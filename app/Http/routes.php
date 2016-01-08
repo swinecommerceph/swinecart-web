@@ -11,6 +11,12 @@
 |
 */
 
+//Route Model Binding
+// $router->bind('customer', function($customer)
+// {
+//     return App\Models\Customer::whereSlug($slug)->first();
+// });
+
 Route::get('/',['as' => 'index_path', function () {
 	// Auth::loginUsingId(2);
     return view('home');
@@ -32,7 +38,15 @@ Route::post('register',['as' => 'postRegister_path', 'uses' => 'Auth\AuthControl
 Route::get('/home',['as' => 'home_path', 'uses' => 'UserController@index']);
 
 // Breeder
-Route::get('/home/breeder',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
+Route::get('/breeder/home',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
 
 // Customer
-Route::get('/home/customer',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
+Route::group(['prefix' => 'customer'], function(){
+
+	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
+	Route::get('editProfile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);	
+	Route::post('editProfile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);	
+	Route::put('editProfile',['as' => 'customer.update', 'uses' => 'CustomerController@updateProfile']);	
+
+});
+

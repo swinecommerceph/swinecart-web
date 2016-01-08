@@ -1,68 +1,59 @@
-@extends('layouts.default')
+@extends('layouts.twoColumn')
 
-@section('content')
-	<div class="container">
-		<div class="col-sm-offset-2 col-sm-8">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					Register
-				</div>
+@section('left_column')
+	<h4 class="center-align"> Register </h4>
+	<!-- Display Validation Errors -->
+	@include('common._errors')
 
-				<div class="panel-body">
-					<!-- Display Validation Errors -->
-					@include('common.errors')
+	<!-- New Task Form -->
+	<form action="{{ route('postRegister_path') }}" method="POST" class="col s12">
+		{{ csrf_field() }}
 
-					<!-- New Task Form -->
-					<form action="{{ route('postRegister_path') }}" method="POST" class="form-horizontal">
-						{{ csrf_field() }}
-
-						<!-- Name -->
-						<div class="form-group">
-							<label for="name" class="col-sm-3 control-label">Name</label>
-
-							<div class="col-sm-6">
-								<input type="text" name="name" class="form-control" value="{{ old('name') }}">
-							</div>
-						</div>
-
-						<!-- E-Mail Address -->
-						<div class="form-group">
-							<label for="email" class="col-sm-3 control-label">E-Mail</label>
-
-							<div class="col-sm-6">
-								<input type="email" name="email" class="form-control" value="{{ old('email') }}">
-							</div>
-						</div>
-
-						<!-- Password -->
-						<div class="form-group">
-							<label for="password" class="col-sm-3 control-label">Password</label>
-
-							<div class="col-sm-6">
-								<input type="password" name="password" class="form-control">
-							</div>
-						</div>
-
-						<!-- Confirm Password -->
-						<div class="form-group">
-							<label for="password_confirmation" class="col-sm-3 control-label">Confirm Password</label>
-
-							<div class="col-sm-6">
-								<input type="password" name="password_confirmation" class="form-control">
-							</div>
-						</div>
-
-						<!-- Register Button -->
-						<div class="form-group">
-							<div class="col-sm-offset-3 col-sm-6">
-								<button type="submit" class="btn btn-default">
-									<i class="fa fa-btn fa-pencil"></i>Register
-								</button>
-							</div>
-						</div>
-					</form>
-				</div>
+		<!-- Name -->
+		<div class="row">
+			<div class="input-field col s12">
+				<input type="text" id="name" name="name" value="{{ old('name') }}">
+				<label for="name">Name</label>
 			</div>
 		</div>
-	</div>
+
+		<!-- E-Mail Address -->
+		<div class="row">
+			<div class="input-field col s12">
+				<input type="email" id="email" name="email" value="{{ old('email') }}">
+				<label for="email">E-Mail</label>
+			</div>
+		</div>
+
+		<!-- Password -->
+		<div class="row">
+			<div class="input-field col s12">
+				<input type="password" id="password" name="password">
+				<label for="password">Password</label>
+			</div>
+		</div>
+
+		<!-- Confirm Password -->
+		<div class="row">
+			<div class="input-field col s12">
+				<input type="password" id="password_confirmation" name="password_confirmation">
+				<label for="password_confirmation">Re-Type Password</label>
+			</div>
+		</div>
+
+		<!-- Register Button -->
+		<div class="col s6 push-s6">
+			<button type="submit" class="btn waves-effect waves-light"> Register 
+				<i class="material-icons right">send</i>
+			</button>
+		</div>
+
+	</form>
+@endsection
+
+@section('right_column')
+	<h4>Downloadable Forms</h4>
+	<p> Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.
+        In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
+    </p>
 @endsection

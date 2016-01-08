@@ -1,50 +1,40 @@
 @extends('layouts.default')
 
 @section('content')
-	<div class="container">
-		<div class="col-sm-offset-2 col-sm-8">
-			<div class="panel panel-default">
-				<div class="panel-heading">
-					Login
+	<div class="row">
+		<div class="col s12 m6 offset-m3">
+			<h4 class="center-align"> Login </h4>
+			<!-- Display Validation Errors -->
+			@include('common._errors')
+
+			<!-- New Task Form -->
+			<form action="{{ route('postLogin_path') }}" method="POST" class="col s12">
+				{{ csrf_field() }}
+
+				<!-- E-Mail Address -->
+				<div class="row">
+					<div class="input-field col s12">
+						<input type="email" id="email" name="email" value="{{ old('email') }}">
+						<label for="email">E-Mail</label>
+					</div>
 				</div>
 
-				<div class="panel-body">
-					<!-- Display Validation Errors -->
-					@include('common.errors')
-
-					<!-- New Task Form -->
-					<form action="{{ route('postLogin_path') }}" method="POST" class="form-horizontal">
-						{{ csrf_field() }}
-
-						<!-- E-Mail Address -->
-						<div class="form-group">
-							<label for="email" class="col-sm-3 control-label">E-Mail</label>
-
-							<div class="col-sm-6">
-								<input type="email" name="email" class="form-control" value="{{ old('email') }}">
-							</div>
-						</div>
-
-						<!-- Password -->
-						<div class="form-group">
-							<label for="password" class="col-sm-3 control-label">Password</label>
-
-							<div class="col-sm-6">
-								<input type="password" name="password" class="form-control">
-							</div>
-						</div>
-
-						<!-- Login Button -->
-						<div class="form-group">
-							<div class="col-sm-offset-3 col-sm-6">
-								<button type="submit" class="btn btn-default">
-									<i class="fa fa-btn fa-sign-in"></i>Login
-								</button>
-							</div>
-						</div>
-					</form>
+				<!-- Password -->
+				<div class="row">
+					<div class="input-field col s12">
+						<input type="password" id="password" name="password">
+						<label for="password">Password</label>
+					</div>
 				</div>
-			</div>
+
+				<!-- Login Button -->
+				<div class="col s6 push-s6">
+					<button type="submit" class="btn waves-effect waves-light"> Login 
+						<i class="material-icons right">send</i>
+					</button>
+				</div>
+				
+			</form>
 		</div>
 	</div>
 @endsection

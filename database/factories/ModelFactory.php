@@ -11,11 +11,24 @@
 |
 */
 
-$factory->define(App\User::class, function (Faker\Generator $faker) {
+$factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->email,
-        'password' => bcrypt(str_random(10)),
+        'password' => bcrypt('secret'),
         'remember_token' => str_random(10),
+    ];
+});
+
+
+$factory->define(App\Models\Customer::class, function (Faker\Generator $faker) {
+    return [
+        'address' => $faker->address, 
+        'landline' => $faker->regexify('(0[1-8][1-8])[1-9]{3}\-[0-9]{4}'), 
+        'mobile' => $faker->regexify('09[0-9]{9}'),
+        'farm_address' => $faker->address, 
+        'farm_type' => $faker->word, 
+        'farm_landline' => $faker->regexify('\(0[1-8][1-8]\)[1-9]{3}\-[0-9]{4}'),
+        'farm_mobile' => $faker->regexify('09[0-9]{9}'),
     ];
 });
