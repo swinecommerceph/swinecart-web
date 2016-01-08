@@ -44,9 +44,8 @@ Route::get('/breeder/home',['as' => 'breeder_path', 'uses' => 'BreederController
 Route::group(['prefix' => 'customer'], function(){
 
 	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
-	Route::get('editProfile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);	
-	Route::post('editProfile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);	
-	Route::put('editProfile',['as' => 'customer.update', 'uses' => 'CustomerController@updateProfile']);	
+	Route::get('editProfile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
+	Route::post('editProfile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
+	Route::put('editProfile',['as' => 'customer.update', 'uses' => 'CustomerController@updateProfile']);
 
 });
-

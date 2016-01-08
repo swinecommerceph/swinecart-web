@@ -21,7 +21,7 @@ class CreateUsersTable extends Migration
             $table->string('userable_type');
             $table->boolean('update_profile')->default('1');
             $table->rememberToken();
-            $table->timestamps();
+            $table->nullableTimestamps();
         });
     }
 
