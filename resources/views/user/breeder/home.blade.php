@@ -5,11 +5,11 @@
 @endsection
 
 @section('navbar_head')
-    <li><a href="{{ route('home_path') }}"> Inventory </a></li>
+    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">assessment</i> Inventory </a></li>
 @endsection
 
 @section('navbar_dropdown')
-    <li><a href="#">Update Profile</a></li>
+    <li><a href="{{ route('breeder.edit') }}"> <i class="material-icons left">mode_edit</i> Update Profile</a></li>
 @endsection
 
 @section('content')
@@ -23,7 +23,7 @@
                     Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
                     Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.
                     In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
-                    Integer tincidunt. Cras dapibus.     
+                    Integer tincidunt. Cras dapibus.
                 </p>
             </div>
           </div>

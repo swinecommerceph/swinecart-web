@@ -20,7 +20,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show Home Page of breeder
+     * Show Home Page of customer
      * @return View
      */
     public function index(Request $request)
@@ -31,21 +31,30 @@ class CustomerController extends Controller
 
     /**
      * Show Page for User to complete profile
-     * @return View 
+     * @return View
      */
     public function createProfile()
     {
         return view('user.customer.createProfile');
     }
-    
+
     /**
      * Create and store Customer profile data to database
      * Associate User to Customer user type as well
-     * @param  Request $request 
-     * @return Redirect           
+     * @param  Request $request
+     * @return Redirect
      */
     public function storeProfile(Request $request)
     {
+        // Validate first the input fields
+        $this->validate($request, [
+            'address_addressLine1' => 'required',
+            'address_addressLine2' => 'required',
+            'address_province' => 'required',
+            'address_zipCode' => 'required',
+            'mobile' => 'required',
+        ]);
+
         $user = $request->user();
         $customer = Customer::create($request->all());
         $customer->users()->save($user);
@@ -56,7 +65,7 @@ class CustomerController extends Controller
 
     /**
      * Show Page for User to update profile
-     * @return View 
+     * @return View
      */
     public function editProfile(Request $request)
     {
@@ -65,8 +74,8 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show Page for User to update profile
-     * @return View 
+     * Update User's profile
+     * @return View
      */
     public function updateProfile(Request $request)
     {

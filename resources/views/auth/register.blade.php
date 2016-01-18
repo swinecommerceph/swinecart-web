@@ -5,14 +5,14 @@
 	<!-- Display Validation Errors -->
 	@include('common._errors')
 
-	<!-- New Task Form -->
+	<!-- Registration Form -->
 	<form action="{{ route('postRegister_path') }}" method="POST" class="col s12">
 		{{ csrf_field() }}
 
 		<!-- Name -->
 		<div class="row">
 			<div class="input-field col s12">
-				<input type="text" id="name" name="name" value="{{ old('name') }}">
+				<input type="text" id="name" name="name" value="{{ old('name') }}" autofocus>
 				<label for="name">Name</label>
 			</div>
 		</div>
@@ -43,7 +43,7 @@
 
 		<!-- Register Button -->
 		<div class="col s6 push-s6">
-			<button type="submit" class="btn waves-effect waves-light"> Register 
+			<button type="submit" class="btn waves-effect waves-light"> Register
 				<i class="material-icons right">send</i>
 			</button>
 		</div>

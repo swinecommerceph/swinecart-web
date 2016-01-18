@@ -14,10 +14,16 @@ class CreateCustomerUserTable extends Migration
     {
         Schema::create('customer_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('address');
+            $table->string('address_addressLine1');
+            $table->string('address_addressLine2');
+            $table->string('address_province');
+            $table->string('address_zipCode');
             $table->string('landline')->nullable();
             $table->string('mobile');
-            $table->string('farm_address')->nullable();
+            $table->string('farmAddress_addressLine1')->nullable();
+            $table->string('farmAddress_addressLine2')->nullable();
+            $table->string('farmAddress_province')->nullable();
+            $table->string('farmAddress_zipCode')->nullable();
             $table->string('farm_type')->nullable();
             $table->string('farm_landline')->nullable();
             $table->string('farm_mobile')->nullable();

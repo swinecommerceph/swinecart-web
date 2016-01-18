@@ -1,7 +1,7 @@
-@extends('user.customer.home')
+@extends('user.breeder.home')
 
 @section('title')
-    | Customer - Complete Profile
+    | Breeder - Complete Profile
 @endsection
 
 @section('content')
@@ -11,8 +11,8 @@
             <h6>Please complete first your profile.</h6>
             <span>* - required </span>
             @include('common._errors')
-            {!! Form::open(['route' => 'customer.store']) !!}
-                @include('user.customer._profileForm')
+            {!! Form::open(['route' => 'breeder.store']) !!}
+                @include('user.breeder._profileForm')
             {!! Form::close() !!}
         </div>
     </div>

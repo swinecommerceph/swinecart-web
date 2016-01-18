@@ -22,8 +22,21 @@ class Breeder extends Model
      *
      * @var array
      */
-    protected $fillable = ['office_address', 'office_landline', 'office_mobile',
-        'farm_address', 'farm_type', 'farm_landline', 'farm_mobile'];
+    protected $fillable = ['officeAddress_addressLine1',
+        'officeAddress_addressLine2',
+        'officeAddress_province',
+        'officeAddress_zipCode',
+        'office_landline',
+        'office_mobile',
+        'farmAddress_addressLine1',
+        'farmAddress_addressLine2',
+        'farmAddress_province',
+        'farmAddress_zipCode',
+        'farm_type',
+        'farm_landline',
+        'farm_mobile',
+        'contactPerson_name',
+        'contactPerson_mobile'];
 
     /**
      * Get all Breeder type users

@@ -38,7 +38,15 @@ Route::post('register',['as' => 'postRegister_path', 'uses' => 'Auth\AuthControl
 Route::get('/home',['as' => 'home_path', 'uses' => 'UserController@index']);
 
 // Breeder
-Route::get('/breeder/home',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
+Route::group(['prefix' => 'breeder'], function(){
+
+	Route::get('home',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
+	Route::get('editProfile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
+	Route::post('editProfile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
+	Route::put('editProfile',['as' => 'breeder.update', 'uses' => 'BreederController@updateProfile']);
+
+});
+
 
 // Customer
 Route::group(['prefix' => 'customer'], function(){

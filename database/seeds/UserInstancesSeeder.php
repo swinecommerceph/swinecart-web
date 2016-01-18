@@ -12,7 +12,7 @@ class UserInstancesSeeder extends Seeder
     public function run()
     {
     	// For Customers
-        factory(App\Models\User::class, 5)->create()->each(function($user){
+        factory(App\Models\User::class, 3)->create()->each(function($user){
         	$user->assign('customer');
         	// $profile = factory(App\Models\Customer::class)->create();
         	// $profile->users()->save($user);
@@ -21,8 +21,8 @@ class UserInstancesSeeder extends Seeder
         // For Breeders
         factory(App\Models\User::class, 3)->create()->each(function($user){
          	$user->assign('breeder');
-        // 	// $profile = factory(App\Models\Customer::class)->create();
-        // 	// $profile->users()->save($user);
-        // });
+         	// $profile = factory(App\Models\Customer::class)->create();
+         	// $profile->users()->save($user);
+        });
     }
 }

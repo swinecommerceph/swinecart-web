@@ -22,8 +22,19 @@ class Customer extends Model
      *
      * @var array
      */
-    protected $fillable = ['address', 'landline', 'mobile',
-        'farm_address', 'farm_type', 'farm_landline', 'farm_mobile'];
+    protected $fillable = ['address_addressLine1',
+        'address_addressLine2',
+        'address_province',
+        'address_zipCode',
+        'landline',
+        'mobile',
+        'farmAddress_addressLine1',
+        'farmAddress_addressLine2',
+        'farmAddress_province',
+        'farmAddress_zipCode',
+        'farm_type',
+        'farm_landline',
+        'farm_mobile'];
 
 	/**
 	 * Get all Customer type users

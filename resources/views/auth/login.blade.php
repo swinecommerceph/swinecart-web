@@ -7,14 +7,14 @@
 			<!-- Display Validation Errors -->
 			@include('common._errors')
 
-			<!-- New Task Form -->
+			<!-- Login Form -->
 			<form action="{{ route('postLogin_path') }}" method="POST" class="col s12">
 				{{ csrf_field() }}
 
 				<!-- E-Mail Address -->
 				<div class="row">
 					<div class="input-field col s12">
-						<input type="email" id="email" name="email" value="{{ old('email') }}">
+						<input type="email" id="email" name="email" value="{{ old('email') }}" autofocus>
 						<label for="email">E-Mail</label>
 					</div>
 				</div>
@@ -29,11 +29,11 @@
 
 				<!-- Login Button -->
 				<div class="col s6 push-s6">
-					<button type="submit" class="btn waves-effect waves-light"> Login 
+					<button type="submit" class="btn waves-effect waves-light"> Login
 						<i class="material-icons right">send</i>
 					</button>
 				</div>
-				
+
 			</form>
 		</div>
 	</div>

@@ -12,29 +12,29 @@
 
 	<!-- Compiled and minified CSS -->
 	{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">  --}}
-          
+
 	<link href="/css/materialize.min.css" rel="stylesheet" type="text/css">
 	<link href="/css/style.css" rel="stylesheet" type="text/css">
 </head>
 
 <body>
-	
+
 	<nav class="teal darken-3">
 	    <div class="nav-wrapper container">
 	      	@if (Auth::guest())
 				<a class="brand-logo" href="{{ route('index_path') }}">Swine E-Commerce PH</a>
 		  	@else
 				<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
-		  	@endif 
+		  	@endif
 
 	      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 	        @if(Auth::guest())
-				<li><a href="{{ route('home_path') }}"> Products </a></li>
+				<li><a href="{{ route('home_path') }}"> <i class="material-icons left">shop_two</i> Products </a></li>
 				<li><a href="{{ route('getRegister_path') }}" class="waves-effect waves-light btn">Register</a>
 				</li>
 				<li><a href="{{ route('getLogin_path') }}" class="waves-effect waves-light btn">Login</a></li>
-			@else		
-				@yield('navbar_head')	
+			@else
+				@yield('navbar_head')
 				<li>
 					<a class="dropdown-button" data-beloworigin="true" data-activates="nav-dropdown">
 						{{ Auth::user()->name }} <i class="material-icons right">arrow_drop_down</i>
@@ -46,15 +46,15 @@
 				    </ul>
 				</li>
 
-				
+
 			@endif
 	      	</ul>
 	    </div>
 	</nav>
-	
+
 
 	<div class="container">
-		
+
 		@yield('content')
 
 	</div>

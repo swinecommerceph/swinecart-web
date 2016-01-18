@@ -14,13 +14,21 @@ class CreateBreederUserTable extends Migration
     {
         Schema::create('breeder_user', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('office_address');
+            $table->string('officeAddress_addressLine1');
+            $table->string('officeAddress_addressLine2');
+            $table->string('officeAddress_province');
+            $table->string('officeAddress_zipCode');
             $table->string('office_landline')->nullable();
             $table->string('office_mobile');
-            $table->string('farm_address');
+            $table->string('farmAddress_addressLine1');
+            $table->string('farmAddress_addressLine2');
+            $table->string('farmAddress_province');
+            $table->string('farmAddress_zipCode');
             $table->string('farm_type');
             $table->string('farm_landline')->nullable();
             $table->string('farm_mobile');
+            $table->string('contactPerson_name');
+            $table->string('contactPerson_mobile');
         });
     }
 
