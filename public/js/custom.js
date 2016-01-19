@@ -1,6 +1,12 @@
 $(document).ready(function(){
 
-	$(".dropdown-button").dropdown({hover:true});
+	$(".dropdown-button").dropdown({
+        hover:false,
+        constrainwidth:false,
+        gutter: 0,
+        belowOrigin: false,
+        alignment: 'right'
+    });
 
 	$(".collapsible").collapsible({
       accordion : false

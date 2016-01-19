@@ -1,13 +1,11 @@
 @if (count($errors) > 0)
 	<!-- Form Error List -->
-	<div class="alert alert-danger">
-		<strong>Whoops! Something went wrong!</strong>
-
-		<br><br>
-
+	<div class="card-panel">
+		<strong> <span class="red-text text-darken-1"> Whoops! Something went wrong! </span> </strong>
+		<br>
 		<ul>
 			@foreach ($errors->all() as $error)
-				<li>{{ $error }}</li>
+				<li class="red-text">{{ $error }}</li>
 			@endforeach
 		</ul>
 	</div>

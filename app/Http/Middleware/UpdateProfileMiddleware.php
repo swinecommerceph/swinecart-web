@@ -16,9 +16,10 @@ class UpdateProfileMiddleware
     public function handle($request, Closure $next, $userType)
     {
         if($request->user()->updateProfileNeeded()){
-            return redirect()->action(ucfirst($userType).'Controller@createProfile');
-        } 
+            return view('user.'.$userType.'.createProfile');
+            // return redirect()->action(ucfirst($userType).'Controller@createProfile');
+        }
         return $next($request);
-        
+
     }
 }

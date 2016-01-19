@@ -22,10 +22,14 @@ Route::get('/',['as' => 'index_path', function () {
     return view('home');
 }])->middleware('guest');
 
-// Authentication Routes
+// Normal Authentication Routes
 Route::get('login',['as' => 'getLogin_path', 'uses' => 'Auth\AuthController@getLogin']);
 Route::post('login',['as' => 'postLogin_path', 'uses' => 'Auth\AuthController@postLogin']);
 Route::get('logout',['as' => 'logout_path', 'uses' => 'Auth\AuthController@getLogout']);
+
+// Third-party Authentication Routes
+Route::get('login/{provider}',['as' => 'provider.redirect', 'uses' => 'Auth\AuthController@redirectToProvider']);
+Route::get('login/{provider}/callback',['as' => 'provider.handle', 'uses' => 'Auth\AuthController@handleProviderCallback']);
 
 // Registration Routes
 Route::get('register',['as' => 'getRegister_path', 'uses' => 'Auth\AuthController@getRegister']);

@@ -17,7 +17,7 @@ class BreederController extends Controller
     public function __construct()
     {
         $this->middleware('role:breeder');
-        // $this->middleware('updateProfile:breeder',['except' => ['index']]);
+        $this->middleware('updateProfile:breeder',['except' => ['index']]);
     }
 
 	/**

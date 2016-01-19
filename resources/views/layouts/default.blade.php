@@ -35,9 +35,10 @@
 				<li><a href="{{ route('getLogin_path') }}" class="waves-effect waves-light btn">Login</a></li>
 			@else
 				@yield('navbar_head')
+				<li> <span>{{ Auth::user()->name }}</span> </li>
 				<li>
 					<a class="dropdown-button" data-beloworigin="true" data-activates="nav-dropdown">
-						{{ Auth::user()->name }} <i class="material-icons right">arrow_drop_down</i>
+						 <i class="material-icons">arrow_drop_down</i>
 					</a>
 					<ul id="nav-dropdown" class="dropdown-content">
 				        @yield('navbar_dropdown')

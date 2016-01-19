@@ -58,7 +58,7 @@ class User extends Model implements AuthenticatableContract,
     /**
      * Assign Role to a User
      */
-    public function assign($role)
+    public function assignRole($role)
     {
         if(is_string($role)){
             return $this->roles()->attach(
@@ -83,7 +83,7 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * Check if User still needs to update profile
-     * @return bool 
+     * @return bool
      */
     public function updateProfileNeeded()
     {
@@ -92,4 +92,3 @@ class User extends Model implements AuthenticatableContract,
     }
 
 }
-

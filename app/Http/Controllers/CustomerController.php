@@ -16,7 +16,7 @@ class CustomerController extends Controller
     public function __construct()
     {
         $this->middleware('role:customer');
-        // $this->middleware('updateProfile:customer',['except' => ['index']]);
+        $this->middleware('updateProfile:customer',['except' => ['index']]);
     }
 
     /**
