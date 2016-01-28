@@ -28,13 +28,6 @@ class Breeder extends Model
         'officeAddress_zipCode',
         'office_landline',
         'office_mobile',
-        'farmAddress_addressLine1',
-        'farmAddress_addressLine2',
-        'farmAddress_province',
-        'farmAddress_zipCode',
-        'farm_type',
-        'farm_landline',
-        'farm_mobile',
         'contactPerson_name',
         'contactPerson_mobile'];
 
@@ -44,5 +37,13 @@ class Breeder extends Model
     public function users()
     {
         return $this->morphMany(User::class, 'userable');
+    }
+
+    /**
+     * Get all of the Customer's farm address/es
+     */
+    public function farmAddresses()
+    {
+        return $this->morphMany(FarmAddress::class, 'addressable');
     }
 }

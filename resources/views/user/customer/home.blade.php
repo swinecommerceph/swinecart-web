@@ -1,3 +1,7 @@
+{{--
+    Displays Home page of Customer User
+--}}
+
 @extends('layouts.default')
 
 @section('title')

@@ -17,9 +17,10 @@ class CreateUsersTable extends Migration
             $table->string('name');
             $table->string('email')->unique();
             $table->string('password', 60);
-            $table->integer('userable_id')->unsigned();;
+            $table->integer('userable_id')->unsigned();
             $table->string('userable_type');
             $table->boolean('update_profile')->default('1');
+            $table->string('status_instance')->default('active');
             $table->rememberToken();
             $table->nullableTimestamps();
         });

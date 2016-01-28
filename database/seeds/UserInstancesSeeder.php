@@ -13,14 +13,14 @@ class UserInstancesSeeder extends Seeder
     {
     	// For Customers
         factory(App\Models\User::class, 3)->create()->each(function($user){
-        	$user->assign('customer');
+        	$user->assignRole('customer');
         	// $profile = factory(App\Models\Customer::class)->create();
         	// $profile->users()->save($user);
         });
 
         // For Breeders
         factory(App\Models\User::class, 3)->create()->each(function($user){
-         	$user->assign('breeder');
+         	$user->assignRole('breeder');
          	// $profile = factory(App\Models\Customer::class)->create();
          	// $profile->users()->save($user);
         });

@@ -20,15 +20,11 @@ class CreateBreederUserTable extends Migration
             $table->string('officeAddress_zipCode');
             $table->string('office_landline')->nullable();
             $table->string('office_mobile');
-            $table->string('farmAddress_addressLine1');
-            $table->string('farmAddress_addressLine2');
-            $table->string('farmAddress_province');
-            $table->string('farmAddress_zipCode');
-            $table->string('farm_type');
-            $table->string('farm_landline')->nullable();
-            $table->string('farm_mobile');
+            $table->string('website');
+            $table->string('produce');
             $table->string('contactPerson_name');
             $table->string('contactPerson_mobile');
+            $table->string('status_instance')->default('active');
         });
     }
 

@@ -1,3 +1,7 @@
+{{--
+	Display error messages on user requests such as filling up forms
+--}}
+
 @if (count($errors) > 0)
 	<!-- Form Error List -->
 	<div class="card-panel">

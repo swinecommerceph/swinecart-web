@@ -3,10 +3,12 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use App\Http\Requests\CustomerProfileRequest;
 
-use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\FarmAddress;
+use Auth;
 
 class CustomerController extends Controller
 {
@@ -16,7 +18,7 @@ class CustomerController extends Controller
     public function __construct()
     {
         $this->middleware('role:customer');
-        $this->middleware('updateProfile:customer',['except' => ['index']]);
+        $this->middleware('updateProfile:customer',['except' => ['index', 'storeProfile']]);
     }
 
     /**
@@ -25,7 +27,7 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->user()->updateProfileNeeded()) return view('user.customer.createProfile');
+        if($request->user()->updateProfileNeeded()) return view('user.customer.createProfile', ['farmAddresses'=>[]]);
         return view('user.customer.home');
     }
 
@@ -35,7 +37,7 @@ class CustomerController extends Controller
      */
     public function createProfile()
     {
-        return view('user.customer.createProfile');
+        return view('user.customer.createProfile', ['farmAddresses'=>[]]);
     }
 
     /**
@@ -44,23 +46,37 @@ class CustomerController extends Controller
      * @param  Request $request
      * @return Redirect
      */
-    public function storeProfile(Request $request)
+    public function storeProfile(CustomerProfileRequest $request)
     {
-        // Validate first the input fields
-        $this->validate($request, [
-            'address_addressLine1' => 'required',
-            'address_addressLine2' => 'required',
-            'address_province' => 'required',
-            'address_zipCode' => 'required',
-            'mobile' => 'required',
-        ]);
+        $user = Auth::user();
+        $customer = Customer::create($request->only(['address_addressLine1',
+            'address_addressLine2',
+            'address_province',
+            'address_zipCode',
+            'landline',
+            'mobile']
+        ));
 
-        $user = $request->user();
-        $customer = Customer::create($request->all());
+        $farmAddressArray = [];
+
+        for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/7; $i++) {
+            $farmAddress = new FarmAddress;
+            $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
+            $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
+            $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
+            $farmAddress->zipCode = $request->input('farmAddress.'.$i.'.zipCode');
+            $farmAddress->farmType = $request->input('farmAddress.'.$i.'.farmType');
+            $farmAddress->landline = $request->input('farmAddress.'.$i.'.landline');
+            $farmAddress->mobile = $request->input('farmAddress.'.$i.'.mobile');
+            array_push($farmAddressArray,$farmAddress);
+        }
+
+        $customer->farmAddresses()->saveMany($farmAddressArray);
         $customer->users()->save($user);
         $user->update_profile = 0;
         $user->save();
-        return redirect()->route('customer.edit');
+        return redirect()->route('customer.edit')
+            ->with('message','Profile completed.');
     }
 
     /**
@@ -69,19 +85,44 @@ class CustomerController extends Controller
      */
     public function editProfile(Request $request)
     {
-        $customer = $request->user()->userable;
-        return view('user.customer.editProfile', compact('customer'));
+        $customer = Auth::user()->userable;
+        $farmAddresses = $customer->farmAddresses;
+        return view('user.customer.editProfile', compact('customer','farmAddresses'));
     }
 
     /**
      * Update User's profile
      * @return View
      */
-    public function updateProfile(Request $request)
+    public function updateProfile(CustomerProfileRequest $request)
     {
-        $customer = $request->user()->userable;
-        $customer->fill($request->input())->save();
-        return redirect()->route('customer.edit');
+
+        $customer = Auth::user()->userable;
+        $customer->fill($request->only(['address_addressLine1',
+            'address_addressLine2',
+            'address_province',
+            'address_zipCode',
+            'landline',
+            'mobile']
+        ))->save();
+
+        $i = 1;
+        foreach ($customer->farmAddresses as $farmAddress) {
+
+            $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
+            $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
+            $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
+            $farmAddress->zipCode = $request->input('farmAddress.'.$i.'.zipCode');
+            $farmAddress->farmType = $request->input('farmAddress.'.$i.'.farmType');
+            $farmAddress->landline = $request->input('farmAddress.'.$i.'.landline');
+            $farmAddress->mobile = $request->input('farmAddress.'.$i.'.mobile');
+            $farmAddress->save();
+            $i++;
+        }
+
+        return redirect()->route('customer.edit')
+            ->with('message','Profile updated successfully!');
     }
+
 
 }

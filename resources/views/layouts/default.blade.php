@@ -1,3 +1,8 @@
+<!--
+	Template for the default layout of a page
+	It is a whole one column page layout
+-->
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -30,9 +35,9 @@
 	      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 	        @if(Auth::guest())
 				<li><a href="{{ route('home_path') }}"> <i class="material-icons left">shop_two</i> Products </a></li>
+				<li><a href="{{ route('getLogin_path') }}" class="waves-effect waves-light btn">Login</a></li>
 				<li><a href="{{ route('getRegister_path') }}" class="waves-effect waves-light btn">Register</a>
 				</li>
-				<li><a href="{{ route('getLogin_path') }}" class="waves-effect waves-light btn">Login</a></li>
 			@else
 				@yield('navbar_head')
 				<li> <span>{{ Auth::user()->name }}</span> </li>
@@ -68,6 +73,7 @@
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/materialize.min.js"></script>
 	<script src="/js/custom.js"></script>
+	@yield('customScript')
 
 </body>
 </html>

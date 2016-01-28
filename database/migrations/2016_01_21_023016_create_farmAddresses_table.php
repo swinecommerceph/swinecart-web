@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateCustomerUserTable extends Migration
+class CreateFarmAddressesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,14 +12,17 @@ class CreateCustomerUserTable extends Migration
      */
     public function up()
     {
-        Schema::create('customer_user', function (Blueprint $table) {
+        Schema::create('farmAddresses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('address_addressLine1');
-            $table->string('address_addressLine2');
-            $table->string('address_province');
-            $table->string('address_zipCode');
+            $table->string('addressLine1');
+            $table->string('addressLine2');
+            $table->string('province');
+            $table->string('zipCode');
+            $table->string('farmType');
             $table->string('landline')->nullable();
             $table->string('mobile');
+            $table->integer('addressable_id')->unsigned();;
+            $table->string('addressable_type');
             $table->string('status_instance')->default('active');
         });
     }
@@ -31,6 +34,6 @@ class CreateCustomerUserTable extends Migration
      */
     public function down()
     {
-        Schema::drop('customer_user');
+        Schema::drop('farmAddresses');
     }
 }

@@ -2,11 +2,15 @@
 
 namespace App\Http\Controllers\Auth;
 
+use Auth;
 use App\Models\User;
 use Validator;
 use App\Http\Controllers\Controller;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use SocialAuth;
+use SocialNorm\Exceptions\ApplicationRejectedException;
+use SocialNorm\Exceptions\InvalidAuthorizationCodeException;
 
 class AuthController extends Controller
 {
@@ -71,5 +75,42 @@ class AuthController extends Controller
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
         ]);
+    }
+
+    /**
+     * Redirect user to chosen provider of third-party authentication
+     */
+    public function redirectToProvider($provider)
+    {
+        if($provider == 'google' || $provider == 'facebook') return SocialAuth::authorize($provider);
+        else return response('Not Found', 404);
+    }
+
+    /**
+     * Handle the information from the provider and authenticate User
+     */
+    public function handleProviderCallback($provider)
+    {
+        try {
+            if($provider == 'google' || $provider == 'facebook'){
+
+                SocialAuth::login($provider, function($user, $details) {
+                    $user->email = $details->email;
+                    $user->name = $details->full_name;
+                    $user->save();
+                    if(!$user->hasRole('customer'))$user->assignRole('customer');
+                });
+            }
+            else return response('Not Found', 404);
+        } catch (ApplicationRejectedException $e) {
+            // User rejected application
+            return redirect()->route('getRegister_path');
+        } catch (InvalidAuthorizationCodeException $e) {
+            // Authorization was attempted with invalid
+            // code,likely forgery attempt
+            return redirect()->route('getLogin_path');
+        }
+
+        return redirect()->route('home_path');
     }
 }

@@ -1,5 +1,6 @@
 $(document).ready(function(){
 
+	// User
 	$(".dropdown-button").dropdown({
         hover:false,
         constrainwidth:false,
@@ -8,9 +9,12 @@ $(document).ready(function(){
         alignment: 'right'
     });
 
+    // Complete/Update Profile
 	$(".collapsible").collapsible({
       accordion : false
     });
+
+    $(".tooltipped").tooltip({delay:50});
 
     var provinces = [
         // Negros Island Rregion

@@ -1,3 +1,7 @@
+{{--
+    Displays Home page of Breeder User
+--}}
+
 @extends('layouts.default')
 
 @section('title')

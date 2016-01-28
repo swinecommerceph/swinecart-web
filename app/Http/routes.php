@@ -18,46 +18,49 @@
 // });
 
 Route::get('/',['as' => 'index_path', function () {
-	// Auth::loginUsingId(2);
     return view('home');
 }])->middleware('guest');
 
-// Normal Authentication Routes
-Route::get('login',['as' => 'getLogin_path', 'uses' => 'Auth\AuthController@getLogin']);
-Route::post('login',['as' => 'postLogin_path', 'uses' => 'Auth\AuthController@postLogin']);
-Route::get('logout',['as' => 'logout_path', 'uses' => 'Auth\AuthController@getLogout']);
+Route::group(['middleware' => ['web']], function () {
 
-// Third-party Authentication Routes
-Route::get('login/{provider}',['as' => 'provider.redirect', 'uses' => 'Auth\AuthController@redirectToProvider']);
-Route::get('login/{provider}/callback',['as' => 'provider.handle', 'uses' => 'Auth\AuthController@handleProviderCallback']);
+    // Normal Authentication Routes
+    Route::get('login',['as' => 'getLogin_path', 'uses' => 'Auth\AuthController@getLogin']);
+    Route::post('login',['as' => 'postLogin_path', 'uses' => 'Auth\AuthController@postLogin']);
+    Route::get('logout',['as' => 'logout_path', 'uses' => 'Auth\AuthController@getLogout']);
 
-// Registration Routes
-Route::get('register',['as' => 'getRegister_path', 'uses' => 'Auth\AuthController@getRegister']);
-Route::post('register',['as' => 'postRegister_path', 'uses' => 'Auth\AuthController@postRegister']);
+    // Third-party Authentication Routes
+    Route::get('login/{provider}',['as' => 'provider.redirect', 'uses' => 'Auth\AuthController@redirectToProvider']);
+    Route::get('login/{provider}/callback',['as' => 'provider.handle', 'uses' => 'Auth\AuthController@handleProviderCallback']);
 
-/**
-* User Routes according to roles
-*/
-// General controller of the routing according to roles
-Route::get('/home',['as' => 'home_path', 'uses' => 'UserController@index']);
+    // Registration Routes
+    Route::get('register',['as' => 'getRegister_path', 'uses' => 'Auth\AuthController@getRegister']);
+    Route::post('register',['as' => 'postRegister_path', 'uses' => 'Auth\AuthController@postRegister']);
 
-// Breeder
-Route::group(['prefix' => 'breeder'], function(){
+    /**
+    * User Routes according to roles
+    */
+    // General controller of the routing according to roles
+    Route::get('/home',['as' => 'home_path', 'uses' => 'UserController@index']);
 
-	Route::get('home',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
-	Route::get('editProfile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
-	Route::post('editProfile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
-	Route::put('editProfile',['as' => 'breeder.update', 'uses' => 'BreederController@updateProfile']);
+    // Breeder
+    Route::group(['prefix' => 'breeder'], function(){
 
-});
+    	Route::get('home',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
+    	Route::get('editProfile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
+    	Route::post('editProfile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
+    	Route::put('editProfile',['as' => 'breeder.update', 'uses' => 'BreederController@updateProfile']);
+
+    });
 
 
-// Customer
-Route::group(['prefix' => 'customer'], function(){
+    // Customer
+    Route::group(['prefix' => 'customer'], function(){
 
-	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
-	Route::get('editProfile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
-	Route::post('editProfile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
-	Route::put('editProfile',['as' => 'customer.update', 'uses' => 'CustomerController@updateProfile']);
+    	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
+    	Route::get('editProfile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
+    	Route::post('editProfile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
+    	Route::put('editProfile',['as' => 'customer.update', 'uses' => 'CustomerController@updateProfile']);
+
+    });
 
 });

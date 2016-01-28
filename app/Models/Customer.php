@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\FarmAddress;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
@@ -27,14 +28,7 @@ class Customer extends Model
         'address_province',
         'address_zipCode',
         'landline',
-        'mobile',
-        'farmAddress_addressLine1',
-        'farmAddress_addressLine2',
-        'farmAddress_province',
-        'farmAddress_zipCode',
-        'farm_type',
-        'farm_landline',
-        'farm_mobile'];
+        'mobile'];
 
 	/**
 	 * Get all Customer type users
@@ -42,5 +36,13 @@ class Customer extends Model
     public function users()
     {
         return $this->morphMany(User::class, 'userable');
+    }
+
+    /**
+     * Get all of the Customer's farm address/es
+     */
+    public function farmAddresses()
+    {
+        return $this->morphMany(FarmAddress::class, 'addressable');
     }
 }

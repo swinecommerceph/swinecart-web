@@ -1,54 +1,81 @@
+{{--
+	View for Registration Page which includes form for Customer registration
+--}}
+
 @extends('layouts.twoColumn')
 
 @section('left_column')
-	<h4 class="center-align"> Register </h4>
-	<!-- Display Validation Errors -->
-	@include('common._errors')
+	<div class="row">
+		<div class="card-panel">
+			<div class="row s12">
+				<h4 class="center-align"> Register </h4>
+				<!-- Display Validation Errors -->
+				@include('common._errors')
 
-	<!-- Registration Form -->
-	<form action="{{ route('postRegister_path') }}" method="POST" class="col s12">
-		{{ csrf_field() }}
+				<!-- Registration Form -->
+				<form action="{{ route('postRegister_path') }}" method="POST" class="col s12">
+					{{ csrf_field() }}
 
-		<!-- Name -->
-		<div class="row">
-			<div class="input-field col s12">
-				<input type="text" id="name" name="name" value="{{ old('name') }}" autofocus>
-				<label for="name">Name</label>
+					<!-- Name -->
+					<div class="row">
+						<div class="input-field col s12">
+							<input type="text" id="name" name="name" value="{{ old('name') }}" autofocus>
+							<label for="name">Name</label>
+						</div>
+					</div>
+
+					<!-- E-Mail Address -->
+					<div class="row">
+						<div class="input-field col s12">
+							<input type="email" id="email" name="email" value="{{ old('email') }}">
+							<label for="email">E-Mail</label>
+						</div>
+					</div>
+
+					<!-- Password -->
+					<div class="row">
+						<div class="input-field col s12">
+							<input type="password" id="password" name="password">
+							<label for="password">Password</label>
+						</div>
+					</div>
+
+					<!-- Confirm Password -->
+					<div class="row">
+						<div class="input-field col s12">
+							<input type="password" id="password_confirmation" name="password_confirmation">
+							<label for="password_confirmation">Re-Type Password</label>
+						</div>
+					</div>
+
+					<!-- Register Button -->
+					<div class="row">
+						<div class="">
+							<button type="submit" class="btn waves-effect waves-light col s5 push-s7"> Register
+								<i class="material-icons right">send</i>
+							</button>
+						</div>
+					</div>
+
+				</form>
+
+				<div class="row">
+					<h5 class="center-align"> OR </h5>
+					<!-- Facebook Button -->
+					<div class="col s12">
+						<a href="#" class="btn-large waves-effect waves-light blue col s12"> Register with Facebook </a>
+					</div>
+				</div>
+
+				<div class="row">
+					<!-- Google Button -->
+					<div class="col s12">
+						<a href="#" class="btn-large waves-effect waves-light red col s12"> Register with Google </a>
+					</div>
+				</div>
 			</div>
 		</div>
-
-		<!-- E-Mail Address -->
-		<div class="row">
-			<div class="input-field col s12">
-				<input type="email" id="email" name="email" value="{{ old('email') }}">
-				<label for="email">E-Mail</label>
-			</div>
-		</div>
-
-		<!-- Password -->
-		<div class="row">
-			<div class="input-field col s12">
-				<input type="password" id="password" name="password">
-				<label for="password">Password</label>
-			</div>
-		</div>
-
-		<!-- Confirm Password -->
-		<div class="row">
-			<div class="input-field col s12">
-				<input type="password" id="password_confirmation" name="password_confirmation">
-				<label for="password_confirmation">Re-Type Password</label>
-			</div>
-		</div>
-
-		<!-- Register Button -->
-		<div class="col s6 push-s6">
-			<button type="submit" class="btn waves-effect waves-light"> Register
-				<i class="material-icons right">send</i>
-			</button>
-		</div>
-
-	</form>
+	</div>
 @endsection
 
 @section('right_column')
