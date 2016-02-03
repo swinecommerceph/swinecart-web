@@ -20,13 +20,23 @@ class UserController extends Controller
 
     /**
      * Redirect user to a specified controller according to role
-     * @return  View 
+     * @return  View
      */
     public function index(Request $request)
     {
         $user = $request->user();
         if($user->hasRole('breeder')) return redirect()->action('BreederController@index');
-        else if($user->hasRole('customer')) return redirect()->action('CustomerController@index');
+        else if($user->hasRole('customer')) {
+            if(!$user->email_verified){
+                $data = [
+                    'email' => $user->email,
+                    'verCode' => $user->verCode,
+                    'type' => 'verify'
+                ];
+                return view('emails.message', $data);
+            }
+            return redirect()->action('CustomerController@index');
+        }
         else redirect()->route('logout_path');
 
     }

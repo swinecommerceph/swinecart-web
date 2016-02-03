@@ -6,3 +6,16 @@
 .collapsible-body{
 	display:block;
 }
+
+#breadcrumb{
+	max-height: 40px;
+	line-height: 40px;
+}
+
+#breadcrumb a, .breadcrumb:before{
+	color: #000;
+}
+
+#verification-code a{
+	text-transform:none !important;
+}

@@ -23,6 +23,9 @@ Route::get('/',['as' => 'index_path', function () {
 
 Route::group(['middleware' => ['web']], function () {
 
+    /**
+     * Authentication and Registration Routes
+     */
     // Normal Authentication Routes
     Route::get('login',['as' => 'getLogin_path', 'uses' => 'Auth\AuthController@getLogin']);
     Route::post('login',['as' => 'postLogin_path', 'uses' => 'Auth\AuthController@postLogin']);
@@ -35,6 +38,12 @@ Route::group(['middleware' => ['web']], function () {
     // Registration Routes
     Route::get('register',['as' => 'getRegister_path', 'uses' => 'Auth\AuthController@getRegister']);
     Route::post('register',['as' => 'postRegister_path', 'uses' => 'Auth\AuthController@postRegister']);
+
+    // Email Verification for Authentication
+    Route::get('login/redirect/email/{email}/verCode/{verCode}',
+        ['as' => 'verCode.send', 'uses' => 'Auth\AuthController@verifyCode']);
+    Route::get('login/resend/email/{email}/verCode/{verCode}',
+        ['as' => 'verCode.resend', 'uses' => 'Auth\AuthController@resendCode']);
 
     /**
     * User Routes according to roles

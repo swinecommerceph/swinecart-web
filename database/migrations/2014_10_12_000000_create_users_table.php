@@ -20,6 +20,8 @@ class CreateUsersTable extends Migration
             $table->integer('userable_id')->unsigned();
             $table->string('userable_type');
             $table->boolean('update_profile')->default('1');
+            $table->string('verification_code');
+            $table->boolean('email_verified')->default('0');
             $table->string('status_instance')->default('active');
             $table->rememberToken();
             $table->nullableTimestamps();

@@ -1,6 +1,5 @@
 <!--
-	Template for the default layout of a page
-	It is a whole one column page layout
+	Template for email layouts
 -->
 
 <!DOCTYPE html>
@@ -27,35 +26,7 @@
 	<div class="navbar-fixed">
 		<nav class="teal darken-3">
 		    <div class="nav-wrapper container">
-		      	@if (Auth::guest())
-					<a class="brand-logo" href="{{ route('index_path') }}">Swine E-Commerce PH</a>
-			  	@else
-					<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
-			  	@endif
-
-		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
-		        @if(Auth::guest())
-					<li><a href="{{ route('home_path') }}"> <i class="material-icons left">shop_two</i> Products </a></li>
-					<li><a href="{{ route('getLogin_path') }}" class="waves-effect waves-light btn">Login</a></li>
-					<li><a href="{{ route('getRegister_path') }}" class="waves-effect waves-light btn">Register</a>
-					</li>
-				@else
-					@yield('navbar_head')
-					<li> <span>{{ Auth::user()->name }}</span> </li>
-					<li>
-						<a class="dropdown-button" data-beloworigin="true" data-activates="nav-dropdown">
-							 <i class="material-icons">arrow_drop_down</i>
-						</a>
-						<ul id="nav-dropdown" class="dropdown-content">
-					        @yield('navbar_dropdown')
-					        <li class="divider"></li>
-					        <li><a href="{{ route('logout_path') }}">Logout</a></li>
-					    </ul>
-					</li>
-
-
-				@endif
-		      	</ul>
+			    <a class="brand-logo center" href="{{ route('home_path') }}">Swine E-Commerce PH</a
 		    </div>
 		</nav>
 	</div>
@@ -79,8 +50,6 @@
 
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/materialize.min.js"></script>
-	<script src="/js/custom.js"></script>
-	@yield('customScript')
 
 </body>
 </html>

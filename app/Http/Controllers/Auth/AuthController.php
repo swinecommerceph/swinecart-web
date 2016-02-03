@@ -11,6 +11,8 @@ use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
 use SocialAuth;
 use SocialNorm\Exceptions\ApplicationRejectedException;
 use SocialNorm\Exceptions\InvalidAuthorizationCodeException;
+use Illuminate\Http\Request;
+use Mail;
 
 class AuthController extends Controller
 {
@@ -44,7 +46,7 @@ class AuthController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => 'getLogout']);
+        $this->middleware('guest', ['except' => ['getLogout','verifyCode']]);
     }
 
     /**
@@ -68,12 +70,13 @@ class AuthController extends Controller
      * @param  array  $data
      * @return User
      */
-    protected function create(array $data)
+    protected function create(array $data, $verCode)
     {
         return User::create([
             'name' => $data['name'],
             'email' => $data['email'],
             'password' => bcrypt($data['password']),
+            'verification_code' => $verCode
         ]);
     }
 
@@ -113,4 +116,90 @@ class AuthController extends Controller
 
         return redirect()->route('home_path');
     }
+
+    /**
+     * Handle a registration request for the application.
+     * Override default register method
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return View
+     */
+    public function register(Request $request)
+    {
+        $validator = $this->validator($request->all());
+
+        if ($validator->fails()) {
+            $this->throwValidationException(
+                $request, $validator
+            );
+        }
+
+        $verCode = str_random('10');
+        $user = $this->create($request->all(), $verCode);
+        $user->assignRole('customer');
+        $data = [
+            'email' => $request->input('email'),
+            'verCode' => $verCode,
+            'type' => 'sent'
+        ];
+
+        Mail::send('emails.verification', $data, function ($message) use($data){
+            $message->to($data['email'])->subject('Verification code for Swine E-Commerce PH');
+        });
+
+        // return view('emails.verification', $data);
+        return view('emails.message', $data);
+
+    }
+
+    /**
+     * Authenticate user if email and verification
+     * code matches in the database
+     *
+     * @param   string  $email
+     * @param   string  $verCode
+     * @return  View or Redirect
+     */
+    public function verifyCode($email, $verCode)
+    {
+        if(Auth::check()){
+            Auth::logout();
+        }
+
+        $verUser = User::where('email', $email)->first();
+        if($verUser->verification_code == $verCode){
+            Auth::login($verUser);
+            $verUser->email_verified = 1;
+            $verUser->save();
+            return redirect($this->redirectPath());
+        }
+        else return redirect()->route('getRegister_path')->with('message','Verification code invalid!');
+    }
+
+    /**
+     * Resend verifcation code to user
+     *
+     * @param   string  $email
+     * @param   string  $verCode
+     * @return  View or Redirect
+     */
+    public function resendCode($email, $verCode)
+    {
+        $user = User::where('email', $email)->first();
+        if($user->verification_code == $verCode){
+            $data = [
+                'email' => $email,
+                'verCode' => $verCode,
+                'type' => 'resent'
+            ];
+
+            Mail::send('emails.verification', $data, function ($message) use($data){
+                $message->to($data['email'])->subject('Verification code for Swine E-Commerce PH');
+            });
+
+            return view('emails.message', $data);
+        }
+        else return redirect()->route('getRegister_path')->with('message','Verification code invalid!');
+    }
+
 }

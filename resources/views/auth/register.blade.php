@@ -28,7 +28,7 @@
 					<div class="row">
 						<div class="input-field col s12">
 							<input type="email" id="email" name="email" value="{{ old('email') }}">
-							<label for="email">E-Mail</label>
+							<label for="email">E-mail</label>
 						</div>
 					</div>
 
@@ -83,4 +83,17 @@
 	<p> Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.
         In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
     </p>
+@endsection
+
+@section('customScript')
+	<script src="/js/breeder/profile.js"> </script>
+	@if(Session::has('message'))
+
+		<script type="text/javascript">
+			$(document).ready(function(){
+				Materialize.toast('{{ Session::get('message') }}', 4000, 'deep-orange');
+			});
+		</script>
+
+	@endif
 @endsection

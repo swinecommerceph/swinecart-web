@@ -8,6 +8,11 @@
     | Breeder - Update Profile
 @endsection
 
+{{-- @section('breadcrumb')
+    <a href="#!" class="breadcrumb"> Home </a>
+    <a href="#!" class="breadcrumb"> Update Profile </a>
+@endsection --}}
+
 @section('content')
     <div class="row">
         <div class="col s12 m8 offset-m2">

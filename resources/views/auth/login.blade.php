@@ -21,7 +21,7 @@
 						<div class="row">
 							<div class="input-field col s12">
 								<input type="email" id="email" name="email" value="{{ old('email') }}" autofocus>
-								<label for="email">E-Mail</label>
+								<label for="email">E-mail</label>
 							</div>
 						</div>
 

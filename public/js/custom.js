@@ -16,6 +16,12 @@ $(document).ready(function(){
 
     $(".tooltipped").tooltip({delay:50});
 
+	$('button[type="submit"]').click(function(e){
+        e.preventDefault();
+        $(this).prop('disabled', true);
+        $(this).parents('form').submit();
+    });
+
     var provinces = [
         // Negros Island Rregion
         'Negros Occidental',
