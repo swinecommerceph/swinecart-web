@@ -16,8 +16,7 @@ class UpdateProfileMiddleware
     public function handle($request, Closure $next, $userType)
     {
         if($request->user()->updateProfileNeeded()){
-            return view('user.'.$userType.'.createProfile', ['farmAddresses'=>[]]);
-            // return redirect()->action(ucfirst($userType).'Controller@createProfile');
+            return view('user.'.$userType.'.createProfile');
         }
         return $next($request);
 

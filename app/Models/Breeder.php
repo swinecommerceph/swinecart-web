@@ -28,6 +28,8 @@ class Breeder extends Model
         'officeAddress_zipCode',
         'office_landline',
         'office_mobile',
+        'website',
+        'produce',
         'contactPerson_name',
         'contactPerson_mobile'];
 

@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class CustomerProfileRequest extends Request
+class CustomerFarmProfileRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,12 +24,6 @@ class CustomerProfileRequest extends Request
     public function rules()
     {
         return [
-            'address_addressLine1' => 'required',
-            'address_addressLine2' => 'required',
-            'address_province' => 'required',
-            'address_zipCode' => 'required',
-            'mobile' => 'required',
-            'farmAddress.*.name' => 'required',
             'farmAddress.*.addressLine1' => 'required',
             'farmAddress.*.addressLine2' => 'required',
             'farmAddress.*.province' => 'required',

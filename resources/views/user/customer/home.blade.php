@@ -8,13 +8,21 @@
     | Customer
 @endsection
 
+@section('breadcrumb-title')
+    Home
+@endsection
+
 @section('navbar_head')
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shop_two</i> Products </a></li>
+    <li><a href="{{ route('home_path') }}"> Products </a></li>
+    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">message</i></a></li>
 @endsection
 
 @section('navbar_dropdown')
-    <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">mode_edit</i> Update Profile</a></li>
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Shopping Cart </a></li>
+    <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
+    <li class="divider"></li>
+    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Swine Cart </a></li>
+    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Order Status </a></li>
+    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Purchased Products History </a></li>
 @endsection
 
 @section('content')

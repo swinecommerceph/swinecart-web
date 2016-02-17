@@ -57,7 +57,10 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
     	Route::get('editProfile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
     	Route::post('editProfile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
-    	Route::put('editProfile',['as' => 'breeder.update', 'uses' => 'BreederController@updateProfile']);
+        Route::put('editProfile/personal/edit',['as' => 'breeder.updatePersonal', 'uses' => 'BreederController@updatePersonal']);
+        Route::post('editProfile/farm/add',['as' => 'breeder.addFarm', 'uses' => 'BreederController@addFarm']);
+        Route::put('editProfile/farm/edit',['as' => 'breeder.updateFarm', 'uses' => 'BreederController@updateFarm']);
+        Route::delete('editProfile/farm/delete',['as' => 'breeder.deleteFarm', 'uses' => 'BreederController@deleteFarm']);
 
     });
 
@@ -68,7 +71,10 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
     	Route::get('editProfile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
     	Route::post('editProfile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
-    	Route::put('editProfile',['as' => 'customer.update', 'uses' => 'CustomerController@updateProfile']);
+    	Route::put('editProfile/personal/edit',['as' => 'customer.updatePersonal', 'uses' => 'CustomerController@updatePersonal']);
+        Route::post('editProfile/farm/add',['as' => 'customer.addFarm', 'uses' => 'CustomerController@addFarm']);
+        Route::put('editProfile/farm/edit',['as' => 'customer.updateFarm', 'uses' => 'CustomerController@updateFarm']);
+        Route::delete('editProfile/farm/delete',['as' => 'customer.deleteFarm', 'uses' => 'CustomerController@deleteFarm']);
 
     });
 

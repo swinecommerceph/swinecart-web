@@ -8,20 +8,25 @@
     | Breeder - Complete Profile
 @endsection
 
+@section('breadcrumb-title')
+    Comlplete Profile
+@endsection
+
 @section('content')
     <div class="row">
-        <div class="col s12 m8 offset-m2">
-            <h4>Complete Profile </h4>
-            <h6>Please complete first your profile.</h6>
-            <span>* - required </span>
+        <div class="col s12 m10 offset-m1">
+            <p class="caption">Please complete first your profile. <br>
+                <blockquote>* - required </blockquote>
+            </p>
+
             @include('common._errors')
-            {!! Form::open(['route' => 'breeder.store', 'class' => 's12']) !!}
-                @include('user.breeder._profileForm')
+            {!! Form::open(['route' => 'breeder.store', 'class' => 's12', 'id' => 'create-profile']) !!}
+                @include('user.breeder._createProfileForm')
             {!! Form::close() !!}
         </div>
     </div>
 @endsection
 
 @section('customScript')
-    <script src="/js/breeder/profile.js"> </script>
+    <script src="/js/breeder/createProfile_script.js"> </script>
 @endsection

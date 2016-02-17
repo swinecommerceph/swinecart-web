@@ -12,8 +12,9 @@ class CreateFarmAddressesTable extends Migration
      */
     public function up()
     {
-        Schema::create('farmAddresses', function (Blueprint $table) {
+        Schema::create('farm_addresses', function (Blueprint $table) {
             $table->increments('id');
+            $table->string('name');
             $table->string('addressLine1');
             $table->string('addressLine2');
             $table->string('province');

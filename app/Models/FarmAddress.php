@@ -14,7 +14,7 @@ class FarmAddress extends Model
      *
      * @var string
      */
-    protected $table = 'farmAddresses';
+    protected $table = 'farm_addresses';
 
     /**
      * The attributes that are mass assignable.

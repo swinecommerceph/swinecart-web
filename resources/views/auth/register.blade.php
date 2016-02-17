@@ -63,14 +63,14 @@
 					<h5 class="center-align"> OR </h5>
 					<!-- Facebook Button -->
 					<div class="col s12">
-						<a href="#" class="btn-large waves-effect waves-light blue col s12"> Register with Facebook </a>
+						<a href="#" class="btn-large waves-effect waves-light blue col s12 social-button"> Register with Facebook </a>
 					</div>
 				</div>
 
 				<div class="row">
 					<!-- Google Button -->
 					<div class="col s12">
-						<a href="#" class="btn-large waves-effect waves-light red col s12"> Register with Google </a>
+						<a href="#" class="btn-large waves-effect waves-light red col s12 social-button"> Register with Google </a>
 					</div>
 				</div>
 			</div>

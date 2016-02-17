@@ -100,6 +100,7 @@ class AuthController extends Controller
                 SocialAuth::login($provider, function($user, $details) {
                     $user->email = $details->email;
                     $user->name = $details->full_name;
+                    $user->email_verified = 1;
                     $user->save();
                     if(!$user->hasRole('customer'))$user->assignRole('customer');
                 });

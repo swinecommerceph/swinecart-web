@@ -1,21 +1,59 @@
+/* Navigation dropdown styles */
 #nav-dropdown{
 	display:block;
 	width: 185px !important;
 }
 
+/* Override collapsible components */
 .collapsible-body{
 	display:block;
 }
 
+/* Breadcrumb styles */
 #breadcrumb{
-	max-height: 40px;
-	line-height: 40px;
+	margin-bottom:5px;
+}
+.breadcrumb{
+	color: #004d40;
+	font-size: 1rem;
 }
 
-#breadcrumb a, .breadcrumb:before{
-	color: #000;
+.breadcrumb:before{
+	color: #bdbdbd;
+	font-size: 1.2rem;
 }
 
+.breadcrumb:last-child{
+	color: #757575;
+	cursor: default;
+}
+
+/* Verification link style */
 #verification-code a{
 	text-transform:none !important;
+}
+
+/* Header styles */
+.breadcrumb-title {
+	font-size:1.5rem;
+	color: #000;
+	font-weight: 300;
+}
+
+/* Caption styles*/
+.caption {
+	font-size: 1.25rem;
+	font-weight: 300;
+	margin-bottom: 20px;
+}
+
+/* Profile Tab styles */
+#personal-information, #farm-information{
+	margin-top:0;
+}
+
+/* Preloader overlay styles*/
+.preloader-wrapper{
+	/*margin-left:auto;
+	margin-right:auto;*/
 }

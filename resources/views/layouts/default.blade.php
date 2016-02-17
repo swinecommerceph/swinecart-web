@@ -40,8 +40,8 @@
 					<li><a href="{{ route('getRegister_path') }}" class="waves-effect waves-light btn">Register</a>
 					</li>
 				@else
-					@yield('navbar_head')
 					<li> <span>{{ Auth::user()->name }}</span> </li>
+					@yield('navbar_head')
 					<li>
 						<a class="dropdown-button" data-beloworigin="true" data-activates="nav-dropdown">
 							 <i class="material-icons">arrow_drop_down</i>
@@ -59,12 +59,21 @@
 		    </div>
 		</nav>
 	</div>
-	{{-- <nav id="breadcrumb" class="teal lighten-5">
-		<div class="nav-wrapper container">
-			@yield('breadcrumb')
-		</div>
-	</nav> --}}
 
+	@if(Auth::check())
+		<div class="grey lighten-3">
+	        <div class="container">
+	            <div class="row">
+	                <div class="col s12">
+	                    <h4 class="breadcrumb-title"> @yield('breadcrumb-title') </h4>
+	                </div>
+	                <div id="breadcrumb" class="col s12">
+	                    @yield('breadcrumb')
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	@endif
 
 	<div class="container">
 
@@ -79,6 +88,7 @@
 
 	<script src="/js/jquery.min.js"></script>
 	<script src="/js/materialize.min.js"></script>
+	<script src="/js/config.js"></script>
 	<script src="/js/custom.js"></script>
 	@yield('customScript')
 

@@ -3,7 +3,11 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use App\Http\Requests\BreederProfileRequest;
+use App\Http\Requests\BreederPersonalProfileRequest;
+use App\Http\Requests\BreederFarmProfileRequest;
+
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -13,6 +17,7 @@ use Auth;
 
 class BreederController extends Controller
 {
+    protected $user;
 
 	/**
      * Create new UserController instance
@@ -21,6 +26,7 @@ class BreederController extends Controller
     {
         $this->middleware('role:breeder');
         $this->middleware('updateProfile:breeder',['except' => ['index','storeProfile']]);
+        $this->user = Auth::user();
     }
 
 	/**
@@ -29,9 +35,8 @@ class BreederController extends Controller
 	 */
     public function index(Request $request)
     {
-        $farmAddresses = [];
-        if($request->user()->updateProfileNeeded()) return view('user.breeder.createProfile', ['farmAddresses'=>[]]);
-    	return view('user.breeder.home');
+        if($request->user()->updateProfileNeeded()) return view('user.breeder.createProfile');
+        return view('user.breeder.home');
     }
 
     /**
@@ -40,7 +45,7 @@ class BreederController extends Controller
      */
     public function createProfile()
     {
-        return view('user.breeder.createProfile', ['farmAddresses'=>[]]);
+        return view('user.breeder.createProfile');
     }
 
     /**
@@ -51,21 +56,90 @@ class BreederController extends Controller
      */
     public function storeProfile(BreederProfileRequest $request)
     {
-        $user = Auth::user();
+        $user = $this->user;
         $breeder = Breeder::create($request->only(['officeAddress_addressLine1',
             'officeAddress_addressLine2',
             'officeAddress_province',
             'officeAddress_zipCode',
             'office_landline',
             'office_mobile',
+            'website',
+            'produce',
             'contactPerson_name',
             'contactPerson_mobile']
         ));
 
         $farmAddressArray = [];
 
-        for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/7; $i++) {
+        for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/8; $i++) {
             $farmAddress = new FarmAddress;
+            $farmAddress->name = $request->input('farmAddress.'.$i.'.name');
+            $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
+            $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
+            $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
+            $farmAddress->zipCode = $request->input('farmAddress.'.$i.'.zipCode');
+            $farmAddress->farmType = $request->input('farmAddress.'.$i.'.farmType');
+            $farmAddress->landline = $request->input('farmAddress.'.$i.'.landline');
+            $farmAddress->mobile = $request->input('farmAddress.'.$i.'.mobile');
+            array_push($farmAddressArray,$farmAddress);
+        }
+
+        $breeder->users()->save($user);
+        $breeder->farmAddresses()->saveMany($farmAddressArray);
+        $user->update_profile = 0;
+        $user->save();
+        return redirect()->route('breeder.edit')
+            ->with('message','Profile completed.');
+    }
+
+    /**
+     * Show Page for User to update profile
+     * @return View
+     */
+    public function editProfile(Request $request)
+    {
+        $breeder = $this->user->userable;
+        $farmAddresses = $breeder->farmAddresses()->where('status_instance','active')->get();
+        return view('user.breeder.editProfile', compact('breeder', 'farmAddresses'));
+    }
+
+    /**
+     * Update User's personal information
+     * AJAX
+     * @return JSON
+     */
+    public function updatePersonal(BreederPersonalProfileRequest $request)
+    {
+        $breeder = Auth::user()->userable;
+        $breeder->fill($request->only(['officeAddress_addressLine1',
+            'officeAddress_addressLine2',
+            'officeAddress_province',
+            'officeAddress_zipCode',
+            'office_landline',
+            'office_mobile',
+            'website',
+            'produce',
+            'contactPerson_name',
+            'contactPerson_mobile']
+        ))->save();
+
+        if($request->ajax()) return $breeder->toJson();
+        else return redirect()->route('breeder.edit');
+    }
+
+    /**
+     * Add User's farm information instance
+     * AJAX
+     * @return JSON
+     */
+    public function addFarm(BreederFarmProfileRequest $request)
+    {
+        $breeder = $this->user->userable;
+        $farmAddressArray = [];
+
+        for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/8; $i++) {
+            $farmAddress = new FarmAddress;
+            $farmAddress->name = $request->input('farmAddress.'.$i.'.name');
             $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
             $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
             $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
@@ -77,57 +151,46 @@ class BreederController extends Controller
         }
 
         $breeder->farmAddresses()->saveMany($farmAddressArray);
-        $breeder->users()->save($user);
-        $user->update_profile = 0;
-        $user->save();
-        return redirect()->route('breeder.edit')
-            ->with('message','Profile updated successfully!');
+
+        if($request->ajax()) return collect($farmAddressArray)->toJson();
+        else return redirect()->route('breeder.edit');
+
     }
 
     /**
-     * Show Page for User to update profile
-     * @return View
+     * Update User's farm information instance
+     * AJAX
+     * @return JSON
      */
-    public function editProfile(Request $request)
+    public function updateFarm(BreederFarmProfileRequest $request)
     {
-        $breeder = $request->user()->userable;
-        $farmAddresses = $breeder->farmAddresses;
-        return view('user.breeder.editProfile', compact('breeder', 'farmAddresses'));
+        $farmAddress = FarmAddress::find($request->id);
+
+        $farmAddress->name = $request->input('farmAddress.1.name');
+        $farmAddress->addressLine1 = $request->input('farmAddress.1.addressLine1');
+        $farmAddress->addressLine2 = $request->input('farmAddress.1.addressLine2');
+        $farmAddress->zipCode = $request->input('farmAddress.1.zipCode');
+        $farmAddress->farmType = $request->input('farmAddress.1.farmType');
+        $farmAddress->landline = $request->input('farmAddress.1.landline');
+        $farmAddress->mobile = $request->input('farmAddress.1.mobile');
+        $farmAddress->save();
+
+        if($request->ajax()) return $farmAddress->toJson();
+        else return redirect()->route('breeder.edit');
     }
 
     /**
-     * Update User's profile
-     * @return View
+     * Delete User's farm information instance
+     * AJAX
+     * @return String
      */
-    public function updateProfile(Request $request)
+    public function deleteFarm(Request $request)
     {
-        $breeder = Auth::user()->userable;
-        $breeder->fill($request->only(['officeAddress_addressLine1',
-            'officeAddress_addressLine2',
-            'officeAddress_province',
-            'officeAddress_zipCode',
-            'office_landline',
-            'office_mobile',
-            'contactPerson_name',
-            'contactPerson_mobile']
-        ))->save();
-
-        $i = 1;
-        foreach ($breeder->farmAddresses as $farmAddress) {
-
-            $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
-            $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
-            $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
-            $farmAddress->zipCode = $request->input('farmAddress.'.$i.'.zipCode');
-            $farmAddress->farmType = $request->input('farmAddress.'.$i.'.farmType');
-            $farmAddress->landline = $request->input('farmAddress.'.$i.'.landline');
-            $farmAddress->mobile = $request->input('farmAddress.'.$i.'.mobile');
-            $farmAddress->save();
-            $i++;
-        }
-
-        return redirect()->route('breeder.edit')
-            ->with('message','Profile updated successfully!');
+        $farmAddress = FarmAddress::find($request->id);
+        $farmAddress->status_instance = 'inactive';
+        $farmAddress->save();
+        if($request->ajax()) return "OK";
+        else return redirect()->route('customer.edit');
     }
 
 }

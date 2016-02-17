@@ -3,7 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
 use App\Http\Requests\CustomerProfileRequest;
+use App\Http\Requests\CustomerPersonalProfileRequest;
+use App\Http\Requests\CustomerFarmProfileRequest;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
@@ -12,6 +15,8 @@ use Auth;
 
 class CustomerController extends Controller
 {
+    protected $user;
+
     /**
      * Create new UserController instance
      */
@@ -19,6 +24,7 @@ class CustomerController extends Controller
     {
         $this->middleware('role:customer');
         $this->middleware('updateProfile:customer',['except' => ['index', 'storeProfile']]);
+        $this->user = Auth::user();
     }
 
     /**
@@ -27,7 +33,7 @@ class CustomerController extends Controller
      */
     public function index(Request $request)
     {
-        if($request->user()->updateProfileNeeded()) return view('user.customer.createProfile', ['farmAddresses'=>[]]);
+        if($request->user()->updateProfileNeeded()) return view('user.customer.createProfile');
         return view('user.customer.home');
     }
 
@@ -37,7 +43,7 @@ class CustomerController extends Controller
      */
     public function createProfile()
     {
-        return view('user.customer.createProfile', ['farmAddresses'=>[]]);
+        return view('user.customer.createProfile');
     }
 
     /**
@@ -48,7 +54,7 @@ class CustomerController extends Controller
      */
     public function storeProfile(CustomerProfileRequest $request)
     {
-        $user = Auth::user();
+        $user = $this->user;
         $customer = Customer::create($request->only(['address_addressLine1',
             'address_addressLine2',
             'address_province',
@@ -59,8 +65,71 @@ class CustomerController extends Controller
 
         $farmAddressArray = [];
 
-        for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/7; $i++) {
+        for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/8; $i++) {
             $farmAddress = new FarmAddress;
+            $farmAddress->name = $request->input('farmAddress.'.$i.'.name');
+            $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
+            $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
+            $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
+            $farmAddress->zipCode = $request->input('farmAddress.'.$i.'.zipCode');
+            $farmAddress->farmType = $request->input('farmAddress.'.$i.'.farmType');
+            $farmAddress->landline = $request->input('farmAddress$farmAddressArray.'.$i.'.landline');
+            $farmAddress->mobile = $request->input('farmAddress.'.$i.'.mobile');
+            array_push($farmAddressArray,$farmAddress);
+        }
+
+        $customer->users()->save($user);
+        $customer->farmAddresses()->saveMany($farmAddressArray);
+        $user->update_profile = 0;
+        $user->save();
+        return redirect()->route('customer.edit')
+            ->with('message','Profile completed.');
+    }
+
+    /**
+     * Show Page for User to update profile
+     * @return View
+     */
+    public function editProfile()
+    {
+        $customer = $this->user->userable;
+        $farmAddresses = $customer->farmAddresses()->where('status_instance','active')->get();
+        return view('user.customer.editProfile', compact('customer','farmAddresses'));
+    }
+
+    /**
+     * Update User's personal information
+     * AJAX
+     * @return JSON
+     */
+    public function updatePersonal(CustomerPersonalProfileRequest $request)
+    {
+        $customer = Auth::user()->userable;
+        $customer->fill($request->only(['address_addressLine1',
+            'address_addressLine2',
+            'address_province',
+            'address_zipCode',
+            'landline',
+            'mobile']
+        ))->save();
+
+        if($request->ajax()) return $customer->toJson();
+        else return redirect()->route('customer.edit');
+    }
+
+    /**
+     * Add User's farm information instance
+     * AJAX
+     * @return JSON
+     */
+    public function addFarm(CustomerFarmProfileRequest $request)
+    {
+        $customer = $this->user->userable;
+        $farmAddressArray = [];
+
+        for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/8; $i++) {
+            $farmAddress = new FarmAddress;
+            $farmAddress->name = $request->input('farmAddress.'.$i.'.name');
             $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
             $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
             $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
@@ -72,56 +141,46 @@ class CustomerController extends Controller
         }
 
         $customer->farmAddresses()->saveMany($farmAddressArray);
-        $customer->users()->save($user);
-        $user->update_profile = 0;
-        $user->save();
-        return redirect()->route('customer.edit')
-            ->with('message','Profile completed.');
+
+        if($request->ajax()) return collect($farmAddressArray)->toJson();
+        else return redirect()->route('customer.edit');
+
     }
 
     /**
-     * Show Page for User to update profile
-     * @return View
+     * Update User's farm information instance
+     * AJAX
+     * @return JSON
      */
-    public function editProfile(Request $request)
+    public function updateFarm(CustomerFarmProfileRequest $request)
     {
-        $customer = Auth::user()->userable;
-        $farmAddresses = $customer->farmAddresses;
-        return view('user.customer.editProfile', compact('customer','farmAddresses'));
+        $farmAddress = FarmAddress::find($request->id);
+
+        $farmAddress->name = $request->input('farmAddress.1.name');
+        $farmAddress->addressLine1 = $request->input('farmAddress.1.addressLine1');
+        $farmAddress->addressLine2 = $request->input('farmAddress.1.addressLine2');
+        $farmAddress->zipCode = $request->input('farmAddress.1.zipCode');
+        $farmAddress->farmType = $request->input('farmAddress.1.farmType');
+        $farmAddress->landline = $request->input('farmAddress.1.landline');
+        $farmAddress->mobile = $request->input('farmAddress.1.mobile');
+        $farmAddress->save();
+
+        if($request->ajax()) return $farmAddress->toJson();
+        else return redirect()->route('customer.edit');
     }
 
     /**
-     * Update User's profile
-     * @return View
+     * Delete User's farm information instance
+     * AJAX
+     * @return String
      */
-    public function updateProfile(CustomerProfileRequest $request)
+    public function deleteFarm(Request $request)
     {
-
-        $customer = Auth::user()->userable;
-        $customer->fill($request->only(['address_addressLine1',
-            'address_addressLine2',
-            'address_province',
-            'address_zipCode',
-            'landline',
-            'mobile']
-        ))->save();
-
-        $i = 1;
-        foreach ($customer->farmAddresses as $farmAddress) {
-
-            $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
-            $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
-            $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
-            $farmAddress->zipCode = $request->input('farmAddress.'.$i.'.zipCode');
-            $farmAddress->farmType = $request->input('farmAddress.'.$i.'.farmType');
-            $farmAddress->landline = $request->input('farmAddress.'.$i.'.landline');
-            $farmAddress->mobile = $request->input('farmAddress.'.$i.'.mobile');
-            $farmAddress->save();
-            $i++;
-        }
-
-        return redirect()->route('customer.edit')
-            ->with('message','Profile updated successfully!');
+        $farmAddress = FarmAddress::find($request->id);
+        $farmAddress->status_instance = 'inactive';
+        $farmAddress->save();
+        if($request->ajax()) return "OK";
+        else return redirect()->route('customer.edit');
     }
 
 

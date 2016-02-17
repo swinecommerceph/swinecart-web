@@ -4,7 +4,7 @@ namespace App\Http\Requests;
 
 use App\Http\Requests\Request;
 
-class BreederProfileRequest extends Request
+class BreederPersonalProfileRequest extends Request
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -31,13 +31,6 @@ class BreederProfileRequest extends Request
             'office_mobile' => 'required',
             'contactPerson_name' => 'required',
             'contactPerson_mobile' => 'required',
-            'farmAddress.*.name' => 'required',
-            'farmAddress.*.addressLine1' => 'required',
-            'farmAddress.*.addressLine2' => 'required',
-            'farmAddress.*.province' => 'required',
-            'farmAddress.*.zipCode' => 'required',
-            'farmAddress.*.farmType' => 'required',
-            'farmAddress.*.mobile' => 'required',
         ];
     }
 }

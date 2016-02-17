@@ -8,6 +8,10 @@
     | Breeder
 @endsection
 
+@section('breadcrumb-title')
+    Home
+@endsection
+
 @section('navbar_head')
     <li><a href="{{ route('home_path') }}"> <i class="material-icons left">assessment</i> Inventory </a></li>
 @endsection

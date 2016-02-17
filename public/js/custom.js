@@ -1,8 +1,10 @@
 $(document).ready(function(){
 
+	// document.location.href = String( document.location.href ).replace( /#.*/, "" );
+
 	// User
 	$(".dropdown-button").dropdown({
-        hover:false,
+        hover:true,
         constrainwidth:false,
         gutter: 0,
         belowOrigin: false,
@@ -20,6 +22,12 @@ $(document).ready(function(){
         e.preventDefault();
         $(this).prop('disabled', true);
         $(this).parents('form').submit();
+    });
+
+    $('.social-button').click(function(e){
+        e.preventDefault();
+        $(this).addClass('disabled');
+        location.href = $(this).attr('href');
     });
 
     var provinces = [
