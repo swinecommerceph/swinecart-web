@@ -10,7 +10,11 @@ use App\Http\Requests\CustomerFarmProfileRequest;
 
 use App\Http\Controllers\Controller;
 use App\Models\Customer;
+use App\Models\Breeder;
 use App\Models\FarmAddress;
+use App\Models\Product;
+use App\Models\Image;
+use App\Models\Breed;
 use Auth;
 
 class CustomerController extends Controller
@@ -18,7 +22,7 @@ class CustomerController extends Controller
     protected $user;
 
     /**
-     * Create new UserController instance
+     * Create new CustomerController instance
      */
     public function __construct()
     {
@@ -38,7 +42,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show Page for User to complete profile
+     * Show Page for Customer to complete profile
      * @return View
      */
     public function createProfile()
@@ -87,7 +91,7 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show Page for User to update profile
+     * Show Page for Customer to update profile
      * @return View
      */
     public function editProfile()
@@ -98,9 +102,9 @@ class CustomerController extends Controller
     }
 
     /**
-     * Update User's personal information
+     * Update Customer's personal information
      * AJAX
-     * @return JSON
+     * @return JSON / View
      */
     public function updatePersonal(CustomerPersonalProfileRequest $request)
     {
@@ -118,9 +122,9 @@ class CustomerController extends Controller
     }
 
     /**
-     * Add User's farm information instance
+     * Add Customer's farm information instance
      * AJAX
-     * @return JSON
+     * @return JSON / View
      */
     public function addFarm(CustomerFarmProfileRequest $request)
     {
@@ -148,9 +152,9 @@ class CustomerController extends Controller
     }
 
     /**
-     * Update User's farm information instance
+     * Update Customer's farm information instance
      * AJAX
-     * @return JSON
+     * @return JSON / View
      */
     public function updateFarm(CustomerFarmProfileRequest $request)
     {
@@ -170,9 +174,9 @@ class CustomerController extends Controller
     }
 
     /**
-     * Delete User's farm information instance
+     * Delete Customer's farm information instance
      * AJAX
-     * @return String
+     * @return String / View
      */
     public function deleteFarm(Request $request)
     {
@@ -183,5 +187,119 @@ class CustomerController extends Controller
         else return redirect()->route('customer.edit');
     }
 
+    /**
+     * View Products of all Breeders
+     * @return View
+     */
+    public function viewProducts(Request $request)
+    {
+        // Check if empty search parameters
+        if (!$request->type && !$request->breed){
+            if($request->sort && $request->sort != 'none'){
+                $part = explode('-',$request->sort);
+                $products = Product::orderBy($part[0], $part[1])->paginate(10);
+            }
+            else $products = Product::paginate(10);
+        }
+        else{
+            if($request->type) $products = Product::whereIn('type', explode(' ',$request->type));
+            if($request->breed) {
+                $breedIds = $this->getBreedIds($request->breed);
+                if(!$request->type) $products = Product::whereIn('breed_id', $breedIds);
+                else $products = $products->whereIn('breed_id', $breedIds);
+            }
+            if($request->sort) {
+                if($request->sort != 'none'){
+                    $part = explode('-',$request->sort);
+                    $products = $products->orderBy($part[0], $part[1]);
+                }
+            }
+            $products = $products->paginate(10);
+        }
 
+        $images = [];
+        $breeders = [];
+        $breeds = [];
+        $farms = [];
+        $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
+        $breedFilters = Breed::where('name','not like', '%+%')->orderBy('name','asc')->get();
+
+        foreach ($products as $product) {
+            $image = Image::find($product->primary_img_id);
+            array_push($images,$image->path);
+            $breeder = Breeder::find($product->breeder_id)->users;
+            array_push($breeders,$breeder->first()->name);
+            $breed = Breed::find($product->breed_id);
+            array_push($breeds,$breed->name);
+            $farm = FarmAddress::find($product->farm_from_id);
+            array_push($farms,$farm->province);
+        }
+        return view('user.customer.viewProducts', compact('products', 'images', 'breeders', 'breeds', 'farms', 'filters', 'breedFilters'));
+    }
+
+    /**
+     * View Details of a Product
+     * @return View
+     */
+    public function viewProductDetail($productId)
+    {
+        $product = Product::find($productId);
+        $image = Image::find($product->primary_img_id)->path;
+        $breeder = Breeder::find($product->breeder_id)->users->first()->name;
+        $breed = Breed::find($product->breed_id)->name;
+        $farm = FarmAddress::find($product->farm_from_id)->province;
+        return view('user.customer.viewProductDetail', compact('product', 'image', 'breeder', 'breed', 'farm'));
+    }
+
+    /**
+     * Parse the Filters according to Type, Breed, and Sort By
+     *
+     * @param   $typeParameter String
+     * @param   $breedParameter String
+     * @param   $sortParameter String
+     * @return  Assocative Array
+     */
+    private function parseThenJoinFilters($typeParameter, $breedParameter, $sortParameter)
+    {
+        $tempFilters = [];
+
+        if($typeParameter){
+            // Parse if there is more than one type filter value
+            $types = explode(' ',$typeParameter);
+            foreach ($types as $type) {
+                $tempFilters[$type] = 'checked';
+            }
+        }
+
+        if($breedParameter){
+            // Parse if there is more than one breed filter value
+            $breeds = explode(' ',$breedParameter);
+            foreach ($breeds as $breed) {
+                $tempFilters[$breed] = 'checked';
+            }
+        }
+
+        $tempFilters[$sortParameter] = 'selected';
+
+        return $tempFilters;
+    }
+
+    /**
+     * Get breed ids of products based from breed filter value
+     *
+     * @param   $breedParameter String
+     * @return  Array
+     */
+    private function getBreedIds($breedParameter)
+    {
+        $tempBreedIds = [];
+        foreach (explode(' ', $breedParameter) as $breedName) {
+            if($breedName == 'crossbreed') $breedInstance = Breed::where('name','like','%+%')->get()->first()->id;
+            else $breedInstance = Breed::where('name',$breedName)->get()->first()->id;
+            array_push($tempBreedIds, $breedInstance);
+        }
+
+        // dd($tempBreedIds);
+        return $tempBreedIds;
+    }
 }

@@ -2,6 +2,7 @@
 
 var profile = {
     add: function(parent_form){
+        $('#progress').fadeIn();
         var farm_address = [];
         var data_values = {
                   "_token" : parent_form.find('input[name=_token]').val()
@@ -33,17 +34,20 @@ var profile = {
             success: function(data){
                 var data = JSON.parse(data);
                 Materialize.toast('Profile updated Success!', 1500, 'green lighten-1');
-                setTimeout(function(){ location.reload(); }, 1500);
+                setTimeout(function(){
+                    $('#progress').fadeOut();
+                    location.reload();
+                }, 1500);
             },
             error: function(message){
                 console.log(message['responseText']);
+                $('#progress').fadeOut();
             }
         });
     },
     edit: function(parent_form, edit_button, cancel_button){
 
-        //$('#progress').fadeIn();
-        $('.preloader-overlay').show();
+        $('#progress').fadeIn();
         $.when(parent_form.find('input').prop('disabled',false)).done(function(){
             // Edit tooltip animation to Done
             edit_button.attr('data-tooltip','Done');
@@ -52,18 +56,18 @@ var profile = {
             $(".tooltipped").tooltip({delay:50});
             edit_button.prop('disabled', false);
             cancel_button.toggle();
-            // $('#progress').fadeOut();
-            $('.preloader-overlay').hide();
+            $('#progress').fadeOut();
         });
 
     },
     update: function(parent_form, edit_button, cancel_button){
+        $('#progress').fadeIn();
         var data_values;
 
         // Determine if form is of personal or farm information
-        if(parent_form.attr('personal-id')){
+        if(parent_form.attr('data-personal-id')){
             data_values = {
-                "id": parent_form.attr('personal-id'),
+                "id": parent_form.attr('data-personal-id'),
                 "address_addressLine1": parent_form.find('input[name=address_addressLine1]').val(),
                 "address_addressLine2": parent_form.find('input[name=address_addressLine2]').val(),
                 "address_province": parent_form.find('input[name=address_province]').val(),
@@ -73,7 +77,7 @@ var profile = {
                 "_token": parent_form.find('input[name=_token]').val()
             };
         }
-        else if (parent_form.attr('farm-id')) {
+        else if (parent_form.attr('data-farm-id')) {
             var farm_address = [];
             var details = {
                 "name": parent_form.find('input[name=name]').val(),
@@ -89,7 +93,7 @@ var profile = {
             farm_address.push(details);
 
             data_values = {
-                    "id": parent_form.attr('farm-id'),
+                    "id": parent_form.attr('data-farm-id'),
                 "_token": parent_form.find('input[name=_token]').val()
             };
             data_values["farmAddress"] = farm_address;
@@ -103,11 +107,10 @@ var profile = {
             data: data_values,
             success: function(data){
                 var data = JSON.parse(data);
-                $('#progress').fadeIn();
                 parent_form.find('input').prop('disabled',true);
 
                 // Change the values of the input
-                if(parent_form.attr('personal-id')){
+                if(parent_form.attr('data-personal-id')){
                     parent_form.find('input[name=address_addressLine1]').val(data.address_addressLine1);
                     parent_form.find('input[name=address_addressLine2]').val(data.address_addressLine2);
                     parent_form.find('input[name=address_province]').val(data.address_province);
@@ -115,7 +118,7 @@ var profile = {
                     parent_form.find('input[name=landline]').val(data.landline);
                     parent_form.find('input[name=mobile]').val(data.mobile);
                 }
-                else if(parent_form.attr('farm-id')){
+                else if(parent_form.attr('data-farm-id')){
                     parent_form.find('input[name=name]').val(data.name);
                     parent_form.find('.farm-title').html(data.name);
                     parent_form.find('input[name=addressLine1]').val(data.addressLine1);
@@ -139,6 +142,7 @@ var profile = {
             },
             error: function(message){
                 console.log(message['responseText']);
+                $('#progress').fadeOut();
             }
         });
     },
@@ -156,34 +160,31 @@ var profile = {
         });
     },
     remove: function(parent_form, row){
+        $('#progress').fadeIn();
+
         $.ajax({
             url: parent_form.attr('action'),
             type: "DELETE",
             cache: false,
             data: {
-                "id": parent_form.attr('farm-id'),
+                "id": parent_form.attr('data-farm-id'),
                 "_token": parent_form.find('input[name=_token]').val()
             },
             success: function(data){
-                $('#progress').fadeIn();
-
                 if(data == 'OK') {
                     row.remove();
+                    $('#progress').fadeOut();
                     Materialize.toast('Farm information removed',2000);
                 }
-                else Materialize.toast('Farm information removal unsuccessful', 3500, 'red');
-
-                $('#progress').fadeOut();
+                else{
+                    $('#progress').fadeOut();
+                    Materialize.toast('Farm information removal unsuccessful', 2500, 'red');
+                }
             },
             error: function(message){
                 console.log(message['responseText']);
+                $('#progress').fadeOut();
             }
         });
-    },
-    get: function(parent_form,name){
-        return $(parent_form).find('input[name="farmAddress[]['+name+']"]').map(function () {
-            return $(this).val();
-        });
     }
-
 };

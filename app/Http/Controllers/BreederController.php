@@ -20,7 +20,7 @@ class BreederController extends Controller
     protected $user;
 
 	/**
-     * Create new UserController instance
+     * Create new BreederController instance
      */
     public function __construct()
     {
@@ -40,7 +40,7 @@ class BreederController extends Controller
     }
 
     /**
-     * Show Page for User to complete profile
+     * Show Page for Breeder to complete profile
      * @return View
      */
     public function createProfile()
@@ -93,7 +93,7 @@ class BreederController extends Controller
     }
 
     /**
-     * Show Page for User to update profile
+     * Show Page for Breeder to update profile
      * @return View
      */
     public function editProfile(Request $request)
@@ -104,9 +104,9 @@ class BreederController extends Controller
     }
 
     /**
-     * Update User's personal information
+     * Update Breeder's personal information
      * AJAX
-     * @return JSON
+     * @return JSON / View
      */
     public function updatePersonal(BreederPersonalProfileRequest $request)
     {
@@ -128,9 +128,9 @@ class BreederController extends Controller
     }
 
     /**
-     * Add User's farm information instance
+     * Add Breeder's farm information instance
      * AJAX
-     * @return JSON
+     * @return JSON / View
      */
     public function addFarm(BreederFarmProfileRequest $request)
     {
@@ -158,9 +158,9 @@ class BreederController extends Controller
     }
 
     /**
-     * Update User's farm information instance
+     * Update Breeder's farm information instance
      * AJAX
-     * @return JSON
+     * @return JSON / View
      */
     public function updateFarm(BreederFarmProfileRequest $request)
     {
@@ -180,9 +180,9 @@ class BreederController extends Controller
     }
 
     /**
-     * Delete User's farm information instance
+     * Delete Breeder's farm information instance
      * AJAX
-     * @return String
+     * @return String / View
      */
     public function deleteFarm(Request $request)
     {
@@ -190,7 +190,23 @@ class BreederController extends Controller
         $farmAddress->status_instance = 'inactive';
         $farmAddress->save();
         if($request->ajax()) return "OK";
-        else return redirect()->route('customer.edit');
+        else return redirect()->route('breeder.edit');
+    }
+
+    /**
+     * Show the Breeder's products
+     */
+    public function showProducts()
+    {
+        return view('user.breeder.showProducts');
+    }
+
+    /**
+     * Store the Breeder's products
+     */
+    public function storeProducts()
+    {
+        # code...
     }
 
 }

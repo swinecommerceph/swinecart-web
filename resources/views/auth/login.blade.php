@@ -4,6 +4,10 @@
 
 @extends('layouts.default')
 
+@section('page-id')
+    id="page-login"
+@endsection
+
 @section('content')
 	<div class="row">
 		<div class="col s12 m6 offset-m3">
@@ -48,7 +52,7 @@
 						<h5 class="center-align"> OR </h5>
 						<!-- Facebook Button -->
 						<div class="col s12">
-							<a href="/login/facebook" class="btn-large waves-effect waves-light blue col s12 social-button"> Login with Facebook </a>
+							<a href="/login/facebook" class="btn-large waves-effect waves-light indigo darken-2 col s12 social-button"> Login with Facebook </a>
 						</div>
 					</div>
 

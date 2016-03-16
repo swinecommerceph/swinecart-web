@@ -22,7 +22,7 @@ class CreateFarmAddressesTable extends Migration
             $table->string('farmType');
             $table->string('landline')->nullable();
             $table->string('mobile');
-            $table->integer('addressable_id')->unsigned();;
+            $table->integer('addressable_id')->unsigned();
             $table->string('addressable_type');
             $table->string('status_instance')->default('active');
         });
@@ -35,6 +35,6 @@ class CreateFarmAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('farmAddresses');
+        Schema::drop('farm_addresses');
     }
 }

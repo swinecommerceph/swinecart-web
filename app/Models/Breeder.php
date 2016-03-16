@@ -3,6 +3,9 @@
 namespace App\Models;
 
 use App\Models\User;
+use App\Models\Product;
+use App\Models\Image;
+use App\Models\Video;
 use Illuminate\Database\Eloquent\Model;
 
 class Breeder extends Model
@@ -42,10 +45,34 @@ class Breeder extends Model
     }
 
     /**
-     * Get all of the Customer's farm address/es
+     * Get all of the Breeder's farm address/es
      */
     public function farmAddresses()
     {
         return $this->morphMany(FarmAddress::class, 'addressable');
+    }
+
+    /**
+     * Get all of the Breeder's images
+     */
+    public function images()
+    {
+        return $this->morphMany(Image::class, 'imageable');
+    }
+
+    /**
+     * Get all of the Breeder's videos
+     */
+    public function videos()
+    {
+        return $this->morphMany(Video::class, 'videoable');
+    }
+
+    /**
+     * Get all of the Breeder's products
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class);
     }
 }

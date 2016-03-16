@@ -9,6 +9,10 @@
     - Verification Code
 @endsection
 
+@section('page-id')
+    id="page-verification"
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col s12 m6 offset-m3">

@@ -2,7 +2,6 @@
 
 namespace App\Models;
 
-use App\Models\Customer;
 use Illuminate\Database\Eloquent\Model;
 
 class FarmAddress extends Model

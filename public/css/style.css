@@ -1,7 +1,12 @@
 /* Navigation dropdown styles */
 #nav-dropdown{
-	display:block;
+	/*display:block;*/
 	width: 185px !important;
+}
+
+#cart-dropdown{
+	/*display:block;*/
+	width: 350px !important;
 }
 
 /* Override collapsible components */
@@ -9,10 +14,17 @@
 	display:block;
 }
 
+#page-customer-view-products #filter-details .collapsible-body,
+#page-customer-view-products #filter-details .collapsible-body .active{
+	overflow-y:auto !important;
+	height:270px;
+}
+
 /* Breadcrumb styles */
 #breadcrumb{
 	margin-bottom:5px;
 }
+
 .breadcrumb{
 	color: #004d40;
 	font-size: 1rem;
@@ -40,6 +52,11 @@
 	font-weight: 300;
 }
 
+/* Card component override styles */
+.card-action .row {
+	margin-bottom:0px;
+}
+
 /* Caption styles*/
 .caption {
 	font-size: 1.25rem;
@@ -52,8 +69,62 @@
 	margin-top:0;
 }
 
-/* Preloader overlay styles*/
+/* Preloader styles*/
+#progress{
+	margin-top:0px;
+}
+
+.select{
+	display:block;
+}
+
 .preloader-wrapper{
-	/*margin-left:auto;
-	margin-right:auto;*/
+
+}
+
+/* Pagination styles*/
+.pagination .active span{
+	color:rgb(255,255,255);
+}
+
+/* Fixed Action Button (Back to top) Style*/
+#back-to-top{
+	/*display:none;	*/
+}
+
+/* For labels*/
+#page-customer-view-products #collapsible-container label{
+	color:#000;
+}
+
+/*#home-page #search-container input:placeholder-shown,
+#home-page #search-container input:placeholder-shown,
+#home-page #search-container input:placeholder-shown,
+#home-page #search-container input:placeholder-shown,
+#home-page #search-container input:placeholder-shown,
+{
+	border:5px solid red;
+	color: #FFF !important;
+}*/
+/*
+ * Device-specific styles
+ */
+
+/* Medium Screen*/
+@media only screen and (min-width: 601px){
+	#general-container .pinned{
+		width:18.8%;
+	}
+
+}
+
+/* Large Screen*/
+@media only screen and (min-width: 993px){
+	#general-container .pinned{
+		width:16.25%;
+	}
+
+	#search-container .pinned{
+		width:100%;
+	}
 }

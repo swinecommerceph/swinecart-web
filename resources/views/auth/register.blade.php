@@ -4,6 +4,10 @@
 
 @extends('layouts.twoColumn')
 
+@section('page-id')
+    id="page-register"
+@endsection
+
 @section('left_column')
 	<div class="row">
 		<div class="card-panel">
@@ -63,7 +67,7 @@
 					<h5 class="center-align"> OR </h5>
 					<!-- Facebook Button -->
 					<div class="col s12">
-						<a href="#" class="btn-large waves-effect waves-light blue col s12 social-button"> Register with Facebook </a>
+						<a href="#" class="btn-large waves-effect waves-light indigo darken-2 col s12 social-button"> Register with Facebook </a>
 					</div>
 				</div>
 

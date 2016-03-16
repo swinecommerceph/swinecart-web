@@ -8,39 +8,102 @@
     | Customer
 @endsection
 
+@section('page-id')
+    id="page-customer-home"
+@endsection
+
 @section('breadcrumb-title')
     Home
 @endsection
 
 @section('navbar_head')
-    <li><a href="{{ route('home_path') }}"> Products </a></li>
+    <li><a href="{{ route('products.view') }}"> Products </a></li>
     <li><a href="{{ route('home_path') }}"> <i class="material-icons left">message</i></a></li>
+    <li><a class="dropdown-button" data-beloworigin="true" data-activates="cart-dropdown"><i class="material-icons left">shopping_cart</i><span>1</span></a>
+        <ul id="cart-dropdown" class="dropdown-content">
+            <li><br></li>
+            <li><a href="{{ route('logout_path') }}">Logout</a></li>
+        </ul>
+    </li>
 @endsection
 
 @section('navbar_dropdown')
     <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
     <li class="divider"></li>
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Swine Cart </a></li>
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Order Status </a></li>
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Purchased Products History </a></li>
+    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
+
+@endsection
+
+@section('static')
+    <div class="fixed-action-btn" style="bottom: 30px; right: 24px;">
+      <a id="back-to-top" class="btn-floating btn-large red tooltipped" data-position="left" data-delay="50" data-tooltip="Back To Top">
+        <i class="large material-icons">keyboard_arrow_up</i>
+      </a>
+    </div>
 @endsection
 
 @section('content')
-    <div class="valign-wrapper">
-        <div class="valign">
-          <div class="card blue-grey lighten-2">
-            <div class="card-content white-text">
-                <span class="card-title">Home - Customer</span>
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-                    Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-                    Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
-                    Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.
-                    In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
-                    Integer tincidunt. Cras dapibus.
-                </p>
-            </div>
-          </div>
+    <div class="row">
+    </div>
+
+    {{-- Search bar --}}
+    <nav id="search-container">
+        <div id="search-field" class="nav-wrapper white">
+            <form>
+                <div class="input-field">
+                    <input id="search" type="search" placeholder="Search for a product" required>
+                    <label for="search"><i class="material-icons teal-text">search</i></label>
+                    <i class="material-icons">close</i>
+                </div>
+            </form>
         </div>
+    </nav>
+
+    <div class="row">
+    </div>
+
+    <div class="slider">
+        <ul class="slides">
+          <li>
+            <img src="/images/demo/HP1.jpg"> <!-- random image -->
+            <div class="caption center-align">
+              <h3>Efficiency</h3>
+              <h5 class="light grey-text text-lighten-3">Through the internet, the
+system aims for faster and
+hassle-free transaction between
+consumers and retailers.</h5>
+            </div>
+          </li>
+          <li>
+            <img src="/images/demo/HP2.jpg"> <!-- random image -->
+            <div class="caption left-align">
+              <h3>Security</h3>
+              <h5 class="light grey-text text-lighten-3">security and legitimacy of
+both customers and
+breeders is ensured
+through establishing a set
+of criteria/qualifications.</h5>
+            </div>
+          </li>
+          <li>
+            <img src="/images/demo/HP3.jpg"> <!-- random image -->
+            <div class="caption right-align">
+              <h3>Variety</h3>
+              <h5 class="light grey-text text-lighten-3">security and legitimacy of both customers and
+breeders is ensured through establishing a set
+of criteria/qualifications.</h5>
+            </div>
+          </li>
+          <li>
+            <img src="/images/demo/HP4.jpg"> <!-- random image -->
+            <div class="caption center-align">
+              <h3>Swine Security</h3>
+              <h5 class="light grey-text text-lighten-3">security and legitimacy of both customers and
+breeders is ensured through establishing a set
+of criteria/qualifications.</h5>
+            </div>
+          </li>
+        </ul>
     </div>
 
 @endsection

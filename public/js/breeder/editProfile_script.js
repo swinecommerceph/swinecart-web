@@ -99,7 +99,7 @@ $(document).ready(function(){
                  '</div>'+
                  '<div class="row ">'+
                      '<div class="col offset-s10">'+
-                         '<a href="#" class="btn-floating btn-medium waves-effect waves-light deep-orange tooltipped remove-farm on-create-farm" data-position="left" data-delay="50" data-tooltip="Remove this Farm">'+
+                         '<a href="#" class="btn-floating btn-medium waves-effect waves-light deep-orange tooltipped remove-farm on-create-farm" data-position="left" data-delay="50" data-tooltip="Remove New Farm '+i+'">'+
                              '<i class="material-icons">remove</i>'+
                          '</a>'+
                      '</div>'+
@@ -110,7 +110,7 @@ $(document).ready(function(){
 
         location.href = '#farm-'+i;
         $(".remove-farm, #submit-button").tooltip({delay:50});
-        Materialize.toast('Farm Information added', 2000);
+        Materialize.toast('New Farm Information added', 2000);
     });
 
     // Edit on Personal/Farm Information
@@ -157,7 +157,7 @@ $(document).ready(function(){
             });
             location.href = '#';
         }
-        else Materialize.toast('At least 1 Farm information required', 4000, 'orange accent-2');
+        else Materialize.toast('At least 1 Farm information required', 2500, 'orange accent-2');
     });
 
     // Remove an instance of added farm information
@@ -170,8 +170,9 @@ $(document).ready(function(){
         if(remove_button.hasClass('on-create-farm')){
             var prev_farm, prevSubmitButtonField;
             var row = remove_button.parents('.add-farm');
+            var name = row.find('h5').html();
 
-            row.remove();
+            row.remove().done;
             prev_farm = $('#farm-address-body').find('.add-farm').last();
             prevSubmitButtonField = prev_farm.find(".submit-button-field");
 
@@ -181,8 +182,8 @@ $(document).ready(function(){
                  '</button>').appendTo(prevSubmitButtonField).fadeIn('slow');
             }
 
-            location.href = '#'+prev_farm.attr('id');
-            Materialize.toast('Farm Information removed', 2000);
+            location.href = '#'+prev_farm.find('.card-panel').attr('id');
+            Materialize.toast(name+' Information removed', 2000);
         }
     });
 
@@ -192,41 +193,5 @@ $(document).ready(function(){
         profile.add($('#create-profile'));
     });
 
-    // Preloader
-    $('<div class="valign-wrapper preloader-overlay">'+
-        '<div class="preloader-wrapper big active center-align">'+
-            '<div class="spinner-layer spinner-blue">'+
-                '<div class="circle-clipper left">'+
-                  '<div class="circle"></div>'+
-                '</div><div class="gap-patch">'+
-                  '<div class="circle"></div>'+
-                '</div><div class="circle-clipper right">'+
-                  '<div class="circle"></div>'+
-                '</div>'+
-            '</div>'+
-            '<div class="spinner-layer spinner-red">'+
-                '<div class="circle-clipper left">'+
-                  '<div class="circle"></div>'+
-                '</div><div class="gap-patch">'+
-                  '<div class="circle"></div>'+
-                '</div><div class="circle-clipper right">'+
-                  '<div class="circle"></div>'+
-                '</div>'+
-            '</div>'+
-            '<div class="spinner-layer spinner-green">'+
-                '<div class="circle-clipper left">'+
-                  '<div class="circle"></div>'+
-                '</div><div class="gap-patch">'+
-                  '<div class="circle"></div>'+
-                '</div><div class="circle-clipper right">'+
-                  '<div class="circle"></div>'+
-                '</div>'+
-            '</div>'+
-        '</div>'+
-    '</div>')
-    .css({
-        position: "absolute", width: "100%", height: "100%", top: 0,left: 0, background: "rgba(255,255,255,0.8)", display:"none"
-    })
-    .appendTo($("#personal-information").css("position", "relative"));
 
 });

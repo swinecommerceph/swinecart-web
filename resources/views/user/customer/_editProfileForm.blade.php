@@ -19,9 +19,6 @@
 		Farm mobile
 -->
 <div class="row">
-	<div id="progress" class="progress" style="display:none;">
-		<div class="indeterminate"></div>
-	</div>
 	<div class="col s12">
 		<ul class="tabs z-depth-1">
 			<li id="personal-tab" class="tab col s6"><a class="active" href="#personal-information"><i class="material-icons">person_outline</i>Personal Information</a></li>
@@ -29,7 +26,7 @@
 		</ul>
 	</div>
 	<div class="col s12">
-		{!! Form::model($customer,['route' => 'customer.updatePersonal', 'method' => 'PUT', 'personal-id' => $customer->id]) !!}
+		{!! Form::model($customer,['route' => 'customer.updatePersonal', 'method' => 'PUT', 'data-personal-id' => $customer->id]) !!}
 		<div id="personal-information" class="card-panel">
 
 			<div class="row">
@@ -101,7 +98,7 @@
 					<div class="row add-farm">
 						<div class="col s10 offset-s1">
 							<div id="{{ $farmAddress->name }}" class="card-panel hoverable">
-								{!! Form::open(['route' => 'customer.updateFarm', 'method' => 'PUT', 'class' => 'edit-farm', 'farm-id' => $farmAddress->id]) !!}
+								{!! Form::open(['route' => 'customer.updateFarm', 'method' => 'PUT', 'class' => 'edit-farm', 'data-farm-id' => $farmAddress->id]) !!}
 								<h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
 								<div class="row">
 								<!-- Farm Address: Name -->
@@ -166,7 +163,7 @@
 								<div class="row">
 								  <div class="col s10 offset-s1 content-section">
 									  <div class="col right">
-										  <button  class="btn-floating btn-medium waves-effect waves-light teal darken-1 tooltipped edit-button" data-position="left" data-delay="50" data-tooltip="Edit">
+										  <button  class="btn-floating btn-medium waves-effect waves-light teal darken-1 tooltipped edit-button" data-position="left" data-delay="50" data-tooltip="Edit {{$farmAddress->name}} Farm">
 											  <i class="material-icons">mode_edit</i>
 										  </button>
 									  </div>
@@ -180,10 +177,10 @@
 
 								{!! Form::close() !!}
 
-								{!! Form::open(['route' => 'customer.deleteFarm', 'method' => 'DELETE', 'class' => 'delete-farm', 'farm-id' => $farmAddress->id]) !!}
+								{!! Form::open(['route' => 'customer.deleteFarm', 'method' => 'DELETE', 'class' => 'delete-farm', 'data-farm-id' => $farmAddress->id]) !!}
 									<div class="row ">
 										<div class="col offset-s10 remove-button-field">
-											<a href="#!" class="btn-floating btn-medium waves-effect waves-light deep-orange tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove this Farm">
+											<a href="#!" class="btn-floating btn-medium waves-effect waves-light deep-orange tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove {{$farmAddress->name}} Farm">
 												<i class="material-icons">remove</i>
 											</a>
 										</div>

@@ -40,9 +40,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('register',['as' => 'postRegister_path', 'uses' => 'Auth\AuthController@postRegister']);
 
     // Email Verification for Authentication
-    Route::get('login/redirect/email/{email}/verCode/{verCode}',
+    Route::get('login/redirect/email/{email}/ver-code/{verCode}',
         ['as' => 'verCode.send', 'uses' => 'Auth\AuthController@verifyCode']);
-    Route::get('login/resend/email/{email}/verCode/{verCode}',
+    Route::get('login/resend/email/{email}/ver-code/{verCode}',
         ['as' => 'verCode.resend', 'uses' => 'Auth\AuthController@resendCode']);
 
     /**
@@ -55,12 +55,18 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['prefix' => 'breeder'], function(){
 
     	Route::get('home',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
-    	Route::get('editProfile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
-    	Route::post('editProfile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
-        Route::put('editProfile/personal/edit',['as' => 'breeder.updatePersonal', 'uses' => 'BreederController@updatePersonal']);
-        Route::post('editProfile/farm/add',['as' => 'breeder.addFarm', 'uses' => 'BreederController@addFarm']);
-        Route::put('editProfile/farm/edit',['as' => 'breeder.updateFarm', 'uses' => 'BreederController@updateFarm']);
-        Route::delete('editProfile/farm/delete',['as' => 'breeder.deleteFarm', 'uses' => 'BreederController@deleteFarm']);
+
+        // profile-related
+    	Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
+    	Route::post('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
+        Route::put('edit-profile/personal/edit',['as' => 'breeder.updatePersonal', 'uses' => 'BreederController@updatePersonal']);
+        Route::post('edit-profile/farm/add',['as' => 'breeder.addFarm', 'uses' => 'BreederController@addFarm']);
+        Route::put('edit-profile/farm/edit',['as' => 'breeder.updateFarm', 'uses' => 'BreederController@updateFarm']);
+        Route::delete('edit-profile/farm/delete',['as' => 'breeder.deleteFarm', 'uses' => 'BreederController@deleteFarm']);
+
+        // product-related
+        Route::get('products',['as' => 'products', 'uses' => 'BreederController@showProducts']);
+        Route::post('products',['as' => 'products.store', 'uses' => 'BreederController@storeProducts']);
 
     });
 
@@ -69,12 +75,18 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['prefix' => 'customer'], function(){
 
     	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
-    	Route::get('editProfile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
-    	Route::post('editProfile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
-    	Route::put('editProfile/personal/edit',['as' => 'customer.updatePersonal', 'uses' => 'CustomerController@updatePersonal']);
-        Route::post('editProfile/farm/add',['as' => 'customer.addFarm', 'uses' => 'CustomerController@addFarm']);
-        Route::put('editProfile/farm/edit',['as' => 'customer.updateFarm', 'uses' => 'CustomerController@updateFarm']);
-        Route::delete('editProfile/farm/delete',['as' => 'customer.deleteFarm', 'uses' => 'CustomerController@deleteFarm']);
+
+        // profile-related
+    	Route::get('edit-profile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
+    	Route::post('edit-profile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
+    	Route::put('edit-profile/personal/edit',['as' => 'customer.updatePersonal', 'uses' => 'CustomerController@updatePersonal']);
+        Route::post('edit-profile/farm/add',['as' => 'customer.addFarm', 'uses' => 'CustomerController@addFarm']);
+        Route::put('edit-profile/farm/edit',['as' => 'customer.updateFarm', 'uses' => 'CustomerController@updateFarm']);
+        Route::delete('edit-profile/farm/delete',['as' => 'customer.deleteFarm', 'uses' => 'CustomerController@deleteFarm']);
+
+        // product-related
+        Route::get('view-products',['as' => 'products.view', 'uses' => 'CustomerController@viewProducts']);
+        Route::get('view-products/{product}',['as' => 'products.viewDetail', 'uses' => 'CustomerController@viewProductDetail']);
 
     });
 

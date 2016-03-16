@@ -1,6 +1,7 @@
 $(document).ready(function(){
 
-	// document.location.href = String( document.location.href ).replace( /#.*/, "" );
+    // Hide certain elements
+    $('#back-to-top').hide();
 
 	// User
 	$(".dropdown-button").dropdown({
@@ -11,13 +12,23 @@ $(document).ready(function(){
         alignment: 'right'
     });
 
-    // Complete/Update Profile
-	$(".collapsible").collapsible({
-      accordion : false
-    });
+    // Initialization for Sliders
+    $('.slider').slider({full_width: true});
 
+    // Initialization for Carousels
+    $('.carousel').carousel();
+
+    // Initialization for Material Boxes
+    $('.materialboxed').materialbox();
+
+    // Initialization for tooltips
     $(".tooltipped").tooltip({delay:50});
 
+    // Initialization for Select tags
+    $('select').material_select();
+    $('select#other-breeds').material_select();
+
+	// Disable buttons after submitting to prevent multiple requests
 	$('button[type="submit"]').click(function(e){
         e.preventDefault();
         $(this).prop('disabled', true);
@@ -28,6 +39,18 @@ $(document).ready(function(){
         e.preventDefault();
         $(this).addClass('disabled');
         location.href = $(this).attr('href');
+    });
+
+    // Back to top button functionality
+    $(window).scroll(function(){
+        if ($(this).scrollTop() >= 250) $('#back-to-top').fadeIn(200);
+        else $('#back-to-top').fadeOut(200);
+    });
+
+    $('#back-to-top').click(function(){
+        $('body,html').animate({
+            scrollTop : 0
+        }, 500);
     });
 
     var provinces = [

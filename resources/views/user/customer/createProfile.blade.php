@@ -8,6 +8,10 @@
     | Customer - Complete Profile
 @endsection
 
+@section('page-id')
+    id="page-customer-create-profile"
+@endsection
+
 @section('breadcrumb-title')
     Comlplete Profile
 @endsection

@@ -8,6 +8,10 @@
     | Breeder
 @endsection
 
+@section('page-id')
+    id="page-breeder-home"
+@endsection
+
 @section('breadcrumb-title')
     Home
 @endsection
@@ -17,7 +21,9 @@
 @endsection
 
 @section('navbar_dropdown')
-    <li><a href="{{ route('breeder.edit') }}"> <i class="material-icons left">mode_edit</i> Update Profile</a></li>
+    <li><a href="{{ route('breeder.edit') }}"> <i class="material-icons left">mode_edit</i> Update Profile </a></li>
+    <li><a href="{{ route('products') }}"> <i class="material-icons left">shop</i> Products </a></li>
+
 @endsection
 
 @section('content')

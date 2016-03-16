@@ -4,22 +4,42 @@
 
 @extends('layouts.default')
 
-@section('content')
-    <div class="valign-wrapper">
-        <div class="valign">
-          <div class="card blue-grey lighten-2">
-            <div class="card-content white-text">
-                <span class="card-title">Home</span>
-                <p>Lorem ipsum dolor sit amet, consectetuer adipiscing elit. Aenean commodo ligula eget dolor. Aenean massa.
-                    Cum sociis natoque penatibus et magnis dis parturient montes, nascetur ridiculus mus.
-                    Donec quam felis, ultricies nec, pellentesque eu, pretium quis, sem. Nulla consequat massa quis enim.
-                    Donec pede justo, fringilla vel, aliquet nec, vulputate eget, arcu.
-                    In enim justo, rhoncus ut, imperdiet a, venenatis vitae, justo. Nullam dictum felis eu pede mollis pretium.
-                    Integer tincidunt. Cras dapibus.
-                </p>
+@section('page-id')
+    id="page-home"
+@endsection
+
+@section('homeContent')
+    <div id="home-page" class="row teal" style="height:100vh; margin-bottom:0px;">
+        <div class="container">
+            {{--  Logo --}}
+            <div class="center" style="padding-top:2em; padding-bottom:2em;">
+                <img src="/images/logowhite.png">
             </div>
-          </div>
+
+            {{-- Search bar --}}
+            <nav id="search-container" class="row grey ligthen-3" style="opacity:0.8;">
+                <div id="search-field" class="nav-wrapper blue-grey lighten-5">
+                    <form>
+                        <div class="input-field">
+                            <input id="search" type="search" placeholder="Search for a product" required>
+                            <label for="search"><i class="material-icons teal-text">search</i></label>
+                            <i class="material-icons">close</i>
+                        </div>
+                    </form>
+                </div>
+            </nav>
+
+            <div class="row">
+                <div class="col s4 offset-s4">
+                    <a href="{{ route('getLogin_path') }}" class="waves-effect waves-light btn-large col s12 grey lighten-1" style="font-size:24px;">Login</a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s4 offset-s4">
+                    <a href="{{ route('getRegister_path') }}" class="waves-effect waves-light btn-large col s12 pink lighten-1" style="font-size:24px;">Register</a>
+                </div>
+            </div>
+
         </div>
     </div>
-
 @endsection

@@ -8,6 +8,10 @@
     | Customer - Update Profile
 @endsection
 
+@section('page-id')
+    id="page-customer-edit-profile"
+@endsection
+
 @section('breadcrumb-title')
     Update Profile
 @endsection

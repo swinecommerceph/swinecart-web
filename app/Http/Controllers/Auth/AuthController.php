@@ -148,7 +148,6 @@ class AuthController extends Controller
             $message->to($data['email'])->subject('Verification code for Swine E-Commerce PH');
         });
 
-        // return view('emails.verification', $data);
         return view('emails.message', $data);
 
     }

@@ -8,6 +8,10 @@
     | Breeder - Update Profile
 @endsection
 
+@section('page-id')
+    id="page-breeder-edit-profile"
+@endsection
+
 @section('breadcrumb-title')
     Update Profile
 @endsection
@@ -25,15 +29,6 @@
             @include('user.breeder._editProfileForm')
         </div>
     </div>
-    {{-- <div class="row">
-        <div class="col s12 m8 offset-m2">
-            <h4>Update Profile </h4>
-            <h6>Update your Profile</h6>
-            {!! Form::model($breeder,['route' => 'breeder.update', 'method' =>'PUT', 'class' => 'col s12']) !!}
-                @include('user.breeder._profileForm')
-            {!! Form::close() !!}
-        </div>
-    </div> --}}
     <!-- Modal Structure -->
     <div id="confirmation-modal" class="modal">
         <div class="modal-content">
@@ -48,7 +43,7 @@
 
 @section('customScript')
     <script src="/js/breeder/profile.js"> </script>
-    <script src="/js/customer/editProfile_script.js"> </script>
+    <script src="/js/breeder/editProfile_script.js"> </script>
     @if(Session::has('message'))
 
         <script type="text/javascript">
