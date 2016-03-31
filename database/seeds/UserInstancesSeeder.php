@@ -42,7 +42,7 @@ class UserInstancesSeeder extends Seeder
 
             // Create up to 7 products as well
             // Initialization
-            $rand = random_int(5,7);
+            $rand = random_int(6,7);
             $types = ['sow', 'boar', 'semen']; // 3
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
             for ($i = 0; $i < $rand; $i++) {
@@ -67,6 +67,9 @@ class UserInstancesSeeder extends Seeder
                 elseif ($randBreed == 'chesterwhite') { // Others
                     $image->path = 'images/product/'.$randType.'_chesterwhite1.jpg';
                 }
+                elseif (($randType == 'boar' && $randBreed == 'largewhite+duroc') ||
+                        ($randType == 'sow' && $randBreed == 'landrace+duroc') ||
+                        ($randType == 'semen' && $randBreed == 'largewhite+duroc')) break;
                 else { // General
                     $image->path = 'images/product/'.$randType.'_'.$randBreed.'1.jpg';
                 }

@@ -4,6 +4,8 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\FarmAddress;
+use App\Models\SwineCart;
+use App\Models\TransactionLog;
 use Illuminate\Database\Eloquent\Model;
 
 class Customer extends Model
@@ -44,5 +46,21 @@ class Customer extends Model
     public function farmAddresses()
     {
         return $this->morphMany(FarmAddress::class, 'addressable');
+    }
+
+    /**
+     * Get Swine Cart items of the customer
+     */
+    public function swineCartItems()
+    {
+        return $this->hasMany(SwineCartItem::class);
+    }
+
+    /**
+     * Get Transaction Logs of the customer
+     */
+    public function transactionLogs()
+    {
+        return $this->hasMany(TransactionLog::class);
     }
 }

@@ -37,7 +37,7 @@
             <div class="row">
                 <div class="carousel" style="height:220px;">
                     <a class="carousel-item" href="#one!"><img src="/{{$image}}"></a>
-                    <a class="carousel-item" href="#two!"><img src="/images/swine.JPG"></a>
+                    <a class="carousel-item" href="#two!"><img src="/images/swine.jpg"></a>
                     <a class="carousel-item" href="#three!"><img src="/images/duroc.jpg"></a>
                 </div>
             </div>
@@ -47,11 +47,17 @@
         <div class="col s12 m5">
             <ul class="collection with-header">
                 <li class="collection-header">
-                    <h4>
-                        {{$product->name}}
-                        <a href="#" class="right tooltipped add-to-cart"  data-position="left" data-delay="50" data-tooltip="Add to Swine Cart" data-product-id="{{$product->id}}">
-                            <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
-                        </a>
+                    <h4 class="row">
+                        <div class="col">
+                            {{$product->name}}
+                        </div>
+                        <div class="col right">
+                            {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
+                                <a href="#" class="right tooltipped add-to-cart"  data-position="left" data-delay="50" data-tooltip="Add to Swine Cart">
+                                    <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
+                                </a>
+                            {!! Form::close() !!}
+                        </div>
                     </h4>
 
                 </li>

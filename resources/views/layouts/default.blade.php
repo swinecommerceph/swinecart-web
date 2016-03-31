@@ -49,7 +49,7 @@
 					@yield('navbar_head')
 					<li>
 						<a class="dropdown-button" data-beloworigin="true" data-activates="nav-dropdown">
-							 <i class="material-icons">arrow_drop_down</i>
+							<i class="material-icons">arrow_drop_down</i>
 						</a>
 						<ul id="nav-dropdown" class="dropdown-content">
 					        @yield('navbar_dropdown')
@@ -57,12 +57,10 @@
 					        <li><a href="{{ route('logout_path') }}">Logout</a></li>
 					    </ul>
 					</li>
-
-
 				@endif
 		      	</ul>
 		    </div>
-			<div id="progress" class="progress" style="display:none;">
+			<div id="preloader-progress" class="progress" style="display:none;">
 				<div class="indeterminate"></div>
 			</div>
 			<div id="search-field" class="nav-wrapper white z-depth-1" style="display:none;">
@@ -111,6 +109,7 @@
 	<script src="/js/materialize.min.js"></script>
 	<script src="/js/config.js"></script>
 	<script src="/js/custom.js"></script>
+	@yield('initScript')
 	@yield('customScript')
 
 </body>

@@ -2,7 +2,7 @@
 
 var profile = {
     add: function(parent_form){
-        $('#progress').fadeIn();
+        config.preloader_progress.fadeIn();
         var farm_address = [];
         var data_values = {
                   "_token" : parent_form.find('input[name=_token]').val()
@@ -35,19 +35,19 @@ var profile = {
                 var data = JSON.parse(data);
                 Materialize.toast('Profile updated Success!', 1500, 'green lighten-1');
                 setTimeout(function(){
-                    $('#progress').fadeOut();
+                    config.preloader_progress.fadeOut();
                     location.reload();
                 }, 1500);
             },
             error: function(message){
                 console.log(message['responseText']);
-                $('#progress').fadeOut();
+                config.preloader_progress.fadeOut();
             }
         });
     },
     edit: function(parent_form, edit_button, cancel_button){
 
-        $('#progress').fadeIn();
+        config.preloader_progress.fadeIn();
         $.when(parent_form.find('input').prop('disabled',false)).done(function(){
             // Edit tooltip animation to Done
             edit_button.attr('data-tooltip','Done');
@@ -56,12 +56,12 @@ var profile = {
             $(".tooltipped").tooltip({delay:50});
             edit_button.prop('disabled', false);
             cancel_button.toggle();
-            $('#progress').fadeOut();
+            config.preloader_progress.fadeOut();
         });
 
     },
     update: function(parent_form, edit_button, cancel_button){
-        $('#progress').fadeIn();
+        config.preloader_progress.fadeIn();
         var data_values;
 
         // Determine if form is of personal or farm information
@@ -137,17 +137,17 @@ var profile = {
                 $(".tooltipped").tooltip({delay:50});
                 edit_button.prop('disabled', false);
                 cancel_button.toggle();
-                $('#progress').fadeOut();
+                config.preloader_progress.fadeOut();
                 Materialize.toast('Profile updated successfully!', 2000, 'green lighten-1');
             },
             error: function(message){
                 console.log(message['responseText']);
-                $('#progress').fadeOut();
+                config.preloader_progress.fadeOut();
             }
         });
     },
     cancel: function(parent_form, edit_button, cancel_button){
-        $('#progress').fadeIn();
+        config.preloader_progress.fadeIn();
         cancel_button.tooltip('remove');
         $.when(parent_form.find('input').prop('disabled',true)).done(function(){
             // Done tooltip animation to Edit
@@ -156,11 +156,11 @@ var profile = {
             edit_button.html('<i class="material-icons">mode_edit</i>');
             $(".tooltipped").tooltip({delay:50});
             cancel_button.toggle();
-            $('#progress').fadeOut();
+            config.preloader_progress.fadeOut();
         });
     },
     remove: function(parent_form, row){
-        $('#progress').fadeIn();
+        config.preloader_progress.fadeIn();
 
         $.ajax({
             url: parent_form.attr('action'),
@@ -173,17 +173,17 @@ var profile = {
             success: function(data){
                 if(data == 'OK') {
                     row.remove();
-                    $('#progress').fadeOut();
+                    config.preloader_progress.fadeOut();
                     Materialize.toast('Farm information removed',2000);
                 }
                 else{
-                    $('#progress').fadeOut();
+                    config.preloader_progress.fadeOut();
                     Materialize.toast('Farm information removal unsuccessful', 2500, 'red');
                 }
             },
             error: function(message){
                 console.log(message['responseText']);
-                $('#progress').fadeOut();
+                config.preloader_progress.fadeOut();
             }
         });
     }

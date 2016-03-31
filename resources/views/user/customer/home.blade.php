@@ -19,10 +19,65 @@
 @section('navbar_head')
     <li><a href="{{ route('products.view') }}"> Products </a></li>
     <li><a href="{{ route('home_path') }}"> <i class="material-icons left">message</i></a></li>
-    <li><a class="dropdown-button" data-beloworigin="true" data-activates="cart-dropdown"><i class="material-icons left">shopping_cart</i><span>1</span></a>
-        <ul id="cart-dropdown" class="dropdown-content">
-            <li><br></li>
-            <li><a href="{{ route('logout_path') }}">Logout</a></li>
+    <li><a id="cart-icon" class="dropdown-button" data-beloworigin="true" data-activates="cart-dropdown">
+            <i class="material-icons">shopping_cart</i>
+            <span></span>
+        </a>
+        <ul id="cart-dropdown" class="dropdown-content collection">
+            <div id="preloader-circular" class="row">
+                <div class="center-align">
+                    <div class="preloader-wrapper small active">
+                        <div class="spinner-layer spinner-blue-only">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+
+                        {{-- <div class="spinner-layer spinner-red">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+
+                        <div class="spinner-layer spinner-yellow">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+
+                        <div class="spinner-layer spinner-green">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div><div class="gap-patch">
+                                <div class="circle"></div>
+                            </div><div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div> --}}
+                    </div>
+                </div>
+            </div>
+            <li>
+                <ul id="item-container" class="collection">
+                </ul>
+            </li>
+
+            <li>
+                <a href="{{ route('home_path') }}" class="left">Go to Cart</a>
+                <a href="{{ route('home_path') }}" class="right">Request items</a>
+            </li>
         </ul>
     </li>
 @endsection
@@ -106,4 +161,9 @@ of criteria/qualifications.</h5>
         </ul>
     </div>
 
+@endsection
+
+@section('initScript')
+    <script src="/js/customer/swinecart.js"> </script>
+    <script src="/js/customer/customer_custom.js"> </script>
 @endsection

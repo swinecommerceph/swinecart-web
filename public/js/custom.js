@@ -8,7 +8,7 @@ $(document).ready(function(){
         hover:true,
         constrainwidth:false,
         gutter: 0,
-        belowOrigin: false,
+        belowOrigin: true,
         alignment: 'right'
     });
 

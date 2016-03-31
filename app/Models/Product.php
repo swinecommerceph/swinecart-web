@@ -28,7 +28,7 @@ class Product extends Model
         'name',
         'type',
         'age',
-        'breed',
+        'breed_id',
         'price',
         'quantity',
         'adg',

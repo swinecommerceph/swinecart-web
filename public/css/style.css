@@ -14,10 +14,16 @@
 	display:block;
 }
 
+#page-customer-view-products .collapsible-body p {
+	padding:1.4rem;
+}
+
 #page-customer-view-products #filter-details .collapsible-body,
-#page-customer-view-products #filter-details .collapsible-body .active{
+#page-customer-view-products #filter-details .collapsible-body .active,
+#page-customer-view-products #filter-location .collapsible-body,
+#page-customer-view-products #filter-location .collapsible-body .active{
 	overflow-y:auto !important;
-	height:270px;
+	height:117px;
 }
 
 /* Breadcrumb styles */
@@ -57,7 +63,7 @@
 	margin-bottom:0px;
 }
 
-/* Caption styles*/
+/* Caption styles */
 .caption {
 	font-size: 1.25rem;
 	font-weight: 300;
@@ -69,48 +75,74 @@
 	margin-top:0;
 }
 
-/* Preloader styles*/
-#progress{
+/* Preloader styles */
+#preloader-progress{
 	margin-top:0px;
 }
 
+/* Select styles */
 .select{
 	display:block;
 }
 
-.preloader-wrapper{
 
-}
-
-/* Pagination styles*/
+/* Pagination styles */
 .pagination .active span{
 	color:rgb(255,255,255);
 }
 
-/* Fixed Action Button (Back to top) Style*/
+/* Fixed Action Button (Back to top) Style */
 #back-to-top{
 	/*display:none;	*/
 }
 
-/* For labels*/
+/* For labels */
 #page-customer-view-products #collapsible-container label{
-	color:#000;
+	/*color:#000;*/
 }
 
-/*#home-page #search-container input:placeholder-shown,
-#home-page #search-container input:placeholder-shown,
-#home-page #search-container input:placeholder-shown,
-#home-page #search-container input:placeholder-shown,
-#home-page #search-container input:placeholder-shown,
-{
-	border:5px solid red;
-	color: #FFF !important;
-}*/
+/* Swine Cart styles */
+#cart-icon i.left{
+	margin-right: 0px;
+}
+
+#cart-icon span.badge{
+	color: white;
+	background-color: #ee6e73;
+	border-radius: 5px;
+}
+
+#cart-dropdown span.title, #cart-dropdown .collection-item a{
+	padding: 0px;
+}
+
+#cart-dropdown li{
+	cursor:default;
+}
+
+#cart-dropdown .anchor-title{
+	margin-right:2rem;
+}
+
+#cart-dropdown .row{
+	margin-bottom: 0px;
+}
+
+#cart-dropdown div.center-align{
+	padding-top:1rem;
+}
+
+#item-container{
+	margin:0px;
+	overflow-y:auto !important;
+	max-height:400px;
+}
+
 /*
  * Device-specific styles
  */
 
-/* Medium Screen*/
+/* Medium Screen */
 @media only screen and (min-width: 601px){
 	#general-container .pinned{
 		width:18.8%;
@@ -118,7 +150,7 @@
 
 }
 
-/* Large Screen*/
+/* Large Screen */
 @media only screen and (min-width: 993px){
 	#general-container .pinned{
 		width:16.25%;

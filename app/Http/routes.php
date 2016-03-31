@@ -88,6 +88,12 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('view-products',['as' => 'products.view', 'uses' => 'CustomerController@viewProducts']);
         Route::get('view-products/{product}',['as' => 'products.viewDetail', 'uses' => 'CustomerController@viewProductDetail']);
 
+        // swinecart-related
+        Route::get('swine-cart',['as' => 'cart.items', 'uses' => 'CustomerController@getSwineCartItems']);
+        Route::post('swine-cart/add',['as' => 'cart.add', 'uses' => 'CustomerController@addToSwineCart']);
+        Route::delete('swine-cart/delete',['as' => 'cart.delete', 'uses' => 'CustomerController@deleteFromSwineCart']);
+        Route::get('swine-cart/quantity',['as' => 'cart.quantity', 'uses' => 'CustomerController@getSwineCartQuantity']);
+
     });
 
 });

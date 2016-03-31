@@ -15,6 +15,8 @@ use App\Models\FarmAddress;
 use App\Models\Product;
 use App\Models\Image;
 use App\Models\Breed;
+use App\Models\SwineCartItem;
+use App\Models\TransactionLog;
 use Auth;
 
 class CustomerController extends Controller
@@ -33,6 +35,7 @@ class CustomerController extends Controller
 
     /**
      * Show Home Page of customer
+     *
      * @return View
      */
     public function index(Request $request)
@@ -43,6 +46,7 @@ class CustomerController extends Controller
 
     /**
      * Show Page for Customer to complete profile
+     *
      * @return View
      */
     public function createProfile()
@@ -53,6 +57,7 @@ class CustomerController extends Controller
     /**
      * Create and store Customer profile data to database
      * Associate User to Customer user type as well
+     *
      * @param  Request $request
      * @return Redirect
      */
@@ -92,6 +97,7 @@ class CustomerController extends Controller
 
     /**
      * Show Page for Customer to update profile
+     *
      * @return View
      */
     public function editProfile()
@@ -104,6 +110,7 @@ class CustomerController extends Controller
     /**
      * Update Customer's personal information
      * AJAX
+     *
      * @return JSON / View
      */
     public function updatePersonal(CustomerPersonalProfileRequest $request)
@@ -124,6 +131,7 @@ class CustomerController extends Controller
     /**
      * Add Customer's farm information instance
      * AJAX
+     *
      * @return JSON / View
      */
     public function addFarm(CustomerFarmProfileRequest $request)
@@ -154,6 +162,7 @@ class CustomerController extends Controller
     /**
      * Update Customer's farm information instance
      * AJAX
+     *
      * @return JSON / View
      */
     public function updateFarm(CustomerFarmProfileRequest $request)
@@ -176,6 +185,7 @@ class CustomerController extends Controller
     /**
      * Delete Customer's farm information instance
      * AJAX
+     *
      * @return String / View
      */
     public function deleteFarm(Request $request)
@@ -189,6 +199,7 @@ class CustomerController extends Controller
 
     /**
      * View Products of all Breeders
+     *
      * @return View
      */
     public function viewProducts(Request $request)
@@ -223,6 +234,7 @@ class CustomerController extends Controller
         $farms = [];
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->orderBy('name','asc')->get();
+        $urlFilters = $this->toUrlFilter($request->type, $request->breed, $request->sort);
 
         foreach ($products as $product) {
             $image = Image::find($product->primary_img_id);
@@ -234,11 +246,12 @@ class CustomerController extends Controller
             $farm = FarmAddress::find($product->farm_from_id);
             array_push($farms,$farm->province);
         }
-        return view('user.customer.viewProducts', compact('products', 'images', 'breeders', 'breeds', 'farms', 'filters', 'breedFilters'));
+        return view('user.customer.viewProducts', compact('products', 'images', 'breeders', 'breeds', 'farms', 'filters', 'breedFilters', 'urlFilters'));
     }
 
     /**
      * View Details of a Product
+     *
      * @return View
      */
     public function viewProductDetail($productId)
@@ -249,6 +262,106 @@ class CustomerController extends Controller
         $breed = Breed::find($product->breed_id)->name;
         $farm = FarmAddress::find($product->farm_from_id)->province;
         return view('user.customer.viewProductDetail', compact('product', 'image', 'breeder', 'breed', 'farm'));
+    }
+
+    /**
+     * Add to Swine Cart the product picked by the user
+     * AJAX
+     *
+     * @return Array
+     */
+    public function addToSwineCart(Request $request)
+    {
+        if($request->ajax()){
+            $customer = $this->user->userable;
+            $swineCartItems = $customer->swineCartItems();
+            $checkProduct = $swineCartItems->where('product_id',$request->productId)->get();
+
+            // Check first if product is already in Swine Cart
+            if(!$checkProduct->isEmpty()){
+                // Then check if it is already requested
+                if($checkProduct->first()->ifRequested) $returnArray = ['requested', Product::find($request->productId)->name];
+                else $returnArray = ['fail', Product::find($request->productId)->name];
+                return $returnArray;
+            }
+            else{
+                $item = new SwineCartItem;
+                $item->product_id = $request->productId;
+                $item->quantity = 1;
+
+                $swineCartItems->save($item);
+
+                $returnArray = ['success', Product::find($request->productId)->name, $customer->swineCartItems()->where('if_requested',0)->count()];
+                return $returnArray;
+            }
+        }
+    }
+
+    /**
+     * Delete item from Swine Cart
+     * AJAX
+     *
+     * @return Array
+     */
+    public function deleteFromSwineCart(Request $request)
+    {
+        if($request->ajax()){
+            $customer = $this->user->userable;
+            $item = $customer->swineCartItems()->where('id',$request->itemId)->get()->first();
+            $product_name = Product::find($item->product_id)->name;
+            if($item) {
+                $item->delete();
+                return ["success", $product_name, $customer->swineCartItems()->where('if_requested',0)->count()];
+            }
+            else return ["not found", $product_id];
+
+        }
+    }
+
+    /**
+     * Get items in the Swine Cart
+     * AJAX
+     *
+     * @return JSON
+     */
+    public function getSwineCartItems(Request $request)
+    {
+        if($request->ajax()){
+            $customer = $this->user->userable;
+            $swineCartItems = $customer->swineCartItems()->where('if_requested',0)->get();
+            $items = [];
+
+            foreach ($swineCartItems as $item) {
+                $itemDetail = [];
+                $product = Product::find($item->product_id);
+                $itemDetail['item_id'] = $item->id;
+                $itemDetail['product_id'] = $item->product_id;
+                $itemDetail['product_name'] = $product->name;
+                $itemDetail['product_type'] = $product->type;
+                $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
+                $itemDetail['img_path'] = Image::find($product->primary_img_id)->path;
+                $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+                $itemDetail['token'] = csrf_token();
+                array_push($items,$itemDetail);
+            }
+
+            $itemsCollection = collect($items);
+            return $itemsCollection->toJson();
+        }
+    }
+
+    /**
+     * Get number of items in the Swine Cart
+     * AJAX
+     *
+     * @return int
+     */
+    public function getSwineCartQuantity(Request $request)
+    {
+        if($request->ajax()){
+            $customer = $this->user->userable;
+            return $customer->swineCartItems()->where('if_requested',0)->count();
+        }
     }
 
     /**
@@ -282,6 +395,25 @@ class CustomerController extends Controller
         $tempFilters[$sortParameter] = 'selected';
 
         return $tempFilters;
+    }
+
+    /**
+     * Parse the Filters according to Type, Breed, and Sort By
+     *
+     * @param   $typeParameter String
+     * @param   $breedParameter String
+     * @param   $sortParameter String
+     * @return  Assocative Array
+     */
+    private function toUrlFilter($typeParameter, $breedParameter, $sortParameter)
+    {
+        $tempUrlFilters = [];
+
+        if($typeParameter)  $tempUrlFilters['type'] = $typeParameter;
+        if($breedParameter) $tempUrlFilters['breed'] = $breedParameter;
+        if($sortParameter) $tempUrlFilters['sort'] = $sortParameter;
+
+        return $tempUrlFilters;
     }
 
     /**

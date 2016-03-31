@@ -38,8 +38,11 @@
     </nav>
 
     <div class="row" style="padding-top:1rem;">
-        <!-- Sort Order -->
-        <div class="input-field col right">
+        {{-- Chips --}}
+        <div id="chip-container" class="col s9 left"> </div>
+
+        {{-- Sort Order --}}
+        <div class="input-field col s3 right">
             <div class="left">
                 <select>
                     <option value="" @if(!empty($filters['none']))
@@ -50,25 +53,11 @@
                     <option value="age-asc" @if(!empty($filters['age-asc'])) {{ $filters['age-asc'] }} @endif > Age: Low to High</option>
                     <option value="age-desc" @if(!empty($filters['age-desc'])) {{ $filters['age-desc'] }} @endif >Age: High to Low</option>
                     <option value="backfat_thickness-asc" @if(!empty($filters['backfat_thickness-asc'])) {{ $filters['backfat_thickness-asc'] }} @endif >BT: Low to High</option>
-                    <option value="backfat_thickness-desc" @if(!empty($filters['backfat_thickness-desc'])) {{ $filters['backfat_thickness-desc'] }} @endif >BT: High to Low</option>
                     <option value="fcr-asc" @if(!empty($filters['fcr-asc'])) {{ $filters['fcr-asc'] }} @endif >FCR: Low to High</option>
-                    <option value="fcr-desc" @if(!empty($filters['fcr-desc'])) {{ $filters['fcr-desc'] }} @endif >FCR: High to Low</option>
-                    <option value="adg-asc" @if(!empty($filters['adg-asc'])) {{ $filters['adg-asc'] }} @endif >ADG: Low to High</option>
                     <option value="adg-desc" @if(!empty($filters['adg-desc'])) {{ $filters['adg-desc'] }} @endif >ADG: High to Low</option>
                 </select>
                 <label> Sort By</label>
             </div>
-            {{-- <div class="col right">
-                <p>
-                    <input class="with-gap" name="group-radio" type="radio" id="radio-asc"  />
-                    <label for="radio-asc">Ascending</label>
-                    <input class="with-gap" name="group-radio" type="radio" id="radio-desc"  />
-                    <label for="radio-desc">Descending</label>
-                </p>
-            </div> --}}
-
-
-
         </div>
     </div>
 
@@ -89,32 +78,29 @@
                                         {{$filters['boar']}}
                                     @endif/>
                                     <label for="check-boar" @if(!empty($filters['boar']))
-                                        style="font-weight:500;"
+                                        style="font-weight:500; color:#000;"
                                     @endif>Boar</label><br>
 
                                     <input type="checkbox" class="filled-in filter-type" id="check-sow" data-type="sow" @if(!empty($filters['sow']))
                                         {{$filters['sow']}}
                                     @endif/>
                                     <label for="check-sow" @if(!empty($filters['sow']))
-                                        style="font-weight:500;"
+                                        style="font-weight:500; color:#000;"
                                     @endif>Sow</label><br>
 
                                     <input type="checkbox" class="filled-in filter-type" id="check-semen" data-type="semen" @if(!empty($filters['semen']))
                                         {{$filters['semen']}}
                                     @endif/>
                                     <label for="check-semen" @if(!empty($filters['semen']))
-                                        style="font-weight:500;"
+                                        style="font-weight:500; color:#000;"
                                     @endif>Semen</label><br>
                                 </p>
                           </div>
                         </li>
                         <li id="filter-details">
-                          <div class="collapsible-header"><i class="material-icons">details</i>Product Details</div>
+                          <div class="collapsible-header"><i class="material-icons">details</i>Breed</div>
                           <div class="collapsible-body">
                             <p class="range-field">
-                                {{-- Age --}}
-                                <label for="slide-age">Age</label><br>
-                                <input type="range" id="slide-age" min="0" max="15" />
 
                                 {{-- Breed --}}
                                 @foreach($breedFilters as $breedFilter)
@@ -123,7 +109,7 @@
                                         {{$filters[$breedFilter->name]}}
                                     @endif/>
                                     <label for="check-{{$breedFilter->name}}" @if(!empty($filters[$breedFilter->name]))
-                                        style="font-weight:500;"
+                                        style="font-weight:500; color:#000;"
                                     @endif>{{ucfirst($breedFilter->name)}}</label><br>
 
                                 @endforeach
@@ -132,12 +118,22 @@
                                     {{$filters['crossbreed']}}
                                 @endif/>
                                 <label for="check-crossbreed" @if(!empty($filters['crossbreed']))
-                                    style="font-weight:500;"
+                                    style="font-weight:500; color:#000;"
                                 @endif>Crossbreed</label>
-
                             </p>
 
                           </div>
+                        </li>
+                        <li id="filter-location">
+                            <div class="collapsible-header"><i class="material-icons">place</i>Province Location</div>
+                            <div class="collapsible-body">
+                                <div class="input-field col">
+                                    <select>
+                                        <option value="reg1" selected>Region I</option>
+                                        <option value="reg2">Region II</option>
+                                    </select>
+                                </div>
+                            </div>
                         </li>
                 </ul>
             </div>
@@ -156,12 +152,14 @@
                     <div class="col s12 m6 l6 ">
                       <div class="card hoverable">
                         <div class="card-image">
-                          <img height="220" src="/{{ $images[$item] }}">
+                            <a href="{{ route('products.viewDetail', ['product' => $product->id]) }}" >
+                                <img height="220" src="/{{ $images[$item] }}">
+                            </a>
                         </div>
                         <div class="card-content">
                           <span class="card-title activator grey-text text-darken-4">{{$product->name}}<i class="material-icons right">more_vert</i></span>
-                          <p class="row">
-                              <span class="col s9">
+                          <div class="row">
+                              <div class="col s9">
                                   <?php
                                     if(str_contains($breeds[$item],'+')){
                                         $part = explode("+", $breeds[$item]);
@@ -171,32 +169,41 @@
                                   ?>
                                   {{ucfirst($product->type).' - '.$breedValue}} <br>
                                   {{$product->age}} days old
-                              </span>
-                              <span class="right">
-                                <a href="#" class="right tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart" data-product-id="{{$product->id}}">
-                                    <i class="material-icons red-text" style="font-size:35px">add_shopping_cart</i>
-                                </a>
-                              </span>
-                          </p>
+                              </div>
+                              <div class="col right">
+                                {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
+                                    <a href="#" class="tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart">
+                                        <i class="material-icons red-text" style="font-size:35px">add_shopping_cart</i>
+
+                                    </a>
+                                {!! Form::close()!!}
+                              </div>
+                          </div>
                         </div>
                         <div class="card-reveal">
                             <span class="card-title grey-text text-darken-4">{{$product->name}}<i class="material-icons right">close</i></span>
                             <p>
-                                Average Daily Gain (grams): {{$product->adg}}<br>
-                                FCR: {{$product->fcr}} <br>
-                                Backfat Thickness (mm): {{$product->backfat_thickness}}<br>
+                                Average Daily Gain (grams): {{ $product->adg }}<br>
+                                FCR: {{ $product->fcr }} <br>
+                                Backfat Thickness (mm): {{ $product->backfat_thickness }}<br>
                             </p>
                             <p>
                                 Breeder info <br>
                                 Name: {{ $breeders[$item] }} <br>
                                 Farm Location: {{ $farms[$item] }}
                             </p>
-                            <div>
+                            <div class="row">
                                 <br>
-                                <a href="{{ route('products.viewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
-                                <a href="#" class="right tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart" data-product-id="{{$product->id}}">
-                                    <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
-                                </a>
+                                <div class="col">
+                                    <a href="{{ route('products.viewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
+                                </div>
+                                <div class="col right">
+                                    {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
+                                        <a href="#" class="tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart">
+                                            <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
+                                        </a>
+                                    {!! Form::close() !!}
+                                </div>
                             </div>
 
                         </div>
@@ -221,7 +228,7 @@
             {{-- Pagination --}}
             <div class="row">
                 <div class="center-align">
-                    {{ $products->links() }}
+                    {!! $products->appends($urlFilters)->links() !!}
                 </div>
             </div>
 
