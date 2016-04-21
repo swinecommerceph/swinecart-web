@@ -99,7 +99,7 @@ $(document).ready(function(){
                  '</div>'+
                  '<div class="row ">'+
                      '<div class="col offset-s10">'+
-                         '<a href="#" class="btn-floating btn-medium waves-effect waves-light deep-orange tooltipped remove-farm on-create-farm" data-position="left" data-delay="50" data-tooltip="Remove New Farm '+i+'">'+
+                         '<a href="#" class="btn-floating btn-medium waves-effect waves-light grey tooltipped remove-farm on-create-farm" data-position="left" data-delay="50" data-tooltip="Remove New Farm '+i+'">'+
                              '<i class="material-icons">remove</i>'+
                          '</a>'+
                      '</div>'+
@@ -192,42 +192,5 @@ $(document).ready(function(){
         e.preventDefault();
         profile.add($('#create-profile'));
     });
-
-    // Preloader
-    // $('<div class="valign-wrapper preloader-overlay">'+
-    //     '<div class="preloader-wrapper big active center-align">'+
-    //         '<div class="spinner-layer spinner-blue">'+
-    //             '<div class="circle-clipper left">'+
-    //               '<div class="circle"></div>'+
-    //             '</div><div class="gap-patch">'+
-    //               '<div class="circle"></div>'+
-    //             '</div><div class="circle-clipper right">'+
-    //               '<div class="circle"></div>'+
-    //             '</div>'+
-    //         '</div>'+
-    //         '<div class="spinner-layer spinner-red">'+
-    //             '<div class="circle-clipper left">'+
-    //               '<div class="circle"></div>'+
-    //             '</div><div class="gap-patch">'+
-    //               '<div class="circle"></div>'+
-    //             '</div><div class="circle-clipper right">'+
-    //               '<div class="circle"></div>'+
-    //             '</div>'+
-    //         '</div>'+
-    //         '<div class="spinner-layer spinner-green">'+
-    //             '<div class="circle-clipper left">'+
-    //               '<div class="circle"></div>'+
-    //             '</div><div class="gap-patch">'+
-    //               '<div class="circle"></div>'+
-    //             '</div><div class="circle-clipper right">'+
-    //               '<div class="circle"></div>'+
-    //             '</div>'+
-    //         '</div>'+
-    //     '</div>'+
-    // '</div>')
-    // .css({
-    //     position: "absolute", width: "100%", height: "100%", top: 0,left: 0, background: "rgba(255,255,255,0.8)", display:"block"
-    // })
-    // .appendTo($("body").css("position", "relative"));
 
 });

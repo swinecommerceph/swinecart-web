@@ -20,7 +20,7 @@ class Video extends Model
      *
      * @var array
      */
-    protected $fillable = ['path'];
+    protected $fillable = ['name'];
 
     /**
      * Get all of the videoable models

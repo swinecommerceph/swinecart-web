@@ -1,7 +1,6 @@
 $(document).ready(function(){
 
     // Hide certain elements
-    $('#back-to-top').hide();
 
 	// User
 	$(".dropdown-button").dropdown({
@@ -31,7 +30,7 @@ $(document).ready(function(){
 	// Disable buttons after submitting to prevent multiple requests
 	$('button[type="submit"]').click(function(e){
         e.preventDefault();
-        $(this).prop('disabled', true);
+        $(this).addClass('disabled');
         $(this).parents('form').submit();
     });
 

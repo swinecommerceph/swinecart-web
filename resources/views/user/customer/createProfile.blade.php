@@ -8,11 +8,11 @@
     | Customer - Complete Profile
 @endsection
 
-@section('page-id')
+@section('pageId')
     id="page-customer-create-profile"
 @endsection
 
-@section('breadcrumb-title')
+@section('breadcrumbTitle')
     Comlplete Profile
 @endsection
 
@@ -25,7 +25,7 @@
     <div class="row">
         <div class="col s12 m10 offset-m1">
             <p class="caption">Please complete first your profile. <br>
-                <blockquote>* - required </blockquote>
+                <blockquote>Fields with * are required.</blockquote>
             </p>
 
             @include('common._errors')

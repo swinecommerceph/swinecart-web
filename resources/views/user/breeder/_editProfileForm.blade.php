@@ -1,4 +1,4 @@
-<!--
+{{--
 	This is the form Breeder Users use
 	for updating
 	their profile
@@ -21,7 +21,7 @@
 		Farm type
 		Farm landline
 		Farm mobile
--->
+ --}}
 <div class="row">
 	<div class="col s12">
 		<ul class="tabs z-depth-1">
@@ -224,7 +224,7 @@
 								{!! Form::open(['route' => 'breeder.deleteFarm', 'method' => 'DELETE', 'class' => 'delete-farm', 'data-farm-id' => $farmAddress->id]) !!}
 									<div class="row ">
 										<div class="col offset-s10 remove-button-field">
-											<a href="#!" class="btn-floating btn-medium waves-effect waves-light deep-orange tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove {{$farmAddress->name}} Farm">
+											<a href="#!" class="btn-floating btn-medium waves-effect waves-light grey tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove {{$farmAddress->name}} Farm">
 												<i class="material-icons">remove</i>
 											</a>
 										</div>

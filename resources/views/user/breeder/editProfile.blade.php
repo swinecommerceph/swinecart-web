@@ -8,11 +8,11 @@
     | Breeder - Update Profile
 @endsection
 
-@section('page-id')
+@section('pageId')
     id="page-breeder-edit-profile"
 @endsection
 
-@section('breadcrumb-title')
+@section('breadcrumbTitle')
     Update Profile
 @endsection
 
@@ -29,7 +29,7 @@
             @include('user.breeder._editProfileForm')
         </div>
     </div>
-    <!-- Modal Structure -->
+    {{-- Modal Structure --}}
     <div id="confirmation-modal" class="modal">
         <div class="modal-content">
           <p>Are you sure you want to remove this farm?</p>

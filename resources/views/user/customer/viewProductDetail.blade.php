@@ -8,11 +8,11 @@
     | {{$product->name}}
 @endsection
 
-@section('page-id')
+@section('pageId')
     id="page-customer-view-product-details"
 @endsection
 
-@section('breadcrumb-title')
+@section('breadcrumbTitle')
     {{$product->name}}
 @endsection
 
@@ -24,19 +24,20 @@
 
 @section('content')
     <div class="row">
-        {{-- Primary Image --}}
         <div class="col s12 m7">
+            {{-- Primary Image --}}
             <div class="row">
                 <div class="card">
                     <div class="card-image">
-                        <img class="materialboxed" src="/{{$image}}">
+                        <img class="materialboxed" src="{{$product->img_path}}" >
                     </div>
                 </div>
             </div>
 
+            {{-- Image Carousel --}}
             <div class="row">
                 <div class="carousel" style="height:220px;">
-                    <a class="carousel-item" href="#one!"><img src="/{{$image}}"></a>
+                    <a class="carousel-item" href="#one!"><img src="/{{$product->img_path}}"></a>
                     <a class="carousel-item" href="#two!"><img src="/images/swine.jpg"></a>
                     <a class="carousel-item" href="#three!"><img src="/images/duroc.jpg"></a>
                 </div>
@@ -49,7 +50,7 @@
                 <li class="collection-header">
                     <h4 class="row">
                         <div class="col">
-                            {{$product->name}}
+                            {{ $product->name }}
                         </div>
                         <div class="col right">
                             {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
@@ -59,24 +60,19 @@
                             {!! Form::close() !!}
                         </div>
                     </h4>
-
+                    <div class="row">
+                        <div class="col">
+                            {{ $product->breeder }} <br>
+                            {{ $product->farm_province }}
+                        </div>
+                    </div>
                 </li>
-                <?php
-                  if(str_contains($breed,'+')){
-                      $part = explode("+", $breed);
-                      $breedValue = ucfirst($part[0])." x ".ucfirst($part[1]);
-                  }
-                  else $breedValue = ucfirst($breed);
-                ?>
-                <li class="collection-item">{{ucfirst($product->type).' - '.$breedValue}}</li>
+                <li class="collection-item">{{$product->type}} - {{$product->breed}}</li>
                 <li class="collection-item">{{$product->age}} days old</li>
                 <li class="collection-item">Average Daily Gain: {{$product->adg}} g</li>
                 <li class="collection-item">FCR: {{$product->fcr}}</li>
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
                 <li class="collection-item">
-                    <span style="font-size:1.2rem;"> <b>Breeder info</b> </span><br>
-                    Name: {{ $breeder }} <br>
-                    Farm Location: {{ $farm }} <br>
                     <span class="row">
                         <i class="col s6">Delivery</i>
                         <span class="col s6">
@@ -123,9 +119,16 @@
         </div>
     </div>
 
-    {{-- Image Carousel --}}
     <div class="row">
-
+        <div class="col s12">
+            <div class="card">
+                <div class="card-content black-text">
+                    <span class="card-title">Other Details</span>
+                    <p>I am a very simple card. I am good at containing small bits of information.
+                    I am convenient because I require little markup to use effectively.</p>
+                </div>
+            </div>
+        </div>
     </div>
 
 @endsection

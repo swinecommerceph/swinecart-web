@@ -1,4 +1,4 @@
-<!--
+{{--
 	This is the form Customer Users use
 	for updating
 	their profile
@@ -17,7 +17,7 @@
 		Farm type
 		Farm landline
 		Farm mobile
--->
+ --}}
 <div class="row">
 	<div class="col s12">
 		<ul class="tabs z-depth-1">
@@ -30,7 +30,7 @@
 		<div id="personal-information" class="card-panel">
 
 			<div class="row">
-			<!-- Address: Address Line 1 -->
+				{{-- Address: Address Line 1 --}}
 				<div class="input-field col s10 push-s1">
 					{!! Form::text('address_addressLine1', null, ['disabled' => 'disabled'])!!}
 					{!! Form::label('address_addressLine1', 'Address Line 1* : Street, Road, Subdivision') !!}
@@ -39,7 +39,7 @@
 
 
 			<div class="row">
-			<!-- Address: Address Line 2 -->
+				{{-- Address: Address Line 2 --}}
 				<div class="input-field col s10 push-s1">
 					{!! Form::text('address_addressLine2', null, ['disabled' => 'disabled'])!!}
 					{!! Form::label('address_addressLine2', 'Address Line 2* : Barangay, Town, City') !!}
@@ -48,28 +48,28 @@
 
 
 			<div class="row">
-			<!-- Address: Province -->
+				{{-- Address: Province --}}
 				<div class="input-field col s5 push-s1">
 					{!! Form::text('address_province', null, ['disabled' => 'disabled'])!!}
 					{!! Form::label('address_province', 'Province*') !!}
 				</div>
 
-			<!-- Address: Zip Code -->
-			<div class="input-field col s5 push-s1">
+				{{-- Address: Zip Code --}}
+				<div class="input-field col s5 push-s1">
 					{!! Form::text('address_zipCode', null, ['disabled' => 'disabled'])!!}
 					{!! Form::label('address_zipCode', 'Postal/ZIP Code*') !!}
 				</div>
 			</div>
 
 			<div class="row">
-			<!-- Landline -->
+				{{-- Landline --}}
 				<div class="input-field col s5 push-s1">
 					{!! Form::text('landline', null, ['disabled' => 'disabled'])!!}
 					{!! Form::label('landline', 'Landline') !!}
 				</div>
 
-			<!-- Mobile -->
-			<div class="input-field col s5 push-s1">
+				{{-- Mobile --}}
+				<div class="input-field col s5 push-s1">
 					{!! Form::text('mobile', null, ['disabled' => 'disabled'])!!}
 					{!! Form::label('mobile', 'Mobile*') !!}
 				</div>
@@ -101,7 +101,7 @@
 								{!! Form::open(['route' => 'customer.updateFarm', 'method' => 'PUT', 'class' => 'edit-farm', 'data-farm-id' => $farmAddress->id]) !!}
 								<h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
 								<div class="row">
-								<!-- Farm Address: Name -->
+									{{-- Farm Address: Name --}}
 									<div class="input-field col s10 push-s1">
 										{!! Form::text('name', $farmAddress->name, ['disabled' => 'disabled'])!!}
 										{!! Form::label('name', 'Name*') !!}
@@ -109,7 +109,7 @@
 								</div>
 
 								<div class="row">
-								<!-- Farm Address: Address Line 1 -->
+									{{-- Farm Address: Address Line 1 --}}
 									<div class="input-field col s10 push-s1">
 										{!! Form::text('addressLine1', $farmAddress->addressLine1, ['disabled' => 'disabled'])!!}
 										{!! Form::label('addressLine1', 'Address Line 1* : Street, Road, Subdivision') !!}
@@ -117,7 +117,7 @@
 								</div>
 
 								<div class="row">
-								<!-- Farm Address: Address Line 2 -->
+									{{-- Farm Address: Address Line 2 --}}
 									<div class="input-field col s10 push-s1">
 										{!! Form::text('addressLine2', $farmAddress->addressLine2, ['disabled' => 'disabled'])!!}
 										{!! Form::label('addressLine2', 'Address Line 2* : Barangay, Town, City') !!}
@@ -125,13 +125,13 @@
 								</div>
 
 								<div class="row">
-									<!-- Farm Address: Province -->
+									{{-- Farm Address: Province --}}
 									<div class="input-field col s5 push-s1">
 										{!! Form::text('province', $farmAddress->province, ['disabled' => 'disabled'])!!}
 										{!! Form::label('province', 'Province*') !!}
 									</div>
 
-									<!-- Farm Address: Zip Code -->
+									{{-- Farm Address: Zip Code --}}
 									<div class="input-field col s5 push-s1">
 										{!! Form::text('zipCode', $farmAddress->zipCode, ['disabled' => 'disabled'])!!}
 										{!! Form::label('zipCode', 'Postal/ZIP Code*') !!}
@@ -139,7 +139,7 @@
 								</div>
 
 								<div class="row">
-									<!-- Farm Type -->
+									{{-- Farm Type --}}
 									<div class="input-field col s5 push-s1">
 										{!! Form::text('farmType', $farmAddress->farmType, ['disabled' => 'disabled'])!!}
 										{!! Form::label('farmType', 'Farm Type*') !!}
@@ -147,13 +147,13 @@
 								</div>
 
 								<div class="row">
-									<!-- Farm Landline -->
+									{{-- Farm Landline --}}
 									<div class="input-field col s5 push-s1">
 										{!! Form::text('landline', $farmAddress->landline, ['disabled' => 'disabled'])!!}
 										{!! Form::label('landline', 'Farm Landline') !!}
 									</div>
 
-									<!-- Farm Mobile -->
+									{{-- Farm Mobile --}}
 									<div class="input-field col s5 push-s1">
 										{!! Form::text('mobile', $farmAddress->mobile, ['disabled' => 'disabled'])!!}
 										{!! Form::label('mobile', 'Farm Mobile*') !!}
@@ -180,7 +180,7 @@
 								{!! Form::open(['route' => 'customer.deleteFarm', 'method' => 'DELETE', 'class' => 'delete-farm', 'data-farm-id' => $farmAddress->id]) !!}
 									<div class="row ">
 										<div class="col offset-s10 remove-button-field">
-											<a href="#!" class="btn-floating btn-medium waves-effect waves-light deep-orange tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove {{$farmAddress->name}} Farm">
+											<a href="#!" class="btn-floating btn-medium waves-effect waves-light grey tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove {{$farmAddress->name}} Farm">
 												<i class="material-icons">remove</i>
 											</a>
 										</div>

@@ -8,11 +8,11 @@
     | Products
 @endsection
 
-@section('page-id')
+@section('pageId')
     id="page-customer-view-products"
 @endsection
 
-@section('breadcrumb-title')
+@section('breadcrumbTitle')
     Products
 @endsection
 
@@ -52,9 +52,9 @@
                             @endif>Relevance</option>
                     <option value="age-asc" @if(!empty($filters['age-asc'])) {{ $filters['age-asc'] }} @endif > Age: Low to High</option>
                     <option value="age-desc" @if(!empty($filters['age-desc'])) {{ $filters['age-desc'] }} @endif >Age: High to Low</option>
-                    <option value="backfat_thickness-asc" @if(!empty($filters['backfat_thickness-asc'])) {{ $filters['backfat_thickness-asc'] }} @endif >BT: Low to High</option>
-                    <option value="fcr-asc" @if(!empty($filters['fcr-asc'])) {{ $filters['fcr-asc'] }} @endif >FCR: Low to High</option>
-                    <option value="adg-desc" @if(!empty($filters['adg-desc'])) {{ $filters['adg-desc'] }} @endif >ADG: High to Low</option>
+                    <option value="backfat_thickness-asc" @if(!empty($filters['backfat_thickness-asc'])) {{ $filters['backfat_thickness-asc'] }} @endif >Backfat Thickness</option>
+                    <option value="fcr-asc" @if(!empty($filters['fcr-asc'])) {{ $filters['fcr-asc'] }} @endif >Feed Conversion Ratio</option>
+                    <option value="adg-desc" @if(!empty($filters['adg-desc'])) {{ $filters['adg-desc'] }} @endif >Average Daily Gain</option>
                 </select>
                 <label> Sort By</label>
             </div>
@@ -67,10 +67,10 @@
             <div style="height: 1px;">
             </div>
             <div id="collapsible-container">
-                <ul class="collapsible" data-collapsible="expandable">
+                <ul class="collapsible" data-collapsible="accordion">
 
                         <li id="filter-type">
-                          <div class="collapsible-header"><i class="material-icons">more</i>Type</div>
+                          <div class="collapsible-header active"><i class="material-icons">more</i>Type</div>
                           <div class="collapsible-body">
                                 {{-- Type --}}
                                 <p>
@@ -142,88 +142,67 @@
         {{-- For the showcase of products (right column) --}}
         <div id="showcase-container" class="col m9 l9">
 
-            <?php $counter = 1; $item = 0;?>
+            <div class="row">
+
+            <?php $counter = 1; ?>
             @foreach($products as $product)
-                <?php if($counter > 2) $counter = 1;?>
-                @if($counter == 1)
-                    <div class="row">
-                @endif
-                    {{-- Left --}}
-                    <div class="col s12 m6 l6 ">
-                      <div class="card hoverable">
-                        <div class="card-image">
-                            <a href="{{ route('products.viewDetail', ['product' => $product->id]) }}" >
-                                <img height="220" src="/{{ $images[$item] }}">
-                            </a>
-                        </div>
-                        <div class="card-content">
-                          <span class="card-title activator grey-text text-darken-4">{{$product->name}}<i class="material-icons right">more_vert</i></span>
-                          <div class="row">
-                              <div class="col s9">
-                                  <?php
-                                    if(str_contains($breeds[$item],'+')){
-                                        $part = explode("+", $breeds[$item]);
-                                        $breedValue = ucfirst($part[0])." x ".ucfirst($part[1]);
-                                    }
-                                    else $breedValue = ucfirst($breeds[$item]);
-                                  ?>
-                                  {{ucfirst($product->type).' - '.$breedValue}} <br>
-                                  {{$product->age}} days old
-                              </div>
-                              <div class="col right">
-                                {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
-                                    <a href="#" class="tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart">
-                                        <i class="material-icons red-text" style="font-size:35px">add_shopping_cart</i>
-
-                                    </a>
-                                {!! Form::close()!!}
-                              </div>
+                {{-- Card --}}
+                <div class="col s12 m6 l6 ">
+                  <div class="card hoverable">
+                    <div class="card-image">
+                        <a href="{{ route('products.viewDetail', ['product' => $product->id]) }}" >
+                            <img height="220" src="{{ $product->img_path }}">
+                        </a>
+                    </div>
+                    <div class="card-content">
+                      <span class="card-title activator grey-text text-darken-4">{{$product->name}}<i class="material-icons right">more_vert</i></span>
+                      <div class="row">
+                          <div class="col s9">
+                              {{$product->type}} - {{$product->breed}} <br>
+                              {{$product->age}} days old
                           </div>
-                        </div>
-                        <div class="card-reveal">
-                            <span class="card-title grey-text text-darken-4">{{$product->name}}<i class="material-icons right">close</i></span>
-                            <p>
-                                Average Daily Gain (grams): {{ $product->adg }}<br>
-                                FCR: {{ $product->fcr }} <br>
-                                Backfat Thickness (mm): {{ $product->backfat_thickness }}<br>
-                            </p>
-                            <p>
-                                Breeder info <br>
-                                Name: {{ $breeders[$item] }} <br>
-                                Farm Location: {{ $farms[$item] }}
-                            </p>
-                            <div class="row">
-                                <br>
-                                <div class="col">
-                                    <a href="{{ route('products.viewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
-                                </div>
-                                <div class="col right">
-                                    {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
-                                        <a href="#" class="tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart">
-                                            <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
-                                        </a>
-                                    {!! Form::close() !!}
-                                </div>
-                            </div>
+                          <div class="col right">
+                            {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
+                                <a href="#" class="tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart">
+                                    <i class="material-icons red-text" style="font-size:35px">add_shopping_cart</i>
 
-                        </div>
+                                </a>
+                            {!! Form::close()!!}
+                          </div>
                       </div>
                     </div>
+                    <div class="card-reveal">
+                        <span class="card-title grey-text text-darken-4">{{$product['name']}}<i class="material-icons right">close</i></span>
+                        <p>
+                            Average Daily Gain: {{ $product->adg }} g<br>
+                            FCR: {{ $product->fcr }} <br>
+                            Backfat Thickness: {{ $product->backfat_thickness }} mm<br>
+                        </p>
+                        <p>
+                            Breeder info <br>
+                            Name: {{ $product->breeder }} <br>
+                            Farm Location: {{ $product->farm_province }}
+                        </p>
+                        <div class="row">
+                            <br>
+                            <div class="col">
+                                <a href="{{ route('products.viewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
+                            </div>
+                            <div class="col right">
+                                {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
+                                    <a href="#" class="tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart">
+                                        <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
+                                    </a>
+                                {!! Form::close() !!}
+                            </div>
+                        </div>
 
-                @if($counter == 2)
                     </div>
-                @endif
-                <?php $counter++; $item++;?>
+                  </div>
+                </div>
             @endforeach
 
-            @if($counter == 1)
-                <div class="col s12">
-                    No results found.
-                </div>
-            @elseif($counter == 2)
-                </div>
-            @endif
-
+            </div>
 
             {{-- Pagination --}}
             <div class="row">

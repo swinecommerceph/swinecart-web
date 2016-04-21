@@ -40,10 +40,8 @@ Route::group(['middleware' => ['web']], function () {
     Route::post('register',['as' => 'postRegister_path', 'uses' => 'Auth\AuthController@postRegister']);
 
     // Email Verification for Authentication
-    Route::get('login/redirect/email/{email}/ver-code/{verCode}',
-        ['as' => 'verCode.send', 'uses' => 'Auth\AuthController@verifyCode']);
-    Route::get('login/resend/email/{email}/ver-code/{verCode}',
-        ['as' => 'verCode.resend', 'uses' => 'Auth\AuthController@resendCode']);
+    Route::get('login/redirect/email/{email}/ver-code/{verCode}', ['as' => 'verCode.send', 'uses' => 'Auth\AuthController@verifyCode']);
+    Route::get('login/resend/email/{email}/ver-code/{verCode}', ['as' => 'verCode.resend', 'uses' => 'Auth\AuthController@resendCode']);
 
     /**
     * User Routes according to roles
@@ -67,6 +65,8 @@ Route::group(['middleware' => ['web']], function () {
         // product-related
         Route::get('products',['as' => 'products', 'uses' => 'BreederController@showProducts']);
         Route::post('products',['as' => 'products.store', 'uses' => 'BreederController@storeProducts']);
+        Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'BreederController@uploadMedia']);
+        Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'BreederController@deleteMedium']);
 
     });
 

@@ -1,4 +1,4 @@
-<!--
+{{--
 	This is the form Breeder Users use
 	for completing
 	their profile
@@ -21,7 +21,7 @@
 		Farm type
 		Farm landline
 		Farm mobile
--->
+ --}}
 
 <div class="row">
 	<div class="col s12">
@@ -34,7 +34,7 @@
 		<div id="personal-information" class="card-panel">
 
 			<div class="row">
-			<!-- Office Address: Address Line 1 -->
+			{{-- Office Address: Address Line 1 --}}
 				<div class="input-field col s10 push-s1">
 					{!! Form::text('officeAddress_addressLine1', null, ['autofocus' => 'autofocus'])!!}
 					{!! Form::label('officeAddress_addressLine1', 'Address Line 1* : Street, Road, Subdivision') !!}
@@ -43,7 +43,7 @@
 
 
 			<div class="row">
-			<!-- Office Address: Address Line 2 -->
+			{{-- Office Address: Address Line 2 --}}
 				<div class="input-field col s10 push-s1">
 					{!! Form::text('officeAddress_addressLine2', null)!!}
 					{!! Form::label('officeAddress_addressLine2', 'Address Line 2* : Barangay, Town, City') !!}
@@ -52,13 +52,13 @@
 
 
 			<div class="row">
-			<!-- Office Address: Province -->
+			{{-- Office Address: Province --}}
 				<div class="input-field col s5 push-s1">
 					{!! Form::text('officeAddress_province', null)!!}
 					{!! Form::label('officeAddress_province', 'Province*') !!}
 				</div>
 
-			<!-- Office Address: Zip Code -->
+			{{-- Office Address: Zip Code --}}
 			<div class="input-field col s5 push-s1">
 					{!! Form::text('officeAddress_zipCode', null)!!}
 					{!! Form::label('officeAddress_zipCode', 'Postal/ZIP Code*') !!}
@@ -66,13 +66,13 @@
 			</div>
 
 			<div class="row">
-			<!-- Office Landline -->
+			{{-- Office Landline --}}
 				<div class="input-field col s5 push-s1">
 					{!! Form::text('office_landline', null)!!}
 					{!! Form::label('office_landline', 'Landline') !!}
 				</div>
 
-			<!-- Office Mobile -->
+			{{-- Office Mobile --}}
 			<div class="input-field col s5 push-s1">
 					{!! Form::text('office_mobile', null)!!}
 					{!! Form::label('office_mobile', 'Mobile*') !!}
@@ -86,7 +86,7 @@
 			</div>
 
 			<div class="row">
-			<!-- Contact Person: Name -->
+			{{-- Contact Person: Name --}}
 				<div class="input-field col s5 push-s1">
 					{!! Form::text('contactPerson_name', null)!!}
 					{!! Form::label('contactPerson_name', 'Name*') !!}
@@ -106,13 +106,13 @@
 			</div>
 
 			<div class="row">
-			<!-- Website -->
+			{{-- Website --}}
 				<div class="input-field col s5 push-s1">
 					{!! Form::text('website', null)!!}
 					{!! Form::label('website', 'Website') !!}
 				</div>
 
-			<!-- Produce -->
+			{{-- Produce --}}
 			<div class="input-field col s5 push-s1">
 					{!! Form::text('produce', null)!!}
 					{!! Form::label('produce', 'Produce') !!}
@@ -139,7 +139,7 @@
 						<h5 class="center-align"> Farm 1 </h5>
 
 						<div class="row">
-						<!-- Farm Address: Name -->
+						{{-- Farm Address: Name --}}
 							<div class="input-field col s10 push-s1">
 								{!! Form::text('farmAddress[1][name]', null)!!}
 								{!! Form::label('farmAaddress[1][name]', 'Name*') !!}
@@ -147,7 +147,7 @@
 						</div>
 
 						<div class="row">
-						<!-- Farm Address: Address Line 1 -->
+						{{-- Farm Address: Address Line 1 --}}
 							<div class="input-field col s10 push-s1">
 								{!! Form::text('farmAddress[1][addressLine1]', null)!!}
 								{!! Form::label('farmAaddress[1][addressLine1]', 'Address Line 1* : Street, Road, Subdivision') !!}
@@ -155,7 +155,7 @@
 						</div>
 
 						<div class="row">
-						<!-- Farm Address: Address Line 2 -->
+						{{-- Farm Address: Address Line 2 --}}
 							<div class="input-field col s10 push-s1">
 								{!! Form::text('farmAddress[1][addressLine2]', null)!!}
 								{!! Form::label('farmAddress[1][addressLine2]', 'Address Line 2* : Barangay, Town, City') !!}
@@ -163,13 +163,13 @@
 						</div>
 
 						<div class="row">
-							<!-- Farm Address: Province -->
+							{{-- Farm Address: Province --}}
 							<div class="input-field col s5 push-s1">
 								{!! Form::text('farmAddress[1][province]', null)!!}
 								{!! Form::label('farmAddress[1][province]', 'Province*') !!}
 							</div>
 
-							<!-- Farm Address: Zip Code -->
+							{{-- Farm Address: Zip Code --}}
 							<div class="input-field col s5 push-s1">
 								{!! Form::text('farmAddress[1][zipCode]', null)!!}
 								{!! Form::label('farmAddress[1][zipCode]', 'Postal/ZIP Code*') !!}
@@ -177,7 +177,7 @@
 						</div>
 
 						<div class="row">
-							<!-- Farm Type -->
+							{{-- Farm Type --}}
 							<div class="input-field col s5 push-s1">
 								{!! Form::text('farmAddress[1][farmType]', null)!!}
 								{!! Form::label('farmAddress[1][farmType]', 'Farm Type*') !!}
@@ -185,13 +185,13 @@
 						</div>
 
 						<div class="row">
-							<!-- Farm Landline -->
+							{{-- Farm Landline --}}
 							<div class="input-field col s5 push-s1">
 								{!! Form::text('farmAddress[1][landline]', null)!!}
 								{!! Form::label('farmAddress[1][landline]', 'Farm Landline') !!}
 							</div>
 
-							<!-- Farm Mobile -->
+							{{-- Farm Mobile --}}
 							<div class="input-field col s5 push-s1">
 								{!! Form::text('farmAddress[1][mobile]', null)!!}
 								{!! Form::label('farmAddress[1][mobile]', 'Farm Mobile*') !!}
@@ -217,7 +217,7 @@
 				</div>
 			</div>
 
-			<!-- Submit Button -->
+			{{-- Submit Button --}}
 			<div class="row">
 			  <button type="submit" class="btn waves-effect waves-light col s3 push-s8"> Submit
 				  <i class="material-icons right">send</i>

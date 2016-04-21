@@ -228,25 +228,19 @@ class CustomerController extends Controller
             $products = $products->paginate(10);
         }
 
-        $images = [];
-        $breeders = [];
-        $breeds = [];
-        $farms = [];
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->orderBy('name','asc')->get();
         $urlFilters = $this->toUrlFilter($request->type, $request->breed, $request->sort);
 
         foreach ($products as $product) {
-            $image = Image::find($product->primary_img_id);
-            array_push($images,$image->path);
-            $breeder = Breeder::find($product->breeder_id)->users;
-            array_push($breeders,$breeder->first()->name);
-            $breed = Breed::find($product->breed_id);
-            array_push($breeds,$breed->name);
-            $farm = FarmAddress::find($product->farm_from_id);
-            array_push($farms,$farm->province);
+            $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $product->type = ucfirst($product->type);
+            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
+            $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
         }
-        return view('user.customer.viewProducts', compact('products', 'images', 'breeders', 'breeds', 'farms', 'filters', 'breedFilters', 'urlFilters'));
+
+        return view('user.customer.viewProducts', compact('products', 'filters', 'breedFilters', 'urlFilters'));
     }
 
     /**
@@ -257,11 +251,12 @@ class CustomerController extends Controller
     public function viewProductDetail($productId)
     {
         $product = Product::find($productId);
-        $image = Image::find($product->primary_img_id)->path;
-        $breeder = Breeder::find($product->breeder_id)->users->first()->name;
-        $breed = Breed::find($product->breed_id)->name;
-        $farm = FarmAddress::find($product->farm_from_id)->province;
-        return view('user.customer.viewProductDetail', compact('product', 'image', 'breeder', 'breed', 'farm'));
+        $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+        $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
+        $product->type = ucfirst($product->type);
+        $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+        $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+        return view('user.customer.viewProductDetail', compact('product'));
     }
 
     /**
@@ -339,7 +334,7 @@ class CustomerController extends Controller
                 $itemDetail['product_name'] = $product->name;
                 $itemDetail['product_type'] = $product->type;
                 $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
-                $itemDetail['img_path'] = Image::find($product->primary_img_id)->path;
+                $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
                 $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
                 $itemDetail['token'] = csrf_token();
                 array_push($items,$itemDetail);
@@ -426,12 +421,37 @@ class CustomerController extends Controller
     {
         $tempBreedIds = [];
         foreach (explode(' ', $breedParameter) as $breedName) {
-            if($breedName == 'crossbreed') $breedInstance = Breed::where('name','like','%+%')->get()->first()->id;
+            if($breedName == 'crossbreed') {
+                // Get all breed ids that contain '+' in their breed name
+                $crossbreeds = Breed::where('name','like','%+%')->get();
+                foreach ($crossbreeds as $crossbreed) {
+                    array_push($tempBreedIds, $crossbreed->id);
+                }
+                continue;
+            }
             else $breedInstance = Breed::where('name',$breedName)->get()->first()->id;
             array_push($tempBreedIds, $breedInstance);
         }
 
         // dd($tempBreedIds);
         return $tempBreedIds;
+    }
+
+    /**
+     * Parse $breed if it contains '+' (ex. landrace+duroc)
+     * to "Landrace x Duroc"
+     *
+     * @param  String $breed
+     * @return String
+     */
+    private function transformBreedSyntax($breed)
+    {
+        if(str_contains($breed,'+')){
+            $part = explode("+", $breed);
+            $breed = ucfirst($part[0])." x ".ucfirst($part[1]);
+            return $breed;
+        }
+
+        return ucfirst($breed);
     }
 }

@@ -14,14 +14,14 @@
 			<div class="card-panel">
 				<div class="row s12">
 					<h4 class="center-align"> Login </h4>
-					<!-- Display Validation Errors -->
+					{{-- Display Validation Errors --}}
 					@include('common._errors')
 
-					<!-- Login Form -->
+					{{-- Login Form --}}
 					<form action="{{ route('postLogin_path') }}" method="POST" class="col s12">
 						{{ csrf_field() }}
 
-						<!-- E-Mail Address -->
+						{{-- E-Mail Address --}}
 						<div class="row">
 							<div class="input-field col s12">
 								<input type="email" id="email" name="email" value="{{ old('email') }}" autofocus>
@@ -29,7 +29,7 @@
 							</div>
 						</div>
 
-						<!-- Password -->
+						{{-- Password --}}
 						<div class="row">
 							<div class="input-field col s12">
 								<input type="password" id="password" name="password">
@@ -37,7 +37,7 @@
 							</div>
 						</div>
 
-						<!-- Login Button -->
+						{{-- Login Button --}}
 						<div class="row">
 							<div class="">
 								<button type="submit" class="btn waves-effect waves-light col s4 push-s8"> Login
@@ -50,14 +50,14 @@
 
 					<div class="row">
 						<h5 class="center-align"> OR </h5>
-						<!-- Facebook Button -->
+						{{-- Facebook Button --}}
 						<div class="col s12">
 							<a href="/login/facebook" class="btn-large waves-effect waves-light indigo darken-2 col s12 social-button"> Login with Facebook </a>
 						</div>
 					</div>
 
 					<div class="row">
-						<!-- Google Button -->
+						{{-- Google Button --}}
 						<div class="col s12">
 							<a href="/login/google" class="btn-large waves-effect waves-light red col s12 social-button"> Login with Google </a>
 						</div>

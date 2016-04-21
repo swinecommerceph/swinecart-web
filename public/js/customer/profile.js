@@ -5,7 +5,7 @@ var profile = {
         config.preloader_progress.fadeIn();
         var farm_address = [];
         var data_values = {
-                  "_token" : parent_form.find('input[name=_token]').val()
+            "_token" : parent_form.find('input[name=_token]').val()
         };
 
         farm_address.push({});

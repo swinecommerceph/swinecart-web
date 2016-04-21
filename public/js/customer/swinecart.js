@@ -55,6 +55,9 @@ var swinecart = {
                 if(data[0] === 'success'){
                     var span = $('#cart-icon span');
 
+                    // Put quantity of Swine Cart to sessionStorage
+                    sessionStorage.setItem('swine_cart_quantity', data[2]);
+
                     if(data[2] == 0){
                         span.html("");
                         span.removeClass('badge');
@@ -65,8 +68,6 @@ var swinecart = {
                     }
                     else span.html(sessionStorage.getItem('swine_cart_quantity'));
 
-                    // Put quantity of Swine Cart to sessionStorage
-                    sessionStorage.setItem('swine_cart_quantity', data[2]);
                     li_element.remove();
                     Materialize.toast(data[1] + ' removed from Swine Cart', 1800, 'green lighten-1');
                 }
@@ -108,7 +109,7 @@ var swinecart = {
 
                         items += '<li class="collection-item avatar">'+
                             '<a href="'+ config.viewProducts_url +'/'+ element.product_id +'">'+
-                                '<img src="/'+ element.img_path +'" alt="" class="circle">'+
+                                '<img src="'+ element.img_path +'" alt="" class="circle">'+
                             '</a>'+
                             '<a href="'+ config.viewProducts_url +'/'+ element.product_id +'" class="anchor-title">'+
                                 '<span class="title">'+ element.product_name +'</span>'+

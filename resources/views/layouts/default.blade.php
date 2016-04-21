@@ -1,7 +1,7 @@
-<!--
+{{--
 	Template for the default layout of a page
 	It is a whole one column page layout
--->
+ --}}
 
 <!DOCTYPE html>
 <html lang="en">
@@ -13,17 +13,20 @@
 	<title>Swine E-Commerce PH @yield('title') </title>
 
 	{{-- <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet" type="text/css"> --}}
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	{{-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> --}}
 
-	<!-- Compiled and minified CSS -->
+	{{-- Compiled and minified CSS --}}
 	{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">  --}}
 
 	<link href="/css/materialize.min.css" rel="stylesheet" type="text/css">
+	<link href="/css/dropzone.css" rel="stylesheet" type="text/css">
+	<link href="/css/icon.css" rel="stylesheet" type="text/css">
 	<link href="/css/style.css" rel="stylesheet" type="text/css">
+
 </head>
 
-<body @yield('page-id')>
-
+<body @yield('pageId')>
+	{{-- Navbar --}}
 	<div class="navbar-fixed">
 		<nav class="teal darken-3">
 		    <div class="nav-wrapper container">
@@ -46,13 +49,13 @@
 					@endif
 				@else
 					<li> <span>{{ Auth::user()->name }}</span> </li>
-					@yield('navbar_head')
+					@yield('navbarHead')
 					<li>
 						<a class="dropdown-button" data-beloworigin="true" data-activates="nav-dropdown">
 							<i class="material-icons">arrow_drop_down</i>
 						</a>
 						<ul id="nav-dropdown" class="dropdown-content">
-					        @yield('navbar_dropdown')
+					        @yield('navbarDropdown')
 					        <li class="divider"></li>
 					        <li><a href="{{ route('logout_path') }}">Logout</a></li>
 					    </ul>
@@ -60,9 +63,13 @@
 				@endif
 		      	</ul>
 		    </div>
-			<div id="preloader-progress" class="progress" style="display:none;">
-				<div class="indeterminate"></div>
+
+			{{-- Preloader Progress --}}
+			<div id="preloader-progress" class="progress red lighten-4" style="display:none;">
+				<div class="indeterminate red"></div>
 			</div>
+
+			{{-- Search Field --}}
 			<div id="search-field" class="nav-wrapper white z-depth-1" style="display:none;">
 	            <div style="height:1px;">
 	            </div>
@@ -74,15 +81,17 @@
 	                </div>
 	            </form>
 	        </div>
+
 		</nav>
 	</div>
 
+	{{-- Breadcrumbs --}}
 	@if(Auth::check() && !Request::is('*/home'))
 		<div class="grey lighten-3">
 	        <div class="container">
 	            <div class="row">
 	                <div class="col s12">
-	                    <h4 class="breadcrumb-title"> @yield('breadcrumb-title') </h4>
+	                    <h4 class="breadcrumb-title"> @yield('breadcrumbTitle') </h4>
 	                </div>
 	                <div id="breadcrumb" class="col s12">
 	                    @yield('breadcrumb')
@@ -92,8 +101,13 @@
 	    </div>
 	@endif
 
+	{{-- For static elements such as add product and back to top --}}
 	@yield('static')
+
+	{{-- Home view for unauthenticated users --}}
 	@yield('homeContent')
+
+	{{-- Common view for authenticated users --}}
 	@if(!Request::is('/'))
 		<div class="container">
 			@yield('content')
@@ -102,14 +116,17 @@
 
 	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script> --}}
 	{{-- <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> --}}
-	<!-- Compiled and minified JavaScript -->
-	<!--script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script-->
+	{{-- Compiled and minified JavaScript --}}
+	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script> --}}
 
-	<script src="/js/jquery.min.js"></script>
-	<script src="/js/materialize.min.js"></script>
+	<script src="/js/vendor/jquery.min.js"></script>
+	<script src="/js/vendor/materialize.min.js"></script>
+	<script src="/js/vendor/dropzone.js"></script>
 	<script src="/js/config.js"></script>
 	<script src="/js/custom.js"></script>
+	{{-- For user-specific initialization scripts --}}
 	@yield('initScript')
+	{{-- Custom scripts for certain pages/functionalities --}}
 	@yield('customScript')
 
 </body>

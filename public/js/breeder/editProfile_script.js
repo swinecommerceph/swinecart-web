@@ -99,7 +99,7 @@ $(document).ready(function(){
                  '</div>'+
                  '<div class="row ">'+
                      '<div class="col offset-s10">'+
-                         '<a href="#" class="btn-floating btn-medium waves-effect waves-light deep-orange tooltipped remove-farm on-create-farm" data-position="left" data-delay="50" data-tooltip="Remove New Farm '+i+'">'+
+                         '<a href="#" class="btn-floating btn-medium waves-effect waves-light grey tooltipped remove-farm on-create-farm" data-position="left" data-delay="50" data-tooltip="Remove New Farm '+i+'">'+
                              '<i class="material-icons">remove</i>'+
                          '</a>'+
                      '</div>'+

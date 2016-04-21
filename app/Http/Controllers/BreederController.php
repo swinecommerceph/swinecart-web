@@ -13,6 +13,11 @@ use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Breeder;
 use App\Models\FarmAddress;
+use App\Models\Product;
+use App\Models\Image;
+use App\Models\Video;
+use App\Models\Breed;
+
 use Auth;
 
 class BreederController extends Controller
@@ -31,6 +36,7 @@ class BreederController extends Controller
 
 	/**
 	 * Show Home Page of breeder
+	 *
 	 * @return View
 	 */
     public function index(Request $request)
@@ -41,6 +47,7 @@ class BreederController extends Controller
 
     /**
      * Show Page for Breeder to complete profile
+     *
      * @return View
      */
     public function createProfile()
@@ -51,6 +58,7 @@ class BreederController extends Controller
     /**
      * Create and store Breeder profile data to database
      * Associate User to Breeder user type as well
+     *
      * @param  Request $request
      * @return Redirect
      */
@@ -94,6 +102,7 @@ class BreederController extends Controller
 
     /**
      * Show Page for Breeder to update profile
+     *
      * @return View
      */
     public function editProfile(Request $request)
@@ -106,6 +115,7 @@ class BreederController extends Controller
     /**
      * Update Breeder's personal information
      * AJAX
+     *
      * @return JSON / View
      */
     public function updatePersonal(BreederPersonalProfileRequest $request)
@@ -130,6 +140,7 @@ class BreederController extends Controller
     /**
      * Add Breeder's farm information instance
      * AJAX
+     *
      * @return JSON / View
      */
     public function addFarm(BreederFarmProfileRequest $request)
@@ -160,6 +171,7 @@ class BreederController extends Controller
     /**
      * Update Breeder's farm information instance
      * AJAX
+     *
      * @return JSON / View
      */
     public function updateFarm(BreederFarmProfileRequest $request)
@@ -182,6 +194,7 @@ class BreederController extends Controller
     /**
      * Delete Breeder's farm information instance
      * AJAX
+     *
      * @return String / View
      */
     public function deleteFarm(Request $request)
@@ -195,18 +208,223 @@ class BreederController extends Controller
 
     /**
      * Show the Breeder's products
+     *
+     * @return View
      */
     public function showProducts()
     {
-        return view('user.breeder.showProducts');
+        $breeder = $this->user->userable;
+        $products = $breeder->products()->where('status_instance','active')->get();
+        $farms = $breeder->farmAddresses;
+
+        foreach ($products as $product) {
+            $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $product->type = ucfirst($product->type);
+            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+        }
+
+        return view('user.breeder.showProducts', compact('products', 'farms'));
     }
 
     /**
      * Store the Breeder's products
+     * AJAX
+     *
+     * @param Request $request
+     * @return JSON
      */
-    public function storeProducts()
+    public function storeProducts(Request $request)
     {
-        # code...
+        $breeder = $this->user->userable;
+        if($request->ajax()){
+            $product = new Product;
+            $productDetail= [];
+            if($request->type == 'boar') $image = Image::firstOrCreate(['name' => 'boar_default.jpg']);
+            else if($request->type == 'sow') $image = Image::firstOrCreate(['name' => 'sow_default.jpg']);
+            else $image = Image::firstOrCreate(['name' => 'semen_default.jpg']);
+
+            $product->farm_from_id = $request->farm_from_id;
+            $product->primary_img_id = $image->id;
+            $product->name = $request->name;
+            $product->type = $request->type;
+            $product->age = $request->age;
+            $product->breed_id = $this->findOrCreateBreed($request->breed);
+            $product->price = $request->price;
+            $product->quantity = $request->quantity;
+            $product->adg = $request->adg;
+            $product->fcr = $request->fcr;
+            $product->backfat_thickness = $request->backfat_thickness;
+            $product->other_details = $request->other_details;
+            // $breeder->products()->save($product);
+
+            $productDetail['product_id'] = $product->id;
+            $productDetail['name'] = $product->name;
+            $productDetail['type'] = ucfirst($request->type);
+            $productDetail['breed'] = $request->breed;
+
+            return collect($productDetail)->toJson();
+        }
+
+    }
+
+    /**
+     * Upload media for a product
+     *
+     * @param Request $request
+     * @return JSON
+     */
+    public function uploadMedia(Request $request)
+    {
+        return "OK";
+        // Check if request contains media files
+        if($request->hasFile('media')) {
+            $files = $request->file('media.*');
+            $fileDetails = [];
+
+            foreach ($files as $file) {
+
+                // Check if file has no problems in uploading
+                if($file->isValid()){
+                    $fileExtension = $file->getClientOriginalExtension();
+                    $originalName = $file->getClientOriginalName();
+
+                    // Get media (Image/Video) info according to extension
+                    if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed, $originalName);
+                    else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed, $originalName);
+
+                    $file = $file->move(public_path() . $mediaInfo['directoryPath'], $mediaInfo['filename']);
+
+                    // Check if file is successfully moved to desired path
+                    if($file){
+                        $product = Product::find($request->productId);
+
+                        // Make Image/Video instance
+                        $media = $mediaInfo['type'];
+                        $media->name = $mediaInfo['filename'];
+
+                        if($this->isImage($fileExtension)) $product->images()->save($media);
+                        else if($this->isVideo($fileExtension)) $product->videos()->save($media);
+
+                        array_push($fileDetails, ['id' => $media->id, 'name' => $mediaInfo['filename']]);
+                    }
+                    else return response()->json('Move file failed', 500);
+                }
+                else return response()->json('Upload failed', 500);
+            }
+
+            return response()->json(collect($fileDetails)->toJson(),200);
+        }
+        else return response()->json('No files detected', 500);
+    }
+
+    /**
+     * Delete and Image of a Product
+     * AJAX
+     *
+     * @param Request $request
+     * @return JSON
+     */
+    public function deleteMedium(Request $request)
+    {
+        if($request->ajax()){
+            $image = Image::find($request->imageId);
+        }
+    }
+
+    /**
+     * Parse $breed if it contains '+' (ex. landrace+duroc)
+     * to "Landrace x Duroc"
+     *
+     * @param  String $breed
+     * @return String
+     */
+    private function transformBreedSyntax($breed)
+    {
+        if(str_contains($breed,'+')){
+            $part = explode("+", $breed);
+            $breed = ucfirst($part[0])." x ".ucfirst($part[1]);
+            return $breed;
+        }
+
+        return ucfirst($breed);
+    }
+
+    /**
+     * Parse $other_details
+     */
+    private function transformOtherDetailsSyntax($otherDetails)
+    {
+        $details = explode(',',$otherDetails);
+        $transformedSyntax = '';
+        foreach ($details as $detail) {
+            $transformedSyntax += $detail.'\\n';
+        }
+        return $transformedSyntax;
+    }
+
+    /**
+     * Find breed_id through breed name ($breed)
+     * or create another breed if not found
+     *
+     * @param String $Breed
+     * @return Integer
+     */
+    private function findOrCreateBreed($breed)
+    {
+        $breedInstance = Breed::where('name','like',$breed)->get()->first();
+        if($breedInstance) return $breedInstance->id;
+        else{
+            $newBreed = Breed::create(['name' => $breed]);
+            return $newBreed->id;
+        }
+    }
+
+    /**
+     * Get appropriate media (Image/Video) info depending on extension
+     *
+     * @param String $extension
+     * @return Associative Array $mediaInfo
+     */
+    private function createMediaInfo($extension, $productId, $type, $breed, $originalName)
+    {
+        $mediaInfo = [];
+
+        if($this->isImage($extension)){
+            $mediaInfo['directoryPath'] = '/images/product';
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . str_random(6) . '.' . $extension;
+            $mediaInfo['type'] = new Image;
+        }
+
+        else if($this->isVideo($extension)){
+            $mediaInfo['directoryPath'] = '/videos/product';
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . str_random(6) . '.' . $extension;
+            $mediaInfo['type'] = new Video;
+        }
+
+        return $mediaInfo;
+
+    }
+
+    /**
+     * Check if media is Image depending on extension
+     *
+     * @param String $extension
+     * @return Boolean
+     */
+    private function isImage($extension)
+    {
+        return ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') ? true : false;
+    }
+
+    /**
+     * Check if media is Video depending on extension
+     *
+     * @param String $extension
+     * @return Boolean
+     */
+    private function isVideo($extension)
+    {
+        return ($extension == 'mp4' || $extension == 'mkv' || $extension == 'avi' || $extension == 'flv') ? true : false;
     }
 
 }

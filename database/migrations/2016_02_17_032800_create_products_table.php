@@ -21,12 +21,12 @@ class CreateProductsTable extends Migration
             $table->string('type');
             $table->integer('age');
             $table->integer('breed_id');
-            $table->float('price');
-            $table->integer('quantity');
-            $table->integer('adg');
-            $table->float('fcr');
-            $table->float('backfat_thickness');
-            $table->text('other_details');
+            $table->float('price')->nullable();
+            $table->integer('quantity')->nullable();
+            $table->integer('adg')->nullable();
+            $table->float('fcr')->nullable();
+            $table->float('backfat_thickness')->nullable();
+            $table->text('other_details')->nullable();
             $table->string('status')->default('showcase');
             $table->string('status_instance')->default('active');
             // $table->timestamps();

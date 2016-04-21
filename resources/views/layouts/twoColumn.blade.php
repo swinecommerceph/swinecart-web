@@ -1,7 +1,7 @@
-<!--
+{{--
 	Template for the two-column layout of a page
 	It is a same size two-column page layout
--->
+ --}}
 
 @extends('layouts.default')
 

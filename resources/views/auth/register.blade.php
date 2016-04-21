@@ -13,14 +13,14 @@
 		<div class="card-panel">
 			<div class="row s12">
 				<h4 class="center-align"> Register </h4>
-				<!-- Display Validation Errors -->
+				{{-- Display Validation Errors --}}
 				@include('common._errors')
 
-				<!-- Registration Form -->
+				{{-- Registration Form --}}
 				<form action="{{ route('postRegister_path') }}" method="POST" class="col s12">
 					{{ csrf_field() }}
 
-					<!-- Name -->
+					{{-- Name --}}
 					<div class="row">
 						<div class="input-field col s12">
 							<input type="text" id="name" name="name" value="{{ old('name') }}" autofocus>
@@ -28,7 +28,7 @@
 						</div>
 					</div>
 
-					<!-- E-Mail Address -->
+					{{-- E-Mail Address --}}
 					<div class="row">
 						<div class="input-field col s12">
 							<input type="email" id="email" name="email" value="{{ old('email') }}">
@@ -36,7 +36,7 @@
 						</div>
 					</div>
 
-					<!-- Password -->
+					{{-- Password --}}
 					<div class="row">
 						<div class="input-field col s12">
 							<input type="password" id="password" name="password">
@@ -44,7 +44,7 @@
 						</div>
 					</div>
 
-					<!-- Confirm Password -->
+					{{-- Confirm Password --}}
 					<div class="row">
 						<div class="input-field col s12">
 							<input type="password" id="password_confirmation" name="password_confirmation">
@@ -52,7 +52,7 @@
 						</div>
 					</div>
 
-					<!-- Register Button -->
+					{{-- Register Button --}}
 					<div class="row">
 						<div class="">
 							<button type="submit" class="btn waves-effect waves-light col s5 push-s7"> Register
@@ -65,16 +65,16 @@
 
 				<div class="row">
 					<h5 class="center-align"> OR </h5>
-					<!-- Facebook Button -->
+					{{-- Facebook Button --}}
 					<div class="col s12">
-						<a href="#" class="btn-large waves-effect waves-light indigo darken-2 col s12 social-button"> Register with Facebook </a>
+						<a href="/login/facebook" class="btn-large waves-effect waves-light indigo darken-2 col s12 social-button"> Register with Facebook </a>
 					</div>
 				</div>
 
 				<div class="row">
-					<!-- Google Button -->
+					{{-- Google Button --}}
 					<div class="col s12">
-						<a href="#" class="btn-large waves-effect waves-light red col s12 social-button"> Register with Google </a>
+						<a href="/login/google" class="btn-large waves-effect waves-light red col s12 social-button"> Register with Google </a>
 					</div>
 				</div>
 			</div>

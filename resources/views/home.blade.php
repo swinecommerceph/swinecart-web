@@ -4,7 +4,7 @@
 
 @extends('layouts.default')
 
-@section('page-id')
+@section('pageId')
     id="page-home"
 @endsection
 

@@ -54,28 +54,28 @@ class UserInstancesSeeder extends Seeder
                 $video = new App\Models\Video;
 
                 if($randType == 'sow' && $randBreed == 'duroc'){ // Sow Duroc Two images
-                    $image->path = 'images/product/'.$randType.'_'.$randBreed.'1.jpg';
-                    $image2->path = 'images/product/'.$randType.'_'.$randBreed.'2.jpg';
+                    $image->name = $randType.'_'.$randBreed.'1.jpg';
+                    $image2->name = $randType.'_'.$randBreed.'2.jpg';
                     $image2->save();
                 }
                 elseif (($randType == 'boar' || $randType == 'semen') && $randBreed == 'landrace+duroc') { // Boar/Semen Crossbreed
-                    $image->path = 'images/product/'.$randType.'_cb_landraceDuroc1.jpg';
+                    $image->name = $randType.'_cb_landraceDuroc1.jpg';
                 }
                 elseif ($randType == 'sow' && $randBreed == 'largewhite+duroc') { // Sow Crossbreed
-                    $image->path = 'images/product/'.$randType.'_cb_largewhiteDuroc1.jpg';
+                    $image->name = $randType.'_cb_largewhiteDuroc1.jpg';
                 }
                 elseif ($randBreed == 'chesterwhite') { // Others
-                    $image->path = 'images/product/'.$randType.'_chesterwhite1.jpg';
+                    $image->name = $randType.'_chesterwhite1.jpg';
                 }
                 elseif (($randType == 'boar' && $randBreed == 'largewhite+duroc') ||
                         ($randType == 'sow' && $randBreed == 'landrace+duroc') ||
                         ($randType == 'semen' && $randBreed == 'largewhite+duroc')) break;
                 else { // General
-                    $image->path = 'images/product/'.$randType.'_'.$randBreed.'1.jpg';
+                    $image->name = $randType.'_'.$randBreed.'1.jpg';
                 }
                 $image->save();
 
-                $video->path = 'videos/product/sample_video.avi';
+                $video->name = 'sample_video.avi';
 
                 $product->farm_from_id = $farm->id;
                 $product->primary_img_id = $image->id;

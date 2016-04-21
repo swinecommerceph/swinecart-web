@@ -3,7 +3,7 @@
 --}}
 
 @if (count($errors) > 0)
-	<!-- Form Error List -->
+	{{-- Form Error List --}}
 	<div class="card-panel">
 		<strong> <span class="red-text text-darken-1"> Whoops! Something went wrong! </span> </strong>
 		<br>
