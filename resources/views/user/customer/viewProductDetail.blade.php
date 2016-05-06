@@ -37,7 +37,7 @@
             {{-- Image Carousel --}}
             <div class="row">
                 <div class="carousel" style="height:220px;">
-                    <a class="carousel-item" href="#one!"><img src="/{{$product->img_path}}"></a>
+                    <a class="carousel-item" href="#one!"><img src="{{$product->img_path}}"></a>
                     <a class="carousel-item" href="#two!"><img src="/images/swine.jpg"></a>
                     <a class="carousel-item" href="#three!"><img src="/images/duroc.jpg"></a>
                 </div>
@@ -70,7 +70,7 @@
                 <li class="collection-item">{{$product->type}} - {{$product->breed}}</li>
                 <li class="collection-item">{{$product->age}} days old</li>
                 <li class="collection-item">Average Daily Gain: {{$product->adg}} g</li>
-                <li class="collection-item">FCR: {{$product->fcr}}</li>
+                <li class="collection-item">Feed Conversion Ratio: {{$product->fcr}}</li>
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
                 <li class="collection-item">
                     <span class="row">

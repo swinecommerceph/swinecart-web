@@ -19,6 +19,7 @@ use App\Models\Video;
 use App\Models\Breed;
 
 use Auth;
+use Storage;
 
 class BreederController extends Controller
 {
@@ -214,13 +215,14 @@ class BreederController extends Controller
     public function showProducts()
     {
         $breeder = $this->user->userable;
-        $products = $breeder->products()->where('status_instance','active')->get();
+        $products = $breeder->products()->where('status_instance','active')->orderBy('id', 'desc')->get();
         $farms = $breeder->farmAddresses;
 
         foreach ($products as $product) {
             $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
             $product->type = ucfirst($product->type);
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
         }
 
         return view('user.breeder.showProducts', compact('products', 'farms'));
@@ -248,14 +250,14 @@ class BreederController extends Controller
             $product->name = $request->name;
             $product->type = $request->type;
             $product->age = $request->age;
-            $product->breed_id = $this->findOrCreateBreed($request->breed);
+            $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
             $product->price = $request->price;
             $product->quantity = $request->quantity;
             $product->adg = $request->adg;
             $product->fcr = $request->fcr;
             $product->backfat_thickness = $request->backfat_thickness;
             $product->other_details = $request->other_details;
-            // $breeder->products()->save($product);
+            $breeder->products()->save($product);
 
             $productDetail['product_id'] = $product->id;
             $productDetail['name'] = $product->name;
@@ -275,7 +277,8 @@ class BreederController extends Controller
      */
     public function uploadMedia(Request $request)
     {
-        return "OK";
+        // return "OK";
+        // return response()->json('Upload failed', 500);
         // Check if request contains media files
         if($request->hasFile('media')) {
             $files = $request->file('media.*');
@@ -292,7 +295,8 @@ class BreederController extends Controller
                     if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed, $originalName);
                     else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed, $originalName);
 
-                    $file = $file->move(public_path() . $mediaInfo['directoryPath'], $mediaInfo['filename']);
+                    Storage::disk('public')->put($mediaInfo['directoryPath'].$mediaInfo['filename'], file_get_contents($file));
+                    // $file = $file->move(public_path() . $mediaInfo['directoryPath'], $mediaInfo['filename']);
 
                     // Check if file is successfully moved to desired path
                     if($file){
@@ -312,7 +316,7 @@ class BreederController extends Controller
                 else return response()->json('Upload failed', 500);
             }
 
-            return response()->json(collect($fileDetails)->toJson(),200);
+            return response()->json(collect($fileDetails)->toJson(), 200);
         }
         else return response()->json('No files detected', 500);
     }
@@ -327,7 +331,80 @@ class BreederController extends Controller
     public function deleteMedium(Request $request)
     {
         if($request->ajax()){
-            $image = Image::find($request->imageId);
+            if($request->mediaType == 'image'){
+                $image = Image::find($request->mediaId);
+                // Check if file exists in the storage
+                if(Storage::disk('public')->exists('/images/product/'.$image->name)){
+                    $fullFilePath = '/images/product/'.$image->name;
+                    Storage::disk('public')->delete($fullFilePath);
+                }
+                $image->delete();
+            }
+            else if($request->mediaType = 'video'){
+                $video = Video::find($request->mediaId);
+                if(Storage::disk('public')->exists('/videos/product/'.$video->name)){
+                    $fullFilePath = '/videos/product/'.$video->name;
+                    Storage::disk('public')->delete($fullFilePath);
+                }
+                $video->delete();
+            }
+
+            return response()->json('File deleted', 200);
+        }
+    }
+
+    /**
+     * Get summary of Product
+     *
+     * @param Request $request
+     * @return JSON
+     */
+    public function productSummary(Request $request)
+    {
+        if($request->ajax()){
+            $product = Product::find($request->product_id);
+            // $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $product->type = ucfirst($product->type);
+            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+            $product->imageCollection = $product->images;
+            $product->videoCollection = $product->videos;
+
+            return $product->toJson();
+        }
+    }
+
+    /**
+     * Set the primary picture of a Product
+     *
+     * @param Request $request
+     * @return String
+     */
+    public function setPrimaryPicture(Request $request)
+    {
+        if($request->ajax()){
+            $product = Product::find($request->product_id);
+            $product->primary_img_id = $request->img_id;
+            $product->save();
+
+            return "OK";
+        }
+    }
+
+    /**
+     * Showcase Product
+     *
+     * @param Request $request
+     * @return String
+     */
+    public function showcaseProduct(Request $request)
+    {
+        if($request->ajax()){
+            $product = Product::find($request->product_id);
+            $product->status = 'showcased';
+            $product->save();
+
+            return "OK";
         }
     }
 
@@ -357,7 +434,7 @@ class BreederController extends Controller
         $details = explode(',',$otherDetails);
         $transformedSyntax = '';
         foreach ($details as $detail) {
-            $transformedSyntax += $detail.'\\n';
+            $transformedSyntax .= $detail."<br>";
         }
         return $transformedSyntax;
     }
@@ -390,13 +467,13 @@ class BreederController extends Controller
         $mediaInfo = [];
 
         if($this->isImage($extension)){
-            $mediaInfo['directoryPath'] = '/images/product';
+            $mediaInfo['directoryPath'] = '/images/product/';
             $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . str_random(6) . '.' . $extension;
             $mediaInfo['type'] = new Image;
         }
 
         else if($this->isVideo($extension)){
-            $mediaInfo['directoryPath'] = '/videos/product';
+            $mediaInfo['directoryPath'] = '/videos/product/';
             $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . str_random(6) . '.' . $extension;
             $mediaInfo['type'] = new Video;
         }

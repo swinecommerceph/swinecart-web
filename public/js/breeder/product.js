@@ -1,9 +1,9 @@
 'use strict';
 
 var product = {
-    current_modal: $('#add-product-modal'),
 
     before_select_value : '' ,
+    current_primary_picture: 0,
 
     other_details_default :
         '<div class="detail-container">'+
@@ -81,7 +81,7 @@ var product = {
         $(parent_form).find('.detail-container').map(function () {
             var characteristic = $(this).find('input[name="characteristic[]"]').val();
             var value = $(this).find('input[name="value[]"]').val();
-            other_details += characteristic+' = '+value+',';
+            if(characteristic && value) other_details += characteristic+' = '+value+',';
         });
 
         data_values["other_details"] = other_details;
@@ -104,6 +104,7 @@ var product = {
 
                 $('#media-dropzone').append(hidden_inputs);
 
+                $('#add-media-modal h4').append(' to '+data.name);
                 $('.add-product-button').attr('href','#add-media-modal');
                 $('#overlay-preloader-circular').remove();
                 parent_form.find('#submit-button').removeClass('disabled');
@@ -125,8 +126,169 @@ var product = {
 
     },
 
+    get_summary: function(product_id){
+        $('.add-product-button').attr('href','#product-summary-modal');
+        $('#add-media-modal').closeModal();
+        $('#product-summary-modal').openModal();
 
-    manage_necessary_fields : function(type){
+        // Attach overlay preloader
+        $('<div id="overlay-preloader-circular" class="valign-wrapper" style="padding:7rem;">'+
+            '<div class="center-align preloader-overlay">'+
+                '<div class="preloader-wrapper big active">'+
+                    '<div class="spinner-layer spinner-blue-only">'+
+                        '<div class="circle-clipper left">'+
+                          '<div class="circle"></div>'+
+                        '</div><div class="gap-patch">'+
+                          '<div class="circle"></div>'+
+                        '</div><div class="circle-clipper right">'+
+                          '<div class="circle"></div>'+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+            '</div>'+
+        '</div>')
+        .css({
+            position: "absolute", width: "100%", height: "100%", top: $('#add-product-modal .modal-content').scrollTop(), left: 0, background: "rgba(255,255,255,0.8)", display:"block"
+        })
+        .appendTo($("#product-summary-modal .modal-content").css("position", "relative"));
+
+        // Let the overlay preloader change its top position every scroll
+        $('#product-summary-modal .modal-content').scroll(function(){
+            $('#overlay-preloader-circular').css({top:$(this).scrollTop()});
+        });
+
+        // Do AJAX
+        $.ajax({
+            url: config.productSummary_url,
+            type: "GET",
+            cache: false,
+            data:{
+                "product_id" : product_id
+            },
+            success: function(data){
+                var data = JSON.parse(data);
+                var other_details = data.other_details.split(',');
+                var images = data.imageCollection;
+                var videos = data.videoCollection;
+                // General Info
+                var items = '<li class="collection-item">'+data.type+' - '+data.breed+'</li>'+
+    				'<li class="collection-item">'+data.age+' days old</li>'+
+    				'<li class="collection-item">Average Daily Gain: '+data.adg+'</li>'+
+    				'<li class="collection-item">Feed Conversion Ratio: '+data.fcr+'</li>' +
+                    '<li class="collection-item">Backfat Thickness: '+data.backfat_thickness+'</li>';
+
+                var other_details_list = '<p>';
+                var image_list = '';
+                var video_list = '';
+
+                // Other Details
+                other_details.forEach(function(element){ other_details_list += element.trim() + '<br>'; });
+                other_details_list += '</p>';
+
+                // Images
+                images.forEach(function(element){
+                    image_list += '<div class="col s12 m6">'+
+                            '<div class="card">'+
+                                '<div class="card-image">'+
+                                    '<img src="'+config.productImages_path+'/'+element.name+'">'+
+                                    '<span class="card-title"></span>'+
+                                '</div>'+
+                                '<div class="card-action">'+
+                                    '<a href="#!" class="set-primary-picture" data-product-id="'+data.id+'" data-img-id="'+element.id+'">Set as Primary Picture</a>'+
+                                '</div>'+
+                            '</div>'+
+                        '</div>';
+                });
+
+                // Videos
+                videos.forEach(function(element){
+                    video_list += '<div class="col s12 m6">'+
+                            '<video class="responsive-video" controls>'+
+                                '<source src="'+config.productVideos_path+'/'+element.name+'" type="video/mp4">'+
+                            '</video>'+
+                        '</div>';
+                });
+
+                $('#product-summary-collection h5').html(data.name);
+                $('#product-summary-collection h6').html(data.farm_province);
+                $('#product-summary-collection').append(items);
+                $('#other-details-summary .card-content').append(other_details_list);
+                $('#images-summary .card-content .row').append(image_list);
+                $('#videos-summary .card-content .row').append(video_list);
+                $('#showcase-product-form').prepend('<input name="productId" type="hidden" value="'+data.id+'">');
+
+                // Add listener to set-primary-picture anchor tags
+                $('.set-primary-picture').click(function(e){
+                    e.preventDefault();
+
+                    // Check first if chosen image not the current primary picture
+                    if(product.current_primary_picture != $(this).attr('data-img-id')){
+                        product.set_primary_picture($(this), $(this).parents('form'), $(this).attr('data-product-id'), $(this).attr('data-img-id'));
+                    }
+
+                });
+
+                $('#overlay-preloader-circular').remove();
+
+            },
+            error: function(message){
+                console.log(message['responseText']);
+            }
+        });
+    },
+
+    set_primary_picture: function(anchor_tag, parent_form, product_id, img_id){
+        // Do AJAX
+        $.ajax({
+            url: parent_form.attr('action'),
+            type: "POST",
+            cache: false,
+            data: {
+                "_token": parent_form.find('input[name=_token]').val(),
+                "product_id": product_id,
+                "img_id": img_id
+            },
+            success: function(data){
+                // var data = JSON.parse(data);
+
+                // Overwrite the old primary picture anchor's description
+                $('.set-primary-picture[data-img-id="'+product.current_primary_picture+'"]').html('Set as Primary Picture');
+
+                // New Primary Picture id
+                product.current_primary_picture = img_id;
+                anchor_tag.html('<i class="material-icons left teal-text">photo</i> Primary Picture');
+
+            },
+            error: function(message){
+                console.log(message['responseText']);
+            }
+        });
+    },
+
+    showcase_product: function(parent_form){
+        // Do AJAX
+        $.ajax({
+            url: parent_form.attr('action'),
+            type: "POST",
+            cache: false,
+            data: {
+                "_token": parent_form.find('input[name=_token]').val(),
+                "product_id": parent_form.find('input[name=productId]').val()
+            },
+            success: function(data){
+                // var data = JSON.parse(data);
+                window.setTimeout(function(){
+                    location.reload(true);
+                }, 1200);
+
+            },
+            error: function(message){
+                console.log(message['responseText']);
+            }
+        });
+    },
+
+    manage_necessary_fields: function(type){
 
         // Fade in quantity field for semen
         if(type === 'semen'){
@@ -182,7 +344,7 @@ var product = {
             $('#input-quantity-container').fadeOut(300);
             if(product.before_select_value === 'sow'){
                 $('#other-details-container').html('');
-                product.other_details_default.prependTo("#other-details-container").fadeIn(300);
+                $(product.other_details_default).prependTo("#other-details-container").fadeIn(300);
             }
             product.before_select_value = 'boar';
         }

@@ -36,7 +36,7 @@ var profile = {
                 Materialize.toast('Profile updated Success!', 1500, 'green lighten-1');
                 setTimeout(function(){
                     config.preloader_progress.fadeOut();
-                    location.reload();
+                    location.reload(true);
                 }, 1500);
             },
             error: function(message){

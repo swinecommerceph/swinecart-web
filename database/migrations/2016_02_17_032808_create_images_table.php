@@ -17,7 +17,6 @@ class CreateImagesTable extends Migration
             $table->string('name');
             $table->integer('imageable_id')->unsigned();
             $table->string('imageable_type');
-            $table->string('status_instance')->default('active');
             // $table->timestamps();
         });
     }

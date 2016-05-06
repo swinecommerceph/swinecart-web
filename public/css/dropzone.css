@@ -204,7 +204,7 @@
       .dropzone .dz-preview:hover .dz-details {
         opacity: 1; }
     .dropzone .dz-preview.dz-file-preview .dz-image {
-      border-radius: 20px;
+      border-radius: 4px;
       background: #999;
       background: linear-gradient(to bottom, #eee, #ddd); }
     .dropzone .dz-preview.dz-file-preview .dz-details {
@@ -218,13 +218,13 @@
         -o-transition: opacity 0.2s linear;
         transition: opacity 0.2s linear; }
     .dropzone .dz-preview .dz-remove {
-      font-size: 14px;
+      /*font-size: 14px;*/
       text-align: center;
       display: block;
       cursor: pointer;
       border: none; }
       .dropzone .dz-preview .dz-remove:hover {
-        text-decoration: underline; }
+        text-decoration: none; }
     .dropzone .dz-preview:hover .dz-details {
       opacity: 1; }
     .dropzone .dz-preview .dz-details {
@@ -266,7 +266,7 @@
       -webkit-filter: blur(8px);
       filter: blur(8px); }
     .dropzone .dz-preview .dz-image {
-      border-radius: 20px;
+      border-radius: 4px;
       overflow: hidden;
       width: 120px;
       height: 120px;
@@ -327,7 +327,7 @@
       z-index: 1000;
       pointer-events: none;
       position: absolute;
-      height: 16px;
+      height: 8px;
       left: 50%;
       top: 50%;
       margin-top: -8px;
@@ -335,7 +335,7 @@
       margin-left: -40px;
       background: rgba(255, 255, 255, 0.9);
       -webkit-transform: scale(1);
-      border-radius: 8px;
+      border-radius: 4px;
       overflow: hidden; }
       .dropzone .dz-preview .dz-progress .dz-upload {
         background: #333;
@@ -367,7 +367,7 @@
       -ms-transition: opacity 0.3s ease;
       -o-transition: opacity 0.3s ease;
       transition: opacity 0.3s ease;
-      border-radius: 8px;
+      border-radius: 4px;
       font-size: 13px;
       top: 130px;
       left: -10px;

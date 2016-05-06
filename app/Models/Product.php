@@ -34,7 +34,15 @@ class Product extends Model
         'adg',
         'fcr',
         'backfat_thickness',
-        'other_details'];
+        'other_details',
+        'status'];
+
+    /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['status_instance'];
 
     /**
      * Get the breeder that owns this product

@@ -27,7 +27,7 @@ class CreateProductsTable extends Migration
             $table->float('fcr')->nullable();
             $table->float('backfat_thickness')->nullable();
             $table->text('other_details')->nullable();
-            $table->string('status')->default('showcase');
+            $table->string('status')->default('unshowcased');
             $table->string('status_instance')->default('active');
             // $table->timestamps();
         });

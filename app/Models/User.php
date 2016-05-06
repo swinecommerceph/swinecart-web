@@ -37,7 +37,7 @@ class User extends Model implements AuthenticatableContract,
      *
      * @var array
      */
-    protected $hidden = ['password', 'remember_token'];
+    protected $hidden = ['password', 'remember_token', 'status_instance'];
 
     /**
      * Get the roles that the user has

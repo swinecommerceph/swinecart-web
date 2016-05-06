@@ -12,7 +12,7 @@
             <i class="material-icons">add</i>
         </a>
         {{-- Publish selected Button --}}
-        <a href="#" class="btn-floating btn-large waves-effect waves-light teal tooltipped publish-selected-button" data-position="top" data-delay="50" data-tooltip="Publish all chosen">
+        <a href="#" class="btn-floating btn-large waves-effect waves-light teal tooltipped publish-selected-button" data-position="top" data-delay="50" data-tooltip="Showcase all chosen">
             <i class="material-icons">publish</i>
         </a>
         {{-- Delete selected Button --}}
@@ -91,7 +91,7 @@
                         FCR: {{$product->fcr}} <br>
                         Backfat Thickness: {{$product['backfat_thickness']}} mm <br>
                         <br>
-                        {{$product->other_details}}
+                        {!! $product->other_details !!}
                     </p>
                 </div>
             </div>

@@ -1,20 +1,8 @@
 {{--
-	This is the form Breeder Users use
-	for adding products
+	Forms regarding creation and showcasing of Breeder's products
 
-	Input Fields include:
-		Name
-		Type
-		Age
-		Breed
-		Average Daily Gain (ADG)
-		Feed Conversion Ratio (FCR)
-		Backfat Thickness
-		Price
-		Quantity (default 1 for boar and sow)
-		Other Product Details
-		Images
-		Videos
+	General Info and other product details
+	Media (Images and Videos)
 --}}
 
 <!-- Modal Structure for adding a Product -->
@@ -209,14 +197,74 @@
 	</div>
 </div>
 
-<div id="custom-preview" class="dz-preview dz-file-preview">
-	<div class="dz-details">
-		<div class="dz-filename"><span data-dz-name></span></div>
-		<div class="dz-size" data-dz-size></div>
-		<img data-dz-thumbnail />
+<div id="product-summary-modal" class="modal modal-fixed-footer">
+	<div class="modal-content">
+		<h4>Product Summary</h4>
+		<div class="row">
+			<ul id="product-summary-collection" class="collection with-header">
+				<li class="collection-header">
+					<h5>Product Name</h5>
+					<h6>Province</h6>
+				</li>
+			</ul>
+		</div>
+		<div class="row">
+	        <div class="col s12">
+	            <div id="other-details-summary" class="card">
+	                <div class="card-content black-text">
+	                    <span class="card-title">Other Details</span>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+		<div class="row">
+	        <div class="col s12">
+	            <div id="images-summary" class="card">
+	                <div class="card-content black-text">
+	                    <span class="card-title">Images</span>
+						{!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
+						<div class="row"></div>
+						{!! Form::close() !!}
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+		<div class="row">
+	        <div class="col s12">
+	            <div id="videos-summary" class="card">
+	                <div class="card-content black-text">
+	                    <span class="card-title">Videos</span>
+						<div class="row"></div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
 	</div>
-	<div class="dz-progress progress red lighten-4"><div class="determinate red" style="width: 70%" data-dz-uploadprogress></div></div>
-	<div class="dz-success-mark"><span><i class='medium material-icons green-text'>check_circle</i></span></div>
-	<div class="dz-error-mark"><span><i class='medium material-icons orange-text text-lighten-1'>error</i></span></div>
-	<div class="dz-error-message"><span data-dz-errormessage></span></div>
+
+	<div class="modal-footer">
+		{!! Form::open(['route' => 'products.showcaseProduct', 'class' => 's12', 'id' => 'showcase-product-form']) !!}
+			<button id="showcase-button" class="btn waves-effect waves-light modal-action"> Showcase
+				<i class="material-icons right">publish</i>
+			</button>
+		{!! Form::close() !!}
+		<a href="#!" id="save-draft-button" class="modal-action waves-effect waves-green btn-flat ">Save as Draft</a>
+	</div>
+</div>
+
+{{--  Custom preview for dropzone --}}
+<div id="custom-preview" style="display:none;">
+	<div class="dz-preview dz-file-preview">
+		<div class="dz-image">
+			<img data-dz-thumbnail alt="" src=""/>
+		</div>
+		<div class="dz-details">
+			<div class="dz-filename"><span data-dz-name></span></div>
+			<div class="dz-size" data-dz-size></div>
+		</div>
+		<div class="dz-progress progress red lighten-4"><div class="determinate green" style="width:0%" data-dz-uploadprogress></div></div>
+		<div class="dz-success-mark"><span><i class='medium material-icons green-text'>check_circle</i></span></div>
+		<div class="dz-error-mark"><span><i class='medium material-icons orange-text text-lighten-1'>error</i></span></div>
+		<div class="dz-error-message"><span data-dz-errormessage></span></div>
+		<a><i class="dz-remove material-icons red-text text-lighten-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Remove this media" data-dz-remove>cancel</i></a>
+	</div>
 </div>

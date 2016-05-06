@@ -43,7 +43,7 @@
 
         {{-- Sort Order --}}
         <div class="input-field col s3 right">
-            <div class="left">
+            <div class="">
                 <select>
                     <option value="" @if(!empty($filters['none']))
                                 {{ $filters['none'] }}
@@ -175,7 +175,7 @@
                         <span class="card-title grey-text text-darken-4">{{$product['name']}}<i class="material-icons right">close</i></span>
                         <p>
                             Average Daily Gain: {{ $product->adg }} g<br>
-                            FCR: {{ $product->fcr }} <br>
+                            Feed Conversion Ratio: {{ $product->fcr }} <br>
                             Backfat Thickness: {{ $product->backfat_thickness }} mm<br>
                         </p>
                         <p>

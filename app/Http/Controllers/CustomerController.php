@@ -208,15 +208,15 @@ class CustomerController extends Controller
         if (!$request->type && !$request->breed){
             if($request->sort && $request->sort != 'none'){
                 $part = explode('-',$request->sort);
-                $products = Product::orderBy($part[0], $part[1])->paginate(10);
+                $products = Product::where('status','showcased')->orderBy($part[0], $part[1])->paginate(10);
             }
-            else $products = Product::paginate(10);
+            else $products = Product::where('status','showcased')->paginate(10);
         }
         else{
-            if($request->type) $products = Product::whereIn('type', explode(' ',$request->type));
+            if($request->type) $products = Product::where('status','showcased')->whereIn('type', explode(' ',$request->type));
             if($request->breed) {
                 $breedIds = $this->getBreedIds($request->breed);
-                if(!$request->type) $products = Product::whereIn('breed_id', $breedIds);
+                if(!$request->type) $products = Product::where('status','showcased')->whereIn('breed_id', $breedIds);
                 else $products = $products->whereIn('breed_id', $breedIds);
             }
             if($request->sort) {
@@ -229,7 +229,7 @@ class CustomerController extends Controller
         }
 
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
-        $breedFilters = Breed::where('name','not like', '%+%')->orderBy('name','asc')->get();
+        $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
         $urlFilters = $this->toUrlFilter($request->type, $request->breed, $request->sort);
 
         foreach ($products as $product) {

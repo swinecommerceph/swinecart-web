@@ -6,7 +6,10 @@ $(document).ready(function(){
     // Initialization of Modals
     $('.add-product-button').leanModal({
         ready: function(){
-            $('.indicator').css({"right": "442px", "left": "0px"});
+            var whole_tab_width = $('#add-product-modal .tabs').width();
+            var swine_tab_width = $('#add-product-modal .tab').first().width();
+
+            $('.indicator').css({"right": whole_tab_width - swine_tab_width, "left": "0px"});
         }
     });
 
@@ -65,6 +68,27 @@ $(document).ready(function(){
         product.remove_other_detail($(this));
     });
 
+    // Move to Product Summary
+    $('#next-button').click(function(e){
+        e.preventDefault();
+        product.get_summary($('#add-media-modal form').find('input[name="productId"]').val());
+    });
+
+    $('#save-draft-button').click(function(e){
+        e.preventDefault();
+        $(this).html('Saving as Draft...');
+        window.setTimeout(function(){
+            location.reload(true);
+        }, 1200);
+
+    });
+
+    $('#showcase-button').click(function(e){
+        e.preventDefault();
+        $(this).html('Showcasing ...');
+        product.showcase_product($(this).parents('form'));
+    });
+
     // Dropzone configuration
     Dropzone.options.mediaDropzone = {
         paramName: 'media',
@@ -72,46 +96,57 @@ $(document).ready(function(){
         parallelUploads: 3,
         maxFiles: 12,
         maxFilesize: 50,
-        addRemoveLinks: true,
-        dictRemoveFile: "Remove",
-        dictCancelUpload: "Cancel",
+        // addRemoveLinks: true,
+        // dictRemoveFile: "Remove",
+        // dictCancelUpload: "Cancel",
         acceptedFiles: "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
         dictDefaultMessage: "<h6> Drop images/videos here to upload </h6>"+
             "<i class='material-icons'>insert_photo</i> <i class='material-icons'>movie</i>"+
             "<br> <h6> Or just click anywhere in this container to choose file </h6>",
-        previewsContainer: "#custom-preview",
+        previewTemplate: document.getElementById('custom-preview').innerHTML,
         init: function() {
             // Listen to events
-            this.on('completemultiple', function(files){
-                $('.dz-sucess-mark').html("<i class='material-icons green-text'>check_circle</i>");
-                $('.dz-error-mark').html("<i class='material-icons orange-text text-lighten-1'>error</i>");
+
+            // Set default thumbnail for videos
+            this.on("addedfile", function(file) {
+                if (file.type.match(/video.*/)) this.emit("thumbnail", file, config.images_path+'/video-icon.png');
             });
+
+            // On success of multiple uploads
             this.on('successmultiple', function(files, response){
                 response = JSON.parse(response);
-                response.forEach(function(element, index, array){
+                var item = 0;
+                response.forEach(function(element){
+                    preview_element = files[item].previewElement;
+                    preview_element.setAttribute('data-media-id', element.id);
                     $('.dz-filename span[data-dz-name]').html(element.name);
-                    // $('.dz-sucess-mark').html("<i class='material-icons green-text'>check_circle</i>");
+                    item++;
                 });
+
+                $(".tooltipped").tooltip({delay:50});
             });
+
+            // Remove file from file system and database records
             this.on('removedfile', function(file){
-                var parent_form = $('#img-dropzone');
-                console.log(file.type);
+                var mime_type = file.type.split('/');
+                var media_type = mime_type[0];
                 // Do AJAX
-                // $.ajax({
-                //     url: config.productImages_url+'/delete',
-                //     type: "DELETE",
-                //     cache: false,
-                //     data:{
-                //         "_token" : parent_form.find('input[name=_token]').val(),
-                //         "imageId":
-                //     },
-                //     success: function(data){
-                //
-                //     },
-                //     error: function(message){
-                //         console.log(message['responseText']);
-                //     }
-                // });
+                $.ajax({
+                    url: config.productMedia_url+'/delete',
+                    type: "DELETE",
+                    cache: false,
+                    data:{
+                        "_token" : $('#media-dropzone').find('input[name=_token]').val(),
+                        "mediaId" : file.previewElement.getAttribute('data-media-id'),
+                        "mediaType" : media_type
+                    },
+                    success: function(data){
+
+                    },
+                    error: function(message){
+                        console.log(message['responseText']);
+                    }
+                });
             });
         }
     };

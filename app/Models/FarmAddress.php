@@ -29,6 +29,13 @@ class FarmAddress extends Model
         'mobile'];
 
     /**
+     * The attributes excluded from the model's JSON form.
+     *
+     * @var array
+     */
+    protected $hidden = ['status_instance'];
+
+    /**
      * Get all of the farm addressable models
      */
     public function addressable()

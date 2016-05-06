@@ -17,7 +17,6 @@ class CreateVideosTable extends Migration
             $table->string('name');
             $table->integer('videoable_id')->unsigned();
             $table->string('videoable_type');
-            $table->string('status_instance')->default('active');
             // $table->timestamps();
         });
     }

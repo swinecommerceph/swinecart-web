@@ -65,6 +65,9 @@ Route::group(['middleware' => ['web']], function () {
         // product-related
         Route::get('products',['as' => 'products', 'uses' => 'BreederController@showProducts']);
         Route::post('products',['as' => 'products.store', 'uses' => 'BreederController@storeProducts']);
+        Route::get('products/product-summary',['as' => 'products.productSummary', 'uses' => 'BreederController@productSummary']);
+        Route::post('products/set-primary-picture',['as' => 'products.setPrimaryPicture', 'uses' => 'BreederController@setPrimaryPicture']);
+        Route::post('products/showcase-product',['as' => 'products.showcaseProduct', 'uses' => 'BreederController@showcaseProduct']);
         Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'BreederController@uploadMedia']);
         Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'BreederController@deleteMedium']);
 

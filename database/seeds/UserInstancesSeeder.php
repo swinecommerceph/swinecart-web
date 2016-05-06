@@ -90,6 +90,7 @@ class UserInstancesSeeder extends Seeder
                 $product->fcr = random_int(10,30)/10.0;
                 $product->backfat_thickness = random_int(90,200)/10.0;
                 $product->other_details = 'Our detailed information of our product';
+                $product->status = 'showcased';
                 $breeder->products()->save($product);
 
                 // Check if there is a second image
