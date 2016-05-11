@@ -113,7 +113,6 @@
                             <i class="material-icons yellow-text">star_border</i>
                         </span>
                     </span>
-
                 </li>
             </ul>
         </div>
@@ -124,8 +123,7 @@
             <div class="card">
                 <div class="card-content black-text">
                     <span class="card-title">Other Details</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.
-                    I am convenient because I require little markup to use effectively.</p>
+                    <p>{!! $product->other_details !!}</p>
                 </div>
             </div>
         </div>

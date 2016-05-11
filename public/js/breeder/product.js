@@ -249,8 +249,6 @@ var product = {
                 "img_id": img_id
             },
             success: function(data){
-                // var data = JSON.parse(data);
-
                 // Overwrite the old primary picture anchor's description
                 $('.set-primary-picture[data-img-id="'+product.current_primary_picture+'"]').html('Set as Primary Picture');
 

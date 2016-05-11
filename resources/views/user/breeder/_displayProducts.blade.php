@@ -37,6 +37,14 @@
             <div class="input-field col s3 right">
                 <select>
                   <option value="" disabled selected>Choose Category</option>
+                  <option value="showcased">Showcased</option>
+                  <option value="unshowcased">Unshowcased</option>
+                </select>
+                <label>Status</label>
+            </div>
+            <div class="input-field col s3 right">
+                <select>
+                  <option value="" disabled selected>Choose Category</option>
                   <option value="all">All</option>
                   <option value="boar">Boar</option>
                   <option value="sow">Sow</option>

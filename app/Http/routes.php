@@ -63,13 +63,13 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('edit-profile/farm/delete',['as' => 'breeder.deleteFarm', 'uses' => 'BreederController@deleteFarm']);
 
         // product-related
-        Route::get('products',['as' => 'products', 'uses' => 'BreederController@showProducts']);
-        Route::post('products',['as' => 'products.store', 'uses' => 'BreederController@storeProducts']);
-        Route::get('products/product-summary',['as' => 'products.productSummary', 'uses' => 'BreederController@productSummary']);
-        Route::post('products/set-primary-picture',['as' => 'products.setPrimaryPicture', 'uses' => 'BreederController@setPrimaryPicture']);
-        Route::post('products/showcase-product',['as' => 'products.showcaseProduct', 'uses' => 'BreederController@showcaseProduct']);
-        Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'BreederController@uploadMedia']);
-        Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'BreederController@deleteMedium']);
+        Route::get('products',['as' => 'products', 'uses' => 'ProductController@showProducts']);
+        Route::post('products',['as' => 'products.store', 'uses' => 'ProductController@storeProducts']);
+        Route::get('products/product-summary',['as' => 'products.productSummary', 'uses' => 'ProductController@productSummary']);
+        Route::post('products/set-primary-picture',['as' => 'products.setPrimaryPicture', 'uses' => 'ProductController@setPrimaryPicture']);
+        Route::post('products/showcase-product',['as' => 'products.showcaseProduct', 'uses' => 'ProductController@showcaseProduct']);
+        Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
+        Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'ProductController@deleteMedium']);
 
     });
 
@@ -88,14 +88,14 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('edit-profile/farm/delete',['as' => 'customer.deleteFarm', 'uses' => 'CustomerController@deleteFarm']);
 
         // product-related
-        Route::get('view-products',['as' => 'products.view', 'uses' => 'CustomerController@viewProducts']);
-        Route::get('view-products/{product}',['as' => 'products.viewDetail', 'uses' => 'CustomerController@viewProductDetail']);
+        Route::get('view-products',['as' => 'products.view', 'uses' => 'ProductController@viewProducts']);
+        Route::get('view-products/{product}',['as' => 'products.viewDetail', 'uses' => 'ProductController@viewProductDetail']);
 
         // swinecart-related
-        Route::get('swine-cart',['as' => 'cart.items', 'uses' => 'CustomerController@getSwineCartItems']);
-        Route::post('swine-cart/add',['as' => 'cart.add', 'uses' => 'CustomerController@addToSwineCart']);
-        Route::delete('swine-cart/delete',['as' => 'cart.delete', 'uses' => 'CustomerController@deleteFromSwineCart']);
-        Route::get('swine-cart/quantity',['as' => 'cart.quantity', 'uses' => 'CustomerController@getSwineCartQuantity']);
+        Route::get('swine-cart',['as' => 'cart.items', 'uses' => 'SwineCartController@getSwineCartItems']);
+        Route::post('swine-cart/add',['as' => 'cart.add', 'uses' => 'SwineCartController@addToSwineCart']);
+        Route::delete('swine-cart/delete',['as' => 'cart.delete', 'uses' => 'SwineCartController@deleteFromSwineCart']);
+        Route::get('swine-cart/quantity',['as' => 'cart.quantity', 'uses' => 'SwineCartController@getSwineCartQuantity']);
 
     });
 
