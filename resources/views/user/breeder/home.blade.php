@@ -32,7 +32,7 @@
         <i class="material-icons">more_vert</i>
         <ul>
             <li><a class="btn-floating waves-effect waves-light grey tooltipped delete-selected-button" data-position="left" data-delay="50" data-tooltip="Delete all chosen"><i class="material-icons">delete</i></a></li>
-            <li><a class="btn-floating waves-effect waves-light teal tooltipped publish-selected-button" data-position="left" data-delay="50" data-tooltip="Showcase all chosen"><i class="material-icons">publish</i></a></li>
+            <li><a class="btn-floating waves-effect waves-light teal tooltipped showcase-selected-button" data-position="left" data-delay="50" data-tooltip="Showcase all chosen"><i class="material-icons">publish</i></a></li>
             <li><a href="#add-product-modal" class="btn-floating modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="left" data-delay="50" data-tooltip="Add product"><i class="material-icons">add</i></a></li>
         </ul>
       </a>

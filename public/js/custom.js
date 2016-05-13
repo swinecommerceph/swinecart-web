@@ -52,6 +52,20 @@ $(document).ready(function(){
         }, 500);
     });
 
+	// Change left and right icons in Pagination
+    if($('.pagination li:first-child a').length == 1)
+        $('.pagination li:first-child a').html('<i class="material-icons">chevron_left</i>');
+    else $('.pagination li:first-child').html('<a href="#!"><i class="material-icons">chevron_left</i></a>');
+
+    if($('.pagination li:last-child a').length == 1)
+        $('.pagination li:last-child a').html('<i class="material-icons">chevron_right</i>');
+    else $('.pagination li:last-child').html('<a href="#!"><i class="material-icons">chevron_right</i></a>');
+
+	// Put waves-effect on appropriate lis
+    $('.pagination li').each(function(){
+        if(!$(this).hasClass('disabled') && !$(this).hasClass('active')) $(this).addClass('waves-effect');
+    });
+
     var provinces = [
         // Negros Island Rregion
         'Negros Occidental',

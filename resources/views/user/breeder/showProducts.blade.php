@@ -40,5 +40,6 @@
 
 @section('customScript')
     <script src="/js/breeder/product.js"> </script>
+    <script src="/js/breeder/filter.js"> </script>
     <script src="/js/breeder/manageProducts_script.js"> </script>
 @endsection

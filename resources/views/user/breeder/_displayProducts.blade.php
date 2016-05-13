@@ -7,48 +7,50 @@
 {{-- General Actions container --}}
 <div class="row">
     <div class="col s4 left">
-        {{-- Add Button --}}
-        <a href="#add-product-modal" class="btn-floating btn-large modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
-            <i class="material-icons">add</i>
-        </a>
-        {{-- Publish selected Button --}}
-        <a href="#" class="btn-floating btn-large waves-effect waves-light teal tooltipped publish-selected-button" data-position="top" data-delay="50" data-tooltip="Showcase all chosen">
-            <i class="material-icons">publish</i>
-        </a>
-        {{-- Delete selected Button --}}
-        <a href="#" class="btn-floating btn-large waves-effect waves-light grey tooltipped delete-selected-button" data-position="top" data-delay="50" data-tooltip="Delete all chosen">
-            <i class="material-icons">delete</i>
-        </a>
+        {!! Form::open(['route' => 'products.manageSelected', 'id' => 'manage-selected-form']) !!}
+            {{-- Add Button --}}
+            <a href="#add-product-modal" class="btn-floating btn-large modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
+                <i class="material-icons">add</i>
+            </a>
+            {{-- Showcase selected Button --}}
+            <a href="#" class="btn-floating btn-large waves-effect waves-light teal tooltipped showcase-selected-button" data-position="top" data-delay="50" data-tooltip="Showcase all chosen">
+                <i class="material-icons">publish</i>
+            </a>
+            {{-- Delete selected Button --}}
+            <a href="#" class="btn-floating btn-large waves-effect waves-light grey tooltipped delete-selected-button" data-position="top" data-delay="50" data-tooltip="Delete all chosen">
+                <i class="material-icons">delete</i>
+            </a>
+        {!! Form::close() !!}
     </div>
 
     {{-- Dropdown container --}}
-    <div class="col s8 right">
+    <div id="dropdown-container" class="col s8 right">
         <div class="row">
-            <div class="input-field col right">
+            <div id="sort-select" class="input-field col right">
                 <select>
-                  <option value="" disabled selected>Choose Category</option>
-                  <option value="age-asc">Age</option>
-                  <option value="adg-desc">Average Daily Gain</option>
-                  <option value="fcr-desc">Feed Conversion Ratio</option>
-                  <option value="backfat_thickness-asc">Backfat Thickness</option>
+                    <option value="none">Relevance</option>
+                    <option value="age-asc" @if(!empty($filters['age-asc'])) {{ $filters['age-asc'] }} @endif>Age: Low to High</option>
+                    <option value="age-desc" @if(!empty($filters['age-desc'])) {{ $filters['age-desc'] }} @endif>Age: High to Low</option>
+                    <option value="adg-desc" @if(!empty($filters['adg-desc'])) {{ $filters['adg-desc'] }} @endif>Average Daily Gain</option>
+                    <option value="fcr-desc" @if(!empty($filters['fcr-desc'])) {{ $filters['fcr-desc'] }} @endif>Feed Conversion Ratio</option>
+                    <option value="backfat_thickness-asc" @if(!empty($filters['backfat_thickness-asc'])) {{ $filters['backfat_thickness-asc'] }} @endif>Backfat Thickness</option>
                 </select>
                 <label>Sort By</label>
             </div>
-            <div class="input-field col s3 right">
+            <div id="status-select" class="input-field col s3 right">
                 <select>
-                  <option value="" disabled selected>Choose Category</option>
-                  <option value="showcased">Showcased</option>
-                  <option value="unshowcased">Unshowcased</option>
+                    <option value="all-status" selected>All</option>
+                    <option value="showcased" @if(!empty($filters['showcased'])) {{ $filters['showcased'] }} @endif>Showcased</option>
+                    <option value="unshowcased" @if(!empty($filters['unshowcased'])) {{ $filters['unshowcased'] }} @endif>Unshowcased</option>
                 </select>
                 <label>Status</label>
             </div>
-            <div class="input-field col s3 right">
+            <div id="type-select" class="input-field col s3 right">
                 <select>
-                  <option value="" disabled selected>Choose Category</option>
-                  <option value="all">All</option>
-                  <option value="boar">Boar</option>
-                  <option value="sow">Sow</option>
-                  <option value="semen">Semen</option>
+                    <option value="all-type" selected>All</option>
+                    <option value="boar" @if(!empty($filters['boar'])) {{ $filters['boar'] }} @endif>Boar</option>
+                    <option value="sow" @if(!empty($filters['sow'])) {{ $filters['sow'] }} @endif>Sow</option>
+                    <option value="semen" @if(!empty($filters['semen'])) {{ $filters['semen'] }} @endif>Semen</option>
                 </select>
                 <label>Show</label>
             </div>
@@ -60,6 +62,7 @@
 
 {{-- Products in card elements container --}}
 <div id="view-products-container" class="row">
+    <?php $productNumber = 1; ?>
     @foreach($products as $product)
         <div class="col s12 m6 l4" id="product-{{$product->id}}">
             <div class="card hoverable">
@@ -76,16 +79,16 @@
                 <div class="card-action">
                     <div class="row">
                         <div class="col left">
-                            <input type="checkbox" name="product-{{$product->id}}" id="product-{{$product->id}}" data-product-id="{{$product->id}}" class="filled-in"/>
-                            <label for="product-{{$product->id}}"></label>
+                            <input type="checkbox" id="check-{{$productNumber}}" data-product-id="{{$product->id}}" class="filled-in"/>
+                            <label for="check-{{$productNumber}}"></label>
                         </div>
                         <div class="col right">
                             {{-- Edit Button --}}
-                            <a href="#" class="tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit {{$product->name}}">
+                            <a href="#edit-product-modal" class="modal-trigger tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit {{$product->name}}">
                                 <i class="material-icons teal-text" style="font-size:30px">edit</i>
                             </a>
                             {{-- Delete Button --}}
-                            <a href="#" class="tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete {{$product->name}}">
+                            <a href="#delete-product-modal" class="modal-trigger tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete {{$product->name}}">
                                 <i class="material-icons grey-text text-darken-1" style="font-size:30px">delete</i>
                             </a>
                         </div>
@@ -105,5 +108,12 @@
             </div>
 
         </div>
+        <?php $productNumber++; ?>
     @endforeach
+    {{-- Pagination --}}
+    <div class="row">
+        <div class="center-align">
+            {!! $products->appends($urlFilters)->links() !!}
+        </div>
+    </div>
 </div>

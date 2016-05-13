@@ -64,10 +64,14 @@ Route::group(['middleware' => ['web']], function () {
 
         // product-related
         Route::get('products',['as' => 'products', 'uses' => 'ProductController@showProducts']);
-        Route::post('products',['as' => 'products.store', 'uses' => 'ProductController@storeProducts']);
-        Route::get('products/product-summary',['as' => 'products.productSummary', 'uses' => 'ProductController@productSummary']);
+        Route::get('products/get-product',['as' => 'products.getProduct', 'uses' => 'ProductController@getProduct']);
+        Route::put('products/get-product',['as' => 'products.updateProduct', 'uses' => 'ProductController@updateProduct']);
+        Route::post('products/manage-selected',['as' => 'products.manageSelected', 'uses' => 'ProductController@showcaseSelected']);
+        Route::delete('products/manage-selected',['as' => 'products.manageSelected', 'uses' => 'ProductController@deleteSelected']);
+        Route::post('products/add',['as' => 'products.store', 'uses' => 'ProductController@storeProduct']);
+        Route::get('products/product-summary',['as' => 'products.summary', 'uses' => 'ProductController@productSummary']);
         Route::post('products/set-primary-picture',['as' => 'products.setPrimaryPicture', 'uses' => 'ProductController@setPrimaryPicture']);
-        Route::post('products/showcase-product',['as' => 'products.showcaseProduct', 'uses' => 'ProductController@showcaseProduct']);
+        Route::post('products/showcase-product',['as' => 'products.showcase', 'uses' => 'ProductController@showcaseProduct']);
         Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
         Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'ProductController@deleteMedium']);
 

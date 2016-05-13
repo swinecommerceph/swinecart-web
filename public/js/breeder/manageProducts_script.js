@@ -29,15 +29,28 @@ $(document).ready(function(){
         alignment: 'right'
     });
 
+    // Publis
+    $('.showcase-selected-button').click(function(e){
+        e.preventDefault();
+        product.showcase_selected($('#manage-selected-form'));
+    });
+
+    // Delete selected products
+    $(".delete-selected-button").click(function(e){
+        e.preventDefault();
+        product.delete_selected($('#manage-selected-form'));
+    });
+
     // Submit add product
     $("#create-product").submit(function(e){
         e.preventDefault();
         product.add($('#create-product'));
     });
 
-    // Delete selected products
-    $(".delete-selected-button").click(function(){
-        console.log('Delete!');
+    $('.edit-product-button').click(function(){
+        $('#edit-product-modal').openModal({
+            dismissible: false
+        });
     });
 
     // Breed radio
@@ -74,6 +87,7 @@ $(document).ready(function(){
         product.get_summary($('#add-media-modal form').find('input[name="productId"]').val());
     });
 
+    // Save as Draft the Product created
     $('#save-draft-button').click(function(e){
         e.preventDefault();
         $(this).html('Saving as Draft...');
@@ -83,10 +97,16 @@ $(document).ready(function(){
 
     });
 
+    // Showcase Product created
     $('#showcase-button').click(function(e){
         e.preventDefault();
         $(this).html('Showcasing ...');
         product.showcase_product($(this).parents('form'));
+    });
+
+    // Redirect to designated link upon checkbox value change
+    $("#dropdown-container select").change(function(){
+        filter.apply();
     });
 
     // Dropzone configuration

@@ -109,7 +109,9 @@ var product = {
                 $('#overlay-preloader-circular').remove();
                 parent_form.find('#submit-button').removeClass('disabled');
                 $('#add-product-modal').closeModal();
-                $('#add-media-modal').openModal();
+                $('#add-media-modal').openModal({
+                    dismissible: false
+                });
             },
             error: function(message){
                 console.log(message['responseText']);
@@ -129,7 +131,9 @@ var product = {
     get_summary: function(product_id){
         $('.add-product-button').attr('href','#product-summary-modal');
         $('#add-media-modal').closeModal();
-        $('#product-summary-modal').openModal();
+        $('#product-summary-modal').openModal({
+            dismissible: false
+        });
 
         // Attach overlay preloader
         $('<div id="overlay-preloader-circular" class="valign-wrapper" style="padding:7rem;">'+
@@ -284,6 +288,79 @@ var product = {
                 console.log(message['responseText']);
             }
         });
+    },
+
+    showcase_selected: function(parent_form){
+        var checked_products = [];
+
+        $('#view-products-container input[type=checkbox]:checked').each(function(){
+            checked_products.push($(this).attr('data-product-id'));
+        });
+
+        // Check if there are checked products
+        if(checked_products.length > 0){
+            // Do AJAX
+            $.ajax({
+                url: parent_form.attr('action'),
+                type: "POST",
+                cache: false,
+                data: {
+                    "_token": parent_form.find('input[name=_token]').val(),
+                    "product_ids": checked_products
+                },
+                success: function(data){
+                    // var data = JSON.parse(data);
+                    checked_products.forEach(function(element){
+                        $('#product-'+element).remove();
+                    });
+                    Materialize.toast('Selected Products showcased!', 2000, 'green lighten-1');
+                },
+                error: function(message){
+                    console.log(message['responseText']);
+                }
+            });
+        }
+        else Materialize.toast('No products chosen!', 1500 , 'orange accent-2');
+
+    },
+
+    delete_selected: function(parent_form){
+        var checked_products = [];
+
+        $('#view-products-container input[type=checkbox]:checked').each(function(){
+            checked_products.push($(this).attr('data-product-id'));
+        });
+
+        // Check if there are checked products
+        if(checked_products.length > 0){
+            // Acknowledge first confirmation to remove
+            $('#confirmation-modal').openModal();
+            $('#confirm-remove').click(function(e){
+                e.preventDefault();
+                // Do AJAX
+                $.ajax({
+                    url: config.manageSelected_url,
+                    type: "DELETE",
+                    cache: false,
+                    data: {
+                        "_token": parent_form.find('input[name=_token]').val(),
+                        "product_ids": checked_products
+                    },
+                    success: function(data){
+                        // var data = JSON.parse(data);
+                        checked_products.forEach(function(element){
+                            $('#product-'+element).remove();
+                        });
+                        Materialize.toast('Selected Products deleted!', 2000, 'green lighten-1');
+
+                    },
+                    error: function(message){
+                        console.log(message['responseText']);
+                    }
+                });
+            });
+        }
+        else Materialize.toast('No products chosen!', 1500 , 'orange accent-2');
     },
 
     manage_necessary_fields: function(type){

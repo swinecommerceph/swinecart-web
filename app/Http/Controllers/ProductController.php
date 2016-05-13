@@ -41,11 +41,34 @@ class ProductController extends Controller
      *
      * @return View
      */
-    public function showProducts()
+    public function showProducts(Request $request)
     {
         $breeder = $this->user->userable;
-        $products = $breeder->products()->where('status_instance','active')->orderBy('id', 'desc')->get();
+        $products = $breeder->products()->where('status_instance','active');
+        if($request->type && $request->type != 'all-type') $products = $products->where('type',$request->type);
+        if($request->status && $request->status != 'all-status') $products = $products->where('status',$request->status);
+        if($request->sort && $request->sort != 'none') {
+            $part = explode('-',$request->sort);
+            $products = $products->orderBy($part[0],$part[1])->paginate(15);
+        }
+        else $products = $products->orderBy('id', 'desc')->paginate(15);
+
         $farms = $breeder->farmAddresses;
+
+        // For select elements
+        $filters = [
+            $request->type => 'selected',
+            $request->status => 'selected',
+            $request->sort => 'selected'
+        ];
+
+        //  For pagination purposes
+        $urlFilters = [
+            'type' => $request->type,
+            'status' => $request->status,
+            'sort' => $request->sort,
+            'page' => $products->currentPage()
+        ];
 
         foreach ($products as $product) {
             $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
@@ -54,17 +77,17 @@ class ProductController extends Controller
             $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
         }
 
-        return view('user.breeder.showProducts', compact('products', 'farms'));
+        return view('user.breeder.showProducts', compact('products', 'farms', 'filters', 'urlFilters'));
     }
 
     /**
-     * Store the Breeder's products
+     * Store the Breeder's product
      * AJAX
      *
      * @param Request $request
      * @return JSON
      */
-    public function storeProducts(Request $request)
+    public function storeProduct(Request $request)
     {
         $breeder = $this->user->userable;
         if($request->ajax()){
@@ -98,6 +121,76 @@ class ProductController extends Controller
             return collect($productDetail)->toJson();
         }
 
+    }
+
+    /**
+     * Get an instance of a Product
+     * AJAX
+     *
+     * @param Request $request
+     * @return JSON
+     */
+    public function getProduct(Request $request)
+    {
+        if($request->ajax()){
+            $product = Product::find($request->productId);
+            $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $product->type = ucfirst($product->type);
+            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+
+            return $product->toJson();
+        }
+    }
+
+    /**
+     * Update details of a Product
+     * AJAX
+     *
+     * @param Request $request
+     * @return String
+     */
+    public function updateProduct(Request $request)
+    {
+        # code...
+    }
+
+    /**
+     * Showcase selected products
+     * AJAX
+     *
+     * @param Request $request
+     * @return String
+     */
+    public function showcaseSelected(Request $request)
+    {
+        if($request->ajax()){
+            foreach ($request->product_ids as $id) {
+                $product = Product::find($id);
+                $product->status = 'showcased';
+                $product->save();
+            }
+            return "OK";
+        }
+    }
+
+    /**
+     * Delete selected products
+     * AJAX
+     *
+     * @param Request $request
+     * @return String
+     */
+    public function deleteSelected(Request $request)
+    {
+        if($request->ajax()){
+            foreach ($request->product_ids as $id) {
+                $product = Product::find($id);
+                $product->status_instance = 'inactive';
+                $product->save();
+            }
+            return "OK";
+        }
     }
 
     /**
@@ -274,7 +367,7 @@ class ProductController extends Controller
 
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
-        $urlFilters = $this->toUrlFilter($request->type, $request->breed, $request->sort);
+        $urlFilters = $this->toUrlFilter($request->type, $request->breed, $request->sort, $products->currentPage());
 
         foreach ($products as $product) {
             $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
@@ -337,16 +430,19 @@ class ProductController extends Controller
     private function createMediaInfo($extension, $productId, $type, $breed, $originalName)
     {
         $mediaInfo = [];
+        if(str_contains($breed,'+')){
+            $part = explode("+", $breed);
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . str_random(6) . '.' . $extension;
+        }
+        else $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . str_random(6) . '.' . $extension;
 
         if($this->isImage($extension)){
             $mediaInfo['directoryPath'] = '/images/product/';
-            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . str_random(6) . '.' . $extension;
             $mediaInfo['type'] = new Image;
         }
 
         else if($this->isVideo($extension)){
             $mediaInfo['directoryPath'] = '/videos/product/';
-            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . str_random(6) . '.' . $extension;
             $mediaInfo['type'] = new Video;
         }
 
@@ -417,13 +513,14 @@ class ProductController extends Controller
      * @param   $sortParameter String
      * @return  Assocative Array
      */
-    private function toUrlFilter($typeParameter, $breedParameter, $sortParameter)
+    private function toUrlFilter($typeParameter, $breedParameter, $sortParameter, $currentPage)
     {
         $tempUrlFilters = [];
 
         if($typeParameter)  $tempUrlFilters['type'] = $typeParameter;
         if($breedParameter) $tempUrlFilters['breed'] = $breedParameter;
         if($sortParameter) $tempUrlFilters['sort'] = $sortParameter;
+        if($currentPage) $tempUrlFilters['page'] = $currentPage;
 
         return $tempUrlFilters;
     }
