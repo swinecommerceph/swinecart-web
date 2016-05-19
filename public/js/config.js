@@ -6,7 +6,7 @@ var config = {
     customer_url: '/customer/home',
     breeder_url: '/breeder/home',
     viewProducts_url: '/customer/view-products',
-    showProducts_url: '/breeder/products',
+    manageProducts_url: '/breeder/products',
     swineCart_url: '/customer/swine-cart',
     productMedia_url: '/breeder/products/media',
     productSummary_url: '/breeder/products/product-summary',

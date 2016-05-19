@@ -7,15 +7,26 @@
 {{-- General Actions container --}}
 <div class="row">
     <div class="col s4 left">
-        {!! Form::open(['route' => 'products.manageSelected', 'id' => 'manage-selected-form']) !!}
+        {!! Form::open(['route' => 'products.updateSelected', 'id' => 'manage-selected-form']) !!}
             {{-- Add Button --}}
             <a href="#add-product-modal" class="btn-floating btn-large modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
                 <i class="material-icons">add</i>
             </a>
-            {{-- Showcase selected Button --}}
-            <a href="#" class="btn-floating btn-large waves-effect waves-light teal tooltipped showcase-selected-button" data-position="top" data-delay="50" data-tooltip="Showcase all chosen">
-                <i class="material-icons">publish</i>
+            {{-- Select All Button --}}
+            <a href="#" class="btn-floating btn-large modal-trigger waves-effect waves-light teal tooltipped select-all-button" data-position="top" data-delay="50" data-tooltip="Select All Products">
+                <i class="material-icons">event_available</i>
             </a>
+            {{-- Showcase selected Button. Only show when products are unshowcased --}}
+            @if(!empty($filters['unshowcased']))
+                <a href="#" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped showcase-selected-button" data-position="top" data-delay="50" data-tooltip="Showcase all chosen">
+                    <i class="material-icons">unarchive</i>
+                </a>
+            {{-- Unshowcase selected Button. Only show when products are showcased --}}
+            @elseif(!empty($filters['showcased']))
+                <a href="#" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped unshowcase-selected-button" data-position="top" data-delay="50" data-tooltip="Unshowcase all chosen">
+                    <i class="material-icons">archive</i>
+                </a>
+            @endif
             {{-- Delete selected Button --}}
             <a href="#" class="btn-floating btn-large waves-effect waves-light grey tooltipped delete-selected-button" data-position="top" data-delay="50" data-tooltip="Delete all chosen">
                 <i class="material-icons">delete</i>
@@ -66,8 +77,10 @@
     @foreach($products as $product)
         <div class="col s12 m6 l4" id="product-{{$product->id}}">
             <div class="card hoverable">
-                <div class="card-image waves-effect waves-block waves-light">
-                    <img height="195"class="activator" src="{{$product->img_path}}">
+                <div class="card-image">
+                    <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
+                        <img height="220" src="{{$product->img_path}}">
+                    </a>
                 </div>
                 <div class="card-content">
                     <span class="card-title activator grey-text text-darken-4 truncate">{{$product->name}}<i class="material-icons right">more_vert</i></span>
@@ -84,11 +97,22 @@
                         </div>
                         <div class="col right">
                             {{-- Edit Button --}}
-                            <a href="#edit-product-modal" class="modal-trigger tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit {{$product->name}}">
-                                <i class="material-icons teal-text" style="font-size:30px">edit</i>
+                            <a href="#edit-product-modal" class="modal-trigger tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit {{$product->name}}" data-product-id="{{$product->id}}">
+                                <i class="material-icons teal-text text-darken-2" style="font-size:30px">edit</i>
                             </a>
+                            @if(!empty($filters['unshowcased']) || $product->status == 'unshowcased')
+                                {{-- Showcase Button --}}
+                                <a href="#" class="modal-trigger tooltipped showcase-product-button" data-position="top" data-delay="50" data-tooltip="Showcase {{$product->name}}" data-product-id="{{$product->id}}">
+                                    <i class="material-icons teal-text" style="font-size:30px">unarchive</i>
+                                </a>
+                            @elseif(!empty($filters['showcased']) || $product->status == 'showcased')
+                                {{-- Unshowcase Button --}}
+                                <a href="#" class="modal-trigger tooltipped unshowcase-product-button" data-position="top" data-delay="50" data-tooltip="Unshowcase {{$product->name}}" data-product-id="{{$product->id}}">
+                                    <i class="material-icons teal-text" style="font-size:30px">archive</i>
+                                </a>
+                            @endif
                             {{-- Delete Button --}}
-                            <a href="#delete-product-modal" class="modal-trigger tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete {{$product->name}}">
+                            <a href="#delete-product-modal" class="modal-trigger tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete {{$product->name}}" data-product-id="{{$product->id}}">
                                 <i class="material-icons grey-text text-darken-1" style="font-size:30px">delete</i>
                             </a>
                         </div>
@@ -102,7 +126,9 @@
                         FCR: {{$product->fcr}} <br>
                         Backfat Thickness: {{$product['backfat_thickness']}} mm <br>
                         <br>
-                        {!! $product->other_details !!}
+                        <div class="col">
+                            <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
+                        </div>
                     </p>
                 </div>
             </div>

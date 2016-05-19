@@ -45,11 +45,7 @@
         <div class="input-field col s3 right">
             <div class="">
                 <select>
-                    <option value="" @if(!empty($filters['none']))
-                                {{ $filters['none'] }}
-                            @elseif(empty($filters['none']))
-                                selected
-                            @endif>Relevance</option>
+                    <option value="" selected>Relevance</option>
                     <option value="age-asc" @if(!empty($filters['age-asc'])) {{ $filters['age-asc'] }} @endif > Age: Low to High</option>
                     <option value="age-desc" @if(!empty($filters['age-desc'])) {{ $filters['age-desc'] }} @endif >Age: High to Low</option>
                     <option value="backfat_thickness-asc" @if(!empty($filters['backfat_thickness-asc'])) {{ $filters['backfat_thickness-asc'] }} @endif >Backfat Thickness</option>
@@ -150,7 +146,7 @@
                 <div class="col s12 m6 l6 ">
                   <div class="card hoverable">
                     <div class="card-image">
-                        <a href="{{ route('products.viewDetail', ['product' => $product->id]) }}" >
+                        <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}" >
                             <img height="220" src="{{ $product->img_path }}">
                         </a>
                     </div>
@@ -186,7 +182,7 @@
                         <div class="row">
                             <br>
                             <div class="col">
-                                <a href="{{ route('products.viewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
+                                <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
                             </div>
                             <div class="col right">
                                 {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
@@ -200,8 +196,14 @@
                     </div>
                   </div>
                 </div>
+                <?php $counter++; ?>
             @endforeach
 
+            @if($counter == 1)
+                <div class="col s12">
+                    No results found.
+                </div>
+            @endif
             </div>
 
             {{-- Pagination --}}

@@ -64,11 +64,11 @@ Route::group(['middleware' => ['web']], function () {
 
         // product-related
         Route::get('products',['as' => 'products', 'uses' => 'ProductController@showProducts']);
-        Route::get('products/get-product',['as' => 'products.getProduct', 'uses' => 'ProductController@getProduct']);
-        Route::put('products/get-product',['as' => 'products.updateProduct', 'uses' => 'ProductController@updateProduct']);
-        Route::post('products/manage-selected',['as' => 'products.manageSelected', 'uses' => 'ProductController@showcaseSelected']);
-        Route::delete('products/manage-selected',['as' => 'products.manageSelected', 'uses' => 'ProductController@deleteSelected']);
-        Route::post('products/add',['as' => 'products.store', 'uses' => 'ProductController@storeProduct']);
+        Route::post('products',['as' => 'products.store', 'uses' => 'ProductController@storeProduct']);
+        Route::put('products',['as' => 'products.update', 'uses' => 'ProductController@updateProduct']);
+        Route::get('products/{product}',['as' => 'products.bViewDetail', 'uses' => 'ProductController@breederViewProductDetail']);
+        Route::post('products/manage-selected',['as' => 'products.updateSelected', 'uses' => 'ProductController@updateSelected']);
+        Route::delete('products/manage-selected',['as' => 'products.deleteSelected', 'uses' => 'ProductController@deleteSelected']);
         Route::get('products/product-summary',['as' => 'products.summary', 'uses' => 'ProductController@productSummary']);
         Route::post('products/set-primary-picture',['as' => 'products.setPrimaryPicture', 'uses' => 'ProductController@setPrimaryPicture']);
         Route::post('products/showcase-product',['as' => 'products.showcase', 'uses' => 'ProductController@showcaseProduct']);
@@ -93,7 +93,7 @@ Route::group(['middleware' => ['web']], function () {
 
         // product-related
         Route::get('view-products',['as' => 'products.view', 'uses' => 'ProductController@viewProducts']);
-        Route::get('view-products/{product}',['as' => 'products.viewDetail', 'uses' => 'ProductController@viewProductDetail']);
+        Route::get('view-products/{product}',['as' => 'products.cViewDetail', 'uses' => 'ProductController@customerViewProductDetail']);
 
         // swinecart-related
         Route::get('swine-cart',['as' => 'cart.items', 'uses' => 'SwineCartController@getSwineCartItems']);
@@ -102,5 +102,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('swine-cart/quantity',['as' => 'cart.quantity', 'uses' => 'SwineCartController@getSwineCartQuantity']);
 
     });
+
 
 });

@@ -24,7 +24,7 @@ class CreateFarmAddressesTable extends Migration
             $table->string('mobile');
             $table->integer('addressable_id')->unsigned();
             $table->string('addressable_type');
-            $table->string('status_instance')->default('active');
+            $table->softDeletes();
         });
     }
 

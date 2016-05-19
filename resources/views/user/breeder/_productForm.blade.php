@@ -5,7 +5,7 @@
 	Media (Images and Videos)
 --}}
 
-<!-- Modal Structure for adding a Product -->
+{{--  Add Product Modal --}}
 <div id="add-product-modal" class="modal modal-fixed-footer">
 	{!! Form::open(['route' => 'products.store', 'class' => 's12', 'id' => 'create-product']) !!}
 	<div class="modal-content">
@@ -31,7 +31,7 @@
 
 					{{-- Type --}}
 					<div class="input-field col s6">
-						<select id="select-type">
+						<select id="select-type" data-form="add">
 					      <option value="" disabled selected>Choose Type</option>
 					      <option value="boar">Boar</option>
 					      <option value="sow">Sow</option>
@@ -62,7 +62,7 @@
 					</div>
 
 					{{-- Quantity --}}
-					<div id="input-quantity-container" class="input-field col s6">
+					<div class="input-field col s6 input-quantity-container">
 						{!! Form::text('quantity', null)!!}
 						{!! Form::label('quantity', 'Quantity') !!}
 					</div>
@@ -75,25 +75,25 @@
 					 {{-- Breed --}}
 					<div class="input-field col s7">
 						<p>
-							<input name="radio-breed" type="radio" value="purebreed" id="purebreed" class="with-gap" checked/>
+							<input name="radio-breed" type="radio" value="purebreed" id="purebreed" class="with-gap purebreed" checked/>
 		      				<label for="purebreed">Purebreed</label>
 						</p>
 						<p>
-							<input name="radio-breed" type="radio" value="crossbreed" id="crossbreed" class="with-gap"/>
+							<input name="radio-breed" type="radio" value="crossbreed" id="crossbreed" class="with-gap crossbreed"/>
 		      				<label for="crossbreed">Crossbreed</label>
 						</p>
 					</div>
 				</div>
 
 				<div class="row">
-					<div id="input-purebreed-container">
+					<div class="input-purebreed-container">
 						{{-- If pure breed --}}
 						<div class="input-field col s6">
 							{!! Form::text('breed', null)!!}
 							{!! Form::label('breed', 'Breed*') !!}
 						</div>
 					</div>
-					<div id="input-crossbreed-container">
+					<div class="input-crossbreed-container">
 						{{-- If crossbreed --}}
 						<div class="input-field col s6">
 							{!! Form::text('fbreed', null)!!}
@@ -142,10 +142,10 @@
 					<br>
 					{{-- Other Details --}}
 					<div class="col s12">
-						<a href="#" id="add-other-details" class="left tooltipped" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-lighten-2">add_circle</i></a>
+						<a href="#" id="add-other-details" class="left tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-lighten-2">add_circle</i></a>
 					</div>
 
-					<div id="other-details-container">
+					<div class="other-details-container">
 						<div class="detail-container">
 							<div class="input-field col s6">
 								{!! Form::text('characteristic[]', null)!!}
@@ -176,8 +176,8 @@
 	{!! Form::close() !!}
 </div>
 
+{{-- Add Media Modal --}}
 <div id="add-media-modal" class="modal modal-fixed-footer">
-
 	<div class="modal-content">
 		<h4>Add Media</h4>
 		<div class="row">
@@ -196,6 +196,7 @@
 	</div>
 </div>
 
+{{-- Product Summary Modal --}}
 <div id="product-summary-modal" class="modal modal-fixed-footer">
 	<div class="modal-content">
 		<h4>Product Summary</h4>
@@ -250,21 +251,22 @@
 	</div>
 </div>
 
+{{-- Edit Product Modal --}}
 <div id="edit-product-modal" class="modal modal-fixed-footer">
-	{!! Form::open(['route' => 'products.updateProduct', 'class' => 's12', 'id' => 'create-product']) !!}
+	{!! Form::open(['route' => 'products.update', 'class' => 's12', 'id' => 'edit-product']) !!}
 	<div class="modal-content">
-		<h4>Add Product <i class="material-icons right modal-action modal-close">close</i> </h4>
+		<h4>Edit Product <i class="material-icons right modal-action modal-close">close</i> </h4>
 		<div class="row">
 			<div id="tabs-container" class="col s12">
 				<ul class="tabs grey lighten-5">
-					<li class="tab col s4"><a href="#swine-information">Swine Information</a></li>
-					<li class="tab col s4"><a href="#breed-information">Breed Information</a></li>
-					<li class="tab col s4"><a href="#other-details">Other Details</a></li>
+					<li class="tab col s4"><a href="#edit-swine-information">Swine Information</a></li>
+					<li class="tab col s4"><a href="#edit-breed-information">Breed Information</a></li>
+					<li class="tab col s4"><a href="#edit-other-details">Other Details</a></li>
 				</ul>
 			</div>
 
 			{{-- Swine Information --}}
-			<div id="swine-information" class="col s12 m12 l10 offset-l1">
+			<div id="edit-swine-information" class="col s12 m12 l10 offset-l1">
 				<div class="row">
 					<br>
 					{{-- Name --}}
@@ -275,7 +277,7 @@
 
 					{{-- Type --}}
 					<div class="input-field col s6">
-						<select id="select-type">
+						<select id="edit-select-type" data-form="add">
 					      <option value="" disabled selected>Choose Type</option>
 					      <option value="boar">Boar</option>
 					      <option value="sow">Sow</option>
@@ -288,7 +290,7 @@
 				<div class="row">
 					{{-- Farm From --}}
 					<div class="input-field col s6">
-						<select id="select-farm">
+						<select id="edit-select-farm">
 					    	<option value="" disabled selected>Choose Farm</option>
 							@foreach($farms as $farm)
 								<option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
@@ -306,7 +308,7 @@
 					</div>
 
 					{{-- Quantity --}}
-					<div id="input-quantity-container" class="input-field col s6">
+					<div class="input-field col s6 input-quantity-container">
 						{!! Form::text('quantity', null)!!}
 						{!! Form::label('quantity', 'Quantity') !!}
 					</div>
@@ -314,30 +316,30 @@
 			</div>
 
 			{{-- Breed Information --}}
-			<div id="breed-information" class="col s12 m12 l10 offset-l1">
+			<div id="edit-breed-information" class="col s12 m12 l10 offset-l1">
 				<div class="row">
 					 {{-- Breed --}}
 					<div class="input-field col s7">
 						<p>
-							<input name="radio-breed" type="radio" value="purebreed" id="purebreed" class="with-gap" checked/>
-		      				<label for="purebreed">Purebreed</label>
+							<input name="radio-breed" type="radio" value="purebreed" id="edit-purebreed" class="with-gap purebreed" checked/>
+		      				<label for="edit-purebreed">Purebreed</label>
 						</p>
 						<p>
-							<input name="radio-breed" type="radio" value="crossbreed" id="crossbreed" class="with-gap"/>
-		      				<label for="crossbreed">Crossbreed</label>
+							<input name="radio-breed" type="radio" value="crossbreed" id="edit-crossbreed" class="with-gap crossbreed"/>
+		      				<label for="edit-crossbreed">Crossbreed</label>
 						</p>
 					</div>
 				</div>
 
 				<div class="row">
-					<div id="input-purebreed-container">
+					<div class="input-purebreed-container">
 						{{-- If pure breed --}}
 						<div class="input-field col s6">
 							{!! Form::text('breed', null)!!}
 							{!! Form::label('breed', 'Breed*') !!}
 						</div>
 					</div>
-					<div id="input-crossbreed-container">
+					<div class="input-crossbreed-container">
 						{{-- If crossbreed --}}
 						<div class="input-field col s6">
 							{!! Form::text('fbreed', null)!!}
@@ -381,15 +383,15 @@
 			</div>
 
 			{{-- Other Details --}}
-			<div id="other-details" class="col s12 m12 l10 offset-l1">
+			<div id="edit-other-details" class="col s12 m12 l10 offset-l1">
 				<div class="row">
 					<br>
 					{{-- Other Details --}}
 					<div class="col s12">
-						<a href="#" id="add-other-details" class="left tooltipped" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-lighten-2">add_circle</i></a>
+						<a href="#" id="add-other-details" class="left tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-lighten-2">add_circle</i></a>
 					</div>
 
-					<div id="other-details-container">
+					<div class="other-details-container">
 						<div class="detail-container">
 							<div class="input-field col s6">
 								{!! Form::text('characteristic[]', null)!!}
@@ -412,13 +414,53 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-
+		<button id="update-button" class="btn waves-effect waves-light modal-action"> Update
+			<i class="material-icons right">send</i>
+		</button>
+		<a href="#!" id="edit-media-button" class="modal-action modal-close waves-effect waves-green btn-flat ">Edit Media</a>
 	</div>
 	{!! Form::close() !!}
-
 </div>
 
-{{-- Modal Structure --}}
+{{-- Edit Media Modal --}}
+<div id="edit-media-modal" class="modal modal-fixed-footer">
+	<div class="modal-content">
+		<h4>Edit Media </h4>
+		<div class="row">
+	        <div class="col s12">
+	            <div id="edit-images-summary" class="card">
+	                <div class="card-content black-text">
+	                    <span class="card-title">Images</span>
+						{!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
+						<div class="row"></div>
+						{!! Form::close() !!}
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+		<div class="row">
+	        <div class="col s12">
+	            <div id="edit-videos-summary" class="card">
+	                <div class="card-content black-text">
+	                    <span class="card-title">Videos</span>
+						<div class="row"></div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<div class="modal-footer">
+		{!! Form::open(['route' => 'products.showcase', 'class' => 's12', 'id' => 'showcase-product-form']) !!}
+			<button id="showcase-button" class="btn waves-effect waves-light modal-action"> Update Media
+				<i class="material-icons right">submit</i>
+			</button>
+		{!! Form::close() !!}
+		<a href="#!" id="back-button" class="modal-action waves-effect waves-green btn-flat ">Back</a>
+	</div>
+</div>
+
+{{-- Confirmation Modal --}}
 <div id="confirmation-modal" class="modal">
 	<div class="modal-content">
 	  <p>Are you sure you want to remove the products chosen?</p>

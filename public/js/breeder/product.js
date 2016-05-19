@@ -94,13 +94,13 @@ var product = {
             data: data_values,
             success: function(data){
                 var data = JSON.parse(data);
-                // console.log(data);
-                Materialize.toast('Product added!', 2500, 'green lighten-1');
                 var hidden_inputs =
                     '<input name="productId" type="hidden" value="'+data.product_id+'">'+
                     '<input name="name" type="hidden" value="'+data.name+'">'+
                     '<input name="type" type="hidden" value="'+data.type+'">'+
                     '<input name="breed" type="hidden" value="'+data.breed+'">';
+
+                Materialize.toast('Product added!', 2500, 'green lighten-1');
 
                 $('#media-dropzone').append(hidden_inputs);
 
@@ -109,8 +109,22 @@ var product = {
                 $('#overlay-preloader-circular').remove();
                 parent_form.find('#submit-button').removeClass('disabled');
                 $('#add-product-modal').closeModal();
+
+                // Open Add Media Modal
                 $('#add-media-modal').openModal({
-                    dismissible: false
+                    dismissible: false,
+                    ready: function(){
+                        // Resize media-dropzone's height
+                        var content_height = $('#add-media-modal .modal-content').height();
+                        var header_height = $('#add-media-modal h4').height();
+                        $('#media-dropzone').css({'height': content_height - header_height});
+
+                        $( window ).resize(function() {
+                            var content_height = $('#add-media-modal .modal-content').height();
+                            var header_height = $('#add-media-modal h4').height();
+                            $('#media-dropzone').css({'height': content_height - header_height});
+                        });
+                    }
                 });
             },
             error: function(message){
@@ -120,12 +134,182 @@ var product = {
         });
     },
 
-    edit: function(){
+    get_product: function(product_id){
+        // Do AJAX
+        $.ajax({
+            url: config.productSummary_url,
+            type: "GET",
+            cache: false,
+            data:{
+                "product_id" : product_id
+            },
+            success: function(data){
+                var data = JSON.parse(data);
+                var parent_form = $('#edit-product');
+                var images = data.imageCollection;
+                var videos = data.videoCollection;
+                var image_list = '';
+                var video_list = '';
 
+                $(parent_form).append('<input name="productId" type="hidden" value="'+data.id+'">');
+
+                // General input types
+                parent_form.find('input[name=name]').val(data.name);
+                parent_form.find('label[for=name]').addClass('active')
+                parent_form.find('input[name=price]').val(data.price);
+                parent_form.find('label[for=price]').addClass('active')
+                parent_form.find('input[name=quantity]').val(data.quantity);
+                parent_form.find('label[for=quantity]').addClass('active')
+                parent_form.find('input[name=age]').val(data.age);
+                parent_form.find('label[for=age]').addClass('active')
+                parent_form.find('input[name=adg]').val(data.adg);
+                parent_form.find('label[for=adg]').addClass('active')
+                parent_form.find('input[name=fcr]').val(data.fcr);
+                parent_form.find('label[for=fcr]').addClass('active')
+                parent_form.find('input[name=backfat_thickness]').val(data.backfat_thickness);
+                parent_form.find('label[for=backfat_thickness]').addClass('active');
+
+                // For select initializations
+                $('#edit-select-type').val(data.type.toLowerCase());
+                $('#edit-select-farm').val(data.farm_from_id);
+                $('select').material_select();
+
+                // For the breed initialization
+                if(data.breed.includes('x')){
+                    var crossbreed = data.breed.split('x');
+                    parent_form.find('input[name=fbreed]').val(crossbreed[0].toString().trim());
+                    parent_form.find('label[for=fbreed]').addClass('active');
+                    parent_form.find('input[name=mbreed]').val(crossbreed[1].toString().trim());
+                    parent_form.find('label[for=mbreed]').addClass('active');
+                    parent_form.find('.input-purebreed-container').hide();
+                    parent_form.find('.input-crossbreed-container').fadeIn(300);
+                }
+                else {
+                    parent_form.find('input[name=breed]').val(data.breed);
+                    parent_form.find('label[for=breed]').addClass('active');
+                }
+
+                // Other Details
+                if(data.other_details){
+                    var other_details_info = data.other_details.split(',');
+                    var details = '';
+                    other_details_info.forEach(function(element){
+                        var information = element.split('=');
+                        if(information != ''){
+                            details += '<div class="detail-container">'+
+                                    '<div class="input-field col s6">'+
+                                        '<input name="characteristic[]" type="text" value="'+ information[0].toString().trim() +'">'+
+                                        '<label for="characteristic[]" class="active">Characteristic</label>'+
+                                    '</div>'+
+                                    '<div class="input-field col s5">'+
+                                        '<input name="value[]" type="text" value="'+ information[1].toString().trim() +'">'+
+                                        '<label for="value[]" class="active">Value</label>'+
+                                    '</div>'+
+                                    '<div class="input-field col s1 remove-button-container">'+
+                                        '<a href="#" class="tooltipped remove-detail" data-position="top" data-delay="50" data-tooltip="Remove detail">'+
+                                            '<i class="material-icons grey-text text-lighten-1">remove_circle</i>'+
+                                        '</a>'+
+                                    '</div>'+
+                                '</div>';
+                        }
+                    });
+
+                    parent_form.find('.other-details-container').html('');
+                    $(details).prependTo(parent_form.find(".other-details-container")).fadeIn(300);
+
+                    // Set-up Images in Edit Media Modal
+                    images.forEach(function(element){
+                        image_list += '<div class="col s12 m6">'+
+                                '<div class="card">'+
+                                    '<div class="card-image">'+
+                                        '<img src="'+config.productImages_path+'/'+element.name+'">'+
+                                        '<span class="card-title"></span>'+
+                                    '</div>'+
+                                    '<div class="card-action">'+
+                                        '<a href="#!" class="set-primary-picture" data-product-id="'+data.id+'" data-img-id="'+element.id+'">Set as Primary Picture</a>'+
+                                    '</div>'+
+                                '</div>'+
+                            '</div>';
+                    });
+
+                    // Set-up Videos in Edit Media Modal
+                    videos.forEach(function(element){
+                        video_list += '<div class="col s12 m6">'+
+                                '<video class="responsive-video" controls>'+
+                                    '<source src="'+config.productVideos_path+'/'+element.name+'" type="video/mp4">'+
+                                '</video>'+
+                            '</div>';
+                    });
+
+                    $('#edit-images-summary .card-content .row').append(image_list);
+                    $('#edit-videos-summary .card-content .row').append(video_list);
+                }
+
+            },
+            error: function(message){
+                console.log(message['responseText']);
+            }
+        });
     },
 
-    remove: function(){
+    edit: function(parent_form){
+        var data_values = {
+            "id": parent_form.find('input[name=productId]').val(),
+            "name": parent_form.find('input[name=name]').val(),
+            "type": parent_form.find('#edit-select-type').val(),
+            "farm_from_id": parent_form.find('#edit-select-farm').val(),
+            "age": parent_form.find('input[name=age]').val(),
+            "price": parent_form.find('input[name=price]').val(),
+            "adg": parent_form.find('input[name=adg]').val(),
+            "fcr": parent_form.find('input[name=fcr]').val(),
+            "backfat_thickness": parent_form.find('input[name=backfat_thickness]').val(),
+            "_token" : parent_form.find('input[name=_token]').val(),
+        };
 
+        // Only get quantity field from semen product type
+        if($('#edit-select-type').val() === 'semen') data_values["quantity"] = parent_form.find('input[name=quantity]').val();
+        else data_values["quantity"] = 1;
+
+
+        // Transform breed syntax if crossbreed
+        if($("#edit-product input:checked").val() === 'crossbreed'){
+            var fbreed = parent_form.find('input[name=fbreed]').val();
+            var mbreed = parent_form.find('input[name=mbreed]').val();
+
+            data_values["breed"] = fbreed.toLowerCase().trim()+'+'+mbreed.toLowerCase().trim();
+        }
+        else data_values["breed"] = parent_form.find('input[name=breed]').val().toLowerCase().trim();
+
+        // Transform syntax of Other details category values
+        var other_details = '';
+        $(parent_form).find('.detail-container').map(function () {
+            var characteristic = $(this).find('input[name="characteristic[]"]').val();
+            var value = $(this).find('input[name="value[]"]').val();
+            if(characteristic && value) other_details += characteristic+' = '+value+',';
+        });
+
+        data_values["other_details"] = other_details;
+
+        // Do AJAX
+        $.ajax({
+            url: parent_form.attr('action'),
+            type: "PUT",
+            cache: false,
+            data: data_values,
+            success: function(data){
+                Materialize.toast('Product updated!', 1500, 'green lighten-1');
+
+                parent_form.find('#update-button').removeClass('disabled');
+                $('#edit-product-modal').closeModal();
+                window.setTimeout(function(){
+                    location.reload(true);
+                }, 1400);
+
+            },
+            error: function(message){
+                console.log(message['responseText']);
+            }
+        });
     },
 
     get_summary: function(product_id){
@@ -198,7 +382,7 @@ var product = {
                                     '<span class="card-title"></span>'+
                                 '</div>'+
                                 '<div class="card-action">'+
-                                    '<a href="#!" class="set-primary-picture" data-product-id="'+data.id+'" data-img-id="'+element.id+'">Set as Primary Picture</a>'+
+                                    '<a href="#!" class="set-primary-picture" data-product-id="'+data.id+'" data-img-id="'+element.id+'">Set as Display Photo</a>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
@@ -254,12 +438,11 @@ var product = {
             },
             success: function(data){
                 // Overwrite the old primary picture anchor's description
-                $('.set-primary-picture[data-img-id="'+product.current_primary_picture+'"]').html('Set as Primary Picture');
+                $('.set-primary-picture[data-img-id="'+product.current_primary_picture+'"]').html('Set as Display Photo');
 
                 // New Primary Picture id
                 product.current_primary_picture = img_id;
-                anchor_tag.html('<i class="material-icons left teal-text">photo</i> Primary Picture');
-
+                anchor_tag.html('<i class="material-icons left teal-text">photo</i> Display Photo');
             },
             error: function(message){
                 console.log(message['responseText']);
@@ -282,7 +465,6 @@ var product = {
                 window.setTimeout(function(){
                     location.reload(true);
                 }, 1200);
-
             },
             error: function(message){
                 console.log(message['responseText']);
@@ -290,15 +472,10 @@ var product = {
         });
     },
 
-    showcase_selected: function(parent_form){
-        var checked_products = [];
-
-        $('#view-products-container input[type=checkbox]:checked').each(function(){
-            checked_products.push($(this).attr('data-product-id'));
-        });
-
+    update_selected: function(parent_form, products, status){
         // Check if there are checked products
-        if(checked_products.length > 0){
+        if(products.length > 0){
+            config.preloader_progress.fadeIn();
             // Do AJAX
             $.ajax({
                 url: parent_form.attr('action'),
@@ -306,13 +483,15 @@ var product = {
                 cache: false,
                 data: {
                     "_token": parent_form.find('input[name=_token]').val(),
-                    "product_ids": checked_products
+                    "product_ids": products,
+                    "updateTo_status": status
                 },
                 success: function(data){
                     // var data = JSON.parse(data);
-                    checked_products.forEach(function(element){
+                    products.forEach(function(element){
                         $('#product-'+element).remove();
                     });
+                    config.preloader_progress.fadeOut();
                     Materialize.toast('Selected Products showcased!', 2000, 'green lighten-1');
                 },
                 error: function(message){
@@ -324,19 +503,14 @@ var product = {
 
     },
 
-    delete_selected: function(parent_form){
-        var checked_products = [];
-
-        $('#view-products-container input[type=checkbox]:checked').each(function(){
-            checked_products.push($(this).attr('data-product-id'));
-        });
-
+    delete_selected: function(parent_form, products){
         // Check if there are checked products
-        if(checked_products.length > 0){
+        if(products.length > 0){
             // Acknowledge first confirmation to remove
             $('#confirmation-modal').openModal();
             $('#confirm-remove').click(function(e){
                 e.preventDefault();
+                config.preloader_progress.fadeIn();
                 // Do AJAX
                 $.ajax({
                     url: config.manageSelected_url,
@@ -344,13 +518,14 @@ var product = {
                     cache: false,
                     data: {
                         "_token": parent_form.find('input[name=_token]').val(),
-                        "product_ids": checked_products
+                        "product_ids": products
                     },
                     success: function(data){
                         // var data = JSON.parse(data);
-                        checked_products.forEach(function(element){
+                        products.forEach(function(element){
                             $('#product-'+element).remove();
                         });
+                        config.preloader_progress.fadeOut();
                         Materialize.toast('Selected Products deleted!', 2000, 'green lighten-1');
 
                     },
@@ -363,21 +538,20 @@ var product = {
         else Materialize.toast('No products chosen!', 1500 , 'orange accent-2');
     },
 
-    manage_necessary_fields: function(type){
-
+    manage_necessary_fields: function(parent_form, type){
         // Fade in quantity field for semen
         if(type === 'semen'){
-            $('#input-quantity-container').fadeIn(300);
+            parent_form.find('.input-quantity-container').fadeIn(300);
             if(product.before_select_value === 'sow'){
-                $('#other-details-container').html('');
-                product.other_details_default.prependTo("#other-details-container").fadeIn(300);
+                parent_form.find('.other-details-container').html('');
+                $(product.other_details_default).prependTo(parent_form.find(".other-details-container")).fadeIn(300);
             }
             product.before_select_value = 'semen';
         }
 
         // Provide default values in other_details category for sow
         else if(type === 'sow'){
-            $('#other-details-container').html('');
+            parent_form.find('.other-details-container').html('');
             $('<div class="detail-container">'+
                     '<div class="input-field col s6">'+
                         '<input name="characteristic[]" type="text" value="Litter Size">'+
@@ -388,7 +562,7 @@ var product = {
                         '<label for="value[]" class="active">Value</label>'+
                     '</div>'+
                     '<div class="input-field col s1 remove-button-container">'+
-        '                <a href="#" class="tooltipped remove-detail" data-position="top" data-delay="50" data-tooltip="Remove detail">'+
+                        '<a href="#" class="tooltipped remove-detail" data-position="top" data-delay="50" data-tooltip="Remove detail">'+
                             '<i class="material-icons grey-text text-lighten-1">remove_circle</i>'+
                         '</a>'+
                     '</div>'+
@@ -407,26 +581,26 @@ var product = {
                             '<i class="material-icons grey-text text-lighten-1">remove_circle</i>'+
                         '</a>'+
                     '</div>'+
-                '</div>').hide().prependTo("#other-details-container").fadeIn(300);
+                '</div>').hide().prependTo(parent_form.find(".other-details-container")).fadeIn(300);
 
-            $('#input-quantity-container').fadeOut(300);
-            $('.remove-detail').tooltip({delay:50});
+            parent_form.find('.input-quantity-container').fadeOut(300);
+            parent_form.find('.remove-detail').tooltip({delay:50});
             product.before_select_value = 'sow';
         }
 
         // Boar
         else{
-            $('#input-quantity-container').fadeOut(300);
+            parent_form.find('.input-quantity-container').fadeOut(300);
             if(product.before_select_value === 'sow'){
-                $('#other-details-container').html('');
-                $(product.other_details_default).prependTo("#other-details-container").fadeIn(300);
+                parent_form.find('.other-details-container').html('');
+                $(product.other_details_default).prependTo(parent_form.find(".other-details-container")).fadeIn(300);
             }
             product.before_select_value = 'boar';
         }
     },
 
-    add_other_detail : function(){
-        $(product.other_details_default).hide().appendTo("#other-details-container").fadeIn(300);
+    add_other_detail : function(parent_form){
+        $(product.other_details_default).hide().appendTo(parent_form.find(".other-details-container")).fadeIn(300);
         $('.remove-detail').tooltip({delay:50});
     },
 

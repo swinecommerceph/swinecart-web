@@ -1,7 +1,8 @@
 $(document).ready(function(){
 
+    var all_checked = false;
     // Hide certain elements
-    $('#input-crossbreed-container, #input-quantity-container').hide();
+    $('.input-crossbreed-container, .input-quantity-container').hide();
 
     // Initialization of Modals
     $('.add-product-button').leanModal({
@@ -29,16 +30,55 @@ $(document).ready(function(){
         alignment: 'right'
     });
 
-    // Publis
+    // Select All Products
+    $('.select-all-button').click(function(e){
+        e.preventDefault();
+        console.log(all_checked);
+        if(!all_checked){
+            $('#view-products-container input[type=checkbox]').prop('checked', true);
+            $('.select-all-button i').html('event_busy');
+            $('.select-all-button').attr('data-tooltip', 'Unselect all Products');
+            all_checked = true;
+        }
+        else{
+            $('#view-products-container input[type=checkbox]').prop('checked', false);
+            $('.select-all-button i').html('event_available');
+            $('.select-all-button').attr('data-tooltip', 'Select all Products');
+            all_checked = false;
+        }
+    });
+
+    // Showcase Selected Button
     $('.showcase-selected-button').click(function(e){
         e.preventDefault();
-        product.showcase_selected($('#manage-selected-form'));
+        var checked_products = [];
+
+        $('#view-products-container input[type=checkbox]:checked').each(function(){
+            checked_products.push($(this).attr('data-product-id'));
+        });
+        product.update_selected($('#manage-selected-form'), checked_products, 'showcase');
+    });
+
+    // Unshowcase Selected Button
+    $('.unshowcase-selected-button').click(function(e){
+        e.preventDefault();
+        var checked_products = [];
+
+        $('#view-products-container input[type=checkbox]:checked').each(function(){
+            checked_products.push($(this).attr('data-product-id'));
+        });
+        product.update_selected($('#manage-selected-form'), checked_products, 'unshowcase');
     });
 
     // Delete selected products
     $(".delete-selected-button").click(function(e){
         e.preventDefault();
-        product.delete_selected($('#manage-selected-form'));
+        var checked_products = [];
+
+        $('#view-products-container input[type=checkbox]:checked').each(function(){
+            checked_products.push($(this).attr('data-product-id'));
+        });
+        product.delete_selected($('#manage-selected-form'), checked_products);
     });
 
     // Submit add product
@@ -47,32 +87,64 @@ $(document).ready(function(){
         product.add($('#create-product'));
     });
 
+    // Edit chosen product
     $('.edit-product-button').click(function(){
+        product.get_product($(this).attr('data-product-id'));
         $('#edit-product-modal').openModal({
-            dismissible: false
+            dismissible: false,
+            ready: function(){
+                var whole_tab_width = $('#edit-product-modal .tabs').width();
+                var swine_tab_width = $('#edit-product-modal .tab').first().width();
+
+                $('.indicator').css({"right": whole_tab_width - swine_tab_width, "left": "0px"});
+            }
         });
     });
 
-    // Breed radio
-    $("input#purebreed").on('click', function(){
-        $('#input-crossbreed-container').hide();
-        $('#input-purebreed-container').fadeIn(300);
+    // Showcase chosen product
+    $('.showcase-product-button').click(function(e){
+        e.preventDefault();
+        $('.tooltipped').tooltip('remove');
+        product.update_selected($('#manage-selected-form'), [$(this).attr('data-product-id')], 'showcase');
     });
 
-    $("input#crossbreed").on('click', function(){
-        $('#input-purebreed-container').hide();
-        $('#input-crossbreed-container').fadeIn(300);
+    // Unshowcase chosen product
+    $('.unshowcase-product-button').click(function(e){
+        e.preventDefault();
+        $('.tooltipped').tooltip('remove');
+        product.update_selected($('#manage-selected-form'), [$(this).attr('data-product-id')], 'unshowcase');
+    });
+
+    // Delete chosen product
+    $('.delete-product-button').click(function(e){
+        e.preventDefault();
+        product.delete_selected($('#manage-selected-form'), [$(this).attr('data-product-id')]);
+    });
+
+    // Breed radio
+    $("input.purebreed").on('click', function(){
+        $(this).parents('form').find('.input-crossbreed-container').hide();
+        $(this).parents('form').find('.input-purebreed-container').fadeIn(300);
+    });
+
+    $("input.crossbreed").on('click', function(){
+        $(this).parents('form').find('.input-purebreed-container').hide();
+        $(this).parents('form').find('.input-crossbreed-container').fadeIn(300);
     });
 
     // Manage necessary fields depending on product type
-    $("#select-type").change(function(){
-        product.manage_necessary_fields($(this).val())
+    $("#select-type").on('change', function(){
+        product.manage_necessary_fields($(this).parents('form'), $(this).val());
+    });
+    $("#edit-select-type").on('change', function(){
+        console.log($(this).parents('form'));
+        product.manage_necessary_fields($(this).parents('form'), $(this).val());
     });
 
     // Add other details button
-    $("#add-other-details").click(function(e){
+    $(".add-other-details").click(function(e){
         e.preventDefault();
-        product.add_other_detail();
+        product.add_other_detail($(this).parents('form'));
     });
 
     // Remove a detail from other details section
@@ -104,6 +176,12 @@ $(document).ready(function(){
         product.showcase_product($(this).parents('form'));
     });
 
+    $('#update-button').click(function(e){
+        e.preventDefault();
+        $(this).addClass('disabled');
+        product.edit($(this).parents('form'));
+    });
+
     // Redirect to designated link upon checkbox value change
     $("#dropdown-container select").change(function(){
         filter.apply();
@@ -120,9 +198,9 @@ $(document).ready(function(){
         // dictRemoveFile: "Remove",
         // dictCancelUpload: "Cancel",
         acceptedFiles: "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
-        dictDefaultMessage: "<h6> Drop images/videos here to upload </h6>"+
+        dictDefaultMessage: "<h5 style='font-weight: 300;'> Drop images/videos here to upload </h5>"+
             "<i class='material-icons'>insert_photo</i> <i class='material-icons'>movie</i>"+
-            "<br> <h6> Or just click anywhere in this container to choose file </h6>",
+            "<br> <h5 style='font-weight: 300;'> Or just click anywhere in this container to choose file </h5>",
         previewTemplate: document.getElementById('custom-preview').innerHTML,
         init: function() {
             // Listen to events

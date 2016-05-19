@@ -23,10 +23,10 @@ class ProductController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('role:breeder', ['only' => ['showProducts', 'storeProducts', 'uploadMedia', 'deleteMedium', 'productSummary', 'setPrimaryPicture', 'showcaseProduct']]);
-        $this->middleware('updateProfile:breeder',['only' => ['showProducts', 'storeProducts', 'uploadMedia', 'deleteMedium', 'productSummary', 'setPrimaryPicture', 'showcaseProduct']]);
-        $this->middleware('role:customer',['only' => ['viewProducts','viewProductDetail']]);
-        $this->middleware('updateProfile:customer',['only' => ['viewProducts','viewProductDetail']]);
+        $this->middleware('role:breeder', ['only' => ['showProducts', 'breederViewProductDetail', 'storeProducts', 'uploadMedia', 'deleteMedium', 'productSummary', 'setPrimaryPicture', 'showcaseProduct']]);
+        $this->middleware('updateProfile:breeder',['only' => ['showProducts', 'customerViewProductDetail', 'storeProducts', 'uploadMedia', 'deleteMedium', 'productSummary', 'setPrimaryPicture', 'showcaseProduct']]);
+        $this->middleware('role:customer',['only' => ['customerViewProductDetail','viewProducts']]);
+        $this->middleware('updateProfile:customer',['only' => ['customerViewProductDetail','viewProducts']]);
         $this->user = Auth::user();
     }
 
@@ -44,7 +44,9 @@ class ProductController extends Controller
     public function showProducts(Request $request)
     {
         $breeder = $this->user->userable;
-        $products = $breeder->products()->where('status_instance','active');
+        $products = $breeder->products();
+
+        // Check filters
         if($request->type && $request->type != 'all-type') $products = $products->where('type',$request->type);
         if($request->status && $request->status != 'all-status') $products = $products->where('status',$request->status);
         if($request->sort && $request->sort != 'none') {
@@ -78,6 +80,23 @@ class ProductController extends Controller
         }
 
         return view('user.breeder.showProducts', compact('products', 'farms', 'filters', 'urlFilters'));
+    }
+
+    /**
+     * View Details of a Product
+     *
+     * @return View
+     */
+    public function breederViewProductDetail($productId)
+    {
+        $product = Product::find($productId);
+        $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+        $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
+        $product->type = ucfirst($product->type);
+        $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+        $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+        $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+        return view('user.breeder.viewProductDetail', compact('product'));
     }
 
     /**
@@ -124,26 +143,6 @@ class ProductController extends Controller
     }
 
     /**
-     * Get an instance of a Product
-     * AJAX
-     *
-     * @param Request $request
-     * @return JSON
-     */
-    public function getProduct(Request $request)
-    {
-        if($request->ajax()){
-            $product = Product::find($request->productId);
-            $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
-            $product->type = ucfirst($product->type);
-            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-            $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
-
-            return $product->toJson();
-        }
-    }
-
-    /**
      * Update details of a Product
      * AJAX
      *
@@ -152,7 +151,23 @@ class ProductController extends Controller
      */
     public function updateProduct(Request $request)
     {
-        # code...
+        if($request->ajax()){
+            $product = Product::find($request->id);
+            $product->farm_from_id = $request->farm_from_id;
+            $product->name = $request->name;
+            $product->type = $request->type;
+            $product->age = $request->age;
+            $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
+            $product->price = $request->price;
+            $product->quantity = $request->quantity;
+            $product->adg = $request->adg;
+            $product->fcr = $request->fcr;
+            $product->backfat_thickness = $request->backfat_thickness;
+            $product->other_details = $request->other_details;
+            $product->save();
+
+            return "OK";
+        }
     }
 
     /**
@@ -162,9 +177,9 @@ class ProductController extends Controller
      * @param Request $request
      * @return String
      */
-    public function showcaseSelected(Request $request)
+    public function updateSelected(Request $request)
     {
-        if($request->ajax()){
+        if($request->ajax() && $request->updateTo_status == 'showcase'){
             foreach ($request->product_ids as $id) {
                 $product = Product::find($id);
                 $product->status = 'showcased';
@@ -172,6 +187,15 @@ class ProductController extends Controller
             }
             return "OK";
         }
+        else if($request->ajax() && $request->updateTo_status == 'unshowcase'){
+            foreach ($request->product_ids as $id) {
+                $product = Product::find($id);
+                $product->status = 'unshowcased';
+                $product->save();
+            }
+            return "OK";
+        }
+
     }
 
     /**
@@ -186,8 +210,38 @@ class ProductController extends Controller
         if($request->ajax()){
             foreach ($request->product_ids as $id) {
                 $product = Product::find($id);
-                $product->status_instance = 'inactive';
-                $product->save();
+
+                // Delete images associated to product
+                foreach ($product->images as $image) {
+                    // Check if file exists in the storage
+                    if(Storage::disk('public')->exists('/images/product/'.$image->name)){
+                        $fullFilePath = '/images/product/'.$image->name;
+                        Storage::disk('public')->delete($fullFilePath);
+                    }
+                    $image->delete();
+                }
+
+                // Delete videos associated to product
+                foreach ($product->videos as $video) {
+                    // Check if file exists in the storage
+                    if(Storage::disk('public')->exists('/videos/product/'.$video->name)){
+                        $fullFilePath = '/videos/product/'.$video->name;
+                        Storage::disk('public')->delete($fullFilePath);
+                    }
+                    $video->delete();
+                }
+
+                $breedId = $product->breed_id;
+                $product->delete();
+
+                // Delete breed from Breed database record if there are
+                // no products of the same breed found
+                // after product deletion
+                $breedInstance = Product::where('breed_id',$breedId)->get()->first();
+                if(!$breedInstance){
+                    $breed = Breed::find($breedId);
+                    $breed->delete();
+                }
             }
             return "OK";
         }
@@ -254,6 +308,7 @@ class ProductController extends Controller
         if($request->ajax()){
             if($request->mediaType == 'image'){
                 $image = Image::find($request->mediaId);
+
                 // Check if file exists in the storage
                 if(Storage::disk('public')->exists('/images/product/'.$image->name)){
                     $fullFilePath = '/images/product/'.$image->name;
@@ -263,6 +318,8 @@ class ProductController extends Controller
             }
             else if($request->mediaType = 'video'){
                 $video = Video::find($request->mediaId);
+
+                // Check if file exists in the storage
                 if(Storage::disk('public')->exists('/videos/product/'.$video->name)){
                     $fullFilePath = '/videos/product/'.$video->name;
                     Storage::disk('public')->delete($fullFilePath);
@@ -367,7 +424,12 @@ class ProductController extends Controller
 
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
-        $urlFilters = $this->toUrlFilter($request->type, $request->breed, $request->sort, $products->currentPage());
+        $urlFilters = [
+            'type' => $request->type,
+            'breed' => $request->breed,
+            'sort' => $request->sort,
+            'page' => $products->currentPage()
+        ];
 
         foreach ($products as $product) {
             $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
@@ -385,7 +447,7 @@ class ProductController extends Controller
      *
      * @return View
      */
-    public function viewProductDetail($productId)
+    public function customerViewProductDetail($productId)
     {
         $product = Product::find($productId);
         $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
@@ -396,7 +458,6 @@ class ProductController extends Controller
         $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
         return view('user.customer.viewProductDetail', compact('product'));
     }
-
 
     /**
      * ---------------------------------------
@@ -505,25 +566,6 @@ class ProductController extends Controller
         return $tempFilters;
     }
 
-    /**
-     * Parse the Filters according to Type, Breed, and Sort By
-     *
-     * @param   $typeParameter String
-     * @param   $breedParameter String
-     * @param   $sortParameter String
-     * @return  Assocative Array
-     */
-    private function toUrlFilter($typeParameter, $breedParameter, $sortParameter, $currentPage)
-    {
-        $tempUrlFilters = [];
-
-        if($typeParameter)  $tempUrlFilters['type'] = $typeParameter;
-        if($breedParameter) $tempUrlFilters['breed'] = $breedParameter;
-        if($sortParameter) $tempUrlFilters['sort'] = $sortParameter;
-        if($currentPage) $tempUrlFilters['page'] = $currentPage;
-
-        return $tempUrlFilters;
-    }
 
     /**
      * Get breed ids of products based from breed filter value

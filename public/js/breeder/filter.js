@@ -18,7 +18,7 @@ var filter = {
 
         filter_parameters += type_url + status_url + sort_url;
 
-        window.location = config.showProducts_url+filter_parameters;
+        window.location = config.manageProducts_url+filter_parameters;
 
     }
 };

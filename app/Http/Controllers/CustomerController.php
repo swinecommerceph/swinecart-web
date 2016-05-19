@@ -102,7 +102,7 @@ class CustomerController extends Controller
     public function editProfile()
     {
         $customer = $this->user->userable;
-        $farmAddresses = $customer->farmAddresses()->where('status_instance','active')->get();
+        $farmAddresses = $customer->farmAddresses;
         return view('user.customer.editProfile', compact('customer','farmAddresses'));
     }
 
@@ -190,8 +190,7 @@ class CustomerController extends Controller
     public function deleteFarm(Request $request)
     {
         $farmAddress = FarmAddress::find($request->id);
-        $farmAddress->status_instance = 'inactive';
-        $farmAddress->save();
+        $farmAddress->delete();
         if($request->ajax()) return "OK";
         else return redirect()->route('customer.edit');
     }

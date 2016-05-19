@@ -108,7 +108,7 @@ class BreederController extends Controller
     public function editProfile(Request $request)
     {
         $breeder = $this->user->userable;
-        $farmAddresses = $breeder->farmAddresses()->where('status_instance','active')->get();
+        $farmAddresses = $breeder->farmAddresses;
         return view('user.breeder.editProfile', compact('breeder', 'farmAddresses'));
     }
 
@@ -200,8 +200,7 @@ class BreederController extends Controller
     public function deleteFarm(Request $request)
     {
         $farmAddress = FarmAddress::find($request->id);
-        $farmAddress->status_instance = 'inactive';
-        $farmAddress->save();
+        $farmAddress->delete();
         if($request->ajax()) return "OK";
         else return redirect()->route('breeder.edit');
     }
