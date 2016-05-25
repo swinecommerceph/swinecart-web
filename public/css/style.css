@@ -106,9 +106,7 @@ nav .input-field #search{
 }
 
 
-/*
-
- */ Pagination styles */
+ /* Pagination styles */
 .pagination .active span{
 	color:rgb(255,255,255);
 }
@@ -200,7 +198,6 @@ blockquote{
 	background-color: #e8f5e9;
 }
 
-
 /* Form component styles */
 #page-breeder-manage-products #other-details{
 	min-height: 310px;
@@ -208,6 +205,10 @@ blockquote{
 
 #page-breeder-manage-products #other-details-container .remove-button-container{
 	margin-top: 30px;
+}
+
+.responsive-video{
+	width: 100%;
 }
 
 /*

@@ -66,7 +66,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('products',['as' => 'products', 'uses' => 'ProductController@showProducts']);
         Route::post('products',['as' => 'products.store', 'uses' => 'ProductController@storeProduct']);
         Route::put('products',['as' => 'products.update', 'uses' => 'ProductController@updateProduct']);
-        Route::get('products/{product}',['as' => 'products.bViewDetail', 'uses' => 'ProductController@breederViewProductDetail']);
+        Route::get('products/view/{product}',['as' => 'products.bViewDetail', 'uses' => 'ProductController@breederViewProductDetail']);
         Route::post('products/manage-selected',['as' => 'products.updateSelected', 'uses' => 'ProductController@updateSelected']);
         Route::delete('products/manage-selected',['as' => 'products.deleteSelected', 'uses' => 'ProductController@deleteSelected']);
         Route::get('products/product-summary',['as' => 'products.summary', 'uses' => 'ProductController@productSummary']);

@@ -14,7 +14,7 @@ $(document).ready(function(){
         e.preventDefault();
         if($(this).hasClass('active')) swinecart.get_items();
     });
-    
+
     $('#cart-icon').click(function(e){
         e.preventDefault();
         if($(this).hasClass('active')) swinecart.get_items();

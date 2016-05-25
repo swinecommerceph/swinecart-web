@@ -17,12 +17,18 @@
 
 	{{-- Compiled and minified CSS --}}
 	{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">  --}}
+	{{-- <link href="http://vjs.zencdn.net/5.9.2/video-js.min.css" rel="stylesheet"> --}}
 
 	<link href="/css/materialize.min.css" rel="stylesheet" type="text/css">
 	<link href="/css/dropzone.css" rel="stylesheet" type="text/css">
 	<link href="/css/icon.css" rel="stylesheet" type="text/css">
 	<link href="/css/style.css" rel="stylesheet" type="text/css">
+	<link href="/js/vendor/video-js/video-js.min.css" rel="stylesheet">
 
+	<!-- If you'd like to support IE8 -->
+  	{{-- <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> --}}
+
+	<script src="/js/vendor/video-js/ie8/videojs-ie8.min.js"></script>
 </head>
 
 <body @yield('pageId')>
@@ -118,10 +124,12 @@
 	{{-- <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> --}}
 	{{-- Compiled and minified JavaScript --}}
 	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script> --}}
+	{{-- <script src="http://vjs.zencdn.net/5.9.2/video.js"></script> --}}
 
 	<script src="/js/vendor/jquery.min.js"></script>
 	<script src="/js/vendor/materialize.min.js"></script>
 	<script src="/js/vendor/dropzone.js"></script>
+	<script src="/js/vendor/video-js/video.min.js"></script>
 	<script src="/js/config.js"></script>
 	<script src="/js/custom.js"></script>
 	{{-- For user-specific initialization scripts --}}

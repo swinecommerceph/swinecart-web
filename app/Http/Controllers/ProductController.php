@@ -96,6 +96,8 @@ class ProductController extends Controller
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
         $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
         $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+        $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
+        $product->videoCollection = $product->videos;
         return view('user.breeder.viewProductDetail', compact('product'));
     }
 
@@ -277,12 +279,15 @@ class ProductController extends Controller
                     if($file){
                         $product = Product::find($request->productId);
 
-                        // Make Image/Video instance
+                        // Make Image/Video instance and store needed information
                         $media = $mediaInfo['type'];
                         $media->name = $mediaInfo['filename'];
 
                         if($this->isImage($fileExtension)) $product->images()->save($media);
-                        else if($this->isVideo($fileExtension)) $product->videos()->save($media);
+                        else if($this->isVideo($fileExtension)){
+                            $media->type = $mediaInfo['fileType'];
+                            $product->videos()->save($media);
+                        }
 
                         array_push($fileDetails, ['id' => $media->id, 'name' => $mediaInfo['filename']]);
                     }
@@ -456,6 +461,8 @@ class ProductController extends Controller
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
         $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
         $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+        $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
+        $product->videoCollection = $product->videos;
         return view('user.customer.viewProductDetail', compact('product'));
     }
 
@@ -505,6 +512,7 @@ class ProductController extends Controller
         else if($this->isVideo($extension)){
             $mediaInfo['directoryPath'] = '/videos/product/';
             $mediaInfo['type'] = new Video;
+            $mediaInfo['fileType'] = 'video/'.$extension;
         }
 
         return $mediaInfo;

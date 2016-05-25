@@ -29,17 +29,38 @@
             <div class="row">
                 <div class="card">
                     <div class="card-image">
-                        <img class="materialboxed" src="{{$product->img_path}}" >
+                        <img src="{{$product->img_path}}" data-imagezoom="true">
                     </div>
                 </div>
             </div>
 
-            {{-- Image Carousel --}}
             <div class="row">
-                <div class="carousel" style="height:220px;">
-                    <a class="carousel-item" href="#one!"><img src="{{$product->img_path}}"></a>
-                    <a class="carousel-item" href="#two!"><img src="/images/swine.jpg"></a>
-                    <a class="carousel-item" href="#three!"><img src="/images/duroc.jpg"></a>
+                <div class="col s12">
+                <ul class="tabs">
+                    <li id="image-carousel-tab" class="tab col s3"><a class="active" href="#images-carousel">Images</a></li>
+                    <li id="video-carousel-tab" class="tab col s3"><a href="#videos-carousel">Videos</a></li>
+                </ul>
+                </div>
+                {{-- Image Carousel --}}
+                <div id="images-carousel" class="col s12">
+                    <div class="carousel" style="height:220px;">
+                        <a class="carousel-item" href="#!"><img src="{{$product->img_path}}"></a>
+                        @foreach($product->imageCollection as $image)
+                            <a class="carousel-item" href="#!"><img src="/images/product/{{$image->name}}"></a>
+                        @endforeach
+                    </div>
+                </div>
+                {{--  Video Carousel --}}
+                <div id="videos-carousel" class="col s12">
+                    <div class="carousel" style="height:220px;">
+                        @foreach($product->videoCollection as $video)
+                            <a class="carousel-item" href="#!">
+                                <video class="responsive-video" controls>
+                                    <source src="/videos/product/{{$video->name}}" type="{{$video->type}}">
+                                </video>
+                            </a>
+                        @endforeach
+                    </div>
                 </div>
             </div>
 
@@ -129,4 +150,9 @@
         </div>
     </div>
 
+@endsection
+
+@section('customScript')
+    <script src="/js/vendor/imagezoom.js"> </script>
+    <script src="/js/customer/viewProductDetail_script.js"> </script>
 @endsection
