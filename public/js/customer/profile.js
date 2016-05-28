@@ -45,6 +45,7 @@ var profile = {
             }
         });
     },
+
     edit: function(parent_form, edit_button, cancel_button){
 
         config.preloader_progress.fadeIn();
@@ -60,6 +61,7 @@ var profile = {
         });
 
     },
+
     update: function(parent_form, edit_button, cancel_button){
         config.preloader_progress.fadeIn();
         var data_values;
@@ -146,6 +148,7 @@ var profile = {
             }
         });
     },
+
     cancel: function(parent_form, edit_button, cancel_button){
         config.preloader_progress.fadeIn();
         cancel_button.tooltip('remove');
@@ -159,6 +162,7 @@ var profile = {
             config.preloader_progress.fadeOut();
         });
     },
+    
     remove: function(parent_form, row){
         config.preloader_progress.fadeIn();
 

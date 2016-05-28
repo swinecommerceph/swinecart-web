@@ -207,8 +207,13 @@ blockquote{
 	margin-top: 30px;
 }
 
-.responsive-video{
+#page-breeder-view-product-details .responsive-video{
 	width: 100%;
+}
+
+/* Modal Styles */
+.modal .modal-footer .btn, .modal .modal-footer .btn-large{
+	margin: 6px 3px;
 }
 
 /*

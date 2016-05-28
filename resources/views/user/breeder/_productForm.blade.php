@@ -171,7 +171,6 @@
 		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action"> Submit
 			<i class="material-icons right">send</i>
 		</button>
-		{{-- <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a> --}}
 	</div>
 	{!! Form::close() !!}
 </div>
@@ -189,10 +188,10 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button id="next-button" type="submit" class="btn waves-effect waves-light modal-action"> Next
+		<button id="next-button" type="submit" class="btn waves-effect waves-light modal-action"> Product Summary
 			<i class="material-icons right">send</i>
 		</button>
-		{{-- <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a> --}}
+		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
 
@@ -206,6 +205,7 @@
 					<h5>Product Name</h5>
 					<h6>Province</h6>
 				</li>
+				<div></div>
 			</ul>
 		</div>
 		<div class="row">
@@ -213,6 +213,7 @@
 	            <div id="other-details-summary" class="card">
 	                <div class="card-content black-text">
 	                    <span class="card-title">Other Details</span>
+						<div></div>
 	                </div>
 	            </div>
 	        </div>
@@ -242,12 +243,23 @@
 	</div>
 
 	<div class="modal-footer">
-		{!! Form::open(['route' => 'products.showcase', 'class' => 's12', 'id' => 'showcase-product-form']) !!}
-			<button id="showcase-button" class="btn waves-effect waves-light modal-action"> Showcase
-				<i class="material-icons right">publish</i>
+		<div class="from-add-process">
+			{!! Form::open(['route' => 'products.showcase', 'class' => 's12', 'id' => 'showcase-product-form']) !!}
+				<button id="showcase-button" class="btn waves-effect waves-light modal-action"> Showcase
+					<i class="material-icons right">publish</i>
+				</button>
+			{!! Form::close() !!}
+			{{-- <a href="#!" id="save-draft-button" class="modal-action waves-effect waves-green btn-flat ">Save as Draft</a> --}}
+			<button id="save-draft-button" class="btn waves-effect waves-light modal-action"> Save as Draft
+				{{-- <i class="material-icons right">publish</i> --}}
 			</button>
-		{!! Form::close() !!}
-		<a href="#!" id="save-draft-button" class="modal-action waves-effect waves-green btn-flat ">Save as Draft</a>
+		</div>
+		<div class="from-edit-process">
+			<button id="save-button" class="btn waves-effect waves-light modal-action"> Save
+				<i class="material-icons right">send</i>
+			</button>
+		</div>
+		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
 
@@ -414,10 +426,19 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button id="update-button" class="btn waves-effect waves-light modal-action"> Update
-			<i class="material-icons right">send</i>
-		</button>
-		<a href="#!" id="edit-media-button" class="modal-action modal-close waves-effect waves-green btn-flat ">Edit Media</a>
+		<div class="from-add-process" style="display:none;">
+			<button id="add-media-button" class="btn waves-effect waves-light modal-action"> Add Media
+				{{-- <i class="material-icons right">send</i> --}}
+			</button>
+		</div>
+		<div class="from-edit-process">
+			<button class="btn waves-effect waves-light modal-action update-button"> Update Product
+				<i class="material-icons right">send</i>
+			</button>
+			<button id="edit-media-button" class="btn waves-effect waves-light modal-action"> Edit Media
+				{{-- <i class="material-icons right">send</i> --}}
+			</button>
+		</div>
 	</div>
 	{!! Form::close() !!}
 </div>
@@ -426,6 +447,13 @@
 <div id="edit-media-modal" class="modal modal-fixed-footer">
 	<div class="modal-content">
 		<h4>Edit Media </h4>
+		<div class="row">
+			{!! Form::open(['route' => 'products.mediaUpload', 'class' => 's12 dropzone', 'id' => 'edit-media-dropzone', 'enctype' => 'multipart/form-data']) !!}
+				<div class="fallback">
+					<input type="file" name="media[]" accept="image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov" multiple>
+				</div>
+			{!! Form::close() !!}
+		</div>
 		<div class="row">
 	        <div class="col s12">
 	            <div id="edit-images-summary" class="card">
@@ -451,12 +479,10 @@
 	</div>
 
 	<div class="modal-footer">
-		{!! Form::open(['route' => 'products.showcase', 'class' => 's12', 'id' => 'showcase-product-form']) !!}
-			<button id="showcase-button" class="btn waves-effect waves-light modal-action"> Update Media
-				<i class="material-icons right">submit</i>
-			</button>
-		{!! Form::close() !!}
-		<a href="#!" id="back-button" class="modal-action waves-effect waves-green btn-flat ">Back</a>
+		<button class="btn waves-effect waves-light modal-action update-button"> Update Product
+			<i class="material-icons right">send</i>
+		</button>
+		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
 

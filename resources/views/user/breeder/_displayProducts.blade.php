@@ -9,7 +9,7 @@
     <div class="col s4 left">
         {!! Form::open(['route' => 'products.updateSelected', 'id' => 'manage-selected-form']) !!}
             {{-- Add Button --}}
-            <a href="#add-product-modal" class="btn-floating btn-large modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
+            <a href="#" class="btn-floating btn-large modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
                 <i class="material-icons">add</i>
             </a>
             {{-- Select All Button --}}
