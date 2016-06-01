@@ -7,11 +7,11 @@ use Closure;
 class RoleMiddleware
 {
     /**
-     * Check if User has the provided role then 
+     * Check if User has the provided role then
      * proceed to the request
      *
      * @param  \Illuminate\Http\Request  $request
-     * @param  \Closure  $next
+     * @param  \Closure                  $next
      * @return mixed
      */
     public function handle($request, Closure $next, $role)

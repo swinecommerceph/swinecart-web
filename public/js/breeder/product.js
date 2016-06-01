@@ -5,10 +5,6 @@ var product = {
     before_select_value : '' ,
     current_display_photo : 0,
     modal_history : [],
-    modal_history_tos : function(){
-        return product.modal_history[product.modal_history.length-1];
-    },
-
     other_details_default :
         '<div class="detail-container">'+
             '<div class="input-field col s6">'+
@@ -26,6 +22,10 @@ var product = {
             '</div>'+
         '</div>'
     ,
+
+    modal_history_tos : function(){
+        return product.modal_history[product.modal_history.length-1];
+    },
 
     add : function(parent_form){
         // Attach overlay preloader
@@ -70,7 +70,6 @@ var product = {
         if($('#select-type').val() === 'semen') data_values["quantity"] = parent_form.find('input[name=quantity]').val();
         else data_values["quantity"] = 1;
 
-
         // Transform breed syntax if crossbreed
         if($("#create-product input:checked").val() === 'crossbreed'){
             var fbreed = parent_form.find('input[name=fbreed]').val();
@@ -107,12 +106,11 @@ var product = {
                 Materialize.toast('Product added!', 2500, 'green lighten-1');
 
                 $('#media-dropzone').append(hidden_inputs);
-
                 $('#add-media-modal h4').append(' to '+data.name);
                 $('.add-product-button').attr('href','#add-media-modal');
                 $('#overlay-preloader-circular').remove();
-                parent_form.find('#submit-button').removeClass('disabled');
                 $('#add-product-modal').closeModal();
+                parent_form.find('#submit-button').removeClass('disabled');
 
                 // Open Add Media Modal
                 $('#add-media-modal').openModal({
@@ -200,6 +198,7 @@ var product = {
             $('#confirmation-modal').openModal();
             $('#confirm-remove').click(function(e){
                 e.preventDefault();
+
                 config.preloader_progress.fadeIn();
                 // Do AJAX
                 $.ajax({
@@ -211,7 +210,6 @@ var product = {
                         "product_ids": products
                     },
                     success: function(data){
-                        // var data = JSON.parse(data);
                         products.forEach(function(element){
                             $('#product-'+element).remove();
                         });
@@ -252,10 +250,9 @@ var product = {
 
                 $(parent_form).append('<input name="productId" type="hidden" value="'+data.id+'">');
                 $('#edit-media-dropzone').append(hidden_inputs);
-
                 $('#edit-media-modal h4').html('Edit Media of '+data.name);
 
-                // General input types
+                // General input initialization
                 parent_form.find('input[name=name]').val(data.name);
                 parent_form.find('label[for=name]').addClass('active')
                 parent_form.find('input[name=price]').val(data.price);
@@ -328,6 +325,7 @@ var product = {
                             $('.indicator').css({"right": whole_tab_width - swine_tab_width, "left": "0px"});
                         }
                     });
+
                     // Set-up value of current_modal_id
                     product.modal_history.push('#edit-product-modal');
 
@@ -493,7 +491,6 @@ var product = {
                 $('#images-summary .card-content .row').html(image_list);
                 $('#videos-summary .card-content .row').html(video_list);
                 $('#showcase-product-form').prepend('<input name="productId" type="hidden" value="'+data.id+'">');
-
                 $('#overlay-preloader-circular').remove();
 
             },
@@ -540,7 +537,6 @@ var product = {
                 "product_id": parent_form.find('input[name=productId]').val()
             },
             success: function(data){
-                // var data = JSON.parse(data);
                 window.setTimeout(function(){
                     location.reload(true);
                 }, 1200);
@@ -566,7 +562,6 @@ var product = {
                     "updateTo_status": status
                 },
                 success: function(data){
-                    // var data = JSON.parse(data);
                     products.forEach(function(element){
                         $('#product-'+element).remove();
                     });

@@ -19,7 +19,6 @@ use App\Models\Breed;
 
 use Auth;
 
-
 class BreederController extends Controller
 {
     protected $user;
@@ -37,6 +36,7 @@ class BreederController extends Controller
 	/**
 	 * Show Home Page of breeder
 	 *
+	 * @param  Request $request
 	 * @return View
 	 */
     public function index(Request $request)
@@ -56,10 +56,10 @@ class BreederController extends Controller
     }
 
     /**
-     * Create and store Breeder profile data to database
+     * Create and store Breeder profile data to database and
      * Associate User to Breeder user type as well
      *
-     * @param  Request $request
+     * @param  BreederProfileRequest $request
      * @return Redirect
      */
     public function storeProfile(BreederProfileRequest $request)
@@ -103,6 +103,7 @@ class BreederController extends Controller
     /**
      * Show Page for Breeder to update profile
      *
+     * @param  Request $request
      * @return View
      */
     public function editProfile(Request $request)
@@ -116,6 +117,7 @@ class BreederController extends Controller
      * Update Breeder's personal information
      * AJAX
      *
+     * @param  BreederPersonalProfileRequest $request
      * @return JSON / View
      */
     public function updatePersonal(BreederPersonalProfileRequest $request)
@@ -141,6 +143,7 @@ class BreederController extends Controller
      * Add Breeder's farm information instance
      * AJAX
      *
+     * @param  BreederFarmProfileRequest $request
      * @return JSON / View
      */
     public function addFarm(BreederFarmProfileRequest $request)
@@ -172,6 +175,7 @@ class BreederController extends Controller
      * Update Breeder's farm information instance
      * AJAX
      *
+     * @param  BreederFarmProfileRequest $request
      * @return JSON / View
      */
     public function updateFarm(BreederFarmProfileRequest $request)
@@ -195,6 +199,7 @@ class BreederController extends Controller
      * Delete Breeder's farm information instance
      * AJAX
      *
+     * @param  Request $request
      * @return String / View
      */
     public function deleteFarm(Request $request)

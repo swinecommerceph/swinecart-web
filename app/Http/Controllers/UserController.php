@@ -20,7 +20,8 @@ class UserController extends Controller
 
     /**
      * Redirect user to a specified controller according to role
-     * @return  View
+     *
+     * @return  Redirect/View
      */
     public function index(Request $request)
     {

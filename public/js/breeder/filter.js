@@ -2,6 +2,7 @@
 
 var filter = {
     apply: function(){
+        // URL search syntax: ?type=value[+value]*&status=value[+value]&sort=value*
         var filter_parameters = '?';
         var type_url = 'type=';
         var status_url = '&status=';

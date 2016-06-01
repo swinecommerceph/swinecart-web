@@ -29,13 +29,13 @@ $(document).ready(function(){
         var i = $("#farm-address-body .add-farm").length;
 
         var parent = $(this).parentsUntil('#farm-address-body','.add-farm');
-        var prevRemoveButtonField = parent.prev().find(".remove-button-field");
+        var prev_remove_button_field = parent.prev().find(".remove-button-field");
         parent.remove().fadeOut('slow');
 
         if (i > 1){
             $('<a href="#" id="remove-farm" class="btn-floating btn-medium waves-effect waves-light deep-orange tooltipped" data-position="left" data-delay="50" data-tooltip="Remove this Farm" style="display:none">'+
                 '<i class="material-icons">remove</i>'+
-            '</a>').appendTo(prevRemoveButtonField).fadeIn('slow');
+            '</a>').appendTo(prev_remove_button_field).fadeIn('slow');
         }
 
         // Redirect to specified section

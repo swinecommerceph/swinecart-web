@@ -29,7 +29,6 @@ class CreateProductsTable extends Migration
             $table->text('other_details')->nullable();
             $table->string('status')->default('unshowcased');
             $table->softDeletes();
-            // $table->timestamps();
         });
     }
 

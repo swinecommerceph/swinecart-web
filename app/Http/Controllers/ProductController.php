@@ -39,6 +39,7 @@ class ProductController extends Controller
     /**
      * Show the Breeder's products
      *
+     * @param  Request $request
      * @return View
      */
     public function showProducts(Request $request)
@@ -64,7 +65,7 @@ class ProductController extends Controller
             $request->sort => 'selected'
         ];
 
-        //  For pagination purposes
+        // For pagination purposes
         $urlFilters = [
             'type' => $request->type,
             'status' => $request->status,
@@ -85,6 +86,7 @@ class ProductController extends Controller
     /**
      * View Details of a Product
      *
+     * @param  Integer  $productId
      * @return View
      */
     public function breederViewProductDetail($productId)
@@ -105,12 +107,13 @@ class ProductController extends Controller
      * Store the Breeder's product
      * AJAX
      *
-     * @param Request $request
+     * @param  Request $request
      * @return JSON
      */
     public function storeProduct(Request $request)
     {
         $breeder = $this->user->userable;
+
         if($request->ajax()){
             $product = new Product;
             $productDetail= [];
@@ -141,14 +144,13 @@ class ProductController extends Controller
 
             return collect($productDetail)->toJson();
         }
-
     }
 
     /**
      * Update details of a Product
      * AJAX
      *
-     * @param Request $request
+     * @param  Request $request
      * @return String
      */
     public function updateProduct(Request $request)
@@ -176,7 +178,7 @@ class ProductController extends Controller
      * Showcase selected products
      * AJAX
      *
-     * @param Request $request
+     * @param  Request $request
      * @return String
      */
     public function updateSelected(Request $request)
@@ -204,7 +206,7 @@ class ProductController extends Controller
      * Delete selected products
      * AJAX
      *
-     * @param Request $request
+     * @param  Request $request
      * @return String
      */
     public function deleteSelected(Request $request)
@@ -252,7 +254,7 @@ class ProductController extends Controller
     /**
      * Upload media for a product
      *
-     * @param Request $request
+     * @param  Request $request
      * @return JSON
      */
     public function uploadMedia(Request $request)
@@ -267,11 +269,10 @@ class ProductController extends Controller
                 // Check if file has no problems in uploading
                 if($file->isValid()){
                     $fileExtension = $file->getClientOriginalExtension();
-                    $originalName = $file->getClientOriginalName();
 
                     // Get media (Image/Video) info according to extension
-                    if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed, $originalName);
-                    else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed, $originalName);
+                    if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed);
+                    else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed);
 
                     Storage::disk('public')->put($mediaInfo['directoryPath'].$mediaInfo['filename'], file_get_contents($file));
 
@@ -279,15 +280,12 @@ class ProductController extends Controller
                     if($file){
                         $product = Product::find($request->productId);
 
-                        // Make Image/Video instance and store needed information
+                        // Make Image/Video instance
                         $media = $mediaInfo['type'];
                         $media->name = $mediaInfo['filename'];
 
                         if($this->isImage($fileExtension)) $product->images()->save($media);
-                        else if($this->isVideo($fileExtension)){
-                            $media->type = $mediaInfo['fileType'];
-                            $product->videos()->save($media);
-                        }
+                        else if($this->isVideo($fileExtension)) $product->videos()->save($media);
 
                         array_push($fileDetails, ['id' => $media->id, 'name' => $mediaInfo['filename']]);
                     }
@@ -305,7 +303,7 @@ class ProductController extends Controller
      * Delete and Image of a Product
      * AJAX
      *
-     * @param Request $request
+     * @param  Request $request
      * @return JSON
      */
     public function deleteMedium(Request $request)
@@ -339,7 +337,7 @@ class ProductController extends Controller
     /**
      * Get summary of Product
      *
-     * @param Request $request
+     * @param  Request $request
      * @return JSON
      */
     public function productSummary(Request $request)
@@ -399,11 +397,12 @@ class ProductController extends Controller
     /**
      * View Products of all Breeders
      *
+     * @param  Request $request
      * @return View
      */
     public function viewProducts(Request $request)
     {
-        // Check if empty search parameters
+        // Check if search parameters are empty
         if (!$request->type && !$request->breed){
             if($request->sort && $request->sort != 'none'){
                 $part = explode('-',$request->sort);
@@ -450,6 +449,7 @@ class ProductController extends Controller
     /**
      * View Details of a Product
      *
+     * @param  Integer  $productId
      * @return View
      */
     public function customerViewProductDetail($productId)
@@ -476,7 +476,7 @@ class ProductController extends Controller
      * Find breed_id through breed name ($breed)
      * or create another breed if not found
      *
-     * @param String $Breed
+     * @param  String   $breed
      * @return Integer
      */
     private function findOrCreateBreed($breed)
@@ -492,10 +492,13 @@ class ProductController extends Controller
     /**
      * Get appropriate media (Image/Video) info depending on extension
      *
-     * @param String $extension
-     * @return Associative Array $mediaInfo
+     * @param  String           $extension
+     * @param  Integer          $productId
+     * @param  String           $type
+     * @param  String           $breed
+     * @return AssociativeArray $mediaInfo
      */
-    private function createMediaInfo($extension, $productId, $type, $breed, $originalName)
+    private function createMediaInfo($extension, $productId, $type, $breed)
     {
         $mediaInfo = [];
         if(str_contains($breed,'+')){
@@ -512,7 +515,6 @@ class ProductController extends Controller
         else if($this->isVideo($extension)){
             $mediaInfo['directoryPath'] = '/videos/product/';
             $mediaInfo['type'] = new Video;
-            $mediaInfo['fileType'] = 'video/'.$extension;
         }
 
         return $mediaInfo;
@@ -522,7 +524,7 @@ class ProductController extends Controller
     /**
      * Check if media is Image depending on extension
      *
-     * @param String $extension
+     * @param  String   $extension
      * @return Boolean
      */
     private function isImage($extension)
@@ -533,7 +535,7 @@ class ProductController extends Controller
     /**
      * Check if media is Video depending on extension
      *
-     * @param String $extension
+     * @param  String   $extension
      * @return Boolean
      */
     private function isVideo($extension)
@@ -544,10 +546,10 @@ class ProductController extends Controller
     /**
      * Parse the Filters according to Type, Breed, and Sort By
      *
-     * @param   $typeParameter String
-     * @param   $breedParameter String
-     * @param   $sortParameter String
-     * @return  Assocative Array
+     * @param   String          $typeParameter
+     * @param   String          $breedParameter
+     * @param   String          $sortParameter
+     * @return  AssocativeArray
      */
     private function parseThenJoinFilters($typeParameter, $breedParameter, $sortParameter)
     {
@@ -578,7 +580,7 @@ class ProductController extends Controller
     /**
      * Get breed ids of products based from breed filter value
      *
-     * @param   $breedParameter String
+     * @param   String  $breedParameter
      * @return  Array
      */
     private function getBreedIds($breedParameter)
@@ -597,7 +599,6 @@ class ProductController extends Controller
             array_push($tempBreedIds, $breedInstance);
         }
 
-        // dd($tempBreedIds);
         return $tempBreedIds;
     }
 
@@ -605,7 +606,7 @@ class ProductController extends Controller
      * Parse $breed if it contains '+' (ex. landrace+duroc)
      * to "Landrace x Duroc"
      *
-     * @param  String $breed
+     * @param  String   $breed
      * @return String
      */
     private function transformBreedSyntax($breed)
@@ -622,7 +623,7 @@ class ProductController extends Controller
     /**
      * Parse $other_details
      *
-     * @param String $otherDetails
+     * @param  String   $otherDetails
      * @return String
      */
     private function transformOtherDetailsSyntax($otherDetails)

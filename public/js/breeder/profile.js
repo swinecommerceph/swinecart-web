@@ -34,9 +34,9 @@ var profile = {
             success: function(data){
                 var data = JSON.parse(data);
                 Materialize.toast('Profile updated Success!', 1500, 'green lighten-1');
-                setTimeout(function(){
+                window.setTimeout(function(){
                     config.preloader_progress.fadeOut();
-                    location.reload();
+                    location.reload(true);
                 }, 1500);
             },
             error: function(message){
@@ -171,7 +171,7 @@ var profile = {
             config.preloader_progress.fadeOut();
         });
     },
-    
+
     remove: function(parent_form, row){
         config.preloader_progress.fadeIn();
 
@@ -199,7 +199,6 @@ var profile = {
                 config.preloader_progress.fadeOut();
             }
         });
-
 
     }
 };

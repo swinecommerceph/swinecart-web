@@ -65,6 +65,8 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * Assign Role to a User
+     *
+     * @param  String   $role
      */
     public function assignRole($role)
     {
@@ -79,6 +81,9 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * Check User if it has a certain role
+     *
+     * @param   String  $role
+     * @return  Boolean
      */
     public function hasRole($role)
     {
@@ -91,7 +96,8 @@ class User extends Model implements AuthenticatableContract,
 
     /**
      * Check if User still needs to update profile
-     * @return bool
+     *
+     * @return Boolean
      */
     public function updateProfileNeeded()
     {

@@ -168,18 +168,18 @@ $(document).ready(function(){
 
         // Check if remove_button is on creating farm information
         if(remove_button.hasClass('on-create-farm')){
-            var prev_farm, prevSubmitButtonField;
+            var prev_farm, prev_submit_button_field;
             var row = remove_button.parents('.add-farm');
             var name = row.find('h5').html();
 
             row.remove().done;
             prev_farm = $('#farm-address-body').find('.add-farm').last();
-            prevSubmitButtonField = prev_farm.find(".submit-button-field");
+            prev_submit_button_field = prev_farm.find(".submit-button-field");
 
-            if (prevSubmitButtonField){
+            if (prev_submit_button_field){
                 $( '<button class="btn-floating btn-medium waves-effect waves-light teal darken-1 tooltipped submit-button" data-position="left" data-delay="50" data-tooltip="Submit added farms">'+
                      '<i class="material-icons">send</i>'+
-                 '</button>').appendTo(prevSubmitButtonField).fadeIn('slow');
+                 '</button>').appendTo(prev_submit_button_field).fadeIn('slow');
             }
 
             location.href = '#'+prev_farm.find('.card-panel').attr('id');

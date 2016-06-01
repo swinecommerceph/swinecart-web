@@ -53,30 +53,37 @@ class UserInstancesSeeder extends Seeder
                 $image2 = new App\Models\Image;
                 $video = new App\Models\Video;
 
-                if($randType == 'sow' && $randBreed == 'duroc'){ // Sow Duroc Two images
+                // Sow Duroc Two images
+                if($randType == 'sow' && $randBreed == 'duroc'){
                     $image->name = $randType.'_'.$randBreed.'1.jpg';
                     $image2->name = $randType.'_'.$randBreed.'2.jpg';
                     $image2->save();
                 }
-                elseif (($randType == 'boar' || $randType == 'semen') && $randBreed == 'landrace+duroc') { // Boar/Semen Crossbreed
+
+                // Boar/Semen Crossbreed
+                elseif (($randType == 'boar' || $randType == 'semen') && $randBreed == 'landrace+duroc') {
                     $image->name = $randType.'_cb_landraceDuroc1.jpg';
                 }
-                elseif ($randType == 'sow' && $randBreed == 'largewhite+duroc') { // Sow Crossbreed
+
+                // Sow Crossbreed
+                elseif ($randType == 'sow' && $randBreed == 'largewhite+duroc') {
                     $image->name = $randType.'_cb_largewhiteDuroc1.jpg';
                 }
-                elseif ($randBreed == 'chesterwhite') { // Others
+
+                // Others
+                elseif ($randBreed == 'chesterwhite') {
                     $image->name = $randType.'_chesterwhite1.jpg';
                 }
                 elseif (($randType == 'boar' && $randBreed == 'largewhite+duroc') ||
                         ($randType == 'sow' && $randBreed == 'landrace+duroc') ||
                         ($randType == 'semen' && $randBreed == 'largewhite+duroc')) break;
-                else { // General
-                    $image->name = $randType.'_'.$randBreed.'1.jpg';
-                }
+
+                // General
+                else $image->name = $randType.'_'.$randBreed.'1.jpg';
+                
                 $image->save();
 
                 $video->name = 'sample_video.avi';
-                $video->type = 'video/avi';
 
                 $product->farm_from_id = $farm->id;
                 $product->primary_img_id = $image->id;

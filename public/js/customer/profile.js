@@ -34,7 +34,7 @@ var profile = {
             success: function(data){
                 var data = JSON.parse(data);
                 Materialize.toast('Profile updated Success!', 1500, 'green lighten-1');
-                setTimeout(function(){
+                window.setTimeout(function(){
                     config.preloader_progress.fadeOut();
                     location.reload(true);
                 }, 1500);
@@ -47,7 +47,6 @@ var profile = {
     },
 
     edit: function(parent_form, edit_button, cancel_button){
-
         config.preloader_progress.fadeIn();
         $.when(parent_form.find('input').prop('disabled',false)).done(function(){
             // Edit tooltip animation to Done
@@ -59,7 +58,6 @@ var profile = {
             cancel_button.toggle();
             config.preloader_progress.fadeOut();
         });
-
     },
 
     update: function(parent_form, edit_button, cancel_button){
@@ -162,7 +160,7 @@ var profile = {
             config.preloader_progress.fadeOut();
         });
     },
-    
+
     remove: function(parent_form, row){
         config.preloader_progress.fadeIn();
 

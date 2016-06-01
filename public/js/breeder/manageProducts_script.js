@@ -1,6 +1,9 @@
 $(document).ready(function(){
 
+    // Variable for checking if all products
+    // are selected or not
     var all_checked = false;
+
     // Hide certain elements
     $('.input-crossbreed-container, .input-quantity-container').hide();
 
@@ -17,7 +20,7 @@ $(document).ready(function(){
     // Select All Products
     $('.select-all-button').click(function(e){
         e.preventDefault();
-        console.log(all_checked);
+
         if(!all_checked){
             $('#view-products-container input[type=checkbox]').prop('checked', true);
             $('.select-all-button i').html('event_busy');
@@ -111,10 +114,10 @@ $(document).ready(function(){
     // Back button on modals
     $('.back-button').click(function(e){
         e.preventDefault();
-        console.log(product.modal_history);
+        
         $(product.modal_history.pop()).closeModal();
 
-        // If goig back to add-product-modal it must be directed to edit-product-modal
+        // If going back to add-product-modal it must be directed to edit-product-modal
         if(product.modal_history_tos() === '#add-product-modal') {
             product.get_product($('#add-media-modal form').find('input[name="productId"]').val());
 
@@ -129,7 +132,6 @@ $(document).ready(function(){
             }
         }
         else $(product.modal_history_tos()).openModal();
-        console.log(product.modal_history);
     });
 
     /* ----------- Add Product Modal functionalities ----------- */
@@ -233,7 +235,6 @@ $(document).ready(function(){
         // Check first if chosen image not the current primary picture
         if(product.current_display_photo != $(this).attr('data-img-id')){
             product.set_display_photo($(this), $(this).parents('form'), $(this).attr('data-product-id'), $(this).attr('data-img-id'));
-            console.log($(this).parents('form')+ ' ' + product.current_display_photo);
         }
     });
 
@@ -391,7 +392,6 @@ $(document).ready(function(){
         product.manage_necessary_fields($(this).parents('form'), $(this).val());
     });
     $("#edit-select-type").on('change', function(){
-        console.log($(this).parents('form'));
         product.manage_necessary_fields($(this).parents('form'), $(this).val());
     });
 

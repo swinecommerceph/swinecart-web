@@ -35,6 +35,7 @@ class CustomerController extends Controller
     /**
      * Show Home Page of customer
      *
+     * @param  Request $request
      * @return View
      */
     public function index(Request $request)
@@ -54,10 +55,10 @@ class CustomerController extends Controller
     }
 
     /**
-     * Create and store Customer profile data to database
+     * Create and store Customer profile data to database and
      * Associate User to Customer user type as well
      *
-     * @param  Request $request
+     * @param  CustomerProfileRequest $request
      * @return Redirect
      */
     public function storeProfile(CustomerProfileRequest $request)
@@ -70,7 +71,6 @@ class CustomerController extends Controller
             'landline',
             'mobile']
         ));
-
         $farmAddressArray = [];
 
         for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/8; $i++) {
@@ -110,6 +110,7 @@ class CustomerController extends Controller
      * Update Customer's personal information
      * AJAX
      *
+     * @param  CustomerPersonalProfileRequest $request
      * @return JSON / View
      */
     public function updatePersonal(CustomerPersonalProfileRequest $request)
@@ -131,6 +132,7 @@ class CustomerController extends Controller
      * Add Customer's farm information instance
      * AJAX
      *
+     * @param  CustomerFarmProfileRequest $request
      * @return JSON / View
      */
     public function addFarm(CustomerFarmProfileRequest $request)
@@ -155,13 +157,13 @@ class CustomerController extends Controller
 
         if($request->ajax()) return collect($farmAddressArray)->toJson();
         else return redirect()->route('customer.edit');
-
     }
 
     /**
      * Update Customer's farm information instance
      * AJAX
      *
+     * @param  CustomerFarmProfileRequest $request
      * @return JSON / View
      */
     public function updateFarm(CustomerFarmProfileRequest $request)
@@ -185,6 +187,7 @@ class CustomerController extends Controller
      * Delete Customer's farm information instance
      * AJAX
      *
+     * @param  Request $request
      * @return String / View
      */
     public function deleteFarm(Request $request)

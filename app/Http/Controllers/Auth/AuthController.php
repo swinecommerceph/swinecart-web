@@ -156,15 +156,13 @@ class AuthController extends Controller
      * Authenticate user if email and verification
      * code matches in the database
      *
-     * @param   string  $email
-     * @param   string  $verCode
+     * @param   String  $email
+     * @param   String  $verCode
      * @return  View or Redirect
      */
     public function verifyCode($email, $verCode)
     {
-        if(Auth::check()){
-            Auth::logout();
-        }
+        if(Auth::check()) Auth::logout();
 
         $verUser = User::where('email', $email)->first();
         if($verUser->verification_code == $verCode){
@@ -179,9 +177,9 @@ class AuthController extends Controller
     /**
      * Resend verifcation code to user
      *
-     * @param   string  $email
-     * @param   string  $verCode
-     * @return  View or Redirect
+     * @param   String          $email
+     * @param   String          $verCode
+     * @return  View/Redirect
      */
     public function resendCode($email, $verCode)
     {

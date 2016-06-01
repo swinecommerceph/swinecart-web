@@ -32,6 +32,7 @@ class SwineCartController extends Controller
      * Add to Swine Cart the product picked by the user
      * AJAX
      *
+     * @param  Request $request
      * @return Array
      */
     public function addToSwineCart(Request $request)
@@ -65,6 +66,7 @@ class SwineCartController extends Controller
      * Delete item from Swine Cart
      * AJAX
      *
+     * @param  Request $request
      * @return Array
      */
     public function deleteFromSwineCart(Request $request)
@@ -72,12 +74,12 @@ class SwineCartController extends Controller
         if($request->ajax()){
             $customer = $this->user->userable;
             $item = $customer->swineCartItems()->where('id',$request->itemId)->get()->first();
-            $product_name = Product::find($item->product_id)->name;
+            $productName = Product::find($item->product_id)->name;
             if($item) {
                 $item->delete();
-                return ["success", $product_name, $customer->swineCartItems()->where('if_requested',0)->count()];
+                return ["success", $productName, $customer->swineCartItems()->where('if_requested',0)->count()];
             }
-            else return ["not found", $product_id];
+            else return ["not found", $item->product_id];
 
         }
     }
@@ -86,6 +88,7 @@ class SwineCartController extends Controller
      * Get items in the Swine Cart
      * AJAX
      *
+     * @param  Request $request
      * @return JSON
      */
     public function getSwineCartItems(Request $request)
@@ -118,7 +121,8 @@ class SwineCartController extends Controller
      * Get number of items in the Swine Cart
      * AJAX
      *
-     * @return int
+     * @param  Request $request
+     * @return Integer
      */
     public function getSwineCartQuantity(Request $request)
     {
