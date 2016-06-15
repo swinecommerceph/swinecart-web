@@ -9,11 +9,16 @@
 @endsection
 
 @section('pageId')
-    id="page-customer-home"
+    id="page-customer-swine-cart"
 @endsection
 
 @section('breadcrumbTitle')
-    Home
+    Swine Cart
+@endsection
+
+@section('breadcrumb')
+    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
+    <a href="#!" class="breadcrumb">Swine Cart</a>
 @endsection
 
 @section('navbarHead')
@@ -89,8 +94,7 @@
 @section('navbarDropdown')
     <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
     <li class="divider"></li>
-    <li><a href="{{ route('view.cart') }}"> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
-
+    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
 @endsection
 
 @section('static')
@@ -102,69 +106,20 @@
 @endsection
 
 @section('content')
-    <div class="row">
-    </div>
+    {{-- Swine Cart --}}
+    <ul class="collection">
+    @foreach($products as $product)
+        <li class="collection-item avatar">
+          
+          {{-- <a href="#"><img src="{{$product->img_path}}" alt="" class="circle"></a>
+          <a href="#" class="anchor-title"><span>{{$product->name}}</span></a>
+          <p>
+            {{$product->id}} - {{$product->breed}}
+          </p> --}}
+        </li>
+    @endforeach
+    </ul>
 
-    {{-- Search bar --}}
-    <nav id="search-container">
-        <div id="search-field" class="nav-wrapper white">
-            <form>
-                <div class="input-field">
-                    <input id="search" type="search" placeholder="Search for a product" required>
-                    <label for="search"><i class="material-icons teal-text">search</i></label>
-                    <i class="material-icons">close</i>
-                </div>
-            </form>
-        </div>
-    </nav>
-
-    <div class="row">
-    </div>
-
-    {{-- Slider --}}
-    <div class="slider">
-        <ul class="slides">
-          <li>
-            <img src="/images/demo/HP1.jpg">
-            <div class="caption center-align">
-              <h3>Efficiency</h3>
-              <h5 class="light grey-text text-lighten-3">Through the internet, the
-system aims for faster and
-hassle-free transaction between
-consumers and retailers.</h5>
-            </div>
-          </li>
-          <li>
-            <img src="/images/demo/HP2.jpg">
-            <div class="caption left-align">
-              <h3>Security</h3>
-              <h5 class="light grey-text text-lighten-3">security and legitimacy of
-both customers and
-breeders is ensured
-through establishing a set
-of criteria/qualifications.</h5>
-            </div>
-          </li>
-          <li>
-            <img src="/images/demo/HP3.jpg">
-            <div class="caption right-align">
-              <h3>Variety</h3>
-              <h5 class="light grey-text text-lighten-3">security and legitimacy of both customers and
-breeders is ensured through establishing a set
-of criteria/qualifications.</h5>
-            </div>
-          </li>
-          <li>
-            <img src="/images/demo/HP4.jpg">
-            <div class="caption center-align">
-              <h3>Swine Security</h3>
-              <h5 class="light grey-text text-lighten-3">security and legitimacy of both customers and
-breeders is ensured through establishing a set
-of criteria/qualifications.</h5>
-            </div>
-          </li>
-        </ul>
-    </div>
 
 @endsection
 

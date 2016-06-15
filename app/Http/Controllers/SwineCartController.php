@@ -115,6 +115,30 @@ class SwineCartController extends Controller
             $itemsCollection = collect($items);
             return $itemsCollection->toJson();
         }
+        else {
+          $customer = $this->user->userable;
+          $swineCartItems = $customer->swineCartItems()->where('if_requested',0)->get();
+          $items = [];
+
+          foreach ($swineCartItems as $item) {
+              $itemDetail = [];
+              $product = Product::find($item->product_id);
+              $itemDetail['item_id'] = $item->id;
+              $itemDetail['product_id'] = $item->product_id;
+              $itemDetail['product_name'] = $product->name;
+              $itemDetail['product_type'] = $product->type;
+              $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
+              $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+              $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+              $itemDetail['token'] = csrf_token();
+              array_push($items,$itemDetail);
+          }
+
+          $itemsCollection = collect($items);
+          $products = $itemsCollection;
+          // dd($products);
+          return view('user.customer.swineCart', compact('products'));
+        }
     }
 
     /**
