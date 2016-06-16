@@ -11,6 +11,12 @@ class UserInstancesSeeder extends Seeder
      */
     public function run()
     {
+      // For Customers
+        factory(App\Models\User::class, 2)->create()->each(function($user){
+            $user->assignRole('admin');
+            $user->save();
+        });
+
     	// For Customers
         factory(App\Models\User::class, 2)->create()->each(function($user){
         	$user->assignRole('customer');
@@ -80,7 +86,7 @@ class UserInstancesSeeder extends Seeder
 
                 // General
                 else $image->name = $randType.'_'.$randBreed.'1.jpg';
-                
+
                 $image->save();
 
                 $video->name = 'sample_video.avi';

@@ -165,6 +165,8 @@ $(document).ready(function(){
         'Sulu',
         'Maguindanao',
         'Lanao del Sur'
-    ]
+    ];
 
+	// Admin
+	$('#admin-content-panel-header').text();
 });

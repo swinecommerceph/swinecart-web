@@ -103,5 +103,12 @@ Route::group(['middleware' => ['web']], function () {
 
     });
 
+    // Admin
+    Route::group(['prefix'=>'admin'], function(){
+        // Route to admin home page
+        Route::get('home',['as'=>'admin_path', 'uses'=>'AdminController@index']);
+
+    });
+
 
 });

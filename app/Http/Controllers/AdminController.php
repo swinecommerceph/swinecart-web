@@ -16,8 +16,9 @@ use App\Models\Product;
 use App\Models\Image;
 use App\Models\Video;
 use App\Models\Breed;
+use App\Models\User;
 
-
+use DB;
 use Auth;
 class AdminController extends Controller
 {
@@ -32,7 +33,19 @@ class AdminController extends Controller
       $this->user = Auth::user();
   }
 
-  
+  /**
+   * Show Home Page of breeder
+   *
+   * @param  Request $request
+   * @return View
+   */
+    public function index(Request $request)
+    {
+        //$users = User::all();
+        $users = DB::table('users')->join('roles', 'users.userable_id', '=' , 'roles.id')->get();
+        return view('user.admin.home', compact('users'));
+    }
+
 
 
 }
