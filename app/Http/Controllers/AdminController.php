@@ -42,10 +42,36 @@ class AdminController extends Controller
     public function index(Request $request)
     {
         //$users = User::all();
-        $users = DB::table('users')->join('roles', 'users.userable_id', '=' , 'roles.id')->get();
+        //$users = DB::table('users')->join('roles', 'users.userable_id', '=' , 'roles.id')->where('users.email_verified','=', 1, 'and', 'roles.id','!=', 1)->get();
+        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->where('role_user.role_id','!=',1)->where('users.email_verified','=', 1)->get();
+        //dd($users);
         return view('user.admin.home', compact('users'));
     }
 
+    public function displayAllUsers(){
+      $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->where('role_user.role_id','!=',1)->where('users.email_verified','=', 1)->get();
+      return view('user.admin.home', compact('users'));
+    }
 
+    public function displayApprovedBreeders(){
+      $users =DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->where('roles.id','=', 2)->where('users.email_verified','=', 1)->get();
+      return view('user.admin.home', compact('users'));
+      //dd($users);
+      //@TODO return to view
 
+    }
+
+    public function displayApprovedCustomer(){
+      $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->where('roles.id','=', 3)->where('users.email_verified','=', 1)->get();
+      return view('user.admin.home', compact('users'));
+      //dd($users);
+      //@TODO return to view
+    }
+
+    public function displayPendingCustomers(){
+      $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->where('users.email_verified', '=', 0)->where('roles.id', '=', 3)->get();
+      return view('user.admin.home', compact('users'));
+      //dd($users);
+      //@TODO return to view
+    }
 }

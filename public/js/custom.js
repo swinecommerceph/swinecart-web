@@ -168,5 +168,11 @@ $(document).ready(function(){
     ];
 
 	// Admin
-	$('#admin-content-panel-header').text();
+	$('#all').click(function(){
+			$('admin-content-panel-header').text('All Users');
+	});
+	$('#users-breeder').click(function(){
+		$('admin-content-panel-header').text('Approved Breeder');
+	});
+
 });

@@ -64,20 +64,20 @@
         <div class="col s3">
           <ul class="collapsible popout" data-collapsible="accordion">
           <li>
-            <div class="collapsible-header active" id="all"><i class="material-icons">face</i>All Users</div>
+            <div class="collapsible-header active" id="all"><i class="material-icons">face</i><a href="{{route('admin.userlist')}}" class="black-text" id='users-breeder'>All Users</a></div>
           </li>
           <li>
             <div class="collapsible-header"><i class="material-icons">assignment_id</i>Manage Approved Users</div>
-            <div class="collapsible-body center"><a href="#" class="black-text" id='users-breeder'><p>Breeder</p></a></div>
-            <div class="collapsible-body center"><a href="#" class="black-text" id='users-customer'><p>Customer</p></a></div>
+            <div class="collapsible-body center"><a href="{{route('admin.approved.breeder')}}" class="black-text" id='users-breeder'><p>Breeder</p></a></div>
+            <div class="collapsible-body center"><a href="{{route('admin.approved.customer')}}" class="black-text" id='users-customer'><p>Customer</p></a></div>
           </li>
           <li>
             <div class="collapsible-header"><i class="material-icons">assignment_late</i>Manage Pending Users</div>
-            <div id='pending-customer' class="collapsible-body center"><a href="#" class="black-text" id='pending-customer'><p>Customer</p></a></div>
+            <div id='pending-customer' class="collapsible-body center"><a href="{{route('admin.pending.customer')}}" class="black-text" id='pending-customer'><p>Customer</p></a></div>
           </li>
           <li>
             <div class="collapsible-header"><i class="material-icons">build</i>Manage Pages</div>
-            <div  class="collapsible-body"><a href="#" class="black-text" id='pages-home'><p>Home</p></div>
+            <div class="collapsible-body"><a href="#" class="black-text" id='pages-home'><p>Home</p></div>
           </li>
         </ul>
         </div>
