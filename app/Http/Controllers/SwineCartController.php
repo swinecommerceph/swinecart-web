@@ -80,7 +80,16 @@ class SwineCartController extends Controller
                 return ["success", $productName, $customer->swineCartItems()->where('if_requested',0)->count()];
             }
             else return ["not found", $item->product_id];
-
+        }
+        else {
+          $customer = $this->user->userable;
+          $item = $customer->swineCartItems()->where('id',$request->itemId)->get()->first();
+          $productName = Product::find($item->product_id)->name;
+          if($item) {
+              $item->delete();
+              return ["success", $productName, $customer->swineCartItems()->where('if_requested',0)->count()];
+          }
+          else return ["not found", $item->product_id];
         }
     }
 

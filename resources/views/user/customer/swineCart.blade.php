@@ -124,11 +124,14 @@
                 </p>
               </div>
               <div class="col right">
-                <a href="#"><i class="material-icons teal-text">close</i></a>
-              </div>
+                <form method="POST" action="http://localhost:8000/customer/swine-cart/delete" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
+                  <input name="_method" type="hidden" value="DELETE">
+                  <input name="_token" type="hidden" value="{{$product->token}}">
+                  <a class="delete-from-swinecart"><i class="material-icons">clear</i></a>
+                </form></div>
               @if($product->request_status === '0')
               <div class="col right">
-                <a href="#"><i class="material-icons">play_for_work</i></a>
+                <a href="#"><i class="material-icons teal-text">play_for_work</i></a>
               </div>
               @endif
             </div>
