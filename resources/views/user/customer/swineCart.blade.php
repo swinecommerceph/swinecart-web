@@ -1,3 +1,4 @@
+
 {{--
     Displays Home page of Customer User
 --}}
@@ -107,18 +108,34 @@
 
 @section('content')
     {{-- Swine Cart --}}
-    <ul class="collection">
-    @foreach($products as $product)
-        <li class="collection-item avatar">
-          
-          {{-- <a href="#"><img src="{{$product->img_path}}" alt="" class="circle"></a>
-          <a href="#" class="anchor-title"><span>{{$product->name}}</span></a>
-          <p>
-            {{$product->id}} - {{$product->breed}}
-          </p> --}}
-        </li>
-    @endforeach
-    </ul>
+    <div class="container">
+      <ul class="collection">
+      @foreach($products as $product)
+          <li class="collection-item avatar">
+            <div class="row">
+              <div class="col s8">
+                <a href="#"><img src="{{$product->img_path}}" class="circle"></a>
+                <a href="#" class="anchor-title teal-text"><span>{{$product->product_name}}</span></a>
+                <p>
+                  {{ucfirst($product->product_type)}} - {{ucfirst($product->product_breed)}}
+                </p>
+                <p>
+                  {{$product->breeder}}
+                </p>
+              </div>
+              <div class="col right">
+                <a href="#"><i class="material-icons teal-text">close</i></a>
+              </div>
+              @if($product->request_status === '0')
+              <div class="col right">
+                <a href="#"><i class="material-icons">play_for_work</i></a>
+              </div>
+              @endif
+            </div>
+          </li>
+      @endforeach
+      </ul>
+    </div>
 
 
 @endsection
