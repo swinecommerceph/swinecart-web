@@ -74,7 +74,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('products/showcase-product',['as' => 'products.showcase', 'uses' => 'ProductController@showcaseProduct']);
         Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
         Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'ProductController@deleteMedium']);
-
+        
     });
 
 

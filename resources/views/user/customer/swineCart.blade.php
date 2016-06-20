@@ -1,4 +1,3 @@
-
 {{--
     Displays Home page of Customer User
 --}}
@@ -110,33 +109,70 @@
     {{-- Swine Cart --}}
     <div class="container">
       <ul class="collection">
-      @foreach($products as $product)
-          <li class="collection-item avatar">
-            <div class="row">
-              <div class="col s8">
-                <a href="#"><img src="{{$product->img_path}}" class="circle"></a>
-                <a href="#" class="anchor-title teal-text"><span>{{$product->product_name}}</span></a>
-                <p>
-                  {{ucfirst($product->product_type)}} - {{ucfirst($product->product_breed)}}
-                </p>
-                <p>
-                  {{$product->breeder}}
-                </p>
+      {{-- @if($products->length === 0)
+        <h4>No product in your cart</h4>
+      @else --}}
+        @forelse($products as $product)
+            <li class="collection-item">
+              <div class="row">
+                <div class="col s2">
+                  Status
+                </div>
+                <div class="col s2">
+                  Images
+                </div>
+                <div class="col s4">
+                  Info
+                </div>
+                <div class="col s2">
+                  Quantity
+                </div>
+                <div class="col s2">
+                  Action
+                </div>
               </div>
-              <div class="col right">
-                <form method="POST" action="http://localhost:8000/customer/swine-cart/delete" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
-                  <input name="_method" type="hidden" value="DELETE">
-                  <input name="_token" type="hidden" value="{{$product->token}}">
-                  <a class="delete-from-swinecart"><i class="material-icons">clear</i></a>
-                </form></div>
-              @if($product->request_status === '0')
-              <div class="col right">
-                <a href="#"><i class="material-icons teal-text">play_for_work</i></a>
+            </li>
+
+            {{-- Original Content --}}
+            <li class="collection-item avatar">
+              <div class="row">
+                <div class="col s8">
+                  <a href="#"><img src="{{$product->img_path}}" class="circle"></a>
+                  <a href="#" class="anchor-title teal-text"><span>{{$product->product_name}}</span></a>
+                  <p>
+                    {{ucfirst($product->product_type)}} -
+                    {{-- @if(strrchr($product->product_breed, '+') !== FALSE)
+                      {{$breed = explode('+',''$product->product_breed')}}
+                    @else
+                      {{ucfirst($product->product_breed)}}
+                    @endif --}}
+                  </p>
+                  <p>
+                    {{$product->breeder}}
+                  </p>
+                </div>
+                <div class="col right">
+                  <form method="POST" action="http://localhost:8000/customer/swine-cart/delete" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
+                    {{-- <input name="_method" type="hidden" value="DELETE"> --}}
+                    <input name="_token" type="hidden" value="{{$product->token}}">
+                    <a href="#" class="delete-from-swinecart"><i class="material-icons teal-text">clear</i></a>
+                  </form>
+                </div>
+                @if($product->request_status === '0')
+                <div class="col right">
+                  <a href="#"><i class="material-icons teal-text">play_for_work</i></a>
+                </div>
+                @endif
               </div>
-              @endif
+            </li>
+        @empty
+          <div class="row">
+            <div class="col s12 offset-s1">
+              <h5>Your swine cart is empty.</h5>
             </div>
-          </li>
-      @endforeach
+          </div>
+        @endforelse
+      {{-- @endif --}}
       </ul>
     </div>
 

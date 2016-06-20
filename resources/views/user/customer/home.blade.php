@@ -20,7 +20,7 @@
     <li><a href="{{ route('products.view') }}"> Products </a></li>
     <li><a href="{{ route('home_path') }}"> <i class="material-icons">message</i></a></li>
     @if(!Auth::user()->update_profile)
-        <li><a id="cart-icon" class="dropdown-button" data-beloworigin="true" data-activates="cart-dropdown">
+        <li><a href = "{{route('view.cart')}}" id="cart-icon" class="dropdown-button" data-beloworigin="true" data-activates="cart-dropdown">
                 <i class="material-icons">shopping_cart</i>
                 <span></span>
             </a>
