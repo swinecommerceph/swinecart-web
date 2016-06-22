@@ -107,74 +107,85 @@
 
 @section('content')
     {{-- Swine Cart --}}
-    <div class="container">
       <ul class="collection">
       {{-- @if($products->length === 0)
         <h4>No product in your cart</h4>
       @else --}}
+      <li class="collection-item">
+        <div class="row">
+          <div class="col s2 right-align">
+            Status
+          </div>
+          <div class="col s2 center-align">
+            Images
+          </div>
+          <div class="col s4">
+            Info
+          </div>
+          <div class="col s2 right-align">
+            Quantity
+          </div>
+          <div class="col s2">
+            Action
+          </div>
+        </div>
+      </li>
         @forelse($products as $product)
+            {{-- Original Content --}}
             <li class="collection-item">
               <div class="row">
-                <div class="col s2">
-                  Status
+                <div class="status col s2">
+                  @if($product->request_status === '1')
+                    Pending Request
+                  @endif
                 </div>
-                <div class="col s2">
-                  Images
+                <div class="col s2 offset-s2 center-align">
+                  <a href="#"><img src="{{$product->img_path}}" width="75" height="75" class="circle"></a>
                 </div>
                 <div class="col s4">
-                  Info
-                </div>
-                <div class="col s2">
-                  Quantity
-                </div>
-                <div class="col s2">
-                  Action
-                </div>
-              </div>
-            </li>
-
-            {{-- Original Content --}}
-            <li class="collection-item avatar">
-              <div class="row">
-                <div class="col s8">
-                  <a href="#"><img src="{{$product->img_path}}" class="circle"></a>
                   <a href="#" class="anchor-title teal-text"><span>{{$product->product_name}}</span></a>
                   <p>
                     {{ucfirst($product->product_type)}} -
                     {{-- @if(strrchr($product->product_breed, '+') !== FALSE)
-                      {{$breed = explode('+',''$product->product_breed')}}
-                    @else
+                      {{$breed = explode('+','$product->product_breed')}}
+                    @else --}}
                       {{ucfirst($product->product_breed)}}
-                    @endif --}}
+                    {{-- @endif --}}
                   </p>
                   <p>
                     {{$product->breeder}}
                   </p>
                 </div>
-                <div class="col right">
-                  <form method="POST" action="http://localhost:8000/customer/swine-cart/delete" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
-                    {{-- <input name="_method" type="hidden" value="DELETE"> --}}
+                <div class="col s2">
+                  @if($product->product_type === 'semen')
+                    <div class="container">
+                      <input type="text" name="semen-quantity">
+                    </div>
+                  @endif
+                </div>
+                <div class="col s2 offset-s2">
+                  <form method="POST" action="{{route('cart.delete')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
+                    <input name="_method" type="hidden" value="DELETE">
                     <input name="_token" type="hidden" value="{{$product->token}}">
-                    <a href="#" class="delete-from-swinecart"><i class="material-icons teal-text">clear</i></a>
+                    <a href="#" class="delete-from-swinecart tooltipped" data-position="bottom" data-delay="50" data-tooltip="Delete product"><i class="material-icons teal-text">clear</i></a>
                   </form>
+                  @if($product->request_status === '0')
+                    <form method="PUT" action="{{route('cart.request')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
+                      <input name="_token" type="hidden" value="{{$product->token}}">
+                      <a href="#" class="request-product tooltipped" data-position="bottom" data-delay="50" data-tooltip="Request product"><i class="material-icons teal-text">play_for_work</i></a>
+                    </form>
+                  @endif
                 </div>
-                @if($product->request_status === '0')
-                <div class="col right">
-                  <a href="#"><i class="material-icons teal-text">play_for_work</i></a>
-                </div>
-                @endif
               </div>
-            </li>
         @empty
           <div class="row">
-            <div class="col s12 offset-s1">
+            <div class="col s12 center-align">
               <h5>Your swine cart is empty.</h5>
             </div>
           </div>
         @endforelse
       {{-- @endif --}}
       </ul>
-    </div>
 
 
 @endsection
@@ -182,4 +193,5 @@
 @section('initScript')
     <script src="/js/customer/swinecart.js"> </script>
     <script src="/js/customer/customer_custom.js"> </script>
+    <script src="/js/customer/swinecart_script.js"> </script>
 @endsection

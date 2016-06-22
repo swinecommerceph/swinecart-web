@@ -62,6 +62,18 @@ class SwineCartController extends Controller
         }
     }
 
+    public function requestSwineCart(Request $request)
+    {
+      if ($request->ajax()) {
+        $customer = $this->user->userable;
+        $swineCartItems = $customer->swineCartItems();
+        $requested = $swineCartItems->find($request->itemId);
+        $requested->if_requested = 1;
+        $requested->save();
+        // dd($checkProduct->if_requested);
+      }
+    }
+
     /**
      * Delete item from Swine Cart
      * AJAX

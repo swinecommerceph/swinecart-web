@@ -74,7 +74,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('products/showcase-product',['as' => 'products.showcase', 'uses' => 'ProductController@showcaseProduct']);
         Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
         Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'ProductController@deleteMedium']);
-        
+
     });
 
 
@@ -98,6 +98,7 @@ Route::group(['middleware' => ['web']], function () {
         // swinecart-related
         Route::get('swine-cart',['as' => 'cart.items', 'uses' => 'SwineCartController@getSwineCartItems']);
         Route::post('swine-cart/add',['as' => 'cart.add', 'uses' => 'SwineCartController@addToSwineCart']);
+        Route::put('swine-cart/request',['as' => 'cart.request', 'uses' => 'SwineCartController@requestSwineCart']);
         Route::delete('swine-cart/delete',['as' => 'cart.delete', 'uses' => 'SwineCartController@deleteFromSwineCart']);
         Route::get('swine-cart/quantity',['as' => 'cart.quantity', 'uses' => 'SwineCartController@getSwineCartQuantity']);
         Route::get('view-swine-cart',['as'=> 'view.cart', 'uses' => 'SwineCartController@getSwineCartItems']);

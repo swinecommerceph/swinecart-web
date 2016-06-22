@@ -6,4 +6,9 @@ $(document).ready(function(){
         swinecart.delete($(this).parents('form'), $(this).parents('li').first());
     });
 
+    $('body').on('click', '.request-product' ,function(e){
+        e.preventDefault();
+        swinecart.request($(this).parents('form'));
+    });
+
 });

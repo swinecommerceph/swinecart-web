@@ -78,6 +78,25 @@ var swinecart = {
         });
     },
 
+    request: function(parent_form){
+      // Do AJAX
+      $.ajax({
+        url: config.swineCart_url + '/request',
+        type: "PUT",
+        cache: false,
+        data: {
+          "_token": parent_form.find('input[name=_token]').val(),
+          "itemId": parent_form.attr('data-item-id')
+        },
+        success: function(data) {
+          
+        },
+        error: function(message) {
+          console.log(message['responseText']);
+        },
+      });
+    },
+
     get_items: function() {
         // Do AJAX
         $.ajax({
