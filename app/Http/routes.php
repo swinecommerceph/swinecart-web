@@ -82,7 +82,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['prefix' => 'customer'], function(){
 
     	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
-
+      
         // profile-related
     	Route::get('edit-profile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
     	Route::post('edit-profile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);

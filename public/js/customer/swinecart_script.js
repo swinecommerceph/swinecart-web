@@ -8,7 +8,7 @@ $(document).ready(function(){
 
     $('body').on('click', '.request-product' ,function(e){
         e.preventDefault();
-        swinecart.request($(this).parents('form'));
+        swinecart.request($(this).parents('form'), $(this).parents('div').siblings('status'));
     });
 
 });

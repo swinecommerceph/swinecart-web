@@ -78,7 +78,7 @@ var swinecart = {
         });
     },
 
-    request: function(parent_form){
+    request: function(parent_form, status){
       // Do AJAX
       $.ajax({
         url: config.swineCart_url + '/request',
@@ -86,10 +86,13 @@ var swinecart = {
         cache: false,
         data: {
           "_token": parent_form.find('input[name=_token]').val(),
-          "itemId": parent_form.attr('data-item-id')
+          "itemId": parent_form.attr('data-item-id'),
+          "productId": parent_form.attr('data-product-id')
         },
         success: function(data) {
-          
+          status.html('Requested');
+          // $('.request-icon').remove();
+          // $('.info').attr('class', 'info col s2 center-align')
         },
         error: function(message) {
           console.log(message['responseText']);

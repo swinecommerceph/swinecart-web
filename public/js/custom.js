@@ -11,6 +11,8 @@ $(document).ready(function(){
         alignment: 'right'
     });
 
+		$('.modal-trigger').leanModal();
+
     // Initialization for Sliders
     $('.slider').slider({full_width: true});
 

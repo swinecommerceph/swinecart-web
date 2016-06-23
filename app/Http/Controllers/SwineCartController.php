@@ -69,6 +69,9 @@ class SwineCartController extends Controller
         $swineCartItems = $customer->swineCartItems();
         $requested = $swineCartItems->find($request->itemId);
         $requested->if_requested = 1;
+        $product = Product::find($request->productId);
+        $product->status = "requested";
+        $product->save();
         $requested->save();
         // dd($checkProduct->if_requested);
       }
@@ -144,6 +147,7 @@ class SwineCartController extends Controller
           foreach ($swineCartItems as $item) {
               $product = Product::find($item->product_id);
               $itemDetail['request_status'] = $item->if_requested;
+              $itemDetail['status'] = $product->status;
               $itemDetail['item_id'] = $item->id;
               $itemDetail['product_id'] = $item->product_id;
               $itemDetail['product_name'] = $product->name;
