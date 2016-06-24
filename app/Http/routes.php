@@ -82,7 +82,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['prefix' => 'customer'], function(){
 
     	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
-      
+
         // profile-related
     	Route::get('edit-profile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
     	Route::post('edit-profile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
@@ -94,6 +94,7 @@ Route::group(['middleware' => ['web']], function () {
         // product-related
         Route::get('view-products',['as' => 'products.view', 'uses' => 'ProductController@viewProducts']);
         Route::get('view-products/{product}',['as' => 'products.cViewDetail', 'uses' => 'ProductController@customerViewProductDetail']);
+        Route::post('swine-cart/rate', ['as' => 'rate.breeder', 'uses' => 'SwineCartController@rate']);
 
         // swinecart-related
         Route::get('swine-cart',['as' => 'cart.items', 'uses' => 'SwineCartController@getSwineCartItems']);

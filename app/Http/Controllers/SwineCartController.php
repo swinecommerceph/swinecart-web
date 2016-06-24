@@ -12,6 +12,7 @@ use App\Models\Breed;
 use App\Models\Image;
 use App\Models\SwineCartItem;
 use App\Models\Product;
+use App\Models\Review;
 use Auth;
 
 class SwineCartController extends Controller
@@ -62,6 +63,25 @@ class SwineCartController extends Controller
         }
     }
 
+    public function rate(Request $request){
+      if($request->ajax()){
+        $reviews = Breeder::find($request->breederId)->reviews();
+        $review = new Review;
+        $review->comment = $request->comment;
+        $review->rating_delivery = $request->delivery;
+        $review->rating_transaction = $request->transaction;
+        $review->rating_productQuality = $request->productQuality;
+        $review->rating_afterSales = $request->afterSales;
+        $reviews->save($review);
+      }
+    }
+
+    /**
+     * Requests item from Swine Cart
+     * AJAX
+     *
+     * @param  Request $request
+     */
     public function requestSwineCart(Request $request)
     {
       if ($request->ajax()) {
@@ -149,6 +169,8 @@ class SwineCartController extends Controller
               $itemDetail['request_status'] = $item->if_requested;
               $itemDetail['status'] = $product->status;
               $itemDetail['item_id'] = $item->id;
+              $itemDetail['customer_id'] = $customer->id;
+              $itemDetail['breeder_id'] = $product->breeder_id;
               $itemDetail['product_id'] = $item->product_id;
               $itemDetail['product_name'] = $product->name;
               $itemDetail['product_type'] = $product->type;

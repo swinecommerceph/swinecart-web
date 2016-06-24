@@ -117,50 +117,56 @@
           <span class="row">
               <i class="col s6">Delivery</i>
               <span class="col s6">
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star_half</i>
-                  <i class="material-icons yellow-text">star_border</i>
+                  <a href="#" class="delivery" data-value=1><i class="material-icons yellow-text">star</i></a>
+                  <a href="#" class="delivery" data-value=2><i class="material-icons yellow-text">star</i></a>
+                  <a href="#" class="delivery" data-value=3><i class="material-icons yellow-text">star</i></a>
+                  <a href="#" class="delivery" data-value=4><i class="material-icons yellow-text">star_half</i></a>
+                  <a href="#" class="delivery" data-value=5><i class="material-icons yellow-text">star_border</i></a>
               </span>
           </span>
           <span class="row">
               <i class="col s6">Transaction</i>
               <span class="col s6">
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star_border</i>
+                <a href="#" class="transaction" data-value=1><i class="material-icons yellow-text">star</i></a>
+                <a href="#" class="transaction" data-value=2><i class="material-icons yellow-text">star</i></a>
+                <a href="#" class="transaction" data-value=3><i class="material-icons yellow-text">star</i></a>
+                <a href="#" class="transaction" data-value=4><i class="material-icons yellow-text">star_half</i></a>
+                <a href="#" class="transaction" data-value=5><i class="material-icons yellow-text">star_border</i></a>
               </span>
           </span>
           <span class="row">
               <i class="col s6">Product Quality</i>
               <span class="col s6">
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star_half</i>
+                <a href="#" class="productQuality" data-value=1><i class="material-icons yellow-text">star</i></a>
+                <a href="#" class="productQuality" data-value=2><i class="material-icons yellow-text">star</i></a>
+                <a href="#" class="productQuality" data-value=3><i class="material-icons yellow-text">star</i></a>
+                <a href="#" class="productQuality" data-value=4><i class="material-icons yellow-text">star_half</i></a>
+                <a href="#" class="productQuality" data-value=5><i class="material-icons yellow-text">star_border</i></a>
               </span>
           </span>
           <span class="row">
               <i class="col s6">After Sales</i>
               <span class="col s6">
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star</i>
-                  <i class="material-icons yellow-text">star_half</i>
-                  <i class="material-icons yellow-text">star_border</i>
-                  <i class="material-icons yellow-text">star_border</i>
+                <a href="#" class="afterSales" data-value=1><i class="material-icons yellow-text">star</i></a>
+                <a href="#" class="afterSales" data-value=2><i class="material-icons yellow-text">star</i></a>
+                <a href="#" class="afterSales" data-value=3><i class="material-icons yellow-text">star</i></a>
+                <a href="#" class="afterSales" data-value=4><i class="material-icons yellow-text">star_half</i></a>
+                <a href="#" class="afterSales" data-value=5><i class="material-icons yellow-text">star_border</i></a>
               </span>
           </span>
+          <div class="container">
+            <div class="input-field col s12">
+            <textarea id="comment" class="materialize-textarea" length="120"></textarea>
+            <label for="comment">Comment</label>
+            </div>
+          </div>
         </div>
-        <form class="rating" action="index.html" method="post">
-
-        </form>
       </div>
       <div class="modal-footer">
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
+        <form class="" action="{{route('rate.breeder')}}" method="post" data-breeder-id="" data-delivery= data-transaction= data-productQuality= data-afterSales=>
+          <input type="hidden" name="_token" value="">
+          <a href="#!" id="submit-rate" class="modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
+        </form>
       </div>
     </div>
 
@@ -201,9 +207,13 @@
                   </div>
                 @elseif($product->request_status === '0' and $product->status != 'showcased')
                   <div class="status col s2 right-align">
-                      {{ucfirst($product->status)}}
+                      <span class="col s12">
+                        {{ucfirst($product->status)}}
+                      </span>
                       @if(($product->status === 'sold'))
-                        <a href="#rate" class="modal-trigger"><i class="material-icons teal-text">rate_review</i></a>
+                        <span class="col s12">
+                          <a href="#rate" class="rate-button" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}" class="modal-trigger"><i class="material-icons teal-text">rate_review</i></a>
+                        </span>
                       @endif
                   </div>
                   <div class="info col s2 center-align">
@@ -217,12 +227,7 @@
                 <div class="col s4">
                   <a href="#" class="anchor-title teal-text"><span class="col s12">{{$product->product_name}}</span></a>
                   <span class="col s12">
-                    {{ucfirst($product->product_type)}} -
-                    {{-- @if(strrchr($product->product_breed, '+') !== FALSE)
-                      {{$breed = explode('+','$product->product_breed')}}
-                    @else --}}
-                      {{ucfirst($product->product_breed)}}
-                    {{-- @endif --}}
+                    {{ucfirst($product->product_type)}} - {{ucfirst($product->product_breed)}}
                   </span>
                   <span class="col s12">
                     {{$product->breeder}}

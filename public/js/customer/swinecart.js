@@ -157,6 +157,29 @@ var swinecart = {
         });
     },
 
+    rate: function(parent_form, comment) {
+      $.ajax({
+        url: config.swineCart_url + '/rate',
+        type: "POST",
+        data: {
+          "_token": parent_form.find('input[name=_token]').val(),
+          "breederId" : parent_form.attr('data-breeder-id'),
+          "delivery" : parent_form.attr('data-delivery'),
+          "transaction" : parent_form.attr('data-transaction'),
+          "productQuality" : parent_form.attr('data-productQuality'),
+          "afterSales" : parent_form.attr('data-afterSales'),
+          "comment" : comment
+        },
+        success: function(data) {
+
+        },
+        error: function(message){
+          console.log(message['responseText']);
+        }
+      });
+
+    },
+
     get_quantity: function() {
         // Do AJAX
         $.ajax({
