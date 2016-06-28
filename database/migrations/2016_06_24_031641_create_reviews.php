@@ -15,11 +15,11 @@ class CreateReviews extends Migration
       Schema::create('reviews', function (Blueprint $table) {
           $table->increments('id');
           $table->integer('breeder_id')->unsigned();
+          $table->integer('customer_id');
           $table->string('comment');
           $table->integer('rating_delivery');
           $table->integer('rating_transaction');
           $table->integer('rating_productQuality');
-          $table->integer('rating_afterSales');
           $table->timestamps();
       });
     }

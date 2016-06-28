@@ -112,58 +112,48 @@
       <div class="modal-content">
         <h4>Rating</h4>
         <div class="divider"></div>
-        <div class="center-align">
+        <div>
           <br>
           <span class="row">
-              <i class="col s6">Delivery</i>
-              <span class="col s6">
-                  <a href="#" class="delivery" data-value=1><i class="material-icons yellow-text">star</i></a>
-                  <a href="#" class="delivery" data-value=2><i class="material-icons yellow-text">star</i></a>
-                  <a href="#" class="delivery" data-value=3><i class="material-icons yellow-text">star</i></a>
-                  <a href="#" class="delivery" data-value=4><i class="material-icons yellow-text">star_half</i></a>
-                  <a href="#" class="delivery" data-value=5><i class="material-icons yellow-text">star_border</i></a>
+              <span class="col s6">Delivery</span>
+              <span id="delivery" class="col s6 right-align">
+                  <a href="#" class="delivery" data-value=1><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                  <a href="#" class="delivery" data-value=2><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                  <a href="#" class="delivery" data-value=3><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                  <a href="#" class="delivery" data-value=4><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                  <a href="#" class="delivery" data-value=5><i class="material-icons grey-text text-darken-2">star_border</i></a>
               </span>
           </span>
           <span class="row">
-              <i class="col s6">Transaction</i>
-              <span class="col s6">
-                <a href="#" class="transaction" data-value=1><i class="material-icons yellow-text">star</i></a>
-                <a href="#" class="transaction" data-value=2><i class="material-icons yellow-text">star</i></a>
-                <a href="#" class="transaction" data-value=3><i class="material-icons yellow-text">star</i></a>
-                <a href="#" class="transaction" data-value=4><i class="material-icons yellow-text">star_half</i></a>
-                <a href="#" class="transaction" data-value=5><i class="material-icons yellow-text">star_border</i></a>
+              <span class="col s6">Transaction</span>
+              <span id="transaction" class="col s6 right-align">
+                <a href="#" class="transaction" data-value=1><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                <a href="#" class="transaction" data-value=2><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                <a href="#" class="transaction" data-value=3><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                <a href="#" class="transaction" data-value=4><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                <a href="#" class="transaction" data-value=5><i class="material-icons grey-text text-darken-2">star_border</i></a>
               </span>
           </span>
           <span class="row">
-              <i class="col s6">Product Quality</i>
-              <span class="col s6">
-                <a href="#" class="productQuality" data-value=1><i class="material-icons yellow-text">star</i></a>
-                <a href="#" class="productQuality" data-value=2><i class="material-icons yellow-text">star</i></a>
-                <a href="#" class="productQuality" data-value=3><i class="material-icons yellow-text">star</i></a>
-                <a href="#" class="productQuality" data-value=4><i class="material-icons yellow-text">star_half</i></a>
-                <a href="#" class="productQuality" data-value=5><i class="material-icons yellow-text">star_border</i></a>
+              <span class="col s6">Product Quality</span>
+              <span id="productQuality" class="col s6 right-align">
+                <a href="#" class="productQuality" data-value=1><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                <a href="#" class="productQuality" data-value=2><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                <a href="#" class="productQuality" data-value=3><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                <a href="#" class="productQuality" data-value=4><i class="material-icons grey-text text-darken-2">star_border</i></a>
+                <a href="#" class="productQuality" data-value=5><i class="material-icons grey-text text-darken-2">star_border</i></a>
               </span>
           </span>
-          <span class="row">
-              <i class="col s6">After Sales</i>
-              <span class="col s6">
-                <a href="#" class="afterSales" data-value=1><i class="material-icons yellow-text">star</i></a>
-                <a href="#" class="afterSales" data-value=2><i class="material-icons yellow-text">star</i></a>
-                <a href="#" class="afterSales" data-value=3><i class="material-icons yellow-text">star</i></a>
-                <a href="#" class="afterSales" data-value=4><i class="material-icons yellow-text">star_half</i></a>
-                <a href="#" class="afterSales" data-value=5><i class="material-icons yellow-text">star_border</i></a>
-              </span>
-          </span>
-          <div class="container">
-            <div class="input-field col s12">
-            <textarea id="comment" class="materialize-textarea" length="120"></textarea>
+          <div class="card">
+            <div class="input-field col s12 center-align">
+            <textarea id="comment" class="materialize-textarea"></textarea>
             <label for="comment">Comment</label>
             </div>
           </div>
         </div>
       </div>
       <div class="modal-footer">
-        <form class="" action="{{route('rate.breeder')}}" method="post" data-breeder-id="" data-delivery= data-transaction= data-productQuality= data-afterSales=>
+        <form class="" action="{{route('rate.breeder')}}" method="post" data-breeder-id= data-customer-id= data-delivery= data-transaction= data-productQuality= data-afterSales=>
           <input type="hidden" name="_token" value="">
           <a href="#!" id="submit-rate" class="modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
         </form>
@@ -172,9 +162,6 @@
 
     {{-- Swine Cart --}}
       <ul class="collection">
-      {{-- @if($products->length === 0)
-        <h4>No product in your cart</h4>
-      @else --}}
       <li class="collection-item">
         <div class="row">
           <div class="col s2 right-align">
@@ -234,10 +221,8 @@
                   </span>
                 </div>
                 @if($product->product_type === 'semen')
-                  <div class="col s2">
-                      <div class="container">
-                        <input type="text" name="semen-quantity">
-                      </div>
+                  <div class="col s2 right-align">
+                      {{$product->product_quantity}}
                   </div>
                   <div class="col s2">
                     <form method="POST" action="{{route('cart.delete')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">

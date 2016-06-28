@@ -82,6 +82,14 @@ nav .input-field #search{
 	margin-right:0px !important;
 }
 
+/*Modal Edit*/
+#comment {
+	width: 325px;
+}
+
+#rate {
+	width: 400px;
+}
 
 /* Caption styles */
 .caption {

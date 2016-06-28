@@ -67,6 +67,7 @@ class SwineCartController extends Controller
       if($request->ajax()){
         $reviews = Breeder::find($request->breederId)->reviews();
         $review = new Review;
+        $review->customer_id = $request->customerId;
         $review->comment = $request->comment;
         $review->rating_delivery = $request->delivery;
         $review->rating_transaction = $request->transaction;
@@ -174,6 +175,7 @@ class SwineCartController extends Controller
               $itemDetail['product_id'] = $item->product_id;
               $itemDetail['product_name'] = $product->name;
               $itemDetail['product_type'] = $product->type;
+              $itemDetail['product_quantity'] = $product->quantity;
               $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
               $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
               $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;

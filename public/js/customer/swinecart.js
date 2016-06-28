@@ -164,6 +164,7 @@ var swinecart = {
         data: {
           "_token": parent_form.find('input[name=_token]').val(),
           "breederId" : parent_form.attr('data-breeder-id'),
+          "customerId" : parent_form.attr('data-customer-id'),
           "delivery" : parent_form.attr('data-delivery'),
           "transaction" : parent_form.attr('data-transaction'),
           "productQuality" : parent_form.attr('data-productQuality'),
