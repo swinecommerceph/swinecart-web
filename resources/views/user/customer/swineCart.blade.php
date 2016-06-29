@@ -144,16 +144,14 @@
                 <a href="#" class="productQuality" data-value=5><i class="material-icons grey-text text-darken-2">star_border</i></a>
               </span>
           </span>
-          <div class="card">
             <div class="input-field col s12 center-align">
             <textarea id="comment" class="materialize-textarea"></textarea>
             <label for="comment">Comment</label>
             </div>
-          </div>
         </div>
       </div>
       <div class="modal-footer">
-        <form class="" action="{{route('rate.breeder')}}" method="post" data-breeder-id= data-customer-id= data-delivery= data-transaction= data-productQuality= data-afterSales=>
+        <form class="" action="{{route('rate.breeder')}}" method="post" data-breeder-id= data-customer-id= data-delivery= data-transaction= data-productQuality=>
           <input type="hidden" name="_token" value="">
           <a href="#!" id="submit-rate" class="modal-action modal-close waves-effect waves-green btn-flat">Submit</a>
         </form>
@@ -161,57 +159,151 @@
     </div>
 
     {{-- Swine Cart --}}
-      <ul class="collection">
-      <li class="collection-item">
-        <div class="row">
-          <div class="col s2 right-align">
-            Status
-          </div>
-          <div class="col s2 center-align">
-            Images
-          </div>
-          <div class="col s4">
-            Info
-          </div>
-          <div class="col s2 right-align">
-            Quantity
-          </div>
-          <div class="col s2">
-            Action
-          </div>
-        </div>
-      </li>
+    <div class="row">
+      <span class="col s2 left-align">
+        STATUS
+      </span>
+      <div class="col s6">
+        ITEM(S)
+      </div>
+      <div class="col s2">
+        QUANTITY
+      </div>
+      <div class="col s2">
+        ACTION
+      </div>
+    </div>
+      <ul class="collection cart">
         @forelse($products as $product)
             {{-- Original Content --}}
-            <li class="collection-item">
-              <div class="row">
-                @if($product->request_status === '1')
-                  <div class="status col s2 right-align">
-                      Requested
+            <li class="collection-item swineyswine">
+              <div class="row swine-cart-item valign-wrapper">
+                {{-- Product Status Icons --}}
+                @if($product->status === 'requested')
+                  <div class="col s2 verticalLine valign-wrapper">
+                      <div class="">
+                        <span class="col s6 center-align">
+                          <i class="material-icons status-icons yellow-text text-darken-2 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Delete product">queue</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons">save</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons">motorcycle</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons">payment</i>
+                        </span>
+                      </div>
                   </div>
                   <div class="info col s2 center-align">
                     <a href="#"><img src="{{$product->img_path}}" width="75" height="75" class="circle"></a>
                   </div>
-                @elseif($product->request_status === '0' and $product->status != 'showcased')
-                  <div class="status col s2 right-align">
-                      <span class="col s12">
-                        {{ucfirst($product->status)}}
-                      </span>
-                      @if(($product->status === 'sold'))
-                        <span class="col s12">
-                          <a href="#rate" class="rate-button" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}" class="modal-trigger"><i class="material-icons teal-text">rate_review</i></a>
+                @elseif($product->status === 'reserved')
+                  <div class="col s2 verticalLine valign-wrapper">
+                      <div class="">
+                        <span class="col s6 center-align">
+                          <i class="material-icons  yellow-text text-darken-2">queue</i>
                         </span>
-                      @endif
+                        <span class="col s6 center-align">
+                          <i class="material-icons  orange-text text-darken-2">save</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons">motorcycle</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons">payment</i>
+                        </span>
+                      </div>
+                  </div>
+                  <div class="info col s2 center-align">
+                    <a href="#"><img src="{{$product->img_path}}" width="75" height="75" class="circle"></a>
+                  </div>
+                @elseif($product->status === 'paid')
+                  <div class="col s2 verticalLine valign-wrapper">
+                      <div class="">
+                        <span class="col s6 center-align">
+                          <i class="material-icons yellow-text text-darken-2">queue</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons  orange-text text-darken-2">save</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons">motorcycle</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons  green-text text-darken-2">payment</i>
+                        </span>
+                      </div>
+                  </div>
+                  <div class="info col s2 center-align">
+                    <a href="#"><img src="{{$product->img_path}}" width="75" height="75" class="circle"></a>
+                  </div>
+                @elseif($product->status === 'on_delivery')
+                  <div class="col s2 verticalLine valign-wrapper">
+                      <div class="">
+                        <span class="col s6 center-align">
+                          <i class="material-icons yellow-text text-darken-2">queue</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons orange-text text-darken-2">save</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons green-text text-darken-2">motorcycle</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons">payment</i>
+                        </span>
+                      </div>
+                  </div>
+                  <div class="info col s2 center-align">
+                    <a href="#"><img src="{{$product->img_path}}" width="75" height="75" class="circle"></a>
+                  </div>
+                @elseif($product->status === 'sold')
+                  <div class="col s2 verticalLine valign-wrapper">
+                      <div class="">
+                        <span class="col s6 center-align">
+                          <a href="#">
+                            <i class="material-icons yellow-text text-darken-2 tooltipped" data-position="top" data-delay="50" data-tooltip="Requested">queue</i>
+                          </a>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons orange-text text-darken-2">save</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons red-text text-darken-2">motorcycle</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons green-text text-darken-2">payment</i>
+                        </span>
+                      </div>
                   </div>
                   <div class="info col s2 center-align">
                     <a href="#"><img src="{{$product->img_path}}" width="75" height="75" class="circle"></a>
                   </div>
                 @else
-                  <div class="info col s2 offset-s2 center-align">
+                  <div class="col s2 verticalLine valign-wrapper">
+                      <div>
+                        <span class="col s6 center-align">
+                          <i class="material-icons status-icons">queue</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons">save</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons">motorcycle</i>
+                        </span>
+                        <span class="col s6 center-align">
+                          <i class="material-icons">payment</i>
+                        </span>
+                      </div>
+                  </div>
+                  <div class="info col s2 center-align">
                     <a href="#"><img src="{{$product->img_path}}" width="75" height="75" class="circle"></a>
                   </div>
                 @endif
-                <div class="col s4">
+                {{-- Product Info --}}
+                <div class="col s4 verticalLine">
                   <a href="#" class="anchor-title teal-text"><span class="col s12">{{$product->product_name}}</span></a>
                   <span class="col s12">
                     {{ucfirst($product->product_type)}} - {{ucfirst($product->product_breed)}}
@@ -220,21 +312,30 @@
                     {{$product->breeder}}
                   </span>
                 </div>
+                {{-- Quantity Check --}}
                 @if($product->product_type === 'semen')
-                  <div class="col s2 right-align">
-                      {{$product->product_quantity}}
+                  <div class="col s2 left-align verticalLine valign-wrapper">
+                      <div class="center-align">{{$product->product_quantity}}</div>
                   </div>
                   <div class="col s2">
-                    <form method="POST" action="{{route('cart.delete')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
-                      <input name="_method" type="hidden" value="DELETE">
-                      <input name="_token" type="hidden" value="{{$product->token}}">
-                      <a href="#" class="delete-from-swinecart tooltipped" data-position="bottom" data-delay="50" data-tooltip="Delete product"><i class="material-icons teal-text">clear</i></a>
-                    </form>
                     @if($product->status === 'showcased')
+                      <form method="POST" action="{{route('cart.delete')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
+                        <input name="_method" type="hidden" value="DELETE">
+                        <input name="_token" type="hidden" value="{{$product->token}}">
+                        <a href="#" class="delete-from-swinecart btn">Remove</a>
+                      </form>
                       <form method="PUT" class="request-icon" action="{{route('cart.request')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}" data-product-id="{{$product->product_id}}">
                         <input name="_token" type="hidden" value="{{$product->token}}">
                         <a href="#" class="request-product tooltipped" data-position="bottom" data-delay="50" data-tooltip="Request product"><i class="material-icons teal-text">play_for_work</i></a>
                       </form>
+                    @elseif($product->status === 'paid' or $product->status === 'on_delivery')
+
+                    @elseif($product->status === 'sold')
+                      <span class="col s12">
+                        <a class="rate-button btn" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}" class="modal-trigger">
+                          Rate
+                        </a>
+                      </span>
                     @endif
                   </div>
                 @else
@@ -242,8 +343,9 @@
                     <form method="POST" action="{{route('cart.delete')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
                       <input name="_method" type="hidden" value="DELETE">
                       <input name="_token" type="hidden" value="{{$product->token}}">
-                      <a href="#" class="delete-from-swinecart tooltipped" data-position="bottom" data-delay="50" data-tooltip="Delete product"><i class="material-icons teal-text">clear</i></a>
+                      <a href="#" class="delete-from-swinecart btn">Remove</a>
                     </form>
+
                     @if($product->status === 'showcased')
                       <form method="PUT" class="request-icon" action="{{route('cart.request')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}" data-product-id="{{$product->product_id}}">
                         <input name="_token" type="hidden" value="{{$product->token}}">

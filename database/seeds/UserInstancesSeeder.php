@@ -80,7 +80,7 @@ class UserInstancesSeeder extends Seeder
 
                 // General
                 else $image->name = $randType.'_'.$randBreed.'1.jpg';
-                
+
                 $image->save();
 
                 $video->name = 'sample_video.avi';

@@ -82,6 +82,35 @@ nav .input-field #search{
 	margin-right:0px !important;
 }
 
+.status-icons {
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: auto;
+}
+
+.info {
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: auto;
+}
+
+.swine-cart-item {
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: auto;
+}
+
+.verticalLine {
+    border-right: thin solid #9e9e9e;
+		height: 100px;
+}
+
 /*Modal Edit*/
 #comment {
 	width: 325px;
