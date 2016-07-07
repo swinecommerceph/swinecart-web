@@ -12,13 +12,13 @@ class UserInstancesSeeder extends Seeder
     public function run()
     {
       // For Customers
-        factory(App\Models\User::class, 2)->create()->each(function($user){
+        factory(App\Models\User::class, 1)->create()->each(function($user){
             $user->assignRole('admin');
             $user->save();
         });
 
     	// For Customers
-        factory(App\Models\User::class, 2)->create()->each(function($user){
+        factory(App\Models\User::class, 10)->create()->each(function($user){
         	$user->assignRole('customer');
             $user->update_profile = 0;
             $user->email_verified = 1;
@@ -33,7 +33,7 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Breeders
-        factory(App\Models\User::class, 5)->create()->each(function($user){
+        factory(App\Models\User::class, 10)->create()->each(function($user){
             $user->assignRole('breeder');
             $user->update_profile = 0;
             $user->email_verified = 1;

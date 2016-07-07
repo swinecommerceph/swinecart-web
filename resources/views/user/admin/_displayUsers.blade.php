@@ -1,5 +1,6 @@
+{{-- Remove this file if not used --}}
+@forelse($users as $user)
 <ul class="collection">
-  @foreach($users as $user)
     <li class="collection-item avatar">
       <div class="row">
         <div class="col s8">
@@ -15,5 +16,7 @@
         </div>
       </div>
     </li>
-  @endforeach
-</ul>
+  </ul>
+  @empty
+  <p>No users</p>
+@endforelse

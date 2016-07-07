@@ -55,8 +55,8 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
 
         // profile-related
-    	Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
-    	Route::post('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
+    	  Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
+    	  Route::post('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
         Route::put('edit-profile/personal/edit',['as' => 'breeder.updatePersonal', 'uses' => 'BreederController@updatePersonal']);
         Route::post('edit-profile/farm/add',['as' => 'breeder.addFarm', 'uses' => 'BreederController@addFarm']);
         Route::put('edit-profile/farm/edit',['as' => 'breeder.updateFarm', 'uses' => 'BreederController@updateFarm']);
@@ -111,7 +111,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
         Route::get('home/approved/breeder', ['as'=>'admin.approved.breeder', 'uses'=>'AdminController@displayApprovedBreeders']);
         Route::get('home/approved/customer', ['as'=>'admin.approved.customer', 'uses'=>'AdminController@displayApprovedCustomer']);
-        Route::get('home/pending/customer', ['as'=>'admin.pending.customer', 'uses'=>'AdminController@displayPendingCustomers']);
+        Route::get('home/pending/users', ['as'=>'admin.pending.users', 'uses'=>'AdminController@displayPendingUsers']);
+        Route::get('home/approved/blocked', ['as'=>'admin.blocked.users', 'uses'=>'AdminController@displayBlockedUsers']);
+        Route::delete('home/delete', ['as'=>'admin.delete', 'uses'=>'AdminController@deleteUser']);
+        Route::put('home/block', ['as'=>'admin.block', 'uses'=>'AdminController@blockUser']);
+        Route::put('home/approve', ['as'=>'admin.approve', 'uses'=>'AdminController@generatePassword']);
     });
 
 

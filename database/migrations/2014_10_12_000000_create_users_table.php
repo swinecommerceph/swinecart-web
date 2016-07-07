@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->boolean('update_profile')->default('1');
             $table->string('verification_code');
             $table->boolean('email_verified')->default('0');
+            $table->boolean('is_blocked')->default('0');
             $table->softDeletes();
             $table->rememberToken();
             $table->nullableTimestamps();
