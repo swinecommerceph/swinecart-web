@@ -21,3 +21,8 @@
   -webkit-font-feature-settings: 'liga';
   -webkit-font-smoothing: antialiased;
 }
+
+@font-face {
+  font-family: Poppins
+  src: url(../fonts/Poppins/Poppins-Regular.ttf);
+}

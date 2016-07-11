@@ -16,8 +16,10 @@ var config = {
     delete_user: '/admin/home/delete',
     block_user: '/admin/home/block',
     approve_user: 'home/approve',
+    search_user: 'home/search',
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',
     preloader_progress: $('#preloader-progress'),
     preloader_circular: $('#preloader-circular')
+
 };

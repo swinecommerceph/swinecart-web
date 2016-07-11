@@ -1,18 +1,38 @@
 $(document).ready(function(){
-  // show all users at page load
-  //  users.show_all();
-
+  $('#user-table').DataTable();
   // if all user tab is clicked display all approved users
   $('body').on('click', '#all', function(e){
       e.preventDefault();
-      $('#admin-content-panel-header').text('All Users');
+      $('#admin-header-wrapper').empty();
+      $('#admin-header-wrapper').append('<h4 id="admin-content-panel-header">All Users</h4>' );
+      // $('#admin-header-wrapper').append(
+      //   '<div class="col s6">'+
+      //     '<h4 id="admin-content-panel-header">All Users</h4>'+
+      //   '</div>'+
+      //   '<div class="input-field col s6">'+
+      //   '<form method="GET" action="'+config.search_user+'">'+
+      //     '<input placeholder="Search" id="search" type="text" name = "search" class="validate">'+
+      //     // '<a href="#!" id="search-button"></a>'+
+      //   '</form>'+
+      //    '</div>'+
+      //  '</div>'
+      // );
       users.show_all();
   });
 
   // if breeder tab is clicked display all approved breeders
     $('body').on('click', '#users-breeder',function(e){
       e.preventDefault();
-      $('#admin-content-panel-header').text('Approved Breeders');
+      $('#admin-header-wrapper').empty();
+      $('#admin-header-wrapper').append(
+        '<div class="col s6">'+
+          '<h4 id="admin-content-panel-header">Approved Breeders</h4>'+
+        '</div>'+
+        '<div class="input-field col s6">'+
+         '<input placeholder="Search" id="search" type="text" class="validate">'+
+         '</div>'+
+       '</div>'
+      );
       users.show_all_breeders();
     //$('admin-content-panel-header').text('Approved Breeder');
   });
@@ -20,14 +40,32 @@ $(document).ready(function(){
   // if customer tab is clicked display all customers
   $('body').on('click', '#users-customer',function(e){
     e.preventDefault();
-    $('#admin-content-panel-header').text('Approved Customers');
+    $('#admin-header-wrapper').empty();
+    $('#admin-header-wrapper').append(
+      '<div class="col s6">'+
+        '<h4 id="admin-content-panel-header">Approved Customers</h4>'+
+      '</div>'+
+      '<div class="input-field col s6">'+
+       '<input placeholder="Search" id="search" type="text" class="validate">'+
+       '</div>'+
+     '</div>'
+    );
     users.show_all_customers();
   });
 
   // if pending users tab is clicked display all pending customers
   $('#pending-breeder').click(function(e){
     e.preventDefault();
-    $('#admin-content-panel-header').text('Pending Users');
+    $('#admin-header-wrapper').empty();
+    $('#admin-header-wrapper').append(
+      '<div class="col s6">'+
+        '<h4 id="admin-content-panel-header">Pending Breeders</h4>'+
+      '</div>'+
+      '<div class="input-field col s6">'+
+       '<input placeholder="Search" id="search" type="text" class="validate">'+
+       '</div>'+
+     '</div>'
+    );
     users.show_all_pending();
   });
 
@@ -120,18 +158,43 @@ $(document).ready(function(){
     // console.log("www");
   });
 
+  // remove the data attribute value of the clicked row
   $('body').on('click', '#cancel-block', function (e){
     var block_button = $('body').find('a[data-clicked="clicked"]');
-    //console.log(block_button.html());
     block_button.attr('data-clicked', '');
-    //console.log("www");
   });
-
-
 
   $('body').on('click', '.approve-data', function (e) {
       e.preventDefault();
 
+  });
+
+  $('body').on('keypress', '#search', function(e){
+      if(event.keyCode == 13){
+        users.search_user();
+
+      }
+  });
+
+
+
+  $('body').on('click', '.manage-button', function (e){
+     $(this).attr('data-clicked', 'clicked');
+     $('#manage-user-modal').openModal({
+        dismissible: true,
+        opacity: 0,
+     });
+     //console.log($(this).parents('td').siblings('.name-column').text());
+     $('#manage-user-modal h4').text($(this).parents('td').siblings('.name-column').text());
+     //console.log($(this).parents('td').siblings('.status-column').text());
+     if($(this).parents('td').siblings('.status-column').text()==1){
+        $('#block-icon').text('refresh');
+        $('#block-label').text('Unblock');
+     }
+     else{
+         $('#block-icon').text('block');
+         $('#block-label').text('Block');
+     }
   });
 
 

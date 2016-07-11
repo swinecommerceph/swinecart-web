@@ -14,15 +14,18 @@
     <link href="/css/icon.css" rel="stylesheet" type="text/css">
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <link href="/js/vendor/video-js/video-js.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+
 
     <script src="/js/vendor/video-js/ie8/videojs-ie8.min.js"></script>
+
   </head>
   <body @yield('pageId')>
     {{-- Navbar --}}
     <div class="navbar-fixed">
       <nav class="teal darken-4">
           <div class="nav-wrapper container">
-            <a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
+            <img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
 
             <ul id="nav-mobile" class="right hide-on-med-and-down">
               <li><span>{{ Auth::user()->name }}</span> </li>
@@ -94,7 +97,7 @@
             <div class="collapsible-body center"><a href="{{route('admin.approved.customer')}}" class="black-text" id='users-customer'><p>Customer</p></a></div>
           </li> --}}
           <li>
-            <div class="collapsible-header"><i class="material-icons">assignment_late</i><a href="{{route('admin.pending.users')}}" class="black-text" id='pending-breeder'>Pending Breeder Farms</a></div>
+            <div class="collapsible-header"><i class="material-icons">assignment_late</i><a href="{{route('admin.pending.users')}}" class="black-text" id='pending-breeder'>Pending Accounts</a></div>
           </li>
           <li>
             <div class="collapsible-header"><i class="material-icons">build</i>Manage Pages</div>
@@ -104,7 +107,12 @@
         </div>
         <div class="col s9 ">
           <div class="card-panel ">
-            <h4 id='admin-content-panel-header'>Admin Dashboard</h4>
+            <div class="row" id= "admin-header-wrapper">
+              {{-- div tag for header Header  --}}
+              <div class="col s6">
+                <h4 id='admin-content-panel-header'>Admin Dashboard</h4>
+              </div>
+            </div>
             <div class="divider"></div>
             <div class="row" id="content-panel-wrapper">
                 <div class="col s12" id="main-content">
@@ -142,7 +150,7 @@
                         <div class="card-panel purple lighten-2 card-summary hoverable">
                           <div class="center white-text">
                               <i class="material-icons summary-icons">hourglass_full</i>
-                              <span class="summary-title">Pending Breeders</span>
+                              <span class="summary-title">Pending Accounts</span>
                           </div>
                           <div class="center white-text summary-data">
                               {{$summary[3]}}
@@ -165,35 +173,6 @@
                   </a>
                 </div>
 
-                {{-- <table class="centered highlight bordered">
-                  <thead>
-                    <tr>
-                        <th data-field="id">Name</th>
-                        <th data-field="type">Account Type</th>
-                        <th data-field="action">Action</th>
-                    </tr>
-                  </thead>
-
-                  <tbody>
-                    <tr>
-                      <td>Farm Name</td>
-                      <td>Breeder</td>
-                      <td>
-                        <div class="row action-column">
-                          <div class="col s6">
-
-                            <a href="#" class="tooltipped block-data" data-position="bottom" data-delay="50" data-tooltip="'+value+'" data-user-name = "'+data.name+'"><i class="material-icons ">block</i></a>
-                          </div>
-                          <div class="col s6">
-                            <a href="#" class="tooltipped delete-data" data-position="bottom" data-delay="50" data-tooltip="Delete" data-user-name = "'+data.name+'"><i class="material-icons">delete</i></a>
-                          </div>
-                        </div>
-                      </td>
-                    </tr>
-                  </tbody>
-                </table> --}}
-
-
                 </div>
             </div>
 
@@ -203,6 +182,29 @@
       </div>
     </div>
 
+    {{-- Manage User Modal --}}
+    <div id="manage-user-modal" class="modal">
+      <div class="modal-content">
+         <h4>Username</h4>
+         <div class="row">
+            <div class="col s6 center">
+               <i id="block-icon" class="material-icons manage-icon">block</i>
+               <div id="block-label" class="col s12">Block</div>
+            </div>
+            <div class="col s6 center">
+               <i id="delete-icon" class="material-icons manage-icon">close</i>
+               <div id="delete-label" class="col s12">Delete</div>
+            </div>
+         </div>
+         <div class="divider"></div>
+         <div class="modal-footer">
+           <a href="#!" id="cancel-manage" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+         </div>
+      </div>
+    </div>
+
+
+    {{-- Delete modal --}}
     <div id="delete-modal" class="modal action-dialog-box red lighten-5">
       <div class="modal-content">
         <h4>Delete User</h4>
@@ -215,6 +217,7 @@
       </div>
     </div>
 
+    {{-- Block/Unblock modal --}}
     <div id="block-modal" class="modal action-dialog-box orange lighten-5">
       <div class="modal-content">
         <h4>Block User</h4>
@@ -228,7 +231,7 @@
     </div>
 
 
-
+    {{-- Modal for user inquiries --}}
     <div id="modal1" class="modal modal-fixed-footer">
       <div id="message-modal-content" class="modal-content">
         <div class="center"><h5>"Username" Message</h5></div>
@@ -277,6 +280,7 @@
   	<script src="/js/vendor/video-js/video.min.js"></script>
   	<script src="/js/config.js"></script>
   	<script src="/js/custom.js"></script>
+   <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
   	{{-- For user-specific initialization scripts --}}
   	@yield('initScript')
   	{{-- Custom scripts for certain pages/functionalities --}}

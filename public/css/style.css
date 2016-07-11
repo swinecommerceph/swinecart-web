@@ -1,3 +1,12 @@
+@font-face {
+  font-family: Poppins;
+  src: url(../fonts/Poppins/Poppins-Regular.ttf);
+}
+
+html{
+	font-family: Poppins;
+  font-size: 16px;
+}
 /* Navigation dropdown styles */
 #nav-dropdown{
 	/*display:block;*/
@@ -297,4 +306,27 @@ blockquote{
 
 .table-header {
 	table-layout: fixed;
+}
+
+#search-button{
+	display: none;
+}
+
+#manage-user-modal{
+   width: 500px;
+}
+
+.manage-icon{
+   font-size: 4em;
+}
+
+.status-column{
+   display: none;
+}
+
+.id-column{
+   display: none;
+}
+.token-column{
+   display: none;
 }

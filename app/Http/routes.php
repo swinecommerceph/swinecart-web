@@ -116,6 +116,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('home/delete', ['as'=>'admin.delete', 'uses'=>'AdminController@deleteUser']);
         Route::put('home/block', ['as'=>'admin.block', 'uses'=>'AdminController@blockUser']);
         Route::put('home/approve', ['as'=>'admin.approve', 'uses'=>'AdminController@generatePassword']);
+        Route::get('home/search', ['as' => 'admin.search', 'uses' => 'AdminController@searchUser']);
     });
 
 

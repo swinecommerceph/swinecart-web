@@ -57,6 +57,7 @@ class AdminController extends Controller
                     ->join('roles', 'role_user.role_id','=','roles.id')
                     ->where('role_user.role_id','!=',1)
                     ->where('users.email_verified','=', 1)
+                    ->where('users.deleted_at','=', NULL)
                     //->where('users.is_blocked','=', 0)
                     ->count();
     return $count;
@@ -74,6 +75,7 @@ class AdminController extends Controller
                     ->where('role_user.role_id','=',2)
                     ->where('users.email_verified','=', 1)
                     ->where('users.is_blocked','=', 0)
+                    ->where('users.deleted_at','=', NULL)
                     ->count();
     return $count;
   }
@@ -91,6 +93,7 @@ class AdminController extends Controller
                     ->where('role_user.role_id','=',3)
                     ->where('users.email_verified','=', 1)
                     ->where('users.is_blocked','=', 0)
+                    ->where('users.deleted_at','=', NULL)
                     ->count();
     return $count;
   }
@@ -101,6 +104,7 @@ class AdminController extends Controller
                     ->join('roles', 'role_user.role_id','=','roles.id')
                     ->where('role_user.role_id','=',2)
                     ->where('users.email_verified','=', 0)
+                    ->where('users.deleted_at','=', NULL)
                     ->count();
     return $count;
   }
@@ -111,7 +115,8 @@ class AdminController extends Controller
                     ->join('roles', 'role_user.role_id','=','roles.id')
                     ->where('role_user.role_id','!=',1)
                     ->where('users.email_verified','=', 1)
-                    ->where('users.is_blocked','=', 0)
+                    ->where('users.is_blocked','=', 1)
+                    ->where('users.deleted_at','=', NULL)
                     ->count();
     return $count;
   }
@@ -219,7 +224,7 @@ class AdminController extends Controller
                       ->where('role_user.role_id','!=',1)
                       ->where('users.email_verified','=', 1)
                       ->where('users.is_blocked','=', 1 )
-                      ->paginate(3);
+                      ->paginate(7);
       foreach ($blockedUsers as $blockedUser) {
         $blockedUser->title = ucfirst($blockedUser->title);
       }
@@ -237,6 +242,19 @@ class AdminController extends Controller
     public function generatePassword(){
       $password = Hash::make(str_random(8));
       return $password;
+    }
+
+    public function searchUser(Request $request){
+      $search = '%'.$request->search.'%';
+      $query = DB::table('users')
+                      ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                      ->join('roles', 'role_user.role_id','=','roles.id')
+                      ->where('role_user.role_id','!=',1)
+                      ->where('users.email_verified','=', 1)
+                      ->where('users.deleted_at','=', NULL)
+                      ->where('name', 'like', $search)
+                      ->get();
+      return $query;
     }
 
 }
