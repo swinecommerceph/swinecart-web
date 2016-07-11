@@ -84,9 +84,9 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
 
         // profile-related
-    	Route::get('edit-profile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
-    	Route::post('edit-profile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
-    	Route::put('edit-profile/personal/edit',['as' => 'customer.updatePersonal', 'uses' => 'CustomerController@updatePersonal']);
+      	Route::get('edit-profile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
+      	Route::post('edit-profile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
+      	Route::put('edit-profile/personal/edit',['as' => 'customer.updatePersonal', 'uses' => 'CustomerController@updatePersonal']);
         Route::post('edit-profile/farm/add',['as' => 'customer.addFarm', 'uses' => 'CustomerController@addFarm']);
         Route::put('edit-profile/farm/edit',['as' => 'customer.updateFarm', 'uses' => 'CustomerController@updateFarm']);
         Route::delete('edit-profile/farm/delete',['as' => 'customer.deleteFarm', 'uses' => 'CustomerController@deleteFarm']);
@@ -95,6 +95,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('view-products',['as' => 'products.view', 'uses' => 'ProductController@viewProducts']);
         Route::get('view-products/{product}',['as' => 'products.cViewDetail', 'uses' => 'ProductController@customerViewProductDetail']);
         Route::post('swine-cart/rate', ['as' => 'rate.breeder', 'uses' => 'SwineCartController@rate']);
+        Route::post('swine-cart/record', ['as' => 'record', 'uses' => 'SwineCartController@record']);
 
         // swinecart-related
         Route::get('swine-cart',['as' => 'cart.items', 'uses' => 'SwineCartController@getSwineCartItems']);

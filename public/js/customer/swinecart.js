@@ -90,7 +90,7 @@ var swinecart = {
           "productId": parent_form.attr('data-product-id')
         },
         success: function(data) {
-          status.html('Requested');
+          status.removeClass('grey-text text-darken-4').addClass('teal-text');
           // $('.request-icon').remove();
           // $('.info').attr('class', 'info col s2 center-align')
         },
@@ -157,6 +157,27 @@ var swinecart = {
         });
     },
 
+    record: function(parent_form){
+      $.ajax({
+        url: config.swineCart_url + '/record',
+        type: "POST",
+        data: {
+          "_token": parent_form.find('input[name=_token]').val(),
+          "breederId" : parent_form.attr('data-breeder-id'),
+          "customerId" : parent_form.attr('data-customer-id'),
+          "productId" : parent_form.attr('data-product-id'),
+          "status": parent_form.attr('data-status'),
+        },
+        success: function(data) {
+
+        },
+        error: function(message){
+          console.log(message['responseText']);
+        }
+      });
+
+    },
+
     rate: function(parent_form, comment) {
       $.ajax({
         url: config.swineCart_url + '/rate',
@@ -168,7 +189,6 @@ var swinecart = {
           "delivery" : parent_form.attr('data-delivery'),
           "transaction" : parent_form.attr('data-transaction'),
           "productQuality" : parent_form.attr('data-productQuality'),
-          "afterSales" : parent_form.attr('data-afterSales'),
           "comment" : comment
         },
         success: function(data) {

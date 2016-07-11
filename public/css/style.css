@@ -1,3 +1,5 @@
+html{font-family: Poppins;}
+
 /* Navigation dropdown styles */
 #nav-dropdown{
 	/*display:block;*/
@@ -34,6 +36,10 @@
 /* Breadcrumb styles */
 #breadcrumb{
 	margin-bottom:5px;
+}
+
+.navbar-fixed{
+	font-family: Electrolize;
 }
 
 .breadcrumb{
@@ -82,14 +88,6 @@ nav .input-field #search{
 	margin-right:0px !important;
 }
 
-.status-icons {
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	margin: auto;
-}
-
 .info {
 	top: 0;
 	bottom: 0;
@@ -97,6 +95,8 @@ nav .input-field #search{
 	left: 0;
 	margin: auto;
 }
+
+.material-icons.md { font-size: 72px; }
 
 .swine-cart-item {
 	top: 0;
@@ -111,13 +111,35 @@ nav .input-field #search{
 		height: 100px;
 }
 
+#swine-cart {
+	padding-top: 20px;
+}
+
+#transaction-history {
+	padding-top: 20px;
+}
+
+#cart {
+	overflow: auto;
+	max-height: 364px;
+	min-height: 364px;
+}
+
 /*Modal Edit*/
 #comment {
 	width: 325px;
 }
 
+/*#info-modal {
+	max-height: 540px;
+} for future testing*/
+
 #rate {
 	width: 400px;
+}
+
+.rate-button {
+	background-color: #e67764;
 }
 
 /* Caption styles */

@@ -8,12 +8,11 @@ $(document).ready(function(){
 
     $('body').on('click', '.request-product' ,function(e){
       e.preventDefault();
-      swinecart.request($(this).parents('form'), $(this).parents('div').siblings('status'));
+      swinecart.request($(this).parents('form'), $(this).parents('div.action').siblings('div.status').children('i.requested'));
     });
 
-    $('.swine-cart-item').hover(function(){
-
-    });
+    // #cart > li:nth-child(14) > div > div.status.col.s2.verticalLine.valign-wrapper > div > span:nth-child(1) > a > i
+    // #cart > li:nth-child(14) > div > div:nth-child(5) > div:nth-child(3) > form > a
 
     //Rating system
     $('.delivery').click(function(e){
@@ -54,12 +53,28 @@ $(document).ready(function(){
     $('.rate-button').click(function(e){
       $('#submit-rate').parents('form').attr('data-customer-id',$(this).attr('data-customer-id'));
       $('#submit-rate').parents('form').attr('data-breeder-id',$(this).attr('data-breeder-id'));
+      $('#submit-rate').parents('form').attr('data-product-id',$(this).attr('data-product-id'));
+      $('#submit-rate').parents('form').attr('data-status',$(this).attr('data-status'));
       $('#submit-rate').siblings('input').val($(this).attr('data-token'));
       $('#rate').openModal();
     });
 
+    $('.anchor-title').click(function(e){
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.collection-header').children('.row').children('.product-name').html($(this).children('span').html());
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.collection-header').children('.row').children('.product-farm').html($(this).attr('data-breeder'));
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-type').html($(this).attr('data-type'));
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-age').children('span').html($(this).attr('data-age'));
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-adg').children('span').html($(this).attr('data-adg'));
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-fcr').children('span').html($(this).attr('data-fcr'));
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-backfat_thickness').children('span').html($(this).attr('data-backfat-thickness'));
+      $('#info-modal').children('.modal-content').children('.row').children('.image').children('.row').children('.other-details').children('.card').children('.card-content').children('p').html($(this).attr('data-other-details'));
+      $('#modal-img').attr('src',$(this).attr('data-imgpath'));
+      $('#info-modal').openModal();
+    });
+
     $('#submit-rate').click(function(e){
       swinecart.rate($(this).parents('form'), $('#comment').val());
+      swinecart.record($(this).parents('form'));
     });
 
     // $('.swine-cart-item').hover(function(){

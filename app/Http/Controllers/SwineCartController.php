@@ -13,6 +13,7 @@ use App\Models\Image;
 use App\Models\SwineCartItem;
 use App\Models\Product;
 use App\Models\Review;
+use App\Models\TransactionLog;
 use Auth;
 
 class SwineCartController extends Controller
@@ -63,6 +64,30 @@ class SwineCartController extends Controller
         }
     }
 
+    /**
+     * Record activity to Logs
+     * AJAX
+     *
+     * @param  Request $request
+     */
+    public function record(Request $request){
+      if($request->ajax()){
+        $history = Customer::find($request->customerId)->transactionLogs();
+        $log = new TransactionLog;
+        // $history->customer_id = $request->customerId;
+        $log->product_id = $request->productId;
+        $log->breeder_id = $request->breederId;
+        $log->status = $request->status;
+        $history->save($log);
+      }
+    }
+
+    /**
+     * Rates breeder from Swine Cart
+     * AJAX
+     *
+     * @param  Request $request
+     */
     public function rate(Request $request){
       if($request->ajax()){
         $reviews = Breeder::find($request->breederId)->reviews();
@@ -72,7 +97,6 @@ class SwineCartController extends Controller
         $review->rating_delivery = $request->delivery;
         $review->rating_transaction = $request->transaction;
         $review->rating_productQuality = $request->productQuality;
-        $review->rating_afterSales = $request->afterSales;
         $reviews->save($review);
       }
     }
@@ -134,7 +158,7 @@ class SwineCartController extends Controller
      * AJAX
      *
      * @param  Request $request
-     * @return JSON
+     * @return JSON, Array
      */
     public function getSwineCartItems(Request $request)
     {
@@ -164,8 +188,11 @@ class SwineCartController extends Controller
           $customer = $this->user->userable;
           $swineCartItems = $customer->swineCartItems()->get();
           $products = [];
+          $log = $customer->transactionLogs()->get();
+          $history = [];
 
           foreach ($swineCartItems as $item) {
+              $itemDetail = [];
               $product = Product::find($item->product_id);
               $itemDetail['request_status'] = $item->if_requested;
               $itemDetail['status'] = $product->status;
@@ -177,13 +204,31 @@ class SwineCartController extends Controller
               $itemDetail['product_type'] = $product->type;
               $itemDetail['product_quantity'] = $product->quantity;
               $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
+              $itemDetail['product_age'] = $product->age;
+              $itemDetail['product_adg'] = $product->adg;
+              $itemDetail['product_fcr'] = $product->fcr;
+              $itemDetail['other_details'] = $product->other_details;
+              $itemDetail['product_backfat_thickness'] = $product->backfat_thickness;
               $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
               $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
               $itemDetail['token'] = csrf_token();
               array_push($products,(object) $itemDetail);
           }
 
-          return view('user.customer.swineCart', compact('products'));
+          foreach ($log as $item) {
+              $itemDetail = [];
+              $product = Product::find($item->product_id);
+              $itemDetail['product_name'] = $product->name;
+              $itemDetail['product_type'] = $product->type;
+              $itemDetail['product_quantity'] = $product->quantity;
+              $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+              $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+              $itemDetail['timestamp'] = $item->created_at;
+              $itemDetail['token'] = csrf_token();
+              array_push($history,(object) $itemDetail);
+          }
+
+          return view('user.customer.swineCart', compact('products', 'history'));
         }
     }
 
