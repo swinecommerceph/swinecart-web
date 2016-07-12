@@ -187,18 +187,30 @@
       <div class="modal-content">
          <h4>Username</h4>
          <div class="row">
-            <div class="col s6 center">
-               <i id="block-icon" class="material-icons manage-icon">block</i>
-               <div id="block-label" class="col s12">Block</div>
-            </div>
-            <div class="col s6 center">
-               <i id="delete-icon" class="material-icons manage-icon">close</i>
-               <div id="delete-label" class="col s12">Delete</div>
-            </div>
+            {!!Form::open(['route'=>'admin.block', 'method'=>'PUT', 'class'=>'block-form'])!!}
+            <a id="block-data" id="block-data" href="#">
+               <div class="col s6 center">
+                  <i id="block-icon" class="material-icons manage-icon">block</i>
+                  <input id="block-token" name="_token" type="hidden" value="">
+                  <input id="block-id" name="user_id" type="hidden" value="">
+                  <div id="block-label" class="col s12">Block</div>
+               </div>
+            </a>
+            {!!Form::close()!!}
+            {!!Form::open(['route'=>'admin.delete', 'method'=>'DELETE', 'class'=>'delete-form'])!!}
+               <a id="delete-data" href="#">
+                  <div class="col s6 center">
+                     <i id="delete-icon" class="material-icons manage-icon">close</i>
+                     <input id="delete-token" name="_token" type="hidden" value="">
+                     <input id="delete-id" name="user_id" type="hidden" value="">
+                     <div id="delete-label" class="col s12">Delete</div>
+                  </div>
+               </a>
+            {!!Form::close()!!}
          </div>
          <div class="divider"></div>
          <div class="modal-footer">
-           <a href="#!" id="cancel-manage" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+           <a href="#!" id="cancel-manage" class=" modal-action modal-close waves-effect waves btn-flat">Cancel</a>
          </div>
       </div>
     </div>
@@ -280,8 +292,9 @@
   	<script src="/js/vendor/video-js/video.min.js"></script>
   	<script src="/js/config.js"></script>
   	<script src="/js/custom.js"></script>
-   <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script>
-  	{{-- For user-specific initialization scripts --}}
+   {{-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script> --}}
+   <script type="text/javascript" src="/js/vendor/datatables.min.js"></script>
+   {{-- For user-specific initialization scripts --}}
   	@yield('initScript')
   	{{-- Custom scripts for certain pages/functionalities --}}
   	@yield('customScript')

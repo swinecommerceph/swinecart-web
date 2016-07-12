@@ -330,3 +330,11 @@ blockquote{
 .token-column{
    display: none;
 }
+
+#delete-data{
+   color: #D32F2F;
+}
+
+#block-data{
+   color: #FF5722;
+}

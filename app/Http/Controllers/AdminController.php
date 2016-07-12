@@ -223,10 +223,12 @@ class AdminController extends Controller
                       ->join('roles', 'role_user.role_id','=','roles.id')
                       ->where('role_user.role_id','!=',1)
                       ->where('users.email_verified','=', 1)
+                      ->where('users.deleted_at','=', NULL )
                       ->where('users.is_blocked','=', 1 )
-                      ->paginate(7);
+                      ->get();
       foreach ($blockedUsers as $blockedUser) {
         $blockedUser->title = ucfirst($blockedUser->title);
+        $blockedUser->token = csrf_token();
       }
       return $blockedUsers;
     }
