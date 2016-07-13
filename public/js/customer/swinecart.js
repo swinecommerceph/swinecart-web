@@ -40,6 +40,41 @@ var swinecart = {
 
     },
 
+    move: function(li_element) {
+        // Do AJAX
+        $.ajax({
+            url: config.swineCart_url + '/delete',
+            type: "DELETE",
+            cache: false,
+            data: {},
+            success: function(data) {
+                // If deletion of item is successful
+                if (data[0] === 'success') {
+                    var span = $('#cart-icon span');
+
+                    // Put quantity of Swine Cart to sessionStorage
+                    sessionStorage.setItem('swine_cart_quantity', data[2]);
+
+                    if (data[2] == 0) {
+                        span.html("");
+                        span.removeClass('badge');
+                        $('#cart-icon .material-icons').removeClass('left');
+                        $('#cart-dropdown #item-container').html(
+                            '<li> <span class="center-align black-text"> No items in your Swine Cart </span> </li>'
+                        );
+                    } else span.html(sessionStorage.getItem('swine_cart_quantity'));
+
+                    li_element.remove();
+                    Materialize.toast(data[1] + ' removed from Swine Cart', 1800, 'green lighten-1');
+                } else Materialize.toast(data[1] + ' is ' + data[0], 1500, 'orange accent-2');
+
+            },
+            error: function(message) {
+                console.log(message['responseText']);
+            }
+        });
+    },
+
     delete: function(parent_form, li_element) {
         // Do AJAX
         $.ajax({
@@ -78,7 +113,7 @@ var swinecart = {
         });
     },
 
-    request: function(parent_form, status){
+    request: function(parent_form, li_element){
       // Do AJAX
       $.ajax({
         url: config.swineCart_url + '/request',
@@ -90,9 +125,15 @@ var swinecart = {
           "productId": parent_form.attr('data-product-id')
         },
         success: function(data) {
-          status.removeClass('grey-text text-darken-4').addClass('teal-text');
-          // $('.request-icon').remove();
-          // $('.info').attr('class', 'info col s2 center-align')
+          li_element.find('.material-icons.request').removeClass('grey-text text-darken-4').addClass('teal-text');
+          li_element.find('.material-icons.request').attr('data-tooltip', 'Requested');
+          li_element.find('div.action').html(
+              '<a class="receive-button btn-flat">'+
+              '(Approve)'+
+              '</a>'
+            );
+          var product = li_element.find('a.anchor-title').html();
+          Materialize.toast(product + ' requested', 1800, 'green lighten-1')
         },
         error: function(message) {
           console.log(message['responseText']);

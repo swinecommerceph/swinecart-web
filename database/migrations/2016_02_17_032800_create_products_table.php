@@ -28,6 +28,8 @@ class CreateProductsTable extends Migration
             $table->float('backfat_thickness')->nullable();
             $table->text('other_details')->nullable();
             $table->string('status')->default('unshowcased');
+            $table->integer('customer_id')->unsigned();
+            $table->string('code');
             $table->softDeletes();
         });
     }

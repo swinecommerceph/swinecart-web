@@ -8,11 +8,8 @@ $(document).ready(function(){
 
     $('body').on('click', '.request-product' ,function(e){
       e.preventDefault();
-      swinecart.request($(this).parents('form'), $(this).parents('div.action').siblings('div.status').children('i.requested'));
+      swinecart.request($(this).parents('form'), $(this).parents('li').first());
     });
-
-    // #cart > li:nth-child(14) > div > div.status.col.s2.verticalLine.valign-wrapper > div > span:nth-child(1) > a > i
-    // #cart > li:nth-child(14) > div > div:nth-child(5) > div:nth-child(3) > form > a
 
     //Rating system
     $('.delivery').click(function(e){
@@ -56,7 +53,12 @@ $(document).ready(function(){
       $('#submit-rate').parents('form').attr('data-product-id',$(this).attr('data-product-id'));
       $('#submit-rate').parents('form').attr('data-status',$(this).attr('data-status'));
       $('#submit-rate').siblings('input').val($(this).attr('data-token'));
-      $('#rate').openModal();
+      var afterRate = function(){
+        swinecart.delete( $(this).parents('form'), $(this).parents('li').first());
+      };
+      $('#rate').openModal({
+        complete : afterRate
+      });
     });
 
     $('.anchor-title').click(function(e){

@@ -248,6 +248,7 @@
       </div>
     </div>
 
+    {{-- Tabs --}}
     <ul class="tabs">
       <li class="tab col s6"><a href="#swine-cart">Orders</a></li>
       <li class="tab col s6 teal-text"><a href="#transaction-history">Transaction History</a></li>
@@ -293,15 +294,12 @@
             </div>
           </li>
         @empty
-          <div class="row">
-            <div class="col s12 center-align">
-              <h5>Your history is empty.</h5>
-            </div>
+          <div class="center-align">
+            <h5>Your history is empty.</h5>
           </div>
         @endforelse
       </ul>
     </div>
-
 
 
     {{-- Swine Cart --}}
@@ -327,7 +325,7 @@
                 <div class="row swine-cart-item valign-wrapper">
                   {{-- Product Status Icons --}}
                   @if($product->status === 'requested')
-                    <div class="status col s2 verticalLine valign-wrapper">
+                    <div class="status col s2 m2 verticalLine valign-wrapper">
                       <div class="">
                         <span class="col s6 right-align">
                           <a href="#">
@@ -352,7 +350,7 @@
                       </div>
                     </div>
                   @elseif($product->status === 'reserved')
-                    <div class="status col s2 verticalLine valign-wrapper">
+                    <div class="status col s2 m2 verticalLine valign-wrapper">
                       <div class="">
                         <span class="col s6 right-align">
                           <a href="#">
@@ -377,7 +375,7 @@
                       </div>
                     </div>
                   @elseif($product->status === 'paid')
-                    <div class="status col s2 verticalLine valign-wrapper">
+                    <div class="status col s2 m2 verticalLine valign-wrapper">
                       <div class="">
                         <span class="col s6 right-align">
                           <a href="#">
@@ -402,7 +400,7 @@
                       </div>
                     </div>
                   @elseif($product->status === 'on_delivery')
-                    <div class="status col s2 verticalLine valign-wrapper">
+                    <div class="status col s2 m2 verticalLine valign-wrapper">
                       <div class="">
                         <span class="col s6 right-align">
                           <a href="#">
@@ -427,7 +425,7 @@
                       </div>
                     </div>
                   @elseif($product->status === 'sold')
-                    <div class="status col s2 verticalLine valign-wrapper">
+                    <div class="status col s2 m2 verticalLine valign-wrapper">
                       <div class="col s12 center-align">
                         <a href="#">
                           <i class="material-icons md teal-text tooltipped" data-position="top" data-delay="50" data-tooltip="Sold">attach_money</i>
@@ -435,7 +433,7 @@
                       </div>
                     </div>
                   @else
-                    <div class="status col s2 verticalLine valign-wrapper">
+                    <div class="status col s2 m2 verticalLine valign-wrapper">
                       <div class="">
                         <span class="col s6 right-align">
                           <a href="#">
@@ -460,7 +458,7 @@
                       </div>
                     </div>
                   @endif
-                  <div class="info col s2 center-align">
+                  <div class="col s2 m2 center-align">
                     <a href="#"><img src="{{$product->img_path}}" width="75" height="75" class="circle"></a>
                   </div>
                   {{-- Product Info --}}
@@ -475,17 +473,17 @@
                   </div>
                   {{-- Quantity Check --}}
                   @if($product->product_type === 'semen')
-                    <div class="quantity col s2 verticalLine valign-wrapper">
+                    <div class="quantity col s2 m2 verticalLine valign-wrapper">
                       <div class="col s12 center-align">
                         {{$product->product_quantity}}
                       </div>
                     </div>
                   @else
-                    <div class="quantity col s2 verticalLine">
+                    <div class="quantity col s2 m2 verticalLine">
                     </div>
                   @endif
                   {{-- Actions --}}
-                  <div class="action col s2">
+                  <div class="action col s2 m2 ">
                       @if($product->status === 'showcased')
                         <div class="col s12 center-align">
                           <form method="POST" action="{{route('cart.delete')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
@@ -502,29 +500,17 @@
                           </form>
                         </div>
                       @elseif($product->status === 'requested')
-                        <div class="col s2 left-align">
-                          <span class="col s12">
-                            <a class="receive-button btn-flat" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}" class="modal-trigger">
+                            <a class="approve-button btn-flat" data-product-id=>
                               (Approve)
                             </a>
-                          </span>
-                        </div>
                       @elseif($product->status === 'reserved')
-                        <div class="col s2 left-align">
-                          <span class="col s12">
-                            <a class="receive-button btn-flat" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}" class="modal-trigger">
-                              (Process)
+                            <a class="message-button btn-large" data-product-id=>
+                              Message
                             </a>
-                          </span>
-                        </div>
                       @elseif($product->status === 'paid' or $product->status === 'on_delivery')
-                        <div class="col s2">
-                          <span class="col s12">
-                            <a class="receive-button btn-flat" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}" class="modal-trigger">
+                            <a class="receive-button btn-flat" data-product-id=>
                               (Receive)
                             </a>
-                          </span>
-                        </div>
                       @elseif($product->status === 'sold')
                         <span class="col s12 center-align">
                           <a class="rate-button btn-large" data-status="{{$product->status}}" data-product-id="{{$product->product_id}}" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}" class="modal-trigger">
@@ -535,10 +521,8 @@
                   </div>
               </div>
           @empty
-            <div class="row">
-              <div class="col s12 center-align">
-                <h5>Your swine cart is empty.</h5>
-              </div>
+            <div class="center-align">
+              <h5>Your swine cart is empty.</h5>
             </div>
           @endforelse
         {{-- @endif --}}
