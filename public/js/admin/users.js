@@ -98,7 +98,7 @@ var users = {
         //
       //   });
           $(".tooltipped").tooltip({delay:50});
-
+          $('select').material_select();
       }
 
     });
@@ -422,15 +422,12 @@ var users = {
       //     );
         //
       //   });
-
-          $(".tooltipped").tooltip({delay:50});
+         $('select').material_select();
+         $(".tooltipped").tooltip({delay:50});
       }
 
     });
   },
-
-
-
 
      delete_user: function(button,name, change, token, id){
     $.ajax({
@@ -442,8 +439,9 @@ var users = {
           "userId": id
       },
       success: function(data){
-        change.remove();
-        //change.attr('class');
+         var table = $('#user-table').DataTable();
+         table.row( change ).remove().draw();
+        //change.remove().draw();
         Materialize.toast(name + ' deleted', 2500, 'red accent-2');
 
       },
@@ -465,7 +463,7 @@ var users = {
       },
       success: function(data){
          $('#block-modal').closeModal();
-          i f($('tr').find('[data-clicked="clicked"]').parents('td').siblings('.status-column').text()==1){
+          if($('tr').find('[data-clicked="clicked"]').parents('td').siblings('.status-column').text()==1){
              $('tr').find('[data-clicked="clicked"]').parents('td').siblings('.status-column').text(0);
              Materialize.toast(name + ' Unblocked', 2500, 'green accent');
           }

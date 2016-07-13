@@ -242,7 +242,7 @@ class AdminController extends Controller
     }
 
     public function generatePassword(){
-      $password = Hash::make(str_random(8));
+      $password = Hash::make(str_random(6));
       return $password;
     }
 

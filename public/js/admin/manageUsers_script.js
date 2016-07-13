@@ -1,5 +1,6 @@
 $(document).ready(function(){
   $('#user-table').DataTable();
+
   // if all user tab is clicked display all approved users
   $('body').on('click', '#all', function(e){
       e.preventDefault();
@@ -169,12 +170,14 @@ $(document).ready(function(){
     var block_id = $('#block-id').attr('value');
     users.block_user(block_name,block_button, block_token, block_id);
 
-   
-
   });
 
   // remove the data attribute value of the clicked row
   $('body').on('click', '#cancel-block', function (e){
+     $('tr').find('[data-clicked="clicked"]').attr('data-clicked','');
+  });
+
+  $('body').on('click', '#cancel-delete', function (e){
      $('tr').find('[data-clicked="clicked"]').attr('data-clicked','');
   });
 

@@ -3,6 +3,11 @@
   src: url(../fonts/Poppins/Poppins-Regular.ttf);
 }
 
+@font-face{
+   font-family: ecommerce;
+   src: url(../fonts/ecommerce/ecommerce.ttf);
+}
+
 html{
 	font-family: Poppins;
   font-size: 16px;
@@ -269,7 +274,12 @@ blockquote{
 
 
 .summary-data{
-	font-size: 5em;
+	font-size: 10em;
+   top:0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   margin: auto;
 }
 
 .summary-icons{
@@ -296,7 +306,7 @@ blockquote{
 }
 
 .card-summary{
-	height: 200px;
+	height: 280px;
 }
 
 .vertical-align{
@@ -337,4 +347,38 @@ blockquote{
 
 #block-data{
    color: #FF5722;
+}
+
+.ecommerce-icon{
+   font-family: ecommerce;
+   font-size: 6em;
+   font-style: normal;
+}
+
+.label-wrapper{
+   top:0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   margin: auto;
+}
+
+#total-card{
+   background-color: #0a7e7b;
+}
+
+#blocked-card{
+   background-color: #ed5272;
+   /*Teal = 0a7e7b
+   Pink = ed5272
+   Gray = 636564
+   Violet = 67052c  */
+}
+
+#pending-card{
+   background-color: #636564;
+}
+
+#inquiries-card{
+   background-color: #67052c;
 }

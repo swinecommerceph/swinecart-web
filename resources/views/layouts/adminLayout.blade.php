@@ -86,7 +86,7 @@
     {{--Side Navigation bar for admin --}}
     <div class="container">
       <div class="row ">
-        <div class="col s3">
+        <div id="menu" class="col s3">
           <ul class="collapsible" data-collapsible="accordion">
           <li>
             <div class="collapsible-header active"><a href="{{route('admin.userlist')}}" class="black-text" id='all'><i class="material-icons">face</i>All Users</a></div>
@@ -120,56 +120,85 @@
                     <div class="row">
                     <a href="#!" id="total-user-summary">
                       <div class="col s6" >
-                        <div class="card-panel green card-summary hoverable">
-                          <div class="center white-text">
-                              <i class="material-icons summary-icons">perm_identity</i>
-                              <span class="summary-title">Total Users</span>
-                          </div>
-                          <div class="center white-text summary-data">
-                            {{$summary[0]}}
-                          </div>
+                        <div id="total-card" class="card-panel card-summary hoverable">
+                           <div class="center white-text row">
+                              <div class="col s4 label-wrapper">
+                                 <div class="">
+                                    <i class="ecommerce-icon">p</i>
+                                 </div>
+                                 <div class="">
+                                    <span class="summary-title">Total Users</span>
+                                 </div>
+
+                              </div>
+
+                               <div class="center white-text summary-data col s8">
+                                 {{$summary[0]}}
+                               </div>
+                           </div>
 
                         </div>
                       </div>
                     </a>
                     <a href="#!" id="total-blocked-summary">
-                      <div class="col s6">
-                        <div class="card-panel red card-summary hoverable">
-                          <div class="center white-text">
-                              <i class="material-icons summary-icons">block</i>
-                              <span class="summary-title">Blocked Users</span>
-                          </div>
-                          <div class="center white-text summary-data">
-                            {{$summary[4]}}
-                          </div>
-                        </div>
-                      </div>
+                       <div class="col s6" >
+                         <div id="blocked-card" class="card-panel card-summary hoverable">
+                            <div class="center white-text row">
+                               <div class="col s4 label-wrapper">
+                                  <div class="">
+                                     <i class="ecommerce-icon">b</i>
+                                  </div>
+                                  <div class="">
+                                     <span class="summary-title">Blocked Users</span>
+                                  </div>
+                               </div>
+
+                                <div class="center white-text summary-data col s8">
+                                  {{$summary[4]}}
+                                </div>
+                            </div>
+                         </div>
+                       </div>
                     </a>
                     <a href="#!" id="total-pending-summary">
-                      <div class="col s6">
-                        <div class="card-panel purple lighten-2 card-summary hoverable">
-                          <div class="center white-text">
-                              <i class="material-icons summary-icons">hourglass_full</i>
-                              <span class="summary-title">Pending Accounts</span>
-                          </div>
-                          <div class="center white-text summary-data">
-                              {{$summary[3]}}
-                          </div>
-                        </div>
-                      </div>
+                       <div class="col s6" >
+                         <div id="pending-card" class="card-panel card-summary hoverable">
+                            <div class="center white-text row">
+                               <div class="col s4 label-wrapper">
+                                  <div class="">
+                                     <i class="ecommerce-icon">w</i>
+                                  </div>
+                                  <div class="">
+                                     <span class="summary-title">Pending Breeder</span>
+                                  </div>
+                               </div>
+
+                               <div class="center white-text summary-data col s8">
+                                  {{$summary[3]}}
+                               </div>
+                            </div>
+                         </div>
+                       </div>
                     </a>
                     <a href="#!">
-                    <div class="col s6">
-                      <div class="card-panel indigo card-summary hoverable">
-                        <div class="center white-text">
-                            <i class="material-icons summary-icons">help</i>
-                            <span class="summary-title">User Inquiries</span>
-                        </div>
-                        <div class="center white-text summary-data">
-                            10
-                        </div>
-                      </div>
-                    </div>
+                       <div class="col s6" >
+                         <div id="inquiries-card" class="card-panel card-summary hoverable">
+                            <div class="center white-text row">
+                               <div class="col s4 label-wrapper">
+                                  <div class="">
+                                     <i class="ecommerce-icon">d</i>
+                                  </div>
+                                  <div class="">
+                                     <span class="summary-title">User Inquiries</span>
+                                  </div>
+                               </div>
+
+                               <div class="center white-text summary-data col s8">
+                                  3
+                               </div>
+                            </div>
+                         </div>
+                       </div>
                   </a>
                 </div>
 
