@@ -8,6 +8,7 @@ use Illuminate\Support\Facades\Hash;
 use App\Http\Requests\BreederProfileRequest;
 use App\Http\Requests\BreederPersonalProfileRequest;
 use App\Http\Requests\BreederFarmProfileRequest;
+use Illuminate\Support\Facades\Redirect;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -18,6 +19,7 @@ use App\Models\Image;
 use App\Models\Video;
 use App\Models\Breed;
 use App\Models\User;
+use Mail;
 
 use DB;
 use Auth;
@@ -103,7 +105,7 @@ class AdminController extends Controller
                     ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                     ->join('roles', 'role_user.role_id','=','roles.id')
                     ->where('role_user.role_id','=',2)
-                    ->where('users.email_verified','=', 0)
+                    ->where('users.approved','=', 0)
                     ->where('users.deleted_at','=', NULL)
                     ->count();
     return $count;
@@ -201,7 +203,7 @@ class AdminController extends Controller
       $users = $this->retrieveAllUsers();
       $userArray = [];
       foreach ($users as $user) {
-        if($user->role_id==2 && $user->email_verified==0 && $user->deleted_at==NULL){
+        if($user->role_id==2 && $user->email_verified==0 && $user->deleted_at==NULL && $user->approved==0){
           $user->title = ucfirst($user->title);
           $user->token = csrf_token();
           $userArray[] = $user;
@@ -241,8 +243,56 @@ class AdminController extends Controller
       return  "Ok";
     }
 
+    /**
+     * Create a new user instance after a valid registration.
+     *
+     * @param  array  $data
+     * @return User
+     */
+    protected function create(array $data, $verCode, $password)
+    {
+        return User::create([
+            'name' => $data['name'],
+            'email' => $data['email'],
+            'password' => bcrypt($password),
+            'verification_code' => $verCode
+
+        ]);
+    }
+     /**
+      * Handle a registration request for the application.
+      * Override default register method
+      *
+      * @param  \Illuminate\Http\Request  $request
+      * @return View
+      */
+     public function register(Request $request)
+     {
+
+        $verCode = str_random('10');
+        $password = $this->generatePassword();
+        $user = $this->create($request->all(), $verCode, $password);
+        $user->assignRole('breeder');
+        $breeder = Breeder::create([])->users()->save($user);
+      //   $data = [
+      //      'email' => $request->input('email'),
+      //      'verCode' => $verCode,
+      //      'type' => 'sent'
+      //   ];
+
+         // Mail::send('emails.verification', $data, function ($message) use($data){
+         //     $message->to($data['email'])->subject('Breeder Credential for Swine E-Commerce PH');
+         // });
+         //
+         // return view('emails.message', $data);
+         //return Redirect::back()->withMessage('User Created!');
+
+     }
+
+
+
     public function generatePassword(){
-      $password = Hash::make(str_random(6));
+      $password = str_random(10);;
       return $password;
     }
 

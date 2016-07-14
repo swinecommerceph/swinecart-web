@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('verification_code');
             $table->boolean('email_verified')->default('0');
             $table->boolean('is_blocked')->default('0');
+            $table->boolean('approved')->default('0');
             $table->softDeletes();
             $table->rememberToken();
             $table->nullableTimestamps();

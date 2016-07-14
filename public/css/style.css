@@ -8,6 +8,11 @@
    src: url(../fonts/ecommerce/ecommerce.ttf);
 }
 
+@font-face {
+   font-family: Electrolize;
+   src: url(../fonts/Electrolize-Regular.ttf);
+}
+
 html{
 	font-family: Poppins;
   font-size: 16px;
@@ -288,8 +293,10 @@ blockquote{
 }
 
 .summary-title{
-	font-size: 1.5em;
+	font-size: 2em;
 	vertical-align: middle;
+   text-align: left;
+
 }
 
 .action-column{
@@ -351,8 +358,11 @@ blockquote{
 
 .ecommerce-icon{
    font-family: ecommerce;
-   font-size: 6em;
+   font-size: 6.5em;
    font-style: normal;
+   text-align: left;
+   vertical-align: middle;
+   color: #d1d1d1 ;
 }
 
 .label-wrapper{
@@ -381,4 +391,22 @@ blockquote{
 
 #inquiries-card{
    background-color: #67052c;
+}
+
+#adduser{
+   width: 800px;
+   height: 450;
+}
+
+.addusercontainer{
+   top:0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   margin: auto;
+   vertical-align: middle;
+}
+
+.brand-logo{
+   font-family : Electrolize;
 }

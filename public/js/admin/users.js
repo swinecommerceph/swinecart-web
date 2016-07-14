@@ -354,7 +354,7 @@ var users = {
         $('#main-content').append(
           '<table class="display " id="user-table">'+
           '<thead >'+
-            '<tr >'+
+            '<tr class="teal white-text">'+
                 '<th data-field="id">Name</th>'+
                 '<th data-field="type">Account Type</th>'+
                 '<th data-field="action">Action</th>'+
@@ -375,7 +375,7 @@ var users = {
              {className: "name-column",data: 'name'},
              {className: "title-column", data: 'title'},
              {
-                 "defaultContent": '<div class="center"><a class="waves-effect waves-light btn teal lighten-2 manage-button" data-clicked=""><i class="material-icons left">create</i>Manage</a></div>'
+                 "defaultContent": '<div class="center"><a class="waves-effect waves-light btn teal lighten-2 manage-button" data-clicked="" data-show="1"><i class="material-icons left">create</i>Manage</a></div>'
              },
              {className:"status-column" ,data: 'is_blocked', bSearchable: false},
              {className:"id-column", data: 'user_id', bSearchable:false},
@@ -480,6 +480,7 @@ var users = {
              $('#block-icon').text('refresh');
              $('#block-label').text('Unblock');
          }
+
       },
       error: function(message){
         console.log(message['responseText']);

@@ -22,6 +22,7 @@ class UserInstancesSeeder extends Seeder
         	$user->assignRole('customer');
             $user->update_profile = 0;
             $user->email_verified = 1;
+            $user->approved = 1;
 
             // Create Customer Profile
             $customer = factory(App\Models\Customer::class)->create();
@@ -37,7 +38,7 @@ class UserInstancesSeeder extends Seeder
             $user->assignRole('breeder');
             $user->update_profile = 0;
             $user->email_verified = 1;
-
+            $user->approved = 1;
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address

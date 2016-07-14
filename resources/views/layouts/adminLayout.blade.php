@@ -42,12 +42,17 @@
                               message
                             </p>
                              <a class="modal-trigger waves-effect waves-light right" href="#modal1">Read more...</a>
-
                           </li>
                         </ul>
                       </li>
                       <li><a href="#" class="center">Show All</a></li>
                   </ul>
+                </li>
+
+                <li>
+                   <a class="waves-effect waves-light modal-trigger " href="#adduser">
+                      <i class="material-icons">add</i>
+                  </a>
                 </li>
 
               <li>
@@ -123,13 +128,12 @@
                         <div id="total-card" class="card-panel card-summary hoverable">
                            <div class="center white-text row">
                               <div class="col s4 label-wrapper">
-                                 <div class="">
+                                 <div class="left">
                                     <i class="ecommerce-icon">p</i>
                                  </div>
                                  <div class="">
-                                    <span class="summary-title">Total Users</span>
+                                    <div class="summary-title">TOTAL USERS</div>
                                  </div>
-
                               </div>
 
                                <div class="center white-text summary-data col s8">
@@ -149,7 +153,7 @@
                                      <i class="ecommerce-icon">b</i>
                                   </div>
                                   <div class="">
-                                     <span class="summary-title">Blocked Users</span>
+                                     <div class="summary-title">BLOCKED USERS</div>
                                   </div>
                                </div>
 
@@ -169,7 +173,7 @@
                                      <i class="ecommerce-icon">w</i>
                                   </div>
                                   <div class="">
-                                     <span class="summary-title">Pending Breeder</span>
+                                     <div class="summary-title">PENDING BREEDERS</div>
                                   </div>
                                </div>
 
@@ -185,11 +189,11 @@
                          <div id="inquiries-card" class="card-panel card-summary hoverable">
                             <div class="center white-text row">
                                <div class="col s4 label-wrapper">
-                                  <div class="">
+                                  <div class="left">
                                      <i class="ecommerce-icon">d</i>
                                   </div>
                                   <div class="">
-                                     <span class="summary-title">User Inquiries</span>
+                                     <div class="summary-title">USER INQUIRIES</div>
                                   </div>
                                </div>
 
@@ -271,6 +275,45 @@
       </div>
     </div>
 
+    {{-- Add user modal --}}
+      <div id="adduser" class="modal">
+         {!!Form::open(['route'=>'admin.add.user', 'method'=>'POST', 'class'=>'add-user-form'])!!}
+       <div class="modal-content">
+         <h4>Add User</h4>
+         <div class="divider"></div>
+         <div class="row">
+            <div class="col s12">
+
+                  <div class="row">
+                     <div class = "addusercontainer" class="row">
+                        <div class="input-field col s11">
+                         <i class="material-icons prefix">account_circle</i>
+                         <input id="icon_prefix" type="text" class="validate" name="name">
+                         <label for="icon_prefix">Username</label>
+                       </div>
+                     </div>
+                 </div>
+
+                 <div class="row">
+                    <div class = "addusercontainer" class="row">
+                       <div class="input-field col s11">
+                        <i class="material-icons prefix">email</i>
+                        <input id="icon_prefix" type="email" class="validate" name="email">
+                        <label for="icon_prefix">Email Address</label>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+         </div>
+       </div>
+       <div class="modal-footer">
+          <button id = "add-user-submit" class="btn waves-effect waves-light" type="submit" name="action">Add
+           <i class="material-icons right">send</i>
+         </button>
+       </div>
+        {!!Form::close()!!}
+     </div>
 
     {{-- Modal for user inquiries --}}
     <div id="modal1" class="modal modal-fixed-footer">
