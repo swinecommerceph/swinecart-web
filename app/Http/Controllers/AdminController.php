@@ -9,6 +9,8 @@ use App\Http\Requests\BreederProfileRequest;
 use App\Http\Requests\BreederPersonalProfileRequest;
 use App\Http\Requests\BreederFarmProfileRequest;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -20,6 +22,7 @@ use App\Models\Video;
 use App\Models\Breed;
 use App\Models\User;
 use Mail;
+
 
 use DB;
 use Auth;
@@ -244,6 +247,20 @@ class AdminController extends Controller
     }
 
     /**
+     * Get a validator for an incoming registration request.
+     *
+     * @param  array  $data
+     * @return \Illuminate\Contracts\Validation\Validator
+     */
+    protected function validator(array $data)
+    {
+        return Validator::make($data, [
+            'name' => 'required|max:255',
+            'email' => 'required|email|max:255|unique:users',
+        ]);
+    }
+
+    /**
      * Create a new user instance after a valid registration.
      *
      * @param  array  $data
@@ -251,13 +268,15 @@ class AdminController extends Controller
      */
     protected function create(array $data, $verCode, $password)
     {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($password),
-            'verification_code' => $verCode
+     return User::create([
+         'name' => $data['name'],
+         'email' => $data['email'],
+         'password' => bcrypt($password),
+         'verification_code' => $verCode
 
-        ]);
+     ]);
+
+
     }
      /**
       * Handle a registration request for the application.
@@ -268,7 +287,12 @@ class AdminController extends Controller
       */
      public function register(Request $request)
      {
-
+        $validator = $this->validator($request->all());
+          if ($validator->fails()) {
+              $this->throwValidationException(
+                  $request, $validator
+              );
+          }
         $verCode = str_random('10');
         $password = $this->generatePassword();
         $user = $this->create($request->all(), $verCode, $password);
@@ -285,7 +309,7 @@ class AdminController extends Controller
          // });
          //
          // return view('emails.message', $data);
-         //return Redirect::back()->withMessage('User Created!');
+         return Redirect::back()->withMessage('User Created!');
 
      }
 
@@ -308,5 +332,13 @@ class AdminController extends Controller
                       ->get();
       return $query;
     }
+
+    public function acceptUser(Request $request){
+      $user = User::find($request->userId);
+      $user->approved = !$user->approved;
+      $user->save();
+
+      return  "Ok";
+   }
 
 }

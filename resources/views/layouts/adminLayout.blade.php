@@ -221,7 +221,7 @@
          <h4>Username</h4>
          <div class="row">
             {!!Form::open(['route'=>'admin.block', 'method'=>'PUT', 'class'=>'block-form'])!!}
-            <a id="block-data" id="block-data" href="#">
+            <a id="block-data" href="#">
                <div class="col s6 center">
                   <i id="block-icon" class="material-icons manage-icon">block</i>
                   <input id="block-token" name="_token" type="hidden" value="">
@@ -248,6 +248,38 @@
       </div>
     </div>
 
+    {{-- Manage User Modal for Accept and Reject --}}
+    <div id="accept-reject-modal" class="modal">
+      <div class="modal-content">
+         <h4>Username</h4>
+         <div class="row">
+            {!!Form::open(['route'=>'admin.add.user', 'method'=>'PUT', 'class'=>'accept-form'])!!}
+            <a id="accept-data" href="#">
+               <div class="col s6 center">
+                  <i id="accept-icon" class="material-icons manage-icon">check</i>
+                  <input id="accept-token" name="_token" type="hidden" value="">
+                  <input id="accept-id" name="user_id" type="hidden" value="">
+                  <div id="accept-label" class="col s12">Accept</div>
+               </div>
+            </a>
+            {!!Form::close()!!}
+            {!!Form::open(['route'=>'admin.delete', 'method'=>'DELETE', 'class'=>'delete-form'])!!}
+               <a id="delete-data" href="#">
+                  <div class="col s6 center">
+                     <i id="delete-icon" class="material-icons manage-icon">close</i>
+                     <input id="delete-token" name="_token" type="hidden" value="">
+                     <input id="delete-id" name="user_id" type="hidden" value="">
+                     <div id="delete-label" class="col s12">Reject</div>
+                  </div>
+               </a>
+            {!!Form::close()!!}
+         </div>
+         <div class="divider"></div>
+         <div class="modal-footer">
+           <a href="#!" id="cancel-accept-reject" class=" modal-action modal-close waves-effect waves btn-flat">Cancel</a>
+         </div>
+      </div>
+    </div>
 
     {{-- Delete modal --}}
     <div id="delete-modal" class="modal action-dialog-box red lighten-5">
@@ -272,6 +304,19 @@
       <div class="modal-footer orange lighten-5">
         <a href="#!" id="cancel-block" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
         <a href="#!" id="confirm-block" class=" modal-action modal-close waves-effect waves-red btn-flat">Confirm</a>
+      </div>
+    </div>
+
+    {{-- Accept modal --}}
+    <div id="accept-modal" class="modal action-dialog-box green lighten-5">
+      <div class="modal-content">
+        <h4>Accept User</h4>
+        <div class="divider"></div>
+        <p>Are you sure you want to accept this user?</p>
+      </div>
+      <div class="modal-footer green lighten-5">
+        <a href="#!" id="cancel-accept" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+        <a href="#!" id="confirm-accept" class=" modal-action modal-close waves-effect waves-red btn-flat">Confirm</a>
       </div>
     </div>
 

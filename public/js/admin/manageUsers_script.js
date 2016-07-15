@@ -6,18 +6,6 @@ $(document).ready(function(){
       e.preventDefault();
       $('#admin-header-wrapper').empty();
       $('#admin-header-wrapper').append('<h4 id="admin-content-panel-header">All Users</h4>' );
-      // $('#admin-header-wrapper').append(
-      //   '<div class="col s6">'+
-      //     '<h4 id="admin-content-panel-header">All Users</h4>'+
-      //   '</div>'+
-      //   '<div class="input-field col s6">'+
-      //   '<form method="GET" action="'+config.search_user+'">'+
-      //     '<input placeholder="Search" id="search" type="text" name = "search" class="validate">'+
-      //     // '<a href="#!" id="search-button"></a>'+
-      //   '</form>'+
-      //    '</div>'+
-      //  '</div>'
-      // );
       users.show_all();
   });
 
@@ -62,13 +50,13 @@ $(document).ready(function(){
       '<div class="col s6">'+
         '<h4 id="admin-content-panel-header">Pending Breeders</h4>'+
       '</div>'+
-      '<div class="input-field col s6">'+
-       '<input placeholder="Search" id="search" type="text" class="validate">'+
-       '</div>'+
+
      '</div>'
     );
     users.show_all_pending();
   });
+
+
 
   // if manage pages tab is clicked display the manage pages view
   $('#pages-home').click(function(e){
@@ -142,6 +130,29 @@ $(document).ready(function(){
      users.delete_user(button, name, change, token, id);
  });
 
+
+ $('body').on('click', '#accept-data', function (e) {
+     e.preventDefault();
+     $('#accept-reject-modal').closeModal();
+     $('#accept-modal .modal-content h4').text($('#accept-label').text() + " User");
+     $('#accept-modal').openModal({
+      dismissible: true,
+      opacity: 0,
+   });
+ });
+
+ $('body').on('click', '#confirm-accept', function (e){
+   var button = $('tr').find('[data-manage-clicked="clicked"]');
+   var name = $('#accept-reject-modal h4').text();
+   var token = $('#accept-token').attr('value');
+   var id = $('#accept-id').attr('value');
+   users.approve_user(name,button, token, id);
+ });
+
+ $('body').on('click', '#cancel-accept', function (e){
+    $('tr').find('[data-manage-clicked="clicked"]').attr('data-manage-clicked','');
+ });
+
     // on click of block icon
   $('body').on('click', '#block-data', function (e) {
       e.preventDefault();
@@ -181,9 +192,40 @@ $(document).ready(function(){
      $('tr').find('[data-clicked="clicked"]').attr('data-clicked','');
   });
 
-  $('body').on('click', '.approve-data', function (e) {
-      e.preventDefault();
+  // for accept and reject modal cancel
+  $('body').on('click', '#cancel-accept-reject', function (e){
+    $('tr').find('[data-manage-clicked="clicked"]').attr('data-manage-clicked', '');
+  });
 
+  // for manage user modal cancel
+  $('body').on('click', '#cancel-manage', function (e){
+    $('tr').find('[data-clicked="clicked"]').attr('data-clicked', '');
+  });
+
+
+  // accept and reject user modal triggers
+  $('body').on('click', '.manage-accept-button', function (e){
+     e.preventDefault();
+     $(this).attr('data-manage-clicked', 'clicked');
+     $('#accept-reject-modal').openModal({
+        dismissible: false,
+        opacity: 0,
+     });
+     //console.log($(this).parents('td').siblings('.name-column').text());
+     $('#accept-reject-modal h4').text($(this).parents('td').siblings('.name-column').text());
+     //console.log($(this).parents('td').siblings('.status-column').text());
+     if($(this).parents('td').siblings('.status-column').text()==0){
+        $('#accept-icon').text('check');
+        $('#accept-label').text('Accept');
+     }
+     else{
+         $('#block-icon').text('');
+         $('#block-label').text('');
+     }
+     $('#delete-token').attr('value', $(this).parents('td').siblings('.token-column').text());
+     $('#delete-id').attr('value', $(this).parents('td').siblings('.id-column').text());
+     $('#accept-token').attr('value', $(this).parents('td').siblings('.token-column').text());
+     $('#accept-id').attr('value', $(this).parents('td').siblings('.id-column').text());
   });
 
   $('body').on('click', '.manage-button', function (e){
@@ -210,8 +252,8 @@ $(document).ready(function(){
      $('#block-id').attr('value', $(this).parents('td').siblings('.id-column').text());
   });
 
-  $('body').on('click', '#cancel-manage', function (e){
-    $('tr').find('[data-clicked="clicked"]').attr('data-clicked', '');
-  });
+  // $('body').on('click', '#cancel-manage', function (e){
+  //   $('tr').find('[data-clicked="clicked"]').attr('data-clicked', '');
+  // });
 
 });
