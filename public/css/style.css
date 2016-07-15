@@ -352,7 +352,7 @@ blockquote{
    display: none;
 }
 
-#delete-data{
+#delete-data {
    color: #D32F2F;
 }
 
@@ -362,6 +362,9 @@ blockquote{
 
 #accept-data{
    color: #388e3c;
+}
+#reject-data{
+   color: #D32F2F;
 }
 
 .ecommerce-icon{

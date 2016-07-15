@@ -34,11 +34,7 @@ var users = {
 
           '</tbody>'+
           '</table>'
-        );
-      //   $('#account-dropdown').dropdown({
-      //     hover: true, // Activate on hover
-      //   });
-
+       );
        var table =  $('#user-table').DataTable({
             data: data,
             columns: [
@@ -180,6 +176,7 @@ var users = {
 
         });
           $(".tooltipped").tooltip({delay:50});
+
       },
       error: function(message){
           console.log(message['responseText']);
@@ -238,46 +235,6 @@ var users = {
             ]
 
          });
-      //   data.forEach(function(data){
-      //     var status;
-      //     var value;
-      //     var icon_color;
-      //     if(data.is_blocked == 1){
-      //       status = 'undo';
-      //       value = 'Unblock';
-      //       icon_color = 'green-text';
-      //     }
-      //     else {
-      //       status ='block';
-      //       value = 'Block';
-      //       icon_color = 'orange-text';
-      //     };
-      //     $('#table-content').append(
-      //       '<tr>'+
-      //         '<td><div>'+data.name+'</div></td>'+
-      //         '<td><div>'+data.title+'</div></td>'+
-      //         '<td>'+
-      //           '<div class="row action-column">'+
-      //             '<div class="col s6">'+
-      //               '<form method="POST" action="'+config.block_user+'" class="block-form" data-user-id="'+data.user_id+'">'+
-      //                 '<input name="_token" type="hidden" value="'+data.token+'">'+
-      //                 '<input name="_method" type="hidden" value="PUT">'+
-      //                 '<a href="#!" class="tooltipped block-data" data-position="bottom" data-delay="50" data-tooltip="'+value+'" data-user-name = "'+data.name+'" data-clicked = ""><i class="material-icons block-icon '+icon_color+'"  >'+status+'</i></a>'+
-      //               '</form>'+
-      //             '</div>'+
-      //             '<div class="col s6">'+
-      //               '<form method="POST" action="'+config.delete_user+'" class="delete-form" data-user-id="'+data.user_id+'">'+
-      //                 '<input name="_token" type="hidden" value="'+data.token+'">'+
-      //                 '<input name="_method" type="hidden" value="DELETE">'+
-      //                 '<a  class="tooltipped delete-data" href="#!" data-position="bottom" data-delay="50" data-tooltip="Delete" data-user-name = "'+data.name+'"><i class="material-icons red-text">delete</i></a>'+
-      //               '</form>'+
-      //             '</div>'+
-      //           '</div>'+
-      //         '</td>'+
-      //       '</tr>'
-      //     );
-        //
-      //   });
           $(".tooltipped").tooltip({delay:50});
       },
       error: function(message){
@@ -299,15 +256,7 @@ var users = {
            '<thead>'+
              '<tr class="teal white-text">'+
                  '<th data-field="id">Name</th>'+
-                 '<th data-field="type">Account Type'+
-                   // '<a id="account-dropdown" class="dropdown-button white-text" data-beloworigin="true" href="#" data-activates="dropdown1">Account Type<i class="material-icons vertical-align">arrow_drop_down</i></a>'+
-                   '</th>'+
-                   // '<ul id="dropdown1" class="dropdown-content">'+
-                   //   '<li id="all"><a href="#!">All</a></li>'+
-                   //   '<li class="divider"></li>'+
-                   //   '<li id="users-customer"><a href="#!">Customer</a></li>'+
-                   //   '<li id="users-breeder"><a href="#!" >Breeder</a></li>'+
-                   // '</ul>'+
+                 '<th data-field="type">Account Type</th>'+
                  '<th data-field="action">Action</th>'+
                  '<th data-field="block-status">Status</th>'+
                  '<th data-field="user-id">ID</th>'+
@@ -319,34 +268,6 @@ var users = {
            '</tbody>'+
            '</table>'
          );
-      //   data.forEach(function(data){
-      //     $('#table-content').append(
-      //           '<tr>'+
-      //             '<td>'+data.name+'</td>'+
-      //             '<td>'+data.title+'</td>'+
-      //             '<td>'+
-      //               '<div class="row action-column">'+
-      //                 '<div class="col s6">'+
-      //                   '<form method="POST" action="'+config.block_user+'" class="block-form" data-user-id="'+data.user_id+'">'+
-      //                     '<input name="_token" type="hidden" value="'+data.token+'">'+
-      //                     '<input name="_method" type="hidden" value="PUT">'+
-      //                     '<a href="#!" class="tooltipped block-data" data-position="bottom" data-delay="50" data-tooltip="Approve" data-user-name = "'+data.name+'" data-clicked = ""><i class="material-icons block-icon green-text">check</i></a>'+
-      //                   '</form>'+
-      //                 '</div>'+
-      //                 '<div class="col s6">'+
-      //                   '<form method="POST" action="'+config.delete_user+'" class="delete-form" data-user-id="'+data.user_id+'">'+
-      //                     '<input name="_token" type="hidden" value="'+data.token+'">'+
-      //                     '<input name="_method" type="hidden" value="DELETE">'+
-      //                     '<a  class="tooltipped delete-data" href="#!" data-position="bottom" data-delay="50" data-tooltip="Reject" data-user-name = "'+data.name+'"><i class="material-icons red-text">close</i></a>'+
-      //                   '</form>'+
-        //
-      //                 '</div>'+
-      //               '</div>'+
-      //             '</td>'+
-      //           '</tr>'
-      //     );
-        //
-      //   });
 
       var table =  $('#user-table').DataTable({
           data: data,
@@ -364,6 +285,7 @@ var users = {
       });
 
         $(".tooltipped").tooltip({delay:50});
+        $('select').material_select();
       },
       error: function(message){
           console.log(message['responseText']);
@@ -409,46 +331,6 @@ var users = {
              {className:"token-column",data: 'token', bSearchable:false}
            ]
         });
-      //   data.data.forEach(function(data){
-      //     var status;
-      //     var value;
-      //     var icon_color;
-      //     if(data.is_blocked == 1){
-      //       status = 'undo';
-      //       value = 'Unblock';
-      //       icon_color = 'green-text';
-      //     }
-      //     else {
-      //       status ='block';
-      //       value = 'Block';
-      //       icon_color = 'orange-text';
-      //     };
-      //     $('#table-content').append(
-      //           '<tr>'+
-      //             '<td>'+data.name+'</td>'+
-      //             '<td>'+data.title+'</td>'+
-      //             '<td>'+
-      //               '<div class="row action-column">'+
-      //                 '<div class="col s6">'+
-      //                   '<form method="POST" action="'+config.block_user+'" class="block-form" data-user-id="'+data.user_id+'">'+
-      //                     '<input name="_token" type="hidden" value="'+data.token+'">'+
-      //                     '<input name="_method" type="hidden" value="PUT">'+
-      //                     '<a href="#" class="tooltipped block-data" data-position="bottom" data-delay="50" data-tooltip="'+value+'" data-user-name = "'+data.name+'"><i class="material-icons block-icon '+icon_color+'"  >'+status+'</i></a>'+
-      //                   '</form>'+
-      //                 '</div>'+
-      //                 '<div class="col s6">'+
-      //                   '<form method="POST" action="'+config.delete_user+'" class="delete-form" data-user-id="'+data.user_id+'">'+
-      //                     '<input name="_token" type="hidden" value="'+data.token+'">'+
-      //                     '<input name="_method" type="hidden" value="DELETE">'+
-      //                     '<a href="#" class="tooltipped delete-data" data-position="bottom" data-delay="50" data-tooltip="Delete" data-user-name = "'+data.name+'"><i class="material-icons red-text">delete</i></a>'+
-      //                   '</form>'+
-      //                 '</div>'+
-      //               '</div>'+
-      //             '</td>'+
-      //           '</tr>'
-      //     );
-        //
-      //   });
          $('select').material_select();
          $(".tooltipped").tooltip({delay:50});
       }
@@ -528,8 +410,6 @@ var users = {
    });
  },
 
-
-
   approve_user: function(name,button, token, id){
     $.ajax({
       url: 'home/approve',
@@ -540,8 +420,9 @@ var users = {
           "userId": id
       },
       success: function(data){
-         Materialize.toast(name + ' Accepted', 2500, 'green accent');
-
+         Materialize.toast(name + "'s Application Accepted", 2500, 'green accent');
+         var table = $('#user-table').DataTable();
+         table.row( button ).remove().draw();
       },
       error: function(message){
         console.log(message['responseText']);
@@ -550,7 +431,31 @@ var users = {
 
 
 
-  }
+},
+
+reject_user: function(button,name, change, token, id){
+$.ajax({
+url: 'home/delete',
+type: 'DELETE',
+cache: false,
+data:{
+     "_token" : token,
+     "userId": id
+},
+success: function(data){
+    var table = $('#user-table').DataTable();
+    table.row( change ).remove().draw();
+  //change.remove().draw();
+  Materialize.toast(name + "'s Application Rejected", 2500, 'red accent-2');
+
+},
+error: function(message){
+  console.log(message['responseText']);
+}
+});
+
+},
+
 
 
 };

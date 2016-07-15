@@ -264,12 +264,12 @@
             </a>
             {!!Form::close()!!}
             {!!Form::open(['route'=>'admin.delete', 'method'=>'DELETE', 'class'=>'delete-form'])!!}
-               <a id="delete-data" href="#">
+               <a id="reject-data" href="#">
                   <div class="col s6 center">
                      <i id="delete-icon" class="material-icons manage-icon">close</i>
-                     <input id="delete-token" name="_token" type="hidden" value="">
-                     <input id="delete-id" name="user_id" type="hidden" value="">
-                     <div id="delete-label" class="col s12">Reject</div>
+                     <input id="reject-token" name="_token" type="hidden" value="">
+                     <input id="reject-id" name="user_id" type="hidden" value="">
+                     <div id="reject-label" class="col s12">Reject</div>
                   </div>
                </a>
             {!!Form::close()!!}
@@ -302,8 +302,8 @@
         <p>Are you sure you want to block this user?</p>
       </div>
       <div class="modal-footer orange lighten-5">
-        <a href="#!" id="cancel-block" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
-        <a href="#!" id="confirm-block" class=" modal-action modal-close waves-effect waves-red btn-flat">Confirm</a>
+        <a href="#!" id="cancel-block" class=" modal-action modal-close waves-effect waves-orange btn-flat">Cancel</a>
+        <a href="#!" id="confirm-block" class=" modal-action modal-close waves-effect waves-orange btn-flat">Confirm</a>
       </div>
     </div>
 
@@ -312,11 +312,24 @@
       <div class="modal-content">
         <h4>Accept User</h4>
         <div class="divider"></div>
-        <p>Are you sure you want to accept this user?</p>
+        <p>Are you sure you want to accept this user's application?</p>
       </div>
       <div class="modal-footer green lighten-5">
-        <a href="#!" id="cancel-accept" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
-        <a href="#!" id="confirm-accept" class=" modal-action modal-close waves-effect waves-red btn-flat">Confirm</a>
+        <a href="#!" id="cancel-accept" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <a href="#!" id="confirm-accept" class=" modal-action modal-close waves-effect waves-green btn-flat">Confirm</a>
+      </div>
+    </div>
+
+    {{-- Reject modal --}}
+    <div id="reject-modal" class="modal action-dialog-box red lighten-5">
+      <div class="modal-content">
+        <h4>Reject User</h4>
+        <div class="divider"></div>
+        <p>Are you sure you want to reject this user's application?</p>
+      </div>
+      <div class="modal-footer red lighten-5">
+        <a href="#!" id="cancel-reject" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+        <a href="#!" id="confirm-reject" class=" modal-action modal-close waves-effect waves-red btn-flat">Confirm</a>
       </div>
     </div>
 

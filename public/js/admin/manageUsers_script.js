@@ -84,41 +84,16 @@ $(document).ready(function(){
     users.show_all_pending();
   });
 
+  // manage-user-modal triggers
 
-
-
-  // on click of delete icon
+  // on click of delete icon in manage-user-modal
   $('body').on('click', '#delete-data', function (e) {
       e.preventDefault();
-      //console.log("delete");
-      //var data = $(this).siblings().find('input[name=_token]').val();
-      //console.log($(this).siblings().first().val());
-      //var value = $(this).siblings().first().val();
-      //console.log("TOKEN" + $(this).siblings().first().val() + " ID: " + $(this).parent('.delete-form').attr('data-user-id'));
-      //var source =  $(this);
-
-      //console.log($(this).parents('li').attr('class'));
-      // var button =  $('tr').find('[data-clicked="clicked"]');
-      // var change = $('tr').find('[data-clicked="clicked"]').parents('tr');
-      // var name = $('#manage-user-modal h4').text();
-      // var token = $('#delete-token').attr('value');
-      // var id = $('#delete-id').attr('value');
-      // console.log(button);
-      // console.log(change);
-      // console.log(name);
-      // console.log(token);
-      // console.log(id);
       $('#manage-user-modal').closeModal();
       $('#delete-modal').openModal({
         dismissible: true,
         opacity: 0,
       });
-
-
-      // var color = $(this).parents('li').attr('class').split(' ')[2];
-      //console.log($(this).nextAll().attr('class', 'collection-item avatar red');
-      //$(this).parents('li').removeClass('teal lighten-4');
-      //users.delete_user(button, name, change, $(this).siblings().val(), $(this).parent('.delete-form').attr('data-user-id'));
   });
 
   $('#confirm-delete').click(function(){
@@ -131,40 +106,17 @@ $(document).ready(function(){
  });
 
 
- $('body').on('click', '#accept-data', function (e) {
-     e.preventDefault();
-     $('#accept-reject-modal').closeModal();
-     $('#accept-modal .modal-content h4').text($('#accept-label').text() + " User");
-     $('#accept-modal').openModal({
-      dismissible: true,
-      opacity: 0,
-   });
- });
-
- $('body').on('click', '#confirm-accept', function (e){
-   var button = $('tr').find('[data-manage-clicked="clicked"]');
-   var name = $('#accept-reject-modal h4').text();
-   var token = $('#accept-token').attr('value');
-   var id = $('#accept-id').attr('value');
-   users.approve_user(name,button, token, id);
- });
-
- $('body').on('click', '#cancel-accept', function (e){
-    $('tr').find('[data-manage-clicked="clicked"]').attr('data-manage-clicked','');
- });
 
     // on click of block icon
   $('body').on('click', '#block-data', function (e) {
       e.preventDefault();
-      // var block_button= $(this);
-      // var block_name = $(this).attr('data-user-name');
-      // var block_token = $(this).siblings().val();
-      // var block_id = $(this).parent('.block-form').attr('data-user-id');
-      //console.log($(this));
-      // $(this).attr('data-clicked', 'clicked');
-      // console.log($(this).attr('data-clicked'));
       $('#manage-user-modal').closeModal();
       $('#block-modal .modal-content h4').text($('#block-label').text() + " User");
+      if($('#block-label').text() == 'Block'){
+         $('#block-modal .modal-content p').text('Are you sure you want to block this user?');
+      }else{
+         $('#block-modal .modal-content p').text('Are you sure you want to unblock this user?');
+      }
       $('#block-modal').openModal({
         dismissible: true,
         opacity: 0,
@@ -203,7 +155,33 @@ $(document).ready(function(){
   });
 
 
+    $('body').on('click', '.manage-button', function (e){
+       e.preventDefault();
+       $(this).attr('data-clicked', 'clicked');
+       $('#manage-user-modal').openModal({
+          dismissible: false,
+          opacity: 0,
+       });
+       //console.log($(this).parents('td').siblings('.name-column').text());
+       $('#manage-user-modal h4').text($(this).parents('td').siblings('.name-column').text());
+       //console.log($(this).parents('td').siblings('.status-column').text());
+       if($(this).parents('td').siblings('.status-column').text()==1){
+          $('#block-icon').text('refresh');
+          $('#block-label').text('Unblock');
+       }
+       else{
+           $('#block-icon').text('block');
+           $('#block-label').text('Block');
+       }
+       $('#delete-token').attr('value', $(this).parents('td').siblings('.token-column').text());
+       $('#delete-id').attr('value', $(this).parents('td').siblings('.id-column').text());
+       $('#block-token').attr('value', $(this).parents('td').siblings('.token-column').text());
+       $('#block-id').attr('value', $(this).parents('td').siblings('.id-column').text());
+    });
+
+
   // accept and reject user modal triggers
+  // open  accept-reject-modal
   $('body').on('click', '.manage-accept-button', function (e){
      e.preventDefault();
      $(this).attr('data-manage-clicked', 'clicked');
@@ -211,46 +189,66 @@ $(document).ready(function(){
         dismissible: false,
         opacity: 0,
      });
+
      //console.log($(this).parents('td').siblings('.name-column').text());
      $('#accept-reject-modal h4').text($(this).parents('td').siblings('.name-column').text());
      //console.log($(this).parents('td').siblings('.status-column').text());
-     if($(this).parents('td').siblings('.status-column').text()==0){
-        $('#accept-icon').text('check');
-        $('#accept-label').text('Accept');
-     }
-     else{
-         $('#block-icon').text('');
-         $('#block-label').text('');
-     }
-     $('#delete-token').attr('value', $(this).parents('td').siblings('.token-column').text());
-     $('#delete-id').attr('value', $(this).parents('td').siblings('.id-column').text());
+     $('#accept-icon').text('check');
+     $('#accept-label').text('Accept');
+
+     $('#reject-token').attr('value', $(this).parents('td').siblings('.token-column').text());
+     $('#reject-id').attr('value', $(this).parents('td').siblings('.id-column').text());
      $('#accept-token').attr('value', $(this).parents('td').siblings('.token-column').text());
      $('#accept-id').attr('value', $(this).parents('td').siblings('.id-column').text());
   });
 
-  $('body').on('click', '.manage-button', function (e){
-     e.preventDefault();
-     $(this).attr('data-clicked', 'clicked');
-     $('#manage-user-modal').openModal({
-        dismissible: false,
-        opacity: 0,
-     });
-     //console.log($(this).parents('td').siblings('.name-column').text());
-     $('#manage-user-modal h4').text($(this).parents('td').siblings('.name-column').text());
-     //console.log($(this).parents('td').siblings('.status-column').text());
-     if($(this).parents('td').siblings('.status-column').text()==1){
-        $('#block-icon').text('refresh');
-        $('#block-label').text('Unblock');
-     }
-     else{
-         $('#block-icon').text('block');
-         $('#block-label').text('Block');
-     }
-     $('#delete-token').attr('value', $(this).parents('td').siblings('.token-column').text());
-     $('#delete-id').attr('value', $(this).parents('td').siblings('.id-column').text());
-     $('#block-token').attr('value', $(this).parents('td').siblings('.token-column').text());
-     $('#block-id').attr('value', $(this).parents('td').siblings('.id-column').text());
+  $('body').on('click', '#accept-data', function (e) {
+      e.preventDefault();
+      $('#accept-reject-modal').closeModal();
+      $('#accept-modal .modal-content h4').text($('#accept-label').text() + " User");
+      $('#accept-modal').openModal({
+      dismissible: true,
+      opacity: 0,
+    });
   });
+
+  $('body').on('click', '#confirm-accept', function (e){
+    var button = $('tr').find('[data-manage-clicked="clicked"]');
+    var name = $('#accept-reject-modal h4').text();
+    var token = $('#accept-token').attr('value');
+    var id = $('#accept-id').attr('value');
+    users.approve_user(name,button, token, id);
+  });
+
+  $('body').on('click', '#cancel-accept', function (e){
+     $('tr').find('[data-manage-clicked="clicked"]').attr('data-manage-clicked','');
+  });
+
+     // on click of delete icon in manage-user-modal
+     $('body').on('click', '#reject-data', function (e) {
+         e.preventDefault();
+         $('#accept-reject-modal').closeModal();
+         $('#reject-modal').openModal({
+           dismissible: true,
+           opacity: 0,
+         });
+     });
+
+     $('#confirm-reject').click(function(){
+        var button =  $('tr').find('[data-manage-clicked="clicked"]');
+        var change = $('tr').find('[data-manage-clicked="clicked"]').parents('tr');
+        var name = $('#accept-reject-modal h4').text();
+        var token = $('#reject-token').attr('value');
+        var id = $('#reject-id').attr('value');
+        users.reject_user(button, name, change, token, id);
+   });
+
+  $('body').on('click', '#cancel-reject', function (e){
+     $('tr').find('[data-manage-clicked="clicked"]').attr('data-manage-clicked','');
+  });
+
+
+
 
   // $('body').on('click', '#cancel-manage', function (e){
   //   $('tr').find('[data-clicked="clicked"]').attr('data-clicked', '');

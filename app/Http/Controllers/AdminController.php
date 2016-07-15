@@ -206,7 +206,7 @@ class AdminController extends Controller
       $users = $this->retrieveAllUsers();
       $userArray = [];
       foreach ($users as $user) {
-        if($user->role_id==2 && $user->email_verified==0 && $user->deleted_at==NULL && $user->approved==0){
+        if($user->role_id==2 && $user->deleted_at==NULL && $user->approved==0){
           $user->title = ucfirst($user->title);
           $user->token = csrf_token();
           $userArray[] = $user;
@@ -219,6 +219,9 @@ class AdminController extends Controller
     public function deleteUser(Request $request){
       $user = User::find($request->userId);
       $user->delete();
+      Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved], function ($message) use($user){
+          $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
+      });
       return "OK";
     }
 
@@ -242,7 +245,9 @@ class AdminController extends Controller
       $user = User::find($request->userId);
       $user->is_blocked = !$user->is_blocked;
       $user->save();
-
+      Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->is_blocked], function ($message) use($user){
+          $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
+      });
       return  "Ok";
     }
 
@@ -285,7 +290,7 @@ class AdminController extends Controller
       * @param  \Illuminate\Http\Request  $request
       * @return View
       */
-     public function register(Request $request)
+     public function createUser(Request $request)
      {
         $validator = $this->validator($request->all());
           if ($validator->fails()) {
@@ -298,15 +303,14 @@ class AdminController extends Controller
         $user = $this->create($request->all(), $verCode, $password);
         $user->assignRole('breeder');
         $breeder = Breeder::create([])->users()->save($user);
-      //   $data = [
-      //      'email' => $request->input('email'),
-      //      'verCode' => $verCode,
-      //      'type' => 'sent'
-      //   ];
+         $data = [
+            'email' => $request->input('email'),
+            'password' => $password
+         ];
 
-         // Mail::send('emails.verification', $data, function ($message) use($data){
-         //     $message->to($data['email'])->subject('Breeder Credential for Swine E-Commerce PH');
-         // });
+          Mail::send('emails.credentials', ['email' => $request->input('email'),'password' => $password], function ($message) use($data){
+              $message->to($data['email'])->subject('Breeder Credentials for Swine E-Commerce PH');
+          });
          //
          // return view('emails.message', $data);
          return Redirect::back()->withMessage('User Created!');
@@ -336,6 +340,9 @@ class AdminController extends Controller
     public function acceptUser(Request $request){
       $user = User::find($request->userId);
       $user->approved = !$user->approved;
+      Mail::send('emails.notification', ['type'=>'accepted'], function ($message) use($user){
+          $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
+      });
       $user->save();
 
       return  "Ok";
