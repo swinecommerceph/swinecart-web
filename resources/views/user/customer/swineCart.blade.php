@@ -151,7 +151,8 @@
                     </div>
                 </li>
                 <li class="collection-item product-type">{{--{{$product->type}} - {{$product->breed}} --}}
-                  <span></span>
+                  <span class="type"></span> -
+                  <span class="breed"></span>
                 </li>
                 <li class="collection-item product-age">{{--{{$product->age}} days old --}}
                   <span></span> days old
@@ -165,35 +166,28 @@
                 <li class="collection-item product-backfat_thickness">{{--Backfat Thickness: {{$product->backfat_thickness}} --}}
                   Backfat Thickness: <span></span>
                 </li>
-                <li>
-                      <i>Delivery</i>
-                      <span class="left-align">
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star_half</i>
-                          <i class="material-icons yellow-text">star_border</i>
-                      </span>
-                      <i>Transaction</i>
-                      <span>
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star_border</i>
-                      </span>
-                      <i>Product Quality</i>
-                      <span>
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star</i>
-                          <i class="material-icons yellow-text">star_half</i>
-                      </span>
+                <li class="collection-item rating">
+                    <div class="delivery-rating">Delivery:<span></span></div>
+                    <div class="transaction-rating">Transaction:<span></span></div>
+                    <div class="product-quality-rating">Product Quality:<span></span></div>
                 </li>
             </ul>
           </div>
         </div>
+      </div>
+    </div>
+
+    {{-- Confirmation Modal --}}
+    <div id="confirmation" class="modal">
+      <div class="modal-content">
+        <div class="input-field col s8">
+          <i class="material-icons prefix">security</i>
+          <input id="icon_prefix" type="text" length="10">
+          <label for="icon_prefix">Confimation Code</label>
+        </div>
+      </div>
+      <div class="modal-footer">
+        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Confirm</a>
       </div>
     </div>
 
@@ -257,8 +251,8 @@
     {{-- Transaction History --}}
     <div id="transaction-history">
       <div class="row">
-        <div class="col s4 offset-s2">
-          ITEM
+        <div class="col s6">
+          &nbsp&nbsp&nbspITEM
         </div>
         <div class="col s4">
           BREEDER
@@ -269,13 +263,13 @@
       </div>
       <ul id="cart" class="collection cart">
         @forelse($history as $log)
-          <li class="collection-item swineyswine">
-            <div class="row">
+          <li class="collection-item">
+            <div class="row  swine-cart-item valign-wrapper">
               <div class="col s2 center-align">
                 <a href="#"><img src="{{$log->img_path}}" width="75" height="75" class="circle"></a>
               </div>
               <div class="col s4 verticalLine">
-                <h5 class="col s12">{{$log->product_name}}</h5>
+                <a href="#" class="anchor-title teal-text" data-breeder="{{$log->breeder}}" data-breed="{{$log->product_breed}}" data-age="{{$log->product_age}}" data-imgpath="{{$log->img_path}}" data-other-details="{{$log->other_details}}" data-type="{{ucfirst($log->product_type)}}" data-adg="{{$log->product_adg}}" data-fcr="{{$log->product_fcr}}" data-backfat-thickness="{{$log->product_backfat_thickness}}"><span class="col s12">{{$log->product_name}}</span></a>
                 <span class="col s12">
                   {{ucfirst($log->product_type)}}
                 </span>
@@ -321,7 +315,7 @@
         <ul id="cart" class="collection cart">
           @forelse($products as $product)
               {{-- Original Content --}}
-              <li class="collection-item swineyswine">
+              <li class="collection-item">
                 <div class="row swine-cart-item valign-wrapper">
                   {{-- Product Status Icons --}}
                   @if($product->status === 'requested')
@@ -462,14 +456,16 @@
                     <a href="#"><img src="{{$product->img_path}}" width="75" height="75" class="circle"></a>
                   </div>
                   {{-- Product Info --}}
-                  <div class="info col s4 verticalLine">
-                    <a href="#" class="anchor-title teal-text" data-breeder="{{$product->breeder}}" data-age="{{$product->product_age}}" data-imgpath="{{$product->img_path}}" data-other-details="{{$product->other_details}}" data-type="{{ucfirst($product->product_type)}}" data-adg="{{$product->product_adg}}" data-fcr="{{$product->product_fcr}}" data-backfat-thickness="{{$product->product_backfat_thickness}}"><span class="col s12">{{$product->product_name}}</span></a>
-                    <span class="col s12">
-                      {{ucfirst($product->product_type)}} - {{ucfirst($product->product_breed)}}
-                    </span>
-                    <span class="col s12">
-                      {{$product->breeder}}
-                    </span>
+                  <div class="info col s4 verticalLine valign-wrapper">
+                    <div class="valign">
+                      <a href="#" class="anchor-title teal-text" data-breeder="{{$product->breeder}}" data-breed="{{$product->product_breed}}" data-age="{{$product->product_age}}" data-imgpath="{{$product->img_path}}" data-other-details="{{$product->other_details}}" data-type="{{ucfirst($product->product_type)}}" data-adg="{{$product->product_adg}}" data-fcr="{{$product->product_fcr}}" data-backfat-thickness="{{$product->product_backfat_thickness}}"><span class="col s12">{{$product->product_name}}</span></a>
+                      <span class="col s12">
+                        {{ucfirst($product->product_type)}} - {{ucfirst($product->product_breed)}}
+                      </span>
+                      <span class="col s12">
+                        {{$product->breeder}}
+                      </span>
+                    </div>
                   </div>
                   {{-- Quantity Check --}}
                   @if($product->product_type === 'semen')
@@ -508,8 +504,12 @@
                               Message
                             </a>
                       @elseif($product->status === 'paid' or $product->status === 'on_delivery')
-                            <a class="receive-button btn-flat" data-product-id=>
-                              (Receive)
+                            <a href="#confirmation" class="receive-button modal-trigger btn" data-product-id=>
+                              Confirm
+                            </a>
+                      @elseif($product->status === 'paid' or $product->status === 'on_delivery')
+                            <a href="#confirmation" class="receive-button modal-trigger btn" data-product-id=>
+                              Confirm
                             </a>
                       @elseif($product->status === 'sold')
                         <span class="col s12 center-align">

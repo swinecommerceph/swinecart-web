@@ -90,6 +90,7 @@ class SwineCartController extends Controller
      */
     public function rate(Request $request){
       if($request->ajax()){
+        $customer = $this->user->userable;
         $reviews = Breeder::find($request->breederId)->reviews();
         $review = new Review;
         $review->customer_id = $request->customerId;
@@ -97,6 +98,10 @@ class SwineCartController extends Controller
         $review->rating_delivery = $request->delivery;
         $review->rating_transaction = $request->transaction;
         $review->rating_productQuality = $request->productQuality;
+        $swineCartItems = $customer->swineCartItems();
+        $reviewed = $swineCartItems->find($request->productId);
+        $reviewed->if_rated = 1;
+        $reviewed->save();
         $reviews->save($review);
       }
     }
@@ -186,7 +191,7 @@ class SwineCartController extends Controller
         }
         else {
           $customer = $this->user->userable;
-          $swineCartItems = $customer->swineCartItems()->get();
+          $swineCartItems = $customer->swineCartItems()->where('if_rated',0)->get();
           $products = [];
           $log = $customer->transactionLogs()->get();
           $history = [];
@@ -203,7 +208,7 @@ class SwineCartController extends Controller
               $itemDetail['product_name'] = $product->name;
               $itemDetail['product_type'] = $product->type;
               $itemDetail['product_quantity'] = $product->quantity;
-              $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
+              $itemDetail['product_breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
               $itemDetail['product_age'] = $product->age;
               $itemDetail['product_adg'] = $product->adg;
               $itemDetail['product_fcr'] = $product->fcr;
@@ -222,6 +227,13 @@ class SwineCartController extends Controller
               $itemDetail['product_type'] = $product->type;
               $itemDetail['product_quantity'] = $product->quantity;
               $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+              $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+              $itemDetail['product_breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+              $itemDetail['product_age'] = $product->age;
+              $itemDetail['product_adg'] = $product->adg;
+              $itemDetail['product_fcr'] = $product->fcr;
+              $itemDetail['other_details'] = $product->other_details;
+              $itemDetail['product_backfat_thickness'] = $product->backfat_thickness;
               $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
               $itemDetail['timestamp'] = $item->created_at;
               $itemDetail['token'] = csrf_token();
@@ -246,4 +258,22 @@ class SwineCartController extends Controller
             return $customer->swineCartItems()->where('if_requested',0)->count();
         }
     }
+
+    /**
+     * Parse $breed if it contains '+' (ex. landrace+duroc)
+     * to "Landrace x Duroc"
+     *
+     * @param  String   $breed
+     * @return String
+     */
+    private function transformBreedSyntax($breed)
+    {
+        if(str_contains($breed,'+')){
+            $part = explode("+", $breed);
+            $breed = ucfirst($part[0])." x ".ucfirst($part[1]);
+            return $breed;
+        }
+        return ucfirst($breed);
+    }
+
 }

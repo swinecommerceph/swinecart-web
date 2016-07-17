@@ -53,18 +53,14 @@ $(document).ready(function(){
       $('#submit-rate').parents('form').attr('data-product-id',$(this).attr('data-product-id'));
       $('#submit-rate').parents('form').attr('data-status',$(this).attr('data-status'));
       $('#submit-rate').siblings('input').val($(this).attr('data-token'));
-      var afterRate = function(){
-        swinecart.delete( $(this).parents('form'), $(this).parents('li').first());
-      };
-      $('#rate').openModal({
-        complete : afterRate
-      });
+      $('#rate').openModal({});
     });
 
     $('.anchor-title').click(function(e){
       $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.collection-header').children('.row').children('.product-name').html($(this).children('span').html());
       $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.collection-header').children('.row').children('.product-farm').html($(this).attr('data-breeder'));
-      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-type').html($(this).attr('data-type'));
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-type').children('span.type').html($(this).attr('data-type'));
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-type').children('span.breed').html($(this).attr('data-breed'));
       $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-age').children('span').html($(this).attr('data-age'));
       $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-adg').children('span').html($(this).attr('data-adg'));
       $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-fcr').children('span').html($(this).attr('data-fcr'));
