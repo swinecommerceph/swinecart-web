@@ -158,18 +158,18 @@
                   <span></span> days old
                 </li>
                 <li class="collection-item product-adg">{{--Average Daily Gain: {{$product->adg}} g--}}
-                  Average Daily Gain: <span></span>
+                  Average Daily Gain: <span></span> g
                 </li>
                 <li class="collection-item product-fcr">{{--Feed Conversion Ratio: {{$product->fcr}}--}}
                   Feed Conversion Ratio: <span></span>
                 </li>
                 <li class="collection-item product-backfat_thickness">{{--Backfat Thickness: {{$product->backfat_thickness}} --}}
-                  Backfat Thickness: <span></span>
+                  Backfat Thickness: <span></span> mm
                 </li>
                 <li class="collection-item rating">
-                    <div class="delivery-rating">Delivery:<span></span></div>
-                    <div class="transaction-rating">Transaction:<span></span></div>
-                    <div class="product-quality-rating">Product Quality:<span></span></div>
+                    <div class="delivery-rating">Delivery:<span class="col right"></span></div>
+                    <div class="transaction-rating">Transaction:<span class="col right"></span></div>
+                    <div class="product-quality-rating">Product Quality:<span class="col right"></span></div>
                 </li>
             </ul>
           </div>
@@ -181,13 +181,15 @@
     <div id="confirmation" class="modal">
       <div class="modal-content">
         <div class="input-field col s8">
-          <i class="material-icons prefix">security</i>
-          <input id="icon_prefix" type="text" length="10">
-          <label for="icon_prefix">Confimation Code</label>
+          <form class="" action="{{route('check')}}" method="get" data-product-id=>
+            <i class="material-icons prefix">security</i>
+            <input id="confirmation-code" type="text" length="10">
+            <label for="confirmation-code">Confimation Code</label>
+          </form>
         </div>
       </div>
       <div class="modal-footer">
-        <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Confirm</a>
+        <a href="#!" id="send-confirm" class="modal-action modal-close btn-flat">Confirm</a>
       </div>
     </div>
 
@@ -252,7 +254,7 @@
     <div id="transaction-history">
       <div class="row">
         <div class="col s6">
-          &nbsp&nbsp&nbspITEM
+          &nbsp&nbsp&nbspITEM(S)
         </div>
         <div class="col s4">
           BREEDER
@@ -268,19 +270,23 @@
               <div class="col s2 center-align">
                 <a href="#"><img src="{{$log->img_path}}" width="75" height="75" class="circle"></a>
               </div>
-              <div class="col s4 verticalLine">
-                <a href="#" class="anchor-title teal-text" data-breeder="{{$log->breeder}}" data-breed="{{$log->product_breed}}" data-age="{{$log->product_age}}" data-imgpath="{{$log->img_path}}" data-other-details="{{$log->other_details}}" data-type="{{ucfirst($log->product_type)}}" data-adg="{{$log->product_adg}}" data-fcr="{{$log->product_fcr}}" data-backfat-thickness="{{$log->product_backfat_thickness}}"><span class="col s12">{{$log->product_name}}</span></a>
-                <span class="col s12">
-                  {{ucfirst($log->product_type)}}
-                </span>
-                @if($log->product_type === 'semen')
+              <div class="col s4 verticalLine valign-wrapper">
+                <div class="valign">
+                  <a href="#" class="anchor-title teal-text" data-delivery="{{number_format($log->avg_delivery,2,'.', ',')}}" data-transaction="{{number_format($log->avg_transaction,2,'.', ',')}}" data-productQuality="{{number_format($log->avg_productQuality,2,'.', ',')}}" data-breeder="{{$log->breeder}}" data-breed="{{$log->product_breed}}" data-age="{{$log->product_age}}" data-imgpath="{{$log->img_path}}" data-other-details="{{$log->other_details}}" data-type="{{ucfirst($log->product_type)}}" data-adg="{{$log->product_adg}}" data-fcr="{{$log->product_fcr}}" data-backfat-thickness="{{$log->product_backfat_thickness}}"><span class="col s12">{{$log->product_name}}</span></a>
                   <span class="col s12">
-                    {{$log->product_quantity}}
+                    {{ucfirst($log->product_type)}}
                   </span>
-                @endif
+                  @if($log->product_type === 'semen')
+                    <span class="col s12">
+                      {{$log->product_quantity}}
+                    </span>
+                  @endif
+                </div>
               </div>
-              <div class="col s4 verticalLine">
-                {{$log->breeder}}
+              <div class="col s4 verticalLine valign-wrapper">
+                <div class="valign">
+                  {{$log->breeder}}
+                </div>
               </div>
               <div class="col s2">
                 {{$log->timestamp}}
@@ -402,7 +408,7 @@
                           </a>
                         </span>
                         <span class="col s6 left-align">
-                          <a>
+                          <a  href="#">
                             <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" data-tooltip="Reserved">save</i>
                           </a>
                         </span>
@@ -458,7 +464,7 @@
                   {{-- Product Info --}}
                   <div class="info col s4 verticalLine valign-wrapper">
                     <div class="valign">
-                      <a href="#" class="anchor-title teal-text" data-breeder="{{$product->breeder}}" data-breed="{{$product->product_breed}}" data-age="{{$product->product_age}}" data-imgpath="{{$product->img_path}}" data-other-details="{{$product->other_details}}" data-type="{{ucfirst($product->product_type)}}" data-adg="{{$product->product_adg}}" data-fcr="{{$product->product_fcr}}" data-backfat-thickness="{{$product->product_backfat_thickness}}"><span class="col s12">{{$product->product_name}}</span></a>
+                      <a href="#" class="anchor-title teal-text" data-delivery="{{number_format($product->avg_delivery,2,'.', ',')}}" data-transaction="{{number_format($product->avg_transaction,2,'.', ',')}}" data-productQuality="{{number_format($product->avg_productQuality,2,'.', ',')}}" data-breeder="{{$product->breeder}}" data-breed="{{$product->product_breed}}" data-age="{{$product->product_age}}" data-imgpath="{{$product->img_path}}" data-other-details="{{$product->other_details}}" data-type="{{ucfirst($product->product_type)}}" data-adg="{{$product->product_adg}}" data-fcr="{{$product->product_fcr}}" data-backfat-thickness="{{$product->product_backfat_thickness}}"><span class="col s12">{{$product->product_name}}</span></a>
                       <span class="col s12">
                         {{ucfirst($product->product_type)}} - {{ucfirst($product->product_breed)}}
                       </span>
@@ -479,22 +485,18 @@
                     </div>
                   @endif
                   {{-- Actions --}}
-                  <div class="action col s2 m2 ">
+                  <div class="action col s2 m2 center-align">
                       @if($product->status === 'showcased')
-                        <div class="col s12 center-align">
                           <form method="POST" action="{{route('cart.delete')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}">
                             <input name="_method" type="hidden" value="DELETE">
                             <input name="_token" type="hidden" value="{{$product->token}}">
                             <a href="#" class="delete-from-swinecart btn">Remove</a>
                           </form>
-                        </div>
-                        <br>
-                        <div class="col s12 center-align">
+                          <br>
                           <form method="PUT" class="request-icon" action="{{route('cart.request')}}" accept-charset="UTF-8" data-item-id="{{$product->item_id}}" data-product-id="{{$product->product_id}}">
                             <input name="_token" type="hidden" value="{{$product->token}}">
                             <a href="#" class="request-product btn">Request</a>
                           </form>
-                        </div>
                       @elseif($product->status === 'requested')
                             <a class="approve-button btn-flat" data-product-id=>
                               (Approve)
@@ -503,12 +505,12 @@
                             <a class="message-button btn-large" data-product-id=>
                               Message
                             </a>
-                      @elseif($product->status === 'paid' or $product->status === 'on_delivery')
-                            <a href="#confirmation" class="receive-button modal-trigger btn" data-product-id=>
-                              Confirm
+                      @elseif($product->status === 'on_delivery')
+                            <a href="#confirmation" class="receive-button modal-trigger btn" data-product-id="{{$product->item_id}}">
+                              Pay
                             </a>
-                      @elseif($product->status === 'paid' or $product->status === 'on_delivery')
-                            <a href="#confirmation" class="receive-button modal-trigger btn" data-product-id=>
+                      @elseif($product->status === 'paid')
+                            <a href="#confirmation" class="receive-button modal-trigger btn" data-product-id="{{$product->item_id}}">
                               Confirm
                             </a>
                       @elseif($product->status === 'sold')

@@ -95,6 +95,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('view-products',['as' => 'products.view', 'uses' => 'ProductController@viewProducts']);
         Route::get('view-products/{product}',['as' => 'products.cViewDetail', 'uses' => 'ProductController@customerViewProductDetail']);
         Route::post('swine-cart/rate', ['as' => 'rate.breeder', 'uses' => 'SwineCartController@rate']);
+        Route::get('swine-cart/confirmation', ['as' => 'check', 'uses' => 'SwineCartController@check']);
         Route::post('swine-cart/record', ['as' => 'record', 'uses' => 'SwineCartController@record']);
 
         // swinecart-related

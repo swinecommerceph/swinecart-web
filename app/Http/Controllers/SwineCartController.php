@@ -106,6 +106,19 @@ class SwineCartController extends Controller
       }
     }
 
+    public function check(Request $request){
+      if($request->ajax()){
+        $product = Product::find($request->product_id);
+        if ($request->code === $product->code) {
+          $product->status = "sold";
+          $product->save();
+        }
+
+        return Product::find($request->product_id)->code;
+      }
+    }
+
+
     /**
      * Requests item from Swine Cart
      * AJAX
@@ -199,6 +212,7 @@ class SwineCartController extends Controller
           foreach ($swineCartItems as $item) {
               $itemDetail = [];
               $product = Product::find($item->product_id);
+              $reviews = Breeder::find($product->breeder_id)->reviews()->get();
               $itemDetail['request_status'] = $item->if_requested;
               $itemDetail['status'] = $product->status;
               $itemDetail['item_id'] = $item->id;
@@ -214,6 +228,9 @@ class SwineCartController extends Controller
               $itemDetail['product_fcr'] = $product->fcr;
               $itemDetail['other_details'] = $product->other_details;
               $itemDetail['product_backfat_thickness'] = $product->backfat_thickness;
+              $itemDetail['avg_delivery'] = $reviews->avg('rating_delivery');
+              $itemDetail['avg_transaction'] = $reviews->avg('rating_transaction');
+              $itemDetail['avg_productQuality'] = $reviews->avg('rating_productQuality');
               $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
               $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
               $itemDetail['token'] = csrf_token();
@@ -223,6 +240,7 @@ class SwineCartController extends Controller
           foreach ($log as $item) {
               $itemDetail = [];
               $product = Product::find($item->product_id);
+              $reviews = Breeder::find($product->breeder_id)->reviews()->get();
               $itemDetail['product_name'] = $product->name;
               $itemDetail['product_type'] = $product->type;
               $itemDetail['product_quantity'] = $product->quantity;
@@ -234,6 +252,9 @@ class SwineCartController extends Controller
               $itemDetail['product_fcr'] = $product->fcr;
               $itemDetail['other_details'] = $product->other_details;
               $itemDetail['product_backfat_thickness'] = $product->backfat_thickness;
+              $itemDetail['avg_delivery'] = $reviews->avg('rating_delivery');
+              $itemDetail['avg_transaction'] = $reviews->avg('rating_transaction');
+              $itemDetail['avg_productQuality'] = $reviews->avg('rating_productQuality');
               $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
               $itemDetail['timestamp'] = $item->created_at;
               $itemDetail['token'] = csrf_token();

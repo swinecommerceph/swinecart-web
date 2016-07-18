@@ -234,13 +234,36 @@ var swinecart = {
           "comment" : comment
         },
         success: function(data) {
-          
+
         },
         error: function(message){
           console.log(message['responseText']);
         }
       });
 
+    },
+
+    check: function(parent_form, li_element){
+      $.ajax({
+          url: config.swineCart_url + '/confirmation',
+          type: "GET",
+          cache: false,
+          data: {
+            "product_id" : parent_form.attr('data-product-id'),
+            "code" : parent_form.children('input').val()
+          },
+          success: function(data) {
+            if(parent_form.children('input').val() === data){
+              Materialize.toast("Confirm");
+            }
+            else {
+              Materialize.toast("Fail");
+            }
+          },
+          error: function(message) {
+              console.log(message['responseText']);
+          }
+      });
     },
 
     get_quantity: function() {
