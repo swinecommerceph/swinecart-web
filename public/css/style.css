@@ -417,3 +417,27 @@ blockquote{
 .brand-logo{
    font-family : Electrolize;
 }
+
+/*for admin forms*/
+#notes{
+  width: 640px; /*can be in percentage also.*/
+  height: auto;
+  margin: 0 auto;
+  padding: 10px;
+  position: relative;
+}
+
+.file-input-property{
+  display: none;
+}
+
+.upload{
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.decrease-text-size{
+   font-size: 2em;
+}

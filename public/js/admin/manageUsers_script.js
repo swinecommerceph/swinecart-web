@@ -254,4 +254,28 @@ $(document).ready(function(){
   //   $('tr').find('[data-clicked="clicked"]').attr('data-clicked', '');
   // });
 
+  // for admin forms
+  $('#breeding-animals').click(function(e){
+    e.preventDefault();
+    $('#breeding-animals-wrapper').append(
+       '<div class="input-field col s8">'+
+          '<input placeholder="Breed" class="breed validate" type="text">'+
+       '</div>'+
+       '<div class="input-field col s2">'+
+          '<input placeholder="Female" class="breed validate" type="number" min="0">'+
+       '</div>'+
+       '<div class="input-field col s2">'+
+          '<input placeholder="Male" class="breed validate" type="number" min="0">'+
+       '</div>'
+
+    );
+ });
+
+ $('#testing-facilities').click(function(e){
+    e.preventDefault();
+    $('#testing-facilities-wrapper').append('<input placeholder="Testing Facility" type="text" class="validate">');
+ });
+//**********************************************************************************//
+
+
 });

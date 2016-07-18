@@ -17,6 +17,7 @@ var config = {
     block_user: '/admin/home/block',
     approve_user: 'home/approve',
     search_user: 'home/search',
+    form: 'registration',
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',
     preloader_progress: $('#preloader-progress'),

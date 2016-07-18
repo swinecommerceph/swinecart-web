@@ -60,6 +60,7 @@
                   <i class="material-icons">arrow_drop_down</i>
                 </a>
                 <ul id="nav-dropdown" class="dropdown-content">
+                      <li><a href="{{ route('registration.form') }}">Registration Form</a></li>
                       <li class="divider"></li>
                       <li><a href="{{ route('logout_path') }}">Logout</a></li>
                   </ul>
@@ -416,7 +417,7 @@
     </div>
 
 
-    <script src="/js/vendor/jquery.min.js"></script>
+   <script src="/js/vendor/jquery.min.js"></script>
   	<script src="/js/vendor/materialize.min.js"></script>
   	<script src="/js/vendor/dropzone.js"></script>
   	<script src="/js/vendor/video-js/video.min.js"></script>

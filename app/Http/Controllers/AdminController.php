@@ -348,4 +348,16 @@ class AdminController extends Controller
       return  "Ok";
    }
 
+   /**
+    * Displays form for the registration
+    * @return View
+    */
+    public function getRegistrationForm(){
+      return view('user.admin.form');
+   }
+
+   public function submitRegistrationForms(Request $request){
+      dd($request);
+   }
+
 }
