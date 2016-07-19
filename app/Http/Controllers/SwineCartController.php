@@ -74,7 +74,6 @@ class SwineCartController extends Controller
       if($request->ajax()){
         $history = Customer::find($request->customerId)->transactionLogs();
         $log = new TransactionLog;
-        // $history->customer_id = $request->customerId;
         $log->product_id = $request->productId;
         $log->breeder_id = $request->breederId;
         $log->status = $request->status;
@@ -104,20 +103,28 @@ class SwineCartController extends Controller
         $reviewed->save();
         $reviews->save($review);
       }
+      return $request->productId;
     }
 
+    /**
+     * Confirmation of transaction via code checking
+     * AJAX
+     *
+     * @param  Request $request
+     * @return String
+     */
     public function check(Request $request){
       if($request->ajax()){
         $product = Product::find($request->product_id);
         if ($request->code === $product->code) {
+          $customer = $this->user->userable;
           $product->status = "sold";
+          $product->customer_id = $customer->id;
           $product->save();
         }
-
-        return Product::find($request->product_id)->code;
+        return [Product::find($request->product_id)->code, $request->product_id];
       }
     }
-
 
     /**
      * Requests item from Swine Cart
@@ -136,7 +143,6 @@ class SwineCartController extends Controller
         $product->status = "requested";
         $product->save();
         $requested->save();
-        // dd($checkProduct->if_requested);
       }
     }
 

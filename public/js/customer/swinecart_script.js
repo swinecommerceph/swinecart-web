@@ -11,7 +11,7 @@ $(document).ready(function(){
       swinecart.request($(this).parents('form'), $(this).parents('li').first());
     });
 
-    //Rating system
+    //Rating 'animation'
     $('.delivery').click(function(e){
       e.preventDefault();
       $('#submit-rate').parents('form').attr('data-delivery',$(this).attr('data-value'));
@@ -39,6 +39,7 @@ $(document).ready(function(){
       $(this).nextAll().children('i').removeClass('yellow-text text-darken-1').addClass('grey-text text-darken-2');
     });
 
+    // Rate submission
     $('.rate-button').click(function(e){
       $('#submit-rate').parents('form').attr('data-customer-id',$(this).attr('data-customer-id'));
       $('#submit-rate').parents('form').attr('data-breeder-id',$(this).attr('data-breeder-id'));
@@ -57,9 +58,9 @@ $(document).ready(function(){
       $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-adg').children('span').html($(this).attr('data-adg'));
       $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-fcr').children('span').html($(this).attr('data-fcr'));
       $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.product-backfat_thickness').children('span').html($(this).attr('data-backfat-thickness'));
-      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.rating').children('.delivery-rating').children('span').html($(this).attr('data-delivery'));
-      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.rating').children('.transaction-rating').children('span').html($(this).attr('data-transaction'));
-      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.rating').children('.product-quality-rating').children('span').html($(this).attr('data-productQuality'));
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.rating').children('.delivery-rating').children('span').children('span').html($(this).attr('data-delivery'));
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.rating').children('.transaction-rating').children('span').children('span').html($(this).attr('data-transaction'));
+      $('#info-modal').children('.modal-content').children('.row').children('.cart-details').children('.collection').children('.rating').children('.product-quality-rating').children('span').children('span').html($(this).attr('data-productQuality'));
       $('#info-modal').children('.modal-content').children('.row').children('.image').children('.row').children('.other-details').children('.card').children('.card-content').children('p').html($(this).attr('data-other-details'));
       $('#modal-img').attr('src',$(this).attr('data-imgpath'));
       $('#info-modal').openModal({
@@ -81,7 +82,4 @@ $(document).ready(function(){
       swinecart.check($('#confirmation-code').parents('form'), $('#confirmation-code').val());
     });
 
-    // $('.swine-cart-item').hover(function(){
-    //   $(this).addClass('teal');
-    // })
 });

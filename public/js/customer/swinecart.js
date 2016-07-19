@@ -40,41 +40,6 @@ var swinecart = {
 
     },
 
-    move: function(li_element) {
-        // Do AJAX
-        $.ajax({
-            url: config.swineCart_url + '/delete',
-            type: "DELETE",
-            cache: false,
-            data: {},
-            success: function(data) {
-                // If deletion of item is successful
-                if (data[0] === 'success') {
-                    var span = $('#cart-icon span');
-
-                    // Put quantity of Swine Cart to sessionStorage
-                    sessionStorage.setItem('swine_cart_quantity', data[2]);
-
-                    if (data[2] == 0) {
-                        span.html("");
-                        span.removeClass('badge');
-                        $('#cart-icon .material-icons').removeClass('left');
-                        $('#cart-dropdown #item-container').html(
-                            '<li> <span class="center-align black-text"> No items in your Swine Cart </span> </li>'
-                        );
-                    } else span.html(sessionStorage.getItem('swine_cart_quantity'));
-
-                    li_element.remove();
-                    Materialize.toast(data[1] + ' removed from Swine Cart', 1800, 'green lighten-1');
-                } else Materialize.toast(data[1] + ' is ' + data[0], 1500, 'orange accent-2');
-
-            },
-            error: function(message) {
-                console.log(message['responseText']);
-            }
-        });
-    },
-
     delete: function(parent_form, li_element) {
         // Do AJAX
         $.ajax({
@@ -198,6 +163,7 @@ var swinecart = {
         });
     },
 
+
     record: function(parent_form){
       $.ajax({
         url: config.swineCart_url + '/record',
@@ -234,7 +200,7 @@ var swinecart = {
           "comment" : comment
         },
         success: function(data) {
-
+          $('#cart').find('li[data-product-id='+data+']').remove();
         },
         error: function(message){
           console.log(message['responseText']);
@@ -243,7 +209,7 @@ var swinecart = {
 
     },
 
-    check: function(parent_form, li_element){
+    check: function(parent_form, code){
       $.ajax({
           url: config.swineCart_url + '/confirmation',
           type: "GET",
@@ -253,8 +219,23 @@ var swinecart = {
             "code" : parent_form.children('input').val()
           },
           success: function(data) {
-            if(parent_form.children('input').val() === data){
-              Materialize.toast("Confirm");
+            if(parent_form.children('input').val() === data[0]){
+              Materialize.toast("Success");
+              $('#cart').find('li[data-product-id='+data[1]+']').find('div.status').html(
+                '<div class="col s12 center-align">'+
+                  '<a href="#">'+
+                    '<i class="material-icons md teal-text tooltipped" data-position="top" data-delay="50" data-tooltip="Sold">attach_money</i>'+
+                  '</a>'+
+                '</div>'
+              );
+
+              $('#cart').find('li[data-product-id='+data[1]+']').find('div.action').html(
+                '<span class="col s12 center-align">'+
+                  '<a href="#rate" class="rate-button btn-large modal-trigger" data-status="{{$product->status}}" data-product-id="{{$product->product_id}}" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}">'+
+                    'Rate'+
+                  '</a>'+
+                '</span>'
+              );
             }
             else {
               Materialize.toast("Fail");

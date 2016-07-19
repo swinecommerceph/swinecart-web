@@ -167,9 +167,9 @@
                   Backfat Thickness: <span></span> mm
                 </li>
                 <li class="collection-item rating">
-                    <div class="delivery-rating">Delivery:<span class="col right"></span></div>
-                    <div class="transaction-rating">Transaction:<span class="col right"></span></div>
-                    <div class="product-quality-rating">Product Quality:<span class="col right"></span></div>
+                    <div class="delivery-rating">Delivery:<span class="col right"><span></span>/5</span></div>
+                    <div class="transaction-rating">Transaction:<span class="col right"><span></span>/5</span></div>
+                    <div class="product-quality-rating">Product Quality:<span class="col right"><span></span>/5</span></div>
                 </li>
             </ul>
           </div>
@@ -263,7 +263,7 @@
           TIME
         </div>
       </div>
-      <ul id="cart" class="collection cart">
+      <ul id="transaction-cart" class="collection cart">
         @forelse($history as $log)
           <li class="collection-item">
             <div class="row  swine-cart-item valign-wrapper">
@@ -321,7 +321,7 @@
         <ul id="cart" class="collection cart">
           @forelse($products as $product)
               {{-- Original Content --}}
-              <li class="collection-item">
+              <li class="collection-item" data-product-id="{{$product->item_id}}">
                 <div class="row swine-cart-item valign-wrapper">
                   {{-- Product Status Icons --}}
                   @if($product->status === 'requested')
@@ -515,7 +515,7 @@
                             </a>
                       @elseif($product->status === 'sold')
                         <span class="col s12 center-align">
-                          <a class="rate-button btn-large" data-status="{{$product->status}}" data-product-id="{{$product->product_id}}" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}" class="modal-trigger">
+                          <a href="#rate" class="rate-button btn-large modal-trigger" data-status="{{$product->status}}" data-product-id="{{$product->product_id}}" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}">
                             Rate
                           </a>
                         </span>

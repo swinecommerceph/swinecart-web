@@ -125,6 +125,11 @@ nav .input-field #search{
 	max-height: 364px;
 }
 
+#transaction-cart {
+	overflow: auto;
+	max-height: 364px;
+}
+
 /*Modal Edit*/
 #comment {
 	width: 325px;
