@@ -17,7 +17,7 @@
 @endsection
 
 @section('navbarHead')
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons">assessment</i></a></li>
+    <li><a href="{{ route('dashboard') }}"> <i class="material-icons">assessment</i></a></li>
 @endsection
 
 @section('navbarDropdown')

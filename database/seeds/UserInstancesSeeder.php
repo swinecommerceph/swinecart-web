@@ -27,7 +27,7 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Breeders
-        factory(App\Models\User::class, 5)->create()->each(function($user){
+        factory(App\Models\User::class, 7)->create()->each(function($user){
             $user->assignRole('breeder');
             $user->update_profile = 0;
             $user->email_verified = 1;
@@ -42,7 +42,7 @@ class UserInstancesSeeder extends Seeder
 
             // Create up to 7 products as well
             // Initialization
-            $rand = random_int(6,7);
+            $rand = random_int(8,10);
             $types = ['sow', 'boar', 'semen']; // 3
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
             for ($i = 0; $i < $rand; $i++) {
@@ -80,7 +80,7 @@ class UserInstancesSeeder extends Seeder
 
                 // General
                 else $image->name = $randType.'_'.$randBreed.'1.jpg';
-                
+
                 $image->save();
 
                 $video->name = 'sample_video.avi';
@@ -98,7 +98,7 @@ class UserInstancesSeeder extends Seeder
                 $product->fcr = random_int(10,30)/10.0;
                 $product->backfat_thickness = random_int(90,200)/10.0;
                 $product->other_details = 'Our detailed information of our product';
-                $product->status = 'showcased';
+                $product->status = 'displayed';
                 $breeder->products()->save($product);
 
                 // Check if there is a second image

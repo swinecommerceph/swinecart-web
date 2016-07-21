@@ -23,12 +23,13 @@
 	<link href="/css/dropzone.css" rel="stylesheet" type="text/css">
 	<link href="/css/icon.css" rel="stylesheet" type="text/css">
 	<link href="/css/style.css" rel="stylesheet" type="text/css">
-	<link href="/js/vendor/video-js/video-js.min.css" rel="stylesheet">
+	<link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
+	<link href="/js/vendor/DataTables/datatables.min.css" rel="stylesheet">
 
 	<!-- If you'd like to support IE8 -->
   	{{-- <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> --}}
 
-	<script src="/js/vendor/video-js/ie8/videojs-ie8.min.js"></script>
+	<script src="/js/vendor/VideoJS/ie8/videojs-ie8.min.js"></script>
 </head>
 
 <body @yield('pageId')>
@@ -129,7 +130,7 @@
 	<script src="/js/vendor/jquery.min.js"></script>
 	<script src="/js/vendor/materialize.min.js"></script>
 	<script src="/js/vendor/dropzone.js"></script>
-	<script src="/js/vendor/video-js/video.min.js"></script>
+	<script src="/js/vendor/VideoJS/video.min.js"></script>
 	<script src="/js/config.js"></script>
 	<script src="/js/custom.js"></script>
 	{{-- For user-specific initialization scripts --}}

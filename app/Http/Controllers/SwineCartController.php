@@ -12,6 +12,8 @@ use App\Models\Breed;
 use App\Models\Image;
 use App\Models\SwineCartItem;
 use App\Models\Product;
+use App\Repositories\ProductRepository;
+
 use Auth;
 
 class SwineCartController extends Controller
@@ -35,12 +37,25 @@ class SwineCartController extends Controller
      * @param  Request $request
      * @return Array
      */
-    public function addToSwineCart(Request $request)
+    public function addToSwineCart(Request $request, ProductRepository $productsDashboard)
     {
         if($request->ajax()){
             $customer = $this->user->userable;
             $swineCartItems = $customer->swineCartItems();
             $checkProduct = $swineCartItems->where('product_id',$request->productId)->get();
+
+            $product = Product::find($request->productId);
+            $breeder = $product->breeder;
+            $topic = $breeder->users()->first()->name;
+            $data = $productsDashboard->getSoldProducts($breeder);
+            $data['topic'] = str_slug($topic);
+
+            // This is our new stuff
+    	    $context = new \ZMQContext();
+    	    $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'Breeder Dashboard Pusher');
+    	    $socket->connect("tcp://127.0.0.1:5555");
+
+    	    $socket->send(collect($data)->toJson());
 
             // Check first if product is already in Swine Cart
             if(!$checkProduct->isEmpty()){

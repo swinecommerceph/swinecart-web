@@ -27,7 +27,11 @@ class CreateProductsTable extends Migration
             $table->float('fcr')->nullable();
             $table->float('backfat_thickness')->nullable();
             $table->text('other_details')->nullable();
-            $table->string('status')->default('unshowcased');
+            $table->enum('status',
+                ['hidden', 'displayed', 'requested', 'reserved', 'paid', 'on_delivery', 'sold']
+                )->default('hidden');
+            $table->integer('customer_id')->unsigned();
+            $table->string('code');
             $table->softDeletes();
         });
     }

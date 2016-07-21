@@ -13,9 +13,6 @@ use App\Http\Controllers\Controller;
 use App\Models\Breeder;
 use App\Models\FarmAddress;
 use App\Models\Product;
-use App\Models\Image;
-use App\Models\Video;
-use App\Models\Breed;
 
 use Auth;
 

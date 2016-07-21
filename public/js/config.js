@@ -11,10 +11,12 @@ var config = {
     productMedia_url: '/breeder/products/media',
     productSummary_url: '/breeder/products/product-summary',
     manageSelected_url: '/breeder/products/manage-selected',
+    dashboard_url: '/breeder/dashboard',
     images_path: '/images',
     videos_path: '/videos',
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',
+    breederWSServer: 'ws://10.0.4.226:8080',
     preloader_progress: $('#preloader-progress'),
     preloader_circular: $('#preloader-circular')
 };
