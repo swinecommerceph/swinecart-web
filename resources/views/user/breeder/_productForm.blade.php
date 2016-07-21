@@ -244,8 +244,8 @@
 
 	<div class="modal-footer">
 		<div class="from-add-process">
-			{!! Form::open(['route' => 'products.showcase', 'class' => 's12', 'id' => 'showcase-product-form']) !!}
-				<button id="showcase-button" class="btn waves-effect waves-light modal-action"> Showcase
+			{!! Form::open(['route' => 'products.display', 'class' => 's12', 'id' => 'display-product-form']) !!}
+				<button id="display-button" class="btn waves-effect waves-light modal-action"> Display
 					<i class="material-icons right">publish</i>
 				</button>
 			{!! Form::close() !!}

@@ -74,6 +74,11 @@ nav .input-field #search{
 	margin-bottom:0px;
 }
 
+#card-status .card-content,
+#card-status .card-action{
+	text-align: center;
+}
+
 #page-breeder-manage-products .edit-product{
 	margin-right: 10px;
 }
@@ -185,6 +190,10 @@ nav .input-field #search{
 	margin:0px;
 }
 
+#product-status-table td .row{
+	margin-bottom: 0px;
+}
+
 /* Tab Styles */
 .tabs .active{
 	color: #b71c1c !important;
@@ -214,6 +223,10 @@ blockquote{
 /* Modal Styles */
 .modal .modal-footer .btn, .modal .modal-footer .btn-large{
 	margin: 6px 3px;
+}
+
+#page-breeder-product-status #product-requests-modal .collection .secondary-content {
+	margin-left:1rem;
 }
 
 /*

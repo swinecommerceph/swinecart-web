@@ -11,6 +11,7 @@ use App\Models\Product;
 use App\Models\Image;
 use App\Models\Video;
 use App\Models\Breed;
+use App\Models\SwineCartItem;
 use Auth;
 use Storage;
 
@@ -23,10 +24,32 @@ class ProductController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('role:breeder', ['only' => ['showProducts', 'breederViewProductDetail', 'storeProducts', 'uploadMedia', 'deleteMedium', 'productSummary', 'setPrimaryPicture', 'showcaseProduct']]);
-        $this->middleware('updateProfile:breeder',['only' => ['showProducts', 'customerViewProductDetail', 'storeProducts', 'uploadMedia', 'deleteMedium', 'productSummary', 'setPrimaryPicture', 'showcaseProduct']]);
-        $this->middleware('role:customer',['only' => ['customerViewProductDetail','viewProducts']]);
-        $this->middleware('updateProfile:customer',['only' => ['customerViewProductDetail','viewProducts']]);
+        $this->middleware('role:breeder',
+        ['only' => ['showProducts',
+            'breederViewProductDetail',
+            'storeProduct',
+            'updateProduct',
+            'updateSelected',
+            'deleteSelected',
+            'uploadMedia',
+            'deleteMedium',
+            'productSummary',
+            'setPrimaryPicture',
+            'displayProduct']]);
+        $this->middleware('updateProfile:breeder',
+        ['only' => ['showProducts',
+            'breederViewProductDetail',
+            'storeProduct',
+            'updateProduct',
+            'updateSelected',
+            'deleteSelected',
+            'uploadMedia',
+            'deleteMedium',
+            'productSummary',
+            'setPrimaryPicture',
+            'displayProduct']]);
+        $this->middleware('role:customer',['only' => ['viewProducts','customerViewProductDetail']]);
+        $this->middleware('updateProfile:customer',['only' => ['viewProducts','customerViewProductDetail']]);
         $this->user = Auth::user();
     }
 
@@ -175,7 +198,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Showcase selected products
+     * Update selected products
      * AJAX
      *
      * @param  Request $request
@@ -183,18 +206,18 @@ class ProductController extends Controller
      */
     public function updateSelected(Request $request)
     {
-        if($request->ajax() && $request->updateTo_status == 'showcase'){
+        if($request->ajax() && $request->updateTo_status == 'display'){
             foreach ($request->product_ids as $id) {
                 $product = Product::find($id);
-                $product->status = 'showcased';
+                $product->status = 'displayed';
                 $product->save();
             }
             return "OK";
         }
-        else if($request->ajax() && $request->updateTo_status == 'unshowcase'){
+        else if($request->ajax() && $request->updateTo_status == 'hide'){
             foreach ($request->product_ids as $id) {
                 $product = Product::find($id);
-                $product->status = 'unshowcased';
+                $product->status = 'hidden';
                 $product->save();
             }
             return "OK";
@@ -357,7 +380,7 @@ class ProductController extends Controller
     /**
      * Set the primary picture of a Product
      *
-     * @param Request $request
+     * @param  Request $request
      * @return String
      */
     public function setPrimaryPicture(Request $request)
@@ -372,16 +395,16 @@ class ProductController extends Controller
     }
 
     /**
-     * Showcase Product
+     * Display Product
      *
-     * @param Request $request
+     * @param  Request $request
      * @return String
      */
-    public function showcaseProduct(Request $request)
+    public function displayProduct(Request $request)
     {
         if($request->ajax()){
             $product = Product::find($request->product_id);
-            $product->status = 'showcased';
+            $product->status = 'displayed';
             $product->save();
 
             return "OK";
@@ -406,15 +429,15 @@ class ProductController extends Controller
         if (!$request->type && !$request->breed){
             if($request->sort && $request->sort != 'none'){
                 $part = explode('-',$request->sort);
-                $products = Product::where('status','showcased')->orderBy($part[0], $part[1])->paginate(10);
+                $products = Product::where('status','displayed')->orWhere('status','requested')->orderBy($part[0], $part[1])->paginate(10);
             }
-            else $products = Product::where('status','showcased')->paginate(10);
+            else $products = Product::where('status','displayed')->orWhere('status','requested')->paginate(10);
         }
         else{
-            if($request->type) $products = Product::where('status','showcased')->whereIn('type', explode(' ',$request->type));
+            if($request->type) $products = Product::where('status','displayed')->orWhere('status','requested')->whereIn('type', explode(' ',$request->type));
             if($request->breed) {
                 $breedIds = $this->getBreedIds($request->breed);
-                if(!$request->type) $products = Product::where('status','showcased')->whereIn('breed_id', $breedIds);
+                if(!$request->type) $products = Product::where('status','displayed')->orWhere('status','requested')->whereIn('breed_id', $breedIds);
                 else $products = $products->whereIn('breed_id', $breedIds);
             }
             if($request->sort) {

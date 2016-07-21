@@ -18,6 +18,7 @@ class CreateSwineCartItemsTable extends Migration
             $table->integer('product_id')->unsigned();
             $table->integer('quantity');
             $table->boolean('if_requested')->default('0');
+            $table->boolean('if_rated')->default('0');
         });
     }
 

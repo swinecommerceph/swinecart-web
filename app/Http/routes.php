@@ -71,9 +71,18 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('products/manage-selected',['as' => 'products.deleteSelected', 'uses' => 'ProductController@deleteSelected']);
         Route::get('products/product-summary',['as' => 'products.summary', 'uses' => 'ProductController@productSummary']);
         Route::post('products/set-primary-picture',['as' => 'products.setPrimaryPicture', 'uses' => 'ProductController@setPrimaryPicture']);
-        Route::post('products/showcase-product',['as' => 'products.showcase', 'uses' => 'ProductController@showcaseProduct']);
+        Route::post('products/display-product',['as' => 'products.display', 'uses' => 'ProductController@displayProduct']);
         Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
         Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'ProductController@deleteMedium']);
+
+        // dashboard-related
+        Route::get('dashboard',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
+        Route::get('dashboard/product-status',['as' => 'dashboard.productStatus', 'uses' => 'DashboardController@showProductStatus']);
+        Route::get('dashboard/product-status/retrieve-product-requests',['as' => 'dashboard.productRequests', 'uses' => 'DashboardController@retrieveProductRequests']);
+        Route::post('dashboard/product-status/reserve-product',['as' => 'dashboard.reserveProduct', 'uses' => 'DashboardController@reserveProduct']);
+        Route::post('dashboard/product-status/product-delivery',['as' => 'dashboard.productDelivery', 'uses' => 'DashboardController@productDelivery']);
+        Route::post('dashboard/product-status/product-paid',['as' => 'dashboard.productPaid', 'uses' => 'DashboardController@productPaid']);
+
 
     });
 
