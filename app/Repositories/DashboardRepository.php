@@ -24,6 +24,7 @@ class DashboardRepository
     /**
      * Get all of the products of a given Breeder
      *
+     * @param  Breeder      $breeder
      * @return Collection
      */
     public function forBreeder(Breeder $breeder)
@@ -36,7 +37,7 @@ class DashboardRepository
      * Include boar, sow, and semen
      * quantity
      *
-     * @param Breeder $breeder
+     * @param  Breeder  $breeder
      * @return Array
      */
     public function getSoldProducts(Breeder $breeder)
@@ -60,8 +61,8 @@ class DashboardRepository
      * Include boar, sow, and semen
      * quantity
      *
-     * @param Breeder $breeder
-     * @return Collection
+     * @param  Breeder  $breeder
+     * @return Array
      */
     public function getAvailableProducts(Breeder $breeder)
     {
@@ -80,10 +81,72 @@ class DashboardRepository
     }
 
     /**
+     * Get the statuses of the products of a Breeder
+     * Include hidden, displayed, requested,
+     * reserved, paid, on_delivery,
+     * and sold quantity
+     *
+     * @param  Breeder $breeder
+     * @return Array
+     */
+    public function getProductStatuses(Breeder $breeder)
+    {
+        $products = $breeder->products;
+        $hiddenQuery = $products->where('status','hidden');
+        $displayedQuery = $products->where('status','displayed');
+        $requestedQuery = $products->where('status','requested');
+        $reservedQuery = $products->where('status','reserved');
+        $onDeliveryQuery = $products->where('status','on_delivery');
+        $paidQuery = $products->where('status','paid');
+        $soldQuery = $products->where('status','sold');
+
+        return [
+            'hidden' => $hiddenQuery->count(),
+            'displayed' => $displayedQuery->count(),
+            'requested' => $requestedQuery->count(),
+            'reserved' => $reservedQuery->count(),
+            'onDelivery' => $onDeliveryQuery->count(),
+            'paid' => $paidQuery->count(),
+            'sold' => $soldQuery->count(),
+            ];
+    }
+
+    /**
+     * Get the ratings of the Breeder.
+     * Include overall, delivery,
+     * transaction, and product
+     * quality rating
+     *
+     * @param  Breeder  $breeder
+     * @return Array
+     */
+    public function getRatings(Breeder $breeder)
+    {
+        $reviews = $breeder->reviews;
+        $deliveryRating = $reviews->avg('rating_delivery');
+        $transactionRating = $reviews->avg('rating_transaction');
+        $productQualityRating = $reviews->avg('rating_productQuality');
+        $overallRating = (($deliveryRating + $transactionRating + $productQualityRating)/15)*100;
+
+
+        return [
+            'overall' => round($overallRating,2),
+            'delivery' => round($deliveryRating,1),
+            'transaction' => round($transactionRating,1),
+            'productQuality' => round($productQualityRating,1)
+            ];
+    }
+
+    public function getHeatMap(Breeder $breeder)
+    {
+        # code...
+    }
+
+    /**
      * Update product status
      *
-     * @param Request $request
-     * @return
+     * @param  Request      $request
+     * @return Array/String
      */
     public function updateStatus(Request $request, Product $product, $status)
     {
@@ -100,8 +163,6 @@ class DashboardRepository
                     return ['fail', $product->name.' is already reserved to '.Customer::find($product->customer_id)->users()->first()->name];
                 }
 
-                break;
-
             case 'on_delivery':
 
                 $product->status = 'on_delivery';
@@ -109,24 +170,22 @@ class DashboardRepository
                 $product->save();
                 return "Product on delivery";
 
-                break;
-
             case 'paid':
                 $product->status = 'paid';
                 if(!$product->code) $product->code = str_random(6);
                 $product->save();
                 return "Product Paid";
 
-                break;
-
             default:
-                # code...
-                break;
+                return "Invalid operation";
         }
     }
 
     /**
+     * Get customers who requested a specific product
      *
+     * @param  Integer   $productId
+     * @return Array
      */
     public function getProductRequests($productId)
     {
@@ -148,27 +207,5 @@ class DashboardRepository
         }
 
         return $productRequestDetails;
-    }
-
-    /**
-     * Get the statuses of the products of a Breeder
-     * Include hidden, displayed, requested,
-     * reserved, paid, on_delivery,
-     * and sold quantity
-     *
-     */
-    public function getProductStatuses(Breeder $breeder)
-    {
-        # code...
-    }
-
-    public function getRatings(Breeder $breeder)
-    {
-        # code...
-    }
-
-    public function getHeatMap(Breeder $breeder)
-    {
-        # code...
     }
 }

@@ -9,11 +9,11 @@
     <div class="col s4 left">
         {!! Form::open(['route' => 'products.updateSelected', 'id' => 'manage-selected-form']) !!}
             {{-- Add Button --}}
-            <a href="#" class="btn-floating btn-large modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
+            <a href="#" class="btn-floating btn-large waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
                 <i class="material-icons">add</i>
             </a>
             {{-- Select All Button --}}
-            <a href="#" class="btn-floating btn-large modal-trigger waves-effect waves-light teal tooltipped select-all-button" data-position="top" data-delay="50" data-tooltip="Select All Products">
+            <a href="#" class="btn-floating btn-large waves-effect waves-light teal tooltipped select-all-button" data-position="top" data-delay="50" data-tooltip="Select All Products">
                 <i class="material-icons">event_available</i>
             </a>
             {{-- Display selected Button. Only show when products are hidden --}}
@@ -102,17 +102,17 @@
                             </a>
                             @if(!empty($filters['hidden']) || $product->status == 'hidden')
                                 {{-- Display Button --}}
-                                <a href="#" class="modal-trigger tooltipped display-product-button" data-position="top" data-delay="50" data-tooltip="Display {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
+                                <a href="#" class="tooltipped display-product-button" data-position="top" data-delay="50" data-tooltip="Display {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
                                     <i class="material-icons teal-text" style="font-size:30px">unarchive</i>
                                 </a>
                             @elseif(!empty($filters['displayed']) || $product->status == 'displayed')
                                 {{-- Hide Button --}}
-                                <a href="#" class="modal-trigger tooltipped hide-product-button" data-position="top" data-delay="50" data-tooltip="Hide {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
+                                <a href="#" class="tooltipped hide-product-button" data-position="top" data-delay="50" data-tooltip="Hide {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
                                     <i class="material-icons teal-text" style="font-size:30px">archive</i>
                                 </a>
                             @endif
                             {{-- Delete Button --}}
-                            <a href="#delete-product-modal" class="modal-trigger tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete {{$product->name}}" data-product-id="{{$product->id}}">
+                            <a href="#" class="tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete {{$product->name}}" data-product-id="{{$product->id}}">
                                 <i class="material-icons grey-text text-darken-1" style="font-size:30px">delete</i>
                             </a>
                         </div>

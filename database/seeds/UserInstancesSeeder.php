@@ -11,6 +11,16 @@ class UserInstancesSeeder extends Seeder
      */
     public function run()
     {
+        $companyNames = [
+            'John and Piolo Farms',
+            'McJolly Farms',
+            'Low Pigs Co.',
+            'PICC',
+            'PCAARRD Farms',
+            'Great Pig Inc.',
+            'Sharoen Fokfun'
+        ];
+
     	// For Customers
         factory(App\Models\User::class, 2)->create()->each(function($user){
         	$user->assignRole('customer');
@@ -27,7 +37,8 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Breeders
-        factory(App\Models\User::class, 7)->create()->each(function($user){
+        factory(App\Models\User::class, 7)->create()->each(function($user)use($companyNames){
+
             $user->assignRole('breeder');
             $user->update_profile = 0;
             $user->email_verified = 1;
@@ -39,6 +50,10 @@ class UserInstancesSeeder extends Seeder
 
             $breeder->users()->save($user);
             $breeder->farmAddresses()->save($farm);
+
+            // Change name if Breeder
+            $user->name = $companyNames[$breeder->id-1];
+            $user->save();
 
             // Create up to 7 products as well
             // Initialization

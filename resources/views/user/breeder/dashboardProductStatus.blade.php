@@ -55,10 +55,10 @@
                                     <a class="col s1" href="#"><i class="material-icons teal-text">message</i></a>
                                 </div>
                             @elseif($product->status == 'on_delivery')
-                                <a href="#"><i class="material-icons teal-text">code</i></a>
+                                <a class="view-code-icon" href="#" data-code="{{$product->code}}"><i class="material-icons teal-text">code</i></a>
                             @elseif($product->status == 'paid')
                                 <div class="row">
-                                    <a class="col s1" href="#"><i class="material-icons teal-text">code</i></a>
+                                    <a class="col s1 view-code-icon" href="#" data-code="{{$product->code}}"><i class="material-icons teal-text">code</i></a>
                                     <a class="col s1 product-delivery-icon" href="#" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}" data-token="{{$token}}"><i class="material-icons teal-text">local_shipping</i></a>
                                 </div>
                             @elseif($product->status == 'sold')
@@ -123,6 +123,19 @@
         <div class="modal-footer">
             <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
             <a href="#!" class="modal-action waves-effect waves-green btn-flat confirm-paid-button">Yes</a>
+        </div>
+    </div>
+
+    {{-- View Code Modal --}}
+    <div id="view-code-modal" class="modal">
+        <div class="modal-content">
+            <h4>View Code</h4>
+            <p>
+                Confirmation Code:
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
         </div>
     </div>
 @endsection

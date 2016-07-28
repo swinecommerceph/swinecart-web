@@ -75,4 +75,12 @@ class Breeder extends Model
     {
         return $this->hasMany(Product::class);
     }
+
+    /**
+     * Get all Breeder's reviews
+     */
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
+    }
 }

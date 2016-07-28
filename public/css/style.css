@@ -1,3 +1,5 @@
+html{font-family:Poppins;}
+
 /* Navigation dropdown styles */
 #nav-dropdown{
 	/*display:block;*/
@@ -12,6 +14,10 @@
 /* Navigation bar element styles*/
 #nav-mobile>li{
 	height:64px;
+}
+
+.navbar-fixed{
+  font-family: Electrolize;
 }
 
 /* Override collapsible components */
@@ -87,6 +93,68 @@ nav .input-field #search{
 	margin-right:0px !important;
 }
 
+/*Swine Cart Related*/
+.info {
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: auto;
+}
+
+.material-icons.md { font-size: 72px; }
+
+.swine-cart-item {
+	top: 0;
+	bottom: 0;
+	right: 0;
+	left: 0;
+	margin: auto;
+}
+
+.verticalLine {
+    border-right: thin solid #9e9e9e;
+    height: 100px;
+}
+
+#swine-cart {
+	padding-top: 20px;
+}
+
+#transaction-history {
+	padding-top: 20px;
+}
+
+#cart {
+	overflow: auto;
+	max-height: 364px;
+}
+
+#transaction-cart {
+	overflow: auto;
+	max-height: 364px;
+}
+
+/*Modal Edit*/
+#comment {
+	width: 325px;
+}
+
+/*#info-modal {
+  max-height: 540px;
+} for future testing*/
+
+#rate {
+	width: 400px;
+}
+
+#confirmation {
+	width: 300px;
+}
+
+.rate-button {
+	background-color: #e67764;
+}
 
 /* Caption styles */
 .caption {

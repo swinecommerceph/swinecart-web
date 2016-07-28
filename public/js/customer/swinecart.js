@@ -1,21 +1,21 @@
 'use strict';
 
 var swinecart = {
-    add: function(parent_form){
+    add: function(parent_form) {
 
         // Do AJAX
         $.ajax({
-            url: config.swineCart_url+'/add',
+            url: config.swineCart_url + '/add',
             type: "POST",
             cache: false,
             data: {
-                "_token" : parent_form.find('input[name=_token]').val(),
+                "_token": parent_form.find('input[name=_token]').val(),
                 "productId": parent_form.attr('data-product-id'),
                 "type": parent_form.attr('data-type'),
             },
-            success: function(data){
+            success: function(data) {
                 // If product is not yet in Swine Cart
-                if(data[0] === 'success'){
+                if (data[0] === 'success') {
                     var span = $('#cart-icon span');
 
                     // Put quantity of Swine Cart to sessionStorage
@@ -33,120 +33,228 @@ var swinecart = {
                 // If product is already in Swine Cart and is not requested yet
                 else Materialize.toast(data[1] + ' already in Swine Cart', 1800, 'orange accent-2');
             },
-            error: function(message){
+            error: function(message) {
                 console.log(message['responseText']);
             }
         });
 
     },
 
-    delete: function(parent_form, li_element){
+    delete: function(parent_form, li_element) {
         // Do AJAX
         $.ajax({
-            url: config.swineCart_url+'/delete',
+            url: config.swineCart_url + '/delete',
             type: "DELETE",
             cache: false,
-            data:{
-                "_token" : parent_form.find('input[name=_token]').val(),
+            data: {
+                "_token": parent_form.find('input[name=_token]').val(),
                 "itemId": parent_form.attr('data-item-id')
             },
-            success: function(data){
+            success: function(data) {
                 // If deletion of item is successful
-                if(data[0] === 'success'){
+                if (data[0] === 'success') {
                     var span = $('#cart-icon span');
 
                     // Put quantity of Swine Cart to sessionStorage
                     sessionStorage.setItem('swine_cart_quantity', data[2]);
 
-                    if(data[2] == 0){
+                    if (data[2] == 0) {
                         span.html("");
                         span.removeClass('badge');
                         $('#cart-icon .material-icons').removeClass('left');
                         $('#cart-dropdown #item-container').html(
                             '<li> <span class="center-align black-text"> No items in your Swine Cart </span> </li>'
                         );
-                    }
-                    else span.html(sessionStorage.getItem('swine_cart_quantity'));
+                    } else span.html(sessionStorage.getItem('swine_cart_quantity'));
 
                     li_element.remove();
                     Materialize.toast(data[1] + ' removed from Swine Cart', 1800, 'green lighten-1');
-                }
-                else Materialize.toast(data[1] + ' is ' + data[0], 1500, 'orange accent-2');
+                } else Materialize.toast(data[1] + ' is ' + data[0], 1500, 'orange accent-2');
 
             },
-            error: function(message){
+            error: function(message) {
                 console.log(message['responseText']);
             }
         });
     },
 
-    get_items: function(){
+    request: function(parent_form, li_element){
+        // Do AJAX
+        $.ajax({
+            url: config.swineCart_url + '/request',
+            type: "PUT",
+            cache: false,
+            data: {
+                "_token": parent_form.find('input[name=_token]').val(),
+                "itemId": parent_form.attr('data-item-id'),
+                "productId": parent_form.attr('data-product-id')
+            },
+            success: function(data) {
+                li_element.find('.material-icons.request').removeClass('grey-text text-darken-4').addClass('teal-text');
+                li_element.find('.material-icons.request').attr('data-tooltip', 'Requested');
+                li_element.find('div.action').html(
+                    '<a class="receive-button btn-flat">'+
+                    '(For Approval)'+
+                    '</a>'
+                    );
+                var product = li_element.find('a.anchor-title').html();
+                Materialize.toast(product + ' requested', 1800, 'green lighten-1')
+            },
+            error: function(message) {
+                console.log(message['responseText']);
+            },
+        });
+    },
+
+    get_items: function() {
         // Do AJAX
         $.ajax({
             url: config.swineCart_url,
             type: "GET",
             cache: false,
-            data:{},
-            success: function(data){
+            data: {},
+            success: function(data) {
                 var data = JSON.parse(data);
 
                 // Check first if empty
-                if(data.length == 0){
+                if (data.length == 0) {
                     $('#cart-dropdown #item-container').html(
                         '<li> <span class="center-align black-text"> No items in your Swine Cart </span> </li>'
                     );
                     config.preloader_circular.hide();
-                }
-                else{
+                } else {
                     var items = '';
-                    data.forEach(function(element, index, array){
+                    data.forEach(function(element, index, array) {
                         // Parse if product breed is crossbreed
                         var product_breed = swinecart.capitalizeFirstLetter(element.product_breed);
-                        if(product_breed.includes('+')){
+                        if (product_breed.includes('+')) {
                             var part = product_breed.split('+');
-                            product_breed = swinecart.capitalizeFirstLetter(part[0])+ ' x '+ swinecart.capitalizeFirstLetter(part[1]);
+                            product_breed = swinecart.capitalizeFirstLetter(part[0]) + ' x ' + swinecart.capitalizeFirstLetter(part[1]);
                         }
 
-                        items += '<li class="collection-item avatar">'+
-                            '<a href="'+ config.viewProducts_url +'/'+ element.product_id +'">'+
-                                '<img src="'+ element.img_path +'" alt="" class="circle">'+
-                            '</a>'+
-                            '<a href="'+ config.viewProducts_url +'/'+ element.product_id +'" class="anchor-title">'+
-                                '<span class="title">'+ element.product_name +'</span>'+
-                            '</a>'+
-                            '<p>'+ swinecart.capitalizeFirstLetter(element.product_type) +' - '+ product_breed +'<br>'+
-                                element.breeder +
-                            '</p>'+
-                            '<form method="POST" action="'+config.host_url+config.swineCart_url+'/delete" accept-charset="UTF-8" data-item-id="'+element.item_id+'">'+
-                                '<input name="_method" type="hidden" value="DELETE">'+
-                                '<input name="_token" type="hidden" value="'+ element.token +'">'+
-                                '<a class="secondary-content delete-from-swinecart"><i class="material-icons">clear</i></a>'+
-                            '</form>'+
-                        '</li>';
+                        items += '<li class="collection-item avatar">' +
+                            '<a href="' + config.viewProducts_url + '/' + element.product_id + '">' +
+                            '<img src="' + element.img_path + '" alt="" class="circle">' +
+                            '</a>' +
+                            '<a href="' + config.viewProducts_url + '/' + element.product_id + '" class="anchor-title">' +
+                            '<span class="title">' + element.product_name + '</span>' +
+                            '</a>' +
+                            '<p>' + swinecart.capitalizeFirstLetter(element.product_type) + ' - ' + product_breed + '<br>' +
+                            element.breeder +
+                            '</p>' +
+                            '<form method="POST" action="' + config.host_url + config.swineCart_url + '/delete" accept-charset="UTF-8" data-item-id="' + element.item_id + '">' +
+                            '<input name="_method" type="hidden" value="DELETE">' +
+                            '<input name="_token" type="hidden" value="' + element.token + '">' +
+                            '<a class="secondary-content delete-from-swinecart"><i class="material-icons">clear</i></a>' +
+                            '</form>' +
+                            '</li>';
                     });
 
                     // Put items to Swine Cart UI
-                    $.when($('#cart-dropdown #item-container').html(items)).done(function(){
+                    $.when($('#cart-dropdown #item-container').html(items)).done(function() {
                         config.preloader_circular.hide();
                     });
                 }
+
+            },
+            error: function(message) {
+                console.log(message['responseText']);
+            }
+        });
+    },
+
+    record: function(parent_form){
+        $.ajax({
+            url: config.swineCart_url + '/record',
+            type: "POST",
+            data: {
+                "_token": parent_form.find('input[name=_token]').val(),
+                "breederId" : parent_form.attr('data-breeder-id'),
+                "customerId" : parent_form.attr('data-customer-id'),
+                "productId" : parent_form.attr('data-product-id'),
+                "status": parent_form.attr('data-status'),
+            },
+            success: function(data) {
 
             },
             error: function(message){
                 console.log(message['responseText']);
             }
         });
+
     },
 
-    get_quantity: function(){
-        // Do AJAX
+    rate: function(parent_form, comment) {
         $.ajax({
-            url: config.swineCart_url+'/quantity',
+        url: config.swineCart_url + '/rate',
+        type: "POST",
+        data: {
+            "_token": parent_form.find('input[name=_token]').val(),
+            "breederId" : parent_form.attr('data-breeder-id'),
+            "customerId" : parent_form.attr('data-customer-id'),
+            "productId" : parent_form.attr('data-product-id'),
+            "delivery" : parent_form.attr('data-delivery'),
+            "transaction" : parent_form.attr('data-transaction'),
+            "productQuality" : parent_form.attr('data-productQuality'),
+            "comment" : comment
+        },
+        success: function(data) {
+            $('#cart').find('li[data-product-id='+data+']').remove();
+        },
+        error: function(message){
+            console.log(message['responseText']);
+        }
+        });
+
+    },
+
+    check: function(parent_form, code){
+        $.ajax({
+            url: config.swineCart_url + '/confirmation',
             type: "GET",
             cache: false,
-            data:{},
-            success: function(data){
-                if(data != 0){
+            data: {
+                "product_id" : parent_form.attr('data-product-id'),
+                "code" : parent_form.children('input').val()
+            },
+            success: function(data) {
+                if(parent_form.children('input').val() === data[0]){
+                    Materialize.toast("Success");
+                    $('#cart').find('li[data-product-id='+data[1]+']').find('div.status').html(
+                    '<div class="col s12 center-align">'+
+                      '<a href="#">'+
+                        '<i class="material-icons md teal-text tooltipped" data-position="top" data-delay="50" data-tooltip="Sold">attach_money</i>'+
+                      '</a>'+
+                    '</div>'
+                    );
+
+                    $('#cart').find('li[data-product-id='+data[1]+']').find('div.action').html(
+                    '<span class="col s12 center-align">'+
+                      '<a href="#rate" class="rate-button btn-large modal-trigger" data-status="{{$product->status}}" data-product-id="{{$product->product_id}}" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}">'+
+                        'Rate'+
+                      '</a>'+
+                    '</span>'
+                    );
+                }
+                else {
+                    Materialize.toast("Fail");
+                }
+            },
+            error: function(message) {
+                console.log(message['responseText']);
+            }
+        });
+    },
+
+    get_quantity: function() {
+        // Do AJAX
+        $.ajax({
+            url: config.swineCart_url + '/quantity',
+            type: "GET",
+            cache: false,
+            data: {},
+            success: function(data) {
+                if (data != 0) {
                     var span = $('#cart-icon span');
 
                     // Put quantity of Swine Cart to sessionStorage
@@ -157,13 +265,13 @@ var swinecart = {
                     $('#cart-icon .material-icons').addClass('left');
                 }
             },
-            error: function(message){
+            error: function(message) {
                 console.log(message['responseText']);
             }
         });
     },
 
-    capitalizeFirstLetter : function(string){
+    capitalizeFirstLetter: function(string) {
         return string.charAt(0).toUpperCase() + string.slice(1);
     }
 };

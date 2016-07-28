@@ -3,7 +3,7 @@
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateTransactionLogsTable extends Migration
+class CreateReviewsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,12 +12,14 @@ class CreateTransactionLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('transaction_logs', function (Blueprint $table) {
+        Schema::create('reviews', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('customer_id')->unsigned();
-            $table->integer('product_id')->unsigned();
             $table->integer('breeder_id')->unsigned();
-            $table->string('status');
+            $table->integer('customer_id');
+            $table->string('comment');
+            $table->integer('rating_delivery');
+            $table->integer('rating_transaction');
+            $table->integer('rating_productQuality');
             $table->timestamps();
         });
     }
@@ -29,6 +31,6 @@ class CreateTransactionLogsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('transaction_logs');
+        Schema::drop('reviews');
     }
 }

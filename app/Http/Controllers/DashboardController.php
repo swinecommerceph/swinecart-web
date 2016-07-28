@@ -35,11 +35,14 @@ class DashboardController extends Controller
      */
     public function showDashboard()
     {
-        $dashboardCollection = [];
-        $dashboardCollection['soldProducts'] = $this->dashboard->getSoldProducts($this->user->userable);
-        $dashboardCollection['availableProducts'] = $this->dashboard->getAvailableProducts($this->user->userable);
+        $dashboardStats = [];
+        $breeder = $this->user->userable;
+        $dashboardStats['soldProducts'] = $this->dashboard->getSoldProducts($breeder);
+        $dashboardStats['availableProducts'] = $this->dashboard->getAvailableProducts($breeder);
+        $dashboardStats['status'] = $this->dashboard->getProductStatuses($breeder);
+        $dashboardStats['ratings'] = $this->dashboard->getRatings($breeder);;
         $topic = str_slug($this->user->name);
-        return view('user.breeder.dashboard', compact('dashboardCollection', 'topic'));
+        return view('user.breeder.dashboard', compact('dashboardStats', 'topic'));
     }
 
     /**

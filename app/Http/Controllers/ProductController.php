@@ -429,15 +429,15 @@ class ProductController extends Controller
         if (!$request->type && !$request->breed){
             if($request->sort && $request->sort != 'none'){
                 $part = explode('-',$request->sort);
-                $products = Product::where('status','displayed')->orWhere('status','requested')->orderBy($part[0], $part[1])->paginate(10);
+                $products = Product::whereIn('status',['displayed','requested'])->orderBy($part[0], $part[1])->paginate(10);
             }
-            else $products = Product::where('status','displayed')->orWhere('status','requested')->paginate(10);
+            else $products = Product::whereIn('status',['displayed','requested'])->paginate(10);
         }
         else{
-            if($request->type) $products = Product::where('status','displayed')->orWhere('status','requested')->whereIn('type', explode(' ',$request->type));
+            if($request->type) $products = Product::whereIn('status',['displayed','requested'])->whereIn('type', explode(' ',$request->type));
             if($request->breed) {
                 $breedIds = $this->getBreedIds($request->breed);
-                if(!$request->type) $products = Product::where('status','displayed')->orWhere('status','requested')->whereIn('breed_id', $breedIds);
+                if(!$request->type) $products = Product::whereIn('status',['displayed','requested'])->whereIn('breed_id', $breedIds);
                 else $products = $products->whereIn('breed_id', $breedIds);
             }
             if($request->sort) {

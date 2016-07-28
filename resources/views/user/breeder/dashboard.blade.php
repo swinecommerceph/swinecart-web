@@ -35,12 +35,12 @@
             <div class="card">
                 <div class="card-content teal white-text">
                     <span class="card-title">Sold Products</span>
-                    <h3>{{ $dashboardCollection['soldProducts']['overall'] }}</h3>
+                    <h3>{{ $dashboardStats['soldProducts']['overall'] }}</h3>
                 </div>
                 <div class="card-action teal darken-4">
-                    <a class="white-text">Boar: {{ $dashboardCollection['soldProducts']['boar'] }} </a>
-                    <a class="white-text">Sow: {{ $dashboardCollection['soldProducts']['sow'] }} </a>
-                    <a class="white-text">Semen: {{ $dashboardCollection['soldProducts']['semen'] }} </a>
+                    <a class="white-text">Boar: {{ $dashboardStats['soldProducts']['boar'] }} </a>
+                    <a class="white-text">Sow: {{ $dashboardStats['soldProducts']['sow'] }} </a>
+                    <a class="white-text">Semen: {{ $dashboardStats['soldProducts']['semen'] }} </a>
                     {{-- <a href="#">This is a link</a>
                     <a href="#">This is a link</a> --}}
                 </div>
@@ -52,12 +52,12 @@
             <div class="card">
                 <div class="card-content pink white-text">
                     <span class="card-title">Available Products</span>
-                    <h3>{{ $dashboardCollection['availableProducts']['overall'] }}</h3>
+                    <h3>{{ $dashboardStats['availableProducts']['overall'] }}</h3>
                 </div>
                 <div class="card-action pink darken-4 white-text">
-                    <a class="white-text">Boar: {{ $dashboardCollection['availableProducts']['boar'] }}</a>
-                    <a class="white-text">Sow: {{ $dashboardCollection['availableProducts']['sow'] }}</a>
-                    <a class="white-text">Semen: {{ $dashboardCollection['availableProducts']['semen'] }}</a>
+                    <a class="white-text">Boar: {{ $dashboardStats['availableProducts']['boar'] }}</a>
+                    <a class="white-text">Sow: {{ $dashboardStats['availableProducts']['sow'] }}</a>
+                    <a class="white-text">Semen: {{ $dashboardStats['availableProducts']['semen'] }}</a>
                 </div>
             </div>
         </div>
@@ -70,13 +70,13 @@
                         <a href="{{ route('dashboard.productStatus') }}" class="white-text">Status</a>
                     </span>
                     <p>
-                        Hidden: <br>
-                        Displayed: <br>
-                        Requested: <br>
-                        Reserved: <br>
-                        Paid: <br>
-                        On Delivery: <br>
-                        Sold:
+                        Hidden: {{ $dashboardStats['status']['hidden'] }} <br>
+                        Displayed: {{ $dashboardStats['status']['displayed'] }} <br>
+                        Requested: {{ $dashboardStats['status']['requested'] }} <br>
+                        Reserved: {{ $dashboardStats['status']['reserved'] }} <br>
+                        On Delivery: {{ $dashboardStats['status']['onDelivery'] }} <br>
+                        Paid: {{ $dashboardStats['status']['paid'] }} <br>
+                        Sold: {{ $dashboardStats['status']['sold'] }}
                     </p>
                 </div>
                 {{-- <div class="card-action blue-grey darken-2">
@@ -91,12 +91,12 @@
             <div class="card">
                 <div class="card-content pink darken-4 white-text">
                     <span class="card-title">Ratings</span>
-                    <h3>67%</h3>
+                    <h3>{{ $dashboardStats['ratings']['overall'] }}%</h3>
                 </div>
                 <div class="card-action pink">
-                    <a class="white-text">Delivery: 4</a>
-                    <a class="white-text">Transaction: 3.5</a>
-                    <a class="white-text">Product Quality: 3.2</a>
+                    <a class="white-text">Delivery: {{ $dashboardStats['ratings']['delivery'] }} </a>
+                    <a class="white-text">Transaction: {{ $dashboardStats['ratings']['transaction'] }} </a>
+                    <a class="white-text">Product Quality: {{ $dashboardStats['ratings']['productQuality'] }} </a>
                 </div>
             </div>
         </div>

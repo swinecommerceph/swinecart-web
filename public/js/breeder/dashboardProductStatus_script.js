@@ -66,4 +66,11 @@ $(document).ready(function(){
             $('#paid-product-confirmation-modal').closeModal();
         });
     });
+
+    $('.view-code-icon').click(function(e){
+        e.preventDefault();
+
+        $('#view-code-modal .modal-content p').html('Confirmation Code: '+$(this).attr('data-code'));
+        $('#view-code-modal').openModal();
+    });
 });

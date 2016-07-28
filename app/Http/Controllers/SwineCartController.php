@@ -12,7 +12,8 @@ use App\Models\Breed;
 use App\Models\Image;
 use App\Models\SwineCartItem;
 use App\Models\Product;
-use App\Repositories\ProductRepository;
+use App\Models\Review;
+use App\Models\TransactionLog;
 
 use Auth;
 
@@ -37,25 +38,26 @@ class SwineCartController extends Controller
      * @param  Request $request
      * @return Array
      */
-    public function addToSwineCart(Request $request, ProductRepository $productsDashboard)
+    public function addToSwineCart(Request $request)
     {
         if($request->ajax()){
             $customer = $this->user->userable;
             $swineCartItems = $customer->swineCartItems();
             $checkProduct = $swineCartItems->where('product_id',$request->productId)->get();
 
-            $product = Product::find($request->productId);
-            $breeder = $product->breeder;
-            $topic = $breeder->users()->first()->name;
-            $data = $productsDashboard->getSoldProducts($breeder);
-            $data['topic'] = str_slug($topic);
-
-            // This is our new stuff
-    	    $context = new \ZMQContext();
-    	    $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'Breeder Dashboard Pusher');
-    	    $socket->connect("tcp://127.0.0.1:5555");
-
-    	    $socket->send(collect($data)->toJson());
+            // --------- WEBSOCKET SEND DATA -------------
+            // $product = Product::find($request->productId);
+            // $breeder = $product->breeder;
+            // $topic = $breeder->users()->first()->name;
+            // $data = $productsDashboard->getSoldProducts($breeder);
+            // $data['topic'] = str_slug($topic);
+            //
+            // // This is our new stuff
+    	    // $context = new \ZMQContext();
+    	    // $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'Breeder Dashboard Pusher');
+    	    // $socket->connect("tcp://127.0.0.1:5555");
+            //
+    	    // $socket->send(collect($data)->toJson());
 
             // Check first if product is already in Swine Cart
             if(!$checkProduct->isEmpty()){
@@ -74,6 +76,88 @@ class SwineCartController extends Controller
                 $returnArray = ['success', Product::find($request->productId)->name, $customer->swineCartItems()->where('if_requested',0)->count()];
                 return $returnArray;
             }
+        }
+    }
+
+    /**
+     * Record activity to Logs
+     * AJAX
+     *
+     * @param  Request $request
+     */
+    public function record(Request $request){
+        if($request->ajax()){
+            $history = Customer::find($request->customerId)->transactionLogs();
+            $log = new TransactionLog;
+            $log->product_id = $request->productId;
+            $log->breeder_id = $request->breederId;
+            $log->status = $request->status;
+            $history->save($log);
+        }
+    }
+
+    /**
+     * Rates breeder from Swine Cart
+     * AJAX
+     *
+     * @param  Request $request
+     */
+    public function rate(Request $request){
+        if($request->ajax()){
+            $customer = $this->user->userable;
+            $reviews = Breeder::find($request->breederId)->reviews();
+            $review = new Review;
+            $review->customer_id = $request->customerId;
+            $review->comment = $request->comment;
+            $review->rating_delivery = $request->delivery;
+            $review->rating_transaction = $request->transaction;
+            $review->rating_productQuality = $request->productQuality;
+            $swineCartItems = $customer->swineCartItems();
+            $reviewed = $swineCartItems->where('product_id',$request->productId)->first();
+            $reviewed->if_rated = 1;
+            $reviewed->save();
+            $reviews->save($review);
+        }
+        return $request->productId;
+    }
+
+    /**
+     * Confirmation of transaction via code checking
+     * AJAX
+     *
+     * @param  Request $request
+     * @return String
+     */
+    public function check(Request $request){
+        if($request->ajax()){
+            $product = Product::find($request->product_id);
+            if ($request->code === $product->code) {
+                $customer = $this->user->userable;
+                $product->status = "sold";
+                $product->customer_id = $customer->id;
+                $product->save();
+            }
+            return [Product::find($request->product_id)->code, $request->product_id];
+        }
+    }
+
+    /**
+     * Requests item from Swine Cart
+     * AJAX
+     *
+     * @param  Request $request
+     */
+    public function requestSwineCart(Request $request)
+    {
+        if ($request->ajax()) {
+            $customer = $this->user->userable;
+            $swineCartItems = $customer->swineCartItems();
+            $requested = $swineCartItems->find($request->itemId);
+            $requested->if_requested = 1;
+            $product = Product::find($request->productId);
+            $product->status = "requested";
+            $product->save();
+            $requested->save();
         }
     }
 
@@ -97,14 +181,25 @@ class SwineCartController extends Controller
             else return ["not found", $item->product_id];
 
         }
+        else {
+            $customer = $this->user->userable;
+            $item = $customer->swineCartItems()->where('id',$request->itemId)->get()->first();
+            $productName = Product::find($item->product_id)->name;
+            if($item) {
+                $item->delete();
+                return ["success", $productName, $customer->swineCartItems()->where('if_requested',0)->count()];
+            }
+            else return ["not found", $item->product_id];
+        }
+
     }
 
     /**
      * Get items in the Swine Cart
-     * AJAX
+     * [!]AJAX
      *
      * @param  Request $request
-     * @return JSON
+     * @return JSON/Array
      */
     public function getSwineCartItems(Request $request)
     {
@@ -130,6 +225,67 @@ class SwineCartController extends Controller
             $itemsCollection = collect($items);
             return $itemsCollection->toJson();
         }
+        else {
+            $customer = $this->user->userable;
+            $swineCartItems = $customer->swineCartItems()->where('if_rated',0)->get();
+            $products = [];
+            $log = $customer->transactionLogs()->get();
+            $history = [];
+
+            foreach ($swineCartItems as $item) {
+                $itemDetail = [];
+                $product = Product::find($item->product_id);
+                $reviews = Breeder::find($product->breeder_id)->reviews()->get();
+                $itemDetail['request_status'] = $item->if_requested;
+                $itemDetail['status'] = $product->status;
+                $itemDetail['item_id'] = $item->id;
+                $itemDetail['customer_id'] = $customer->id;
+                $itemDetail['breeder_id'] = $product->breeder_id;
+                $itemDetail['product_id'] = $item->product_id;
+                $itemDetail['product_name'] = $product->name;
+                $itemDetail['product_type'] = $product->type;
+                $itemDetail['product_quantity'] = $product->quantity;
+                $itemDetail['product_breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+                $itemDetail['product_age'] = $product->age;
+                $itemDetail['product_adg'] = $product->adg;
+                $itemDetail['product_fcr'] = $product->fcr;
+                $itemDetail['other_details'] = $product->other_details;
+                $itemDetail['product_backfat_thickness'] = $product->backfat_thickness;
+                $itemDetail['avg_delivery'] = $reviews->avg('rating_delivery');
+                $itemDetail['avg_transaction'] = $reviews->avg('rating_transaction');
+                $itemDetail['avg_productQuality'] = $reviews->avg('rating_productQuality');
+                $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+                $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+                $itemDetail['token'] = csrf_token();
+                array_push($products,(object) $itemDetail);
+            }
+
+            foreach ($log as $item) {
+                $itemDetail = [];
+                $product = Product::find($item->product_id);
+                $reviews = Breeder::find($product->breeder_id)->reviews()->get();
+                $itemDetail['product_name'] = $product->name;
+                $itemDetail['product_type'] = $product->type;
+                $itemDetail['product_quantity'] = $product->quantity;
+                $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+                $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+                $itemDetail['product_breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+                $itemDetail['product_age'] = $product->age;
+                $itemDetail['product_adg'] = $product->adg;
+                $itemDetail['product_fcr'] = $product->fcr;
+                $itemDetail['other_details'] = $product->other_details;
+                $itemDetail['product_backfat_thickness'] = $product->backfat_thickness;
+                $itemDetail['avg_delivery'] = $reviews->avg('rating_delivery');
+                $itemDetail['avg_transaction'] = $reviews->avg('rating_transaction');
+                $itemDetail['avg_productQuality'] = $reviews->avg('rating_productQuality');
+                $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+                $itemDetail['timestamp'] = $item->created_at;
+                $itemDetail['token'] = csrf_token();
+                array_push($history,(object) $itemDetail);
+            }
+
+            return view('user.customer.swineCart', compact('products', 'history'));
+        }
     }
 
     /**
@@ -145,5 +301,22 @@ class SwineCartController extends Controller
             $customer = $this->user->userable;
             return $customer->swineCartItems()->where('if_requested',0)->count();
         }
+    }
+
+    /**
+    * Parse $breed if it contains '+' (ex. landrace+duroc)
+    * to "Landrace x Duroc"
+    *
+    * @param  String   $breed
+    * @return String
+    */
+    private function transformBreedSyntax($breed)
+    {
+       if(str_contains($breed,'+')){
+           $part = explode("+", $breed);
+           $breed = ucfirst($part[0])." x ".ucfirst($part[1]);
+           return $breed;
+       }
+       return ucfirst($breed);
     }
 }

@@ -38,9 +38,9 @@
 		<nav class="teal darken-3">
 		    <div class="nav-wrapper container">
 		      	@if (Auth::guest())
-					<a class="brand-logo" href="{{ route('index_path') }}">Swine E-Commerce PH</a>
+					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('index_path') }}">Swine E-Commerce PH</a>
 			  	@else
-					<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
+					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a> 
 			  	@endif
 
 		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
