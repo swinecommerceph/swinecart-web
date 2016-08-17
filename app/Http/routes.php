@@ -79,10 +79,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('dashboard',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
         Route::get('dashboard/product-status',['as' => 'dashboard.productStatus', 'uses' => 'DashboardController@showProductStatus']);
         Route::get('dashboard/product-status/retrieve-product-requests',['as' => 'dashboard.productRequests', 'uses' => 'DashboardController@retrieveProductRequests']);
-        Route::post('dashboard/product-status/reserve-product',['as' => 'dashboard.reserveProduct', 'uses' => 'DashboardController@reserveProduct']);
-        Route::post('dashboard/product-status/product-delivery',['as' => 'dashboard.productDelivery', 'uses' => 'DashboardController@productDelivery']);
-        Route::post('dashboard/product-status/product-paid',['as' => 'dashboard.productPaid', 'uses' => 'DashboardController@productPaid']);
-
+        Route::patch('dashboard/product-status/update-status',['as' => 'dashboard.reserveProduct', 'uses' => 'DashboardController@updateProductStatus']);
 
     });
 
@@ -111,7 +108,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('swine-cart/delete',['as' => 'cart.delete', 'uses' => 'SwineCartController@deleteFromSwineCart']);
         Route::get('swine-cart/quantity',['as' => 'cart.quantity', 'uses' => 'SwineCartController@getSwineCartQuantity']);
         Route::post('swine-cart/rate', ['as' => 'rate.breeder', 'uses' => 'SwineCartController@rate']);
-        Route::get('swine-cart/confirmation', ['as' => 'check', 'uses' => 'SwineCartController@check']);
         Route::post('swine-cart/record', ['as' => 'record', 'uses' => 'SwineCartController@record']);
         Route::get('view-swine-cart',['as'=> 'view.cart', 'uses' => 'SwineCartController@getSwineCartItems']);
 

@@ -84,7 +84,7 @@
 
                 <li>
                     <a href="{{ route('view.cart') }}" class="left">Go to Cart</a>
-                    <a href="{{ route('home_path') }}" class="right">Request items</a>
+                    <a href="{{ route('view.cart') }}" class="right">Request items</a>
                 </li>
             </ul>
         </li>
@@ -177,20 +177,32 @@
       </div>
     </div>
 
-    {{-- Confirmation Modal --}}
-    <div id="confirmation" class="modal">
-      <div class="modal-content">
-        <div class="input-field col s8">
-          <form class="" action="{{route('check')}}" method="get" data-product-id="">
-            <i class="material-icons prefix">security</i>
-            <input id="confirmation-code" type="text" length="6">
-            <label for="confirmation-code">Confirmation Code</label>
-          </form>
+    {{--  Remove Product Confirmation Modal --}}
+    <div id="remove-product-confirmation-modal" class="modal">
+        <div class="modal-content">
+            <h4>Remove Product Confirmation</h4>
+            <p>
+                Are you sure you want to remove this product from your Swine Cart?
+            </p>
         </div>
-      </div>
-      <div class="modal-footer">
-        <a href="#!" id="send-confirm" class="modal-action modal-close btn-flat">Confirm</a>
-      </div>
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+            <a class="modal-action waves-effect waves-green btn-flat remove-product-button">Yes</a>
+        </div>
+    </div>
+
+    {{--  Request Product Confirmation Modal--}}
+    <div id="request-product-confirmation-modal" class="modal">
+        <div class="modal-content">
+            <h4>Request Product Confirmation</h4>
+            <p>
+                Are you sure you want to reserve this product?
+            </p>
+        </div>
+        <div class="modal-footer">
+            <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+            <a class="modal-action waves-effect waves-green btn-flat request-product-button">Yes</a>
+        </div>
     </div>
 
     {{-- Rating Modal --}}
@@ -324,7 +336,7 @@
               <li class="collection-item" data-product-id="{{$product->item_id}}">
                 <div class="row swine-cart-item valign-wrapper">
                   {{-- Product Status Icons --}}
-                  @if($product->request_status)
+                  @if($product->request_status && $product->status === 'requested')
                     <div class="status col s2 m2 verticalLine valign-wrapper">
                       <div class="">
                         <span class="col s6 right-align">
@@ -364,7 +376,7 @@
                         </span>
                         <span class="col s6 right-align">
                           <a href="#">
-                            <i class="on-delivery material-icons grey-text text-darken-4 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Not on Delivery">local_shipping</i>
+                            <i class="on-delivery material-icons grey-text text-darken-4 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Waiting Delivery">local_shipping</i>
                           </a>
                         </span>
                         <span class="col s6 left-align">
@@ -389,7 +401,7 @@
                         </span>
                         <span class="col s6 right-align">
                           <a href="#">
-                            <i class="on-delivery material-icons teal-text tooltipped" data-position="bottom" data-delay="50" data-tooltip="Not on Delivery">local_shipping</i>
+                            <i class="on-delivery material-icons teal-text tooltipped" data-position="bottom" data-delay="50" data-tooltip="Awaiting Delivery">local_shipping</i>
                           </a>
                         </span>
                         <span class="col s6 left-align">
@@ -419,7 +431,7 @@
                         </span>
                         <span class="col s6 left-align">
                           <a href="#">
-                            <i class="paid material-icons grey-text text-darken-4 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Not Paid">payment</i>
+                            <i class="paid material-icons grey-text text-darken-4 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Awaiting Payment">payment</i>
                           </a>
                         </span>
                       </div>
@@ -502,17 +514,19 @@
                               (For Approval)
                             </a>
                       @elseif($product->status === 'reserved')
-                            <a class="message-button btn-large" data-product-id=>
-                              Message
+                            <a class="message-button btn-large" data-breeder-id="{{$product->breeder_id}}" data-customer-id="{{$product->customer_id}}">
+                                Message
                             </a>
                       @elseif($product->status === 'on_delivery')
-                            <a href="#confirmation" class="receive-button modal-trigger btn" data-product-id="{{$product->product_id}}">
-                              Pay
-                            </a>
+                            {{-- <a class="message-button btn-large" data-breeder-id="{{$product->breeder_id}}" data-customer-id="{{$product->customer_id}}">
+                                Message
+                            </a> --}}
+                            (Awaiting Payment)
                       @elseif($product->status === 'paid')
-                            <a href="#confirmation" class="receive-button modal-trigger btn" data-product-id="{{$product->product_id}}">
-                              Confirm
-                            </a>
+                            {{-- <a class="message-button btn-large" data-breeder-id="{{$product->breeder_id}}" data-customer-id="{{$product->customer_id}}">
+                                Message
+                            </a> --}}
+                            (Awaiting Delivery)
                       @elseif($product->status === 'sold')
                         <span class="col s12 center-align">
                           <a href="#rate" class="rate-button btn-large modal-trigger" data-status="{{$product->status}}" data-product-id="{{$product->product_id}}" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}">

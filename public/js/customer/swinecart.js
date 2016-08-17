@@ -97,7 +97,7 @@ var swinecart = {
                     '(For Approval)'+
                     '</a>'
                     );
-                var product = li_element.find('a.anchor-title').html();
+                var product = li_element.find('a.anchor-title').text();
                 Materialize.toast(product + ' requested', 1800, 'green lighten-1')
             },
             error: function(message) {
@@ -206,44 +206,6 @@ var swinecart = {
         }
         });
 
-    },
-
-    check: function(parent_form, code){
-        $.ajax({
-            url: config.swineCart_url + '/confirmation',
-            type: "GET",
-            cache: false,
-            data: {
-                "product_id" : parent_form.attr('data-product-id'),
-                "code" : parent_form.children('input').val()
-            },
-            success: function(data) {
-                if(parent_form.children('input').val() === data[0]){
-                    Materialize.toast("Success");
-                    $('#cart').find('li[data-product-id='+data[1]+']').find('div.status').html(
-                    '<div class="col s12 center-align">'+
-                      '<a href="#">'+
-                        '<i class="material-icons md teal-text tooltipped" data-position="top" data-delay="50" data-tooltip="Sold">attach_money</i>'+
-                      '</a>'+
-                    '</div>'
-                    );
-
-                    $('#cart').find('li[data-product-id='+data[1]+']').find('div.action').html(
-                    '<span class="col s12 center-align">'+
-                      '<a href="#rate" class="rate-button btn-large modal-trigger" data-status="{{$product->status}}" data-product-id="{{$product->product_id}}" data-customer-id="{{$product->customer_id}}" data-breeder-id="{{$product->breeder_id}}" data-token="{{$product->token}}">'+
-                        'Rate'+
-                      '</a>'+
-                    '</span>'
-                    );
-                }
-                else {
-                    Materialize.toast("Fail");
-                }
-            },
-            error: function(message) {
-                console.log(message['responseText']);
-            }
-        });
     },
 
     get_quantity: function() {

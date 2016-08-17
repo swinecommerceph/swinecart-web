@@ -31,117 +31,254 @@
         </div>
     </div>
 
-    <div class="row">
-        <table id="product-status-table" class="">
+
+
+    <div id="product-status-container" class="row">
+        <div class="row">
+            <div id="status-select" class="input-field col left">
+                <select v-select="statusFilter">
+                    <option value="">Relevance</option>
+                    <option value="requested">Requested</option>
+                    <option value="reserved">Reserved</option>
+                    <option value="on_delivery">On Delivery</option>
+                    <option value="paid">Paid</option>
+                    <option value="sold">Sold</option>
+                </select>
+                <label>Type</label>
+            </div>
+            <form class="col s3 right">
+                <div class="input-field col s12">
+                    <input type="text" id="search" name="search" v-model="searchQuery">
+                    <label for="search">Search</label>
+                </div>
+            </form>
+        </div>
+        <status-table :products="{{ $products }}" :token="'{{ $token }}'" :filter-query="searchQuery" :status-filter="statusFilter"> </status-table>
+    </div>
+
+    {{-- Template for the <status-table> component --}}
+    <template id="status-table-template">
+        {{-- <pre>
+            @{{ products | json }}
+        </pre> --}}
+        <table id="product-status-table" class="bordered highlight">
             <thead>
                 <tr>
-                    <th> Product Information </td>
-                    <th> Status </td>
+                    <th @click="sortBy('name')" :class="sortKey == 'name' ? 'red-text' : '' ">
+                        <span class="">
+                            Product Information
+                            <i class="material-icons right" v-if="sortOrders['name'] > 0">keyboard_arrow_up</i>
+                            <i class="material-icons right" v-else>keyboard_arrow_down</i>
+                        </span>
+                    </td>
+                    <th @click="sortBy('status')" :class="sortKey == 'status' ? 'red-text' : '' ">
+                        <span class="">
+                            Status
+                            <i class="material-icons right" v-if="sortOrders['status'] > 0">keyboard_arrow_up</i>
+                            <i class="material-icons right" v-else>keyboard_arrow_down</i>
+                        </span>
+                    </td>
                     <th> Action </td>
                 </tr>
             </thead>
             <tbody>
-                @foreach($products as $product)
-                    <tr>
-                        <td> {{ $product->name }} </td>
-                        <td> {{ $product->status }} </td>
-                        <td>
-                            @if($product->status == 'requested')
-                                <a class="product-request-icon" href="#" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}"><i class="material-icons teal-text">face</i></a>
-                            @elseif($product->status == 'reserved')
-                                <div class="row">
-                                    <a class="col s1 product-delivery-icon" href="#" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}" data-token="{{$token}}"><i class="material-icons teal-text">local_shipping</i></a>
-                                    <a class="col s1 product-paid-icon" href="#" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}" data-token="{{$token}}"><i class="material-icons teal-text">credit_card</i></a>
-                                    <a class="col s1" href="#"><i class="material-icons teal-text">message</i></a>
-                                </div>
-                            @elseif($product->status == 'on_delivery')
-                                <a class="view-code-icon" href="#" data-code="{{$product->code}}"><i class="material-icons teal-text">code</i></a>
-                            @elseif($product->status == 'paid')
-                                <div class="row">
-                                    <a class="col s1 view-code-icon" href="#" data-code="{{$product->code}}"><i class="material-icons teal-text">code</i></a>
-                                    <a class="col s1 product-delivery-icon" href="#" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}" data-token="{{$token}}"><i class="material-icons teal-text">local_shipping</i></a>
-                                </div>
-                            @elseif($product->status == 'sold')
-                                <a href="#"><i class="material-icons teal-text">thumb_up</i></a>
-                            @endif
-                        </td>
-                    </tr>
-                @endforeach
+                <tr v-for="product in products
+                        | filterBy statusFilter
+                        | filterBy filterQuery
+                        | orderBy sortKey sortOrders[sortKey]"
+                    track-by="id"
+                >
+                    <td>
+                        <div class="row">
+                            <div class="col s3 center-align">
+                                <a href="#">
+                                    <img v-bind:src="product.img_path" width="75" height="75" class="circle"/>
+                                </a>
+                            </div>
+                            <div class="col s9 valign-wrapper">
+                                @{{ product.name }}<br>
+                                @{{ product.type | capitalize }} - @{{ product.breed }}
+                            </div>
+                        </div>
+                    </td>
+                    <td>
+                        @{{ product.status }}
+                    </td>
+                    <td>
+                        {{--  If product's status is requested --}}
+                        <a class=""
+                            href="#"
+                            data-position="top"
+                            data-delay="50"
+                            data-tooltip="See requests"
+                            @click.prevent="getProductRequests(product.id)"
+                            v-if="product.status == 'requested'"
+                        >
+                            <i class="material-icons teal-text">face</i>
+                        </a>
+
+                        {{-- If product's status is reserved --}}
+                        <div class="row"
+                            v-if="product.status == 'reserved'"
+                        >
+                            <a class="col s2 tooltipped"
+                                href="#"
+                                data-position="top"
+                                data-delay="50"
+                                data-tooltip="Confirm Delivery"
+                                @click.prevent="setUpConfirmation(product.id,'delivery')"
+                            >
+                                <i class="material-icons teal-text">local_shipping</i>
+                            </a>
+                            <a class="col s2 tooltipped"
+                                href="#"
+                                data-position="top"
+                                data-delay="50"
+                                data-tooltip="Confirm Payment"
+                                @click.prevent="setUpConfirmation(product.id,'paid')"
+                            >
+                                <i class="material-icons teal-text">credit_card</i>
+                            </a>
+                            <a class="col s2 tooltipped"
+                                href="#"
+                                data-breeder-id="@{{ product.breeder_id }}"
+                                data-customer-id="@{{ product.customer_id }}"
+                                data-position="top"
+                                data-delay="50"
+                                data-tooltip="Message @{{ product.customer_name }}"
+                            >
+                                <i class="material-icons teal-text">message</i>
+                            </a>
+                        </div>
+
+                        {{-- If product's status is on_delivery --}}
+                        <div class="row"
+                            v-if="product.status == 'on_delivery'"
+                        >
+                            <a class="col s2 tooltipped left"
+                                href="#"
+                                data-position="top"
+                                data-delay="50"
+                                data-tooltip="Confirm Sold"
+                                @click.prevent="setUpConfirmation(product.id,'sold')"
+                            >
+                                <i class="material-icons teal-text">thumb_up</i>
+                            </a>
+                            <span>(Awaiting Payment)</span>
+                        </div>
+
+                        {{-- If product's status is paid --}}
+                        <div class="row"
+                            v-if="product.status == 'paid'"
+                        >
+                            <a class="col s2 tooltipped left"
+                                href="#"
+                                data-position="top"
+                                data-delay="50"
+                                data-tooltip="Confirm Sold"
+                                @click.prevent="setUpConfirmation(product.id,'sold')"
+                            >
+                                <i class="material-icons teal-text">thumb_up</i>
+                            </a>
+                            <span>(Awaiting Delivery)</span>
+                        </div>
+
+                        {{-- If product's status is sold --}}
+                        <div v-if="product.status == 'sold'">
+                            (SOLD)
+                        </div>
+                    </td>
+                </tr>
             </tbody>
         </table>
-    </div>
 
-    {{-- Product Requests Modal --}}
-    <div id="product-requests-modal" class="modal modal-fixed-footer">
-        <div class="modal-content">
-            <h4>Product Requests</h4>
-            <ul class="collection"></ul>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+        {{-- Product Requests Modal --}}
+        <div id="product-requests-modal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>@{{ productRequest.productName }} Product Requests</h4>
+                <ul class="collection">
+                    <li class="collection-item" v-for="customer in productRequest.customers">
+                        @{{ customer.customerName }} from @{{ customer.customerProvince }}
+                        <a href="#!"
+                            class="secondary-content tooltipped"
+                            data-position="top"
+                            data-delay="50"
+                            data-tooltip="Reserve product to @{{ customer.customerName }}"
+                            @click.prevent="confirmReservation(customer.customerId, customer.customerName)"
+                        >
+                            <i class="material-icons">add_to_photos</i>
+                        </a>
+                        <a href="#!" class="secondary-content tooltipped" data-position="top" data-delay="50" data-tooltip="Message @{{ customer.customerName }}"><i class="material-icons">message</i></a>
+                    </li>
+                </ul>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+            </div>
         </div>
 
-    </div>
+        {{-- Reserve Product Confirmation Modal --}}
+        <div id="reserve-product-confirmation-modal" class="modal">
+            <div class="modal-content">
+                <h4>Reserve Product Confirmation</h4>
+                <p>
+                    Are you sure you want to reserve @{{ productRequest.productName }} to @{{ productReserve.customerName }}?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                <a class="modal-action waves-effect waves-green btn-flat" @click.prevent="reserveToCustomer">Yes</a>
+            </div>
+        </div>
 
-    {{-- Reserve Product Confirmation Modal --}}
-    <div id="reserve-product-confirmation-modal" class="modal">
-        <div class="modal-content">
-            <h4>Reserve Product Confirmation</h4>
-            <p>
-                Are you sure you want to reserve Product?
-            </p>
+        {{-- Product Delivery Confirmation Modal --}}
+        <div id="product-delivery-confirmation-modal" class="modal">
+            <div class="modal-content">
+                <h4>@{{ productInfoModal.productName }} Delivery Confirmation</h4>
+                <p>
+                    Are you sure the product is on delivery to @{{ productInfoModal.customerName }}?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                <a class="modal-action waves-effect waves-green btn-flat" @click.prevent="productOnDelivery">Yes</a>
+            </div>
         </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-            <a href="#!" class="modal-action waves-effect waves-green btn-flat confirm-reserve-button">Yes</a>
 
+        {{-- Paid Product Confirmation Modal --}}
+        <div id="paid-product-confirmation-modal" class="modal">
+            <div class="modal-content">
+                <h4>@{{ productInfoModal.productName }} Pay Confirmation</h4>
+                <p>
+                    Are you sure the product is already paid by @{{ productInfoModal.customerName }}?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+                <a class="modal-action waves-effect waves-green btn-flat" @click.prevent="productPaid">Yes</a>
+            </div>
         </div>
-    </div>
 
-    {{-- Product Delivery Confirmation Modal --}}
-    <div id="product-delivery-confirmation-modal" class="modal">
-        <div class="modal-content">
-            <h4>Product Delivery Confirmation</h4>
-            <p>
-                Are you sure the product is on delivery?
-            </p>
+        {{-- Sold Product Confirmation Modal --}}
+        <div id="sold-product-confirmation-modal" class="modal">
+            <div class="modal-content">
+                <h4>@{{ productInfoModal.productName }} Sold Confirmation</h4>
+                <p>
+                    Are you sure the product is already sold to @{{ productInfoModal.customerName }}?
+                </p>
+            </div>
+            <div class="modal-footer">
+                <a class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+                <a class="modal-action waves-effect waves-green btn-flat" @click.prevent="productOnSold">Yes</a>
+            </div>
         </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-            <a href="#!" class="modal-action waves-effect waves-green btn-flat confirm-delivery-button">Yes</a>
-        </div>
-    </div>
 
-    {{-- Paid Product Confirmation Modal --}}
-    <div id="paid-product-confirmation-modal" class="modal">
-        <div class="modal-content">
-            <h4>Paid Product Confirmation</h4>
-            <p>
-                Are you sure the product is paid already?
-            </p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-            <a href="#!" class="modal-action waves-effect waves-green btn-flat confirm-paid-button">Yes</a>
-        </div>
-    </div>
-
-    {{-- View Code Modal --}}
-    <div id="view-code-modal" class="modal">
-        <div class="modal-content">
-            <h4>View Code</h4>
-            <p>
-                Confirmation Code:
-            </p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-        </div>
-    </div>
+    </template>
 @endsection
 
 @section('customScript')
-    <script src="/js/vendor/DataTables/datatables.min.js"></script>
+    {{-- <script src="/js/vendor/DataTables/datatables.min.js"></script> --}}
+    <script src="/js/vendor/VueJS/vue.js"></script>
+    <script src="/js/vendor/VueJS/vue-resource.js"></script>
     <script src="/js/breeder/dashboard.js"></script>
-    <script src="/js/breeder/dashboardProductStatus_script.js"></script>
 @endsection

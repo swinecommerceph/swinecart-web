@@ -7,7 +7,9 @@ use Illuminate\Http\Request;
 use App\Models\Breeder;
 use App\Models\Customer;
 use App\Models\Product;
+use App\Models\Breed;
 use App\Models\SwineCartItem;
+use App\Models\Image;
 
 class DashboardRepository
 {
@@ -29,55 +31,18 @@ class DashboardRepository
      */
     public function forBreeder(Breeder $breeder)
     {
-        return $breeder->products;
-    }
+        $products = $breeder->products()->whereIn('status',['requested','reserved','on_delivery','paid','sold'])->get();
+        foreach ($products as $product) {
+            $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
 
-    /**
-     * Get sold products of a Breeder.
-     * Include boar, sow, and semen
-     * quantity
-     *
-     * @param  Breeder  $breeder
-     * @return Array
-     */
-    public function getSoldProducts(Breeder $breeder)
-    {
-        $products = $breeder->products;
-        $overallQuery = $products->where('status','sold');
-        $boarQuery = $products->where('status','sold')->where('type','boar');
-        $sowQuery = $products->where('status','sold')->where('type','sow');
-        $semenQuery = $products->where('status','sold')->where('type','semen');
-
-        return [
-            'overall' => $overallQuery->count(),
-            'boar' => $boarQuery->count(),
-            'sow' => $sowQuery->count(),
-            'semen' => $semenQuery->count()
-            ];
-    }
-
-    /**
-     * Get available products of a Breeder.
-     * Include boar, sow, and semen
-     * quantity
-     *
-     * @param  Breeder  $breeder
-     * @return Array
-     */
-    public function getAvailableProducts(Breeder $breeder)
-    {
-        $products = $breeder->products;
-        $overallQuery = $products->where('status','displayed');
-        $boarQuery = $products->where('status','displayed')->where('type','boar');
-        $sowQuery = $products->where('status','displayed')->where('type','sow');
-        $semenQuery = $products->where('status','displayed')->where('type','semen');
-
-        return [
-            'overall' => $overallQuery->count(),
-            'boar' => $boarQuery->count(),
-            'sow' => $sowQuery->count(),
-            'semen' => $semenQuery->count()
-            ];
+            // Attach Customer name if it exists
+            if($product->customer_id){
+                $customer = Customer::find($product->customer_id);
+                $product->customer_name = $customer->users()->first()->name;
+            }
+        }
+        return $products;
     }
 
     /**
@@ -86,28 +51,22 @@ class DashboardRepository
      * reserved, paid, on_delivery,
      * and sold quantity
      *
-     * @param  Breeder $breeder
+     * @param  Breeder  $breeder
      * @return Array
      */
-    public function getProductStatuses(Breeder $breeder)
+    public function getProductStatus(Breeder $breeder, $status)
     {
         $products = $breeder->products;
-        $hiddenQuery = $products->where('status','hidden');
-        $displayedQuery = $products->where('status','displayed');
-        $requestedQuery = $products->where('status','requested');
-        $reservedQuery = $products->where('status','reserved');
-        $onDeliveryQuery = $products->where('status','on_delivery');
-        $paidQuery = $products->where('status','paid');
-        $soldQuery = $products->where('status','sold');
+        $overallQuery = $products->where('status',$status);
+        $boarQuery = $products->where('status',$status)->where('type','boar');
+        $sowQuery = $products->where('status',$status)->where('type','sow');
+        $semenQuery = $products->where('status',$status)->where('type','semen');
 
         return [
-            'hidden' => $hiddenQuery->count(),
-            'displayed' => $displayedQuery->count(),
-            'requested' => $requestedQuery->count(),
-            'reserved' => $reservedQuery->count(),
-            'onDelivery' => $onDeliveryQuery->count(),
-            'paid' => $paidQuery->count(),
-            'sold' => $soldQuery->count(),
+            'overall' => $overallQuery->count(),
+            'boar' => $boarQuery->count(),
+            'sow' => $sowQuery->count(),
+            'semen' => $semenQuery->count()
             ];
     }
 
@@ -122,18 +81,27 @@ class DashboardRepository
      */
     public function getRatings(Breeder $breeder)
     {
-        $reviews = $breeder->reviews;
-        $deliveryRating = $reviews->avg('rating_delivery');
-        $transactionRating = $reviews->avg('rating_transaction');
-        $productQualityRating = $reviews->avg('rating_productQuality');
-        $overallRating = (($deliveryRating + $transactionRating + $productQualityRating)/15)*100;
+        $reviewDetails = [];
+        $query = $breeder->reviews()->orderBy('created_at','desc')->get();
+        $reviews = $query->take(3);
+        $deliveryRating = $query->avg('rating_delivery');
+        $transactionRating = $query->avg('rating_transaction');
+        $productQualityRating = $query->avg('rating_productQuality');
+        $overallRating = ($deliveryRating + $transactionRating + $productQualityRating)/3;
 
+        foreach ($reviews as $review) {
+            $reviewDetail = [];
+            $reviewDetail['customerName'] = Customer::find($review->customer_id)->users()->first()->name;
+            $reviewDetail['comment'] = $review->comment;
+            array_push($reviewDetails, $reviewDetail);
+        }
 
         return [
             'overall' => round($overallRating,2),
             'delivery' => round($deliveryRating,1),
             'transaction' => round($transactionRating,1),
-            'productQuality' => round($productQualityRating,1)
+            'productQuality' => round($productQualityRating,1),
+            'reviews' => $reviewDetails
             ];
     }
 
@@ -143,14 +111,42 @@ class DashboardRepository
     }
 
     /**
+     * Get customers who requested a specific product
+     *
+     * @param  Integer   $productId
+     * @return Array
+     */
+    public function getProductRequests($productId)
+    {
+        // dd($productId);
+        $productRequests = SwineCartItem::where('product_id', $productId)->where('if_requested', 1)->get();
+        $productRequestDetails = [];
+
+        foreach ($productRequests as $productRequest) {
+            $customer = Customer::find($productRequest->customer_id);
+            $province = $customer->address_province;
+            $name = $customer->users()->first()->name;
+            array_push($productRequestDetails,
+                [
+                    'customerId' => $productRequest->customer_id,
+                    'customerName' => $name,
+                    'customerProvince' => $province
+                ]
+            );
+        }
+
+        return $productRequestDetails;
+    }
+
+    /**
      * Update product status
      *
      * @param  Request      $request
      * @return Array/String
      */
-    public function updateStatus(Request $request, Product $product, $status)
+    public function updateStatus(Request $request, Product $product)
     {
-        switch ($status) {
+        switch ($request->status) {
             case 'reserved':
                 // Check if product is already reserved
                 if(!$product->customer_id){
@@ -164,17 +160,19 @@ class DashboardRepository
                 }
 
             case 'on_delivery':
-
                 $product->status = 'on_delivery';
-                if(!$product->code) $product->code = str_random(6);
                 $product->save();
-                return "Product on delivery";
+                return "OK";
 
             case 'paid':
                 $product->status = 'paid';
-                if(!$product->code) $product->code = str_random(6);
                 $product->save();
-                return "Product Paid";
+                return "OK";
+
+            case 'sold':
+                $product->status = 'sold';
+                $product->save();
+                return "OK";
 
             default:
                 return "Invalid operation";
@@ -182,30 +180,20 @@ class DashboardRepository
     }
 
     /**
-     * Get customers who requested a specific product
+     * Parse $breed if it contains '+' (ex. landrace+duroc)
+     * to "Landrace x Duroc"
      *
-     * @param  Integer   $productId
-     * @return Array
+     * @param  String   $breed
+     * @return String
      */
-    public function getProductRequests($productId)
+    private function transformBreedSyntax($breed)
     {
-        $productRequests = SwineCartItem::where('product_id', $productId)->where('if_requested', 1)->get();
-        $productRequestDetails = [];
-
-        foreach ($productRequests as $productRequest) {
-            $customer = Customer::find($productRequest->customer_id);
-            $province = $customer->address_province;
-            $name = $customer->users()->first()->name;
-            array_push($productRequestDetails,
-                [
-                    'customer_id' => $productRequest->customer_id,
-                    'customer_name' => $name,
-                    'province' => $province,
-                    '_token' => csrf_token()
-                ]
-            );
+        if(str_contains($breed,'+')){
+            $part = explode("+", $breed);
+            $breed = ucfirst($part[0])." x ".ucfirst($part[1]);
+            return $breed;
         }
 
-        return $productRequestDetails;
+        return ucfirst($breed);
     }
 }

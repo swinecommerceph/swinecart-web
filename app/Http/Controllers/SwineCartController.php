@@ -122,26 +122,6 @@ class SwineCartController extends Controller
     }
 
     /**
-     * Confirmation of transaction via code checking
-     * AJAX
-     *
-     * @param  Request $request
-     * @return String
-     */
-    public function check(Request $request){
-        if($request->ajax()){
-            $product = Product::find($request->product_id);
-            if ($request->code === $product->code) {
-                $customer = $this->user->userable;
-                $product->status = "sold";
-                $product->customer_id = $customer->id;
-                $product->save();
-            }
-            return [Product::find($request->product_id)->code, $request->product_id];
-        }
-    }
-
-    /**
      * Requests item from Swine Cart
      * AJAX
      *
@@ -236,6 +216,10 @@ class SwineCartController extends Controller
                 $itemDetail = [];
                 $product = Product::find($item->product_id);
                 $reviews = Breeder::find($product->breeder_id)->reviews()->get();
+
+                // Check if product is reserved to another customer
+                // Then skip to the next product
+                if($product->customer_id && $product->customer_id != $customer->id) continue;
                 $itemDetail['request_status'] = $item->if_requested;
                 $itemDetail['status'] = $product->status;
                 $itemDetail['item_id'] = $item->id;

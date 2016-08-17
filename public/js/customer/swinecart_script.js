@@ -3,12 +3,28 @@ $(document).ready(function(){
     // Delete item from Swine Cart
     $('body').on('click', '.delete-from-swinecart' ,function(e){
         e.preventDefault();
-        swinecart.delete($(this).parents('form'), $(this).parents('li').first());
+        var delete_button = $(this);
+
+        $('#remove-product-confirmation-modal').openModal();
+        $('.remove-product-button').click(function(e){
+            e.preventDefault();
+
+            swinecart.delete(delete_button.parents('form'), delete_button.parents('li').first());
+            $('#remove-product-confirmation-modal').closeModal();
+        });
     });
 
     $('body').on('click', '.request-product' ,function(e){
         e.preventDefault();
-        swinecart.request($(this).parents('form'), $(this).parents('li').first());
+        var request_button = $(this);
+
+        $('#request-product-confirmation-modal').openModal();
+        $('.request-product-button').click(function(e){
+            e.preventDefault();
+
+            swinecart.request(request_button.parents('form'), request_button.parents('li').first());
+            $('#request-product-confirmation-modal').closeModal();
+        });
     });
 
     //Rating 'animation'
@@ -71,15 +87,6 @@ $(document).ready(function(){
     $('#submit-rate').click(function(e){
         swinecart.rate($(this).parents('form'), $('#comment').val());
         swinecart.record($(this).parents('form'));
-    });
-
-    $('.receive-button').click(function(e){
-        $('#confirmation-code').parents('form').attr('data-product-id',$(this).attr('data-product-id'));
-    });
-
-    $('#send-confirm').click(function(e){
-        e.preventDefault();
-        swinecart.check($('#confirmation-code').parents('form'), $('#confirmation-code').val());
     });
 
 });

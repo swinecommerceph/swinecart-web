@@ -120,7 +120,7 @@
 
                           </div>
                         </li>
-                        <li id="filter-location">
+                        {{-- <li id="filter-location">
                             <div class="collapsible-header"><i class="material-icons">place</i>Province Location</div>
                             <div class="collapsible-body">
                                 <div class="input-field col">
@@ -130,7 +130,7 @@
                                     </select>
                                 </div>
                             </div>
-                        </li>
+                        </li> --}}
                 </ul>
             </div>
         </div>

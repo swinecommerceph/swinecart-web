@@ -37,10 +37,14 @@ class DashboardController extends Controller
     {
         $dashboardStats = [];
         $breeder = $this->user->userable;
-        $dashboardStats['soldProducts'] = $this->dashboard->getSoldProducts($breeder);
-        $dashboardStats['availableProducts'] = $this->dashboard->getAvailableProducts($breeder);
-        $dashboardStats['status'] = $this->dashboard->getProductStatuses($breeder);
-        $dashboardStats['ratings'] = $this->dashboard->getRatings($breeder);;
+        $dashboardStats['hidden'] = $this->dashboard->getProductStatus($breeder,'hidden');
+        $dashboardStats['displayed'] = $this->dashboard->getProductStatus($breeder,'displayed');
+        $dashboardStats['requested'] = $this->dashboard->getProductStatus($breeder,'requested');
+        $dashboardStats['reserved'] = $this->dashboard->getProductStatus($breeder,'reserved');
+        $dashboardStats['on_delivery'] = $this->dashboard->getProductStatus($breeder,'on_delivery');
+        $dashboardStats['paid'] = $this->dashboard->getProductStatus($breeder,'paid');
+        $dashboardStats['sold'] = $this->dashboard->getProductStatus($breeder,'sold');
+        $dashboardStats['ratings'] = $this->dashboard->getRatings($breeder);
         $topic = str_slug($this->user->name);
         return view('user.breeder.dashboard', compact('dashboardStats', 'topic'));
     }
@@ -54,7 +58,7 @@ class DashboardController extends Controller
     {
         $products = $this->dashboard->forBreeder($this->user->userable);
         $token = csrf_token();
-        // $products = Product::all();
+        // dd($products);
         return view('user.breeder.dashboardProductStatus', compact('products', 'token'));
     }
 
@@ -73,43 +77,71 @@ class DashboardController extends Controller
     }
 
     /**
-     * Reserve a Product to a Customer
+     * Get Customers who requested for a respective Product
      * AJAX
      *
      * @param  Request  $request
      * @return Array
      */
-    public function reserveProduct(Request $request)
+    public function updateProductStatus(Request $request)
     {
         if($request->ajax()){
             $product = Product::find($request->product_id);
-            return $this->dashboard->updateStatus($request, $product, 'reserved');
+            return $this->dashboard->updateStatus($request, $product);
         }
     }
 
-    /**
-     * Change Product status to 'on_delivery'
-     *
-     * @param  Request $request
-     */
-    public function productDelivery(Request $request)
-    {
-        if($request->ajax()){
-            $product = Product::find($request->product_id);
-            return $this->dashboard->updateStatus($request, $product, 'on_delivery');
-        }
-    }
-
-    /**
-     * Change Product status to 'paid'
-     *
-     * @param Request $request
-     */
-    public function productPaid(Request $request)
-    {
-        if($request->ajax()){
-            $product = Product::find($request->product_id);
-            return $this->dashboard->updateStatus($request, $product, 'paid');
-        }
-    }
+    // /**
+    //  * Reserve a Product to a Customer
+    //  * AJAX
+    //  *
+    //  * @param  Request  $request
+    //  * @return Array
+    //  */
+    // public function reserveProduct(Request $request)
+    // {
+    //     if($request->ajax()){
+    //         $product = Product::find($request->product_id);
+    //         return $this->dashboard->updateStatus($request, $product, 'reserved');
+    //     }
+    // }
+    //
+    // /**
+    //  * Change Product status to 'on_delivery'
+    //  *
+    //  * @param  Request $request
+    //  */
+    // public function productDelivery(Request $request)
+    // {
+    //     if($request->ajax()){
+    //         $product = Product::find($request->product_id);
+    //         return $this->dashboard->updateStatus($request, $product, 'on_delivery');
+    //     }
+    // }
+    //
+    // /**
+    //  * Change Product status to 'paid'
+    //  *
+    //  * @param Request $request
+    //  */
+    // public function productPaid(Request $request)
+    // {
+    //     if($request->ajax()){
+    //         $product = Product::find($request->product_id);
+    //         return $this->dashboard->updateStatus($request, $product, 'paid');
+    //     }
+    // }
+    //
+    // /**
+    //  * Change Product status to 'sold'
+    //  *
+    //  * @param Request $request
+    //  */
+    // public function productSold(Request $request)
+    // {
+    //     if($request->ajax()){
+    //         $product = Product::find($request->product_id);
+    //         return $this->dashboard->updateStatus($request, $product, 'sold');
+    //     }
+    // }
 }

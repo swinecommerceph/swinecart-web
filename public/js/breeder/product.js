@@ -575,6 +575,7 @@ var product = {
                             update_button.attr('data-tooltip','Hide '+product_name);
                             update_button.tooltip({delay:50});
                             update_button.find('.material-icons').html('archive');
+                            update_button.parents('.card').find('.card-image img').removeClass('hidden');
                         }
                         else{
                             update_button.removeClass('hide-product-button');
@@ -582,6 +583,7 @@ var product = {
                             update_button.attr('data-tooltip','Display '+product_name);
                             update_button.tooltip({delay:50});
                             update_button.find('.material-icons').html('unarchive');
+                            update_button.parents('.card').find('.card-image img').addClass('hidden');
                         }
                     }
                     else{

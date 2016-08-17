@@ -68,7 +68,7 @@ class ProductController extends Controller
     public function showProducts(Request $request)
     {
         $breeder = $this->user->userable;
-        $products = $breeder->products();
+        $products = $breeder->products()->whereIn('status',['hidden','displayed']);
 
         // Check filters
         if($request->type && $request->type != 'all-type') $products = $products->where('type',$request->type);
@@ -431,7 +431,7 @@ class ProductController extends Controller
                 $part = explode('-',$request->sort);
                 $products = Product::whereIn('status',['displayed','requested'])->orderBy($part[0], $part[1])->paginate(10);
             }
-            else $products = Product::whereIn('status',['displayed','requested'])->paginate(10);
+            else $products = Product::whereIn('status',['displayed','requested'])->orderBy('id','desc')->paginate(10);
         }
         else{
             if($request->type) $products = Product::whereIn('status',['displayed','requested'])->whereIn('type', explode(' ',$request->type));

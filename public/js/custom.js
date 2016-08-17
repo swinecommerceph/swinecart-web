@@ -14,7 +14,7 @@ $(document).ready(function(){
 	$('.modal-trigger').leanModal();
 
     // Initialization for Sliders
-    $('.slider').slider({full_width: true});
+    $('.home-slider').slider({full_width: true});
 
     // Initialization for Carousels
     $('.carousel').carousel();

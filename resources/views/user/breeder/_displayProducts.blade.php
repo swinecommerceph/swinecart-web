@@ -78,9 +78,15 @@
         <div class="col s12 m6 l4" id="product-{{$product->id}}">
             <div class="card hoverable">
                 <div class="card-image">
-                    <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
-                        <img height="220" src="{{$product->img_path}}">
-                    </a>
+                    @if($product->status == 'hidden')
+                        <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
+                            <img height="220" src="{{$product->img_path}}" class="hidden">
+                        </a>
+                    @else
+                        <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
+                            <img height="220" src="{{$product->img_path}}">
+                        </a>
+                    @endif
                 </div>
                 <div class="card-content">
                     <span class="card-title activator grey-text text-darken-4 truncate">{{$product->name}}<i class="material-icons right">more_vert</i></span>

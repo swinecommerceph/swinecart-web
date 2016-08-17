@@ -11,7 +11,7 @@ use Illuminate\Database\Eloquent\SoftDeletes;
 class Product extends Model
 {
     use SoftDeletes;
-    
+
     public $timestamps = false;
 
     /**
@@ -52,7 +52,7 @@ class Product extends Model
      *
      * @var array
      */
-    protected $hidden = ['status_instance'];
+    protected $hidden = ['status_instance', 'deleted_at'];
 
     /**
      * Get the breeder that owns this product

@@ -31,7 +31,6 @@ class CreateProductsTable extends Migration
                 ['hidden', 'displayed', 'requested', 'reserved', 'paid', 'on_delivery', 'sold']
                 )->default('hidden');
             $table->integer('customer_id')->unsigned();
-            $table->string('code');
             $table->softDeletes();
         });
     }

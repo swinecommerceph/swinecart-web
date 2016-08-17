@@ -79,7 +79,7 @@
 
                 <li>
                     <a href="{{ route('view.cart') }}" class="left">Go to Cart</a>
-                    <a href="{{ route('home_path') }}" class="right">Request items</a>
+                    <a href="{{ route('view.cart') }}" class="right">Request items</a>
                 </li>
             </ul>
         </li>
@@ -122,7 +122,7 @@
     </div>
 
     {{-- Slider --}}
-    <div class="slider">
+    <div class="slider home-slider">
         <ul class="slides">
           <li>
             <img src="/images/demo/HP1.jpg">

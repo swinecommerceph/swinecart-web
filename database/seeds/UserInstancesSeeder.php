@@ -55,9 +55,9 @@ class UserInstancesSeeder extends Seeder
             $user->name = $companyNames[$breeder->id-1];
             $user->save();
 
-            // Create up to 7 products as well
+            // Create products as well
             // Initialization
-            $rand = random_int(8,10);
+            $rand = random_int(10,15);
             $types = ['sow', 'boar', 'semen']; // 3
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
             for ($i = 0; $i < $rand; $i++) {

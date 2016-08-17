@@ -40,7 +40,7 @@
 		      	@if (Auth::guest())
 					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('index_path') }}">Swine E-Commerce PH</a>
 			  	@else
-					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a> 
+					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
 			  	@endif
 
 		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
@@ -55,7 +55,7 @@
 						@endif
 					@endif
 				@else
-					<li> <span>{{ Auth::user()->name }}</span> </li>
+					<li> <a>{{ Auth::user()->name }}</a> </li>
 					@yield('navbarHead')
 					<li>
 						<a class="dropdown-button" data-beloworigin="true" data-activates="nav-dropdown">

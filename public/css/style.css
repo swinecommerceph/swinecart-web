@@ -1,4 +1,7 @@
-html{font-family:Poppins;}
+html{
+	font-family:Poppins;
+	font-size:1rem;
+}
 
 /* Navigation dropdown styles */
 #nav-dropdown{
@@ -93,7 +96,19 @@ nav .input-field #search{
 	margin-right:0px !important;
 }
 
-/*Swine Cart Related*/
+.card-image img.hidden{
+	-webkit-filter: grayscale();
+	   -moz-filter: grayscale();
+	     -o-filter: grayscale();
+		 	filter: grayscale();
+}
+
+/* Breeder Dashboard */
+#page-breeder-product-status i{
+	font-size:2rem;
+}
+
+/* Swine Cart Related */
 .info {
 	top: 0;
 	bottom: 0;
@@ -260,6 +275,10 @@ nav .input-field #search{
 
 #product-status-table td .row{
 	margin-bottom: 0px;
+}
+
+#product-status-table th{
+	cursor:pointer;
 }
 
 /* Tab Styles */
