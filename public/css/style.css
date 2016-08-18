@@ -72,12 +72,6 @@ html{
 	font-weight: 300;
 }
 
-/* Search bar styles */
-nav .input-field #search{
-	padding-top: 1.5rem;
-	padding-bottom: 1.3rem;
-}
-
 /* Card component override styles */
 .card-action .row {
 	margin-bottom:0px;
@@ -197,6 +191,8 @@ nav .input-field #search{
  /* Pagination styles */
 .pagination .active span{
 	color:rgb(255,255,255);
+	font-size:1.2rem;
+	padding: 0 10px;
 }
 
 /* Fixed Action Button (Back to top) Style */

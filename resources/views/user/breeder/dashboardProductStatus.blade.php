@@ -31,13 +31,11 @@
         </div>
     </div>
 
-
-
     <div id="product-status-container" class="row">
         <div class="row">
             <div id="status-select" class="input-field col left">
                 <select v-select="statusFilter">
-                    <option value="">Relevance</option>
+                    <option value="">All</option>
                     <option value="requested">Requested</option>
                     <option value="reserved">Reserved</option>
                     <option value="on_delivery">On Delivery</option>

@@ -93,9 +93,7 @@ var swinecart = {
                 li_element.find('.material-icons.request').removeClass('grey-text text-darken-4').addClass('teal-text');
                 li_element.find('.material-icons.request').attr('data-tooltip', 'Requested');
                 li_element.find('div.action').html(
-                    '<a class="receive-button btn-flat">'+
-                    '(For Approval)'+
-                    '</a>'
+                    '(For Approval)'
                     );
                 var product = li_element.find('a.anchor-title').text();
                 Materialize.toast(product + ' requested', 1800, 'green lighten-1')

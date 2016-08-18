@@ -58,7 +58,7 @@
 					<li> <a>{{ Auth::user()->name }}</a> </li>
 					@yield('navbarHead')
 					<li>
-						<a class="dropdown-button" data-beloworigin="true" data-activates="nav-dropdown">
+						<a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
 							<i class="material-icons">arrow_drop_down</i>
 						</a>
 						<ul id="nav-dropdown" class="dropdown-content">

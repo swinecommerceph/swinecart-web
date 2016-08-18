@@ -3,13 +3,13 @@ $(document).ready(function(){
     // Hide certain elements
 
 	// User
-	$(".dropdown-button").dropdown({
-        hover:true,
-        constrainwidth:false,
-        gutter: 0,
-        belowOrigin: true,
-        alignment: 'right'
-    });
+	// $(".dropdown-button").dropdown({
+    //     hover:true,
+    //     constrainwidth:false,
+    //     gutter: 0,
+    //     belowOrigin: true,
+    //     alignment: 'right'
+    // });
 
 	$('.modal-trigger').leanModal();
 

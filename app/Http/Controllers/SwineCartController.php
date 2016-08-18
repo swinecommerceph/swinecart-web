@@ -263,7 +263,8 @@ class SwineCartController extends Controller
                 $itemDetail['avg_transaction'] = $reviews->avg('rating_transaction');
                 $itemDetail['avg_productQuality'] = $reviews->avg('rating_productQuality');
                 $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
-                $itemDetail['timestamp'] = $item->created_at;
+                $dateArray = date_parse($item->created_at->toDateTimeString());
+                $itemDetail['date'] = date('j M Y (D) g:iA', mktime( $dateArray['hour'], $dateArray['minute'], $dateArray['second'], $dateArray['month'], $dateArray['day'], $dateArray['year']) );
                 $itemDetail['token'] = csrf_token();
                 array_push($history,(object) $itemDetail);
             }

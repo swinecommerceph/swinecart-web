@@ -2,7 +2,7 @@
     Displays Home page of Customer User
 --}}
 
-@extends('layouts.default')
+@extends('user.customer.home')
 
 @section('title')
     | Customer
@@ -25,7 +25,7 @@
     <li><a href="{{ route('products.view') }}"> Products </a></li>
     <li><a href="{{ route('home_path') }}"> <i class="material-icons">message</i></a></li>
     @if(!Auth::user()->update_profile)
-        <li><a id="cart-icon" class="dropdown-button" data-beloworigin="true" data-activates="cart-dropdown">
+        <li><a id="cart-icon" class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="cart-dropdown">
                 <i class="material-icons">shopping_cart</i>
                 <span></span>
             </a>
@@ -83,8 +83,8 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('view.cart') }}" class="left">Go to Cart</a>
-                    <a href="{{ route('view.cart') }}" class="right">Request items</a>
+                    <a class="left">Go to Cart</a>
+                    <a class="right">Request items</a>
                 </li>
             </ul>
         </li>
@@ -94,15 +94,7 @@
 @section('navbarDropdown')
     <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
     <li class="divider"></li>
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
-@endsection
-
-@section('static')
-    <div class="fixed-action-btn" style="bottom: 30px; right: 24px;">
-      <a id="back-to-top" class="btn-floating btn-large red tooltipped" style="display:none;" data-position="left" data-delay="50" data-tooltip="Back To Top">
-        <i class="material-icons">keyboard_arrow_up</i>
-      </a>
-    </div>
+    <li><a> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
 @endsection
 
 @section('content')
@@ -301,7 +293,7 @@
                 </div>
               </div>
               <div class="col s2">
-                {{$log->timestamp}}
+                {{$log->date}}
               </div>
             </div>
           </li>
@@ -510,9 +502,10 @@
                             <a href="#" class="request-product btn">Request</a>
                           </form>
                       @elseif($product->request_status && $product->status === 'requested')
-                            <a class="approve-button btn-flat" data-product-id=>
+                            {{-- <a class="approve-button btn-flat" data-product-id=>
                               (For Approval)
-                            </a>
+                            </a> --}}
+                            (For Approval)
                       @elseif($product->status === 'reserved')
                             <a class="message-button btn-large" data-breeder-id="{{$product->breeder_id}}" data-customer-id="{{$product->customer_id}}">
                                 Message
