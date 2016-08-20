@@ -35,26 +35,26 @@ $(document).ready(function(){
         }
     });
 
-    // Showcase Selected Button
-    $('.showcase-selected-button').click(function(e){
+    // Display Selected Button
+    $('.display-selected-button').click(function(e){
         e.preventDefault();
         var checked_products = [];
 
         $('#view-products-container input[type=checkbox]:checked').each(function(){
             checked_products.push($(this).attr('data-product-id'));
         });
-        product.update_selected($('#manage-selected-form'), checked_products, 'showcase');
+        product.update_selected($('#manage-selected-form'), '', checked_products, 'display');
     });
 
-    // Unshowcase Selected Button
-    $('.unshowcase-selected-button').click(function(e){
+    // Hide Selected Button
+    $('.hide-selected-button').click(function(e){
         e.preventDefault();
         var checked_products = [];
 
         $('#view-products-container input[type=checkbox]:checked').each(function(){
             checked_products.push($(this).attr('data-product-id'));
         });
-        product.update_selected($('#manage-selected-form'), checked_products, 'unshowcase');
+        product.update_selected($('#manage-selected-form'), '', checked_products, 'hide');
     });
 
     // Delete selected products
@@ -68,18 +68,18 @@ $(document).ready(function(){
         product.delete_selected($('#manage-selected-form'), checked_products);
     });
 
-    // Showcase chosen product
-    $('.showcase-product-button').click(function(e){
+    // Display chosen product
+    $('body').on('click', '.display-product-button' ,function(e){
         e.preventDefault();
-        $('.tooltipped').tooltip('remove');
-        product.update_selected($('#manage-selected-form'), [$(this).attr('data-product-id')], 'showcase');
+        $(this).tooltip('remove');
+        product.update_selected($('#manage-selected-form'), $(this), [$(this).attr('data-product-id')], 'display');
     });
 
-    // Unshowcase chosen product
-    $('.unshowcase-product-button').click(function(e){
+    // Hide chosen product
+    $('body').on('click', '.hide-product-button' ,function(e){
         e.preventDefault();
-        $('.tooltipped').tooltip('remove');
-        product.update_selected($('#manage-selected-form'), [$(this).attr('data-product-id')], 'unshowcase');
+        $(this).tooltip('remove');
+        product.update_selected($('#manage-selected-form'), $(this), [$(this).attr('data-product-id')], 'hide');
     });
 
     // Add a product
@@ -114,7 +114,7 @@ $(document).ready(function(){
     // Back button on modals
     $('.back-button').click(function(e){
         e.preventDefault();
-        
+
         $(product.modal_history.pop()).closeModal();
 
         // If going back to add-product-modal it must be directed to edit-product-modal
@@ -221,11 +221,11 @@ $(document).ready(function(){
 
     });
 
-    // Showcase Product created
-    $('#showcase-button').click(function(e){
+    // Display Product created
+    $('#display-button').click(function(e){
         e.preventDefault();
-        $(this).html('Showcasing ...');
-        product.showcase_product($(this).parents('form'));
+        $(this).html('Displaying ...');
+        product.display_product($(this).parents('form'));
     });
 
     // Change html of set-display-photo anchor tag if it is a display photo

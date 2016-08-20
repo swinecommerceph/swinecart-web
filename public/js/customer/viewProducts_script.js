@@ -9,14 +9,14 @@ $(document).ready(function(){
             chips +=
                 '<div class="chip" style="text-transform:capitalize;">'+
                     'Type: '+$(this).attr('data-type')+
-                    '<i class="material-icons" data-checkbox-id="'+$(this).attr('id')+'">close</i>'+
+                    '<i class="close material-icons" data-checkbox-id="'+$(this).attr('id')+'">close</i>'+
                 '</div> ';
         }
         else if ($(this).attr('data-breed')) {
             chips +=
                 '<div class="chip" style="text-transform:capitalize;">'+
                     'Breed: '+$(this).attr('data-breed')+
-                    '<i class="material-icons" data-checkbox-id="'+$(this).attr('id')+'">close</i>'+
+                    '<i class="close material-icons" data-checkbox-id="'+$(this).attr('id')+'">close</i>'+
                 '</div> ';
         }
 

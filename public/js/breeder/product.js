@@ -490,7 +490,7 @@ var product = {
                 $('#other-details-summary .card-content div').html(other_details_list);
                 $('#images-summary .card-content .row').html(image_list);
                 $('#videos-summary .card-content .row').html(video_list);
-                $('#showcase-product-form').prepend('<input name="productId" type="hidden" value="'+data.id+'">');
+                $('#display-product-form').prepend('<input name="productId" type="hidden" value="'+data.id+'">');
                 $('#overlay-preloader-circular').remove();
 
             },
@@ -526,7 +526,7 @@ var product = {
         });
     },
 
-    showcase_product: function(parent_form){
+    display_product: function(parent_form){
         // Do AJAX
         $.ajax({
             url: parent_form.attr('action'),
@@ -547,7 +547,7 @@ var product = {
         });
     },
 
-    update_selected: function(parent_form, products, status){
+    update_selected: function(parent_form, update_button, products, status){
         // Check if there are checked products
         if(products.length > 0){
             config.preloader_progress.fadeIn();
@@ -562,11 +562,37 @@ var product = {
                     "updateTo_status": status
                 },
                 success: function(data){
-                    products.forEach(function(element){
-                        $('#product-'+element).remove();
-                    });
+                    var filter_status = $('#status-select option:selected').val();
+
+                    // Do not remove product card if the filter enables
+                    // all product statuses (hidden & displayed)
+                    if(filter_status == "all-status"){
+                        var product_name = update_button.attr('data-product-name');
+
+                        if(status == 'display'){
+                            update_button.removeClass('display-product-button');
+                            update_button.addClass('hide-product-button');
+                            update_button.attr('data-tooltip','Hide '+product_name);
+                            update_button.tooltip({delay:50});
+                            update_button.find('.material-icons').html('archive');
+                            update_button.parents('.card').find('.card-image img').removeClass('hidden');
+                        }
+                        else{
+                            update_button.removeClass('hide-product-button');
+                            update_button.addClass('display-product-button');
+                            update_button.attr('data-tooltip','Display '+product_name);
+                            update_button.tooltip({delay:50});
+                            update_button.find('.material-icons').html('unarchive');
+                            update_button.parents('.card').find('.card-image img').addClass('hidden');
+                        }
+                    }
+                    else{
+                        products.forEach(function(element){
+                            $('#product-'+element).remove();
+                        });
+                    }
                     config.preloader_progress.fadeOut();
-                    Materialize.toast('Selected Products showcased!', 2000, 'green lighten-1');
+                    Materialize.toast('Selected Products updated!', 2000, 'green lighten-1');
                 },
                 error: function(message){
                     console.log(message['responseText']);

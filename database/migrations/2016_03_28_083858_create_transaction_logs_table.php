@@ -18,7 +18,7 @@ class CreateTransactionLogsTable extends Migration
             $table->integer('product_id')->unsigned();
             $table->integer('breeder_id')->unsigned();
             $table->string('status');
-            $table->timestamp('date');
+            $table->timestamps();
         });
     }
 

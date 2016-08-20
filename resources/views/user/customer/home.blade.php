@@ -20,7 +20,7 @@
     <li><a href="{{ route('products.view') }}"> Products </a></li>
     <li><a href="{{ route('home_path') }}"> <i class="material-icons">message</i></a></li>
     @if(!Auth::user()->update_profile)
-        <li><a id="cart-icon" class="dropdown-button" data-beloworigin="true" data-activates="cart-dropdown">
+        <li><a href="{{ route('view.cart') }}" id="cart-icon" class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="cart-dropdown">
                 <i class="material-icons">shopping_cart</i>
                 <span></span>
             </a>
@@ -78,8 +78,8 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('home_path') }}" class="left">Go to Cart</a>
-                    <a href="{{ route('home_path') }}" class="right">Request items</a>
+                    <a href="{{ route('view.cart') }}" class="left">Go to Cart</a>
+                    <a href="{{ route('view.cart') }}" class="right">Request items</a>
                 </li>
             </ul>
         </li>
@@ -89,8 +89,7 @@
 @section('navbarDropdown')
     <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
     <li class="divider"></li>
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
-
+    <li><a href="{{ route('view.cart') }}"> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
 @endsection
 
 @section('static')
@@ -122,7 +121,7 @@
     </div>
 
     {{-- Slider --}}
-    <div class="slider">
+    <div class="slider home-slider">
         <ul class="slides">
           <li>
             <img src="/images/demo/HP1.jpg">

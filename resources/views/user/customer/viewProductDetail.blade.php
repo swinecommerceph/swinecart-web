@@ -124,16 +124,6 @@
                             <i class="material-icons yellow-text">star_half</i>
                         </span>
                     </span>
-                    <span class="row">
-                        <i class="col s6">After Sales</i>
-                        <span class="col s6">
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star_half</i>
-                            <i class="material-icons yellow-text">star_border</i>
-                            <i class="material-icons yellow-text">star_border</i>
-                        </span>
-                    </span>
                 </li>
             </ul>
         </div>

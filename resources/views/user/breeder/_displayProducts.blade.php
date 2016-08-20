@@ -9,21 +9,21 @@
     <div class="col s4 left">
         {!! Form::open(['route' => 'products.updateSelected', 'id' => 'manage-selected-form']) !!}
             {{-- Add Button --}}
-            <a href="#" class="btn-floating btn-large modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
+            <a href="#" class="btn-floating btn-large waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
                 <i class="material-icons">add</i>
             </a>
             {{-- Select All Button --}}
-            <a href="#" class="btn-floating btn-large modal-trigger waves-effect waves-light teal tooltipped select-all-button" data-position="top" data-delay="50" data-tooltip="Select All Products">
+            <a href="#" class="btn-floating btn-large waves-effect waves-light teal tooltipped select-all-button" data-position="top" data-delay="50" data-tooltip="Select All Products">
                 <i class="material-icons">event_available</i>
             </a>
-            {{-- Showcase selected Button. Only show when products are unshowcased --}}
-            @if(!empty($filters['unshowcased']))
-                <a href="#" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped showcase-selected-button" data-position="top" data-delay="50" data-tooltip="Showcase all chosen">
+            {{-- Display selected Button. Only show when products are hidden --}}
+            @if(!empty($filters['hidden']))
+                <a href="#" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped display-selected-button" data-position="top" data-delay="50" data-tooltip="Display all chosen">
                     <i class="material-icons">unarchive</i>
                 </a>
-            {{-- Unshowcase selected Button. Only show when products are showcased --}}
-            @elseif(!empty($filters['showcased']))
-                <a href="#" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped unshowcase-selected-button" data-position="top" data-delay="50" data-tooltip="Unshowcase all chosen">
+            {{-- Hide selected Button. Only show when products are displayed --}}
+        @elseif(!empty($filters['displayed']))
+                <a href="#" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped hide-selected-button" data-position="top" data-delay="50" data-tooltip="Hide all chosen">
                     <i class="material-icons">archive</i>
                 </a>
             @endif
@@ -51,8 +51,8 @@
             <div id="status-select" class="input-field col s3 right">
                 <select>
                     <option value="all-status" selected>All</option>
-                    <option value="showcased" @if(!empty($filters['showcased'])) {{ $filters['showcased'] }} @endif>Showcased</option>
-                    <option value="unshowcased" @if(!empty($filters['unshowcased'])) {{ $filters['unshowcased'] }} @endif>Unshowcased</option>
+                    <option value="displayed" @if(!empty($filters['displayed'])) {{ $filters['displayed'] }} @endif>Displayed</option>
+                    <option value="hidden" @if(!empty($filters['hidden'])) {{ $filters['hidden'] }} @endif>Hidden</option>
                 </select>
                 <label>Status</label>
             </div>
@@ -78,9 +78,15 @@
         <div class="col s12 m6 l4" id="product-{{$product->id}}">
             <div class="card hoverable">
                 <div class="card-image">
-                    <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
-                        <img height="220" src="{{$product->img_path}}">
-                    </a>
+                    @if($product->status == 'hidden')
+                        <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
+                            <img height="220" src="{{$product->img_path}}" class="hidden">
+                        </a>
+                    @else
+                        <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
+                            <img height="220" src="{{$product->img_path}}">
+                        </a>
+                    @endif
                 </div>
                 <div class="card-content">
                     <span class="card-title activator grey-text text-darken-4 truncate">{{$product->name}}<i class="material-icons right">more_vert</i></span>
@@ -100,19 +106,19 @@
                             <a href="#edit-product-modal" class="modal-trigger tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit {{$product->name}}" data-product-id="{{$product->id}}">
                                 <i class="material-icons teal-text text-darken-2" style="font-size:30px">edit</i>
                             </a>
-                            @if(!empty($filters['unshowcased']) || $product->status == 'unshowcased')
-                                {{-- Showcase Button --}}
-                                <a href="#" class="modal-trigger tooltipped showcase-product-button" data-position="top" data-delay="50" data-tooltip="Showcase {{$product->name}}" data-product-id="{{$product->id}}">
+                            @if(!empty($filters['hidden']) || $product->status == 'hidden')
+                                {{-- Display Button --}}
+                                <a href="#" class="tooltipped display-product-button" data-position="top" data-delay="50" data-tooltip="Display {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
                                     <i class="material-icons teal-text" style="font-size:30px">unarchive</i>
                                 </a>
-                            @elseif(!empty($filters['showcased']) || $product->status == 'showcased')
-                                {{-- Unshowcase Button --}}
-                                <a href="#" class="modal-trigger tooltipped unshowcase-product-button" data-position="top" data-delay="50" data-tooltip="Unshowcase {{$product->name}}" data-product-id="{{$product->id}}">
+                            @elseif(!empty($filters['displayed']) || $product->status == 'displayed')
+                                {{-- Hide Button --}}
+                                <a href="#" class="tooltipped hide-product-button" data-position="top" data-delay="50" data-tooltip="Hide {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
                                     <i class="material-icons teal-text" style="font-size:30px">archive</i>
                                 </a>
                             @endif
                             {{-- Delete Button --}}
-                            <a href="#delete-product-modal" class="modal-trigger tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete {{$product->name}}" data-product-id="{{$product->id}}">
+                            <a href="#" class="tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete {{$product->name}}" data-product-id="{{$product->id}}">
                                 <i class="material-icons grey-text text-darken-1" style="font-size:30px">delete</i>
                             </a>
                         </div>

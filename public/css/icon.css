@@ -3,7 +3,22 @@
   font-family: 'Material Icons';
   font-style: normal;
   font-weight: 400;
-  src: local('Material Icons'), local('MaterialIcons-Regular'), url(../font/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+  src: local('Material Icons'), local('MaterialIcons-Regular'), url(../fonts/2fcrYFNaTjcS6g4U3t-Y5ZjZjT5FdEJ140U2DJYC3mY.woff2) format('woff2');
+}
+
+@font-face {
+  font-family: Electrolize;
+  src: url(../fonts/electrolize/Electrolize-Regular.ttf);
+}
+
+@font-face {
+  font-family: Poppins;
+  src: url(../fonts/poppins/Poppins-Regular.ttf);
+}
+
+@font-face {
+  font-family: Ecommerce;
+  src: url(../fonts/ecommerce.ttf);
 }
 
 .material-icons {
@@ -22,7 +37,22 @@
   -webkit-font-smoothing: antialiased;
 }
 
+<<<<<<< HEAD
 @font-face {
   font-family: Poppins
   src: url(../fonts/Poppins/Poppins-Regular.ttf);
+=======
+.ecommerce-icons {
+  font-family: Ecommerce;
+  font-size: 24px;
+  line-height: 1;
+  letter-spacing: normal;
+  text-transform: none;
+  display: inline-block;
+  white-space: nowrap;
+  word-wrap: normal;
+  direction: ltr;
+  -webkit-font-feature-settings: 'liga';
+  -webkit-font-smoothing: antialiased;
+>>>>>>> upstream/master
 }
