@@ -19,6 +19,8 @@ class DashboardController extends Controller
 
     /**
      * Create new DashboardController instance
+     *
+     * @param  DashboardRepository $dashboard
      */
     public function __construct(DashboardRepository $dashboard)
     {
@@ -58,7 +60,6 @@ class DashboardController extends Controller
     {
         $products = $this->dashboard->forBreeder($this->user->userable);
         $token = csrf_token();
-        // dd($products);
         return view('user.breeder.dashboardProductStatus', compact('products', 'token'));
     }
 

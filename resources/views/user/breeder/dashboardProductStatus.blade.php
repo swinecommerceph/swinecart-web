@@ -56,9 +56,6 @@
 
     {{-- Template for the <status-table> component --}}
     <template id="status-table-template">
-        {{-- <pre>
-            @{{ products | json }}
-        </pre> --}}
         <table id="product-status-table" class="bordered highlight">
             <thead>
                 <tr>
@@ -275,7 +272,6 @@
 @endsection
 
 @section('customScript')
-    {{-- <script src="/js/vendor/DataTables/datatables.min.js"></script> --}}
     <script src="/js/vendor/VueJS/vue.js"></script>
     <script src="/js/vendor/VueJS/vue-resource.js"></script>
     <script src="/js/breeder/dashboard.js"></script>

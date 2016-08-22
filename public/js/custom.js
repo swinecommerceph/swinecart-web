@@ -167,6 +167,6 @@ $(document).ready(function(){
         'Sulu',
         'Maguindanao',
         'Lanao del Sur'
-    ]
+    ];
 
 });

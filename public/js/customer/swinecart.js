@@ -90,12 +90,28 @@ var swinecart = {
                 "productId": parent_form.attr('data-product-id')
             },
             success: function(data) {
+                var product = li_element.find('a.anchor-title').text();
+                var span = $('#cart-icon span');
+
                 li_element.find('.material-icons.request').removeClass('grey-text text-darken-4').addClass('teal-text');
                 li_element.find('.material-icons.request').attr('data-tooltip', 'Requested');
                 li_element.find('div.action').html(
                     '(For Approval)'
                     );
-                var product = li_element.find('a.anchor-title').text();
+
+                // Put quantity of Swine Cart to sessionStorage
+                sessionStorage.setItem('swine_cart_quantity', data);
+
+                if(data == 0){
+                    span.html("");
+                    span.removeClass('badge');
+                    $('#cart-icon .material-icons').removeClass('left');
+                    $('#cart-dropdown #item-container').html(
+                        '<li> <span class="center-align black-text"> No items in your Swine Cart </span> </li>'
+                    );
+                }
+                else span.html(sessionStorage.getItem('swine_cart_quantity'));
+
                 Materialize.toast(product + ' requested', 1800, 'green lighten-1')
             },
             error: function(message) {

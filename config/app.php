@@ -145,7 +145,6 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
         AdamWathan\EloquentOAuthL5\EloquentOAuthServiceProvider::class,
-        // Gloudemans\Shoppingcart\ShoppingcartServiceProvider::class,
 
     ],
 
@@ -199,8 +198,6 @@ return [
         'Form'      => Collective\Html\FormFacade::class,
         'Html'      => Collective\Html\HtmlFacade::class,
         'SocialAuth' => AdamWathan\EloquentOAuth\Facades\OAuth::class,
-        // 'Cart'      => Gloudemans\Shoppingcart\Facades\Cart::class,
-
     ],
 
     'env' => env('APP_ENV', 'production'),

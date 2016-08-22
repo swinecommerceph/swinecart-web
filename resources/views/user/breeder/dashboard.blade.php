@@ -33,7 +33,9 @@
 
         <div id="card-product-status" class="col z-depth-1">
             <div class="col s12">
-                <h5 class="center-align">Product Status</h5>
+                <h5 class="center-align">
+                    <a href="{{ route('dashboard.productStatus') }}" class="black-text">Product Status</a>
+                </h5>
             </div>
             {{-- Sold Products --}}
             <div class="col s12 m3">

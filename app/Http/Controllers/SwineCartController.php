@@ -138,6 +138,8 @@ class SwineCartController extends Controller
             $product->status = "requested";
             $product->save();
             $requested->save();
+
+            return $customer->swineCartItems()->where('if_requested',0)->count();
         }
     }
 

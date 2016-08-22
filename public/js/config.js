@@ -14,9 +14,15 @@ var config = {
     dashboard_url: '/breeder/dashboard',
     images_path: '/images',
     videos_path: '/videos',
+    delete_user: '/admin/home/delete',
+    block_user: '/admin/home/block',
+    approve_user: 'home/approve',
+    search_user: 'home/search',
+    form: 'registration',
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',
     breederWSServer: 'ws://10.0.4.226:8080',
     preloader_progress: $('#preloader-progress'),
     preloader_circular: $('#preloader-circular')
+
 };

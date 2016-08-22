@@ -9,6 +9,10 @@ html{
 	width: 185px !important;
 }
 
+#inquiries-dropdown{
+	width: 650px !important;
+}
+
 #cart-dropdown{
 	/*display:block;*/
 	width: 350px !important;
@@ -333,4 +337,184 @@ blockquote{
 	#search-container .pinned{
 		width:100%;
 	}
+}
+
+/*Admin content custom CSS*/
+#table-content{
+  height: 100px;
+  overflow: auto;
+}
+
+#message-panel{
+	overflow: auto;
+  height: 400px;
+}
+
+#modal1{
+	height: 620px;
+}
+
+
+.summary-data{
+	font-size: 10em;
+   top:0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   margin: auto;
+}
+
+.summary-icons{
+	font-size: 3em;
+	vertical-align: middle;
+}
+
+.summary-title{
+	font-size: 2em;
+	vertical-align: middle;
+   text-align: left;
+
+}
+
+.action-column{
+ top:0;
+ bottom: 0;
+ left: 0;
+ right: 0;
+ margin: auto;
+}
+
+.action-dialog-box{
+	width: 500px;
+	height: 220px;
+}
+
+.card-summary{
+	height: 280px;
+}
+
+.vertical-align{
+	vertical-align: middle;
+	display: inline-block;
+}
+
+.table-header {
+	table-layout: fixed;
+}
+
+#search-button{
+	display: none;
+}
+
+#manage-user-modal{
+   width: 500px;
+}
+
+#accept-reject-modal{
+   width: 500px;
+}
+
+.manage-icon{
+   font-size: 4em;
+}
+
+.status-column{
+   display: none;
+}
+
+.id-column{
+   display: none;
+}
+.token-column{
+   display: none;
+}
+
+#delete-data {
+   color: #D32F2F;
+}
+
+#block-data{
+   color: #FF5722;
+}
+
+#accept-data{
+   color: #388e3c;
+}
+#reject-data{
+   color: #D32F2F;
+}
+
+.ecommerce-icon{
+   font-family: ecommerce;
+   font-size: 6.5em;
+   font-style: normal;
+   text-align: left;
+   vertical-align: middle;
+   color: #d1d1d1 ;
+}
+
+.label-wrapper{
+   top:0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   margin: auto;
+}
+
+#total-card{
+   background-color: #0a7e7b;
+}
+
+#blocked-card{
+   background-color: #ed5272;
+}
+
+#pending-card{
+   background-color: #636564;
+}
+
+#inquiries-card{
+   background-color: #67052c;
+}
+
+#adduser{
+   width: 800px;
+   height: 450;
+}
+
+.addusercontainer{
+   top:0;
+   bottom: 0;
+   left: 0;
+   right: 0;
+   margin: auto;
+   vertical-align: middle;
+}
+
+.brand-logo{
+   font-family : Electrolize;
+}
+
+/*for admin forms*/
+#notes{
+  width: 640px; /*can be in percentage also.*/
+  height: auto;
+  margin: 0 auto;
+  padding: 10px;
+  position: relative;
+}
+
+.file-input-property{
+  display: none;
+}
+
+.upload{
+  top:0;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  margin: auto;
+}
+.decrease-text-size{
+   font-size: 2em;
 }

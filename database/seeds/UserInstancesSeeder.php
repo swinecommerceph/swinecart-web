@@ -11,6 +11,7 @@ class UserInstancesSeeder extends Seeder
      */
     public function run()
     {
+
         $companyNames = [
             'John and Piolo Farms',
             'McJolly Farms',
@@ -18,14 +19,24 @@ class UserInstancesSeeder extends Seeder
             'PICC',
             'PCAARRD Farms',
             'Great Pig Inc.',
-            'Sharoen Fokfun'
+            'Sharoen Fokfun',
+            'Wellize Farms',
+            'Great Pigs Dutchman',
+            'General Pigs Co.'
         ];
 
+        // For Administrator
+        factory(App\Models\User::class, 1)->create()->each(function($user){
+            $user->assignRole('admin');
+            $user->save();
+        });
+
     	// For Customers
-        factory(App\Models\User::class, 2)->create()->each(function($user){
+        factory(App\Models\User::class, 10)->create()->each(function($user){
         	$user->assignRole('customer');
             $user->update_profile = 0;
             $user->email_verified = 1;
+            $user->approved = 1;
 
             // Create Customer Profile
             $customer = factory(App\Models\Customer::class)->create();
@@ -37,12 +48,11 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Breeders
-        factory(App\Models\User::class, 7)->create()->each(function($user)use($companyNames){
-
+        factory(App\Models\User::class, 10)->create()->each(function($user)use($companyNames){
             $user->assignRole('breeder');
             $user->update_profile = 0;
             $user->email_verified = 1;
-
+            $user->approved = 1;
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address
@@ -57,7 +67,7 @@ class UserInstancesSeeder extends Seeder
 
             // Create products as well
             // Initialization
-            $rand = random_int(10,15);
+            $rand = random_int(10,13);
             $types = ['sow', 'boar', 'semen']; // 3
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
             for ($i = 0; $i < $rand; $i++) {
