@@ -115,7 +115,7 @@ Route::group(['middleware' => ['web']], function () {
 
     // Admin
     Route::group(['prefix'=>'admin'], function(){
-        
+
         // Route to admin home page
         Route::get('home',['as'=>'admin_path', 'uses'=>'AdminController@index']);
         Route::get('form', ['as'=>'registration.form', 'uses'=>'AdminController@getRegistrationForm']);
@@ -133,28 +133,5 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('home/add', ['as' => 'admin.add.user', 'uses' => 'AdminController@createUser']);
 
     });
-
-    // Admin
-    Route::group(['prefix'=>'admin'], function(){
-        // Route to admin home page
-        Route::get('home',['as'=>'admin_path', 'uses'=>'AdminController@index']);
-        Route::get('form', ['as'=>'registration.form', 'uses'=>'AdminController@getRegistrationForm']);
-        Route::post('form/register', ['as'=>'admin.register.submit', 'uses'=>'AdminController@submitRegistrationForms']);
-
-
-
-        Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
-        Route::get('home/approved/breeder', ['as'=>'admin.approved.breeder', 'uses'=>'AdminController@displayApprovedBreeders']);
-        Route::get('home/approved/customer', ['as'=>'admin.approved.customer', 'uses'=>'AdminController@displayApprovedCustomer']);
-        Route::get('home/pending/users', ['as'=>'admin.pending.users', 'uses'=>'AdminController@displayPendingUsers']);
-        Route::get('home/approved/blocked', ['as'=>'admin.blocked.users', 'uses'=>'AdminController@displayBlockedUsers']);
-        Route::delete('home/delete', ['as'=>'admin.delete', 'uses'=>'AdminController@deleteUser']);
-        Route::put('home/block', ['as'=>'admin.block', 'uses'=>'AdminController@blockUser']);
-        Route::put('home/approve', ['as'=>'admin.approve', 'uses'=>'AdminController@acceptUser']);
-        Route::get('home/search', ['as' => 'admin.search', 'uses' => 'AdminController@searchUser']);
-        Route::post('home/add', ['as' => 'admin.add.user', 'uses' => 'AdminController@createUser']);
-
-    });
-
 
 });
