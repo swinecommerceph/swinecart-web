@@ -10,8 +10,6 @@ use App\Http\Requests\BreederPersonalProfileRequest;
 use App\Http\Requests\BreederFarmProfileRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
-
-
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Breeder;
@@ -22,8 +20,6 @@ use App\Models\Video;
 use App\Models\Breed;
 use App\Models\User;
 use Mail;
-
-
 use DB;
 use Auth;
 class AdminController extends Controller
@@ -103,6 +99,12 @@ class AdminController extends Controller
     return $count;
   }
 
+    /**
+    * Helper functions for retrieving the number of pending breeders
+    *
+    * @param  none
+    * @return count of all users that are pending
+    */
   public function pendingUserCount(){
     $count = DB::table('users')
                     ->join('role_user', 'users.id', '=' , 'role_user.user_id')
@@ -114,6 +116,12 @@ class AdminController extends Controller
     return $count;
   }
 
+  /**
+  * Helper functions for retrieving the number of blocked users
+  *
+  * @param  none
+  * @return count of all users that are blocked
+  */
   public function blockedUserCount(){
     $count = DB::table('users')
                     ->join('role_user', 'users.id', '=' , 'role_user.user_id')
@@ -126,8 +134,6 @@ class AdminController extends Controller
     return $count;
   }
 
-
-
   /**
    * Show Home Page of breeder
    *
@@ -136,7 +142,6 @@ class AdminController extends Controller
    */
     public function index(Request $request)
     {
-        //$users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->where('role_user.role_id','!=',1)->where('users.email_verified','=', 1)->get();
         $all = $this->userCount();
         $breeders = $this->breederCount();
         $customers = $this->customerCount();
@@ -147,86 +152,105 @@ class AdminController extends Controller
         return view(('user.admin.home'), compact('summary'));
     }
 
+    /**
+     * Function to get all users in the database that are not deleted and blocked
+     *
+     * @param  none
+     * @return array of user
+     */
     public function displayAllUsers(){
-      // $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->
-      //         join('roles', 'role_user.role_id','=','roles.id')->
-      //         where('role_user.role_id','!=',1)->
-      //         where('users.email_verified','=', 1)->get();
-
-      $users = $this->retrieveAllUsers();
-      $userArray = [];
-      foreach ($users as $user) {
-        if($user->role_id!=1 && $user->email_verified==1 && $user->deleted_at==NULL){
-          $user->title = ucfirst($user->title);
-          $user->token = csrf_token();
-          $userArray[] = $user;
+        $users = $this->retrieveAllUsers();
+        $userArray = [];
+        foreach ($users as $user) {
+            if($user->role_id!=1 && $user->email_verified==1 && $user->deleted_at==NULL){
+              $user->title = ucfirst($user->title);
+              $user->token = csrf_token();
+              $userArray[] = $user;
+            }
         }
-      }
-      return $userArray;
+        return $userArray;
     }
 
+    /**
+     * Function to get all approved breeders
+     *
+     * @param  none
+     * @return array of breeders
+     */
     public function displayApprovedBreeders(){
-      //$users =DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->where('roles.id','=', 2)->where('users.email_verified','=', 1)->get();
-      // foreach ($users as $user) {
-      //   $user->title = ucfirst($user->title);
-      // }
-      // return $users;
-      $users = $this->retrieveAllUsers();
-      $userArray = [];
-      foreach ($users as $user) {
-        if($user->role_id==2 && $user->email_verified==1 && $user->deleted_at==NULL){
-          $user->title = ucfirst($user->title);
-          $user->token = csrf_token();
-          $userArray[] = $user;
+        $users = $this->retrieveAllUsers();
+        $userArray = [];
+        foreach ($users as $user) {
+            if($user->role_id==2 && $user->email_verified==1 && $user->deleted_at==NULL){
+              $user->title = ucfirst($user->title);
+              $user->token = csrf_token();
+              $userArray[] = $user;
+            }
         }
-      }
-      return $userArray;
+        return $userArray;
     }
 
+    /**
+     * Function to get all approved customers
+     *
+     * @param  none
+     * @return array of customers
+     */
     public function displayApprovedCustomer(){
-      // $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->where('roles.id','=', 3)->where('users.email_verified','=', 1)->get();
-      // foreach ($users as $user) {
-      //   $user->title = ucfirst($user->title);
-      // }
-      // return $users;
-      $users = $this->retrieveAllUsers();
-      $userArray = [];
-      foreach ($users as $user) {
-        if($user->role_id==3 && $user->email_verified==1 && $user->deleted_at==NULL){
-          $user->title = ucfirst($user->title);
-          $user->token = csrf_token();
-          $userArray[] = $user;
+        $users = $this->retrieveAllUsers();
+        $userArray = [];
+        foreach ($users as $user) {
+            if($user->role_id==3 && $user->email_verified==1 && $user->deleted_at==NULL){
+              $user->title = ucfirst($user->title);
+              $user->token = csrf_token();
+              $userArray[] = $user;
+            }
         }
-      }
-
-      return $userArray;
+        return $userArray;
     }
 
+    /**
+     * Function to get all pending users
+     *
+     * @param  none
+     * @return array of pending users
+     */
     public function displayPendingUsers(){
-      $users = $this->retrieveAllUsers();
-      $userArray = [];
-      foreach ($users as $user) {
-        if($user->role_id==2 && $user->deleted_at==NULL && $user->approved==0){
-          $user->title = ucfirst($user->title);
-          $user->token = csrf_token();
-          $userArray[] = $user;
+        $users = $this->retrieveAllUsers();
+        $userArray = [];
+        foreach ($users as $user) {
+            if($user->role_id==2 && $user->deleted_at==NULL && $user->approved==0){
+              $user->title = ucfirst($user->title);
+              $user->token = csrf_token();
+              $userArray[] = $user;
+            }
         }
-      }
-
-      return $userArray;
+        return $userArray;
     }
 
+    /**
+     * Function to delete a user (triggers soft delete)
+     *
+     * @param  none
+     * @return OK (string) status
+     */
     public function deleteUser(Request $request){
-      $user = User::find($request->userId);
-      $user->delete();
-      Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved], function ($message) use($user){
+        $user = User::find($request->userId);
+        $user->delete();
+        Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
-      });
-      return "OK";
+        });
+        return "OK";
     }
 
+    /**
+     * Function to get the blocked user list
+     *
+     * @param  none
+     * @return array of blocked users
+     */
     public function displayBlockedUsers(){
-      $blockedUsers = DB::table('users')
+        $blockedUsers = DB::table('users')
                       ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                       ->join('roles', 'role_user.role_id','=','roles.id')
                       ->where('role_user.role_id','!=',1)
@@ -234,21 +258,27 @@ class AdminController extends Controller
                       ->where('users.deleted_at','=', NULL )
                       ->where('users.is_blocked','=', 1 )
                       ->get();
-      foreach ($blockedUsers as $blockedUser) {
-        $blockedUser->title = ucfirst($blockedUser->title);
-        $blockedUser->token = csrf_token();
-      }
-      return $blockedUsers;
+        foreach ($blockedUsers as $blockedUser) {
+            $blockedUser->title = ucfirst($blockedUser->title);
+            $blockedUser->token = csrf_token();
+        }
+        return $blockedUsers;
     }
 
+    /**
+     * Function to add the user to the blocked list, changes blocked status to 1
+     *
+     * @param  none
+     * @return status string "OK"
+     */
     public function blockUser(Request $request){
-      $user = User::find($request->userId);
-      $user->is_blocked = !$user->is_blocked;
-      $user->save();
-      Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->is_blocked], function ($message) use($user){
+        $user = User::find($request->userId);
+        $user->is_blocked = !$user->is_blocked;
+        $user->save();
+        Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->is_blocked], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
-      });
-      return  "Ok";
+        });
+        return  "Ok";
     }
 
     /**
@@ -280,84 +310,80 @@ class AdminController extends Controller
          'verification_code' => $verCode
 
      ]);
-
-
     }
-     /**
-      * Handle a registration request for the application.
-      * Override default register method
-      *
-      * @param  \Illuminate\Http\Request  $request
-      * @return View
-      */
-     public function createUser(Request $request)
-     {
+
+    /**
+     * Handle a registration request for the application.
+     * Override default register method
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @return View
+     */
+    public function createUser(Request $request)
+    {
         $validator = $this->validator($request->all());
-          if ($validator->fails()) {
-              $this->throwValidationException(
-                  $request, $validator
-              );
-          }
+        if ($validator->fails()) {
+            $this->throwValidationException(
+              $request, $validator
+            );
+        }
         $verCode = str_random('10');
         $password = $this->generatePassword();
         $user = $this->create($request->all(), $verCode, $password);
         $user->assignRole('breeder');
         $breeder = Breeder::create([])->users()->save($user);
-         $data = [
+
+        $data = [
             'email' => $request->input('email'),
             'password' => $password
-         ];
+        ];
 
-          Mail::send('emails.credentials', ['email' => $request->input('email'),'password' => $password], function ($message) use($data){
-              $message->to($data['email'])->subject('Breeder Credentials for Swine E-Commerce PH');
-          });
-         //
-         // return view('emails.message', $data);
-         return Redirect::back()->withMessage('User Created!');
+        Mail::send('emails.credentials', ['email' => $request->input('email'),'password' => $password], function ($message) use($data){
+          $message->to($data['email'])->subject('Breeder Credentials for Swine E-Commerce PH');
+        });
 
-     }
-
-
+        return Redirect::back()->withMessage('User Created!');
+    }
 
     public function generatePassword(){
-      $password = str_random(10);;
-      return $password;
+        $password = str_random(10);;
+        return $password;
     }
 
     public function searchUser(Request $request){
-      $search = '%'.$request->search.'%';
-      $query = DB::table('users')
-                      ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                      ->join('roles', 'role_user.role_id','=','roles.id')
-                      ->where('role_user.role_id','!=',1)
-                      ->where('users.email_verified','=', 1)
-                      ->where('users.deleted_at','=', NULL)
-                      ->where('name', 'like', $search)
-                      ->get();
-      return $query;
+        $search = '%'.$request->search.'%';
+        $query = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->join('roles', 'role_user.role_id','=','roles.id')
+                        ->where('role_user.role_id','!=',1)
+                        ->where('users.email_verified','=', 1)
+                        ->where('users.deleted_at','=', NULL)
+                        ->where('name', 'like', $search)
+                        ->get();
+        return $query;
     }
 
     public function acceptUser(Request $request){
-      $user = User::find($request->userId);
-      $user->approved = !$user->approved;
-      Mail::send('emails.notification', ['type'=>'accepted'], function ($message) use($user){
+        $user = User::find($request->userId);
+        $user->approved = !$user->approved;
+        Mail::send('emails.notification', ['type'=>'accepted'], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
-      });
-      $user->save();
+        });
+        $user->save();
 
-      return  "Ok";
-   }
+        return  "Ok";
+    }
 
-   /**
-    * Displays form for the registration
-    * @return View
-    */
+    /**
+     * Displays form for the registration
+     * @return View
+     */
     public function getRegistrationForm(){
-      return view('user.admin.form');
-   }
+        return view('user.admin.form');
+    }
 
-   public function submitRegistrationForms(Request $request){
-      dd($request);
-   }
+    public function submitRegistrationForms(Request $request){
+        dd($request);
+    }
 
 }

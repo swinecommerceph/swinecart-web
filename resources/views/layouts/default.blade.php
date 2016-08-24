@@ -16,19 +16,20 @@
 	{{-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> --}}
 
 	{{-- Compiled and minified CSS --}}
-	{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">  --}}
+	{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/css/materialize.min.css">  --}}
 	{{-- <link href="http://vjs.zencdn.net/5.9.2/video-js.min.css" rel="stylesheet"> --}}
 
 	<link href="/css/materialize.min.css" rel="stylesheet" type="text/css">
 	<link href="/css/dropzone.css" rel="stylesheet" type="text/css">
 	<link href="/css/icon.css" rel="stylesheet" type="text/css">
 	<link href="/css/style.css" rel="stylesheet" type="text/css">
-	<link href="/js/vendor/video-js/video-js.min.css" rel="stylesheet">
+	<link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
+	<link href="/js/vendor/DataTables/datatables.min.css" rel="stylesheet">
 
 	<!-- If you'd like to support IE8 -->
   	{{-- <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> --}}
 
-	<script src="/js/vendor/video-js/ie8/videojs-ie8.min.js"></script>
+	<script src="/js/vendor/VideoJS/ie8/videojs-ie8.min.js"></script>
 </head>
 
 <body @yield('pageId')>
@@ -37,9 +38,9 @@
 		<nav class="teal darken-3">
 		    <div class="nav-wrapper container">
 		      	@if (Auth::guest())
-					<a class="brand-logo" href="{{ route('index_path') }}">Swine E-Commerce PH</a>
+					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('index_path') }}">Swine E-Commerce PH</a>
 			  	@else
-					<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
+					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
 			  	@endif
 
 		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
@@ -54,10 +55,10 @@
 						@endif
 					@endif
 				@else
-					<li> <span>{{ Auth::user()->name }}</span> </li>
+					<li> <a>{{ Auth::user()->name }}</a> </li>
 					@yield('navbarHead')
 					<li>
-						<a class="dropdown-button" data-beloworigin="true" data-activates="nav-dropdown">
+						<a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
 							<i class="material-icons">arrow_drop_down</i>
 						</a>
 						<ul id="nav-dropdown" class="dropdown-content">
@@ -123,13 +124,13 @@
 	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script> --}}
 	{{-- <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> --}}
 	{{-- Compiled and minified JavaScript --}}
-	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script> --}}
+	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script> --}}
 	{{-- <script src="http://vjs.zencdn.net/5.9.2/video.js"></script> --}}
 
 	<script src="/js/vendor/jquery.min.js"></script>
 	<script src="/js/vendor/materialize.min.js"></script>
 	<script src="/js/vendor/dropzone.js"></script>
-	<script src="/js/vendor/video-js/video.min.js"></script>
+	<script src="/js/vendor/VideoJS/video.min.js"></script>
 	<script src="/js/config.js"></script>
 	<script src="/js/custom.js"></script>
 	{{-- For user-specific initialization scripts --}}

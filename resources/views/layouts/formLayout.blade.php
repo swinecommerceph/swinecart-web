@@ -8,7 +8,7 @@
 	<link href="/css/dropzone.css" rel="stylesheet" type="text/css">
 	<link href="/css/icon.css" rel="stylesheet" type="text/css">
 	<link href="/css/style.css" rel="stylesheet" type="text/css">
-	<link href="/js/vendor/video-js/video-js.min.css" rel="stylesheet">
+	<link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
 	<link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 	<!--For Mobile-->
 	<meta name="viewport" content="width=device-width, initial-scale=1.0" />
@@ -497,7 +497,7 @@
 	<script src="/js/vendor/jquery.min.js"></script>
   	<script src="/js/vendor/materialize.min.js"></script>
   	<script src="/js/vendor/dropzone.js"></script>
-  	<script src="/js/vendor/video-js/video.min.js"></script>
+  	<script src="/js/vendor/VideoJS/video.min.js"></script>
   	<script src="/js/config.js"></script>
   	<script src="/js/custom.js"></script>
    {{-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script> --}}

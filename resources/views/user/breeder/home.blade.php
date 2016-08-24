@@ -17,7 +17,8 @@
 @endsection
 
 @section('navbarHead')
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons">assessment</i></a></li>
+    <li><a href="{{ route('home_path') }}"> <i class="material-icons">message</i></a></li>
+    <li><a href="{{ route('dashboard') }}"> <i class="material-icons">assessment</i></a></li>
 @endsection
 
 @section('navbarDropdown')
@@ -53,7 +54,7 @@
     <div class="row">
     </div>
     {{-- Slider --}}
-    <div class="slider">
+    <div class="slider home-slider">
         <ul class="slides">
           <li>
             <img src="/images/demo/HP1.jpg">

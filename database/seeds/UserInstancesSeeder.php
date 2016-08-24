@@ -12,6 +12,19 @@ class UserInstancesSeeder extends Seeder
     public function run()
     {
       // For Customers
+        $companyNames = [
+            'John and Piolo Farms',
+            'McJolly Farms',
+            'Low Pigs Co.',
+            'PICC',
+            'PCAARRD Farms',
+            'Great Pig Inc.',
+            'Sharoen Fokfun',
+            'Wellize Farms',
+            'Great Pigs Dutchman',
+            'General Pigs Co.'
+        ];
+        // For Administrator
         factory(App\Models\User::class, 1)->create()->each(function($user){
             $user->assignRole('admin');
             $user->save();
@@ -34,7 +47,7 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Breeders
-        factory(App\Models\User::class, 10)->create()->each(function($user){
+        factory(App\Models\User::class, 10)->create()->each(function($user)use($companyNames){
             $user->assignRole('breeder');
             $user->update_profile = 0;
             $user->email_verified = 1;
@@ -47,9 +60,13 @@ class UserInstancesSeeder extends Seeder
             $breeder->users()->save($user);
             $breeder->farmAddresses()->save($farm);
 
-            // Create up to 7 products as well
+            // Change name if Breeder
+            $user->name = $companyNames[$breeder->id-1];
+            $user->save();
+
+            // Create products as well
             // Initialization
-            $rand = random_int(6,7);
+            $rand = random_int(10,13);
             $types = ['sow', 'boar', 'semen']; // 3
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
             for ($i = 0; $i < $rand; $i++) {
@@ -105,7 +122,7 @@ class UserInstancesSeeder extends Seeder
                 $product->fcr = random_int(10,30)/10.0;
                 $product->backfat_thickness = random_int(90,200)/10.0;
                 $product->other_details = 'Our detailed information of our product';
-                $product->status = 'showcased';
+                $product->status = 'displayed';
                 $breeder->products()->save($product);
 
                 // Check if there is a second image

@@ -52,7 +52,7 @@ class Product extends Model
      *
      * @var array
      */
-    protected $hidden = ['status_instance'];
+    protected $hidden = ['status_instance', 'deleted_at'];
 
     /**
      * Get the breeder that owns this product

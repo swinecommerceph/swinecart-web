@@ -9,7 +9,9 @@
         "laravel/framework": "5.2.*",
         "laravelcollective/html": "5.2.*",
         "adamwathan/eloquent-oauth-l5": "^0.4.2",
-        "barryvdh/laravel-dompdf": "0.6.*"
+		"cboden/ratchet": "0.3.*",
+		"react/zmq": "0.2.*|0.3.*",
+        "react/promise": "^2.0"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

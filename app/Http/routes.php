@@ -71,9 +71,15 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('products/manage-selected',['as' => 'products.deleteSelected', 'uses' => 'ProductController@deleteSelected']);
         Route::get('products/product-summary',['as' => 'products.summary', 'uses' => 'ProductController@productSummary']);
         Route::post('products/set-primary-picture',['as' => 'products.setPrimaryPicture', 'uses' => 'ProductController@setPrimaryPicture']);
-        Route::post('products/showcase-product',['as' => 'products.showcase', 'uses' => 'ProductController@showcaseProduct']);
+        Route::post('products/display-product',['as' => 'products.display', 'uses' => 'ProductController@displayProduct']);
         Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
         Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'ProductController@deleteMedium']);
+
+        // dashboard-related
+        Route::get('dashboard',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
+        Route::get('dashboard/product-status',['as' => 'dashboard.productStatus', 'uses' => 'DashboardController@showProductStatus']);
+        Route::get('dashboard/product-status/retrieve-product-requests',['as' => 'dashboard.productRequests', 'uses' => 'DashboardController@retrieveProductRequests']);
+        Route::patch('dashboard/product-status/update-status',['as' => 'dashboard.reserveProduct', 'uses' => 'DashboardController@updateProductStatus']);
 
     });
 
@@ -98,8 +104,33 @@ Route::group(['middleware' => ['web']], function () {
         // swinecart-related
         Route::get('swine-cart',['as' => 'cart.items', 'uses' => 'SwineCartController@getSwineCartItems']);
         Route::post('swine-cart/add',['as' => 'cart.add', 'uses' => 'SwineCartController@addToSwineCart']);
+        Route::put('swine-cart/request',['as' => 'cart.request', 'uses' => 'SwineCartController@requestSwineCart']);
         Route::delete('swine-cart/delete',['as' => 'cart.delete', 'uses' => 'SwineCartController@deleteFromSwineCart']);
         Route::get('swine-cart/quantity',['as' => 'cart.quantity', 'uses' => 'SwineCartController@getSwineCartQuantity']);
+        Route::post('swine-cart/rate', ['as' => 'rate.breeder', 'uses' => 'SwineCartController@rate']);
+        Route::post('swine-cart/record', ['as' => 'record', 'uses' => 'SwineCartController@record']);
+        Route::get('view-swine-cart',['as'=> 'view.cart', 'uses' => 'SwineCartController@getSwineCartItems']);
+
+    });
+
+    // Admin
+    Route::group(['prefix'=>'admin'], function(){
+        
+        // Route to admin home page
+        Route::get('home',['as'=>'admin_path', 'uses'=>'AdminController@index']);
+        Route::get('form', ['as'=>'registration.form', 'uses'=>'AdminController@getRegistrationForm']);
+        Route::post('form/register', ['as'=>'admin.register.submit', 'uses'=>'AdminController@submitRegistrationForms']);
+
+        Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
+        Route::get('home/approved/breeder', ['as'=>'admin.approved.breeder', 'uses'=>'AdminController@displayApprovedBreeders']);
+        Route::get('home/approved/customer', ['as'=>'admin.approved.customer', 'uses'=>'AdminController@displayApprovedCustomer']);
+        Route::get('home/pending/users', ['as'=>'admin.pending.users', 'uses'=>'AdminController@displayPendingUsers']);
+        Route::get('home/approved/blocked', ['as'=>'admin.blocked.users', 'uses'=>'AdminController@displayBlockedUsers']);
+        Route::delete('home/delete', ['as'=>'admin.delete', 'uses'=>'AdminController@deleteUser']);
+        Route::put('home/block', ['as'=>'admin.block', 'uses'=>'AdminController@blockUser']);
+        Route::put('home/approve', ['as'=>'admin.approve', 'uses'=>'AdminController@acceptUser']);
+        Route::get('home/search', ['as' => 'admin.search', 'uses' => 'AdminController@searchUser']);
+        Route::post('home/add', ['as' => 'admin.add.user', 'uses' => 'AdminController@createUser']);
 
     });
 

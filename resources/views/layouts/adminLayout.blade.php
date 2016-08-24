@@ -13,11 +13,19 @@
     <link href="/css/dropzone.css" rel="stylesheet" type="text/css">
     <link href="/css/icon.css" rel="stylesheet" type="text/css">
     <link href="/css/style.css" rel="stylesheet" type="text/css">
+<<<<<<< HEAD
     <link href="/js/vendor/video-js/video-js.min.css" rel="stylesheet">
     <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 
 
     <script src="/js/vendor/video-js/ie8/videojs-ie8.min.js"></script>
+=======
+    <link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
+    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
+
+
+    <script src="/js/vendor/VideoJS/ie8/videojs-ie8.min.js"></script>
+>>>>>>> upstream/master
 
   </head>
   <body @yield('pageId')>
@@ -28,7 +36,11 @@
             <img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
 
             <ul id="nav-mobile" class="right hide-on-med-and-down">
+<<<<<<< HEAD
               <li><span>{{ Auth::user()->name }}</span> </li>
+=======
+              <li><a>{{ Auth::user()->name }}</a> </li>
+>>>>>>> upstream/master
               <li>
                 <a href="#" class="dropdown-button" data-beloworigin="true" data-activates="inquiries-dropdown"><i class="material-icons">feedback</i></a>
                 <ul id="inquiries-dropdown" class="dropdown-content">
@@ -56,7 +68,11 @@
                 </li>
 
               <li>
+<<<<<<< HEAD
                 <a class="dropdown-button" data-beloworigin="true" data-activates="nav-dropdown">
+=======
+                <a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
+>>>>>>> upstream/master
                   <i class="material-icons">arrow_drop_down</i>
                 </a>
                 <ul id="nav-dropdown" class="dropdown-content">
@@ -420,7 +436,11 @@
    <script src="/js/vendor/jquery.min.js"></script>
   	<script src="/js/vendor/materialize.min.js"></script>
   	<script src="/js/vendor/dropzone.js"></script>
+<<<<<<< HEAD
   	<script src="/js/vendor/video-js/video.min.js"></script>
+=======
+  	<script src="/js/vendor/VideoJS/video.min.js"></script>
+>>>>>>> upstream/master
   	<script src="/js/config.js"></script>
   	<script src="/js/custom.js"></script>
    {{-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script> --}}
