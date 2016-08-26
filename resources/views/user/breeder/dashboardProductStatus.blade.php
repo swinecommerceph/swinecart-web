@@ -65,14 +65,14 @@
                             <i class="material-icons right" v-if="sortOrders['name'] > 0">keyboard_arrow_up</i>
                             <i class="material-icons right" v-else>keyboard_arrow_down</i>
                         </span>
-                    </td>
+                    </th>
                     <th @click="sortBy('status')" :class="sortKey == 'status' ? 'red-text' : '' ">
                         <span class="">
                             Status
                             <i class="material-icons right" v-if="sortOrders['status'] > 0">keyboard_arrow_up</i>
                             <i class="material-icons right" v-else>keyboard_arrow_down</i>
                         </span>
-                    </td>
+                    </th>
                     <th> Action </td>
                 </tr>
             </thead>
