@@ -73,7 +73,7 @@
                             <i class="material-icons right" v-else>keyboard_arrow_down</i>
                         </span>
                     </th>
-                    <th> Action </td>
+                    <th> Action </th>
                 </tr>
             </thead>
             <tbody>
