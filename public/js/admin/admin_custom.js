@@ -1,3 +1,4 @@
+// Admin page custom javascripts
 $(document).ready(function(){
 
     // Modal trigger for admin

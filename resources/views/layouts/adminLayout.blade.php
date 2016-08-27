@@ -98,11 +98,6 @@
           <li>
             <div class="collapsible-header active"><a href="{{route('admin.userlist')}}" class="black-text" id='all'><i class="material-icons">face</i>All Users</a></div>
           </li>
-          {{-- <li>
-            <div class="collapsible-header"><i class="material-icons">assignment_id</i>Manage Approved Users</div>
-            <div class="collapsible-body center"><a href="{{route('admin.approved.breeder')}}" class="black-text" id='users-breeder'><p>Breeder</p></a></div>
-            <div class="collapsible-body center"><a href="{{route('admin.approved.customer')}}" class="black-text" id='users-customer'><p>Customer</p></a></div>
-          </li> --}}
           <li>
             <div class="collapsible-header"><i class="material-icons">assignment_late</i><a href="{{route('admin.pending.users')}}" class="black-text" id='pending-breeder'>Pending Accounts</a></div>
           </li>
@@ -385,28 +380,7 @@
           <div class="col s12">
           <div id="message-panel" class="card-panel">
             <span class="black-text">
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-              I am a very simple card. I am good at containing small bits of information.
-              I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+              Sample Text
             </span>
           </div>
         </div>
@@ -424,7 +398,6 @@
   	<script src="/js/vendor/VideoJS/video.min.js"></script>
   	<script src="/js/config.js"></script>
   	<script src="/js/custom.js"></script>
-   {{-- <script type="text/javascript" src="https://cdn.datatables.net/v/dt/dt-1.10.12/datatables.min.js"></script> --}}
    <script type="text/javascript" src="/js/vendor/datatables.min.js"></script>
    {{-- For user-specific initialization scripts --}}
   	@yield('initScript')
