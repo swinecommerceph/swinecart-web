@@ -11,7 +11,7 @@ class UserInstancesSeeder extends Seeder
      */
     public function run()
     {
-
+      // For Customers
         $companyNames = [
             'John and Piolo Farms',
             'McJolly Farms',
@@ -24,7 +24,6 @@ class UserInstancesSeeder extends Seeder
             'Great Pigs Dutchman',
             'General Pigs Co.'
         ];
-
         // For Administrator
         factory(App\Models\User::class, 1)->create()->each(function($user){
             $user->assignRole('admin');

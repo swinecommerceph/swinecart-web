@@ -55,8 +55,8 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
 
         // profile-related
-    	Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
-    	Route::post('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
+    	  Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
+    	  Route::post('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
         Route::put('edit-profile/personal/edit',['as' => 'breeder.updatePersonal', 'uses' => 'BreederController@updatePersonal']);
         Route::post('edit-profile/farm/add',['as' => 'breeder.addFarm', 'uses' => 'BreederController@addFarm']);
         Route::put('edit-profile/farm/edit',['as' => 'breeder.updateFarm', 'uses' => 'BreederController@updateFarm']);
@@ -115,7 +115,7 @@ Route::group(['middleware' => ['web']], function () {
 
     // Admin
     Route::group(['prefix'=>'admin'], function(){
-        
+
         // Route to admin home page
         Route::get('home',['as'=>'admin_path', 'uses'=>'AdminController@index']);
         Route::get('form', ['as'=>'registration.form', 'uses'=>'AdminController@getRegistrationForm']);
@@ -133,6 +133,5 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('home/add', ['as' => 'admin.add.user', 'uses' => 'AdminController@createUser']);
 
     });
-
 
 });
