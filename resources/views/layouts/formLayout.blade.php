@@ -17,7 +17,7 @@
 </head>
 
 <body @yield('pageId')>
-	<nav class="teal">
+	<nav class="teal darken-3">
 		<div class="nav-wrapper container">
 			<a href="{{ route('home_path') }}" class="brand-logo">Swine E-Commerce</a>
 		</div>

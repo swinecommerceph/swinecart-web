@@ -23,7 +23,7 @@
   <body @yield('pageId')>
     {{-- Navbar --}}
     <div class="navbar-fixed">
-      <nav class="teal darken-4">
+      <nav class="teal darken-3">
           <div class="nav-wrapper container">
             <img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
 
@@ -63,7 +63,7 @@
                 <ul id="nav-dropdown" class="dropdown-content">
                       <li><a href="{{ route('registration.form') }}">Registration Form</a></li>
                       <li class="divider"></li>
-                      <li><a href="{{ route('logout_path') }}">Logout</a></li>
+                      <li><a href="{{ url('logout') }}">Logout</a></li>
                   </ul>
               </li>
             </ul>

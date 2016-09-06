@@ -31,12 +31,12 @@
 
             <div class="row">
                 <div class="col s4 offset-s4">
-                    <a href="{{ route('getLogin_path') }}" class="waves-effect waves-light btn-large col s12 grey lighten-1" style="font-size:24px;">Login</a>
+                    <a href="{{ route('login') }}" class="waves-effect waves-light btn-large col s12 grey lighten-1" style="font-size:24px;">Login</a>
                 </div>
             </div>
             <div class="row">
                 <div class="col s4 offset-s4">
-                    <a href="{{ route('getRegister_path') }}" class="waves-effect waves-light btn-large col s12 pink lighten-1" style="font-size:24px;">Register</a>
+                    <a href="{{ url('register') }}" class="waves-effect waves-light btn-large col s12 pink lighten-1" style="font-size:24px;">Register</a>
                 </div>
             </div>
 

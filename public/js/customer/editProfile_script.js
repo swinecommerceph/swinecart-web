@@ -124,7 +124,7 @@ $(document).ready(function(){
         edit_button.tooltip('remove');
 
         // If button is for editing the fields
-        if(edit_button.attr('data-tooltip') == 'Edit')profile.edit(parent_form, edit_button, cancel_button);
+        if(edit_button.attr('data-tooltip').includes('Edit'))profile.edit(parent_form, edit_button, cancel_button);
 
         // If button is ready for submission
         else profile.update(parent_form, edit_button, cancel_button);

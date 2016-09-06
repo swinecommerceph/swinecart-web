@@ -19,40 +19,46 @@ use App\Models\Image;
 use App\Models\Video;
 use App\Models\Breed;
 use App\Models\User;
+
 use Mail;
 use DB;
 use Auth;
+
 class AdminController extends Controller
 {
-  protected $user;
+    protected $user;
 
-  /**
-   * Create new BreederController instance
-   */
-  public function __construct()
-  {
+    /**
+    * Create new BreederController instance
+    */
+    public function __construct()
+    {
       $this->middleware('role:admin');
-      $this->user = Auth::user();
-  }
+      $this->middleware(function($request, $next){
+          $this->user = Auth::user();
 
-  /**
-   * Helper functions for retrieving all user data
-   *
-   * @param  none
-   * @return users
-   */
-  public function retrieveAllUsers(){
-    $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->get();
-    return $users;
-  }
+          return $next($request);
+      });
+    }
 
-  /**
-   * Helper functions for retrieving all user data
-   *
-   * @param  none
-   * @return count of all approved user
-   */
-  public function userCount(){
+    /**
+     * Helper functions for retrieving all user data
+     *
+     * @param  none
+     * @return users
+     */
+    public function retrieveAllUsers(){
+        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->get();
+        return $users;
+    }
+
+    /**
+     * Helper functions for retrieving all user data
+     *
+     * @param  none
+     * @return count of all approved user
+     */
+    public function userCount(){
     $count = DB::table('users')
                     ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                     ->join('roles', 'role_user.role_id','=','roles.id')
@@ -62,84 +68,85 @@ class AdminController extends Controller
                     //->where('users.is_blocked','=', 0)
                     ->count();
     return $count;
-  }
-  /**
-   * Helper functions for retrieving all user data
-   *
-   * @param  none
-   * @return count of all approved breeders
-   */
-  public function breederCount(){
-    $count = DB::table('users')
-                    ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                    ->join('roles', 'role_user.role_id','=','roles.id')
-                    ->where('role_user.role_id','=',2)
-                    ->where('users.email_verified','=', 1)
-                    ->where('users.is_blocked','=', 0)
-                    ->where('users.deleted_at','=', NULL)
-                    ->count();
-    return $count;
-  }
-
-  /**
-   * Helper functions for retrieving all user data
-   *
-   * @param  none
-   * @return count of all customers
-   */
-  public function customerCount(){
-    $count = DB::table('users')
-                    ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                    ->join('roles', 'role_user.role_id','=','roles.id')
-                    ->where('role_user.role_id','=',3)
-                    ->where('users.email_verified','=', 1)
-                    ->where('users.is_blocked','=', 0)
-                    ->where('users.deleted_at','=', NULL)
-                    ->count();
-    return $count;
-  }
+    }
 
     /**
-    * Helper functions for retrieving the number of pending breeders
-    *
-    * @param  none
-    * @return count of all users that are pending
-    */
-  public function pendingUserCount(){
-    $count = DB::table('users')
-                    ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                    ->join('roles', 'role_user.role_id','=','roles.id')
-                    ->where('role_user.role_id','=',2)
-                    ->where('users.approved','=', 0)
-                    ->where('users.deleted_at','=', NULL)
-                    ->count();
-    return $count;
-  }
+     * Helper functions for retrieving all user data
+     *
+     * @param  none
+     * @return count of all approved breeders
+     */
+    public function breederCount(){
+        $count = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->join('roles', 'role_user.role_id','=','roles.id')
+                        ->where('role_user.role_id','=',2)
+                        ->where('users.email_verified','=', 1)
+                        ->where('users.is_blocked','=', 0)
+                        ->where('users.deleted_at','=', NULL)
+                        ->count();
+        return $count;
+    }
 
-  /**
-  * Helper functions for retrieving the number of blocked users
-  *
-  * @param  none
-  * @return count of all users that are blocked
-  */
-  public function blockedUserCount(){
-    $count = DB::table('users')
-                    ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                    ->join('roles', 'role_user.role_id','=','roles.id')
-                    ->where('role_user.role_id','!=',1)
-                    ->where('users.email_verified','=', 1)
-                    ->where('users.is_blocked','=', 1)
-                    ->where('users.deleted_at','=', NULL)
-                    ->count();
-    return $count;
-  }
+    /**
+     * Helper functions for retrieving all user data
+     *
+     * @param  none
+     * @return count of all customers
+     */
+    public function customerCount(){
+        $count = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->join('roles', 'role_user.role_id','=','roles.id')
+                        ->where('role_user.role_id','=',3)
+                        ->where('users.email_verified','=', 1)
+                        ->where('users.is_blocked','=', 0)
+                        ->where('users.deleted_at','=', NULL)
+                        ->count();
+        return $count;
+    }
 
-  /**
-   * Show Home Page of breeder
-   *
-   * @param  Request $request
-   * @return View
-   */
+    /**
+     * Helper functions for retrieving the number of pending breeders
+     *
+     * @param  none
+     * @return count of all users that are pending
+     */
+    public function pendingUserCount(){
+        $count = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->join('roles', 'role_user.role_id','=','roles.id')
+                        ->where('role_user.role_id','=',2)
+                        ->where('users.approved','=', 0)
+                        ->where('users.deleted_at','=', NULL)
+                        ->count();
+        return $count;
+    }
+
+    /**
+     * Helper functions for retrieving the number of blocked users
+     *
+     * @param  none
+     * @return count of all users that are blocked
+     */
+    public function blockedUserCount(){
+        $count = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->join('roles', 'role_user.role_id','=','roles.id')
+                        ->where('role_user.role_id','!=',1)
+                        ->where('users.email_verified','=', 1)
+                        ->where('users.is_blocked','=', 1)
+                        ->where('users.deleted_at','=', NULL)
+                        ->count();
+        return $count;
+    }
+
+    /**
+     * Show Home Page of breeder
+     *
+     * @param  Request $request
+     * @return View
+     */
     public function index(Request $request)
     {
         $all = $this->userCount();

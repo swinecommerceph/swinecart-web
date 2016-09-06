@@ -17,7 +17,7 @@
 				@include('common._errors')
 
 				{{-- Registration Form --}}
-				<form action="{{ route('postRegister_path') }}" method="POST" class="col s12">
+				<form action="{{ url('register') }}" method="POST" class="col s12">
 					{{ csrf_field() }}
 
 					{{-- Name --}}

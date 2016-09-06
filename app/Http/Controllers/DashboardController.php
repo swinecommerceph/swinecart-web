@@ -26,7 +26,11 @@ class DashboardController extends Controller
     {
         $this->middleware('role:breeder');
         $this->middleware('updateProfile:breeder');
-        $this->user = Auth::user();
+        $this->middleware(function($request, $next){
+            $this->user = Auth::user();
+
+            return $next($request);
+        });
         $this->dashboard = $dashboard;
     }
 

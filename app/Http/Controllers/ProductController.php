@@ -12,6 +12,7 @@ use App\Models\Image;
 use App\Models\Video;
 use App\Models\Breed;
 use App\Models\SwineCartItem;
+
 use Auth;
 use Storage;
 
@@ -50,7 +51,11 @@ class ProductController extends Controller
             'displayProduct']]);
         $this->middleware('role:customer',['only' => ['viewProducts','customerViewProductDetail']]);
         $this->middleware('updateProfile:customer',['only' => ['viewProducts','customerViewProductDetail']]);
-        $this->user = Auth::user();
+        $this->middleware(function($request, $next){
+            $this->user = Auth::user();
+
+            return $next($request);
+        });
     }
 
     /**

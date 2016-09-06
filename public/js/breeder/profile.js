@@ -1,6 +1,8 @@
 'use strict';
 
 var profile = {
+    edit_farm_name: '',
+
     add: function(parent_form){
         config.preloader_progress.fadeIn();
         var farm_address = [];
@@ -50,6 +52,7 @@ var profile = {
 
         config.preloader_progress.fadeIn();
         $.when(parent_form.find('input').prop('disabled',false)).done(function(){
+            profile.edit_farm_name = edit_button.attr('data-tooltip');
             // Edit tooltip animation to Done
             edit_button.attr('data-tooltip','Done');
             edit_button.attr('data-position','top');
@@ -142,7 +145,7 @@ var profile = {
                 }
 
                 // Done tooltip animation to Edit
-                edit_button.attr('data-tooltip','Edit');
+                edit_button.attr('data-tooltip',profile.edit_farm_name);
                 edit_button.attr('data-position','left');
                 edit_button.html('<i class="material-icons">mode_edit</i>');
                 $(".tooltipped").tooltip({delay:50});
@@ -163,7 +166,7 @@ var profile = {
         cancel_button.tooltip('remove');
         $.when(parent_form.find('input').prop('disabled',true)).done(function(){
             // Done tooltip animation to Edit
-            edit_button.attr('data-tooltip','Edit');
+            edit_button.attr('data-tooltip',profile.edit_farm_name);
             edit_button.attr('data-position','left');
             edit_button.html('<i class="material-icons">mode_edit</i>');
             $(".tooltipped").tooltip({delay:50});

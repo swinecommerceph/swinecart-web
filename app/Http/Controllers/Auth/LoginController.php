@@ -2,82 +2,46 @@
 
 namespace App\Http\Controllers\Auth;
 
-use Auth;
 use App\Models\User;
-use Validator;
 use App\Http\Controllers\Controller;
-use Illuminate\Foundation\Auth\ThrottlesLogins;
-use Illuminate\Foundation\Auth\AuthenticatesAndRegistersUsers;
+use Illuminate\Foundation\Auth\AuthenticatesUsers;
+use Auth;
 use SocialAuth;
 use SocialNorm\Exceptions\ApplicationRejectedException;
 use SocialNorm\Exceptions\InvalidAuthorizationCodeException;
-use Illuminate\Http\Request;
 use Mail;
 
-class AuthController extends Controller
+class LoginController extends Controller
 {
     /*
     |--------------------------------------------------------------------------
-    | Registration & Login Controller
+    | Login Controller
     |--------------------------------------------------------------------------
     |
-    | This controller handles the registration of new users, as well as the
-    | authentication of existing users. By default, this controller uses
-    | a simple trait to add these behaviors. Why don't you explore it?
+    | This controller handles authenticating users for the application and
+    | redirecting them to your home screen. The controller uses a trait
+    | to conveniently provide its functionality to your applications.
     |
     */
 
-    use AuthenticatesAndRegistersUsers, ThrottlesLogins;
+    use AuthenticatesUsers;
+
 
     /**
-     * Specify rediret URI after login
+     * Where to redirect users after login / registration.
+     *
+     * @var string
      */
-    protected $redirectPath = '/home';
+    protected $redirectTo = '/home';
 
     /**
-     * Specify login path for user login view
-     */
-    protected $loginPath = '/login';
-
-    /**
-     * Create a new authentication controller instance.
+     * Create a new controller instance.
      *
      * @return void
      */
     public function __construct()
     {
-        $this->middleware('guest', ['except' => ['getLogout','verifyCode']]);
-    }
-
-    /**
-     * Get a validator for an incoming registration request.
-     *
-     * @param  array  $data
-     * @return \Illuminate\Contracts\Validation\Validator
-     */
-    protected function validator(array $data)
-    {
-        return Validator::make($data, [
-            'name' => 'required|max:255',
-            'email' => 'required|email|max:255|unique:users',
-            'password' => 'required|confirmed|min:6',
-        ]);
-    }
-
-    /**
-     * Create a new user instance after a valid registration.
-     *
-     * @param  array  $data
-     * @return User
-     */
-    protected function create(array $data, $verCode)
-    {
-        return User::create([
-            'name' => $data['name'],
-            'email' => $data['email'],
-            'password' => bcrypt($data['password']),
-            'verification_code' => $verCode
-        ]);
+        $this->middleware('guest', ['except' => ['logout','verifyCode']]);
     }
 
     /**
@@ -119,40 +83,6 @@ class AuthController extends Controller
     }
 
     /**
-     * Handle a registration request for the application.
-     * Override default register method
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @return View
-     */
-    public function register(Request $request)
-    {
-        $validator = $this->validator($request->all());
-
-        if ($validator->fails()) {
-            $this->throwValidationException(
-                $request, $validator
-            );
-        }
-
-        $verCode = str_random('10');
-        $user = $this->create($request->all(), $verCode);
-        $user->assignRole('customer');
-        $data = [
-            'email' => $request->input('email'),
-            'verCode' => $verCode,
-            'type' => 'sent'
-        ];
-
-        Mail::send('emails.verification', $data, function ($message) use($data){
-            $message->to($data['email'])->subject('Verification code for Swine E-Commerce PH');
-        });
-
-        return view('emails.message', $data);
-
-    }
-
-    /**
      * Authenticate user if email and verification
      * code matches in the database
      *
@@ -171,7 +101,7 @@ class AuthController extends Controller
             $verUser->save();
             return redirect($this->redirectPath());
         }
-        else return redirect()->route('getRegister_path')->with('message','Verification code invalid!');
+        else return redirect('register')->with('message','Verification code invalid!');
     }
 
     /**

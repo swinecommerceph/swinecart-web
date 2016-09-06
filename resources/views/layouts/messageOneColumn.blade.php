@@ -12,13 +12,15 @@
 	<title>Swine E-Commerce PH @yield('title') </title>
 
 	{{-- <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet" type="text/css"> --}}
-	<link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+	{{-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> --}}
 
 	{{-- Compiled and minified CSS --}}
 	{{-- <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/css/materialize.min.css">  --}}
 
 	<link href="/css/materialize.min.css" rel="stylesheet" type="text/css">
+	<link href="/css/icon.css" rel="stylesheet" type="text/css">
 	<link href="/css/style.css" rel="stylesheet" type="text/css">
+	{{-- @yield('email-css') --}}
 </head>
 
 <body>
@@ -40,8 +42,8 @@
 	{{-- Compiled and minified JavaScript --}}
 	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.5/js/materialize.min.js"></script> --}}
 
-	<script src="/js/jquery.min.js"></script>
-	<script src="/js/materialize.min.js"></script>
+	<script src="/js/vendor/jquery.min.js"></script>
+	<script src="/js/vendor/materialize.min.js"></script>
 
 </body>
 </html>

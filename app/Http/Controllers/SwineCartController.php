@@ -28,7 +28,11 @@ class SwineCartController extends Controller
     {
         $this->middleware('role:customer');
         $this->middleware('updateProfile:customer');
-        $this->user = Auth::user();
+        $this->middleware(function($request, $next){
+            $this->user = Auth::user();
+
+            return $next($request);
+        });
     }
 
     /**
@@ -49,7 +53,7 @@ class SwineCartController extends Controller
             // $product = Product::find($request->productId);
             // $breeder = $product->breeder;
             // $topic = $breeder->users()->first()->name;
-            // $data = $productsDashboard->getSoldProducts($breeder);
+            // $data = $repo->forBreeder($breeder);
             // $data['topic'] = str_slug($topic);
             //
             // // This is our new stuff

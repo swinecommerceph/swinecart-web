@@ -142,10 +142,11 @@
         </div>
         <?php $productNumber++; ?>
     @endforeach
-    {{-- Pagination --}}
-    <div class="row">
-        <div class="center-align">
-            {!! $products->appends($urlFilters)->links() !!}
-        </div>
+</div>
+
+{{-- Pagination --}}
+<div class="row">
+    <div class="center-align">
+        {!! $products->appends($urlFilters)->links() !!}
     </div>
 </div>

@@ -182,9 +182,16 @@
                     <span class="card-title">Reviews</span>
                     <div id="review-slider" class="slider">
                         <ul class="slides teal">
+                            {{-- <li>
+                                <img>
+                                <div class="caption center-align">
+                                    <h4>"Your Reviews"</h4>
+                                    <h6 class="light grey-text text-lighten-3">- Customer</h6>
+                                </div>
+                            </li> --}}
                             @foreach($dashboardStats['ratings']['reviews'] as $review)
                                 <li>
-                                    {{-- <img src="http://lorempixel.com/580/250/nature/1"> <!-- random image --> --}}
+                                    <img>
                                     <div class="caption center-align">
                                         <h4>"{{ $review['comment'] }}"</h4>
                                         <h6 class="light grey-text text-lighten-3">- {{ $review['customerName'] }}</h6>

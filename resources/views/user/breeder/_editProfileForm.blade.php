@@ -207,7 +207,7 @@
 								<div class="row">
 								  <div class="col s10 offset-s1 content-section">
 									  <div class="col right">
-										  <button  class="btn-floating btn-medium waves-effect waves-light teal darken-1 tooltipped edit-button" data-position="left" data-delay="50" data-tooltip="Edit {{$farmAddress->name}} Farm">
+										  <button  class="btn-floating btn-medium waves-effect waves-light teal darken-1 tooltipped edit-button" data-position="left" data-delay="50" data-tooltip="Edit {{$farmAddress->name}}">
 											  <i class="material-icons">mode_edit</i>
 										  </button>
 									  </div>
@@ -224,7 +224,7 @@
 								{!! Form::open(['route' => 'breeder.deleteFarm', 'method' => 'DELETE', 'class' => 'delete-farm', 'data-farm-id' => $farmAddress->id]) !!}
 									<div class="row ">
 										<div class="col offset-s10 remove-button-field">
-											<a href="#!" class="btn-floating btn-medium waves-effect waves-light grey tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove {{$farmAddress->name}} Farm">
+											<a href="#!" class="btn-floating btn-medium waves-effect waves-light grey tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove {{$farmAddress->name}}">
 												<i class="material-icons">remove</i>
 											</a>
 										</div>

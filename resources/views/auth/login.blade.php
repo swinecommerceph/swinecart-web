@@ -18,7 +18,7 @@
 					@include('common._errors')
 
 					{{-- Login Form --}}
-					<form action="{{ route('postLogin_path') }}" method="POST" class="col s12">
+					<form action="{{ url('login') }}" method="POST" class="col s12">
 						{{ csrf_field() }}
 
 						{{-- E-Mail Address --}}

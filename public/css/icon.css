@@ -37,11 +37,6 @@
   -webkit-font-smoothing: antialiased;
 }
 
-@font-face {
-  font-family: Poppins;
-  src: url(../fonts/Poppins/Poppins-Regular.ttf);
-}
-
 .ecommerce-icons {
   font-family: Ecommerce;
   font-size: 24px;
