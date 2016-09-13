@@ -623,7 +623,7 @@ var product = {
                         '<label for="characteristic[]" class="active">Characteristic</label>'+
                     '</div>'+
                     '<div class="input-field col s5">'+
-                        '<input name="value[]" type="text" value="<value>">'+
+                        '<input name="value[]" type="text" value="">'+
                         '<label for="value[]" class="active">Value</label>'+
                     '</div>'+
                     '<div class="input-field col s1 remove-button-container">'+
@@ -638,7 +638,7 @@ var product = {
                         '<label for="characteristic[]" class="active">Characteristic</label>'+
                     '</div>'+
                     '<div class="input-field col s5">'+
-                        '<input name="value[]" type="text" value="<value>">'+
+                        '<input name="value[]" type="text" value="">'+
                         '<label for="value[]" class="active">Value</label>'+
                     '</div>'+
                     '<div class="input-field col s1 remove-button-container">'+

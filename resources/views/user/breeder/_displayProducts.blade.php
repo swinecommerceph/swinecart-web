@@ -92,7 +92,7 @@
                     <span class="card-title activator grey-text text-darken-4 truncate">{{$product->name}}<i class="material-icons right">more_vert</i></span>
                     <p>
                         {{$product->type}} - {{$product->breed}} <br>
-                        {{$product->age}} days old <br>
+                        {{$product->age}} days old  at 90kg <br>
                     </p>
                 </div>
                 <div class="card-action">

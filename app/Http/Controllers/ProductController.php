@@ -114,12 +114,12 @@ class ProductController extends Controller
     /**
      * View Details of a Product
      *
-     * @param  Integer  $productId
+     * @param  Product  $product
      * @return View
      */
-    public function breederViewProductDetail($productId)
+    public function breederViewProductDetail(Product $product)
     {
-        $product = Product::find($productId);
+        // $product = Product::find($productId);
         $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
         $product->type = ucfirst($product->type);
@@ -477,12 +477,12 @@ class ProductController extends Controller
     /**
      * View Details of a Product
      *
-     * @param  Integer  $productId
+     * @param  Product  $product
      * @return View
      */
-    public function customerViewProductDetail($productId)
+    public function customerViewProductDetail(Product $product)
     {
-        $product = Product::find($productId);
+        // $product = Product::find($productId);
         $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
         $product->type = ucfirst($product->type);

@@ -203,7 +203,7 @@
                         >
                             <i class="material-icons">add_to_photos</i>
                         </a>
-                        <a href="#!" class="secondary-content tooltipped" data-position="top" data-delay="50" data-tooltip="Message @{{ customer.customerName }}"><i class="material-icons">message</i></a>
+                        <a href="#!" class="secondary-content tooltipped" data-position="top" data-delay="50" data-tooltip="Send message to @{{ customer.customerName }}"><i class="material-icons">message</i></a>
                     </li>
                 </ul>
             </div>

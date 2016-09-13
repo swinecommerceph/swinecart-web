@@ -133,7 +133,7 @@
                             {{-- productName --}}
                         </div>
                         <div class="col right">
-                          <a href="#"><i class="material-icons">shopping_basket</i></a>
+                          <a href="#"><i class="material-icons red-text">add_shopping_cart</i></a>
                         </div>
                     </h4>
                     <div class="row">
@@ -147,7 +147,7 @@
                   <span class="breed"></span>
                 </li>
                 <li class="collection-item product-age">{{--{{$product->age}} days old --}}
-                  <span></span> days old
+                  <span></span> days old at 90kg
                 </li>
                 <li class="collection-item product-adg">{{--Average Daily Gain: {{$product->adg}} g--}}
                   Average Daily Gain: <span></span> g

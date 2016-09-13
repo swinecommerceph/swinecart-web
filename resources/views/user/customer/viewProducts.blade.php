@@ -155,7 +155,7 @@
                       <div class="row">
                           <div class="col s9">
                               {{$product->type}} - {{$product->breed}} <br>
-                              {{$product->age}} days old
+                              {{$product->age}} days old at 90kg
                           </div>
                           <div class="col right">
                             {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}

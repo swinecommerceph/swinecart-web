@@ -110,7 +110,7 @@
 					{{-- Age --}}
 					<div class="input-field col s6">
 						{!! Form::text('age', null)!!}
-						{!! Form::label('age', 'Age (days)') !!}
+						{!! Form::label('age', 'Age at 90kg (days)') !!}
 					</div>
 
 					{{-- ADG --}}
@@ -368,7 +368,7 @@
 					{{-- Age --}}
 					<div class="input-field col s6">
 						{!! Form::text('age', null)!!}
-						{!! Form::label('age', 'Age (days)') !!}
+						{!! Form::label('age', 'Age at 90kg (days)') !!}
 					</div>
 
 					{{-- ADG --}}
