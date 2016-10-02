@@ -17,6 +17,7 @@ var config = {
     delete_user: '/admin/home/delete',
     block_user: '/admin/home/block',
     approve_user: 'home/approve',
+    reject_user: 'home/reject',
     search_user: 'home/search',
     form: 'registration',
     productImages_path: '/images/product',

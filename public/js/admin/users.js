@@ -370,7 +370,7 @@ var users = {
    });
  },
 
-    // @TODO: Remove row automatically after approval of request  
+    // @TODO: Remove row automatically after approval of request
     //  approve a pending breeder request
     approve_user: function(name,button, token, id){
         $.ajax({
@@ -400,7 +400,7 @@ var users = {
     //  reject a pending breeder request
     reject_user: function(button,name, change, token, id){
         $.ajax({
-        url: 'home/delete',
+        url: 'home/reject',
         type: 'DELETE',
         cache: false,
         data:{

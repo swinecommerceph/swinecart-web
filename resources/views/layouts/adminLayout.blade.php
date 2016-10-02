@@ -260,7 +260,7 @@
                </div>
             </a>
             {!!Form::close()!!}
-            {!!Form::open(['route'=>'admin.delete', 'method'=>'DELETE', 'class'=>'delete-form'])!!}
+            {!!Form::open(['route'=>'admin.reject', 'method'=>'DELETE', 'class'=>'delete-form'])!!}
                <a id="reject-data" href="#">
                   <div class="col s6 center">
                      <i id="delete-icon" class="material-icons manage-icon">close</i>

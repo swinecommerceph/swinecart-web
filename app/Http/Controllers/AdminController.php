@@ -19,6 +19,7 @@ use App\Models\Image;
 use App\Models\Video;
 use App\Models\Breed;
 use App\Models\User;
+use App\Models\Log;
 
 use Mail;
 use DB;
@@ -242,8 +243,17 @@ class AdminController extends Controller
      * @return OK (string) status
      */
     public function deleteUser(Request $request){
+        $adminID = Auth::user()->id;
+        $adminName = Auth::user()->name;
         $user = User::find($request->userId);           // find the user
         $user->delete();                                // delete it in the database
+        // create a log entry for the action done
+        Log::create([
+            'admin_id' => $adminID,
+            'admin_name' => $adminName,
+            'action' => 'Deleted '.$user->name
+        ]);
+
         // send an email notification to the user's email
         Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
@@ -281,9 +291,25 @@ class AdminController extends Controller
      * @return status string "OK"
      */
     public function blockUser(Request $request){
+        $adminID = Auth::user()->id;
+        $adminName = Auth::user()->name;
         $user = User::find($request->userId);       // find the user using the user id
         $user->is_blocked = !$user->is_blocked;     // change the status for is_blocked column
         $user->save();                              // save the change to the database
+        // create a log entry for the action done
+        if($user->is_blocked){
+            Log::create([
+                'admin_id' => $adminID,
+                'admin_name' => $adminName,
+                'action' => 'Blocked '.$user->name
+            ]);
+        }else{
+            Log::create([
+                'admin_id' => $adminID,
+                'admin_name' => $adminName,
+                'action' => 'Unblocked '.$user->name
+            ]);
+        }
         // send an email notification to the email of the user
         Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->is_blocked], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
@@ -347,6 +373,15 @@ class AdminController extends Controller
             'password' => $password
         ];
 
+        $adminID = Auth::user()->id;
+        $adminName = Auth::user()->name;
+        // create a log entry for the action done
+        Log::create([
+            'admin_id' => $adminID,
+            'admin_name' => $adminName,
+            'action' => 'Created user account for '.$data['email']
+        ]);
+
         Mail::send('emails.credentials', ['email' => $request->input('email'),'password' => $password], function ($message) use($data){     // send an email containing the credential of the user to the input email
           $message->to($data['email'])->subject('Breeder Credentials for Swine E-Commerce PH');
         });
@@ -369,10 +404,46 @@ class AdminController extends Controller
      * @return none (redirect)
      */
     public function acceptUser(Request $request){
+        $adminID = Auth::user()->id;
+        $adminName = Auth::user()->name;
         $user = User::find($request->userId);
         $user->approved = !$user->approved;     // negate the status to approve user
+        // create a log entry for the action done
+        Log::create([
+            'admin_id' => $adminID,
+            'admin_name' => $adminName,
+            'action' => 'Approved '.$user->name
+        ]);
+
         // send an email notification to the email of the user
         Mail::send('emails.notification', ['type'=>'accepted'], function ($message) use($user){
+          $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
+        });
+        $user->save();  // save changes to the database
+
+        return  "Ok";
+    }
+
+    /**
+    * @TODO Separate DELETE and REJECT user function for better notifications
+    *
+    * Reject a pending user request and send an email verification to the user's email
+    *
+    * @return none (redirect)
+    */
+    public function rejectUser(Request $request){
+        $adminID = Auth::user()->id;
+        $adminName = Auth::user()->name;
+        $user = User::find($request->userId);
+        $user->approved = !$user->approved;     // negate the status to approve user
+        // create a log entry for the action done
+        Log::create([
+            'admin_id' => $adminID,
+            'admin_name' => $adminName,
+            'action' => 'Reject '.$user->name
+        ]);
+        // send an email notification to the email of the user
+        Mail::send('emails.notification', ['type'=>'rejected'], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
         });
         $user->save();  // save changes to the database
