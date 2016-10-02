@@ -454,6 +454,8 @@ class AdminController extends Controller
     /**
      * Displays form for the registration of breeder
      * @return View
+     *
+     * @TODO Registration form file checker
      */
     public function getRegistrationForm(){
         return view('user.admin.form');
@@ -462,6 +464,8 @@ class AdminController extends Controller
     /**
      * @todo Submit the registration form for breeder accreditation
      * @return View
+     *
+     * @TODO Checker for submitted form
      */
     public function submitRegistrationForms(Request $request){
         dd($request);
