@@ -20,6 +20,9 @@ $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     ];
 });
 
+$factory->define(App\Models\Admin::class, function (Faker\Generator $faker){
+    return [];
+});
 
 $factory->define(App\Models\Customer::class, function (Faker\Generator $faker) {
     $provinces = [

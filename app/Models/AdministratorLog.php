@@ -2,11 +2,13 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
 use App\Models\Admin;
+use Illuminate\Database\Eloquent\Model;
 
-class Log extends Model
+
+class AdministratorLog extends Model
 {
+    protected $table = 'administrator_logs';
     protected $fillable = ['admin_id', 'admin_name', 'action'];
 
     public function admin()

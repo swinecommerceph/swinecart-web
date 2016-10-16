@@ -55,14 +55,6 @@ $(document).ready(function(){
     users.show_all_pending();
     });
 
-    // if manage pages tab is clicked display the manage pages view
-    $('#pages-home').click(function(e){
-    e.preventDefault();
-      $('#admin-content-panel-header').text('Manage Home Page');
-      $('#main-content').empty();
-
-    });
-
     // if the card for all user is clicked
     $('#total-user-summary').click(function(e){
     e.preventDefault();

@@ -18,8 +18,9 @@ use App\Models\Product;
 use App\Models\Image;
 use App\Models\Video;
 use App\Models\Breed;
+use App\Models\Admin;
 use App\Models\User;
-use App\Models\Log;
+use App\Models\AdministratorLog;
 
 use Mail;
 use DB;
@@ -247,8 +248,8 @@ class AdminController extends Controller
         $adminName = Auth::user()->name;
         $user = User::find($request->userId);           // find the user
         $user->delete();                                // delete it in the database
-        // create a log entry for the action done
-        Log::create([
+        // create a AdministratorLog entry for the action done
+        AdministratorLog::create([
             'admin_id' => $adminID,
             'admin_name' => $adminName,
             'action' => 'Deleted '.$user->name
@@ -298,13 +299,13 @@ class AdminController extends Controller
         $user->save();                              // save the change to the database
         // create a log entry for the action done
         if($user->is_blocked){
-            Log::create([
+            AdministratorLog::create([
                 'admin_id' => $adminID,
                 'admin_name' => $adminName,
                 'action' => 'Blocked '.$user->name
             ]);
         }else{
-            Log::create([
+            AdministratorLog::create([
                 'admin_id' => $adminID,
                 'admin_name' => $adminName,
                 'action' => 'Unblocked '.$user->name
@@ -376,7 +377,7 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         // create a log entry for the action done
-        Log::create([
+        AdministratorLog::create([
             'admin_id' => $adminID,
             'admin_name' => $adminName,
             'action' => 'Created user account for '.$data['email']
@@ -409,7 +410,7 @@ class AdminController extends Controller
         $user = User::find($request->userId);
         $user->approved = !$user->approved;     // negate the status to approve user
         // create a log entry for the action done
-        Log::create([
+        AdministratorLog::create([
             'admin_id' => $adminID,
             'admin_name' => $adminName,
             'action' => 'Approved '.$user->name
@@ -437,7 +438,7 @@ class AdminController extends Controller
         $user = User::find($request->userId);
         $user->approved = !$user->approved;     // negate the status to approve user
         // create a log entry for the action done
-        Log::create([
+        AdministratorLog::create([
             'admin_id' => $adminID,
             'admin_name' => $adminName,
             'action' => 'Reject '.$user->name
@@ -471,4 +472,11 @@ class AdminController extends Controller
         dd($request);
     }
 
+    public function manageImages(){
+        return view('user.admin._manageImages');
+    }
+
+    public function manageTextContent(){
+        return view('user.admin._manageTextContent');
+    }
 }

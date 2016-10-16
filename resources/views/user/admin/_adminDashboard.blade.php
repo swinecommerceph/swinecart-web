@@ -1,7 +1,5 @@
-{{--
-    Displays Home page of Admin
---}}
-
+{{-- delete later if not used --}}
+{{-- @TODO refactor code for dashboard and add dashboard code here --}}
 @extends('layouts.adminLayout')
 
 @section('title')
@@ -15,94 +13,8 @@
 {{-- @section('breadcrumbTitle')
     Home
 @endsection --}}
-@section('header')
-    Admin Dashboard
-@endsection
 
 @section('content')
-    <div class="row">
-        <a href="#!" id="total-user-summary">
-          <div class="col s6" >
-            <div id="total-card" class="card-panel card-summary hoverable">
-               <div class="center white-text row">
-                  <div class="col s4 label-wrapper">
-                     <div class="left">
-                        <i class="ecommerce-icon">p</i>
-                     </div>
-                     <div class="">
-                        <div class="summary-title">TOTAL USERS</div>
-                     </div>
-                  </div>
-
-                   <div class="center white-text summary-data col s8">
-                     {{$summary[0]}}
-                   </div>
-               </div>
-
-            </div>
-          </div>
-        </a>
-        <a href="#!" id="total-blocked-summary">
-           <div class="col s6" >
-             <div id="blocked-card" class="card-panel card-summary hoverable">
-                <div class="center white-text row">
-                   <div class="col s4 label-wrapper">
-                      <div class="">
-                         <i class="ecommerce-icon">b</i>
-                      </div>
-                      <div class="">
-                         <div class="summary-title">BLOCKED USERS</div>
-                      </div>
-                   </div>
-
-                    <div class="center white-text summary-data col s8">
-                      {{$summary[4]}}
-                    </div>
-                </div>
-             </div>
-           </div>
-        </a>
-        <a href="#!" id="total-pending-summary">
-           <div class="col s6" >
-             <div id="pending-card" class="card-panel card-summary hoverable">
-                <div class="center white-text row">
-                   <div class="col s4 label-wrapper">
-                      <div class="">
-                         <i class="ecommerce-icon">w</i>
-                      </div>
-                      <div class="">
-                         <div class="summary-title">PENDING BREEDERS</div>
-                      </div>
-                   </div>
-
-                   <div class="center white-text summary-data col s8">
-                      {{$summary[3]}}
-                   </div>
-                </div>
-             </div>
-           </div>
-        </a>
-        <a href="#!">
-           <div class="col s6" >
-             <div id="inquiries-card" class="card-panel card-summary hoverable">
-                <div class="center white-text row">
-                   <div class="col s4 label-wrapper">
-                      <div class="left">
-                         <i class="ecommerce-icon">d</i>
-                      </div>
-                      <div class="">
-                         <div class="summary-title">USER INQUIRIES</div>
-                      </div>
-                   </div>
-
-                   <div class="center white-text summary-data col s8">
-                      3
-                   </div>
-                </div>
-             </div>
-           </div>
-        </a>
-    </div>
 
 @endsection
 
@@ -292,3 +204,91 @@
     <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Resolve</a>
   </div>
 </div>
+
+
+{{-- <div class="row">
+<a href="#!" id="total-user-summary">
+  <div class="col s6" >
+    <div id="total-card" class="card-panel card-summary hoverable">
+       <div class="center white-text row">
+          <div class="col s4 label-wrapper">
+             <div class="left">
+                <i class="ecommerce-icon">p</i>
+             </div>
+             <div class="">
+                <div class="summary-title">TOTAL USERS</div>
+             </div>
+          </div>
+
+           <div class="center white-text summary-data col s8">
+             {{$summary[0]}}
+           </div>
+       </div>
+
+    </div>
+  </div>
+</a>
+<a href="#!" id="total-blocked-summary">
+   <div class="col s6" >
+     <div id="blocked-card" class="card-panel card-summary hoverable">
+        <div class="center white-text row">
+           <div class="col s4 label-wrapper">
+              <div class="">
+                 <i class="ecommerce-icon">b</i>
+              </div>
+              <div class="">
+                 <div class="summary-title">BLOCKED USERS</div>
+              </div>
+           </div>
+
+            <div class="center white-text summary-data col s8">
+              {{$summary[4]}}
+            </div>
+        </div>
+     </div>
+   </div>
+</a>
+<a href="#!" id="total-pending-summary">
+   <div class="col s6" >
+     <div id="pending-card" class="card-panel card-summary hoverable">
+        <div class="center white-text row">
+           <div class="col s4 label-wrapper">
+              <div class="">
+                 <i class="ecommerce-icon">w</i>
+              </div>
+              <div class="">
+                 <div class="summary-title">PENDING BREEDERS</div>
+              </div>
+           </div>
+
+           <div class="center white-text summary-data col s8">
+              {{$summary[3]}}
+           </div>
+        </div>
+     </div>
+   </div>
+</a>
+<a href="#!">
+   <div class="col s6" >
+     <div id="inquiries-card" class="card-panel card-summary hoverable">
+        <div class="center white-text row">
+           <div class="col s4 label-wrapper">
+              <div class="left">
+                 <i class="ecommerce-icon">d</i>
+              </div>
+              <div class="">
+                 <div class="summary-title">USER INQUIRIES</div>
+              </div>
+           </div>
+
+           <div class="center white-text summary-data col s8">
+              3
+           </div>
+        </div>
+     </div>
+   </div>
+</a>
+</div>
+
+</div>
+</div> --}}

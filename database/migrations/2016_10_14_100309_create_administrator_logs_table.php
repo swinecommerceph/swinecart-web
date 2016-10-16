@@ -4,7 +4,7 @@ use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateLogsTable extends Migration
+class CreateAdministratorLogsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -13,9 +13,9 @@ class CreateLogsTable extends Migration
      */
     public function up()
     {
-        Schema::create('logs', function (Blueprint $table) {
+        Schema::create('administrator_logs', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('admin_id')->nsigned();
+            $table->integer('admin_id')->unsigned();
             $table->string('admin_name');
             $table->string('action');
             $table->timestamps();
@@ -29,6 +29,6 @@ class CreateLogsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('logs');
+        Schema::drop('administrator_logs');
     }
 }
