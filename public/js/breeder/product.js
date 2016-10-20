@@ -58,7 +58,7 @@ var product = {
             "name": parent_form.find('input[name=name]').val(),
             "type": parent_form.find('#select-type').val(),
             "farm_from_id": parent_form.find('#select-farm').val(),
-            "age": parent_form.find('input[name=age]').val(),
+            "birthdate": parent_form.find('input[name=birthdate]').val(),
             "price": parent_form.find('input[name=price]').val(),
             "adg": parent_form.find('input[name=adg]').val(),
             "fcr": parent_form.find('input[name=fcr]').val(),
@@ -256,15 +256,18 @@ var product = {
                 parent_form.find('input[name=name]').val(data.name);
                 parent_form.find('label[for=name]').addClass('active')
                 parent_form.find('input[name=price]').val(data.price);
-                parent_form.find('label[for=price]').addClass('active')
-                parent_form.find('input[name=quantity]').val(data.quantity);
-                parent_form.find('label[for=quantity]').addClass('active')
+                parent_form.find('label[for=price]').addClass('active');
+                if(data.type === 'Semen'){
+                    parent_form.find('input[name=quantity]').val(data.quantity);
+                    parent_form.find('label[for=quantity]').addClass('active');
+                    parent_form.find('.input-quantity-container').fadeIn(300);
+                }
                 parent_form.find('input[name=age]').val(data.age);
-                parent_form.find('label[for=age]').addClass('active')
+                parent_form.find('label[for=age]').addClass('active');
                 parent_form.find('input[name=adg]').val(data.adg);
-                parent_form.find('label[for=adg]').addClass('active')
+                parent_form.find('label[for=adg]').addClass('active');
                 parent_form.find('input[name=fcr]').val(data.fcr);
-                parent_form.find('label[for=fcr]').addClass('active')
+                parent_form.find('label[for=fcr]').addClass('active');
                 parent_form.find('input[name=backfat_thickness]').val(data.backfat_thickness);
                 parent_form.find('label[for=backfat_thickness]').addClass('active');
 
@@ -574,7 +577,7 @@ var product = {
                             update_button.addClass('hide-product-button');
                             update_button.attr('data-tooltip','Hide '+product_name);
                             update_button.tooltip({delay:50});
-                            update_button.find('.material-icons').html('archive');
+                            update_button.find('.material-icons').html('visibility_off');
                             update_button.parents('.card').find('.card-image img').removeClass('hidden');
                         }
                         else{
@@ -582,7 +585,7 @@ var product = {
                             update_button.addClass('display-product-button');
                             update_button.attr('data-tooltip','Display '+product_name);
                             update_button.tooltip({delay:50});
-                            update_button.find('.material-icons').html('unarchive');
+                            update_button.find('.material-icons').html('visibility');
                             update_button.parents('.card').find('.card-image img').addClass('hidden');
                         }
                     }

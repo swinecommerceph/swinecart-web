@@ -149,25 +149,32 @@ html{
 	max-height: 364px;
 }
 
-/*Modal Edit*/
-#comment {
-	width: 325px;
+/* Rate Breeder modal */
+#comment-container {
+	padding: 0 1.5rem;
 }
 
+#comment-container label{
+	left:1.5rem;
+}
 /*#info-modal {
   max-height: 540px;
 } for future testing*/
 
-#rate {
-	width: 400px;
+#rate-modal {
+	width: 450px;
 }
 
 #confirmation {
 	width: 300px;
 }
 
-.rate-button {
+#rate-button {
 	background-color: #e67764;
+}
+
+#rate-button:hover {
+	background-color: rgba(230, 119, 100, 0.9);
 }
 
 /* Caption styles */

@@ -7,6 +7,12 @@ $(document).ready(function(){
     // Hide certain elements
     $('.input-crossbreed-container, .input-quantity-container').hide();
 
+    // Materialize's Date Picker initialization
+    $('.datepicker').pickadate({
+        selectMonths: true,
+        selectYears: 10
+    });
+
     /* ----------- Manage Products page general functionalities ----------- */
     // Back to top button functionality
     $(window).scroll(function(){
@@ -91,12 +97,20 @@ $(document).ready(function(){
 
                 $('.indicator').css({"right": whole_tab_width - swine_tab_width, "left": "0px"});
             }
-        })
+        });
         product.modal_history.push('#add-product-modal');
     });
 
     // Edit chosen product
     $('.edit-product-button').click(function(){
+        $('#edit-product-modal').openModal({
+            ready: function(){
+                var whole_tab_width = $('#edit-product-modal .tabs').width();
+                var swine_tab_width = $('#edit-product-modal .tab').first().width();
+
+                $('.indicator').css({"right": whole_tab_width - swine_tab_width, "left": "0px"});
+            }
+        });
         product.get_product($(this).attr('data-product-id'));
     });
 

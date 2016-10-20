@@ -29,6 +29,6 @@ class CreateTransactionLogsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('transaction_logs');
+        Schema::dropIfExists('transaction_logs');
     }
 }

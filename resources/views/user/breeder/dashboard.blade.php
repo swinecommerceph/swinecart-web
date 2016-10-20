@@ -49,6 +49,7 @@
                     <div class="card-action teal">
                         <a class="white-text">Boar: {{ $dashboardStats['sold']['boar'] }} </a>
                         <a class="white-text">Sow: {{ $dashboardStats['sold']['sow'] }} </a>
+                        <a class="white-text">Gilt: {{ $dashboardStats['sold']['gilt'] }} </a>
                         <a class="white-text">Semen: {{ $dashboardStats['sold']['semen'] }} </a>
                     </div>
                 </div>
@@ -66,6 +67,7 @@
                     <div class="card-action pink">
                         <a class="white-text">Boar: {{ $dashboardStats['paid']['boar'] }} </a>
                         <a class="white-text">Sow: {{ $dashboardStats['paid']['sow'] }} </a>
+                        <a class="white-text">Gilt: {{ $dashboardStats['paid']['gilt'] }} </a>
                         <a class="white-text">Semen: {{ $dashboardStats['paid']['semen'] }} </a>
                     </div>
                 </div>
@@ -84,6 +86,7 @@
                     <div class="card-action grey">
                         <a class="white-text">Boar: {{ $dashboardStats['on_delivery']['boar'] }} </a>
                         <a class="white-text">Sow: {{ $dashboardStats['on_delivery']['sow'] }} </a>
+                        <a class="white-text">Gilt: {{ $dashboardStats['on_delivery']['gilt'] }} </a>
                         <a class="white-text">Semen: {{ $dashboardStats['on_delivery']['semen'] }} </a>
                     </div>
                 </div>
@@ -101,6 +104,7 @@
                     <div class="card-action yellow darken-1">
                         <a class="white-text">Boar: {{ $dashboardStats['reserved']['boar'] }} </a>
                         <a class="white-text">Sow: {{ $dashboardStats['reserved']['sow'] }} </a>
+                        <a class="white-text">Gilt: {{ $dashboardStats['reserved']['gilt'] }} </a>
                         <a class="white-text">Semen: {{ $dashboardStats['reserved']['semen'] }} </a>
                     </div>
                 </div>
@@ -118,6 +122,7 @@
                     <div class="card-action yellow darken-1">
                         <a class="white-text">Boar: {{ $dashboardStats['hidden']['boar'] }} </a>
                         <a class="white-text">Sow: {{ $dashboardStats['hidden']['sow'] }} </a>
+                        <a class="white-text">Gilt: {{ $dashboardStats['hidden']['gilt'] }} </a>
                         <a class="white-text">Semen: {{ $dashboardStats['hidden']['semen'] }} </a>
                     </div>
                 </div>
@@ -135,6 +140,7 @@
                     <div class="card-action teal">
                         <a class="white-text">Boar: {{ $dashboardStats['displayed']['boar'] }} </a>
                         <a class="white-text">Sow: {{ $dashboardStats['displayed']['sow'] }} </a>
+                        <a class="white-text">Gilt: {{ $dashboardStats['displayed']['gilt'] }} </a>
                         <a class="white-text">Semen: {{ $dashboardStats['displayed']['semen'] }} </a>
                     </div>
                 </div>
@@ -152,6 +158,7 @@
                     <div class="card-action grey">
                         <a class="white-text">Boar: {{ $dashboardStats['requested']['boar'] }} </a>
                         <a class="white-text">Sow: {{ $dashboardStats['requested']['sow'] }} </a>
+                        <a class="white-text">Gilt: {{ $dashboardStats['requested']['gilt'] }} </a>
                         <a class="white-text">Semen: {{ $dashboardStats['requested']['semen'] }} </a>
                     </div>
                 </div>
@@ -163,7 +170,7 @@
             <div class="card">
                 <div class="card-content pink white-text">
                     <span class="card-title">
-                        <a href="{{route('dashboard.productStatus')}}" class="white-text">Ratings</a>
+                        <a href="{{route('dashboard.productStatus')}}" class="white-text">Rating</a>
                     </span>
                     <h3>{{ $dashboardStats['ratings']['overall'] }}/5</h3>
                 </div>
@@ -205,9 +212,9 @@
         </div>
     </div>
 
-    <div class="row">
+    {{-- <div class="row"> --}}
         {{-- Location --}}
-        <div class="col s12">
+        {{-- <div class="col s12">
             <div class="card">
                 <div class="card-content teal darken-4 white-text">
                     <span class="card-title">Sales by Region</span>
@@ -216,7 +223,7 @@
                 </div>
             </div>
         </div>
-    </div>
+    </div> --}}
 @endsection
 
 @section('customScript')

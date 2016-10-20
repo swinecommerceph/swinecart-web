@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\ProductReservation;
 use App\Models\Image;
 use App\Models\Video;
 use Illuminate\Database\Eloquent\Model;
@@ -82,5 +83,13 @@ class Breeder extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    /**
+     * Get all of the product reservations for the Breeder
+     */
+    public function reservations()
+    {
+        return $this->hasManyThrough(ProductReservation::class,Product::class);
     }
 }

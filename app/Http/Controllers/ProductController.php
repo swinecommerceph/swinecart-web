@@ -73,7 +73,7 @@ class ProductController extends Controller
     public function showProducts(Request $request)
     {
         $breeder = $this->user->userable;
-        $products = $breeder->products()->whereIn('status',['hidden','displayed']);
+        $products = $breeder->products()->whereIn('status',['hidden','displayed','requested'])->where('quantity','>',0);
 
         // Check filters
         if($request->type && $request->type != 'all-type') $products = $products->where('type',$request->type);
@@ -143,12 +143,14 @@ class ProductController extends Controller
         $breeder = $this->user->userable;
 
         if($request->ajax()){
+            dd($request->birthdate);
             $product = new Product;
             $productDetail= [];
 
             // Create default primary picture for product
             if($request->type == 'boar') $image = Image::firstOrCreate(['name' => 'boar_default.jpg']);
             else if($request->type == 'sow') $image = Image::firstOrCreate(['name' => 'sow_default.jpg']);
+            else if($request->type == 'gilt') $image = Image::firstOrCreate(['name' => 'gilt_default.jpg']);
             else $image = Image::firstOrCreate(['name' => 'semen_default.jpg']);
 
             $product->farm_from_id = $request->farm_from_id;
@@ -434,15 +436,15 @@ class ProductController extends Controller
         if (!$request->type && !$request->breed){
             if($request->sort && $request->sort != 'none'){
                 $part = explode('-',$request->sort);
-                $products = Product::whereIn('status',['displayed','requested'])->orderBy($part[0], $part[1])->paginate(10);
+                $products = Product::whereIn('status',['displayed','requested'])->where('quantity','>',0)->orderBy($part[0], $part[1])->paginate(10);
             }
-            else $products = Product::whereIn('status',['displayed','requested'])->orderBy('id','desc')->paginate(10);
+            else $products = Product::whereIn('status',['displayed','requested'])->where('quantity','>',0)->orderBy('id','desc')->paginate(10);
         }
         else{
-            if($request->type) $products = Product::whereIn('status',['displayed','requested'])->whereIn('type', explode(' ',$request->type));
+            if($request->type) $products = Product::whereIn('status',['displayed','requested'])->where('quantity','>',0)->whereIn('type', explode(' ',$request->type));
             if($request->breed) {
                 $breedIds = $this->getBreedIds($request->breed);
-                if(!$request->type) $products = Product::whereIn('status',['displayed','requested'])->whereIn('breed_id', $breedIds);
+                if(!$request->type) $products = Product::whereIn('status',['displayed','requested'])->where('quantity','>',0)->whereIn('breed_id', $breedIds);
                 else $products = $products->whereIn('breed_id', $breedIds);
             }
             if($request->sort) {

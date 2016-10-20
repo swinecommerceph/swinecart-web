@@ -35,6 +35,6 @@ class CreateFarmAddressesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('farm_addresses');
+        Schema::dropIfExists('farm_addresses');
     }
 }

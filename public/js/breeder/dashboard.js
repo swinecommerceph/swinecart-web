@@ -1,13 +1,5 @@
 'use strict';
 
-var dashboard = {
-
-    // Functions related to product_status
-    product_status : {
-
-    }
-};
-
 Vue.component('status-table',{
     template: '#status-table-template',
     props: ['products', 'token', 'filterQuery', 'statusFilter'],
@@ -28,31 +20,71 @@ Vue.component('status-table',{
             productReserve:{
                 productName: '',
                 customerId: 0,
-                customerName: ''
+                customerName: '',
+                requestQuantity: 0,
             },
             productInfoModal:{
                 productId: 0,
+                reservationId: 0,
                 productName: '',
                 productIndex: 0,
                 customerName: ''
             }
         };
     },
+    computed: {
+        filteredProducts: function(){
+            var self = this;
+            var sortKey = this.sortKey;
+            var statusFilter = this.statusFilter;
+            var filterQuery = this.filterQuery.toLowerCase();
+            var order = this.sortOrders[sortKey];
+            var products = this.products;
+
+            // Check if desired product status exists
+            if(statusFilter){
+                products = products.filter(function(product){
+                    return product.status === statusFilter;
+                });
+            }
+
+            // Check if there is a search query
+            if(filterQuery){
+                products = products.filter(function(product){
+                    return Object.keys(product).some(function (key) {
+                        return String(product[key]).toLowerCase().indexOf(filterQuery) > -1;
+                    });
+                });
+            }
+
+            // Check if desired sort key exists
+            if(sortKey){
+                products = products.sort(function(a,b){
+                    a = a[sortKey];
+                    b = b[sortKey];
+                    return (a === b ? 0 : a > b ? 1 : -1) * order;
+                });
+            }
+
+            return products;
+        }
+    },
     methods:{
+
         sortBy: function(key){
             this.sortKey = key;
             this.sortOrders[key] = this.sortOrders[key] * -1;
         },
 
-        searchProduct : function(productId){
+        searchProduct : function(uuid){
             // Return index of productId to find
             for(var i = 0; i < this.products.length; i++) {
-                if(this.products[i].id === productId) return i;
+                if(this.products[i].uuid === uuid) return i;
             }
         },
 
-        getProductRequests: function(productId){
-            var index = this.searchProduct(productId);
+        getProductRequests: function(uuid){
+            var index = this.searchProduct(uuid);
 
             // Set data values for initializing product-requests-modal
             this.productRequest.productId = this.products[index].id;
@@ -84,11 +116,12 @@ Vue.component('status-table',{
 
         },
 
-        confirmReservation: function(customerId, customerName){
+        confirmReservation: function(customerId, customerName, requestQuantity){
             // Initialize productReserve local data to be
             // used for the confirmation modal
             this.productReserve.customerId = customerId;
             this.productReserve.customerName = customerName;
+            this.productReserve.requestQuantity = requestQuantity;
             $('#reserve-product-confirmation-modal').openModal();
         },
 
@@ -100,6 +133,7 @@ Vue.component('status-table',{
                     _token: this.token,
                     product_id: this.productRequest.productId,
                     customer_id: this.productReserve.customerId,
+                    request_quantity: this.productReserve.requestQuantity,
                     status: 'reserved'
                 }
             ).then(
@@ -115,6 +149,7 @@ Vue.component('status-table',{
                     if(responseBody[0] === "success"){
                         this.products[index].status = "reserved";
                         this.products[index].customer_name = this.productReserve.customerName;
+                        this.products[index].quantity = this.products[index].quantity - this.productReserve.requestQuantity;
                     }
 
                     // Initialize/Update some DOM elements
@@ -130,12 +165,13 @@ Vue.component('status-table',{
             );
         },
 
-        setUpConfirmation: function(productId, status){
-            var index = this.searchProduct(productId);
+        setUpConfirmation: function(uuid, status){
+            var index = this.searchProduct(uuid);
 
             // Initialize productDeliver local data to be
             // used for the confirmation modal
             this.productInfoModal.productId = this.products[index].id;
+            this.productInfoModal.reservationId = this.products[index].reservation_id;
             this.productInfoModal.productName = this.products[index].name;
             this.productInfoModal.customerName = this.products[index].customer_name;
             this.productInfoModal.productIndex = index;
@@ -152,6 +188,7 @@ Vue.component('status-table',{
                 {
                     _token: this.token,
                     product_id: this.productInfoModal.productId,
+                    reservation_id: this.productInfoModal.reservationId,
                     status: 'on_delivery'
                 }
             ).then(
@@ -187,6 +224,7 @@ Vue.component('status-table',{
                 {
                     _token: this.token,
                     product_id: this.productInfoModal.productId,
+                    reservation_id: this.productInfoModal.reservationId,
                     status: 'paid'
                 }
             ).then(
@@ -222,6 +260,7 @@ Vue.component('status-table',{
                 {
                     _token: this.token,
                     product_id: this.productInfoModal.productId,
+                    reservation_id: this.productInfoModal.reservationId,
                     status: 'sold'
                 }
             ).then(
@@ -250,30 +289,37 @@ Vue.component('status-table',{
             );
         }
 
+    },
+    filters: {
+        capitalize: function(str){
+            return str[0].toUpperCase() + str.slice(1);
+        }
     }
 });
 
-// Connect Materialize's select to data binding in VueJS
-Vue.directive("select", {
-    "twoWay": true,
-
-    "bind": function () {
-        $(this.el).material_select();
-
+Vue.component('custom-status-select', {
+    template: '\
+        <div> \
+            <select ref="select" :value="value">\
+                <option value="">All</option> \
+                <option value="requested">Requested</option> \
+                <option value="reserved">Reserved</option> \
+                <option value="on_delivery">On Delivery</option> \
+                <option value="paid">Paid</option> \
+                <option value="sold">Sold</option> \
+            </select> \
+            <label>Status</label> \
+        </div> \
+    ',
+    props:['value'],
+    mounted: function(){
+        $('select').material_select();
         var self = this;
-
-        $(this.el).on('change', function() {
-            self.set($(self.el).val());
+        $('select').on('change', function(){
+            self.$emit('status-select',self.$refs.select.value);
         });
-    },
-
-    update: function (newValue, oldValue) {
-        $(this.el).val(newValue);
-    },
-
-    "unbind": function () {
-        $(this.el).material_select('destroy');
     }
+
 });
 
 new Vue({
@@ -281,6 +327,11 @@ new Vue({
     data:{
         searchQuery: '',
         statusFilter: ''
+    },
+    methods:{
+        statusChange: function(value){
+            this.statusFilter = value;
+        }
     },
     created: function(){
         // If parameters are found parse it for the statusFilter data

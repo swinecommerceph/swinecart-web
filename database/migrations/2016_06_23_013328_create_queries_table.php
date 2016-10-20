@@ -29,6 +29,6 @@ class CreateQueriesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('queries');
+        Schema::dropIfExists('queries');
     }
 }

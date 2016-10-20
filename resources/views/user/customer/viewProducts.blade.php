@@ -84,6 +84,13 @@
                                         style="font-weight:500; color:#000;"
                                     @endif>Sow</label><br>
 
+                                    <input type="checkbox" class="filled-in filter-type" id="check-gilt" data-type="gilt" @if(!empty($filters['gilt']))
+                                        {{$filters['gilt']}}
+                                    @endif/>
+                                    <label for="check-gilt" @if(!empty($filters['gilt']))
+                                        style="font-weight:500; color:#000;"
+                                    @endif>Gilt</label><br>
+
                                     <input type="checkbox" class="filled-in filter-type" id="check-semen" data-type="semen" @if(!empty($filters['semen']))
                                         {{$filters['semen']}}
                                     @endif/>

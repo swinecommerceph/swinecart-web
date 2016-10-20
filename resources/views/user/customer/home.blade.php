@@ -78,8 +78,7 @@
                 </li>
 
                 <li>
-                    <a href="{{ route('view.cart') }}" class="left">Go to Cart</a>
-                    <a href="{{ route('view.cart') }}" class="right">Request items</a>
+                    <a href="{{ route('view.cart') }}" class="center-align">Go to Cart</a>
                 </li>
             </ul>
         </li>

@@ -1,5 +1,7 @@
 $(document).ready(function(){
 
+    $('select').material_select();
+    
     // Initialization for number of items in Swine Cart
     swinecart.get_quantity();
 

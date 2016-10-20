@@ -19,12 +19,12 @@
             {{-- Display selected Button. Only show when products are hidden --}}
             @if(!empty($filters['hidden']))
                 <a href="#" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped display-selected-button" data-position="top" data-delay="50" data-tooltip="Display all chosen">
-                    <i class="material-icons">unarchive</i>
+                    <i class="material-icons">visibility</i>
                 </a>
             {{-- Hide selected Button. Only show when products are displayed --}}
-        @elseif(!empty($filters['displayed']))
+            @elseif(!empty($filters['displayed']))
                 <a href="#" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped hide-selected-button" data-position="top" data-delay="50" data-tooltip="Hide all chosen">
-                    <i class="material-icons">archive</i>
+                    <i class="material-icons">visibility_off</i>
                 </a>
             @endif
             {{-- Delete selected Button --}}
@@ -53,6 +53,7 @@
                     <option value="all-status" selected>All</option>
                     <option value="displayed" @if(!empty($filters['displayed'])) {{ $filters['displayed'] }} @endif>Displayed</option>
                     <option value="hidden" @if(!empty($filters['hidden'])) {{ $filters['hidden'] }} @endif>Hidden</option>
+                    <option value="requested" @if(!empty($filters['requested'])) {{ $filters['requested'] }} @endif>Requested</option>    
                 </select>
                 <label>Status</label>
             </div>
@@ -61,6 +62,7 @@
                     <option value="all-type" selected>All</option>
                     <option value="boar" @if(!empty($filters['boar'])) {{ $filters['boar'] }} @endif>Boar</option>
                     <option value="sow" @if(!empty($filters['sow'])) {{ $filters['sow'] }} @endif>Sow</option>
+                    <option value="gilt" @if(!empty($filters['gilt'])) {{ $filters['gilt'] }} @endif>Gilt</option>
                     <option value="semen" @if(!empty($filters['semen'])) {{ $filters['semen'] }} @endif>Semen</option>
                 </select>
                 <label>Show</label>
@@ -109,12 +111,12 @@
                             @if(!empty($filters['hidden']) || $product->status == 'hidden')
                                 {{-- Display Button --}}
                                 <a href="#" class="tooltipped display-product-button" data-position="top" data-delay="50" data-tooltip="Display {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
-                                    <i class="material-icons teal-text" style="font-size:30px">unarchive</i>
+                                    <i class="material-icons teal-text" style="font-size:30px">visibility</i>
                                 </a>
                             @elseif(!empty($filters['displayed']) || $product->status == 'displayed')
                                 {{-- Hide Button --}}
                                 <a href="#" class="tooltipped hide-product-button" data-position="top" data-delay="50" data-tooltip="Hide {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
-                                    <i class="material-icons teal-text" style="font-size:30px">archive</i>
+                                    <i class="material-icons teal-text" style="font-size:30px">visibility_off</i>
                                 </a>
                             @endif
                             {{-- Delete Button --}}

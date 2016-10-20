@@ -3,12 +3,15 @@
 namespace App\Repositories;
 
 use Illuminate\Http\Request;
+use Ramsey\Uuid\Uuid;
 
 use App\Models\Breeder;
 use App\Models\Customer;
 use App\Models\Product;
+use App\Models\ProductReservation;
 use App\Models\Breed;
 use App\Models\SwineCartItem;
+use App\Models\FarmAddress;
 use App\Models\Image;
 
 class DashboardRepository
@@ -31,18 +34,60 @@ class DashboardRepository
      */
     public function forBreeder(Breeder $breeder)
     {
-        $products = $breeder->products()->whereIn('status',['requested','reserved','on_delivery','paid','sold'])->get();
-        foreach ($products as $product) {
-            $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
-            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+        $products = $breeder->products()->where('status','requested')->get();
+        $reservations = $breeder->reservations()->get();
+        $items = [];
 
-            // Attach Customer name if it exists
-            if($product->customer_id){
-                $customer = Customer::find($product->customer_id);
-                $product->customer_name = $customer->users()->first()->name;
-            }
+        // Include all "requested" products
+        foreach ($products as $product) {
+            if($product->quantity == 0) continue;
+            $itemDetail = [];
+            $itemDetail['uuid'] = (string) Uuid::uuid4();
+            $itemDetail['id'] = $product->id;
+            $itemDetail['reservation_id'] = 0;
+            $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $itemDetail['breeder_id'] = $product->breeder_id;
+            $itemDetail['farm_province'] = FarmAddress::find($product->farm_from_id)->province;
+            $itemDetail['name'] = $product->name;
+            $itemDetail['type'] = $product->type;
+            $itemDetail['age'] = $product->age;
+            $itemDetail['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $itemDetail['quantity'] = $product->quantity;
+            $itemDetail['adg'] = $product->adg;
+            $itemDetail['fcr'] = $product->fcr;
+            $itemDetail['bft'] = $product->backfat_thickness;
+            $itemDetail['status'] = $product->status;
+            $itemDetail['customer_id'] = 0;
+            $itemDetail['customer_name'] = '';
+            array_push($items, (object)$itemDetail);
         }
-        return $products;
+
+        // Include "reserved" / "paid" / "on_delivery" / "sold" products
+        foreach ($reservations as $reservation) {
+            $product = Product::find($reservation->product_id);
+            $itemDetail = [];
+            $itemDetail['uuid'] = (string) Uuid::uuid4();
+            $itemDetail['id'] = $product->id;
+            $itemDetail['reservation_id'] = $reservation->id;
+            $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $itemDetail['breeder_id'] = $product->breeder_id;
+            $itemDetail['farm_province'] = FarmAddress::find($product->farm_from_id)->province;
+            $itemDetail['name'] = $product->name;
+            $itemDetail['type'] = $product->type;
+            $itemDetail['age'] = $product->age;
+            $itemDetail['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $itemDetail['quantity'] = $reservation->quantity;
+            $itemDetail['adg'] = $product->adg;
+            $itemDetail['fcr'] = $product->fcr;
+            $itemDetail['bft'] = $product->backfat_thickness;
+            $itemDetail['status'] = $reservation->order_status;
+            $itemDetail['customer_id'] = $reservation->customer_id;
+            $itemDetail['customer_name'] = Customer::find($reservation->customer_id)->users()->first()->name;
+            array_push($items, (object)$itemDetail);
+        }
+
+        // dd($items);
+        return collect($items)->toJson();
     }
 
     /**
@@ -57,17 +102,39 @@ class DashboardRepository
     public function getProductStatus(Breeder $breeder, $status)
     {
         $products = $breeder->products;
-        $overallQuery = $products->where('status',$status);
-        $boarQuery = $products->where('status',$status)->where('type','boar');
-        $sowQuery = $products->where('status',$status)->where('type','sow');
-        $semenQuery = $products->where('status',$status)->where('type','semen');
+        if($status == 'hidden' || $status == 'displayed' || $status == 'requested'){
+            $overallQuery = $products->where('status',$status);
+            $boarQuery = $products->where('status',$status)->where('type','boar');
+            $sowQuery = $products->where('status',$status)->where('type','sow');
+            $giltQuery = $products->where('status',$status)->where('type','gilt');
+            $semenQuery = $products->where('status',$status)->where('type','semen');
 
-        return [
-            'overall' => $overallQuery->count(),
-            'boar' => $boarQuery->count(),
-            'sow' => $sowQuery->count(),
-            'semen' => $semenQuery->count()
+            return [
+                'overall' => $overallQuery->count(),
+                'boar' => $boarQuery->count(),
+                'sow' => $sowQuery->count(),
+                'gilt' => $giltQuery->count(),
+                'semen' => $semenQuery->count()
             ];
+        }
+        else{
+            // dd($products);
+            $overallQuery = $products->where('status',$status);
+            $boarQuery = $products->where('type','boar')->where('quantity', 0);
+            $sowQuery = $products->where('type','sow')->where('quantity', 0);;
+            $giltQuery = $products->where('type','gilt')->where('quantity', 0);;
+            $semenQuery = $products->where('type','semen')->where('quantity', 0);;
+
+            return [
+                'overall' => $overallQuery->count(),
+                'boar' => $boarQuery->count(),
+                'sow' => $sowQuery->count(),
+                'gilt' => $giltQuery->count(),
+                'semen' => $semenQuery->count()
+            ];
+
+        }
+
     }
 
     /**
@@ -130,7 +197,8 @@ class DashboardRepository
                 [
                     'customerId' => $productRequest->customer_id,
                     'customerName' => $name,
-                    'customerProvince' => $province
+                    'customerProvince' => $province,
+                    'requestQuantity' => $productRequest->quantity
                 ]
             );
         }
@@ -148,30 +216,63 @@ class DashboardRepository
     {
         switch ($request->status) {
             case 'reserved':
-                // Check if product is already reserved
-                if(!$product->customer_id){
-                    $product->status = 'reserved';
-                    $product->customer_id = $request->customer_id;
+                // Check if product is not yet reserved
+                if($product->quantity){
+                    $resultingQuantity = $product->quantity - $request->request_quantity;
+                    $requestQuantity = $request->request_quantity;
+
+                    // Check if requested quantity is greater than the available quantity
+                    if($resultingQuantity >= 0) $product->quantity = $resultingQuantity;
+                    else{
+                        $requestQuantity = $product->quantity;
+                        $product->quantity = 0;
+                    }
                     $product->save();
+
+                    $reservation = new ProductReservation;
+                    $reservation->customer_id = $request->customer_id;
+                    $reservation->quantity = $requestQuantity;
+                    $reservation->order_status = 'reserved';
+                    $product->reservations()->save($reservation);
+
+                    // If product type is not semen remove other requests to this product
+                    $productRequests = SwineCartItem::where('product_id', $product->id)->where('if_requested', 1)->where('customer_id', '<>', $request->customer_id);
+                    if($product->type != 'semen'){
+                        $productRequests->delete();
+                        // For further development. Code here must send notification
+                        // to the users that the product has been reserved
+                        // or already not available for purchase
+                        // <code>
+                    }
+                    else{
+                        if($productRequests->count() == 0){
+                            $product->status = 'displayed';
+                            $product->save();
+                        }
+                    }
+
                     return ['success', $product->name.' reserved to '.Customer::find($request->customer_id)->users()->first()->name];
                 }
                 else {
-                    return ['fail', $product->name.' is already reserved to '.Customer::find($product->customer_id)->users()->first()->name];
+                    return ['fail', $product->name.' is already reserved to another customer'];
                 }
 
             case 'on_delivery':
-                $product->status = 'on_delivery';
-                $product->save();
+                $reservation = ProductReservation::find($request->reservation_id);
+                $reservation->order_status = 'on_delivery';
+                $reservation->save();
                 return "OK";
 
             case 'paid':
-                $product->status = 'paid';
-                $product->save();
+                $reservation = ProductReservation::find($request->reservation_id);
+                $reservation->order_status = 'paid';
+                $reservation->save();
                 return "OK";
 
             case 'sold':
-                $product->status = 'sold';
-                $product->save();
+                $reservation = ProductReservation::find($request->reservation_id);
+                $reservation->order_status = 'sold';
+                $reservation->save();
                 return "OK";
 
             default:

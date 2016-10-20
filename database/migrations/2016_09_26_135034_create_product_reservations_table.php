@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateSwineCartItemsTable extends Migration
+class CreateProductReservationsTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,13 +13,14 @@ class CreateSwineCartItemsTable extends Migration
      */
     public function up()
     {
-        Schema::create('swine_cart_items', function (Blueprint $table) {
+        Schema::create('product_reservations', function (Blueprint $table) {
             $table->increments('id');
-            $table->integer('customer_id')->unsigned();
             $table->integer('product_id')->unsigned();
-            $table->integer('quantity');
-            $table->boolean('if_requested')->default('0');
-            $table->boolean('if_rated')->default('0');
+            $table->integer('customer_id')->unsigned();
+            $table->integer('quantity')->nullable();
+            $table->enum('order_status',
+                ['reserved', 'paid', 'on_delivery', 'sold']
+                )->default('reserved');
             $table->mediumText('special_request');
         });
     }
@@ -30,6 +32,6 @@ class CreateSwineCartItemsTable extends Migration
      */
     public function down()
     {
-        Schema::dropIfExists('swine_cart_items');
+        Schema::dropIfExists('product_reservations');
     }
 }

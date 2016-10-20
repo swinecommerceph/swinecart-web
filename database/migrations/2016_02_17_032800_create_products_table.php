@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->integer('primary_img_id')->unsigned();
             $table->string('name');
             $table->string('type');
-            $table->integer('age');
+            $table->date('birthday');
             $table->integer('breed_id');
             $table->float('price')->nullable();
             $table->integer('quantity')->nullable();
@@ -28,9 +28,8 @@ class CreateProductsTable extends Migration
             $table->float('backfat_thickness')->nullable();
             $table->text('other_details')->nullable();
             $table->enum('status',
-                ['hidden', 'displayed', 'requested', 'reserved', 'paid', 'on_delivery', 'sold']
+                ['hidden', 'displayed', 'requested']
                 )->default('hidden');
-            $table->integer('customer_id')->unsigned();
             $table->softDeletes();
         });
     }
