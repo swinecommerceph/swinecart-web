@@ -104,6 +104,8 @@ class ProductController extends Controller
         foreach ($products as $product) {
             $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
             $product->type = ucfirst($product->type);
+            $product->birthdate = date_format(date_create($product->birthdate), 'M j, Y');
+            $product->age = $this->computeAge($product->birthdate);
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
         }
@@ -123,6 +125,8 @@ class ProductController extends Controller
         $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
         $product->type = ucfirst($product->type);
+        $product->birthdate = date_format(date_create($product->birthdate), 'M j, Y');
+        $product->age = $this->computeAge($product->birthdate);
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
         $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
         $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
@@ -143,7 +147,6 @@ class ProductController extends Controller
         $breeder = $this->user->userable;
 
         if($request->ajax()){
-            dd($request->birthdate);
             $product = new Product;
             $productDetail= [];
 
@@ -157,7 +160,7 @@ class ProductController extends Controller
             $product->primary_img_id = $image->id;
             $product->name = $request->name;
             $product->type = $request->type;
-            $product->age = $request->age;
+            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
             $product->price = $request->price;
             $product->quantity = $request->quantity;
@@ -190,7 +193,7 @@ class ProductController extends Controller
             $product->farm_from_id = $request->farm_from_id;
             $product->name = $request->name;
             $product->type = $request->type;
-            $product->age = $request->age;
+            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
             $product->price = $request->price;
             $product->quantity = $request->quantity;
@@ -377,9 +380,9 @@ class ProductController extends Controller
             $product->type = ucfirst($product->type);
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+            $product->birthdate = date_format(date_create($product->birthdate), 'F j, Y');
             $product->imageCollection = $product->images;
             $product->videoCollection = $product->videos;
-
             return $product->toJson();
         }
     }
@@ -468,6 +471,8 @@ class ProductController extends Controller
         foreach ($products as $product) {
             $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
             $product->type = ucfirst($product->type);
+            $product->birthdate = date_format(date_create($product->birthdate), 'M j, Y');
+            $product->age = $this->computeAge($product->birthdate);
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
             $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
@@ -487,6 +492,8 @@ class ProductController extends Controller
         // $product = Product::find($productId);
         $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
+        $product->birthdate = date_format(date_create($product->birthdate), 'M j, Y');
+        $product->age = $this->computeAge($product->birthdate);
         $product->type = ucfirst($product->type);
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
         $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
@@ -666,5 +673,16 @@ class ProductController extends Controller
         return $transformedSyntax;
     }
 
-
+    /**
+     * Compute age (in days) of product with the use of its birthdate
+     *
+     * @param  String   $birthdate
+     * @return Integer
+     */
+    private function computeAge($birthdate)
+    {
+        $rawSeconds = time() - strtotime($birthdate);
+        $age = ((($rawSeconds/60)/60))/24;
+        return floor($age);
+    }
 }

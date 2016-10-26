@@ -19,7 +19,7 @@ class CreateProductsTable extends Migration
             $table->integer('primary_img_id')->unsigned();
             $table->string('name');
             $table->string('type');
-            $table->date('birthday');
+            $table->date('birthdate');
             $table->integer('breed_id');
             $table->float('price')->nullable();
             $table->integer('quantity')->nullable();

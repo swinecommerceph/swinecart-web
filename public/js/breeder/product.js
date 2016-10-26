@@ -143,7 +143,7 @@ var product = {
             "name": parent_form.find('input[name=name]').val(),
             "type": parent_form.find('#edit-select-type').val(),
             "farm_from_id": parent_form.find('#edit-select-farm').val(),
-            "age": parent_form.find('input[name=age]').val(),
+            "birthdate": parent_form.find('input[name=birthdate]').val(),
             "price": parent_form.find('input[name=price]').val(),
             "adg": parent_form.find('input[name=adg]').val(),
             "fcr": parent_form.find('input[name=fcr]').val(),
@@ -175,19 +175,25 @@ var product = {
 
         data_values["other_details"] = other_details;
 
-        // Do AJAX
-        $.ajax({
-            url: parent_form.attr('action'),
-            type: "PUT",
-            cache: false,
-            data: data_values,
-            success: function(data){
-                Materialize.toast('Product updated!', 1500, 'green lighten-1');
-                $('#edit-product-modal').closeModal();
-            },
-            error: function(message){
-                console.log(message['responseText']);
-            }
+        $.when(
+            // Wait for the update on the database
+            // Do AJAX
+            $.ajax({
+                url: parent_form.attr('action'),
+                type: "PUT",
+                cache: false,
+                data: data_values,
+                success: function(data){
+                    Materialize.toast('Product updated!', 1500, 'green lighten-1');
+                    $('#edit-product-modal').closeModal();
+                },
+                error: function(message){
+                    console.log(message['responseText']);
+                }
+            })
+        ).done(function(){
+            // Then get the product summary
+            product.get_summary($('#edit-product').find('input[name="productId"]').val());
         });
     },
 
@@ -262,8 +268,8 @@ var product = {
                     parent_form.find('label[for=quantity]').addClass('active');
                     parent_form.find('.input-quantity-container').fadeIn(300);
                 }
-                parent_form.find('input[name=age]').val(data.age);
-                parent_form.find('label[for=age]').addClass('active');
+                parent_form.find('input[name=birthdate]').val(data.birthdate);
+                parent_form.find('label[for=birthdate]').addClass('active');
                 parent_form.find('input[name=adg]').val(data.adg);
                 parent_form.find('label[for=adg]').addClass('active');
                 parent_form.find('input[name=fcr]').val(data.fcr);
@@ -279,6 +285,10 @@ var product = {
                 // For the breed initialization
                 if(data.breed.includes('x')){
                     var crossbreed = data.breed.split('x');
+
+                    // Check the crossbreed radio
+                    $('#edit-crossbreed').prop('checked',true);
+
                     parent_form.find('input[name=fbreed]').val(crossbreed[0].toString().trim());
                     parent_form.find('label[for=fbreed]').addClass('active');
                     parent_form.find('input[name=mbreed]').val(crossbreed[1].toString().trim());
@@ -287,8 +297,13 @@ var product = {
                     parent_form.find('.input-crossbreed-container').fadeIn(300);
                 }
                 else {
+                    // Check the crossbreed radio
+                    $('#edit-purebreed').prop('checked',true);
+
                     parent_form.find('input[name=breed]').val(data.breed);
                     parent_form.find('label[for=breed]').addClass('active');
+                    parent_form.find('.input-crossbreed-container').hide();
+                    parent_form.find('.input-purebreed-container').fadeIn(300);
                 }
 
                 // Other Details
@@ -387,7 +402,8 @@ var product = {
     get_summary: function(product_id){
         $(product.modal_history_tos()).closeModal();
 
-        // Set-up first modal action buttons
+        // Set-up first modal action buttons depending
+        // on what modal it came from
         if(product.modal_history_tos().includes('add')){
             $('.from-add-process').show();
             $('.from-edit-process').hide();
@@ -442,10 +458,10 @@ var product = {
 
                 // General Info
                 var items = '<li class="collection-item">'+data.type+' - '+data.breed+'</li>'+
-    				'<li class="collection-item">'+data.age+' days old</li>'+
-    				'<li class="collection-item">Average Daily Gain: '+data.adg+'</li>'+
+    				'<li class="collection-item">Born on '+data.birthdate+'</li>'+
+    				'<li class="collection-item">Average Daily Gain: '+data.adg+' g</li>'+
     				'<li class="collection-item">Feed Conversion Ratio: '+data.fcr+'</li>' +
-                    '<li class="collection-item">Backfat Thickness: '+data.backfat_thickness+'</li>';
+                    '<li class="collection-item">Backfat Thickness: '+data.backfat_thickness+' mm</li>';
 
                 var other_details_list = '<p>';
                 var image_list = '';

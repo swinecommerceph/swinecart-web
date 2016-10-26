@@ -89,7 +89,7 @@
                     </div>
                 </li>
                 <li class="collection-item">{{$product->type}} - {{$product->breed}}</li>
-                <li class="collection-item">{{$product->age}} days old at 90kg</li>
+                <li class="collection-item">Born on {{$product->birthdate}} ({{$product->age}} days old)</li>
                 <li class="collection-item">Average Daily Gain: {{$product->adg}} g</li>
                 <li class="collection-item">Feed Conversion Ratio: {{$product->fcr}}</li>
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>

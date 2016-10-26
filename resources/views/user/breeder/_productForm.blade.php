@@ -108,7 +108,7 @@
 				</div>
 
 				<div class="row">
-					{{-- Age --}}
+					{{-- Birthdate --}}
 					<div class="input-field col s6">
 						<input type="date" id="birthdate" name="birthdate" class="datepicker"/>
 						<label for="birthdate">Birth Date</label>
@@ -369,10 +369,12 @@
 				</div>
 
 				<div class="row">
-					{{-- Age --}}
+					{{-- Birhtdate --}}
 					<div class="input-field col s6">
-						{!! Form::text('age', null)!!}
-						{!! Form::label('age', 'Age at 90kg (days)') !!}
+						<input type="date" id="birthdate" name="birthdate" class="datepicker"/>
+						<label for="birthdate">Birth Date</label>
+						{{-- {!! Form::text('birthdate', null)!!}
+						{!! Form::label('birthdate', 'Birthdate') !!} --}}
 					</div>
 
 					{{-- ADG --}}

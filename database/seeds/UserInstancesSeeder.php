@@ -114,7 +114,7 @@ class UserInstancesSeeder extends Seeder
                 $product->primary_img_id = $image->id;
                 $product->name = random_int(1000,3000);
                 $product->type = $randType;
-                $product->birthday = (new DateTime())->format('Y-m-d');
+                $product->birthdate = (new DateTime())->format('Y-m-d');
                 $product->breed_id = App\Models\Breed::firstOrCreate(['name' => $randBreed])->id;
                 $product->price = random_int(35000,100000)/1.0;
                 if($randType == 'semen') $product->quantity = random_int(10,300);

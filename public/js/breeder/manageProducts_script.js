@@ -10,7 +10,8 @@ $(document).ready(function(){
     // Materialize's Date Picker initialization
     $('.datepicker').pickadate({
         selectMonths: true,
-        selectYears: 10
+        selectYears: 10,
+        format: 'mmmm d, yyyy'
     });
 
     /* ----------- Manage Products page general functionalities ----------- */
@@ -92,10 +93,8 @@ $(document).ready(function(){
     $('.add-product-button').click(function(){
         $('#add-product-modal').openModal({
             ready: function(){
-                var whole_tab_width = $('#add-product-modal .tabs').width();
-                var swine_tab_width = $('#add-product-modal .tab').first().width();
-
-                $('.indicator').css({"right": whole_tab_width - swine_tab_width, "left": "0px"});
+                // Programmatically select th 'swine-information' tab
+                $('#add-product-modal ul.tabs').tabs('select_tab', 'swine-information');
             }
         });
         product.modal_history.push('#add-product-modal');
@@ -105,10 +104,8 @@ $(document).ready(function(){
     $('.edit-product-button').click(function(){
         $('#edit-product-modal').openModal({
             ready: function(){
-                var whole_tab_width = $('#edit-product-modal .tabs').width();
-                var swine_tab_width = $('#edit-product-modal .tab').first().width();
-
-                $('.indicator').css({"right": whole_tab_width - swine_tab_width, "left": "0px"});
+                // Programmatically select the 'edit-swine-information' tab
+                $('#edit-product-modal ul.tabs').tabs('select_tab', 'edit-swine-information');
             }
         });
         product.get_product($(this).attr('data-product-id'));
@@ -167,7 +164,7 @@ $(document).ready(function(){
     Dropzone.options.mediaDropzone = {
         paramName: 'media',
         uploadMultiple: true,
-        parallelUploads: 3,
+        parallelUploads: 1,
         maxFiles: 12,
         maxFilesize: 50,
         // addRemoveLinks: true,
@@ -266,7 +263,6 @@ $(document).ready(function(){
         e.preventDefault();
         $(this).addClass('disabled');
         product.edit($('#edit-product'));
-        product.get_summary($('#edit-product').find('input[name="productId"]').val());
         $(this).removeClass('disabled');
     });
 
@@ -295,7 +291,7 @@ $(document).ready(function(){
     Dropzone.options.editMediaDropzone = {
         paramName: 'media',
         uploadMultiple: true,
-        parallelUploads: 3,
+        parallelUploads: 1,
         maxFiles: 12,
         maxFilesize: 50,
         // addRemoveLinks: true,

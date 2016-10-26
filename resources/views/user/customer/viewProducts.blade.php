@@ -46,8 +46,8 @@
             <div class="">
                 <select>
                     <option value="" selected>Relevance</option>
-                    <option value="age-asc" @if(!empty($filters['age-asc'])) {{ $filters['age-asc'] }} @endif > Age: Low to High</option>
-                    <option value="age-desc" @if(!empty($filters['age-desc'])) {{ $filters['age-desc'] }} @endif >Age: High to Low</option>
+                    <option value="birthdate-asc" @if(!empty($filters['birthdate-asc'])) {{ $filters['birthdate-asc'] }} @endif > Age: High to Low</option>
+                    <option value="birthdate-desc" @if(!empty($filters['birthdate-desc'])) {{ $filters['birthdate-desc'] }} @endif >Age: Low to High</option>
                     <option value="backfat_thickness-asc" @if(!empty($filters['backfat_thickness-asc'])) {{ $filters['backfat_thickness-asc'] }} @endif >Backfat Thickness</option>
                     <option value="fcr-asc" @if(!empty($filters['fcr-asc'])) {{ $filters['fcr-asc'] }} @endif >Feed Conversion Ratio</option>
                     <option value="adg-desc" @if(!empty($filters['adg-desc'])) {{ $filters['adg-desc'] }} @endif >Average Daily Gain</option>
@@ -162,7 +162,8 @@
                       <div class="row">
                           <div class="col s9">
                               {{$product->type}} - {{$product->breed}} <br>
-                              {{$product->age}} days old at 90kg
+                              Birthdate: {{$product->birthdate}} <br>
+                              Age: {{$product->age}} days old
                           </div>
                           <div class="col right">
                             {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
@@ -176,16 +177,42 @@
                     </div>
                     <div class="card-reveal">
                         <span class="card-title grey-text text-darken-4">{{$product['name']}}<i class="material-icons right">close</i></span>
-                        <p>
-                            Average Daily Gain: {{ $product->adg }} g<br>
-                            Feed Conversion Ratio: {{ $product->fcr }} <br>
-                            Backfat Thickness: {{ $product->backfat_thickness }} mm<br>
-                        </p>
-                        <p>
-                            Breeder info <br>
-                            Name: {{ $product->breeder }} <br>
-                            Farm Location: {{ $product->farm_province }}
-                        </p>
+                        <br>
+                        <table class="col s9">
+                            <thead> </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="grey-text text-darken-2"> Average Daily Gain (g) </td>
+                                    <td class="right-align"> {{ $product->adg }} </td>
+                                </tr>
+                                <tr>
+                                    <td class="grey-text text-darken-2"> Feed Conversion Ratio </td>
+                                    <td class="right-align"> {{ $product->fcr }} </td>
+                                </tr>
+                                <tr>
+                                    <td class="grey-text text-darken-2"> Backfat Thickness (mm) </td>
+                                    <td class="right-align"> {{ $product->backfat_thickness }} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+
+                        <div class="col s10"> <br> </div>
+
+                        <table class="col s10">
+                            <thead> </thead>
+                            <tbody>
+                                <tr>
+                                    <td class="grey-text text-darken-2"> Breeder Name </td>
+                                    <td> {{ $product->breeder }} </td>
+                                </tr>
+                                <tr>
+                                    <td class="grey-text text-darken-2"> Farm Location </td>
+                                    <td> {{ $product->farm_province }} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                        <div class="col s10"> <br> </div>
+
                         <div class="row">
                             <br>
                             <div class="col">

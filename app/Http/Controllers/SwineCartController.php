@@ -8,6 +8,7 @@ use Illuminate\Support\Collection;
 use App\Http\Requests;
 use App\Models\Customer;
 use App\Models\Breeder;
+use App\Models\FarmAddress;
 use App\Models\Breed;
 use App\Models\Image;
 use App\Models\SwineCartItem;
@@ -219,12 +220,15 @@ class SwineCartController extends Controller
                 $itemDetail['item_id'] = $item->id;
                 $itemDetail['customer_id'] = $customer->id;
                 $itemDetail['breeder_id'] = $product->breeder_id;
+                $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
                 $itemDetail['product_id'] = $item->product_id;
+                $itemDetail['product_province'] = FarmAddress::find($product->farm_from_id)->province;
                 $itemDetail['product_name'] = $product->name;
                 $itemDetail['product_type'] = $product->type;
                 $itemDetail['product_quantity'] = $product->quantity;
                 $itemDetail['product_breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-                $itemDetail['product_age'] = $product->age;
+                $itemDetail['product_birthdate'] = date_format(date_create($product->birthdate), 'M j, Y');
+                $itemDetail['product_age'] = $this->computeAge($product->birthdate);
                 $itemDetail['product_adg'] = $product->adg;
                 $itemDetail['product_fcr'] = $product->fcr;
                 $itemDetail['product_backfat_thickness'] = $product->backfat_thickness;
@@ -233,7 +237,6 @@ class SwineCartController extends Controller
                 $itemDetail['avg_transaction'] = $reviews->avg('rating_transaction');
                 $itemDetail['avg_productQuality'] = $reviews->avg('rating_productQuality');
                 $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
-                $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
                 array_push($products,(object) $itemDetail);
             }
 
@@ -242,13 +245,15 @@ class SwineCartController extends Controller
                 $product = Product::find($item->product_id);
                 $reviews = Breeder::find($product->breeder_id)->reviews()->get();
                 $itemDetail['id'] = $item->id;
+                $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+                $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
                 $itemDetail['product_name'] = $product->name;
                 $itemDetail['product_type'] = $product->type;
                 $itemDetail['product_quantity'] = $product->quantity;
-                $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
-                $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+                $itemDetail['product_province'] = FarmAddress::find($product->farm_from_id)->province;
                 $itemDetail['product_breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-                $itemDetail['product_age'] = $product->age;
+                $itemDetail['product_birthdate'] = date_format(date_create($product->birthdate), 'M j, Y');
+                $itemDetail['product_age'] = $this->computeAge($product->age);
                 $itemDetail['product_adg'] = $product->adg;
                 $itemDetail['product_fcr'] = $product->fcr;
                 $itemDetail['other_details'] = $product->other_details;
@@ -256,7 +261,6 @@ class SwineCartController extends Controller
                 $itemDetail['avg_delivery'] = $reviews->avg('rating_delivery');
                 $itemDetail['avg_transaction'] = $reviews->avg('rating_transaction');
                 $itemDetail['avg_productQuality'] = $reviews->avg('rating_productQuality');
-                $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
                 $dateArray = date_parse($item->created_at->toDateTimeString());
                 $itemDetail['date'] = date('j M Y (D) g:iA', mktime( $dateArray['hour'], $dateArray['minute'], $dateArray['second'], $dateArray['month'], $dateArray['day'], $dateArray['year']) );
                 array_push($history,(object) $itemDetail);
@@ -267,38 +271,6 @@ class SwineCartController extends Controller
             $token = csrf_token();
             return view('user.customer.swineCart', compact('products', 'history', 'token'));
         }
-    }
-
-    /**
-     * Get number of items in the Swine Cart
-     * AJAX
-     *
-     * @param  Request $request
-     * @return Integer
-     */
-    public function getSwineCartQuantity(Request $request)
-    {
-        if($request->ajax()){
-            $customer = $this->user->userable;
-            return $customer->swineCartItems()->where('if_requested',0)->count();
-        }
-    }
-
-    /**
-    * Parse $breed if it contains '+' (ex. landrace+duroc)
-    * to "Landrace x Duroc"
-    *
-    * @param  String   $breed
-    * @return String
-    */
-    private function transformBreedSyntax($breed)
-    {
-       if(str_contains($breed,'+')){
-           $part = explode("+", $breed);
-           $breed = ucfirst($part[0])." x ".ucfirst($part[1]);
-           return $breed;
-       }
-       return ucfirst($breed);
     }
 
     /**
@@ -342,6 +314,51 @@ class SwineCartController extends Controller
 
             return collect($itemDetail)->toJson();
         }
+    }
+
+    /**
+     * Get number of items in the Swine Cart
+     * AJAX
+     *
+     * @param  Request $request
+     * @return Integer
+     */
+    public function getSwineCartQuantity(Request $request)
+    {
+        if($request->ajax()){
+            $customer = $this->user->userable;
+            return $customer->swineCartItems()->where('if_requested',0)->count();
+        }
+    }
+
+    /**
+    * Parse $breed if it contains '+' (ex. landrace+duroc)
+    * to "Landrace x Duroc"
+    *
+    * @param  String   $breed
+    * @return String
+    */
+    private function transformBreedSyntax($breed)
+    {
+       if(str_contains($breed,'+')){
+           $part = explode("+", $breed);
+           $breed = ucfirst($part[0])." x ".ucfirst($part[1]);
+           return $breed;
+       }
+       return ucfirst($breed);
+    }
+
+    /**
+     * Compute age (in days) of product with the use of its birthdate
+     *
+     * @param  String   $birthdate
+     * @return Integer
+     */
+    private function computeAge($birthdate)
+    {
+        $rawSeconds = time() - strtotime($birthdate);
+        $age = ((($rawSeconds/60)/60))/24;
+        return floor($age);
     }
 
 }

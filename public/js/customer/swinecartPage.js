@@ -98,7 +98,50 @@ var StarRating = Vue.extend({
 });
 
 Vue.component('quantity-input',{
-    template: 'quantity-input-template',
+    template: '\
+        <div class="col s12" style="padding:0;"> \
+            <input type="text" \
+                ref="input" \
+                class="center-align" \
+                :value="value" \
+                @input="updateValue($event.target.value)" \
+                @focus="selectAll" \
+                @blur="formatValue" \
+            > \
+        </div> \
+    ',
+    props: {
+        value: {
+            type: Number
+        }
+    },
+    methods: {
+        updateValue: function(value){
+            var resultValue = this.validateQuantity(value);
+            this.$refs.input.value = resultValue;
+            this.$emit('input', resultValue);
+        },
+
+        selectAll: function(event){
+            setTimeout(function () {
+                event.target.select()
+            }, 0);
+        },
+
+        formatValue: function(){
+            this.$refs.input.value = this.validateQuantity(this.value);
+        },
+
+        validateQuantity: function(value){
+            var parsedValue = _.toNumber(value);
+            if(_.isFinite(parsedValue) && parsedValue > 0){
+                // If it is a number check if it is divisible by 2
+                if(parsedValue % 2 !== 0) return parsedValue + 1;
+                else return parsedValue;
+            }
+            else return 2;
+        }
+    }
 
 });
 
@@ -150,8 +193,10 @@ Vue.component('order-details',{
             vm.productInfoModal.imgPath = this.products[index].img_path;
             vm.productInfoModal.name = this.products[index].product_name;
             vm.productInfoModal.breeder = this.products[index].breeder;
+            vm.productInfoModal.province = this.products[index].product_province;
             vm.productInfoModal.type = this.products[index].product_type;
             vm.productInfoModal.breed = this.products[index].product_breed;
+            vm.productInfoModal.birthdate = this.products[index].product_birthdate;
             vm.productInfoModal.age = this.products[index].product_age;
             vm.productInfoModal.adg = this.products[index].product_adg;
             vm.productInfoModal.fcr = this.products[index].product_fcr;
@@ -345,6 +390,10 @@ Vue.component('order-details',{
         setProductRating: function(value){
             // Listener to 'set-product-rating' from 'star-rating' component
             this.breederRate.productQualityValue = value;
+        },
+
+        setRequestedQuantity: function(value){
+            // Listener to 'update-requested-quantity' from 'quantity-input' component
         }
     }
 });
@@ -391,8 +440,10 @@ var vm = new Vue({
             imgPath: '',
             name: '',
             breeder: '',
+            farm_province: '',
             type: '',
             breed: '',
+            birthdate: '',
             age: 0,
             adg: 0,
             fcr: 0,

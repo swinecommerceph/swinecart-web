@@ -313,7 +313,7 @@ Vue.component('custom-status-select', {
     ',
     props:['value'],
     mounted: function(){
-        $('select').material_select();
+        // $('select').material_select();
         var self = this;
         $('select').on('change', function(){
             self.$emit('status-select',self.$refs.select.value);

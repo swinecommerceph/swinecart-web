@@ -152,7 +152,8 @@
                         <div class="row">
                             <div class="col breeder product-farm">
                               {{-- Breeder and farm_province --}}
-                              @{{ productInfoModal.breeder }}
+                              @{{ productInfoModal.breeder }} <br>
+                              @{{ productInfoModal.province }}
                             </div>
                         </div>
                     </li>
@@ -160,8 +161,8 @@
                         <span class="type"> @{{ capitalizedProductType }} </span> -
                         <span class="breed"> @{{ productInfoModal.breed }} </span>
                     </li>
-                    <li class="collection-item product-age">{{--{{$product->age}} days old --}}
-                        <span> @{{ productInfoModal.age }} </span> days old at 90kg
+                    <li class="collection-item product-age">{{--{{$product->birthdate}} and {{$product->age}} --}}
+                        <span> Born on @{{ productInfoModal.birthdate }} (@{{ productInfoModal.age }} days old)</span>
                     </li>
                     <li class="collection-item product-adg">{{--Average Daily Gain: {{$product->adg}} g--}}
                         Average Daily Gain: <span> @{{ productInfoModal.adg }} </span> g
@@ -354,11 +355,7 @@
                                             <i class="reserved material-icons grey-text text-darken-4 tooltipped" data-position="top" data-delay="50" data-tooltip=" Not Reserved">save</i>
                                         </a>
                                     </span>
-                                    <span class="col s6 right-align"
-                                        @input=""
-                                        @focus=""
-                                        @blur=""
-                                    >
+                                    <span class="col s6 right-align">
                                         <a href="#">
                                             <i class="on-delivery material-icons grey-text text-darken-4 tooltipped" data-position="bottom" data-delay="50" data-tooltip=" Not On Delivery">local_shipping</i>
                                         </a>
@@ -409,9 +406,16 @@
                                     </a>
                                 </div>
                                 <div class="col s4 center-align" style="padding:0;">
-                                    <div class="col s12" style="padding:0;">
-                                        <input type="text" class="center-align" v-model="product.request_quantity">
-                                    </div>
+                                    <quantity-input v-model="product.request_quantity"> </quantity-input>
+                                    {{-- <div class="col s12" style="padding:0;">
+                                        <input type="text"
+                                            class="center-align"
+                                            v-model="product.request_quantity"
+                                            @input=""
+                                            @focus=""
+                                            @blur=""
+                                        >
+                                    </div> --}}
                                 </div>
                                 <div class="col s4 center-align">
                                     <a href="#"
@@ -660,6 +664,7 @@
 @section('initScript')
     <script src="/js/vendor/VueJS/vue.js"></script>
     <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
+    <script src="/js/vendor/lodash.min.js"></script>
     <script src="/js/customer/swinecart.js"> </script>
     <script src="/js/customer/customer_custom.js"> </script>
     <script type="text/javascript">
