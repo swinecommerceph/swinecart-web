@@ -498,7 +498,7 @@ blockquote{
 
 /*for admin forms*/
 #notes{
-  width: 640px; /*can be in percentage also.*/
+  width: 640px;
   height: auto;
   margin: 0 auto;
   padding: 10px;
@@ -518,4 +518,9 @@ blockquote{
 }
 .decrease-text-size{
    font-size: 2em;
+}
+
+/*css for admin manage pages*/
+[v-cloak] {
+  display: none;
 }

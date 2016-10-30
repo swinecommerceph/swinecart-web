@@ -1,5 +1,7 @@
 // Admin page custom javascripts
 $(document).ready(function(){
+    var carousel_interval = 5000;
+
 
     // Modal trigger for admin
     $('.modal-trigger').leanModal({
@@ -26,4 +28,12 @@ $(document).ready(function(){
     }).on('mouseleave', ".collapsible-body", function() {
         $(this).css('background-color', 'white');
     });
+
+    $('.carousel.carousel-slider').carousel({
+        full_width: true
+    });
+
+    setInterval(function(){
+     		$('.carousel').carousel('next');
+      }, carousel_interval);
 });

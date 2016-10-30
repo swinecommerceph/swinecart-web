@@ -103,8 +103,8 @@
               </li>
               <li>
                 <div class="collapsible-header"><i class="material-icons">build</i>Manage Pages</div>
-                <div class="collapsible-body center" ><a href="{{route('admin.manage.images')}}" class="black-text" id='pages-home-images'><p>Homepage Images</p></a></div>
-                <div class="collapsible-body center" ><a href="{{route('admin.manage.text')}}" class="black-text" id='pages-home-text'><p>Homepage Text</p></a></div>
+                <div class="collapsible-body center" ><a href="{{route('admin.manage.homepage')}}" class="black-text" id='pages-home-images'><p>Homepage Images</p></a></div>
+                {{-- <div class="collapsible-body center" ><a href="{{route('admin.manage.text')}}" class="black-text" id='pages-home-text'><p>Homepage Text</p></a></div> --}}
               </li>
             </ul>
             </div>
@@ -129,13 +129,14 @@
             </div>
         </div>
     </div>
-   <script src="/js/vendor/jquery.min.js"></script>
+    <script src="/js/vendor/jquery.min.js"></script>
+    <script src="/js/vendor/VueJS/vue.js"></script>
   	<script src="/js/vendor/materialize.min.js"></script>
   	<script src="/js/vendor/dropzone.js"></script>
   	<script src="/js/vendor/VideoJS/video.min.js"></script>
-    <script src="/js/vendor/VueJS/vue.js"></script>
   	<script src="/js/config.js"></script>
-  	<script src="/js/custom.js"></script>
+    <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
+    <script src="/js/custom.js"></script>
    {{-- <script type="text/javascript" src="/js/vendor/datatables.min.js"></script> --}}
    <script src="/js/vendor/DataTables/datatables.js"></script>
    {{-- For user-specific initialization scripts --}}

@@ -134,8 +134,10 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/search', ['as' => 'admin.search', 'uses' => 'AdminController@searchUser']);
         Route::post('home/add', ['as' => 'admin.add.user', 'uses' => 'AdminController@createUser']);
 
-        Route::get('home/manage/images', ['as'=>'admin.manage.images', 'uses' => 'AdminController@manageImages']);
-        Route::get('home/manage/textcontent', ['as'=>'admin.manage.text', 'uses' => 'AdminController@manageTextContent']);
+        Route::get('home/manage/homepage', ['as'=>'admin.manage.homepage', 'uses' => 'AdminController@manageImages']);
+        //Route::get('home/manage/textcontent', ['as'=>'admin.manage.text', 'uses' => 'AdminController@manageTextContent']);
+        Route::get('home/manage/homepage/fetchimages', ['as'=>'admin.manage.fetchimages', 'uses'=>'AdminController@getHomeImages']);
+        Route::post('home/manage/homepage/addimage', ['as'=>'admin.manage.addimage', 'uses'=>'AdminController@addHomeImage']);
     });
 
 });

@@ -20,11 +20,14 @@ use App\Models\Video;
 use App\Models\Breed;
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\HomeImage;
 use App\Models\AdministratorLog;
 
 use Mail;
 use DB;
 use Auth;
+use Input;
+use Storage;
 
 class AdminController extends Controller
 {
@@ -472,11 +475,57 @@ class AdminController extends Controller
         dd($request);
     }
 
+    /**
+     * Displays the manage pages view
+     *
+     * @param none
+     * @return View
+     *
+     */
     public function manageImages(){
         return view('user.admin._manageImages');
     }
 
-    public function manageTextContent(){
-        return view('user.admin._manageTextContent');
-    }
+    /**
+     * Get all home images in the database
+     *
+     * @param none
+     * @return home_images
+     *
+     */
+     public function getHomeImages(){
+        $homeImages = DB::table('home_images')->get();
+        dd($homeImages);
+        return $homeImages;
+     }
+
+     public function addHomeImage(Request $request){
+        //  dd($request);
+        // $temp = tempnam('/images/homeimages/','homeimage');
+        // unlink($temp);
+        //dd([$request->testin,$request->image]);
+        // HomeImage::create([
+        //     'text' => $request->testin,
+        //     'name' => $name
+        // ]);
+        //
+
+        //dd($filename);
+        if (Input::hasFile('image')) {
+            $filename = date('d-m-y-H-i-s',time()).'-'.Input::file('image')->getClientOriginalName();
+            Input::file('image')->move(public_path('/images/homeimages/'), $filename);
+            HomeImage::create([
+                'text' => $request->testin,
+                'name' => $filename
+            ]);
+            return 'OK';
+        } else {
+            return "Input::hasFile('profile_picture') has returned false. Size = "
+                . Input::file('profile_picture')->getClientSize();
+        }
+
+     }
+    // public function manageTextContent(){
+    //     return view('user.admin._manageTextContent');
+    // }
 }

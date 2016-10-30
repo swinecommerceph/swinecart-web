@@ -1,9 +1,10 @@
 <?php
 
+use Illuminate\Support\Facades\Schema;
 use Illuminate\Database\Schema\Blueprint;
 use Illuminate\Database\Migrations\Migration;
 
-class CreateRolesTable extends Migration
+class CreateHomeImagesTable extends Migration
 {
     /**
      * Run the migrations.
@@ -12,11 +13,11 @@ class CreateRolesTable extends Migration
      */
     public function up()
     {
-        Schema::create('roles', function (Blueprint $table) {
+        Schema::create('home_images', function (Blueprint $table) {
             $table->increments('id');
-            // return unique and find code that prevents adding unique value to role
-            $table->string('title')->unique();
-            // $table->string('title');
+            $table->string('name');
+            $table->text('text')->nullable();
+            $table->timestamps();
         });
     }
 
@@ -27,6 +28,6 @@ class CreateRolesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('roles');
+        Schema::dropIfExists('home_images');
     }
 }

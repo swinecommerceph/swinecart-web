@@ -1,47 +1,6 @@
-{{-- <form class="col s12">
-  <div class="input-field col s12">
-    <select>
-      <option value="" disabled selected>Choose slide to edit</option>
-      <option value="1">Slide 1</option>
-      <option value="2">Slide 2</option>
-      <option value="3">Slide 3</option>
-    </select>
-    <label>Carousel Slide</label>
-  </div>
-
-  <div class="row">
-    <form class="col s12">
-      <div class="row">
-        <div class="input-field col s6">
-          <input id="input_text" type="text">
-          <label for="input_text">Title</label>
-        </div>
-      </div>
-      <div class="row">
-        <div class="input-field col s12">
-          <textarea id="textarea1" class="materialize-textarea" length="120"></textarea>
-          <label for="textarea1">Content</label>
-        </div>
-      </div>
-    </form>
-  </div>
-
-  <div class="file-field input-field">
-    <div class="btn">
-      <span>File</span>
-      <input type="file">
-    </div>
-    <div class="file-path-wrapper">
-      <input class="file-path validate" type="image">
-    </div>
-  </div>
-</form> --}}
-
-
 {{--
     Displays Home page of Admin
 --}}
-
 @extends('layouts.adminLayout')
 
 @section('title')
@@ -59,11 +18,11 @@
 @section('content')
     <div class="row">
       <div class="col s12">
-          <h5>Replace Image</h5>
+          <h5>Edit Images and Text</h5>
       </div>
 
       <div class="col s12">
-          <form>
+          {{-- <form>
               <div class="col s12">
               <label>Preview</label>
               </div>
@@ -155,9 +114,64 @@
                   </div>
               </div>
 
-          </form>
+          </form> --}}
+
+          <div id="slider-button-div">
+            <a class="waves-effect waves-teal btn-flat modal-trigger" href="#edit-page-modal">Edit</a>
+         </div>
+          {{-- Slider --}}
+          <div class="slider home-slider">
+
+              <ul class="slides">
+                <li>
+                  <img src="/images/demo/HP1.jpg">
+                  <div class="caption center-align">
+                    <h3>Efficiency</h3>
+                    <h5 class="light grey-text text-lighten-3">Through the internet, the
+      system aims for faster and
+      hassle-free transaction between
+      consumers and retailers.</h5>
+                  </div>
+                </li>
+                <li>
+                  <img src="/images/demo/HP2.jpg">
+                  <div class="caption left-align">
+                    <h3>Security</h3>
+                    <h5 class="light grey-text text-lighten-3">security and legitimacy of
+      both customers and
+      breeders is ensured
+      through establishing a set
+      of criteria/qualifications.</h5>
+                  </div>
+                </li>
+                <li>
+                  <img src="/images/demo/HP3.jpg">
+                  <div class="caption right-align">
+                    <h3>Variety</h3>
+                    <h5 class="light grey-text text-lighten-3">security and legitimacy of both customers and
+      breeders is ensured through establishing a set
+      of criteria/qualifications.</h5>
+                  </div>
+                </li>
+                <li>
+                  <img src="/images/demo/HP4.jpg">
+                  <div class="caption center-align">
+                    <h3>Swine Security</h3>
+                    <h5 class="light grey-text text-lighten-3">security and legitimacy of both customers and
+      breeders is ensured through establishing a set
+      of criteria/qualifications.</h5>
+                  </div>
+                </li>
+              </ul>
+          </div>
+
       </div>
 
+    </div>
+
+    <div id="boo" v-cloak>
+        <input type="text" v-model="message">
+        <span>@{{ message }}</span>
     </div>
 
 @endsection
@@ -223,10 +237,32 @@
   </div>
 </div>
 
+{{-- Modal for manage pages --}}
+<div id="edit-page-modal" class="modal modal-fixed-footer">
+   <div class="modal-content">
+     <h4>Modal Header</h4>
+     {!!Form::open(['route'=>'admin.manage.addimage', 'method'=>'POST', 'class'=>'testaddimage' , 'files'=>true])!!}
+        <div class="col s12">
+             <input type="file" name="image" />
+        </div>
+        <div class="input-field col s12">
+          <textarea id="textarea1" class="materialize-textarea" length="120" name='testin'></textarea>
+          <label for="textarea1">Textarea</label>
+        </div>
+        <button id = "add-image-submit" class="btn waves-effect waves-light" type="submit"Add
+          <i class="material-icons right">send</i>
+        </button>
+     {!!Form::close()!!}
+   </div>
+   <div class="modal-footer">
+     <a id="testbutton" href="{{route('admin.manage.fetchimages')}}" class="modal-action modal-close waves-effect waves-green btn-flat ">TEST-SHOW</a>
+     {{-- <a id="testbutton2" href="{{route('admin.manage.addimage')}}" class="modal-action modal-close waves-effect waves-green btn-flat ">TEST-ADD</a> --}}
+   </div>
+ </div>
 
 
 @section('initScript')
-    <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
+    {{-- <script type="text/javascript" src="/js/admin/admin_custom.js"></script> --}}
     <script type="text/javascript" src="/js/admin/users.js"></script>
     <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
     <script type="text/javascript" src="/js/admin/pages.js"></script>
