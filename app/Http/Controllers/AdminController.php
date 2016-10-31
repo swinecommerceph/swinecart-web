@@ -476,53 +476,71 @@ class AdminController extends Controller
     }
 
     /**
-     * Displays the manage pages view
+     * Check if media is Image depending on extension
      *
-     * @param none
-     * @return View
-     *
+     * @param  String   $extension
+     * @return Boolean
      */
-    public function manageImages(){
-        return view('user.admin._manageImages');
+    private function isImage($extension)
+    {
+        return ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') ? true : false;
     }
 
     /**
-     * Get all home images in the database
+     * Displays the manage pages view
      *
      * @param none
-     * @return home_images
+     * @return View and All content homepage images and texts
      *
      */
-     public function getHomeImages(){
-        $homeImages = DB::table('home_images')->get();
-        dd($homeImages);
-        return $homeImages;
-     }
+    public function manageHomePage(){
+        $homeContent = DB::table('home_images')->get();
+        return view('user.admin._manageImages',compact('homeContent'));
+    }
 
+     /**
+      * Add an image and/or text to he home page slider
+      *
+      * @param form request
+      * @return String
+      * @todo Error detection
+      */
      public function addHomeImage(Request $request){
-        //  dd($request);
-        // $temp = tempnam('/images/homeimages/','homeimage');
-        // unlink($temp);
-        //dd([$request->testin,$request->image]);
-        // HomeImage::create([
-        //     'text' => $request->testin,
-        //     'name' => $name
-        // ]);
-        //
-
-        //dd($filename);
-        if (Input::hasFile('image')) {
+         if (Input::hasFile('image')) {
             $filename = date('d-m-y-H-i-s',time()).'-'.Input::file('image')->getClientOriginalName();
             Input::file('image')->move(public_path('/images/homeimages/'), $filename);
-            HomeImage::create([
-                'text' => $request->testin,
-                'name' => $filename
-            ]);
-            return 'OK';
+            $content = new HomeImage;
+            $content->text = $request->textContent;
+            $content->title = $request->title;
+            $content->name = $filename;
+            $content->path = '/images/homeimages/';
+            $content->save();
+            return $content->path.$content->name;
         } else {
-            return "Input::hasFile('profile_picture') has returned false. Size = "
-                . Input::file('profile_picture')->getClientSize();
+            return "Image Error";
         }
+
+     }
+
+     /**
+      * Delete image and text in the home page
+      *
+      * @param form request
+      * @return String
+      * @todo Error detection
+      */
+     public function deleteHomeImage(Request $request){
+
+     }
+
+     /**
+      * Edit an image and/or text in the home page
+      *
+      * @param form request
+      * @return String
+      * @todo Error detection
+      */
+     public function editHomeImage(Request $request){
 
      }
     // public function manageTextContent(){

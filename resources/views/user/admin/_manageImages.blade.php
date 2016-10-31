@@ -239,26 +239,80 @@
 
 {{-- Modal for manage pages --}}
 <div id="edit-page-modal" class="modal modal-fixed-footer">
+    <div class="modal-content">
+        <h4>Slider Images</h4>
+        <div class="row">
+            @foreach($homeContent as $content)
+                <div class="col s4">
+                    <div class="card medium sticky-action">
+                      <div class="card-image waves-effect waves-block waves-light">
+                        <img class="activator" src= {{$content->path.$content->name}}>
+                      </div>
+                      <div class="card-content">
+                        <span class="card-title activator grey-text text-darken-4">{{$content->title}}<i class="material-icons right">more_vert</i></span>
+                        <p class="truncate">{{$content->text}}</p>
+                      </div>
+                      <div class="card-action">
+                          <a class="right" href="#">Delete</a>
+                          <a class="right" href="#">Edit</a>
+                      </div>
+                      <div class="card-reveal">
+                        <span class="card-title grey-text text-darken-4">{{$content->title}}<i class="material-icons right">close</i></span>
+                        <p>{{$content->text}}</p>
+                      </div>
+                    </div>
+                </div>
+            @endforeach
+
+            {{-- for adding new images and text in the homepage slider --}}
+            <div class="col s4">
+                <div class="card medium">
+                    <div class="col s12 ">
+                        {{-- <div class="row "><i class="material-icons">library add</i></div> --}}
+                        <div class="add-content">
+                            {{-- <a class="waves-effect waves-light btn" href="#add-content-modal">Add Content</a> --}}
+                            <a class="waves-effect waves-light modal-trigger" href="#modal2">Add</a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+
+{{-- Modal to get input data --}}
+<div id="modal2" class="modal">
    <div class="modal-content">
      <h4>Modal Header</h4>
      {!!Form::open(['route'=>'admin.manage.addimage', 'method'=>'POST', 'class'=>'testaddimage' , 'files'=>true])!!}
-        <div class="col s12">
-             <input type="file" name="image" />
+        <div class="row">
+            <div class="col s12">
+                 <input type="file" name="image" />
+            </div>
         </div>
-        <div class="input-field col s12">
-          <textarea id="textarea1" class="materialize-textarea" length="120" name='testin'></textarea>
-          <label for="textarea1">Textarea</label>
+
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="input_title" type="text" length="20" name="title">
+                <label for="input_title">Title</label>
+            </div>
         </div>
-        <button id = "add-image-submit" class="btn waves-effect waves-light" type="submit"Add
+
+        <div class="row">
+            <div class="input-field col s12">
+              <textarea id="input_text" class="materialize-textarea" length="120" name='textContent'></textarea>
+              <label for="input_text">Content text</label>
+            </div>
+        </div>
+        <button id = "add-image-submit" class="btn waves-effect waves-light right" type="submit">Add
           <i class="material-icons right">send</i>
         </button>
      {!!Form::close()!!}
    </div>
-   <div class="modal-footer">
-     <a id="testbutton" href="{{route('admin.manage.fetchimages')}}" class="modal-action modal-close waves-effect waves-green btn-flat ">TEST-SHOW</a>
-     {{-- <a id="testbutton2" href="{{route('admin.manage.addimage')}}" class="modal-action modal-close waves-effect waves-green btn-flat ">TEST-ADD</a> --}}
-   </div>
  </div>
+
+
 
 
 @section('initScript')
