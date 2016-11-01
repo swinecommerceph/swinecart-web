@@ -253,8 +253,8 @@
                         <p class="truncate">{{$content->text}}</p>
                       </div>
                       <div class="card-action">
-                          <a class="right" href="#">Delete</a>
-                          <a class="right" href="#">Edit</a>
+                          <a class="right modal-trigger delete-content-trigger" href="#deleteConfirmation" data= {{$content->id}}>Delete</a>
+                          <a class="right modal-trigger edit-content-trigger" href="#edit-modal" data= {{$content->id}}>Edit</a>
                       </div>
                       <div class="card-reveal">
                         <span class="card-title grey-text text-darken-4">{{$content->title}}<i class="material-icons right">close</i></span>
@@ -271,7 +271,7 @@
                         {{-- <div class="row "><i class="material-icons">library add</i></div> --}}
                         <div class="add-content">
                             {{-- <a class="waves-effect waves-light btn" href="#add-content-modal">Add Content</a> --}}
-                            <a class="waves-effect waves-light modal-trigger" href="#modal2">Add</a>
+                            <a class="waves-effect waves-light modal-trigger" href="#getInputModal">Add</a>
                         </div>
                     </div>
                 </div>
@@ -282,10 +282,10 @@
 </div>
 
 {{-- Modal to get input data --}}
-<div id="modal2" class="modal">
+<div id="getInputModal" class="modal">
    <div class="modal-content">
-     <h4>Modal Header</h4>
-     {!!Form::open(['route'=>'admin.manage.addimage', 'method'=>'POST', 'class'=>'testaddimage' , 'files'=>true])!!}
+     <h4>Add Content</h4>
+     {!!Form::open(['route'=>'admin.manage.addcontent', 'method'=>'POST', 'class'=>'addcontentform' , 'files'=>true])!!}
         <div class="row">
             <div class="col s12">
                  <input type="file" name="image" />
@@ -312,6 +312,55 @@
    </div>
  </div>
 
+
+{{-- Modal for edit edit image and content --}}
+<div id="edit-modal" class="modal">
+   <div class="modal-content">
+     <h4>Edit Content</h4>
+     {!!Form::open(['route'=>'admin.manage.editcontent', 'method'=>'PUT', 'class'=>'editcontentform' , 'files'=>true])!!}
+        <input id="edit-content-id" name="content_id" type="hidden" value="">
+        <div class="row">
+            <div class="col s12">
+                 <input type="file" name="image" />
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+                <input id="input_title" type="text" length="20" name="title">
+                <label for="input_title">Title</label>
+            </div>
+        </div>
+
+        <div class="row">
+            <div class="input-field col s12">
+              <textarea id="input_text" class="materialize-textarea" length="120" name='textContent'></textarea>
+              <label for="input_text">Content text</label>
+            </div>
+        </div>
+        <button id = "add-image-submit" class="btn waves-effect waves-light right" type="submit">Add
+          <i class="material-icons right">send</i>
+        </button>
+     {!!Form::close()!!}
+   </div>
+ </div>
+
+{{-- Confirmation modal for delete --}}
+    <div id="deleteConfirmation" class="modal">
+        <div class="modal-content">
+            <h4>Delete</h4>
+            <div class="divider"></div>
+            <p>Are you sure you want to permanently delete homepage content? </p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            {!!Form::open(['route'=>'admin.manage.deletecontent', 'method'=>'DELETE', 'id'=>'delete-content-form'] )!!}
+            {{-- <input id="delete-content-token" name="_token" type="hidden" value=""> --}}
+            <input id="delete-content-id" name="content_id" type="hidden" value="">
+            <button class=" modal-action modal-close waves-effect waves-green btn-flat" type="submit">Yes</button>
+            {!!Form::close()!!}
+        </div>
+    </div>
 
 
 

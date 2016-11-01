@@ -28,6 +28,7 @@ use DB;
 use Auth;
 use Input;
 use Storage;
+use File;
 
 class AdminController extends Controller
 {
@@ -519,7 +520,6 @@ class AdminController extends Controller
         } else {
             return "Image Error";
         }
-
      }
 
      /**
@@ -529,8 +529,13 @@ class AdminController extends Controller
       * @return String
       * @todo Error detection
       */
-     public function deleteHomeImage(Request $request){
-
+     public function deleteContent(Request $request){
+         $content = HomeImage::find($request->content_id);
+         //File::delete($content->path.$content->name);
+         unlink(public_path($content->path.$content->name));
+         //dd($content->path.$content->name);
+         $content->delete();
+         return "OK";
      }
 
      /**
@@ -540,8 +545,25 @@ class AdminController extends Controller
       * @return String
       * @todo Error detection
       */
-     public function editHomeImage(Request $request){
+     public function editContent(Request $request){
+         $content = HomeImage::find($request->content_id);
+         if (Input::hasFile('image')) {
+            unlink(public_path($content->path.$content->name));
+            $filename = date('d-m-y-H-i-s',time()).'-'.Input::file('image')->getClientOriginalName();
+            Input::file('image')->move(public_path('/images/homeimages/'), $filename);
+            $content->name = $filename;
+            $content->path = '/images/homeimages/';
+        }
 
+        if(!empty($request->title)){
+            $content->title = $request->title;
+        }
+
+        if(!empty($request->textContent)){
+            $content->text = $request->textContent;
+        }
+        $content->save();
+        return $content->path.$content->name;
      }
     // public function manageTextContent(){
     //     return view('user.admin._manageTextContent');

@@ -18,5 +18,5 @@ class HomeImage extends Model
      *
      * @var array
      */
-    protected $fillable = ['name', 'text'];
+    protected $fillable = ['name', 'text', 'title', 'path'];
 }
