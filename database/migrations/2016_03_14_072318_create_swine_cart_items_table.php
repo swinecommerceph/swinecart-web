@@ -16,9 +16,11 @@ class CreateSwineCartItemsTable extends Migration
             $table->increments('id');
             $table->integer('customer_id')->unsigned();
             $table->integer('product_id')->unsigned();
+            $table->integer('reservation_id')->unsigned()->default('0');
             $table->integer('quantity');
             $table->boolean('if_requested')->default('0');
             $table->boolean('if_rated')->default('0');
+            $table->date('date_needed');
             $table->mediumText('special_request');
         });
     }

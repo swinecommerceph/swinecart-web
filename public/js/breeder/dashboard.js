@@ -5,7 +5,6 @@ Vue.component('status-table',{
     props: ['products', 'token', 'filterQuery', 'statusFilter'],
     data: function(){
         return {
-            searchKey: '',
             sortKey: '',
             sortOrders:{
                 name: 1,
@@ -15,12 +14,15 @@ Vue.component('status-table',{
                 productId: 0,
                 productName: '',
                 productIndex: 0,
+                type: '',
+                breed: '',
                 customers: []
             },
             productReserve:{
                 productName: '',
                 customerId: 0,
                 customerName: '',
+                swineCartId: 0,
                 requestQuantity: 0,
             },
             productInfoModal:{
@@ -29,6 +31,14 @@ Vue.component('status-table',{
                 productName: '',
                 productIndex: 0,
                 customerName: ''
+            },
+            reservationDetails:{
+                productName: '',
+                customerName: '',
+                type: '',
+                breed: '',
+                dateNeeded: '',
+                specialRequest: ''
             }
         };
     },
@@ -83,13 +93,17 @@ Vue.component('status-table',{
             }
         },
 
-        getProductRequests: function(uuid){
+        getProductRequests: function(uuid, event){
             var index = this.searchProduct(uuid);
 
             // Set data values for initializing product-requests-modal
             this.productRequest.productId = this.products[index].id;
             this.productRequest.productName = this.products[index].name;
             this.productRequest.productIndex = index;
+            this.productRequest.type = this.products[index].type;
+            this.productRequest.breed = this.products[index].breed;
+
+            $(event.target).parent().tooltip('remove');
 
             // Do AJAX
             this.$http.get(
@@ -101,7 +115,7 @@ Vue.component('status-table',{
                 function(response){
 
                     // Store fetched data in local component data
-                    this.productRequest.customers = response.json();
+                    this.productRequest.customers = response.body;
                     $('#product-requests-modal').openModal();
 
                     this.$nextTick(function(){
@@ -116,12 +130,17 @@ Vue.component('status-table',{
 
         },
 
-        confirmReservation: function(customerId, customerName, requestQuantity){
+        confirmReservation: function(index){
+            var requestDetails = this.productRequest.customers[index];
+
             // Initialize productReserve local data to be
             // used for the confirmation modal
-            this.productReserve.customerId = customerId;
-            this.productReserve.customerName = customerName;
-            this.productReserve.requestQuantity = requestQuantity;
+            this.productReserve.customerId = requestDetails.customerId;
+            this.productReserve.customerName = requestDetails.customerName;
+            this.productReserve.swineCartId = requestDetails.swineCartId;
+            this.productReserve.requestQuantity = requestDetails.requestQuantity;
+            this.productReserve.dateNeeded = requestDetails.dateNeeded;
+            this.productReserve.specialRequest = requestDetails.specialRequest;
             $('#reserve-product-confirmation-modal').openModal();
         },
 
@@ -133,23 +152,55 @@ Vue.component('status-table',{
                     _token: this.token,
                     product_id: this.productRequest.productId,
                     customer_id: this.productReserve.customerId,
+                    swinecart_id: this.productReserve.swineCartId,
                     request_quantity: this.productReserve.requestQuantity,
+                    date_needed: this.productReserve.dateNeeded,
+                    special_request: this.productReserve.specialRequest,
                     status: 'reserved'
                 }
             ).then(
                 function(response){
-                    var responseBody = response.json();
+                    var responseBody = response.body;
                     var index = this.productRequest.productIndex;
 
                     $('#reserve-product-confirmation-modal').closeModal();
                     $('#product-requests-modal').closeModal();
 
-                    // Set local data to new data from the response
+                    // Update product data (root data) based on the response
                     // of the AJAX PATCH method
                     if(responseBody[0] === "success"){
-                        this.products[index].status = "reserved";
-                        this.products[index].customer_name = this.productReserve.customerName;
-                        this.products[index].quantity = this.products[index].quantity - this.productReserve.requestQuantity;
+                        if(this.products[index].type !== 'semen'){
+                            var updateDetails = {
+                                'status': 'reserved',
+                                'index': index,
+                                'type': this.products[index].type,
+                                'reservationId': responseBody[2],
+                                'customerId': this.productReserve.customerId,
+                                'customerName': this.productReserve.customerName
+                            };
+
+                            // Update product list on root data
+                            this.$emit('update-product', updateDetails);
+                        }
+                        else{
+                            var updateDetails = {
+                                'status': 'reserved',
+                                'uuid': responseBody[3],
+                                'index': index,
+                                'type': this.products[index].type,
+                                'reservationId': responseBody[2],
+                                'quantity': this.productReserve.requestQuantity,
+                                'customerId': this.productReserve.customerId,
+                                'customerName': this.productReserve.customerName,
+                                'dateNeeded': this.productReserve.dateNeeded,
+                                'specialRequest': this.productReserve.specialRequest,
+                                'removeParentProductDisplay': responseBody[4]
+                            };
+
+                            // Update product list on root data
+                            this.$emit('update-product', updateDetails);
+                        }
+
                     }
 
                     // Initialize/Update some DOM elements
@@ -200,9 +251,14 @@ Vue.component('status-table',{
 
                     $('#product-delivery-confirmation-modal').closeModal();
 
-                    // Set status of the product to 'on_delivery'
+                    // Set status of the product (root data) to 'on_delivery'
                     // after successful product status change
-                    this.products[index].status = "on_delivery";
+                    this.$emit('update-product',
+                        {
+                            'status': 'on_delivery',
+                            'index': index
+                        }
+                    );
 
                     // Initialize/Update some DOM elements
                     this.$nextTick(function(){
@@ -236,9 +292,14 @@ Vue.component('status-table',{
 
                     $('#paid-product-confirmation-modal').closeModal();
 
-                    // Set status of the product to 'paid' after
+                    // Set status of the product (root data) to 'paid' after
                     // successful product status change
-                    this.products[index].status = "paid";
+                    this.$emit('update-product',
+                        {
+                            'status': 'paid',
+                            'index': index
+                        }
+                    );
 
                     // Initialize/Update some DOM elements
                     this.$nextTick(function(){
@@ -272,9 +333,14 @@ Vue.component('status-table',{
 
                     $('#sold-product-confirmation-modal').closeModal();
 
-                    // Set status of the product to 'sold' after
+                    // Set status of the product (root data) to 'sold' after
                     // successful product status change
-                    this.products[index].status = "sold";
+                    this.$emit('update-product',
+                        {
+                            'status': 'sold',
+                            'index': index
+                        }
+                    );
 
                     // Initialize/Update some DOM elements
                     this.$nextTick(function(){
@@ -287,12 +353,26 @@ Vue.component('status-table',{
                     console.log(response.statusText);
                 }
             );
+        },
+
+        showReservationDetails: function(uuid){
+            var index = this.searchProduct(uuid);
+
+            this.reservationDetails.productName = this.products[index].name;
+            this.reservationDetails.customerName = this.products[index].customer_name;
+            this.reservationDetails.type = this.products[index].type;
+            this.reservationDetails.breed = this.products[index].breed;
+            this.reservationDetails.dateNeeded = this.products[index].date_needed;
+            this.reservationDetails.specialRequest = this.products[index].special_request;
+
+            $('#product-reservation-details-modal').openModal();
         }
 
     },
     filters: {
         capitalize: function(str){
-            return str[0].toUpperCase() + str.slice(1);
+            if (str) return str[0].toUpperCase() + str.slice(1);
+            else return '';
         }
     }
 });
@@ -322,15 +402,89 @@ Vue.component('custom-status-select', {
 
 });
 
-new Vue({
+var vm = new Vue({
     el: '#product-status-container',
     data:{
         searchQuery: '',
-        statusFilter: ''
+        statusFilter: '',
+        products: rawProducts,
     },
     methods:{
         statusChange: function(value){
             this.statusFilter = value;
+        },
+
+        // Update local product data depending on the status
+        updateProduct: function(updateDetails){
+            // Listener to 'update-product' on status-table component
+
+            switch (updateDetails.status) {
+                case 'reserved':
+                    var index = updateDetails.index;
+
+                    // Just update the product if it is not of type 'semen'
+                    if(updateDetails.type !== 'semen'){
+                        this.products[index].status = 'reserved';
+                        this.products[index].quantity = 0;
+                        this.products[index].reservation_id = updateDetails.reservationId;
+                        this.products[index].customer_id = updateDetails.customerId;
+                        this.products[index].customer_name = updateDetails.customerName;
+                    }
+
+                    // Add another entry to the product list if of type 'semen'
+                    else{
+                        var baseProduct = this.products[index];
+
+                        this.products.push(
+                            {
+                                'uuid': updateDetails.uuid,
+                                'id': baseProduct.id,
+                                'reservation_id': updateDetails.reservationId,
+                                'img_path': baseProduct.img_path,
+                                'breeder_id': baseProduct.breeder_id,
+                                'farm_province': baseProduct.farm_province,
+                                'name': baseProduct.name,
+                                'type': baseProduct.type,
+                                'age': baseProduct.age,
+                                'breed': baseProduct.breed,
+                                'img_path': baseProduct.img_path,
+                                'quantity': updateDetails.quantity,
+                                'adg': baseProduct.adg,
+                                'fcr': baseProduct.fcr,
+                                'bft': baseProduct.bft,
+                                'status': 'reserved',
+                                'customer_id': updateDetails.customerId,
+                                'customer_name': updateDetails.customerName,
+                                'date_needed': updateDetails.dateNeeded,
+                                'special_request': updateDetails.specialRequest
+                            }
+                        );
+
+                        // If after reservation, the product has been put to status 'displayed'
+                        // due to zero customers requesting it the parent product
+                        // display should be removed in the UI component
+                        if(updateDetails.removeParentProductDisplay) this.products.splice(index,1);
+                    }
+
+                    break;
+
+                case 'on_delivery':
+                    var index = updateDetails.index;
+                    this.products[index].status = 'on_delivery';
+                    break;
+
+                case 'paid':
+                    var index = updateDetails.index;
+                    this.products[index].status = 'paid';
+                    break;
+
+                case 'sold':
+                    var index = updateDetails.index;
+                    this.products[index].status = 'sold';
+                    break;
+
+                default: break;
+            }
         }
     },
     created: function(){

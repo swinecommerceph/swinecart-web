@@ -43,7 +43,13 @@
                 </div>
             </form>
         </div>
-        <status-table :products="{{ $products }}" :token="'{{ $token }}'" :filter-query="searchQuery" :status-filter="statusFilter"> </status-table>
+        <status-table :token="'{{ $token }}'"
+            :products="products"
+            :filter-query="searchQuery"
+            :status-filter="statusFilter"
+            @update-product="updateProduct"
+        >
+        </status-table>
     </div>
 
     {{-- Template for the <status-table> component --}}
@@ -66,7 +72,7 @@
                                 <i class="material-icons right" v-else>keyboard_arrow_down</i>
                             </span>
                         </th>
-                        <th> Action </th>
+                        <th> Actions </th>
                     </tr>
                 </thead>
                 <tbody>
@@ -74,15 +80,26 @@
                         <td>
                             <div class="row">
                                 <div class="col s3 center-align">
-                                    <a href="#">
+                                    <a href="#!">
                                         <img v-bind:src="product.img_path" width="75" height="75" class="circle"/>
                                     </a>
                                 </div>
-                                <div class="col s9 valign-wrapper">
+                                <div class="col s4 valign-wrapper">
                                     @{{ product.name }}<br>
                                     @{{ product.type | capitalize }} - @{{ product.breed }} <br>
-                                    <template v-if="product.type == 'semen'">
-                                        @{{ product.quantity }}
+                                    <template v-if="product.reservation_id && product.type === 'semen'">
+                                        Quantity: @{{ product.quantity }}
+                                    </template>
+                                </div>
+                                <div class="col s5">
+                                    <template v-if="product.customer_name">
+                                        @{{ product.customer_name }} <br>
+                                        <a href="#"
+                                            class="anchor-title teal-text"
+                                            @click.prevent="showReservationDetails(product.uuid)"
+                                        >
+                                            RESERVATION DETAILS
+                                        </a>
                                     </template>
                                 </div>
                             </div>
@@ -92,12 +109,12 @@
                         </td>
                         <td>
                             {{--  If product's status is requested --}}
-                            <a class=""
+                            <a class="tooltipped"
                                 href="#"
                                 data-position="top"
                                 data-delay="50"
-                                data-tooltip="See requests"
-                                @click.prevent="getProductRequests(product.uuid)"
+                                data-tooltip="See product requests"
+                                @click.prevent="getProductRequests(product.uuid, $event)"
                                 v-if="product.status == 'requested'"
                             >
                                 <i class="material-icons teal-text">face</i>
@@ -182,25 +199,64 @@
             <div id="product-requests-modal" class="modal modal-fixed-footer">
                 <div class="modal-content">
                     <h4>@{{ productRequest.productName }} Product Requests</h4>
-                    <ul class="collection">
-                        <li class="collection-item" v-for="customer in productRequest.customers">
-                            [ @{{ customer.requestQuantity }} ] @{{ customer.customerName }} from @{{ customer.customerProvince }}
-                            <a href="#!"
-                                class="secondary-content tooltipped"
-                                data-position="top"
-                                data-delay="50"
-                                :data-tooltip="'Reserve product to ' + customer.customerName"
-                                @click.prevent="confirmReservation(customer.customerId, customer.customerName, customer.requestQuantity)"
-                            >
-                                <i class="material-icons">add_to_photos</i>
-                            </a>
-                            <a href="#!"
-                                class="secondary-content tooltipped"
-                                data-position="top"
-                                data-delay="50"
-                                data-tooltip="'Send message to ' + customer.customerName"><i class="material-icons">message</i></a>
-                        </li>
-                    </ul>
+                    <p>
+                        @{{ productRequest.type | capitalize }} - @{{ productRequest.breed }}
+                    </p>
+                    <table class="responsive-table bordered highlight">
+                        <thead>
+                            <tr>
+                                <th> Name </th>
+                                <th> Province </th>
+                                <th> Special Request </th>
+                                <th class="right-align"> Quantity </th>
+                                <th class="right-align" v-show="productRequest.type === 'semen'"> Date Needed </th>
+                                <th class="center-align"> Actions </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr v-for="(customer, index) in productRequest.customers">
+                                <td>
+                                    {{-- <a href="#!"
+                                        class="tooltipped"
+                                        data-position="right"
+                                        data-delay="50"
+                                        data-tooltip="<p> This is the address </p><br> <p> This is another detail </p>"
+                                        data-html="true"
+                                    > --}}
+                                        @{{ customer.customerName }}
+                                    {{-- </a> --}}
+                                </td>
+                                <td> @{{ customer.customerProvince }} </td>
+                                <td>
+                                    <p style="max-width:15rem;">
+                                        @{{ customer.specialRequest }}
+                                    </p>
+                                </td>
+                                <td class="right-align"> @{{ customer.requestQuantity }} </td>
+                                <td class="right-align" v-show="productRequest.type === 'semen'"> @{{ customer.dateNeeded }} </td>
+                                <td class="row center-align">
+                                    <a href="#!"
+                                        class="tooltipped"
+                                        data-position="top"
+                                        data-delay="50"
+                                        :data-tooltip="'Reserve product to ' + customer.customerName"
+                                        @click.prevent="confirmReservation(index)"
+                                    >
+                                        <i class="material-icons teal-text">add_to_photos</i>
+                                    </a>
+                                    <a href="#!"
+                                        class="tooltipped"
+                                        style="margin-left:0.5rem;"
+                                        data-position="top"
+                                        data-delay="50"
+                                        :data-tooltip="'Send message to ' + customer.customerName"
+                                    >
+                                        <i class="material-icons teal-text">message</i>
+                                    </a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
                 </div>
                 <div class="modal-footer">
                     <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
@@ -262,6 +318,38 @@
                     <a class="modal-action waves-effect waves-green btn-flat" @click.prevent="productOnSold">Yes</a>
                 </div>
             </div>
+
+            {{--  Product Reservation Details modal --}}
+            <div id="product-reservation-details-modal" class="modal">
+                <div class="modal-content">
+                    <h4>@{{ reservationDetails.productName }} Reservation Details</h4>
+                    <p>
+                        @{{ reservationDetails.type | capitalize }} - @{{ reservationDetails.breed }}
+                    </p>
+                    <table>
+                        <thead>
+                            <tr> </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th> Customer Name </th>
+                                <td> @{{ reservationDetails.customerName }} </td>
+                            </tr>
+                            <tr v-show="reservationDetails.type === 'semen'">
+                                <th> Date Needed </th>
+                                <td> @{{ reservationDetails.dateNeeded }} </td>
+                            </tr>
+                            <tr>
+                                <th> Special Request </th>
+                                <td> @{{ reservationDetails.specialRequest }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                </div>
+            </div>
         </div>
     </template>
 @endsection
@@ -269,5 +357,9 @@
 @section('customScript')
     <script src="/js/vendor/VueJS/vue.js"></script>
     <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
+    <script type="text/javascript">
+        // Variables
+        var rawProducts = {!! $products !!};
+    </script>
     <script src="/js/breeder/dashboard.js"></script>
 @endsection

@@ -141,12 +141,12 @@ html{
 
 #cart {
 	overflow: auto;
-	max-height: 364px;
+	max-height: 30rem;
 }
 
 #transaction-cart {
 	overflow: auto;
-	max-height: 364px;
+	max-height: 30rem;
 }
 
 /* Rate Breeder modal */

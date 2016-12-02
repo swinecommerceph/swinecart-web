@@ -7,10 +7,11 @@ $(document).ready(function(){
     // Hide certain elements
     $('.input-crossbreed-container, .input-quantity-container').hide();
 
-    // Materialize's Date Picker initialization
+    // initialization of Materialize's Date Picker
     $('.datepicker').pickadate({
+        max: true,
         selectMonths: true,
-        selectYears: 10,
+        selectYears: 4,
         format: 'mmmm d, yyyy'
     });
 

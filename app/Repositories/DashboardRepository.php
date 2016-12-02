@@ -50,7 +50,7 @@ class DashboardRepository
             $itemDetail['farm_province'] = FarmAddress::find($product->farm_from_id)->province;
             $itemDetail['name'] = $product->name;
             $itemDetail['type'] = $product->type;
-            $itemDetail['age'] = $product->age;
+            $itemDetail['age'] = $this->computeAge($product->birthdate);
             $itemDetail['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $itemDetail['quantity'] = $product->quantity;
             $itemDetail['adg'] = $product->adg;
@@ -59,6 +59,8 @@ class DashboardRepository
             $itemDetail['status'] = $product->status;
             $itemDetail['customer_id'] = 0;
             $itemDetail['customer_name'] = '';
+            $itemDetail['date_needed'] = '';
+            $itemDetail['special_request'] = '';
             array_push($items, (object)$itemDetail);
         }
 
@@ -74,7 +76,7 @@ class DashboardRepository
             $itemDetail['farm_province'] = FarmAddress::find($product->farm_from_id)->province;
             $itemDetail['name'] = $product->name;
             $itemDetail['type'] = $product->type;
-            $itemDetail['age'] = $product->age;
+            $itemDetail['age'] = $this->computeAge($product->birthdate);
             $itemDetail['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $itemDetail['quantity'] = $reservation->quantity;
             $itemDetail['adg'] = $product->adg;
@@ -83,6 +85,8 @@ class DashboardRepository
             $itemDetail['status'] = $reservation->order_status;
             $itemDetail['customer_id'] = $reservation->customer_id;
             $itemDetail['customer_name'] = Customer::find($reservation->customer_id)->users()->first()->name;
+            $itemDetail['date_needed'] = $this->transformDateSyntax($reservation->date_needed);
+            $itemDetail['special_request'] = $reservation->special_request;
             array_push($items, (object)$itemDetail);
         }
 
@@ -101,8 +105,10 @@ class DashboardRepository
      */
     public function getProductStatus(Breeder $breeder, $status)
     {
-        $products = $breeder->products;
+
         if($status == 'hidden' || $status == 'displayed' || $status == 'requested'){
+            $products = $breeder->products;
+
             $overallQuery = $products->where('status',$status);
             $boarQuery = $products->where('status',$status)->where('type','boar');
             $sowQuery = $products->where('status',$status)->where('type','sow');
@@ -118,12 +124,17 @@ class DashboardRepository
             ];
         }
         else{
-            // dd($products);
-            $overallQuery = $products->where('status',$status);
-            $boarQuery = $products->where('type','boar')->where('quantity', 0);
-            $sowQuery = $products->where('type','sow')->where('quantity', 0);;
-            $giltQuery = $products->where('type','gilt')->where('quantity', 0);;
-            $semenQuery = $products->where('type','semen')->where('quantity', 0);;
+            // $reservations = ProductReservation::with('product')->get();
+            $reservations = $breeder->reservations()->with('product')->get();
+
+            foreach ($reservations as $reservation) {
+                $reservation->type = $reservation->product->type;
+            }
+            $overallQuery = $reservations->where('order_status',$status);
+            $boarQuery = $reservations->where('order_status',$status)->where('type','boar');
+            $sowQuery = $reservations->where('order_status',$status)->where('type','sow');
+            $giltQuery = $reservations->where('order_status',$status)->where('type','gilt');
+            $semenQuery = $reservations->where('order_status',$status)->where('type','semen');
 
             return [
                 'overall' => $overallQuery->count(),
@@ -169,7 +180,7 @@ class DashboardRepository
             'transaction' => round($transactionRating,1),
             'productQuality' => round($productQualityRating,1),
             'reviews' => $reviewDetails
-            ];
+        ];
     }
 
     public function getHeatMap(Breeder $breeder)
@@ -186,7 +197,7 @@ class DashboardRepository
     public function getProductRequests($productId)
     {
         // dd($productId);
-        $productRequests = SwineCartItem::where('product_id', $productId)->where('if_requested', 1)->get();
+        $productRequests = SwineCartItem::where('product_id', $productId)->where('if_requested', 1)->where('reservation_id', 0)->get();
         $productRequestDetails = [];
 
         foreach ($productRequests as $productRequest) {
@@ -195,10 +206,13 @@ class DashboardRepository
             $name = $customer->users()->first()->name;
             array_push($productRequestDetails,
                 [
+                    'swineCartId' => $productRequest->id,
                     'customerId' => $productRequest->customer_id,
                     'customerName' => $name,
                     'customerProvince' => $province,
-                    'requestQuantity' => $productRequest->quantity
+                    'requestQuantity' => $productRequest->quantity,
+                    'dateNeeded' => ($productRequest->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($productRequest->date_needed),
+                    'specialRequest' => $productRequest->special_request
                 ]
             );
         }
@@ -216,27 +230,38 @@ class DashboardRepository
     {
         switch ($request->status) {
             case 'reserved':
-                // Check if product is not yet reserved
+                // Check if product is available for reservations
                 if($product->quantity){
-                    $resultingQuantity = $product->quantity - $request->request_quantity;
-                    $requestQuantity = $request->request_quantity;
+                    $customerName = Customer::find($request->customer_id)->users()->first()->name;
 
-                    // Check if requested quantity is greater than the available quantity
-                    if($resultingQuantity >= 0) $product->quantity = $resultingQuantity;
-                    else{
-                        $requestQuantity = $product->quantity;
-                        $product->quantity = 0;
-                    }
+                    // Update quantity of product
+                    if($product->type != 'semen') $product->quantity = 0;
                     $product->save();
 
+                    // Make a product reservation
                     $reservation = new ProductReservation;
                     $reservation->customer_id = $request->customer_id;
-                    $reservation->quantity = $requestQuantity;
+                    $reservation->quantity = $request->request_quantity;
+                    $reservation->date_needed = date_format(date_create($request->date_needed), 'Y-n-j');
+                    $reservation->special_request = $request->special_request;
                     $reservation->order_status = 'reserved';
                     $product->reservations()->save($reservation);
 
+                    // Update the Swine Cart item
+                    $swineCartItem = SwineCartItem::find($request->swinecart_id);
+                    $swineCartItem->reservation_id = $reservation->id;
+                    $swineCartItem->save();
+
+                    // Update Transaction Log
+                    // This must be put in an event for better performance
+                    $transactionLog = $reservation->transactionLog()->first();
+                    $decodedStatusTransaction = json_decode($transactionLog->status_transactions, true);
+                    $decodedStatusTransaction['reserved'] = date('j M Y (D) g:iA', time());
+                    $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
+                    $transactionLog->save();
+
                     // If product type is not semen remove other requests to this product
-                    $productRequests = SwineCartItem::where('product_id', $product->id)->where('if_requested', 1)->where('customer_id', '<>', $request->customer_id);
+                    $productRequests = SwineCartItem::where('product_id', $product->id)->where('customer_id', '<>', $request->customer_id)->where('reservation_id',0);
                     if($product->type != 'semen'){
                         $productRequests->delete();
                         // For further development. Code here must send notification
@@ -248,10 +273,17 @@ class DashboardRepository
                         if($productRequests->count() == 0){
                             $product->status = 'displayed';
                             $product->save();
+
+                            return ['success', $product->name.' reserved to '.$customerName, $reservation->id, (string) Uuid::uuid4(), true];
                         }
                     }
 
-                    return ['success', $product->name.' reserved to '.Customer::find($request->customer_id)->users()->first()->name];
+                    // [0] - success/fail operation flag
+                    // [1] - toast message
+                    // [2] - reservation_id
+                    // [3] - generated UUID
+                    // [4] - flag for removing the parent product display in the UI component
+                    return ['success', $product->name.' reserved to '.$customerName, $reservation->id, (string) Uuid::uuid4(), false];
                 }
                 else {
                     return ['fail', $product->name.' is already reserved to another customer'];
@@ -261,18 +293,45 @@ class DashboardRepository
                 $reservation = ProductReservation::find($request->reservation_id);
                 $reservation->order_status = 'on_delivery';
                 $reservation->save();
+
+                // Update Transaction Log
+                // This must be put in an event for better performance
+                $transactionLog = $reservation->transactionLog()->first();
+                $decodedStatusTransaction = json_decode($transactionLog->status_transactions, true);
+                $decodedStatusTransaction['on_delivery'] = date('j M Y (D) g:iA', time());
+                $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
+                $transactionLog->save();
+
                 return "OK";
 
             case 'paid':
                 $reservation = ProductReservation::find($request->reservation_id);
                 $reservation->order_status = 'paid';
                 $reservation->save();
+
+                // Update Transaction Log
+                // This must be put in an event for better performance
+                $transactionLog = $reservation->transactionLog()->first();
+                $decodedStatusTransaction = json_decode($transactionLog->status_transactions, true);
+                $decodedStatusTransaction['paid'] = date('j M Y (D) g:iA', time());
+                $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
+                $transactionLog->save();
+
                 return "OK";
 
             case 'sold':
                 $reservation = ProductReservation::find($request->reservation_id);
                 $reservation->order_status = 'sold';
                 $reservation->save();
+
+                // Update Transaction Log
+                // This must be put in an event for better performance
+                $transactionLog = $reservation->transactionLog()->first();
+                $decodedStatusTransaction = json_decode($transactionLog->status_transactions, true);
+                $decodedStatusTransaction['sold'] = date('j M Y (D) g:iA', time());
+                $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
+                $transactionLog->save();
+
                 return "OK";
 
             default:
@@ -296,5 +355,28 @@ class DashboardRepository
         }
 
         return ucfirst($breed);
+    }
+
+    /**
+     * Transform date original (YYYY-MM-DD) syntax to Month Day, Year
+     * @param  String   $birthdate
+     * @return String
+     */
+    private function transformDateSyntax($date)
+    {
+        return date_format(date_create($date), 'M j, Y');
+    }
+
+    /**
+     * Compute age (in days) of product with the use of its birthdate
+     *
+     * @param  String   $birthdate
+     * @return Integer
+     */
+    private function computeAge($birthdate)
+    {
+        $rawSeconds = time() - strtotime($birthdate);
+        $age = ((($rawSeconds/60)/60))/24;
+        return floor($age);
     }
 }

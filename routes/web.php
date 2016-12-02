@@ -104,8 +104,9 @@ Route::group(['middleware' => ['web']], function () {
 
         // swinecart-related
         Route::get('swine-cart',['as' => 'cart.items', 'uses' => 'SwineCartController@getSwineCartItems']);
+        Route::get('swine-cart/transaction-history',['as' => 'cart.items', 'uses' => 'SwineCartController@getTransactionHistory']);
         Route::post('swine-cart/add',['as' => 'cart.add', 'uses' => 'SwineCartController@addToSwineCart']);
-        Route::patch('swine-cart/request',['as' => 'cart.request', 'uses' => 'SwineCartController@requestSwineCart']);
+        Route::patch('swine-cart/request',['as' => 'cart.request', 'uses' => 'SwineCartController@requestSwineCartItem']);
         Route::delete('swine-cart/delete',['as' => 'cart.delete', 'uses' => 'SwineCartController@deleteFromSwineCart']);
         Route::get('swine-cart/quantity',['as' => 'cart.quantity', 'uses' => 'SwineCartController@getSwineCartQuantity']);
         Route::post('swine-cart/rate', ['as' => 'rate.breeder', 'uses' => 'SwineCartController@rateBreeder']);

@@ -3,6 +3,8 @@
 namespace App\Models;
 
 use App\Models\Product;
+use App\Models\SwineCartItem;
+use App\Models\TransactionLog;
 use Illuminate\Database\Eloquent\Model;
 
 class ProductReservation extends Model
@@ -32,6 +34,14 @@ class ProductReservation extends Model
     public function product()
     {
         return $this->belongsTo(Product::class);
+    }
+
+    /**
+     * Get the transaction log related to this product reservation
+     */
+    public function transactionLog()
+    {
+        return $this->hasManyThrough(TransactionLog::class, SwineCartItem::class, 'reservation_id', 'swineCart_id', 'id');
     }
 
 }

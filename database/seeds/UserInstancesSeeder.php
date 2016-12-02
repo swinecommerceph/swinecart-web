@@ -114,15 +114,15 @@ class UserInstancesSeeder extends Seeder
                 $product->primary_img_id = $image->id;
                 $product->name = random_int(1000,3000);
                 $product->type = $randType;
-                $product->birthdate = (new DateTime())->format('Y-m-d');
+                $product->birthdate = date('Y-m-d', time() - (15 * (7 * 24 * 60 * 60)));
                 $product->breed_id = App\Models\Breed::firstOrCreate(['name' => $randBreed])->id;
                 $product->price = random_int(35000,100000)/1.0;
-                if($randType == 'semen') $product->quantity = random_int(10,300);
+                if($randType == 'semen') $product->quantity = -1;
                 else $product->quantity = 1;
                 $product->adg = random_int(760,1450);
                 $product->fcr = random_int(10,30)/10.0;
                 $product->backfat_thickness = random_int(90,200)/10.0;
-                $product->other_details = 'Other Details=Our detailed information of our product,';
+                $product->other_details = 'Other Details = Our detailed information of our product,';
                 $product->status = 'displayed';
                 $breeder->products()->save($product);
 

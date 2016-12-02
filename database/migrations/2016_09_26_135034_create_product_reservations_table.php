@@ -17,11 +17,12 @@ class CreateProductReservationsTable extends Migration
             $table->increments('id');
             $table->integer('product_id')->unsigned();
             $table->integer('customer_id')->unsigned();
-            $table->integer('quantity')->nullable();
+            $table->integer('quantity');
+            $table->date('date_needed');
+            $table->mediumText('special_request');
             $table->enum('order_status',
                 ['reserved', 'paid', 'on_delivery', 'sold']
                 )->default('reserved');
-            $table->mediumText('special_request');
         });
     }
 
