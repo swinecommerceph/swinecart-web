@@ -13,6 +13,9 @@ use App\Models\Breed;
 use App\Models\SwineCartItem;
 use App\Models\FarmAddress;
 use App\Models\Image;
+use App\Notifications\ProductReserved;
+use App\Notifications\ProductReservationUpdate;
+use App\Notifications\ProductReservedToOtherCustomer;
 
 class DashboardRepository
 {
@@ -260,14 +263,39 @@ class DashboardRepository
                     $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
                     $transactionLog->save();
 
+                    // ******** ********
+                    // Notify reserved customer
+                    $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
+                    $reservedCustomerUser->notify(new ProductReserved(
+                        [
+                            'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been reserved to you',
+                            'time' => $decodedStatusTransaction['reserved'],
+                            'url' => route('cart.items')
+                        ]
+                    ));
+                    // ******** ********
+
                     // If product type is not semen remove other requests to this product
                     $productRequests = SwineCartItem::where('product_id', $product->id)->where('customer_id', '<>', $request->customer_id)->where('reservation_id',0);
+
                     if($product->type != 'semen'){
+                        // ******** ********
+                        // Notify Customer users that the product has been reserved to another customer
+                        foreach ($productRequests->get() as $productRequest) {
+                            $customerUser = $productRequest->customer->users()->first();
+                            $breederName = Product::find($productRequest->product_id)->breeder->users()->first()->name;
+                            $customerUser->notify(new ProductReservedToOtherCustomer(
+                                [
+                                    'description' => 'Sorry, product ' . $product->name . ' was reserved by ' . $breederName . ' to another customer',
+                                    'time' => $decodedStatusTransaction['reserved'],
+                                    'url' => route('cart.items')
+                                ]
+                            ));
+                        }
+                        // ******** ********
+
+                        // Delete requests to this product after notifying Customer users
                         $productRequests->delete();
-                        // For further development. Code here must send notification
-                        // to the users that the product has been reserved
-                        // or already not available for purchase
-                        // <code>
                     }
                     else{
                         if($productRequests->count() == 0){
@@ -302,6 +330,18 @@ class DashboardRepository
                 $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
                 $transactionLog->save();
 
+                // ******** ********
+                // Notify customer
+                $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
+                $reservedCustomerUser->notify(new ProductReservationUpdate(
+                    [
+                        'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery',
+                        'time' => $decodedStatusTransaction['on_delivery'],
+                        'url' => route('cart.items')
+                    ]
+                ));
+                // ******** ********
+
                 return "OK";
 
             case 'paid':
@@ -317,6 +357,18 @@ class DashboardRepository
                 $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
                 $transactionLog->save();
 
+                // ******** ********
+                // Notify customer
+                $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
+                $reservedCustomerUser->notify(new ProductReservationUpdate(
+                    [
+                        'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as paid',
+                        'time' => $decodedStatusTransaction['paid'],
+                        'url' => route('cart.items')
+                    ]
+                ));
+                // ******** ********
+
                 return "OK";
 
             case 'sold':
@@ -331,6 +383,18 @@ class DashboardRepository
                 $decodedStatusTransaction['sold'] = date('j M Y (D) g:iA', time());
                 $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
                 $transactionLog->save();
+
+                // ******** ********
+                // Notify reserved customer
+                $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
+                $reservedCustomerUser->notify(new ProductReservationUpdate(
+                    [
+                        'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as sold',
+                        'time' => $decodedStatusTransaction['sold'],
+                        'url' => route('cart.items')
+                    ]
+                ));
+                // ******** ********
 
                 return "OK";
 

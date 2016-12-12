@@ -25,6 +25,7 @@
     <li><a href="{{ route('products.view') }}"> Products </a></li>
     <li><a href="{{ route('home_path') }}"> <i class="material-icons">message</i></a></li>
     @if(!Auth::user()->update_profile)
+        {{-- Swine Cart --}}
         <li><a id="cart-icon" class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="cart-dropdown">
                 <i class="material-icons">shopping_cart</i>
                 <span></span>
@@ -83,8 +84,78 @@
                 </li>
 
                 <li>
-                    <a class="left">Go to Cart</a>
-                    <a class="right">Request items</a>
+                    <a class="center-align">Go to Cart</a>
+                </li>
+            </ul>
+        </li>
+        <li id="notification-main-container">
+            <a href="#!" id="notification-icon"
+                class="dropdown-button"
+                data-beloworigin="true"
+                data-hover="false"
+                data-alignment="right"
+                data-activates="notification-dropdown"
+                @click.prevent="getNotificationInstances"
+            >
+                <i class="material-icons"
+                    :class="notificationCount > 0 ? 'left' : '' "
+                >
+                    notifications
+                </i>
+                <span class="badge"
+                    v-if="notificationCount > 0 && notificationCount <= 99"
+                >
+                    @{{ notificationCount }}
+                </span>
+                <span class="badge"
+                    v-if="notificationCount > 99"
+                >
+                    99+
+                </span>
+            </a>
+            <ul id="notification-dropdown" class="dropdown-content collection">
+                <div id="notification-preloader-circular" class="row">
+                    <div class="center-align">
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-blue-only">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div>
+                                <div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <li>
+                    <ul id="notification-container" class="collection">
+                        <li v-for="(notification,index) in notifications"
+                            style="overflow:auto;"
+                            class="collection-item"
+                        >
+                            <a class="black-text"
+                                :href="notification.url"
+                                @click.prevent="goToNotification(index)"
+                            >
+                                <span class="left" v-if="!notification.read_at">
+                                    <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_checked</i>
+                                </span>
+                                <span class="left" v-else >
+                                    <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
+                                </span>
+                                <p style="margin-left:1.5rem;"> @{{ notification.data.description }} </p>
+                                <p class="right-align grey-text text-darken-1" style="font-size:0.8rem;"> @{{ notification.data.time }} </p>
+                            </a>
+                        </li>
+
+                    </ul>
+                </li>
+                <li>
+                    <a class="center-align">See all Notifications</a>
                 </li>
             </ul>
         </li>
@@ -724,12 +795,8 @@
 
 @endsection
 
-@section('initScript')
-    <script src="/js/vendor/VueJS/vue.js"></script>
-    <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
+@section('customScript')
     <script src="/js/vendor/lodash.min.js"></script>
-    <script src="/js/customer/swinecart.js"> </script>
-    <script src="/js/customer/customer_custom.js"> </script>
     <script type="text/javascript">
         // Variables
         var rawProducts = {!! $products !!};

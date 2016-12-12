@@ -63,7 +63,7 @@ var swinecart = {
                         span.removeClass('badge');
                         $('#cart-icon .material-icons').removeClass('left');
                         $('#cart-dropdown #item-container').html(
-                            '<li> <span class="center-align black-text"> No items in your Swine Cart </span> </li>'
+                            '<li> <span class="center-align black-text"> No potential products to request </span> </li>'
                         );
                     } else span.html(sessionStorage.getItem('swine_cart_quantity'));
 
@@ -91,7 +91,7 @@ var swinecart = {
                 // Check first if empty
                 if (data.length == 0) {
                     $('#cart-dropdown #item-container').html(
-                        '<li> <span class="center-align black-text"> No items in your Swine Cart </span> </li>'
+                        '<li> <span class="center-align black-text"> No potential products to request </span> </li>'
                     );
                     config.preloader_circular.hide();
                 } else {

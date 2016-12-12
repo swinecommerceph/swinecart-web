@@ -19,6 +19,10 @@ html{
 	width: 350px !important;
 }
 
+#notification-dropdown{
+	width: 400px !important;
+}
+
 /* Navigation bar element styles*/
 #nav-mobile>li{
 	height:64px;
@@ -218,11 +222,11 @@ html{
 }
 
 /* Swine Cart styles */
-#cart-icon i.left{
+#cart-icon i.left, #notification-icon i.left{
 	margin-right: 0px;
 }
 
-#cart-icon span.badge{
+#cart-icon span.badge, #notification-icon span.badge{
 	color: white;
 	background-color: #ee6e73;
 	border-radius: 5px;
@@ -274,6 +278,23 @@ html{
 	margin:0px;
 	overflow-y:auto !important;
 	max-height:400px;
+}
+
+/* Notification container styles */
+#notification-container{
+	margin:0px;
+	overflow-y:auto !important;
+	max-height:500px;
+	font-family:Poppins;
+}
+
+
+#notification-dropdown .collection-item{
+	padding: 0px;
+}
+
+#notification-dropdown .collection-item p{
+	margin: 0px;
 }
 
 /* Table styles */

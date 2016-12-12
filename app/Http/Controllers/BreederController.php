@@ -211,4 +211,59 @@ class BreederController extends Controller
         else return redirect()->route('breeder.edit');
     }
 
+    /**
+     * Get Breeder's notification instances
+     *
+     * @param  Request $request
+     * @return JSON / View
+     */
+    public function getNotifications(Request $request)
+    {
+        if($request->ajax()){
+            $notificationInstances = [];
+
+            foreach ($this->user->notifications as $notification) {
+                $notificationInstance = [];
+                $notificationInstance['id'] = $notification->id;
+                $notificationInstance['data'] = $notification->data;
+                $notificationInstance['read_at'] = $notification->read_at;
+                array_push($notificationInstances, $notificationInstance);
+            }
+
+            return [collect($notificationInstances)->toJson(), csrf_token()];
+        }
+        else{
+
+            return view('');
+        }
+    }
+
+    /**
+     * Get count of Breeder's notification instances
+     *
+     * @param  Request $request
+     * @return Integer
+     */
+    public function getNotificationsCount(Request $request)
+    {
+        if($request->ajax()){
+            return $this->user->unreadNotifications->count();
+        }
+    }
+
+    /**
+     * Mark the notification instance as read
+     *
+     * @param  Request $request
+     * @return String
+     */
+    public function seeNotification(Request $request)
+    {
+        if($request->ajax()){
+            $notification = $this->user->notifications()->where('id', $request->notificationId)->get()->first();
+            $notification->markAsRead();
+            return 'OK';
+        }
+    }
+
 }

@@ -91,7 +91,6 @@ Vue.component('star-rating',{
     created: function(){
         // Normalize classes of stars
         this.normalizeClasses(-1);
-
     }
 });
 

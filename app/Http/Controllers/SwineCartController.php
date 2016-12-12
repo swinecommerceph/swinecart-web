@@ -18,6 +18,7 @@ use App\Models\TransactionLog;
 use App\Models\ProductReservation;
 
 use Auth;
+use App\Notifications\ProductRequested;
 
 class SwineCartController extends Controller
 {
@@ -150,8 +151,6 @@ class SwineCartController extends Controller
             $product->save();
 
             // Bind Swine Cart to Transaction Log
-            // Update Transaction Log
-            // This must be put in an event for better performance
             $productDetails = [
                 "id" => $product->id,
                 "name" => $product->name,
@@ -170,11 +169,23 @@ class SwineCartController extends Controller
                 "rated" => ''
             ];
 
+            // Update Transaction Log
+            // This must be put in an event for better performance
             $transactionLog = new TransactionLog;
             $transactionLog->customer_id = $requested->customer_id;
             $transactionLog->product_details = collect($productDetails)->toJson();
             $transactionLog->status_transactions = collect($statusTransactions)->toJson();
             $requested->transactionLog()->save($transactionLog);
+
+            // Notify Breeder of the request
+            $breederUser = Breeder::find($product->breeder_id)->users()->first();
+            $breederUser->notify(new ProductRequested(
+                [
+                    'description' => 'Product ' . $product->name . ' is requested by ' . $this->user->name,
+                    'time' => $statusTransactions['requested'],
+                    'url' => route('dashboard.productStatus')
+                ]
+            ));
 
             return [$customer->swineCartItems()->where('if_requested',0)->count(), $statusTransactions['requested']];
         }

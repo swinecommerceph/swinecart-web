@@ -82,6 +82,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('dashboard/product-status/retrieve-product-requests',['as' => 'dashboard.productRequests', 'uses' => 'DashboardController@retrieveProductRequests']);
         Route::patch('dashboard/product-status/update-status',['as' => 'dashboard.reserveProduct', 'uses' => 'DashboardController@updateProductStatus']);
 
+        // notification-related
+        Route::get('notifications',['as' => 'notifs', 'uses' => 'BreederController@getNotifications']);
+        Route::get('notifications/count',['as' => 'notifs.count', 'uses' => 'BreederController@getNotificationsCount']);
+        Route::patch('notifications/seen',['as' => 'notifs.seen', 'uses' => 'BreederController@seeNotification']);
+
     });
 
 
@@ -104,13 +109,18 @@ Route::group(['middleware' => ['web']], function () {
 
         // swinecart-related
         Route::get('swine-cart',['as' => 'cart.items', 'uses' => 'SwineCartController@getSwineCartItems']);
-        Route::get('swine-cart/transaction-history',['as' => 'cart.items', 'uses' => 'SwineCartController@getTransactionHistory']);
+        Route::get('swine-cart/transaction-history',['as' => 'cart.history', 'uses' => 'SwineCartController@getTransactionHistory']);
         Route::post('swine-cart/add',['as' => 'cart.add', 'uses' => 'SwineCartController@addToSwineCart']);
         Route::patch('swine-cart/request',['as' => 'cart.request', 'uses' => 'SwineCartController@requestSwineCartItem']);
         Route::delete('swine-cart/delete',['as' => 'cart.delete', 'uses' => 'SwineCartController@deleteFromSwineCart']);
         Route::get('swine-cart/quantity',['as' => 'cart.quantity', 'uses' => 'SwineCartController@getSwineCartQuantity']);
         Route::post('swine-cart/rate', ['as' => 'rate.breeder', 'uses' => 'SwineCartController@rateBreeder']);
         Route::get('view-swine-cart',['as'=> 'view.cart', 'uses' => 'SwineCartController@getSwineCartItems']);
+
+        // notification-related
+        Route::get('notifications',['as' => 'notifs', 'uses' => 'CustomerController@getNotifications']);
+        Route::get('notifications/count',['as' => 'notifs.count', 'uses' => 'CustomerController@getNotificationsCount']);
+        Route::patch('notifications/seen',['as' => 'notifs.seen', 'uses' => 'CustomerController@seeNotification']);
 
     });
 

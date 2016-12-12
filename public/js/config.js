@@ -5,6 +5,8 @@ var config = {
     authUser_url: '/home',
     customer_url: '/customer/home',
     breeder_url: '/breeder/home',
+    customerNotifications_url: '/customer/notifications',
+    breederNotifications_url: '/breeder/notifications',
     viewProducts_url: '/customer/view-products',
     manageProducts_url: '/breeder/products',
     swineCart_url: '/customer/swine-cart',
