@@ -531,3 +531,10 @@ blockquote{
 	transform: translate(50%,50%);
 	position: absolute;
 }
+.caption{
+	word-break:break-all;
+}
+
+.content-text{
+	word-break:break-all;
+}

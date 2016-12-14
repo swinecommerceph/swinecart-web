@@ -19,6 +19,7 @@ var config = {
     approve_user: 'home/approve',
     reject_user: 'home/reject',
     search_user: 'home/search',
+    all_user: 'home/userlist',
     form: 'registration',
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',

@@ -29,6 +29,13 @@
 
             <ul id="nav-mobile" class="right hide-on-med-and-down">
               <li><a>{{ Auth::user()->name }}</a> </li>
+
+              <li>
+                <a class="waves-effect waves-light modal-trigger " href="#vewlogs">
+                    <i class="material-icons">class</i>
+                </a>
+              </li>
+
               <li>
                 <a href="#" class="dropdown-button" data-beloworigin="true" data-activates="inquiries-dropdown"><i class="material-icons">feedback</i></a>
                 <ul id="inquiries-dropdown" class="dropdown-content">
@@ -55,17 +62,17 @@
                   </a>
                 </li>
 
-              <li>
 
-                <a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
-                  <i class="material-icons">arrow_drop_down</i>
-                </a>
-                <ul id="nav-dropdown" class="dropdown-content">
+                <li>
+                    <a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
+                        <i class="material-icons">arrow_drop_down</i>
+                    </a>
+                    <ul id="nav-dropdown" class="dropdown-content">
                       <li><a href="{{ route('registration.form') }}">Registration Form</a></li>
                       <li class="divider"></li>
                       <li><a href="{{ url('logout') }}">Logout</a></li>
-                  </ul>
-              </li>
+                    </ul>
+                </li>
             </ul>
           </div>
 

@@ -160,7 +160,8 @@ class AdminController extends Controller
         $customers = $this->customerCount();
         $pending = $this->pendingUserCount();
         $blocked = $this->blockedUserCount();
-        $summary = array($all, $breeders, $customers, $pending, $blocked);
+        $logs = $this->getAdministratorLogs();
+        $summary = array($all, $breeders, $customers, $pending, $blocked, $logs);
 
         return view(('user.admin.home'), compact('summary'));
     }
@@ -477,6 +478,18 @@ class AdminController extends Controller
     }
 
     /**
+     * Displays the administrator logs
+     *
+     * @param none
+     * @return View the administrator logs
+     *
+     */
+    public function getAdministratorLogs(){
+        $logs = DB::table('administrator_logs')->get();
+        return $logs;
+    }
+
+    /**
      * Check if media is Image depending on extension
      *
      * @param  String   $extension
@@ -516,9 +529,9 @@ class AdminController extends Controller
             $content->name = $filename;
             $content->path = '/images/homeimages/';
             $content->save();
-            return $content->path.$content->name;
+            return Redirect::back()->with('message','Image Added');
         } else {
-            return "Image Error";
+            return Redirect::back()->with('message','Operation Failed');
         }
      }
 
@@ -535,7 +548,7 @@ class AdminController extends Controller
          unlink(public_path($content->path.$content->name));
          //dd($content->path.$content->name);
          $content->delete();
-         return "OK";
+         return Redirect::back()->with('message','Image Deleted');
      }
 
      /**
@@ -563,8 +576,17 @@ class AdminController extends Controller
             $content->text = $request->textContent;
         }
         $content->save();
-        return $content->path.$content->name;
+        return Redirect::back()->with('message','Content Edited');
      }
+
+     public function goToUserlist(){
+         return redirect()->route('home/userlist');
+     }
+
+     public function goToPending(){
+         return redirect()->route('home/pending/users');
+     }
+
     // public function manageTextContent(){
     //     return view('user.admin._manageTextContent');
     // }

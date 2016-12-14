@@ -6,6 +6,13 @@ $(document).ready(function(){
     //     message: 'Hello Vue!'
     //   }
     // });
+    // $('#pages-home-images').click(function(e){
+    //     e.preventDefault();
+    //
+    //     pages.fetchImages();
+    // });
+
+
     $('.delete-content-trigger').click(function(e){
         e.preventDefault();
         // console.log($('#delete-content-form > input').attr('name','_token').attr('value'));
@@ -19,5 +26,8 @@ $(document).ready(function(){
         //$('#delete-content-token').attr('value', $('#delete-content-form').attr('data'));
         $('#edit-content-id').attr('value',  $(this).attr('data'));
     });
+
+
+
 
 });

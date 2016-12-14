@@ -121,6 +121,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home',['as'=>'admin_path', 'uses'=>'AdminController@index']);
         Route::get('form', ['as'=>'registration.form', 'uses'=>'AdminController@getRegistrationForm']);
         Route::post('form/register', ['as'=>'admin.register.submit', 'uses'=>'AdminController@submitRegistrationForms']);
+        Route::get('home/logs', ['as'=>'admin_logs', 'uses'=>'AdminController@getAdministratorLogs']);
+
 
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
         Route::get('home/approved/breeder', ['as'=>'admin.approved.breeder', 'uses'=>'AdminController@displayApprovedBreeders']);
@@ -140,6 +142,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('home/manage/homepage/addcontent', ['as'=>'admin.manage.addcontent', 'uses'=>'AdminController@addHomeImage']);
         Route::delete('home/manage/homepage/deletecontent', ['as'=>'admin.manage.deletecontent', 'uses'=>'AdminController@deleteContent']);
         Route::put('home/manage/homepage/editcontent', ['as'=>'admin.manage.editcontent', 'uses'=>'AdminController@editContent']);
+        Route::get('home/manage/return/userlist', ['as' => 'admin.return.userlist', 'uses'=> 'AdminController@goToUserlist']);
+        Route::get('home/manage/return/pending', ['as' => 'admin.return.pending', 'uses'=> 'AdminController@goToPending']);
     });
 
 });

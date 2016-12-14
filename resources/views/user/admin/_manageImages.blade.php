@@ -22,146 +22,22 @@
       </div>
 
       <div class="col s12">
-          {{-- <form>
-              <div class="col s12">
-              <label>Preview</label>
-              </div>
-              <div class="col s12">
-                  <img class="materialboxed" width="100%" height="300" src="http://placehold.it/1000x500">
-              </div>
-              <div class="input-field col s6">
-                  <select id="app" class="browser-default">
-                      <option value="" disabled selected>Choose image to change</option>
-                      <option value="1">Image 1</option>
-                      <option value="2">Image 2</option>
-                      <option value="3">Image 3</option>
-                  </select>
-
-              </div>
-              <div class="file-field input-field col s6">
-                  <div class="btn">
-                      <span>File</span>
-                      <input type="file">
-                  </div>
-                  <div class="file-path-wrapper">
-                      <input class="file-path validate" type="text">
-                  </div>
-              </div>
-
-              <div class="col s12">
-                  <div class="valign-wrapper">
-                  <button class="btn waves-effect waves-light valign center-block" type="submit" name="action">Submit
-                      <i class="material-icons right">send</i>
-                  </button>
-                  </div>
-              </div>
-          </form>
-      </div>
-
-
-      <div class="col s12">
-          <h5>Add New Image</h5>
-      </div>
-      <div class="col s12">
-          <form>
-              <div class="file-field input-field col s12">
-                  <div class="btn">
-                      <span>File</span>
-                      <input type="file">
-                  </div>
-                  <div class="file-path-wrapper">
-                      <input class="file-path validate" type="text">
-                  </div>
-              </div>
-              <div class="col s12">
-                  <div class="valign-wrapper">
-                      <button class="btn waves-effect waves-light valign center-block" type="submit" name="action">Submit
-                      <i class="material-icons right">send</i>
-                      </button>
-                  </div>
-              </div>
-
-          </form>
-      </div>
-
-
-      <div class="col s12">
-          <h5>Delete Image</h5>
-      </div>
-
-
-      <div class="col s12">
-          <form>
-              <div class="col s12">
-              <label>Preview</label>
-              </div>
-              <div class="col s12">
-                  <img class="materialboxed" width="100%" height="300" src="http://placehold.it/1000x500">
-              </div>
-              <div class="input-field col s6">
-                  <select class="browser-default">
-                      <option value="" disabled selected>Choose image to change</option>
-                      <option value="1">Image 1</option>
-                      <option value="2">Image 2</option>
-                      <option value="3">Image 3</option>
-                  </select>
-              </div>
-
-              <div class="col s6">
-                  <div class="input-field">
-                  <button class="btn waves-effect waves-light" type="submit" name="action">Delete
-                  </button>
-                  </div>
-              </div>
-
-          </form> --}}
 
           <div id="slider-button-div">
             <a class="waves-effect waves-teal btn-flat modal-trigger" href="#edit-page-modal">Edit</a>
          </div>
           {{-- Slider --}}
           <div class="slider home-slider">
-
               <ul class="slides">
-                <li>
-                  <img src="/images/demo/HP1.jpg">
-                  <div class="caption center-align">
-                    <h3>Efficiency</h3>
-                    <h5 class="light grey-text text-lighten-3">Through the internet, the
-      system aims for faster and
-      hassle-free transaction between
-      consumers and retailers.</h5>
-                  </div>
-                </li>
-                <li>
-                  <img src="/images/demo/HP2.jpg">
-                  <div class="caption left-align">
-                    <h3>Security</h3>
-                    <h5 class="light grey-text text-lighten-3">security and legitimacy of
-      both customers and
-      breeders is ensured
-      through establishing a set
-      of criteria/qualifications.</h5>
-                  </div>
-                </li>
-                <li>
-                  <img src="/images/demo/HP3.jpg">
-                  <div class="caption right-align">
-                    <h3>Variety</h3>
-                    <h5 class="light grey-text text-lighten-3">security and legitimacy of both customers and
-      breeders is ensured through establishing a set
-      of criteria/qualifications.</h5>
-                  </div>
-                </li>
-                <li>
-                  <img src="/images/demo/HP4.jpg">
-                  <div class="caption center-align">
-                    <h3>Swine Security</h3>
-                    <h5 class="light grey-text text-lighten-3">security and legitimacy of both customers and
-      breeders is ensured through establishing a set
-      of criteria/qualifications.</h5>
-                  </div>
-                </li>
+                @foreach($homeContent as $content)
+                    <li>
+                      <img src= {{$content->path.$content->name}}>
+                      <div class="caption center-align">
+                        <h3>{{$content->title}}</h3>
+                        <h5 class="light grey-text text-lighten-3 content-text">{{$content->text}}</h5>
+                      </div>
+                    </li>
+                @endforeach
               </ul>
           </div>
 
@@ -169,10 +45,10 @@
 
     </div>
 
-    <div id="boo" v-cloak>
+    {{-- <div id="boo" v-cloak>
         <input type="text" v-model="message">
         <span>@{{ message }}</span>
-    </div>
+    </div> --}}
 
 @endsection
 
@@ -242,8 +118,9 @@
     <div class="modal-content">
         <h4>Slider Images</h4>
         <div class="row">
+
             @foreach($homeContent as $content)
-                <div class="col s4">
+                <div class="col s12">
                     <div class="card medium sticky-action">
                       <div class="card-image waves-effect waves-block waves-light">
                         <img class="activator" src= {{$content->path.$content->name}}>

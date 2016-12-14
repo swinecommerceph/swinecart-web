@@ -292,3 +292,33 @@
     <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Resolve</a>
   </div>
 </div>
+
+{{-- Modal for logs --}}
+<div id="vewlogs" class="modal">
+    <div class="modal-content">
+      <h4>Administrator Logs</h4>
+      <div class="divider"></div>
+      <table class="bordered responsive-table highlight ">
+        <thead>
+          <tr>
+              <th data-field="time">Time</th>
+              <th data-field="name">Name</th>
+              <th data-field="action">Action</th>
+          </tr>
+        </thead>
+
+        <tbody>
+            @foreach($summary[5] as $log)
+          <tr>
+            <td>{{$log->created_at}}</td>
+            <td>{{$log->admin_name}}</td>
+            <td>{{$log->action}}</td>
+          </tr>
+         @endforeach
+        </tbody>
+      </table>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+</div>
