@@ -538,3 +538,11 @@ blockquote{
 .content-text{
 	word-break:break-all;
 }
+
+#menu{
+	width: 300px;
+}
+
+/*#search-button{
+	display: none;
+}*/

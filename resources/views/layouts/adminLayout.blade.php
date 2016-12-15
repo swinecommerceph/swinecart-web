@@ -31,13 +31,13 @@
               <li><a>{{ Auth::user()->name }}</a> </li>
 
               <li>
-                <a class="waves-effect waves-light modal-trigger " href="#vewlogs">
+                <a class="waves-effect waves-light modal-trigger tooltipped" href="{{ route('admin_logs') }} data-position="bottom" data-delay="40" data-tooltip="Administrator Logs"">
                     <i class="material-icons">class</i>
                 </a>
               </li>
 
               <li>
-                <a href="#" class="dropdown-button" data-beloworigin="true" data-activates="inquiries-dropdown"><i class="material-icons">feedback</i></a>
+                <a href="#" class="dropdown-button tooltipped" data-beloworigin="true" data-activates="inquiries-dropdown" data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">feedback</i></a>
                 <ul id="inquiries-dropdown" class="dropdown-content">
                       <li>
                         <ul class="collection">
@@ -52,12 +52,12 @@
                           </li>
                         </ul>
                       </li>
-                      <li><a href="#" class="center">Show All</a></li>
+                      <li><a href="#" class=" center">Show All</a></li>
                   </ul>
                 </li>
 
                 <li>
-                   <a class="waves-effect waves-light modal-trigger " href="#adduser">
+                   <a class="waves-effect waves-light modal-trigger tooltipped" href="#adduser" data-position="bottom" data-delay="40" data-tooltip="Add User">
                       <i class="material-icons">add</i>
                   </a>
                 </li>
@@ -67,9 +67,6 @@
                     <a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
                         <i class="material-icons">arrow_drop_down</i>
                     </a>
-                    <ul id="nav-dropdown" class="dropdown-content">
-                      <li><a href="{{ route('registration.form') }}">Registration Form</a></li>
-                      <li class="divider"></li>
                       <li><a href="{{ url('logout') }}">Logout</a></li>
                     </ul>
                 </li>
@@ -82,7 +79,7 @@
         </div>
 
         {{-- Search Field --}}
-        <div id="search-field" class="nav-wrapper white z-depth-1" style="display:none;">
+        {{-- <div id="search-field" class="nav-wrapper white z-depth-1" style="display:none;">
                 <div style="height:1px;">
                 </div>
                 <form>
@@ -92,7 +89,7 @@
                         <i class="material-icons">close</i>
                     </div>
                 </form>
-            </div>
+            </div> --}}
 
       </nav>
     </div>
@@ -100,42 +97,134 @@
     {{--Side Navigation bar for admin --}}
     <div class="container">
           <div class="row ">
-            <div id="menu" class="col s3 ">
-              <ul class="collapsible" data-collapsible="accordion">
-              <li>
-                <div class="collapsible-header active"><a href="{{route('admin.userlist')}}" class="black-text" id='all'><i class="material-icons">face</i>All Users</a></div>
-              </li>
-              <li>
-                <div class="collapsible-header"><i class="material-icons">assignment_late</i><a href="{{route('admin.pending.users')}}" class="black-text" id='pending-breeder'>Pending Accounts</a></div>
-              </li>
-              <li>
-                <div class="collapsible-header"><i class="material-icons">build</i>Manage Pages</div>
-                <div class="collapsible-body center" ><a href="{{route('admin.manage.homepage')}}" class="black-text" id='pages-home-images'><p>Homepage Images</p></a></div>
-                {{-- <div class="collapsible-body center" ><a href="{{route('admin.manage.text')}}" class="black-text" id='pages-home-text'><p>Homepage Text</p></a></div> --}}
-              </li>
-            </ul>
-            </div>
+              <div class="menu-wrapper col s3">
+                  <div id="menu">
+                    <ul class="collapsible" data-collapsible="accordion">
+                    <li>
+                      <a href="{{route('admin.userlist')}}" class="black-text" id='all'><div class="collapsible-header active"><i class="material-icons">face</i>All Users</div></a>
+                    </li>
+                    <li>
+                     <a href="{{route('admin.pending.users')}}" class="black-text" id='pending-breeder'> <div class="collapsible-header"><i class="material-icons">assignment_late</i>Pending Accounts</div></a>
+                    </li>
+                    <li>
+                      <div class="collapsible-header"><i class="material-icons">build</i>Manage Pages</div>
+                      <div class="collapsible-body center" ><a href="{{route('admin.manage.homepage')}}" class="black-text" id='pages-home-images'><p>Homepage Images</p></a></div>
+                      {{-- <div class="collapsible-body center" ><a href="{{route('admin.manage.text')}}" class="black-text" id='pages-home-text'><p>Homepage Text</p></a></div> --}}
+                    </li>
+                  </ul>
+                  </div>
+              </div>
 
-            <div class="col s9 ">
-                <div class="card-panel ">
-                    <div class="row" id= "admin-header-wrapper">
-                      {{-- div tag for header Header  --}}
-                      <div class="col s6">
-                        <h4 id='admin-content-panel-header'>@yield('header')</h4>
-                      </div>
-                    </div>
-                    <div class="divider"></div>
-                    <div class="row" id="content-panel-wrapper">
-                        <div class="col s12" id="main-content">
-                            {{-- content page generated by javascript functions--}}
-                            @yield('content')
+            <div class="content-wrapper col s9">
+                <div class="col s12">
+                    <div class="card-panel ">
+                        @yield('header')
+                        <div class="divider"></div>
+                        <div class="row" id="content-panel-wrapper">
+                            <div class="col s12" id="main-content">
+                                {{-- content page generated by javascript functions--}}
+                                @yield('content')
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
         </div>
     </div>
+
+    {{-- Accept modal --}}
+    <div id="accept-modal" class="modal action-dialog-box green lighten-5">
+      <div class="modal-content">
+        <h4>Accept User</h4>
+        <div class="divider"></div>
+        <p>Are you sure you want to accept this user's application?</p>
+      </div>
+      <div class="modal-footer green lighten-5">
+        <a href="#!" id="cancel-accept" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+        <a href="#!" id="confirm-accept" class=" modal-action modal-close waves-effect waves-green btn-flat">Confirm</a>
+      </div>
+    </div>
+
+    {{-- Reject modal --}}
+    <div id="reject-modal" class="modal action-dialog-box red lighten-5">
+      <div class="modal-content">
+        <h4>Reject User</h4>
+        <div class="divider"></div>
+        <p>Are you sure you want to reject this user's application?</p>
+      </div>
+      <div class="modal-footer red lighten-5">
+        <a href="#!" id="cancel-reject" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
+        <a href="#!" id="confirm-reject" class=" modal-action modal-close waves-effect waves-red btn-flat">Confirm</a>
+      </div>
+    </div>
+
+
+    {{-- Add user modal --}}
+      <div id="adduser" class="modal">
+         {!!Form::open(['route'=>'admin.add.user', 'method'=>'POST', 'class'=>'add-user-form'])!!}
+       <div class="modal-content">
+         <h4>Add User</h4>
+         <div class="divider"></div>
+         <div class="row">
+            <div class="col s12">
+
+                  <div class="row">
+                     <div class = "addusercontainer" class="row">
+                        <div class="input-field col s11">
+                         <i class="material-icons prefix">account_circle</i>
+                         <input id="icon_prefix" type="text" class="validate" name="name">
+                         <label for="icon_prefix">Username</label>
+                       </div>
+                     </div>
+                 </div>
+
+                 <div class="row">
+                    <div class = "addusercontainer" class="row">
+                       <div class="input-field col s11">
+                        <i class="material-icons prefix">email</i>
+                        <input id="icon_prefix" type="email" class="validate" name="email">
+                        <label for="icon_prefix">Email Address</label>
+                      </div>
+                    </div>
+                </div>
+
+            </div>
+         </div>
+       </div>
+       <div class="modal-footer">
+          <button id = "add-user-submit" class="btn waves-effect waves-light" type="submit" name="action">Add
+           <i class="material-icons right">send</i>
+         </button>
+       </div>
+        {!!Form::close()!!}
+     </div>
+
+    {{-- Modal for user inquiries --}}
+    <div id="modal1" class="modal modal-fixed-footer">
+      <div id="message-modal-content" class="modal-content">
+        <div class="center"><h5>"Username" Message</h5></div>
+          <div class="center">Timestamp</div>
+          <div class="divider"></div>
+          <div class="row">
+          <div class="col s12">
+          <div id="message-panel" class="card-panel">
+            <span class="black-text">
+              Sample Text
+            </span>
+          </div>
+        </div>
+      </div>
+    </div>
+      <div class="modal-footer">
+        <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Resolve</a>
+      </div>
+    </div>
+
+
+
+
     <script src="/js/vendor/jquery.min.js"></script>
     <script src="/js/vendor/VueJS/vue.js"></script>
   	<script src="/js/vendor/materialize.min.js"></script>
@@ -145,7 +234,7 @@
     <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
     <script src="/js/custom.js"></script>
    {{-- <script type="text/javascript" src="/js/vendor/datatables.min.js"></script> --}}
-   <script src="/js/vendor/DataTables/datatables.js"></script>
+   {{-- <script src="/js/vendor/DataTables/datatables.js"></script> --}}
    {{-- For user-specific initialization scripts --}}
   	@yield('initScript')
   	{{-- Custom scripts for certain pages/functionalities --}}

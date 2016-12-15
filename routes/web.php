@@ -134,6 +134,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::put('home/approve', ['as'=>'admin.approve', 'uses'=>'AdminController@acceptUser']);
         Route::delete('home/reject', ['as'=>'admin.reject', 'uses'=>'AdminController@rejectUser']);
         Route::get('home/search', ['as' => 'admin.search', 'uses' => 'AdminController@searchUser']);
+        Route::get('home/pending/search', ['as' => 'admin.searchPending', 'uses' => 'AdminController@searchPendingUser']);
         Route::post('home/add', ['as' => 'admin.add.user', 'uses' => 'AdminController@createUser']);
 
         Route::get('home/manage/homepage', ['as'=>'admin.manage.homepage', 'uses' => 'AdminController@manageHomePage']);

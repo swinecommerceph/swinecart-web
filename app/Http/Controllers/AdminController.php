@@ -160,8 +160,7 @@ class AdminController extends Controller
         $customers = $this->customerCount();
         $pending = $this->pendingUserCount();
         $blocked = $this->blockedUserCount();
-        $logs = $this->getAdministratorLogs();
-        $summary = array($all, $breeders, $customers, $pending, $blocked, $logs);
+        $summary = array($all, $breeders, $customers, $pending, $blocked);
 
         return view(('user.admin.home'), compact('summary'));
     }
@@ -173,16 +172,12 @@ class AdminController extends Controller
      * @return array of user
      */
     public function displayAllUsers(){
-        $users = $this->retrieveAllUsers();
-        $userArray = [];
-        foreach ($users as $user) {
-            if($user->role_id!=1 && $user->email_verified==1 && $user->deleted_at==NULL){
-              $user->title = ucfirst($user->title);
-              $user->token = csrf_token();
-              $userArray[] = $user;
-            }
-        }
-        return $userArray;
+        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('approved','=',1)
+                ->whereNull('deleted_at')
+                ->paginate(10);
+
+        return view('user.admin._displayUsers',compact('users'));
     }
 
     /**
@@ -230,16 +225,12 @@ class AdminController extends Controller
      * @return array of pending users
      */
     public function displayPendingUsers(){
-        $users = $this->retrieveAllUsers();
-        $userArray = [];
-        foreach ($users as $user) {
-            if($user->role_id==2 && $user->deleted_at==NULL && $user->approved==0){
-              $user->title = ucfirst($user->title);
-              $user->token = csrf_token();
-              $userArray[] = $user;
-            }
-        }
-        return $userArray;
+        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
+                    ->where('role_id','=',2)
+                    ->where('approved','=',0)
+                    ->whereNull('deleted_at')
+                    ->paginate(10);
+        return view('user.admin._pendingUsers',compact('users'));
     }
 
     /**
@@ -251,7 +242,7 @@ class AdminController extends Controller
     public function deleteUser(Request $request){
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
-        $user = User::find($request->userId);           // find the user
+        $user = User::find($request->id);           // find the user
         $user->delete();                                // delete it in the database
         // create a AdministratorLog entry for the action done
         AdministratorLog::create([
@@ -264,7 +255,8 @@ class AdminController extends Controller
         Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
         });
-        return "OK";
+
+        return Redirect::back()->with('message','User Deleted');
     }
 
     /**
@@ -275,20 +267,48 @@ class AdminController extends Controller
      */
     public function displayBlockedUsers(){
         // get all the user with the blocked status
-        $blockedUsers = DB::table('users')
+        $users = DB::table('users')
                       ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                       ->join('roles', 'role_user.role_id','=','roles.id')
                       ->where('role_user.role_id','!=',1)
                       ->where('users.email_verified','=', 1)
                       ->where('users.deleted_at','=', NULL )
                       ->where('users.is_blocked','=', 1 )
-                      ->get();
-        foreach ($blockedUsers as $blockedUser) {
-            $blockedUser->title = ucfirst($blockedUser->title);     // fix the format for the role in each of the users queried
-            $blockedUser->token = csrf_token();                     // get the token
-        }
-        return $blockedUsers;                                       // return to view
+                      ->paginate(10);
+        // foreach ($blockedUsers as $blockedUser) {
+        //     $blockedUser->title = ucfirst($blockedUser->title);     // fix the format for the role in each of the users queried
+        //     $blockedUser->token = csrf_token();                     // get the token
+        // }
+        return view('user.admin._displayUsers',compact('users'));
     }
+
+    public function searchUser(Request $request){
+        //dd($request->search);
+        $users = DB::table('users')
+                      ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                      ->join('roles', 'role_user.role_id','=','roles.id')
+                      ->where('users.name','LIKE', "%$request->search%")
+                      ->where('users.email_verified','=', 1)
+                      ->where('users.deleted_at','=', NULL )
+                      ->paginate(10);
+
+        return view('user.admin._displayUsers',compact('users'));
+    }
+
+    public function searchPendingUser(Request $request){
+        $users = DB::table('users')
+                      ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                      ->join('roles', 'role_user.role_id','=','roles.id')
+                      ->where('users.name','LIKE', "%$request->search%")
+                      ->where('users.email_verified','=', 0)
+                      ->where('users.deleted_at','=', NULL )
+                      ->paginate(10);
+
+        return view('user.admin._pendingUsers',compact('users'));
+    }
+
+
+
 
     /**
      * Function to add the user to the blocked list, changes blocked status to 1
@@ -299,7 +319,7 @@ class AdminController extends Controller
     public function blockUser(Request $request){
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
-        $user = User::find($request->userId);       // find the user using the user id
+        $user = User::find($request->id);       // find the user using the user id
         $user->is_blocked = !$user->is_blocked;     // change the status for is_blocked column
         $user->save();                              // save the change to the database
         // create a log entry for the action done
@@ -320,7 +340,12 @@ class AdminController extends Controller
         Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->is_blocked], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
         });
-        return  "Ok";
+        if($user->is_blocked == 1){
+            return Redirect::back()->with('message','User Blocked');
+        }else{
+            return Redirect::back()->with('message','User Unblocked');
+        }
+
     }
 
     /**
@@ -412,7 +437,7 @@ class AdminController extends Controller
     public function acceptUser(Request $request){
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
-        $user = User::find($request->userId);
+        $user = User::find($request->id);
         $user->approved = !$user->approved;     // negate the status to approve user
         // create a log entry for the action done
         AdministratorLog::create([
@@ -427,7 +452,7 @@ class AdminController extends Controller
         });
         $user->save();  // save changes to the database
 
-        return  "Ok";
+        return Redirect::back()->withMessage('User Accepted!'); // redirect to the page and display a toast notification that a user is created
     }
 
     /**
@@ -440,7 +465,7 @@ class AdminController extends Controller
     public function rejectUser(Request $request){
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
-        $user = User::find($request->userId);
+        $user = User::find($request->id);
         $user->approved = !$user->approved;     // negate the status to approve user
         // create a log entry for the action done
         AdministratorLog::create([
@@ -454,7 +479,7 @@ class AdminController extends Controller
         });
         $user->save();  // save changes to the database
 
-        return  "Ok";
+        return Redirect::back()->withMessage('User Rejected!'); // redirect to the page and display a toast notification that a user is created
     }
 
     /**
@@ -485,8 +510,8 @@ class AdminController extends Controller
      *
      */
     public function getAdministratorLogs(){
-        $logs = DB::table('administrator_logs')->get();
-        return $logs;
+        $logs = DB::table('administrator_logs')->paginate(10);
+        return view('user.admin._adminLogs',compact('logs'));
     }
 
     /**

@@ -12,7 +12,7 @@
 @endsection
 
 @section('header')
-    Manage Images
+    <h4 id='admin-content-panel-header'>Manage Home Page</h4>
 @endsection
 
 @section('content')

@@ -36,4 +36,11 @@ $(document).ready(function(){
     setInterval(function(){
      		$('.carousel').carousel('next');
       }, carousel_interval);
+
+
+     $('#menu').pushpin({
+         top:55, offset: 60
+     });
+
+
 });
