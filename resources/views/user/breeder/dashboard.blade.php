@@ -30,6 +30,11 @@
         </div>
     </div>
     <div id="card-status" class="row">
+        {{-- <div id="charts-container" class="">
+            <div class="col s12">
+                <canvas id="barChart"></canvas>
+            </div>
+        </div> --}}
 
         <div id="card-product-status" class="col z-depth-1">
             <div class="col s12">
@@ -255,5 +260,61 @@
             }
         );
     </script>
+    <script src="/js/vendor/chart.bundle.min.js"></script>
+    <script type="text/javascript">
+        var rawBarChartData = {
+            labels: ["Sold", "Paid", "On Delivery", "Reserved", "Requested", "Hidden", "Displayed"],
+            datasets: [{
+                label: 'Boar',
+                backgroundColor: 'rgb(255, 99, 132)',
+                data: [
+                    {{ $dashboardStats['sold']['boar'] }},
+                    {{ $dashboardStats['paid']['boar'] }},
+                    {{ $dashboardStats['on_delivery']['boar'] }},
+                    {{ $dashboardStats['reserved']['boar'] }},
+                    {{ $dashboardStats['requested']['boar'] }},
+                    {{ $dashboardStats['hidden']['boar'] }},
+                    {{ $dashboardStats['displayed']['boar'] }}
+                ]
+            }, {
+                label: 'Sow',
+                backgroundColor: 'rgb(54, 162, 235)',
+                data: [
+                    {{ $dashboardStats['sold']['sow'] }},
+                    {{ $dashboardStats['paid']['sow'] }},
+                    {{ $dashboardStats['on_delivery']['sow'] }},
+                    {{ $dashboardStats['reserved']['sow'] }},
+                    {{ $dashboardStats['requested']['sow'] }},
+                    {{ $dashboardStats['hidden']['sow'] }},
+                    {{ $dashboardStats['displayed']['sow'] }}
+                ]
+            }, {
+                label: 'Semen',
+                backgroundColor: 'rgb(75, 192, 192)',
+                data: [
+                    {{ $dashboardStats['sold']['semen'] }},
+                    {{ $dashboardStats['paid']['semen'] }},
+                    {{ $dashboardStats['on_delivery']['semen'] }},
+                    {{ $dashboardStats['reserved']['semen'] }},
+                    {{ $dashboardStats['requested']['semen'] }},
+                    {{ $dashboardStats['hidden']['semen'] }},
+                    {{ $dashboardStats['displayed']['semen'] }}
+                ]
+            }, {
+                label: 'Gilt',
+                backgroundColor: 'rgb(153, 102, 255)',
+                data: [
+                    {{ $dashboardStats['sold']['gilt'] }},
+                    {{ $dashboardStats['paid']['gilt'] }},
+                    {{ $dashboardStats['on_delivery']['gilt'] }},
+                    {{ $dashboardStats['reserved']['gilt'] }},
+                    {{ $dashboardStats['requested']['gilt'] }},
+                    {{ $dashboardStats['hidden']['gilt'] }},
+                    {{ $dashboardStats['displayed']['gilt'] }}
+                ]
+            }]
 
+        };
+    </script>
+    <script src="/js/breeder/dashboard.js"></script>
 @endsection

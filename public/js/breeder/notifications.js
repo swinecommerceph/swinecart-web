@@ -1,62 +1,19 @@
-$(document).ready(function(){
+'use strict';
 
-    // Initialization for select tags
-    $('select').material_select();
-
-    // Initialization for number of items in Swine Cart
-    swinecart.get_quantity();
-
-    // Add product to Swine Cart
-    $(".add-to-cart").click(function(e){
-        e.preventDefault();
-        swinecart.add($(this).parents('form'));
-    })
-
-    // Get items from Swine Cart
-    $('#cart-icon').hover(function(e){
-        e.preventDefault();
-        if($(this).hasClass('active')) swinecart.get_items();
-    });
-
-    // Delete item from Swine Cart
-    $('body').on('click', '#cart-dropdown .delete-from-swinecart' ,function(e){
-        e.preventDefault();
-        swinecart.delete($(this).parents('form'), $(this).parents('li').first());
-    });
-
-});
-
-var notifications = new Vue({
-    el: '#notification-main-container',
+var notificationsPage = new Vue({
+    el: '#notification-page-collection',
     data:{
         token: '',
         notifications: [],
         notificationCount: 0
     },
     methods:{
-        getNotificationCount: function(){
-            // Get count of customer's notifications
-
-            // Do AJAX
-            this.$http.get(
-                config.customerNotifications_url + '/count',
-                {}
-            ).then(
-                function(response){
-                    this.notificationCount = response.body;
-                },
-                function(response){
-                    console.log(response.statusText);
-                }
-            );
-        },
-
         getNotificationInstances: function(){
             // Get notification instances of Customer
 
             // Do AJAX
             this.$http.get(
-                config.customerNotifications_url + '/get',
+                config.breederNotifications_url + '/get',
                 {}
             ).then(
                 function(response){
@@ -79,7 +36,7 @@ var notifications = new Vue({
 
             // Do AJAX
             this.$http.patch(
-                config.customerNotifications_url + '/seen',
+                config.breederNotifications_url + '/seen',
                 {
                     _token: this.token,
                     notificationId: this.notifications[index].id,
@@ -99,6 +56,6 @@ var notifications = new Vue({
     },
     created: function(){
         // Get notifications count
-        this.getNotificationCount();
+        this.getNotificationInstances();
     }
 });

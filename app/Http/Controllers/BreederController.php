@@ -212,10 +212,21 @@ class BreederController extends Controller
     }
 
     /**
+     * Show Breeder's Notification Page
+     *
+     * @return  View
+     */
+    public function showNotificationsPage()
+    {
+        return view('user.breeder.notifications');
+    }
+
+    /**
      * Get Breeder's notification instances
+     * AJAX
      *
      * @param  Request $request
-     * @return JSON / View
+     * @return JSON
      */
     public function getNotifications(Request $request)
     {
@@ -232,10 +243,7 @@ class BreederController extends Controller
 
             return [collect($notificationInstances)->toJson(), csrf_token()];
         }
-        else{
 
-            return view('');
-        }
     }
 
     /**

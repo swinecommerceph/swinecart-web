@@ -361,5 +361,5 @@
         // Variables
         var rawProducts = {!! $products !!};
     </script>
-    <script src="/js/breeder/dashboard.js"></script>
+    <script src="/js/breeder/dashboardProductStatus.js"></script>
 @endsection

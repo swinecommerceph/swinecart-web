@@ -204,7 +204,18 @@ class CustomerController extends Controller
     }
 
     /**
+     * Show Customer's Notification Page
+     *
+     * @return  View
+     */
+    public function showNotificationsPage()
+    {
+        return view('user.customer.notifications');
+    }
+
+    /**
      * Get Customer's notification instances
+     * AJAX
      *
      * @param  Request $request
      * @return JSON / View
@@ -223,10 +234,6 @@ class CustomerController extends Controller
             }
 
             return [collect($notificationInstances)->toJson(), csrf_token()];
-        }
-        else{
-
-            return view('');
         }
     }
 

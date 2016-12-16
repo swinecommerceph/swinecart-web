@@ -288,12 +288,11 @@ html{
 	font-family:Poppins;
 }
 
-
 #notification-dropdown .collection-item{
 	padding: 0px;
 }
 
-#notification-dropdown .collection-item p{
+#notification-dropdown .collection-item p, #notification-page-collection .collection-item p{
 	margin: 0px;
 }
 

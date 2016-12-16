@@ -23,7 +23,7 @@ var notifications = new Vue({
 
             // Do AJAX
             this.$http.get(
-                config.breederNotifications_url+'/count',
+                config.breederNotifications_url + '/count',
                 {}
             ).then(
                 function(response){
@@ -40,7 +40,7 @@ var notifications = new Vue({
 
             // Do AJAX
             this.$http.get(
-                config.breederNotifications_url,
+                config.breederNotifications_url + '/get',
                 {}
             ).then(
                 function(response){

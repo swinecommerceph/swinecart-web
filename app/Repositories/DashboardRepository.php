@@ -263,7 +263,6 @@ class DashboardRepository
                     $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
                     $transactionLog->save();
 
-                    // ******** ********
                     // Notify reserved customer
                     $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
                     $reservedCustomerUser->notify(new ProductReserved(
@@ -273,13 +272,11 @@ class DashboardRepository
                             'url' => route('cart.items')
                         ]
                     ));
-                    // ******** ********
 
                     // If product type is not semen remove other requests to this product
                     $productRequests = SwineCartItem::where('product_id', $product->id)->where('customer_id', '<>', $request->customer_id)->where('reservation_id',0);
 
                     if($product->type != 'semen'){
-                        // ******** ********
                         // Notify Customer users that the product has been reserved to another customer
                         foreach ($productRequests->get() as $productRequest) {
                             $customerUser = $productRequest->customer->users()->first();
@@ -292,7 +289,6 @@ class DashboardRepository
                                 ]
                             ));
                         }
-                        // ******** ********
 
                         // Delete requests to this product after notifying Customer users
                         $productRequests->delete();
@@ -330,7 +326,6 @@ class DashboardRepository
                 $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
                 $transactionLog->save();
 
-                // ******** ********
                 // Notify customer
                 $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
                 $reservedCustomerUser->notify(new ProductReservationUpdate(
@@ -340,7 +335,6 @@ class DashboardRepository
                         'url' => route('cart.items')
                     ]
                 ));
-                // ******** ********
 
                 return "OK";
 
@@ -357,7 +351,6 @@ class DashboardRepository
                 $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
                 $transactionLog->save();
 
-                // ******** ********
                 // Notify customer
                 $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
                 $reservedCustomerUser->notify(new ProductReservationUpdate(
@@ -367,7 +360,6 @@ class DashboardRepository
                         'url' => route('cart.items')
                     ]
                 ));
-                // ******** ********
 
                 return "OK";
 
@@ -384,7 +376,6 @@ class DashboardRepository
                 $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
                 $transactionLog->save();
 
-                // ******** ********
                 // Notify reserved customer
                 $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
                 $reservedCustomerUser->notify(new ProductReservationUpdate(
@@ -394,7 +385,6 @@ class DashboardRepository
                         'url' => route('cart.items')
                     ]
                 ));
-                // ******** ********
 
                 return "OK";
 

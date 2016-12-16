@@ -18,6 +18,7 @@ use App\Models\TransactionLog;
 use App\Models\ProductReservation;
 
 use Auth;
+use App\Notifications\BreederRated;
 use App\Notifications\ProductRequested;
 
 class SwineCartController extends Controller
@@ -118,6 +119,16 @@ class SwineCartController extends Controller
             $decodedStatusTransaction['rated'] = date('j M Y (D) g:iA', time());
             $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
             $transactionLog->save();
+
+            // Notify Breeder of the rating
+            $breederUser = Breeder::find($request->breederId)->users()->first();
+            $breederUser->notify(new BreederRated(
+                [
+                    'description' => 'Customer ' . $this->user->name . ' rated you',
+                    'time' => $decodedStatusTransaction['rated'],
+                    'url' => route('dashboard')
+                ]
+            ));
 
             return "OK";
         }

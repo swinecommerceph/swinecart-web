@@ -83,9 +83,10 @@ Route::group(['middleware' => ['web']], function () {
         Route::patch('dashboard/product-status/update-status',['as' => 'dashboard.reserveProduct', 'uses' => 'DashboardController@updateProductStatus']);
 
         // notification-related
-        Route::get('notifications',['as' => 'notifs', 'uses' => 'BreederController@getNotifications']);
-        Route::get('notifications/count',['as' => 'notifs.count', 'uses' => 'BreederController@getNotificationsCount']);
-        Route::patch('notifications/seen',['as' => 'notifs.seen', 'uses' => 'BreederController@seeNotification']);
+        Route::get('notifications',['as' => 'bNotifs', 'uses' => 'BreederController@showNotificationsPage']);
+        Route::get('notifications/get',['as' => 'bNotifs.get', 'uses' => 'BreederController@getNotifications']);
+        Route::get('notifications/count',['as' => 'bNotifs.count', 'uses' => 'BreederController@getNotificationsCount']);
+        Route::patch('notifications/seen',['as' => 'bNotifs.seen', 'uses' => 'BreederController@seeNotification']);
 
     });
 
@@ -118,9 +119,10 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('view-swine-cart',['as'=> 'view.cart', 'uses' => 'SwineCartController@getSwineCartItems']);
 
         // notification-related
-        Route::get('notifications',['as' => 'notifs', 'uses' => 'CustomerController@getNotifications']);
-        Route::get('notifications/count',['as' => 'notifs.count', 'uses' => 'CustomerController@getNotificationsCount']);
-        Route::patch('notifications/seen',['as' => 'notifs.seen', 'uses' => 'CustomerController@seeNotification']);
+        Route::get('notifications',['as' => 'cNotifs', 'uses' => 'CustomerController@showNotificationsPage']);
+        Route::get('notifications/get',['as' => 'cNotifs.get', 'uses' => 'CustomerController@getNotifications']);
+        Route::get('notifications/count',['as' => 'cNotifs.count', 'uses' => 'CustomerController@getNotificationsCount']);
+        Route::patch('notifications/seen',['as' => 'cNotifs.seen', 'uses' => 'CustomerController@seeNotification']);
 
     });
 
