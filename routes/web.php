@@ -150,7 +150,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('home/add', ['as' => 'admin.add.user', 'uses' => 'AdminController@createUser']);
 
         Route::get('home/manage/homepage', ['as'=>'admin.manage.homepage', 'uses' => 'AdminController@manageHomePage']);
-        //Route::get('home/manage/textcontent', ['as'=>'admin.manage.text', 'uses' => 'AdminController@manageTextContent']);
         Route::get('home/manage/homepage/fetchimages', ['as'=>'admin.manage.fetchimages', 'uses'=>'AdminController@getHomeImages']);
         Route::post('home/manage/homepage/addcontent', ['as'=>'admin.manage.addcontent', 'uses'=>'AdminController@addHomeImage']);
         Route::delete('home/manage/homepage/deletecontent', ['as'=>'admin.manage.deletecontent', 'uses'=>'AdminController@deleteContent']);
