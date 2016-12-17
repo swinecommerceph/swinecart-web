@@ -282,19 +282,50 @@ class AdminController extends Controller
         return view('user.admin._displayUsers',compact('users'));
     }
 
+    /**
+     * Function to get the searched approved user
+     *
+     * @param  request array from search form containing string for name and values for checkboxes
+     * @return array of approved users that match the search criterion
+     */
     public function searchUser(Request $request){
-        //dd($request->search);
-        $users = DB::table('users')
-                      ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                      ->join('roles', 'role_user.role_id','=','roles.id')
-                      ->where('users.name','LIKE', "%$request->search%")
-                      ->where('users.email_verified','=', 1)
-                      ->where('users.deleted_at','=', NULL )
-                      ->paginate(10);
+        //$values = [$request->admin, $request->breeder, $request->customer];
+        if($request->breeder==null && $request->customer==null){
+            $users = DB::table('users')
+                          ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                          ->join('roles', 'role_user.role_id','=','roles.id')
+                          ->where('users.name','LIKE', "%$request->search%")
+                          ->where('users.email_verified','=', 1)
+                          ->where('users.deleted_at','=', NULL )
+                          ->paginate(10);
+        }else{
+            $values = [$request->breeder, $request->customer];
+            $search = [];
+            for($i = 0; $i < 2; $i++){
+                if($values[$i] != null){
+                    $search[] = $values[$i];
+                }
+            }
+            $users = DB::table('users')
+                          ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                          ->join('roles', 'role_user.role_id','=','roles.id')
+                          ->where('users.name','LIKE', "%$request->search%")
+                          ->where('users.email_verified','=', 1)
+                          ->where('users.deleted_at','=', NULL )
+                          ->whereIn('role_user.role_id', $search)
+                          ->paginate(10);
+        }
+
 
         return view('user.admin._displayUsers',compact('users'));
     }
 
+    /**
+     * Function to get the searched pending users
+     *
+     * @param  request array from search form containing string for name and values for checkboxes
+     * @return array of pending users that match the search criterion
+     */
     public function searchPendingUser(Request $request){
         $users = DB::table('users')
                       ->join('role_user', 'users.id', '=' , 'role_user.user_id')
@@ -306,8 +337,6 @@ class AdminController extends Controller
 
         return view('user.admin._pendingUsers',compact('users'));
     }
-
-
 
 
     /**

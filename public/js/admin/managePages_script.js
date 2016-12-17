@@ -1,17 +1,5 @@
 $(document).ready(function(){
 
-    // var app = new Vue({
-    //   el: '#boo',
-    //   data: {
-    //     message: 'Hello Vue!'
-    //   }
-    // });
-    // $('#pages-home-images').click(function(e){
-    //     e.preventDefault();
-    //
-    //     pages.fetchImages();
-    // });
-
 
     $('.delete-content-trigger').click(function(e){
         e.preventDefault();
