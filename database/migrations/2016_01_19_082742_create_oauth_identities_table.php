@@ -21,6 +21,6 @@ class CreateOauthIdentitiesTable extends Migration
     public function down()
     {
         $tableName = Config::get('eloquent-oauth.table');
-        Schema::drop($tableName);
+        Schema::dropIfExists($tableName);
     }
 }

@@ -12,10 +12,10 @@ class CreateUserQueriesTable extends Migration
      */
     public function up()
     {
-      Schema::create('user_queries', function (Blueprint $table) {
-        $table->integer('user_id')->unsigned();
-        $table->integer('query_id')->unsigned();
-      });
+        Schema::create('user_queries', function (Blueprint $table) {
+            $table->integer('user_id')->unsigned();
+            $table->integer('query_id')->unsigned();
+        });
     }
 
     /**
@@ -25,6 +25,6 @@ class CreateUserQueriesTable extends Migration
      */
     public function down()
     {
-        Schema::drop('user_queries');
+        Schema::dropIfExists('user_queries');
     }
 }

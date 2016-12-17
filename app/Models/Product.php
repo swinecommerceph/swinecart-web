@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Breeder;
 use App\Models\Image;
 use App\Models\Video;
+use App\Models\ProductReservation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -52,7 +53,7 @@ class Product extends Model
      *
      * @var array
      */
-    protected $hidden = ['status_instance', 'deleted_at'];
+    protected $hidden = ['deleted_at'];
 
     /**
      * Get the breeder that owns this product
@@ -76,5 +77,13 @@ class Product extends Model
     public function videos()
     {
         return $this->morphMany(Video::class, 'videoable');
+    }
+
+    /**
+     * Get all of the Product's reservations
+     */
+    public function reservations()
+    {
+        return $this->hasMany(ProductReservation::class);
     }
 }

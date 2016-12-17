@@ -35,6 +35,6 @@ class CreateBreederUserTable extends Migration
      */
     public function down()
     {
-        Schema::drop('breeder_user');
+        Schema::dropIfExists('breeder_user');
     }
 }

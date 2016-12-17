@@ -19,6 +19,10 @@ html{
 	width: 350px !important;
 }
 
+#notification-dropdown{
+	width: 400px !important;
+}
+
 /* Navigation bar element styles*/
 #nav-mobile>li{
 	height:64px;
@@ -141,33 +145,40 @@ html{
 
 #cart {
 	overflow: auto;
-	max-height: 364px;
+	max-height: 30rem;
 }
 
 #transaction-cart {
 	overflow: auto;
-	max-height: 364px;
+	max-height: 30rem;
 }
 
-/*Modal Edit*/
-#comment {
-	width: 325px;
+/* Rate Breeder modal */
+#comment-container {
+	padding: 0 1.5rem;
 }
 
+#comment-container label{
+	left:1.5rem;
+}
 /*#info-modal {
   max-height: 540px;
 } for future testing*/
 
-#rate {
-	width: 400px;
+#rate-modal {
+	width: 450px;
 }
 
 #confirmation {
 	width: 300px;
 }
 
-.rate-button {
+#rate-button {
 	background-color: #e67764;
+}
+
+#rate-button:hover {
+	background-color: rgba(230, 119, 100, 0.9);
 }
 
 /* Caption styles */
@@ -211,11 +222,11 @@ html{
 }
 
 /* Swine Cart styles */
-#cart-icon i.left{
+#cart-icon i.left, #notification-icon i.left{
 	margin-right: 0px;
 }
 
-#cart-icon span.badge{
+#cart-icon span.badge, #notification-icon span.badge{
 	color: white;
 	background-color: #ee6e73;
 	border-radius: 5px;
@@ -269,6 +280,22 @@ html{
 	max-height:400px;
 }
 
+/* Notification container styles */
+#notification-container{
+	margin:0px;
+	overflow-y:auto !important;
+	max-height:500px;
+	font-family:Poppins;
+}
+
+#notification-dropdown .collection-item{
+	padding: 0px;
+}
+
+#notification-dropdown .collection-item p, #notification-page-collection .collection-item p{
+	margin: 0px;
+}
+
 /* Table styles */
 #page-breeder-manage-products table p{
 	margin:0px;
@@ -280,6 +307,11 @@ html{
 
 #product-status-table th{
 	cursor:pointer;
+}
+
+#page-customer-view-products #showcase-container .card .card-reveal td,
+#page-breeder-manage-products #view-products-container .card .card-reveal td{
+	padding:0px;
 }
 
 /* Tab Styles */

@@ -15,10 +15,10 @@ class CreateTransactionLogsTable extends Migration
         Schema::create('transaction_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('customer_id')->unsigned();
-            $table->integer('product_id')->unsigned();
-            $table->integer('breeder_id')->unsigned();
-            $table->string('status');
-            $table->timestamps();
+            $table->integer('swineCart_id')->unsigned();
+            $table->json('product_details');
+            $table->json('status_transactions');
+            // $table->timestamps();
         });
     }
 
@@ -29,6 +29,6 @@ class CreateTransactionLogsTable extends Migration
      */
     public function down()
     {
-        Schema::drop('transaction_logs');
+        Schema::dropIfExists('transaction_logs');
     }
 }

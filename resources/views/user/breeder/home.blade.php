@@ -19,6 +19,77 @@
 @section('navbarHead')
     <li><a href="{{ route('home_path') }}"> <i class="material-icons">message</i></a></li>
     <li><a href="{{ route('dashboard') }}"> <i class="material-icons">assessment</i></a></li>
+    <li id="notification-main-container">
+        <a href="#!" id="notification-icon"
+            class="dropdown-button"
+            data-beloworigin="true"
+            data-hover="false"
+            data-alignment="right"
+            data-activates="notification-dropdown"
+            @click.prevent="getNotificationInstances"
+        >
+            <i class="material-icons"
+                :class="notificationCount > 0 ? 'left' : '' "
+            >
+                notifications
+            </i>
+            <span class="badge"
+                v-if="notificationCount > 0 && notificationCount <= 99"
+            >
+                @{{ notificationCount }}
+            </span>
+            <span class="badge"
+                v-if="notificationCount > 99"
+            >
+                99+
+            </span>
+        </a>
+        <ul id="notification-dropdown" class="dropdown-content collection">
+            <div id="notification-preloader-circular" class="row">
+                <div class="center-align">
+                    <div class="preloader-wrapper small active">
+                        <div class="spinner-layer spinner-blue-only">
+                            <div class="circle-clipper left">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="gap-patch">
+                                <div class="circle"></div>
+                            </div>
+                            <div class="circle-clipper right">
+                                <div class="circle"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <li>
+                <ul id="notification-container" class="collection">
+                    <li v-for="(notification,index) in notifications"
+                        style="overflow:auto;"
+                        class="collection-item"
+                    >
+                        <a class="black-text"
+                            :href="notification.url"
+                            @click.prevent="goToNotification(index)"
+                        >
+                            <span class="left" v-if="!notification.read_at">
+                                <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_checked</i>
+                            </span>
+                            <span class="left" v-else >
+                                <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
+                            </span>
+                            <p style="margin-left:1.5rem;"> @{{ notification.data.description }} </p>
+                            <p class="left-align grey-text text-darken-1" style="margin-left:1.5rem; font-size:0.8rem;"> @{{ notification.data.time }} </p>
+                        </a>
+                    </li>
+
+                </ul>
+            </li>
+            <li>
+                <a href="{{ route('bNotifs') }}" class="center-align">See all Notifications</a>
+            </li>
+        </ul>
+    </li>
 @endsection
 
 @section('navbarDropdown')
@@ -32,12 +103,12 @@
         <i class="material-icons">more_vert</i>
         <ul>
             <li><a class="btn-floating waves-effect waves-light grey tooltipped delete-selected-button" data-position="left" data-delay="50" data-tooltip="Delete all chosen"><i class="material-icons">delete</i></a></li>
-            @if(!empty($filters['unshowcased']))
+            @if(!empty($filters['hidden']))
                 {{-- Only show when products are unshowcased --}}
-                <li><a class="btn-floating waves-effect waves-light teal ligthen-2 tooltipped showcase-selected-button" data-position="left" data-delay="50" data-tooltip="Showcase all chosen"><i class="material-icons">unarchive</i></a></li>
-            @elseif(!empty($filters['showcased']))
+                <li><a class="btn-floating waves-effect waves-light teal ligthen-2 tooltipped display-selected-button" data-position="left" data-delay="50" data-tooltip="Display all chosen"><i class="material-icons">visibility</i></a></li>
+            @elseif(!empty($filters['displayed']))
                 {{-- Only show when products are showcased --}}
-                <li><a class="btn-floating waves-effect waves-light teal ligthen-2 tooltipped unshowcase-selected-button" data-position="left" data-delay="50" data-tooltip="Unshowcase all chosen"><i class="material-icons">archive</i></a></li>
+                <li><a class="btn-floating waves-effect waves-light teal ligthen-2 tooltipped hide-selected-button" data-position="left" data-delay="50" data-tooltip="Hide all chosen"><i class="material-icons">visibility_off</i></a></li>
             @endif
             <li><a href="#" class="btn-floating modal-trigger waves-effect waves-light teal tooltipped select-all-button" data-position="left" data-delay="50" data-tooltip="Select All Products"><i class="material-icons">event_available</i></a></li>
             <li><a href="#" class="btn-floating modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="left" data-delay="50" data-tooltip="Add product"><i class="material-icons">add</i></a></li>
@@ -101,5 +172,7 @@ of criteria/qualifications.</h5>
 @endsection
 
 @section('initScript')
+    <script src="/js/vendor/VueJS/vue.js"></script>
+    <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
     <script src="/js/breeder/breeder_custom.js"> </script>
 @endsection

@@ -63,7 +63,7 @@ var swinecart = {
                         span.removeClass('badge');
                         $('#cart-icon .material-icons').removeClass('left');
                         $('#cart-dropdown #item-container').html(
-                            '<li> <span class="center-align black-text"> No items in your Swine Cart </span> </li>'
+                            '<li> <span class="center-align black-text"> No potential products to request </span> </li>'
                         );
                     } else span.html(sessionStorage.getItem('swine_cart_quantity'));
 
@@ -75,48 +75,6 @@ var swinecart = {
             error: function(message) {
                 console.log(message['responseText']);
             }
-        });
-    },
-
-    request: function(parent_form, li_element){
-        // Do AJAX
-        $.ajax({
-            url: config.swineCart_url + '/request',
-            type: "PUT",
-            cache: false,
-            data: {
-                "_token": parent_form.find('input[name=_token]').val(),
-                "itemId": parent_form.attr('data-item-id'),
-                "productId": parent_form.attr('data-product-id')
-            },
-            success: function(data) {
-                var product = li_element.find('a.anchor-title').text();
-                var span = $('#cart-icon span');
-
-                li_element.find('.material-icons.request').removeClass('grey-text text-darken-4').addClass('teal-text');
-                li_element.find('.material-icons.request').attr('data-tooltip', 'Requested');
-                li_element.find('div.action').html(
-                    '(For Approval)'
-                    );
-
-                // Put quantity of Swine Cart to sessionStorage
-                sessionStorage.setItem('swine_cart_quantity', data);
-
-                if(data == 0){
-                    span.html("");
-                    span.removeClass('badge');
-                    $('#cart-icon .material-icons').removeClass('left');
-                    $('#cart-dropdown #item-container').html(
-                        '<li> <span class="center-align black-text"> No items in your Swine Cart </span> </li>'
-                    );
-                }
-                else span.html(sessionStorage.getItem('swine_cart_quantity'));
-
-                Materialize.toast(product + ' requested', 1800, 'green lighten-1')
-            },
-            error: function(message) {
-                console.log(message['responseText']);
-            },
         });
     },
 
@@ -133,7 +91,7 @@ var swinecart = {
                 // Check first if empty
                 if (data.length == 0) {
                     $('#cart-dropdown #item-container').html(
-                        '<li> <span class="center-align black-text"> No items in your Swine Cart </span> </li>'
+                        '<li> <span class="center-align black-text"> No potential products to request </span> </li>'
                     );
                     config.preloader_circular.hide();
                 } else {
@@ -175,51 +133,6 @@ var swinecart = {
                 console.log(message['responseText']);
             }
         });
-    },
-
-    record: function(parent_form){
-        $.ajax({
-            url: config.swineCart_url + '/record',
-            type: "POST",
-            data: {
-                "_token": parent_form.find('input[name=_token]').val(),
-                "breederId" : parent_form.attr('data-breeder-id'),
-                "customerId" : parent_form.attr('data-customer-id'),
-                "productId" : parent_form.attr('data-product-id'),
-                "status": parent_form.attr('data-status'),
-            },
-            success: function(data) {
-
-            },
-            error: function(message){
-                console.log(message['responseText']);
-            }
-        });
-
-    },
-
-    rate: function(parent_form, comment) {
-        $.ajax({
-        url: config.swineCart_url + '/rate',
-        type: "POST",
-        data: {
-            "_token": parent_form.find('input[name=_token]').val(),
-            "breederId" : parent_form.attr('data-breeder-id'),
-            "customerId" : parent_form.attr('data-customer-id'),
-            "productId" : parent_form.attr('data-product-id'),
-            "delivery" : parent_form.attr('data-delivery'),
-            "transaction" : parent_form.attr('data-transaction'),
-            "productQuality" : parent_form.attr('data-productQuality'),
-            "comment" : comment
-        },
-        success: function(data) {
-            $('#cart').find('li[data-product-id='+data+']').remove();
-        },
-        error: function(message){
-            console.log(message['responseText']);
-        }
-        });
-
     },
 
     get_quantity: function() {

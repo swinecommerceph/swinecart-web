@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Customer;
+use App\Models\TransactionLog;
 use Illuminate\Database\Eloquent\Model;
 
 class SwineCartItem extends Model
@@ -25,10 +26,18 @@ class SwineCartItem extends Model
         'quantity'];
 
     /**
-     * Get the respective customer of the Swine Cart
+     * Get the respective customer of the Swine Cart Item
      */
     public function customer()
     {
-        $this->belongsTo(Customer::class);
+        return $this->belongsTo(Customer::class);
+    }
+
+    /**
+     * Get the transaction log that tracks the Swine Cart Item
+     */
+    public function transactionLog()
+    {
+        return $this->hasOne(TransactionLog::class, 'swineCart_id');
     }
 }

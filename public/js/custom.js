@@ -26,7 +26,7 @@
     $(".tooltipped").tooltip({delay:50});
 
     // Initialization for Select tags
-    $('select').material_select();
+    // $('select').material_select();
     $('select#other-breeds').material_select();
 
 	// Disable buttons after submitting to prevent multiple requests

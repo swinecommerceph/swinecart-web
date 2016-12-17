@@ -35,6 +35,7 @@
 					      <option value="" disabled selected>Choose Type</option>
 					      <option value="boar">Boar</option>
 					      <option value="sow">Sow</option>
+						  <option value="gilt">Gilt</option>
 					      <option value="semen">Semen</option>
 					    </select>
 					    <label>Type*</label>
@@ -107,10 +108,12 @@
 				</div>
 
 				<div class="row">
-					{{-- Age --}}
+					{{-- Birthdate --}}
 					<div class="input-field col s6">
-						{!! Form::text('age', null)!!}
-						{!! Form::label('age', 'Age at 90kg (days)') !!}
+						<input type="date" id="birthdate" name="birthdate" class="datepicker"/>
+						<label for="birthdate">Birth Date</label>
+						{{-- {!! Form::date('birthday', null, ['class' => 'datepicker'])!!}
+						{!! Form::label('birthday', 'Birth Date') !!} --}}
 					</div>
 
 					{{-- ADG --}}
@@ -293,6 +296,7 @@
 					      <option value="" disabled selected>Choose Type</option>
 					      <option value="boar">Boar</option>
 					      <option value="sow">Sow</option>
+						  <option value="gilt">Gilt</option>
 					      <option value="semen">Semen</option>
 					    </select>
 					    <label>Type*</label>
@@ -365,10 +369,12 @@
 				</div>
 
 				<div class="row">
-					{{-- Age --}}
+					{{-- Birhtdate --}}
 					<div class="input-field col s6">
-						{!! Form::text('age', null)!!}
-						{!! Form::label('age', 'Age at 90kg (days)') !!}
+						<input type="date" id="birthdate" name="birthdate" class="datepicker"/>
+						<label for="birthdate">Birth Date</label>
+						{{-- {!! Form::text('birthdate', null)!!}
+						{!! Form::label('birthdate', 'Birthdate') !!} --}}
 					</div>
 
 					{{-- ADG --}}
