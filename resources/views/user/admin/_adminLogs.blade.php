@@ -9,7 +9,39 @@
 @endsection
 
 @section('header')
-    <h4 id='admin-content-panel-header'>Administrator Logs</h4>
+    <div class="row">
+        <div class="col s5">
+            <h4 id='admin-content-panel-header'>Administrator Logs</h4>
+        </div>
+
+        <div class="col s7">
+            <div class="row">
+                {!!Form::open(['route'=>'admin.search.logs', 'method'=>'GET', 'class'=>'search-user-form col s12'])!!}
+                    <div class="input-field col s12">
+                        <div class="col s6">
+                            <input id="search-input" class="validate" type="text" name="search">
+                            <label for="search-input">Search</label>
+                        </div>
+                        <div class="col s6">
+                            <select multiple name="option[]">
+                                <option disabled selected>Choose category</option>
+                                <option value="Block" name="block">Block</option>
+                                <option value="Unblock" name="unblock">Unblock</option>
+                                <option value="Delete" name="delete">Delete</option>
+                                <option value="Create" name="create">Create</option>
+                                <option value="Accept" name="accept">Accept</option>
+                                <option value="Reject" name="reject">Reject</option>
+                            </select>
+                        </div>
+                    </div>
+
+                    <div class="col hide">
+                        <button id="search-button" class="btn waves-effect waves-light" type="submit">Submit</button>
+                    </div>
+                {!!Form::close()!!}
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('content')
@@ -17,19 +49,31 @@
         <thead>
           <tr>
               <th data-field="time">Time</th>
-              <th data-field="name">Name</th>
+              <th data-field="name">Admin Name</th>
+              <th data-field="name">User Name</th>
+              <th data-field="name">Category</th>
               <th data-field="action">Action</th>
           </tr>
         </thead>
 
         <tbody>
-            @foreach($logs as $log)
+            @forelse($logs as $log)
                 <tr>
                     <td>{{$log->created_at}}</td>
                     <td>{{$log->admin_name}}</td>
+                    <td>{{$log->user}}</td>
+                    <td>{{$log->category}}</td>
                     <td>{{$log->action}}</td>
                 </tr>
-            @endforeach
+            @empty
+                <tr>
+                    <td></td>
+                    <td></td>
+                    <td class="center">Administrator Log Empty</td>
+                    <td></td>
+                    <td></td>
+                </tr>
+            @endforelse
         </tbody>
       </table>
       <div class="pagination center"> {{ $logs->links() }} </div>

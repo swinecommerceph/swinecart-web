@@ -134,6 +134,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('form', ['as'=>'registration.form', 'uses'=>'AdminController@getRegistrationForm']);
         Route::post('form/register', ['as'=>'admin.register.submit', 'uses'=>'AdminController@submitRegistrationForms']);
         Route::get('home/logs', ['as'=>'admin_logs', 'uses'=>'AdminController@getAdministratorLogs']);
+        Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
 
 
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
@@ -146,6 +147,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::put('home/approve', ['as'=>'admin.approve', 'uses'=>'AdminController@acceptUser']);
         Route::delete('home/reject', ['as'=>'admin.reject', 'uses'=>'AdminController@rejectUser']);
         Route::get('home/search', ['as' => 'admin.search', 'uses' => 'AdminController@searchUser']);
+        Route::get('home/search_blocked', ['as' => 'admin.searchBlocked', 'uses' => 'AdminController@searchBlockedUsers']);
         Route::get('home/pending/search', ['as' => 'admin.searchPending', 'uses' => 'AdminController@searchPendingUser']);
         Route::post('home/add', ['as' => 'admin.add.user', 'uses' => 'AdminController@createUser']);
 

@@ -31,7 +31,7 @@
               <li><a>{{ Auth::user()->name }}</a> </li>
 
               <li>
-                <a class="waves-effect waves-light modal-trigger tooltipped" href="{{ route('admin_logs') }}" data-position="bottom" data-delay="40" data-tooltip="Administrator Logs"">
+                <a class="waves-effect waves-light modal-trigger tooltipped" href="{{ route('admin_logs') }}" data-position="bottom" data-delay="40" data-tooltip="Administrator Logs">
                     <i class="material-icons">class</i>
                 </a>
               </li>
@@ -64,11 +64,7 @@
 
 
                 <li>
-                    <a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
-                        <i class="material-icons">arrow_drop_down</i>
-                    </a>
-                      <li><a href="{{ url('logout') }}">Logout</a></li>
-                    </ul>
+                    <li><a href="{{ url('logout') }}">Logout</a></li>
                 </li>
             </ul>
           </div>

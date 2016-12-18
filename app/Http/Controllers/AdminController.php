@@ -248,7 +248,9 @@ class AdminController extends Controller
         AdministratorLog::create([
             'admin_id' => $adminID,
             'admin_name' => $adminName,
-            'action' => 'Deleted '.$user->name
+            'user' => $user->name,
+            'category' => 'Delete',
+            'action' => 'Deleted '.$user->name,
         ]);
 
         // send an email notification to the user's email
@@ -279,7 +281,7 @@ class AdminController extends Controller
         //     $blockedUser->title = ucfirst($blockedUser->title);     // fix the format for the role in each of the users queried
         //     $blockedUser->token = csrf_token();                     // get the token
         // }
-        return view('user.admin._displayUsers',compact('users'));
+        return view('user.admin._blockedUsers',compact('users'));
     }
 
     /**
@@ -338,6 +340,40 @@ class AdminController extends Controller
         return view('user.admin._pendingUsers',compact('users'));
     }
 
+    public function searchBlockedUsers(Request $request){
+        if($request->breeder==null && $request->customer==null){
+            $users = DB::table('users')
+                          ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                          ->join('roles', 'role_user.role_id','=','roles.id')
+                          ->where('users.name','LIKE', "%$request->search%")
+                          ->where('users.email_verified','=', 1)
+                          ->where('users.deleted_at','=', NULL )
+                          ->where('users.is_blocked','=', 1 )
+                          ->paginate(10);
+        }else{
+            $values = [$request->breeder, $request->customer];
+            $search = [];
+            for($i = 0; $i < 2; $i++){
+                if($values[$i] != null){
+                    $search[] = $values[$i];
+                }
+            }
+            $users = DB::table('users')
+                          ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                          ->join('roles', 'role_user.role_id','=','roles.id')
+                          ->where('users.name','LIKE', "%$request->search%")
+                          ->where('users.email_verified','=', 1)
+                          ->where('users.deleted_at','=', NULL )
+                          ->where('users.is_blocked','=', 1 )
+                          ->whereIn('role_user.role_id', $search)
+                          ->paginate(10);
+        }
+
+
+        return view('user.admin._blockedUsers',compact('users'));
+    }
+
+
 
     /**
      * Function to add the user to the blocked list, changes blocked status to 1
@@ -356,13 +392,17 @@ class AdminController extends Controller
             AdministratorLog::create([
                 'admin_id' => $adminID,
                 'admin_name' => $adminName,
-                'action' => 'Blocked '.$user->name
+                'user' => $user->name,
+                'category' => 'Block',
+                'action' => 'Blocked '.$user->name,
             ]);
         }else{
             AdministratorLog::create([
                 'admin_id' => $adminID,
                 'admin_name' => $adminName,
-                'action' => 'Unblocked '.$user->name
+                'user' => $user->name,
+                'category' => 'Unblock',
+                'action' => 'Unblocked '.$user->name,
             ]);
         }
         // send an email notification to the email of the user
@@ -439,7 +479,9 @@ class AdminController extends Controller
         AdministratorLog::create([
             'admin_id' => $adminID,
             'admin_name' => $adminName,
-            'action' => 'Created user account for '.$data['email']
+            'user' => $data['email'],
+            'category' => 'Create',
+            'action' => 'Created user account for '.$data['email'],
         ]);
 
         Mail::send('emails.credentials', ['email' => $request->input('email'),'password' => $password], function ($message) use($data){     // send an email containing the credential of the user to the input email
@@ -472,7 +514,9 @@ class AdminController extends Controller
         AdministratorLog::create([
             'admin_id' => $adminID,
             'admin_name' => $adminName,
-            'action' => 'Approved '.$user->name
+            'user' => $user->name,
+            'category' => 'Accept',
+            'action' => 'Approved '.$user->name,
         ]);
 
         // send an email notification to the email of the user
@@ -500,7 +544,9 @@ class AdminController extends Controller
         AdministratorLog::create([
             'admin_id' => $adminID,
             'admin_name' => $adminName,
-            'action' => 'Reject '.$user->name
+            'user' => $user->name,
+            'category' => 'Reject',
+            'action' => 'Reject '.$user->name,
         ]);
         // send an email notification to the email of the user
         Mail::send('emails.notification', ['type'=>'rejected'], function ($message) use($user){
@@ -540,6 +586,24 @@ class AdminController extends Controller
      */
     public function getAdministratorLogs(){
         $logs = DB::table('administrator_logs')->paginate(10);
+        return view('user.admin._adminLogs',compact('logs'));
+    }
+
+    public function searchAdministratorLogs(Request $request){
+
+        if($request->option!=null){
+            $logs = DB::table('administrator_logs')
+                    ->whereIn('category', $request->option)
+                    ->where('user', 'LIKE', "%$request->search%")
+                    ->orWhere('admin_name', 'LIKE', "%$request->search%")
+                    ->paginate(10);
+        }else{
+            $logs = DB::table('administrator_logs')
+                    ->where('user', 'LIKE', "%$request->search%")
+                    ->orWhere('admin_name', 'LIKE', "%$request->search%")
+                    ->paginate(10);
+        }
+
         return view('user.admin._adminLogs',compact('logs'));
     }
 

@@ -17,6 +17,8 @@ class CreateAdministratorLogsTable extends Migration
             $table->increments('id');
             $table->integer('admin_id')->unsigned();
             $table->string('admin_name');
+            $table->string('user');
+            $table->string('category');
             $table->string('action');
             $table->timestamps();
         });
