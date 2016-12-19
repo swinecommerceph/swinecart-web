@@ -530,7 +530,7 @@ blockquote{
 
 /*for admin forms*/
 #notes{
-  width: 640px; /*can be in percentage also.*/
+  width: 640px;
   height: auto;
   margin: 0 auto;
   padding: 10px;
@@ -550,4 +550,27 @@ blockquote{
 }
 .decrease-text-size{
    font-size: 2em;
+}
+
+/*css for admin manage pages*/
+[v-cloak] {
+  display: none;
+}
+
+.add-content{
+	right: 50%;
+	bottom: 50%;
+	transform: translate(50%,50%);
+	position: absolute;
+}
+.caption{
+	word-break:break-all;
+}
+
+.content-text{
+	word-break:break-all;
+}
+
+#menu{
+	width: 300px;
 }

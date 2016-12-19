@@ -18,11 +18,17 @@ use App\Models\Product;
 use App\Models\Image;
 use App\Models\Video;
 use App\Models\Breed;
+use App\Models\Admin;
 use App\Models\User;
+use App\Models\HomeImage;
+use App\Models\AdministratorLog;
 
 use Mail;
 use DB;
 use Auth;
+use Input;
+use Storage;
+use File;
 
 class AdminController extends Controller
 {
@@ -166,16 +172,12 @@ class AdminController extends Controller
      * @return array of user
      */
     public function displayAllUsers(){
-        $users = $this->retrieveAllUsers();
-        $userArray = [];
-        foreach ($users as $user) {
-            if($user->role_id!=1 && $user->email_verified==1 && $user->deleted_at==NULL){
-              $user->title = ucfirst($user->title);
-              $user->token = csrf_token();
-              $userArray[] = $user;
-            }
-        }
-        return $userArray;
+        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('approved','=',1)
+                ->whereNull('deleted_at')
+                ->paginate(10);
+
+        return view('user.admin._displayUsers',compact('users'));
     }
 
     /**
@@ -223,16 +225,12 @@ class AdminController extends Controller
      * @return array of pending users
      */
     public function displayPendingUsers(){
-        $users = $this->retrieveAllUsers();
-        $userArray = [];
-        foreach ($users as $user) {
-            if($user->role_id==2 && $user->deleted_at==NULL && $user->approved==0){
-              $user->title = ucfirst($user->title);
-              $user->token = csrf_token();
-              $userArray[] = $user;
-            }
-        }
-        return $userArray;
+        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
+                    ->where('role_id','=',2)
+                    ->where('approved','=',0)
+                    ->whereNull('deleted_at')
+                    ->paginate(10);
+        return view('user.admin._pendingUsers',compact('users'));
     }
 
     /**
@@ -242,13 +240,25 @@ class AdminController extends Controller
      * @return OK (string) status
      */
     public function deleteUser(Request $request){
-        $user = User::find($request->userId);           // find the user
+        $adminID = Auth::user()->id;
+        $adminName = Auth::user()->name;
+        $user = User::find($request->id);           // find the user
         $user->delete();                                // delete it in the database
+        // create a AdministratorLog entry for the action done
+        AdministratorLog::create([
+            'admin_id' => $adminID,
+            'admin_name' => $adminName,
+            'user' => $user->name,
+            'category' => 'Delete',
+            'action' => 'Deleted '.$user->name,
+        ]);
+
         // send an email notification to the user's email
         Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
         });
-        return "OK";
+
+        return Redirect::back()->with('message','User Deleted');
     }
 
     /**
@@ -259,20 +269,111 @@ class AdminController extends Controller
      */
     public function displayBlockedUsers(){
         // get all the user with the blocked status
-        $blockedUsers = DB::table('users')
+        $users = DB::table('users')
                       ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                       ->join('roles', 'role_user.role_id','=','roles.id')
                       ->where('role_user.role_id','!=',1)
                       ->where('users.email_verified','=', 1)
                       ->where('users.deleted_at','=', NULL )
                       ->where('users.is_blocked','=', 1 )
-                      ->get();
-        foreach ($blockedUsers as $blockedUser) {
-            $blockedUser->title = ucfirst($blockedUser->title);     // fix the format for the role in each of the users queried
-            $blockedUser->token = csrf_token();                     // get the token
-        }
-        return $blockedUsers;                                       // return to view
+                      ->paginate(10);
+        // foreach ($blockedUsers as $blockedUser) {
+        //     $blockedUser->title = ucfirst($blockedUser->title);     // fix the format for the role in each of the users queried
+        //     $blockedUser->token = csrf_token();                     // get the token
+        // }
+        return view('user.admin._blockedUsers',compact('users'));
     }
+
+    /**
+     * Function to get the searched approved user
+     *
+     * @param  request array from search form containing string for name and values for checkboxes
+     * @return array of approved users that match the search criterion
+     */
+    public function searchUser(Request $request){
+        //$values = [$request->admin, $request->breeder, $request->customer];
+        if($request->breeder==null && $request->customer==null){
+            $users = DB::table('users')
+                          ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                          ->join('roles', 'role_user.role_id','=','roles.id')
+                          ->where('users.name','LIKE', "%$request->search%")
+                          ->where('users.email_verified','=', 1)
+                          ->where('users.deleted_at','=', NULL )
+                          ->paginate(10);
+        }else{
+            $values = [$request->breeder, $request->customer];
+            $search = [];
+            for($i = 0; $i < 2; $i++){
+                if($values[$i] != null){
+                    $search[] = $values[$i];
+                }
+            }
+            $users = DB::table('users')
+                          ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                          ->join('roles', 'role_user.role_id','=','roles.id')
+                          ->where('users.name','LIKE', "%$request->search%")
+                          ->where('users.email_verified','=', 1)
+                          ->where('users.deleted_at','=', NULL )
+                          ->whereIn('role_user.role_id', $search)
+                          ->paginate(10);
+        }
+
+
+        return view('user.admin._displayUsers',compact('users'));
+    }
+
+    /**
+     * Function to get the searched pending users
+     *
+     * @param  request array from search form containing string for name and values for checkboxes
+     * @return array of pending users that match the search criterion
+     */
+    public function searchPendingUser(Request $request){
+        $users = DB::table('users')
+                      ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                      ->join('roles', 'role_user.role_id','=','roles.id')
+                      ->where('users.name','LIKE', "%$request->search%")
+                      ->where('users.email_verified','=', 0)
+                      ->where('users.deleted_at','=', NULL )
+                      ->paginate(10);
+
+        return view('user.admin._pendingUsers',compact('users'));
+    }
+
+    public function searchBlockedUsers(Request $request){
+        if($request->breeder==null && $request->customer==null){
+            $users = DB::table('users')
+                          ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                          ->join('roles', 'role_user.role_id','=','roles.id')
+                          ->where('users.name','LIKE', "%$request->search%")
+                          ->where('users.email_verified','=', 1)
+                          ->where('users.deleted_at','=', NULL )
+                          ->where('users.is_blocked','=', 1 )
+                          ->paginate(10);
+        }else{
+            $values = [$request->breeder, $request->customer];
+            $search = [];
+            for($i = 0; $i < 2; $i++){
+                if($values[$i] != null){
+                    $search[] = $values[$i];
+                }
+            }
+            $users = DB::table('users')
+                          ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                          ->join('roles', 'role_user.role_id','=','roles.id')
+                          ->where('users.name','LIKE', "%$request->search%")
+                          ->where('users.email_verified','=', 1)
+                          ->where('users.deleted_at','=', NULL )
+                          ->where('users.is_blocked','=', 1 )
+                          ->whereIn('role_user.role_id', $search)
+                          ->paginate(10);
+        }
+
+
+        return view('user.admin._blockedUsers',compact('users'));
+    }
+
+
 
     /**
      * Function to add the user to the blocked list, changes blocked status to 1
@@ -281,14 +382,39 @@ class AdminController extends Controller
      * @return status string "OK"
      */
     public function blockUser(Request $request){
-        $user = User::find($request->userId);       // find the user using the user id
+        $adminID = Auth::user()->id;
+        $adminName = Auth::user()->name;
+        $user = User::find($request->id);       // find the user using the user id
         $user->is_blocked = !$user->is_blocked;     // change the status for is_blocked column
         $user->save();                              // save the change to the database
+        // create a log entry for the action done
+        if($user->is_blocked){
+            AdministratorLog::create([
+                'admin_id' => $adminID,
+                'admin_name' => $adminName,
+                'user' => $user->name,
+                'category' => 'Block',
+                'action' => 'Blocked '.$user->name,
+            ]);
+        }else{
+            AdministratorLog::create([
+                'admin_id' => $adminID,
+                'admin_name' => $adminName,
+                'user' => $user->name,
+                'category' => 'Unblock',
+                'action' => 'Unblocked '.$user->name,
+            ]);
+        }
         // send an email notification to the email of the user
         Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->is_blocked], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
         });
-        return  "Ok";
+        if($user->is_blocked == 1){
+            return Redirect::back()->with('message','User Blocked');
+        }else{
+            return Redirect::back()->with('message','User Unblocked');
+        }
+
     }
 
     /**
@@ -347,6 +473,17 @@ class AdminController extends Controller
             'password' => $password
         ];
 
+        $adminID = Auth::user()->id;
+        $adminName = Auth::user()->name;
+        // create a log entry for the action done
+        AdministratorLog::create([
+            'admin_id' => $adminID,
+            'admin_name' => $adminName,
+            'user' => $data['email'],
+            'category' => 'Create',
+            'action' => 'Created user account for '.$data['email'],
+        ]);
+
         Mail::send('emails.credentials', ['email' => $request->input('email'),'password' => $password], function ($message) use($data){     // send an email containing the credential of the user to the input email
           $message->to($data['email'])->subject('Breeder Credentials for Swine E-Commerce PH');
         });
@@ -369,20 +506,62 @@ class AdminController extends Controller
      * @return none (redirect)
      */
     public function acceptUser(Request $request){
-        $user = User::find($request->userId);
+        $adminID = Auth::user()->id;
+        $adminName = Auth::user()->name;
+        $user = User::find($request->id);
         $user->approved = !$user->approved;     // negate the status to approve user
+        // create a log entry for the action done
+        AdministratorLog::create([
+            'admin_id' => $adminID,
+            'admin_name' => $adminName,
+            'user' => $user->name,
+            'category' => 'Accept',
+            'action' => 'Approved '.$user->name,
+        ]);
+
         // send an email notification to the email of the user
         Mail::send('emails.notification', ['type'=>'accepted'], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
         });
         $user->save();  // save changes to the database
 
-        return  "Ok";
+        return Redirect::back()->withMessage('User Accepted!'); // redirect to the page and display a toast notification that a user is created
+    }
+
+    /**
+    * @TODO Separate DELETE and REJECT user function for better notifications
+    *
+    * Reject a pending user request and send an email verification to the user's email
+    *
+    * @return none (redirect)
+    */
+    public function rejectUser(Request $request){
+        $adminID = Auth::user()->id;
+        $adminName = Auth::user()->name;
+        $user = User::find($request->id);
+        $user->approved = !$user->approved;     // negate the status to approve user
+        // create a log entry for the action done
+        AdministratorLog::create([
+            'admin_id' => $adminID,
+            'admin_name' => $adminName,
+            'user' => $user->name,
+            'category' => 'Reject',
+            'action' => 'Reject '.$user->name,
+        ]);
+        // send an email notification to the email of the user
+        Mail::send('emails.notification', ['type'=>'rejected'], function ($message) use($user){
+          $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
+        });
+        $user->save();  // save changes to the database
+
+        return Redirect::back()->withMessage('User Rejected!'); // redirect to the page and display a toast notification that a user is created
     }
 
     /**
      * Displays form for the registration of breeder
      * @return View
+     *
+     * @TODO Registration form file checker
      */
     public function getRegistrationForm(){
         return view('user.admin.form');
@@ -391,9 +570,142 @@ class AdminController extends Controller
     /**
      * @todo Submit the registration form for breeder accreditation
      * @return View
+     *
+     * @TODO Checker for submitted form
      */
     public function submitRegistrationForms(Request $request){
         dd($request);
     }
 
+    /**
+     * Displays the administrator logs
+     *
+     * @param none
+     * @return View the administrator logs
+     *
+     */
+    public function getAdministratorLogs(){
+        $logs = DB::table('administrator_logs')->paginate(10);
+        return view('user.admin._adminLogs',compact('logs'));
+    }
+
+    public function searchAdministratorLogs(Request $request){
+
+        if($request->option!=null){
+            $logs = DB::table('administrator_logs')
+                    ->whereIn('category', $request->option)
+                    ->where('user', 'LIKE', "%$request->search%")
+                    ->orWhere('admin_name', 'LIKE', "%$request->search%")
+                    ->paginate(10);
+        }else{
+            $logs = DB::table('administrator_logs')
+                    ->where('user', 'LIKE', "%$request->search%")
+                    ->orWhere('admin_name', 'LIKE', "%$request->search%")
+                    ->paginate(10);
+        }
+
+        return view('user.admin._adminLogs',compact('logs'));
+    }
+
+    /**
+     * Check if media is Image depending on extension
+     *
+     * @param  String   $extension
+     * @return Boolean
+     */
+    private function isImage($extension)
+    {
+        return ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') ? true : false;
+    }
+
+    /**
+     * Displays the manage pages view
+     *
+     * @param none
+     * @return View and All content homepage images and texts
+     *
+     */
+    public function manageHomePage(){
+        $homeContent = DB::table('home_images')->get();
+        return view('user.admin._manageImages',compact('homeContent'));
+    }
+
+     /**
+      * Add an image and/or text to he home page slider
+      *
+      * @param form request
+      * @return String
+      * @todo Error detection
+      */
+     public function addHomeImage(Request $request){
+         if (Input::hasFile('image')) {
+            $filename = date('d-m-y-H-i-s',time()).'-'.Input::file('image')->getClientOriginalName();
+            Input::file('image')->move(public_path('/images/homeimages/'), $filename);
+            $content = new HomeImage;
+            $content->text = $request->textContent;
+            $content->title = $request->title;
+            $content->name = $filename;
+            $content->path = '/images/homeimages/';
+            $content->save();
+            return Redirect::back()->with('message','Image Added');
+        } else {
+            return Redirect::back()->with('message','Operation Failed');
+        }
+     }
+
+     /**
+      * Delete image and text in the home page
+      *
+      * @param form request
+      * @return String
+      * @todo Error detection
+      */
+     public function deleteContent(Request $request){
+         $content = HomeImage::find($request->content_id);
+         //File::delete($content->path.$content->name);
+         unlink(public_path($content->path.$content->name));
+         //dd($content->path.$content->name);
+         $content->delete();
+         return Redirect::back()->with('message','Image Deleted');
+     }
+
+     /**
+      * Edit an image and/or text in the home page
+      *
+      * @param form request
+      * @return String
+      * @todo Error detection
+      */
+     public function editContent(Request $request){
+         $content = HomeImage::find($request->content_id);
+         if (Input::hasFile('image')) {
+            unlink(public_path($content->path.$content->name));
+            $filename = date('d-m-y-H-i-s',time()).'-'.Input::file('image')->getClientOriginalName();
+            Input::file('image')->move(public_path('/images/homeimages/'), $filename);
+            $content->name = $filename;
+            $content->path = '/images/homeimages/';
+        }
+
+        if(!empty($request->title)){
+            $content->title = $request->title;
+        }
+
+        if(!empty($request->textContent)){
+            $content->text = $request->textContent;
+        }
+        $content->save();
+        return Redirect::back()->with('message','Content Edited');
+     }
+
+     public function goToUserlist(){
+         return redirect()->route('home/userlist');
+     }
+
+     public function goToPending(){
+         return redirect()->route('home/pending/users');
+     }
+
+    // public function manageTextContent(){
+    //     return view('user.admin._manageTextContent');
+    // }
 }

@@ -29,8 +29,15 @@
 
             <ul id="nav-mobile" class="right hide-on-med-and-down">
               <li><a>{{ Auth::user()->name }}</a> </li>
+
               <li>
-                <a href="#" class="dropdown-button" data-beloworigin="true" data-activates="inquiries-dropdown"><i class="material-icons">feedback</i></a>
+                <a class="waves-effect waves-light modal-trigger tooltipped" href="{{ route('admin_logs') }}" data-position="bottom" data-delay="40" data-tooltip="Administrator Logs">
+                    <i class="material-icons">class</i>
+                </a>
+              </li>
+
+              <li>
+                <a href="#" class="dropdown-button tooltipped" data-beloworigin="true" data-activates="inquiries-dropdown" data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">feedback</i></a>
                 <ul id="inquiries-dropdown" class="dropdown-content">
                       <li>
                         <ul class="collection">
@@ -45,27 +52,20 @@
                           </li>
                         </ul>
                       </li>
-                      <li><a href="#" class="center">Show All</a></li>
+                      <li><a href="#" class=" center">Show All</a></li>
                   </ul>
                 </li>
 
                 <li>
-                   <a class="waves-effect waves-light modal-trigger " href="#adduser">
+                   <a class="waves-effect waves-light modal-trigger tooltipped" href="#adduser" data-position="bottom" data-delay="40" data-tooltip="Add User">
                       <i class="material-icons">add</i>
                   </a>
                 </li>
 
-              <li>
 
-                <a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
-                  <i class="material-icons">arrow_drop_down</i>
-                </a>
-                <ul id="nav-dropdown" class="dropdown-content">
-                      <li><a href="{{ route('registration.form') }}">Registration Form</a></li>
-                      <li class="divider"></li>
-                      <li><a href="{{ url('logout') }}">Logout</a></li>
-                  </ul>
-              </li>
+                <li>
+                    <li><a href="{{ url('logout') }}">Logout</a></li>
+                </li>
             </ul>
           </div>
 
@@ -75,7 +75,7 @@
         </div>
 
         {{-- Search Field --}}
-        <div id="search-field" class="nav-wrapper white z-depth-1" style="display:none;">
+        {{-- <div id="search-field" class="nav-wrapper white z-depth-1" style="display:none;">
                 <div style="height:1px;">
                 </div>
                 <form>
@@ -85,223 +85,49 @@
                         <i class="material-icons">close</i>
                     </div>
                 </form>
-            </div>
+            </div> --}}
 
       </nav>
     </div>
 
     {{--Side Navigation bar for admin --}}
     <div class="container">
-      <div class="row ">
-        <div id="menu" class="col s3">
-          <ul class="collapsible" data-collapsible="accordion">
-          <li>
-            <div class="collapsible-header active"><a href="{{route('admin.userlist')}}" class="black-text" id='all'><i class="material-icons">face</i>All Users</a></div>
-          </li>
-          <li>
-            <div class="collapsible-header"><i class="material-icons">assignment_late</i><a href="{{route('admin.pending.users')}}" class="black-text" id='pending-breeder'>Pending Accounts</a></div>
-          </li>
-          <li>
-            <div class="collapsible-header"><i class="material-icons">build</i>Manage Pages</div>
-            <div class="collapsible-body center" ><a href="#" class="black-text" id='pages-home'><p>Home</p></a><div>
-          </li>
-        </ul>
-        </div>
-        <div class="col s9 ">
-          <div class="card-panel ">
-            <div class="row" id= "admin-header-wrapper">
-              {{-- div tag for header Header  --}}
-              <div class="col s6">
-                <h4 id='admin-content-panel-header'>Admin Dashboard</h4>
+          <div class="row ">
+              <div class="menu-wrapper col s3">
+                  <div id="menu">
+                    <ul class="collapsible" data-collapsible="accordion">
+                    <li>
+                      <a href="{{route('admin.userlist')}}" class="black-text" id='all'><div class="collapsible-header active"><i class="material-icons">face</i>All Users</div></a>
+                    </li>
+                    <li>
+                     <a href="{{route('admin.pending.users')}}" class="black-text" id='pending-breeder'> <div class="collapsible-header"><i class="material-icons">assignment_late</i>Pending Accounts</div></a>
+                    </li>
+                    <li>
+                      <div class="collapsible-header"><i class="material-icons">build</i>Manage Pages</div>
+                      <div class="collapsible-body center" ><a href="{{route('admin.manage.homepage')}}" class="black-text" id='pages-home-images'><p>Homepage Images</p></a></div>
+                      {{-- <div class="collapsible-body center" ><a href="{{route('admin.manage.text')}}" class="black-text" id='pages-home-text'><p>Homepage Text</p></a></div> --}}
+                    </li>
+                  </ul>
+                  </div>
               </div>
-            </div>
-            <div class="divider"></div>
-            <div class="row" id="content-panel-wrapper">
-                <div class="col s12" id="main-content">
-                  {{-- content page generated by javascript functions--}}
-                    <div class="row">
-                    <a href="#!" id="total-user-summary">
-                      <div class="col s6" >
-                        <div id="total-card" class="card-panel card-summary hoverable">
-                           <div class="center white-text row">
-                              <div class="col s4 label-wrapper">
-                                 <div class="left">
-                                    <i class="ecommerce-icon">p</i>
-                                 </div>
-                                 <div class="">
-                                    <div class="summary-title">TOTAL USERS</div>
-                                 </div>
-                              </div>
 
-                               <div class="center white-text summary-data col s8">
-                                 {{$summary[0]}}
-                               </div>
-                           </div>
+            <div class="content-wrapper col s9">
+                <div class="col s12">
+                    <div class="card-panel ">
+                        @yield('header')
+                        <div class="divider"></div>
+                        <div class="row" id="content-panel-wrapper">
+                            <div class="col s12" id="main-content">
+                                {{-- content page generated by javascript functions--}}
+                                @yield('content')
 
+                            </div>
                         </div>
-                      </div>
-                    </a>
-                    <a href="#!" id="total-blocked-summary">
-                       <div class="col s6" >
-                         <div id="blocked-card" class="card-panel card-summary hoverable">
-                            <div class="center white-text row">
-                               <div class="col s4 label-wrapper">
-                                  <div class="">
-                                     <i class="ecommerce-icon">b</i>
-                                  </div>
-                                  <div class="">
-                                     <div class="summary-title">BLOCKED USERS</div>
-                                  </div>
-                               </div>
-
-                                <div class="center white-text summary-data col s8">
-                                  {{$summary[4]}}
-                                </div>
-                            </div>
-                         </div>
-                       </div>
-                    </a>
-                    <a href="#!" id="total-pending-summary">
-                       <div class="col s6" >
-                         <div id="pending-card" class="card-panel card-summary hoverable">
-                            <div class="center white-text row">
-                               <div class="col s4 label-wrapper">
-                                  <div class="">
-                                     <i class="ecommerce-icon">w</i>
-                                  </div>
-                                  <div class="">
-                                     <div class="summary-title">PENDING BREEDERS</div>
-                                  </div>
-                               </div>
-
-                               <div class="center white-text summary-data col s8">
-                                  {{$summary[3]}}
-                               </div>
-                            </div>
-                         </div>
-                       </div>
-                    </a>
-                    <a href="#!">
-                       <div class="col s6" >
-                         <div id="inquiries-card" class="card-panel card-summary hoverable">
-                            <div class="center white-text row">
-                               <div class="col s4 label-wrapper">
-                                  <div class="left">
-                                     <i class="ecommerce-icon">d</i>
-                                  </div>
-                                  <div class="">
-                                     <div class="summary-title">USER INQUIRIES</div>
-                                  </div>
-                               </div>
-
-                               <div class="center white-text summary-data col s8">
-                                  3
-                               </div>
-                            </div>
-                         </div>
-                       </div>
-                  </a>
-                </div>
-
+                    </div>
                 </div>
             </div>
-
-          </div>
 
         </div>
-      </div>
-    </div>
-
-    {{-- Manage User Modal --}}
-    <div id="manage-user-modal" class="modal">
-      <div class="modal-content">
-         <h4>Username</h4>
-         <div class="row">
-            {!!Form::open(['route'=>'admin.block', 'method'=>'PUT', 'class'=>'block-form'])!!}
-            <a id="block-data" href="#">
-               <div class="col s6 center">
-                  <i id="block-icon" class="material-icons manage-icon">block</i>
-                  <input id="block-token" name="_token" type="hidden" value="">
-                  <input id="block-id" name="user_id" type="hidden" value="">
-                  <div id="block-label" class="col s12">Block</div>
-               </div>
-            </a>
-            {!!Form::close()!!}
-            {!!Form::open(['route'=>'admin.delete', 'method'=>'DELETE', 'class'=>'delete-form'])!!}
-               <a id="delete-data" href="#">
-                  <div class="col s6 center">
-                     <i id="delete-icon" class="material-icons manage-icon">close</i>
-                     <input id="delete-token" name="_token" type="hidden" value="">
-                     <input id="delete-id" name="user_id" type="hidden" value="">
-                     <div id="delete-label" class="col s12">Delete</div>
-                  </div>
-               </a>
-            {!!Form::close()!!}
-         </div>
-         <div class="divider"></div>
-         <div class="modal-footer">
-           <a href="#!" id="cancel-manage" class=" modal-action modal-close waves-effect waves btn-flat">Cancel</a>
-         </div>
-      </div>
-    </div>
-
-    {{-- Manage User Modal for Accept and Reject --}}
-    <div id="accept-reject-modal" class="modal">
-      <div class="modal-content">
-         <h4>Username</h4>
-         <div class="row">
-            {!!Form::open(['route'=>'admin.add.user', 'method'=>'PUT', 'class'=>'accept-form'])!!}
-            <a id="accept-data" href="#">
-               <div class="col s6 center">
-                  <i id="accept-icon" class="material-icons manage-icon">check</i>
-                  <input id="accept-token" name="_token" type="hidden" value="">
-                  <input id="accept-id" name="user_id" type="hidden" value="">
-                  <div id="accept-label" class="col s12">Accept</div>
-               </div>
-            </a>
-            {!!Form::close()!!}
-            {!!Form::open(['route'=>'admin.delete', 'method'=>'DELETE', 'class'=>'delete-form'])!!}
-               <a id="reject-data" href="#">
-                  <div class="col s6 center">
-                     <i id="delete-icon" class="material-icons manage-icon">close</i>
-                     <input id="reject-token" name="_token" type="hidden" value="">
-                     <input id="reject-id" name="user_id" type="hidden" value="">
-                     <div id="reject-label" class="col s12">Reject</div>
-                  </div>
-               </a>
-            {!!Form::close()!!}
-         </div>
-         <div class="divider"></div>
-         <div class="modal-footer">
-           <a href="#!" id="cancel-accept-reject" class=" modal-action modal-close waves-effect waves btn-flat">Cancel</a>
-         </div>
-      </div>
-    </div>
-
-    {{-- Delete modal --}}
-    <div id="delete-modal" class="modal action-dialog-box red lighten-5">
-      <div class="modal-content">
-        <h4>Delete User</h4>
-        <div class="divider"></div>
-        <p>Are you sure you want to delete this user?</p>
-      </div>
-      <div class="modal-footer red lighten-5">
-        <a href="#!" id="cancel-delete" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
-        <a href="#!" id="confirm-delete" class=" modal-action modal-close waves-effect waves-red btn-flat">Confirm</a>
-      </div>
-    </div>
-
-    {{-- Block/Unblock modal --}}
-    <div id="block-modal" class="modal action-dialog-box orange lighten-5">
-      <div class="modal-content">
-        <h4>Block User</h4>
-        <div class="divider"></div>
-        <p>Are you sure you want to block this user?</p>
-      </div>
-      <div class="modal-footer orange lighten-5">
-        <a href="#!" id="cancel-block" class=" modal-action modal-close waves-effect waves-orange btn-flat">Cancel</a>
-        <a href="#!" id="confirm-block" class=" modal-action modal-close waves-effect waves-orange btn-flat">Confirm</a>
-      </div>
     </div>
 
     {{-- Accept modal --}}
@@ -329,6 +155,7 @@
         <a href="#!" id="confirm-reject" class=" modal-action modal-close waves-effect waves-red btn-flat">Confirm</a>
       </div>
     </div>
+
 
     {{-- Add user modal --}}
       <div id="adduser" class="modal">
@@ -392,13 +219,18 @@
     </div>
 
 
-   <script src="/js/vendor/jquery.min.js"></script>
+
+
+    <script src="/js/vendor/jquery.min.js"></script>
+    <script src="/js/vendor/VueJS/vue.js"></script>
   	<script src="/js/vendor/materialize.min.js"></script>
   	<script src="/js/vendor/dropzone.js"></script>
   	<script src="/js/vendor/VideoJS/video.min.js"></script>
   	<script src="/js/config.js"></script>
-  	<script src="/js/custom.js"></script>
-   <script type="text/javascript" src="/js/vendor/datatables.min.js"></script>
+    <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
+    <script src="/js/custom.js"></script>
+   {{-- <script type="text/javascript" src="/js/vendor/datatables.min.js"></script> --}}
+   {{-- <script src="/js/vendor/DataTables/datatables.js"></script> --}}
    {{-- For user-specific initialization scripts --}}
   	@yield('initScript')
   	{{-- Custom scripts for certain pages/functionalities --}}

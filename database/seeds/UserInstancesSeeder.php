@@ -25,9 +25,11 @@ class UserInstancesSeeder extends Seeder
             'General Pigs Co.'
         ];
         // For Administrator
-        factory(App\Models\User::class, 1)->create()->each(function($user){
+        factory(App\Models\User::class, 2)->create()->each(function($user){
             $user->assignRole('admin');
-            $user->save();
+            // Create Administrator Profile
+            $administrator = factory(App\Models\Admin::class)->create();
+            $administrator->users()->save($user);
         });
 
     	// For Customers

@@ -5,18 +5,18 @@
 @endsection
 
 @section('pageId')
-    id="home-all"
+    id="home-blocked"
 @endsection
 
 @section('header')
     <div class="row">
         <div class="col s4">
-            <h4 id='admin-content-panel-header'>Users</h4>
+            <h4 id='admin-content-panel-header'>Blocked Users</h4>
         </div>
 
         <div class="col s8">
             <div class="row">
-                {!!Form::open(['route'=>'admin.search', 'method'=>'GET', 'class'=>'search-user-form col s12'])!!}
+                {!!Form::open(['route'=>'admin.searchBlocked', 'method'=>'GET', 'class'=>'search-user-form col s12'])!!}
                     <div class="input-field col s12">
                         <div class="col s7">
                             <input id="search-input" class="validate" type="text" name="search">
