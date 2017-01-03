@@ -30,11 +30,36 @@
         </div>
     </div>
     <div id="card-status" class="row">
-        {{-- <div id="charts-container" class="">
+        <div id="charts-container" class="">
+            <div class="col s1">
+                <div class="">
+                    <input class="with-gap" name="frequency" type="radio" id="frequency-monthly" value="monthly" v-model="chosenFrequency" @click="valueChange" />
+                    <label for="frequency-monthly">Monthly</label>
+                </div>
+                <div class="">
+                    <input class="with-gap" name="frequency" type="radio" id="frequency-weekly" value="weekly" v-model="chosenFrequency" @click="valueChange" />
+                    <label for="frequency-weekly">Weekly</label>
+                </div>
+                <div class="">
+                    <input class="with-gap" name="frequency" type="radio" id="frequency-daily" value="daily" v-model="chosenFrequency" @click="valueChange" />
+                    <label for="frequency-daily">Daily</label>
+                </div>
+            </div>
+            <div class="col s5">
+                <div class="input-field col s5">
+                    <custom-date-from-select v-model="dateFromInput" @date-from-select="dateFromChange"> </custom-date-from-select>
+                </div>
+                <div class="input-field col s5">
+                    <custom-date-to-select v-model="dateToInput" @date-to-select="dateToChange"> </custom-date-to-select>
+                </div>
+                <div class="" style="margin-top:1rem;">
+                    <a class="btn-floating" @click.prevent="fetchSoldData"><i class="material-icons">send</i></a>
+                </div>
+            </div>
             <div class="col s12">
                 <canvas id="barChart"></canvas>
             </div>
-        </div> --}}
+        </div>
 
         <div id="card-product-status" class="col z-depth-1">
             <div class="col s12">
@@ -260,10 +285,10 @@
             }
         );
     </script>
-    <script src="/js/vendor/chart.bundle.min.js"></script>
+    <script src="/js/vendor/chart.min.js"></script>
     <script type="text/javascript">
         var rawBarChartData = {
-            labels: ["Sold", "Paid", "On Delivery", "Reserved", "Requested", "Hidden", "Displayed"],
+            labels: ["Jan", "Feb", "Mar", "Apr", "May", "Jun", "Jul"],
             datasets: [{
                 label: 'Boar',
                 backgroundColor: 'rgb(255, 99, 132)',

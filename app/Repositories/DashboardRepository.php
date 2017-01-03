@@ -4,6 +4,7 @@ namespace App\Repositories;
 
 use Illuminate\Http\Request;
 use Ramsey\Uuid\Uuid;
+use Carbon\Carbon;
 
 use App\Models\Breeder;
 use App\Models\Customer;
@@ -108,6 +109,10 @@ class DashboardRepository
      */
     public function getProductStatus(Breeder $breeder, $status)
     {
+        $months = [
+            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
+            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
+        ];
 
         if($status == 'hidden' || $status == 'displayed' || $status == 'requested'){
             $products = $breeder->products;
@@ -258,9 +263,8 @@ class DashboardRepository
                     // Update Transaction Log
                     // This must be put in an event for better performance
                     $transactionLog = $reservation->transactionLog()->first();
-                    $decodedStatusTransaction = json_decode($transactionLog->status_transactions, true);
-                    $decodedStatusTransaction['reserved'] = date('j M Y (D) g:iA', time());
-                    $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
+                    $transactionLog->reserved = Carbon::now();
+                    // $transactionLog->reserved = date('j M Y (D) g:iA', time());
                     $transactionLog->save();
 
                     // Notify reserved customer
@@ -268,7 +272,7 @@ class DashboardRepository
                     $reservedCustomerUser->notify(new ProductReserved(
                         [
                             'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been reserved to you',
-                            'time' => $decodedStatusTransaction['reserved'],
+                            'time' => $transactionLog->reserved,
                             'url' => route('cart.items')
                         ]
                     ));
@@ -284,7 +288,7 @@ class DashboardRepository
                             $customerUser->notify(new ProductReservedToOtherCustomer(
                                 [
                                     'description' => 'Sorry, product ' . $product->name . ' was reserved by ' . $breederName . ' to another customer',
-                                    'time' => $decodedStatusTransaction['reserved'],
+                                    'time' => $transactionLog->reserved,
                                     'url' => route('cart.items')
                                 ]
                             ));
@@ -321,9 +325,7 @@ class DashboardRepository
                 // Update Transaction Log
                 // This must be put in an event for better performance
                 $transactionLog = $reservation->transactionLog()->first();
-                $decodedStatusTransaction = json_decode($transactionLog->status_transactions, true);
-                $decodedStatusTransaction['on_delivery'] = date('j M Y (D) g:iA', time());
-                $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
+                $transactionLog->on_delivery = Carbon::now();
                 $transactionLog->save();
 
                 // Notify customer
@@ -331,7 +333,7 @@ class DashboardRepository
                 $reservedCustomerUser->notify(new ProductReservationUpdate(
                     [
                         'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery',
-                        'time' => $decodedStatusTransaction['on_delivery'],
+                        'time' => $transactionLog->on_delivery,
                         'url' => route('cart.items')
                     ]
                 ));
@@ -346,9 +348,7 @@ class DashboardRepository
                 // Update Transaction Log
                 // This must be put in an event for better performance
                 $transactionLog = $reservation->transactionLog()->first();
-                $decodedStatusTransaction = json_decode($transactionLog->status_transactions, true);
-                $decodedStatusTransaction['paid'] = date('j M Y (D) g:iA', time());
-                $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
+                $transactionLog->paid = Carbon::now();
                 $transactionLog->save();
 
                 // Notify customer
@@ -356,7 +356,7 @@ class DashboardRepository
                 $reservedCustomerUser->notify(new ProductReservationUpdate(
                     [
                         'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as paid',
-                        'time' => $decodedStatusTransaction['paid'],
+                        'time' => $transactionLog->paid,
                         'url' => route('cart.items')
                     ]
                 ));
@@ -371,9 +371,7 @@ class DashboardRepository
                 // Update Transaction Log
                 // This must be put in an event for better performance
                 $transactionLog = $reservation->transactionLog()->first();
-                $decodedStatusTransaction = json_decode($transactionLog->status_transactions, true);
-                $decodedStatusTransaction['sold'] = date('j M Y (D) g:iA', time());
-                $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
+                $transactionLog->sold = Carbon::now();
                 $transactionLog->save();
 
                 // Notify reserved customer
@@ -381,7 +379,7 @@ class DashboardRepository
                 $reservedCustomerUser->notify(new ProductReservationUpdate(
                     [
                         'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as sold',
-                        'time' => $decodedStatusTransaction['sold'],
+                        'time' => $transactionLog->sold,
                         'url' => route('cart.items')
                     ]
                 ));

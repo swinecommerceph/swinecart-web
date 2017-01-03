@@ -148,14 +148,14 @@
                                     <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
                                 </span>
                                 <p style="margin-left:1.5rem;"> @{{ notification.data.description }} </p>
-                                <p class="right-align grey-text text-darken-1" style="font-size:0.8rem;"> @{{ notification.data.time }} </p>
+                                <p class="right-align grey-text text-darken-1" style="font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
                             </a>
                         </li>
 
                     </ul>
                 </li>
                 <li>
-                    <a class="center-align">See all Notifications</a>
+                    <a href="{{ route('cNotifs') }}" class="center-align">See all Notifications</a>
                 </li>
             </ul>
         </li>
@@ -747,23 +747,23 @@
                                 </div>
                             </div>
                             <div class="col s4">
-                                <div v-if="log.status_transactions.requested">
-                                    Requested <span class="right"> @{{ log.status_transactions.requested }} </span>
+                                <div v-if="log.requested">
+                                    Requested <span class="right"> @{{ log.requested | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.reserved">
-                                    Reserved <span class="right"> @{{ log.status_transactions.reserved }} </span>
+                                <div v-if="log.reserved">
+                                    Reserved <span class="right"> @{{ log.reserved | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.on_delivery">
-                                    On Delivery <span class="right"> @{{ log.status_transactions.on_delivery }} </span>
+                                <div v-if="log.on_delivery">
+                                    On Delivery <span class="right"> @{{ log.on_delivery | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.paid">
-                                    Paid <span class="right"> @{{ log.status_transactions.paid }} </span>
+                                <div v-if="log.paid">
+                                    Paid <span class="right"> @{{ log.paid | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.sold">
-                                    Sold <span class="right"> @{{ log.status_transactions.sold }} </span>
+                                <div v-if="log.sold">
+                                    Sold <span class="right"> @{{ log.sold | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.rated">
-                                    Rated <span class="right"> @{{ log.status_transactions.rated }} </span>
+                                <div v-if="log.rated">
+                                    Rated <span class="right"> @{{ log.rated | transformToDetailedDate }} </span>
                                 </div>
                             </div>
                         </div>

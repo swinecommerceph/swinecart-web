@@ -20,7 +20,7 @@ class CreateSwineCartItemsTable extends Migration
             $table->integer('quantity');
             $table->boolean('if_requested')->default('0');
             $table->boolean('if_rated')->default('0');
-            $table->date('date_needed');
+            $table->date('date_needed')->nullable();
             $table->mediumText('special_request');
         });
     }
