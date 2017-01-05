@@ -27,7 +27,8 @@ class UserController extends Controller
     {
         $user = $request->user();
         if($user->hasRole('breeder')) return redirect()->action('BreederController@index');
-        else if($user->hasRole('admin')) return redirect()->action('AdminController@index'); 
+        else if($user->hasRole('admin')) return redirect()->action('AdminController@index');
+        else if($user->hasRole('spectator')) return redirect()->action('SpectatorController@index');
         else if($user->hasRole('customer')) {
             if(!$user->email_verified){
                 $data = [

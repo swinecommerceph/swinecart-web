@@ -1,0 +1,47 @@
+<?php
+
+namespace App\Http\Controllers;
+
+use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Support\Facades\Hash;
+use App\Http\Requests\BreederProfileRequest;
+use App\Http\Requests\BreederPersonalProfileRequest;
+use App\Http\Requests\BreederFarmProfileRequest;
+use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Validator;
+use App\Http\Requests;
+use App\Http\Controllers\Controller;
+use App\Models\Breeder;
+use App\Models\FarmAddress;
+use App\Models\Product;
+use App\Models\Image;
+use App\Models\Video;
+use App\Models\Breed;
+use App\Models\Admin;
+use App\Models\User;
+
+use DB;
+use Auth;
+use Input;
+
+class SpectatorController extends Controller
+{
+    protected $user;
+
+    public function __construct()
+    {
+      $this->middleware('role:spectator');
+      $this->middleware(function($request, $next){
+          $this->user = Auth::user();
+
+          return $next($request);
+      });
+    }
+
+    public function index(Request $request)
+    {
+        return view('user.spectator.home');
+    }
+
+}

@@ -375,3 +375,7 @@ $factory->define(App\Models\FarmAddress::class, function (Faker\Generator $faker
         'mobile' => $faker->regexify('09[0-9]{9}'),
     ];
 });
+
+$factory->define(App\Models\Spectator::class, function (Faker\Generator $faker){
+    return [];
+});

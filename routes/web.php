@@ -160,4 +160,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/manage/return/pending', ['as' => 'admin.return.pending', 'uses'=> 'AdminController@goToPending']);
     });
 
+    Route::group(['prefix'=>'spectator'], function(){
+
+        // Route to admin home page
+        Route::get('home',['as'=>'spectator_path', 'uses'=>'SpectatorController@index']);
+    });
+
+
 });
