@@ -25,7 +25,7 @@
     <div class="navbar-fixed">
       <nav class="teal darken-3">
           <div class="nav-wrapper container">
-            <img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
+            <a href="{{ route('home_path') }}"><img src="/images/logowhite.png" height=65/>&nbsp&nbsp<div class="brand-logo">Swine E-Commerce PH</div></a>
 
             <ul id="nav-mobile" class="right hide-on-med-and-down">
               <li><a>{{ Auth::user()->name }}</a> </li>
