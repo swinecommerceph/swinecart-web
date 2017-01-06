@@ -162,12 +162,6 @@
     @endif
 @endsection
 
-@section('navbarDropdown')
-    <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
-    <li class="divider"></li>
-    <li><a> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
-@endsection
-
 @section('content')
 
     <div class="" id="swine-cart-container">
@@ -302,7 +296,7 @@
                                 <div class="">
                                     <span class="col s6 right-align">
                                         <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
+                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested | transformToDetailedDate">queue</i>
                                         </a>
                                     </span>
                                     <span class="col s6 left-align">
@@ -330,12 +324,12 @@
                                 <div class="">
                                     <span class="col s6 right-align">
                                         <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
+                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested | transformToDetailedDate">queue</i>
                                         </a>
                                     </span>
                                     <span class="col s6 left-align">
                                         <a href="#">
-                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved">save</i>
+                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved | transformToDetailedDate">save</i>
                                         </a>
                                     </span>
                                     <span class="col s6 right-align">
@@ -358,12 +352,12 @@
                                 <div class="">
                                     <span class="col s6 right-align">
                                         <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
+                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested | transformToDetailedDate">queue</i>
                                         </a>
                                     </span>
                                     <span class="col s6 left-align">
                                         <a href="#">
-                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved">save</i>
+                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved | transformToDetailedDate">save</i>
                                         </a>
                                     </span>
                                     <span class="col s6 right-align">
@@ -373,7 +367,7 @@
                                     </span>
                                     <span class="col s6 left-align">
                                         <a href="#">
-                                            <i class="paid material-icons teal-text tooltipped" data-position="bottom" data-delay="50" :data-tooltip="'Paid, ' + product.status_transactions.paid">payment</i>
+                                            <i class="paid material-icons teal-text tooltipped" data-position="bottom" data-delay="50" :data-tooltip="'Paid, ' + product.status_transactions.paid | transformToDetailedDate">payment</i>
                                         </a>
                                     </span>
                                 </div>
@@ -386,17 +380,17 @@
                                 <div class="">
                                     <span class="col s6 right-align">
                                         <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
+                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested | transformToDetailedDate">queue</i>
                                         </a>
                                     </span>
                                     <span class="col s6 left-align">
                                         <a  href="#">
-                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved">save</i>
+                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved | transformToDetailedDate">save</i>
                                         </a>
                                     </span>
                                     <span class="col s6 right-align">
                                         <a href="#">
-                                            <i class="on-delivery material-icons teal-text tooltipped" data-position="bottom" data-delay="50" :data-tooltip="'On Delivery, ' + product.status_transactions.on_delivery">local_shipping</i>
+                                            <i class="on-delivery material-icons teal-text tooltipped" data-position="bottom" data-delay="50" :data-tooltip="'On Delivery, ' + product.status_transactions.on_delivery | transformToDetailedDate">local_shipping</i>
                                         </a>
                                     </span>
                                     <span class="col s6 left-align">
@@ -413,7 +407,7 @@
                             >
                                 <div class="col s12 center-align">
                                     <a href="#">
-                                      <i class="material-icons md teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Sold, ' + product.status_transactions.sold">attach_money</i>
+                                      <i class="material-icons md teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Sold, ' + product.status_transactions.sold | transformToDetailedDate">attach_money</i>
                                     </a>
                                 </div>
                             </div>

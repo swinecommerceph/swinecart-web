@@ -7,6 +7,11 @@ var notificationsPage = new Vue({
         notifications: [],
         notificationCount: 0
     },
+    filters:{
+        transformToReadableDate: function(value){
+            return moment(value).fromNow();
+        }
+    },
     methods:{
         getNotificationInstances: function(){
             // Get notification instances of Customer

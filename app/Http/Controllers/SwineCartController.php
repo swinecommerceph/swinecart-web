@@ -175,6 +175,7 @@ class SwineCartController extends Controller
             // This must be put in an event for better performance
             $transactionLog = new TransactionLog;
             $transactionLog->customer_id = $requested->customer_id;
+            $transactionLog->breeder_id = $product->breeder_id;
             $transactionLog->product_details = collect($productDetails)->toJson();
             $transactionLog->requested = Carbon::now();
             $requested->transactionLog()->save($transactionLog);

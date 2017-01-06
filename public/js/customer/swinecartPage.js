@@ -208,6 +208,10 @@ Vue.component('order-details',{
         capitalize: function(value){
             // Capitalize first letter of word
             return value[0].toUpperCase() + value.slice(1);
+        },
+
+        transformToDetailedDate: function(value){
+            return moment(value).format("MMM D YYYY (dddd), h:mmA");
         }
     },
     methods: {
@@ -464,6 +468,20 @@ Vue.component('transaction-history',{
 
         };
     },
+    filters: {
+        capitalize: function(value){
+            // Capitalize first letter of word
+            if(value){
+                var str = value;
+                return str[0].toUpperCase() + str.slice(1);
+            }
+            return '';
+        },
+
+        transformToDetailedDate: function(value){
+            return moment(value).format("MMM D YYYY (dddd), h:mmA");
+        }
+    },
     methods: {
         viewProductModalFromHistory: function(index){
             vm.productInfoModal.imgPath = this.history[index].img_path;
@@ -485,19 +503,6 @@ Vue.component('transaction-history',{
             });
         }
 
-    },
-    filters: {
-        capitalize: function(value){
-            // Capitalize first letter of word
-            if(value){
-                var str = value;
-                return str[0].toUpperCase() + str.slice(1);
-            }
-            return '';
-        },
-        transformToDetailedDate: function(value){
-            return moment(value).format("MMM D YYYY (dddd), h:mmA");
-        }
     }
 });
 

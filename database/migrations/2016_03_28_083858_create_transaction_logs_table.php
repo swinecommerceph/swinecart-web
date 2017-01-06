@@ -15,6 +15,7 @@ class CreateTransactionLogsTable extends Migration
         Schema::create('transaction_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('customer_id')->unsigned();
+            $table->integer('breeder_id')->unsigned();
             $table->integer('swineCart_id')->unsigned();
             $table->json('product_details');
             $table->dateTime('requested')->nullable();

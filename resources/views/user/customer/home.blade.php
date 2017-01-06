@@ -159,8 +159,6 @@
 
 @section('navbarDropdown')
     <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
-    <li class="divider"></li>
-    <li><a href="{{ route('view.cart') }}"> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
 @endsection
 
 @section('static')

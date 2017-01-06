@@ -7,17 +7,19 @@ Vue.component('custom-date-from-select', {
             <label for="date-from">Date From</label> \
         </div> \
     ',
-    props:['value'],
+    props:['value', 'dateAccreditation'],
     mounted: function(){
-        var now = new Date();
+        var self = this;
+
         $('#date-from').pickadate({
-            min: new Date(now.getFullYear(), now.getMonth()-3, now.getDay()),
+            min: new Date(self.dateAccreditation),
             max: true,
             selectMonths: true,
-            format: 'mmmm yyyy'
+            selectYears: true,
+            format: 'mmmm yyyy',
+            formatSubmit: 'yyyy-mm-dd'
         });
 
-        var self = this;
         $('#date-from').on('change', function(){
             self.$emit('date-from-select',self.$refs.selectFrom.value);
         });
@@ -35,10 +37,10 @@ Vue.component('custom-date-to-select', {
     props:['value'],
     mounted: function(){
         $('#date-to').pickadate({
-            // min: true,
             selectMonths: true,
             selectYears: 2,
-            format: 'mmmm yyyy'
+            format: 'mmmm yyyy',
+            formatSubmit: 'yyyy-mm-dd'
         });
 
         var self = this;
@@ -55,20 +57,12 @@ var vm = new Vue({
         barChartData: '',
         barChart: '',
         chosenFrequency: 'monthly',
-        dateFromInputs: {
-            monthly: '',
-            weekly: '',
-            daily: ''
-        },
-        dateToInputs: {
-            monthly: '',
-            weekly: '',
-            daily: ''
-        },
         dateFromInput: '',
         dateToInput: '',
         dateFromObject: {},
-        dateToObject: {}
+        dateToObject: {},
+        latestAccreditation: '',
+        serverDateNow: ''
     },
     methods: {
         valueChange: function(){
@@ -77,88 +71,158 @@ var vm = new Vue({
             this.dateToObject.clear();
 
             // Set input date labels to normal
-            $("label[for='date-to']").removeClass('active');
             $("label[for='date-from']").removeClass('active');
+            $("label[for='date-to']").removeClass('active');
 
-            // Set Date To input to disabled
+            // Set "Date To" input to disabled
             $('#date-to').prop('disabled', true);
 
-            // / switch (this.chosenFrequency) {
-            //     case 'monthly':
-            //
-            //         break;
-            //
-            //     case 'weekly':
-            //
-            //         break;
-            //
-            //     case 'daily':
-            //
-            //         break;
-            //
-            //     default:
-            //         break;
-            // }
+            // Change format of Date inputs depending on the frequency
+            switch (this.chosenFrequency) {
+                case 'monthly':
+                    this.dateFromObject.component.settings.format = 'mmmm yyyy';
+                    this.dateToObject.component.settings.format = 'mmmm yyyy';
+                    break;
+
+                case 'weekly':
+                    this.dateFromObject.component.settings.format = 'mmmm yyyy';
+                    break;
+
+                case 'daily':
+                    this.dateFromObject.component.settings.format = 'mmmm d, yyyy';
+                    this.dateToObject.component.settings.format = 'mmmm d, yyyy';
+                    break;
+
+                default:
+                    break;
+            }
+
         },
 
         dateFromChange: function(value){
 
-            $('#date-to').prop('disabled', false);
+            var minDate = new Date(this.dateFromObject.get('select','yyyy-mm-dd'));
+            var now = moment(this.serverDateNow);
+            var constrictedDate, maxDate;
 
-            console.log(this.dateFromObject.get());
-            // this.dateToObject.set('min', new Date());
-            // this.dateToObject.set('max',);
+            this.dateFromInput = value;
+            this.dateToObject.clear();
 
-            // switch (this.chosenFrequency) {
-            //     case 'monthly':
-            //
-            //         break;
-            //
-            //     case 'weekly':
-            //
-            //         break;
-            //
-            //     case 'daily':
-            //
-            //         break;
-            //
-            //     default:
-            //         break;
-            // }
+            switch (this.chosenFrequency) {
+                case 'monthly':
+                    $("label[for='date-to']").removeClass('active');
+                    $('#date-to').prop('disabled', false);
+
+                    // Make sure to get the correct month interval
+                    var plusFiveMonths = moment(minDate).add(5, 'months');
+
+                    constrictedDate = (plusFiveMonths.isSameOrAfter(now)) ? now : plusFiveMonths;
+                    maxDate = new Date(constrictedDate.format('YYYY-MM-D'));
+
+                    break;
+
+                case 'weekly':
+
+                    return;
+
+                case 'daily':
+                    $("label[for='date-to']").removeClass('active');
+                    $('#date-to').prop('disabled', false);
+
+                    // Make sure to get the correct month interval
+                    var plusSixDays = moment(minDate).add(6, 'days');
+
+                    constrictedDate = (plusSixDays.isSameOrAfter(now)) ? now : plusSixDays;
+                    maxDate = new Date(constrictedDate.format('YYYY-MM-D'));
+
+                    break;
+
+                default: break;
+            }
+
+            // Set min and max of "Date To" Input based on "Date From" Input
+            this.dateToObject.set('min', minDate);
+            this.dateToObject.set('max', maxDate);
 
         },
 
         dateToChange: function(value){
 
+            this.dateToInput = value;
         },
 
-        fetchSoldData: function(){
-            // Get Data from server:
-            // Breeder->Products->Reservations->where('order_status','sold')->with('transactionLog')
-            // Use Carbon and use it to compare dates
+        retrieveSoldProducts: function(){
+
+            // Get Sold Products data from server according to chosen frequency
+            if((this.dateFromObject.get() && this.dateToObject.get()) || this.chosenFrequency === 'weekly'){
+
+                // Do AJAX
+                this.$http.get(
+                    config.dashboard_url+'/sold-products',
+                    {
+                        params: {
+                            dateFrom: this.dateFromObject.get('select','yyyy-mm-dd'),
+                            dateTo: this.dateToObject.get('select','yyyy-mm-dd'),
+                            frequency: this.chosenFrequency
+                        }
+                    }
+                ).then(
+                    function(response){
+
+                        // Store fetched data in local component data
+                        var soldData = response.body;
+                        this.barChartData.labels = soldData.labels;
+                        this.barChartData.datasets.forEach(function(dataset, i){
+                            dataset.data = soldData.dataSets[i];
+                        });
+                        this.barChart.options.title.text = soldData.title;
+
+                        // Update Bar Chart
+                        this.barChart.update();
+                    },
+                    function(response){
+                        console.log(response.statusText);
+                    }
+                );
+            }
+            else console.log('Nope!');
         }
     },
-    mounted: function(){
+    created: function(){
+
+        // Initialize local data
         this.barChartData = rawBarChartData;
+        this.latestAccreditation = rawLatestAccreditation;
+        this.serverDateNow = rawServerDateNow;
+    },
+    mounted: function(){
+
+        // Declaring global defaults
+        Chart.defaults.global.defaultFontFamily = 'Poppins';
+        Chart.defaults.global.defaultFontSize = 14;
+        Chart.defaults.global.title.fontSize = 18;
 
         // Instantiating the Bar Chart
-        var bctx = document.getElementById("barChart");
-        this.barChart = new Chart(bctx, {
+        var barChartCanvas = document.getElementById("barChart");
+
+        this.barChart = new Chart(barChartCanvas, {
             type: 'bar',
             data: this.barChartData,
             options: {
+                defaultFontFamily: 'Poppins',
                 title:{
-                    display:true,
-                    text:"No. of Products Sold"
+                    display: true,
+                    text: rawChartTitle
                 },
                 tooltips: {
                     mode: 'index',
-                    intersect: false
+                    intersect: false,
+                    titleSpacing: 10
                 },
                 responsive: true,
                 scales: {
                     xAxes: [{
-                        stacked: true,
+                        stacked: true
                     }],
                     yAxes: [{
                         stacked: true
@@ -167,8 +231,8 @@ var vm = new Vue({
             }
         });
 
+        // Store Date Picker object to root component
         this.dateFromObject = $('#date-from').pickadate('picker');
         this.dateToObject = $('#date-to').pickadate('picker');
-
     }
 });

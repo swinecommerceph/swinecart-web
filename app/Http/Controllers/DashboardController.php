@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 use App\Http\Requests;
 use App\Models\Customer;
@@ -10,7 +11,6 @@ use App\Models\Product;
 use App\Repositories\DashboardRepository;
 
 use Auth;
-use Symfony\Component\HttpKernel\DataCollector\AjaxDataCollector;
 
 class DashboardController extends Controller
 {
@@ -43,16 +43,27 @@ class DashboardController extends Controller
     {
         $dashboardStats = [];
         $breeder = $this->user->userable;
+
         $dashboardStats['hidden'] = $this->dashboard->getProductStatus($breeder,'hidden');
         $dashboardStats['displayed'] = $this->dashboard->getProductStatus($breeder,'displayed');
         $dashboardStats['requested'] = $this->dashboard->getProductStatus($breeder,'requested');
         $dashboardStats['reserved'] = $this->dashboard->getProductStatus($breeder,'reserved');
         $dashboardStats['on_delivery'] = $this->dashboard->getProductStatus($breeder,'on_delivery');
         $dashboardStats['paid'] = $this->dashboard->getProductStatus($breeder,'paid');
-        $dashboardStats['sold'] = $this->dashboard->getProductStatus($breeder,'sold');
         $dashboardStats['ratings'] = $this->dashboard->getRatings($breeder);
+
+        $latestAccreditation = $this->user->userable->latest_accreditation;
+        $serverDateNow = Carbon::now();
+        $soldData = $this->dashboard->getSoldProducts(
+            (object) [
+                'dateFrom' => $serverDateNow->copy()->subMonths(2)->format('Y-m-d'),
+                'dateTo' => $serverDateNow->format('Y-m-d'),
+                'frequency' => 'monthly'
+            ], $breeder);
+
         $topic = str_slug($this->user->name);
-        return view('user.breeder.dashboard', compact('dashboardStats', 'topic'));
+
+        return view('user.breeder.dashboard', compact('dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData', 'topic'));
     }
 
     /**
@@ -78,6 +89,21 @@ class DashboardController extends Controller
     {
         if($request->ajax()){
             return $this->dashboard->getProductRequests($request->product_id);
+        }
+    }
+
+    /**
+     * Get sold products of Breeder on a specified time frequency
+     * AJAX
+     *
+     * @param  Request  $request
+     * @return Array
+     */
+    public function retrieveSoldProducts(Request $request)
+    {
+        if($request->ajax()){
+            $breeder = $this->user->userable;
+            return $this->dashboard->getSoldProducts($request, $breeder);
         }
     }
 

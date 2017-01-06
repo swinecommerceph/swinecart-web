@@ -109,10 +109,6 @@ class DashboardRepository
      */
     public function getProductStatus(Breeder $breeder, $status)
     {
-        $months = [
-            'Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun',
-            'Jul', 'Aug', 'Sep', 'Oct', 'Nov', 'Dec'
-        ];
 
         if($status == 'hidden' || $status == 'displayed' || $status == 'requested'){
             $products = $breeder->products;
@@ -132,7 +128,6 @@ class DashboardRepository
             ];
         }
         else{
-            // $reservations = ProductReservation::with('product')->get();
             $reservations = $breeder->reservations()->with('product')->get();
 
             foreach ($reservations as $reservation) {
@@ -154,6 +149,127 @@ class DashboardRepository
 
         }
 
+    }
+
+    /**
+     * Get sold products of Breeder on a specified time frequency
+     *
+     * @param  Request  $request
+     * @param  Breeder  $breeder
+     * @return Array
+     */
+    public function getSoldProducts($request, Breeder $breeder)
+    {
+
+        $dateFrom = Carbon::createFromFormat('Y-m-d', $request->dateFrom);
+        $dateTo = $request->dateTo ? Carbon::createFromFormat('Y-m-d', $request->dateTo) : '';
+        $soldData = [
+            'title' => '',
+            'labels' => [],
+            'dataSets' => [
+                [], [], [], []
+            ],
+        ];
+
+        // Fetch sold products data depending on the chosen frequency
+        switch ($request->frequency) {
+            case 'monthly':
+                // Get boar, sow, gilt, semen count for the months specified
+                $monthFromInt = $dateFrom->month;
+                $monthToInt = $dateTo->month;
+
+                // Make sure to get the correct month difference
+                $diff = ($monthFromInt <= $monthToInt) ? $monthToInt - $monthFromInt : ($monthToInt + 12) - $monthFromInt;
+                $currentDate = $dateFrom;
+
+                $soldData['title'] = 'No. of Products Sold Monthly from ' . $dateFrom->format('F Y') . ' - ' . $dateTo->format('F Y');
+
+                for ($i = 0; $i < $diff + 1; $i++) {
+
+                    $boarQuery = $breeder->transactionLogs()->whereYear('requested', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->whereYear('requested', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->whereYear('requested', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->whereYear('requested', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'semen');
+
+                    array_push($soldData['labels'], $currentDate->format('M \'y'));
+                    // dataSets refer to boar, sow, gilt, and semen respectively
+                    array_push($soldData['dataSets'][0], $boarQuery->count());
+                    array_push($soldData['dataSets'][1], $sowQuery->count());
+                    array_push($soldData['dataSets'][2], $giltQuery->count());
+                    array_push($soldData['dataSets'][3], $semenQuery->count());
+
+                    $currentDate->addMonth();
+                }
+
+                break;
+
+            case 'weekly':
+                // Get boar, sow, gilt, semen count for the weeks specified
+
+                $startDay = $dateFrom;
+                $startDay->day = 1;
+                $endDay = $startDay->copy()->addWeek();
+                $endDayOfMonth = Carbon::create($startDay->year, $startDay->month, $startDay->daysInMonth);
+
+                $soldData['title'] = 'No. of Products Sold Weekly on ' . $startDay->format('F Y');
+
+                for ($i = 0; $i < ($startDay->daysInMonth/7) ; $i++) {
+
+                    if($endDay->gte($endDayOfMonth)) $endDay = $endDayOfMonth;
+
+                    $boarQuery = $breeder->transactionLogs()->whereDate('requested', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->whereDate('requested', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->whereDate('requested', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->whereDate('requested', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'semen');
+
+                    array_push($soldData['labels'], $startDay->format('M j'). ' - ' . $endDay->format('M j'));
+                    // dataSets refer to boar, sow, gilt, and semen respectively
+                    array_push($soldData['dataSets'][0], $boarQuery->count());
+                    array_push($soldData['dataSets'][1], $sowQuery->count());
+                    array_push($soldData['dataSets'][2], $giltQuery->count());
+                    array_push($soldData['dataSets'][3], $semenQuery->count());
+
+                    $startDay->addWeek();
+                    $endDay->addWeek();
+                }
+
+                break;
+
+            case 'daily':
+                // Get boar, sow, gilt, semen count for the days specified
+                $dayFromInt = $dateFrom->dayOfWeek;
+                $dayToInt = $dateTo->dayOfWeek;
+
+                // Make sure to get the correct month difference
+                $diff = ($dayFromInt <= $dayToInt) ? $dayToInt - $dayFromInt : ($dayToInt + 7) - $dayFromInt;
+                $currentDate = $dateFrom;
+
+                $soldData['title'] = 'No. of Products Sold Daily from ' . $dateFrom->format('M j, Y') . ' - ' . $dateTo->format('M j, Y');
+
+                // dd($dayFromInt);
+                for ($i = 0; $i < $diff + 1; $i++) {
+
+                    $boarQuery = $breeder->transactionLogs()->whereDate('requested', $currentDate->format('Y-m-d'))->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->whereDate('requested', $currentDate->format('Y-m-d'))->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->whereDate('requested', $currentDate->format('Y-m-d'))->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->whereDate('requested', $currentDate->format('Y-m-d'))->where('product_details->type', 'semen');
+
+                    array_push($soldData['labels'], $currentDate->format('M j (D)'));
+                    // dataSets refer to boar, sow, gilt, and semen respectively
+                    array_push($soldData['dataSets'][0], $boarQuery->count());
+                    array_push($soldData['dataSets'][1], $sowQuery->count());
+                    array_push($soldData['dataSets'][2], $giltQuery->count());
+                    array_push($soldData['dataSets'][3], $semenQuery->count());
+
+                    $currentDate->addDay();
+                }
+
+                break;
+
+            default: break;
+        }
+
+        return $soldData;
     }
 
     /**
@@ -197,7 +313,7 @@ class DashboardRepository
     }
 
     /**
-     * Get customers who requested a specific product
+     * Get Customers who requested for a respective Product
      *
      * @param  Integer   $productId
      * @return Array
@@ -231,7 +347,8 @@ class DashboardRepository
     /**
      * Update product status
      *
-     * @param  Request      $request
+     * @param  Request  $request
+     * @param  Product  $product
      * @return Array/String
      */
     public function updateStatus(Request $request, Product $product)
@@ -264,7 +381,6 @@ class DashboardRepository
                     // This must be put in an event for better performance
                     $transactionLog = $reservation->transactionLog()->first();
                     $transactionLog->reserved = Carbon::now();
-                    // $transactionLog->reserved = date('j M Y (D) g:iA', time());
                     $transactionLog->save();
 
                     // Notify reserved customer
