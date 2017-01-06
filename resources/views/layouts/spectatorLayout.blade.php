@@ -42,11 +42,19 @@
         <div class="container">
             <div class="row">
                 <div class="col s3">
-                    <ul class="collection">
-                        <li class="collection-item"><div>Users</div></li>
-                        <li class="collection-item"><div>Products</div></li>
-                        <li class="collection-item"><div>Logs</div></li>
-                        <li class="collection-item"><div>Site Statistics</div></li>
+                    <ul class="collapsible" data-collapsible="accordion">
+                        <li>
+                            <a href="{{route('spectator.users')}}" class="black-text"><div class="collapsible-header"><i class="material-icons">face</i>Users</div></a>
+                        </li>
+                        <li>
+                            <a href="{{route('spectator.products')}}" class="black-text"><div class="collapsible-header"><i class="material-icons">shopping_basket</i>Products</div></a>
+                        </li>
+                        <li>
+                            <a href="{{route('spectator.logs')}}" class="black-text"><div class="collapsible-header"><i class="material-icons">view_headline</i>Logs</div></a>
+                        </li>
+                        <li>
+                            <a href="{{route('spectator.statistics')}}" class="black-text"><div class="collapsible-header"><i class="material-icons">trending_up</i>Site Statistics</div></a>
+                        </li>
                     </ul>
                 </div>
                 <div class="col s9">

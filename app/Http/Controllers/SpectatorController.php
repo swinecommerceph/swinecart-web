@@ -44,4 +44,25 @@ class SpectatorController extends Controller
         return view('user.spectator.home');
     }
 
+    public function viewUsers()
+    {
+        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->paginate(10);
+        return view(('user.spectator.users'), compact('users'));
+    }
+
+    public function viewProducts()
+    {
+        return view('user.spectator.products');
+    }
+
+    public function viewLogs()
+    {
+        return view('user.spectator.logs');
+    }
+
+    public function viewStatistics()
+    {
+        return view('user.spectator.statistics');
+    }
+
 }

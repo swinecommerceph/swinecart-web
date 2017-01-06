@@ -164,6 +164,10 @@ Route::group(['middleware' => ['web']], function () {
 
         // Route to admin home page
         Route::get('home',['as'=>'spectator_path', 'uses'=>'SpectatorController@index']);
+        Route::get('users',['as'=>'spectator.users', 'uses'=>'SpectatorController@viewUsers']);
+        Route::get('products',['as'=>'spectator.products', 'uses'=>'SpectatorController@viewProducts']);
+        Route::get('logs',['as'=>'spectator.logs', 'uses'=>'SpectatorController@viewLogs']);
+        Route::get('statistics',['as'=>'spectator.statistics', 'uses'=>'SpectatorController@viewStatistics']);
     });
 
 

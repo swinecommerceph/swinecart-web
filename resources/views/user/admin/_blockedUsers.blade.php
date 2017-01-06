@@ -77,7 +77,7 @@
                         </div>
                     @else
                         <div class="col s6">
-                            <a class="waves-effect waves-light btn green lighten-1 unblock-button"  data-id ="{{$user->user_id}}"><i class="material-icons left">undo</i>Unblock</a>
+                            <a class="waves-effect waves-light btn green lighten-1 unblock-button"  data-id ="{{$user->user_id}}"><i class="material-icons left">remove_circle_outline</i>Unblock</a>
                         </div>
                     @endif
 

@@ -5,12 +5,9 @@
 @endsection
 
 @section('pageId')
-    id="page-spectator-home"
+    id="page-spectator-users"
 @endsection
 
-{{-- @section('breadcrumbTitle')
-    Home
-@endsection --}}
 @section('header')
     <h4>Admin Dashboard</h4>
 @endsection
@@ -19,7 +16,7 @@
     <div class="card-panel">
         <div class="row">
             <div class="col s12">
-                <h4>Home</h4>
+                <h4>Statistics</h4>
             </div>
         </div>
         <div class="divider"></div>
