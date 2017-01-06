@@ -30,46 +30,72 @@
         </div>
     </div>
     <div id="card-status" class="row">
-        {{-- <div id="charts-container" class="">
+
+        {{-- Charts --}}
+        <div id="charts-container" class="">
+            <p><br></p>
+
+            <div class="col s1">
+                <div class="">
+                    <input class="with-gap" name="frequency" type="radio" id="frequency-monthly" value="monthly" v-model="chosenFrequency" @change="valueChange" />
+                    <label for="frequency-monthly">Monthly</label>
+                </div>
+                <div class="">
+                    <input class="with-gap" name="frequency" type="radio" id="frequency-weekly" value="weekly" v-model="chosenFrequency" @change="valueChange" />
+                    <label for="frequency-weekly">Weekly</label>
+                </div>
+                <div class="">
+                    <input class="with-gap" name="frequency" type="radio" id="frequency-daily" value="daily" v-model="chosenFrequency" @change="valueChange" />
+                    <label for="frequency-daily">Daily</label>
+                </div>
+            </div>
+            <div class="col s5">
+                <div class="input-field col s5">
+                    <custom-date-from-select v-model="dateFromInput"
+                        :date-accreditation="latestAccreditation"
+                        @date-from-select="dateFromChange"
+                    >
+                    </custom-date-from-select>
+                </div>
+                <div class="input-field col s5">
+                    <custom-date-to-select v-model="dateToInput"
+                        @date-to-select="dateToChange"
+                        v-show="chosenFrequency !== 'weekly'"> </custom-date-to-select>
+                </div>
+                <div class="" style="margin-top:1rem;">
+                    <a class="btn-floating" @click.prevent="retrieveSoldProducts"><i class="material-icons">send</i></a>
+                </div>
+            </div>
+
             <div class="col s12">
                 <canvas id="barChart"></canvas>
             </div>
-        </div> --}}
+
+            <p><br></p>
+        </div>
+
+        <div class="col s12">
+            <br>
+        </div>
 
         <div id="card-product-status" class="col z-depth-1">
+            <p></p>
             <div class="col s12">
                 <h5 class="center-align">
                     <a href="{{ route('dashboard.productStatus') }}" class="black-text">Product Status</a>
                 </h5>
             </div>
-            {{-- Sold Products --}}
-            <div class="col s12 m3">
-                <div class="card">
-                    <div class="card-content teal white-text">
-                        <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'sold'])}}" class="white-text">Sold</a>
-                        </span>
-                        <h3>{{ $dashboardStats['sold']['overall'] }}</h3>
-                    </div>
-                    <div class="card-action teal">
-                        <a class="white-text">Boar: {{ $dashboardStats['sold']['boar'] }} </a>
-                        <a class="white-text">Sow: {{ $dashboardStats['sold']['sow'] }} </a>
-                        <a class="white-text">Gilt: {{ $dashboardStats['sold']['gilt'] }} </a>
-                        <a class="white-text">Semen: {{ $dashboardStats['sold']['semen'] }} </a>
-                    </div>
-                </div>
-            </div>
 
             {{-- Paid Products --}}
-            <div class="col s12 m3">
+            <div class="col s12 m4">
                 <div class="card">
-                    <div class="card-content pink white-text">
+                    <div class="card-content teal white-text">
                         <span class="card-title">
                             <a href="{{route('dashboard.productStatus',['status' => 'paid'])}}" class="white-text">Paid</a>
                         </span>
                         <h3>{{ $dashboardStats['paid']['overall'] }}</h3>
                     </div>
-                    <div class="card-action pink">
+                    <div class="card-action teal">
                         <a class="white-text">Boar: {{ $dashboardStats['paid']['boar'] }} </a>
                         <a class="white-text">Sow: {{ $dashboardStats['paid']['sow'] }} </a>
                         <a class="white-text">Gilt: {{ $dashboardStats['paid']['gilt'] }} </a>
@@ -80,7 +106,7 @@
 
 
             {{-- On Delivery Products --}}
-            <div class="col s12 m3">
+            <div class="col s12 m4">
                 <div class="card">
                     <div class="card-content grey white-text">
                         <span class="card-title">
@@ -98,15 +124,15 @@
             </div>
 
             {{-- Reserved Products --}}
-            <div class="col s12 m3">
+            <div class="col s12 m4">
                 <div class="card">
-                    <div class="card-content yellow darken-1 white-text">
+                    <div class="card-content pink white-text">
                         <span class="card-title">
                             <a href="{{route('dashboard.productStatus',['status' => 'reserved'])}}" class="white-text">Reserved</a>
                         </span>
                         <h3>{{ $dashboardStats['reserved']['overall'] }}</h3>
                     </div>
-                    <div class="card-action yellow darken-1">
+                    <div class="card-action pink">
                         <a class="white-text">Boar: {{ $dashboardStats['reserved']['boar'] }} </a>
                         <a class="white-text">Sow: {{ $dashboardStats['reserved']['sow'] }} </a>
                         <a class="white-text">Gilt: {{ $dashboardStats['reserved']['gilt'] }} </a>
@@ -124,7 +150,7 @@
                         </span>
                         <h3>{{ $dashboardStats['hidden']['overall'] }}</h3>
                     </div>
-                    <div class="card-action yellow darken-1">
+                    <div class="card-action pink">
                         <a class="white-text">Boar: {{ $dashboardStats['hidden']['boar'] }} </a>
                         <a class="white-text">Sow: {{ $dashboardStats['hidden']['sow'] }} </a>
                         <a class="white-text">Gilt: {{ $dashboardStats['hidden']['gilt'] }} </a>
@@ -173,13 +199,13 @@
         {{-- Rating --}}
         <div class="col s12 m6">
             <div class="card">
-                <div class="card-content pink white-text">
+                <div class="card-content grey white-text">
                     <span class="card-title">
                         <a href="{{route('dashboard.productStatus')}}" class="white-text">Rating</a>
                     </span>
                     <h3>{{ $dashboardStats['ratings']['overall'] }}/5</h3>
                 </div>
-                <div class="card-action pink">
+                <div class="card-action grey">
                     <a class="white-text">Delivery: {{ $dashboardStats['ratings']['delivery'] }} </a>
                     <a class="white-text">Transaction: {{ $dashboardStats['ratings']['transaction'] }} </a>
                     <a class="white-text">Product Quality: {{ $dashboardStats['ratings']['productQuality'] }} </a>
@@ -194,13 +220,6 @@
                     <span class="card-title">Reviews</span>
                     <div id="review-slider" class="slider">
                         <ul class="slides teal">
-                            {{-- <li>
-                                <img>
-                                <div class="caption center-align">
-                                    <h4>"Your Reviews"</h4>
-                                    <h6 class="light grey-text text-lighten-3">- Customer</h6>
-                                </div>
-                            </li> --}}
                             @foreach($dashboardStats['ratings']['reviews'] as $review)
                                 <li>
                                     <img>
@@ -215,6 +234,7 @@
                 </div>
             </div>
         </div>
+
     </div>
 
     {{-- <div class="row"> --}}
@@ -260,58 +280,29 @@
             }
         );
     </script>
-    <script src="/js/vendor/chart.bundle.min.js"></script>
+    <script src="/js/vendor/chart.min.js"></script>
     <script type="text/javascript">
+        var rawLatestAccreditation = "{{ $latestAccreditation }}";
+        var rawServerDateNow = "{{ $serverDateNow }}";
+        var rawChartTitle = "{!! $soldData['title'] !!}";
         var rawBarChartData = {
-            labels: ["Sold", "Paid", "On Delivery", "Reserved", "Requested", "Hidden", "Displayed"],
+            labels: {!! json_encode($soldData['labels']) !!},
             datasets: [{
                 label: 'Boar',
                 backgroundColor: 'rgb(255, 99, 132)',
-                data: [
-                    {{ $dashboardStats['sold']['boar'] }},
-                    {{ $dashboardStats['paid']['boar'] }},
-                    {{ $dashboardStats['on_delivery']['boar'] }},
-                    {{ $dashboardStats['reserved']['boar'] }},
-                    {{ $dashboardStats['requested']['boar'] }},
-                    {{ $dashboardStats['hidden']['boar'] }},
-                    {{ $dashboardStats['displayed']['boar'] }}
-                ]
+                data: {{ json_encode($soldData['dataSets'][0]) }}
             }, {
                 label: 'Sow',
                 backgroundColor: 'rgb(54, 162, 235)',
-                data: [
-                    {{ $dashboardStats['sold']['sow'] }},
-                    {{ $dashboardStats['paid']['sow'] }},
-                    {{ $dashboardStats['on_delivery']['sow'] }},
-                    {{ $dashboardStats['reserved']['sow'] }},
-                    {{ $dashboardStats['requested']['sow'] }},
-                    {{ $dashboardStats['hidden']['sow'] }},
-                    {{ $dashboardStats['displayed']['sow'] }}
-                ]
-            }, {
-                label: 'Semen',
-                backgroundColor: 'rgb(75, 192, 192)',
-                data: [
-                    {{ $dashboardStats['sold']['semen'] }},
-                    {{ $dashboardStats['paid']['semen'] }},
-                    {{ $dashboardStats['on_delivery']['semen'] }},
-                    {{ $dashboardStats['reserved']['semen'] }},
-                    {{ $dashboardStats['requested']['semen'] }},
-                    {{ $dashboardStats['hidden']['semen'] }},
-                    {{ $dashboardStats['displayed']['semen'] }}
-                ]
+                data: {{ json_encode($soldData['dataSets'][1]) }}
             }, {
                 label: 'Gilt',
+                backgroundColor: 'rgb(75, 192, 192)',
+                data: {{ json_encode($soldData['dataSets'][2]) }}
+            }, {
+                label: 'Semen',
                 backgroundColor: 'rgb(153, 102, 255)',
-                data: [
-                    {{ $dashboardStats['sold']['gilt'] }},
-                    {{ $dashboardStats['paid']['gilt'] }},
-                    {{ $dashboardStats['on_delivery']['gilt'] }},
-                    {{ $dashboardStats['reserved']['gilt'] }},
-                    {{ $dashboardStats['requested']['gilt'] }},
-                    {{ $dashboardStats['hidden']['gilt'] }},
-                    {{ $dashboardStats['displayed']['gilt'] }}
-                ]
+                data: {{ json_encode($soldData['dataSets'][3]) }}
             }]
 
         };

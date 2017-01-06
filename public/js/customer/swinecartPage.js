@@ -208,6 +208,10 @@ Vue.component('order-details',{
         capitalize: function(value){
             // Capitalize first letter of word
             return value[0].toUpperCase() + value.slice(1);
+        },
+
+        transformToDetailedDate: function(value){
+            return moment(value).format("MMM D YYYY (dddd), h:mmA");
         }
     },
     methods: {
@@ -320,7 +324,7 @@ Vue.component('order-details',{
             this.productRequest.name = this.products[index].product_name;
             this.productRequest.id = this.products[index].product_id;
             this.productRequest.type = this.products[index].product_type;
-            this.productRequest.dateNeeded = this.products[index].date_needed;
+            this.productRequest.dateNeeded = '';
             this.productRequest.specialRequest = this.products[index].special_request;
             $('#request-product-confirmation-modal').openModal();
         },
@@ -353,7 +357,7 @@ Vue.component('order-details',{
                         requestStatus: 1,
                         dateNeeded: this.productRequest.dateNeeded,
                         specialRequest: this.productRequest.specialRequest,
-                        statusTransaction: data[1]
+                        statusTransaction: data[1].date
                     };
 
                     this.$emit('product-requested', updateDetails);
@@ -464,6 +468,20 @@ Vue.component('transaction-history',{
 
         };
     },
+    filters: {
+        capitalize: function(value){
+            // Capitalize first letter of word
+            if(value){
+                var str = value;
+                return str[0].toUpperCase() + str.slice(1);
+            }
+            return '';
+        },
+
+        transformToDetailedDate: function(value){
+            return moment(value).format("MMM D YYYY (dddd), h:mmA");
+        }
+    },
     methods: {
         viewProductModalFromHistory: function(index){
             vm.productInfoModal.imgPath = this.history[index].img_path;
@@ -485,16 +503,6 @@ Vue.component('transaction-history',{
             });
         }
 
-    },
-    filters: {
-        capitalize: function(value){
-            // Capitalize first letter of word
-            if(value){
-                var str = value;
-                return str[0].toUpperCase() + str.slice(1);
-            }
-            return '';
-        }
     }
 });
 
@@ -579,7 +587,6 @@ var vm = new Vue({
                     // Parse JSON objects
                     for (var i = 0; i < this.history.length; i++) {
                         this.history[i].product_details = JSON.parse(this.history[i].product_details);
-                        this.history[i].status_transactions = JSON.parse(this.history[i].status_transactions);
                     }
                 },
                 function(response){

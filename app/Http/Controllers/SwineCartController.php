@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Carbon\Carbon;
 
 use App\Http\Requests;
 use App\Models\Customer;
@@ -115,9 +116,7 @@ class SwineCartController extends Controller
             // Update Transaction Log
             // This must be put in an event for better performance
             $transactionLog = $reviewed->transactionLog()->first();
-            $decodedStatusTransaction = json_decode($transactionLog->status_transactions, true);
-            $decodedStatusTransaction['rated'] = date('j M Y (D) g:iA', time());
-            $transactionLog->status_transactions = collect($decodedStatusTransaction)->toJson();
+            $transactionLog->rated = Carbon::now();
             $transactionLog->save();
 
             // Notify Breeder of the rating
@@ -125,7 +124,7 @@ class SwineCartController extends Controller
             $breederUser->notify(new BreederRated(
                 [
                     'description' => 'Customer ' . $this->user->name . ' rated you',
-                    'time' => $decodedStatusTransaction['rated'],
+                    'time' => $transactionLog->rated,
                     'url' => route('dashboard')
                 ]
             ));
@@ -171,21 +170,14 @@ class SwineCartController extends Controller
                 "farm_from" => FarmAddress::find($product->farm_from_id)->province,
                 "img_path" => '/images/product/'.Image::find($product->primary_img_id)->name
             ];
-            $statusTransactions = [
-                "requested" => date('j M Y (D) g:iA', time()),
-                "reserved" => '',
-                "on_delivery" => '',
-                "paid" => '',
-                "sold" => '',
-                "rated" => ''
-            ];
 
             // Update Transaction Log
             // This must be put in an event for better performance
             $transactionLog = new TransactionLog;
             $transactionLog->customer_id = $requested->customer_id;
+            $transactionLog->breeder_id = $product->breeder_id;
             $transactionLog->product_details = collect($productDetails)->toJson();
-            $transactionLog->status_transactions = collect($statusTransactions)->toJson();
+            $transactionLog->requested = Carbon::now();
             $requested->transactionLog()->save($transactionLog);
 
             // Notify Breeder of the request
@@ -193,12 +185,12 @@ class SwineCartController extends Controller
             $breederUser->notify(new ProductRequested(
                 [
                     'description' => 'Product ' . $product->name . ' is requested by ' . $this->user->name,
-                    'time' => $statusTransactions['requested'],
+                    'time' => $transactionLog->requested,
                     'url' => route('dashboard.productStatus')
                 ]
             ));
 
-            return [$customer->swineCartItems()->where('if_requested',0)->count(), $statusTransactions['requested']];
+            return [$customer->swineCartItems()->where('if_requested',0)->count(), $transactionLog->requested];
         }
     }
 
@@ -270,8 +262,6 @@ class SwineCartController extends Controller
             $customer = $this->user->userable;
             $swineCartItems = $customer->swineCartItems()->where('if_rated',0)->get();
             $products = [];
-            $log = $customer->transactionLogs()->get();
-            $history = [];
 
             foreach ($swineCartItems as $item) {
                 $itemDetail = [];
@@ -305,25 +295,22 @@ class SwineCartController extends Controller
                 else $itemDetail['date_needed'] = $this->transformDateSyntax($item->date_needed);
                 $itemDetail['special_request'] = $item->special_request;
                 $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
-                if($item->transactionLog) $itemDetail['status_transactions'] = json_decode($item->transactionLog->status_transactions,true);
-                else{
-                    $itemDetail['status_transactions'] = [
-                        "requested" => '',
-                        "reserved" => '',
-                        "on_delivery" => '',
-                        "paid" => '',
-                        "sold" => '',
-                        "rated" => ''
-                    ];
-                }
+                $itemDetail['status_transactions'] = [
+                    "requested" => ($item->transactionLog) ? $item->transactionLog->requested : '',
+                    "reserved" => ($item->transactionLog) ? $item->transactionLog->reserved : '',
+                    "on_delivery" => ($item->transactionLog) ? $item->transactionLog->on_delivery : '',
+                    "paid" => ($item->transactionLog) ? $item->transactionLog->paid: '',
+                    "sold" => ($item->transactionLog) ? $item->transactionLog->sold: '',
+                    "rated" => ($item->transactionLog) ? $item->transactionLog->rated: ''
+                ];
+
                 array_push($products,(object) $itemDetail);
             }
 
             $products = collect($products);
-            $history = collect($history);
             $token = csrf_token();
             $customerId = $customer->id;
-            return view('user.customer.swineCart', compact('products', 'history', 'token', 'customerId'));
+            return view('user.customer.swineCart', compact('products', 'token', 'customerId'));
         }
     }
 

@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Customer;
+use App\Models\Breeder;
 use App\Models\SwineCartItem;
 use Illuminate\Database\Eloquent\Model;
 
@@ -16,6 +17,14 @@ class TransactionLog extends Model
     public function customer()
     {
         return $this->belongsTo(Customer::class);
+    }
+
+    /**
+     * Get the breeder associated to the Transaction Log
+     */
+    public function breeder()
+    {
+        return $this->belongsTo(Breeder::class);
     }
 
     /**

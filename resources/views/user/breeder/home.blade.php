@@ -79,7 +79,7 @@
                                 <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
                             </span>
                             <p style="margin-left:1.5rem;"> @{{ notification.data.description }} </p>
-                            <p class="left-align grey-text text-darken-1" style="margin-left:1.5rem; font-size:0.8rem;"> @{{ notification.data.time }} </p>
+                            <p class="left-align grey-text text-darken-1" style="margin-left:1.5rem; font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
                         </a>
                     </li>
 
@@ -174,5 +174,6 @@ of criteria/qualifications.</h5>
 @section('initScript')
     <script src="/js/vendor/VueJS/vue.js"></script>
     <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
+    <script src="/js/vendor/moment.min.js"></script>
     <script src="/js/breeder/breeder_custom.js"> </script>
 @endsection

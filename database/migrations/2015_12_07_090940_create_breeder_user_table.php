@@ -24,6 +24,7 @@ class CreateBreederUserTable extends Migration
             $table->string('produce');
             $table->string('contactPerson_name');
             $table->string('contactPerson_mobile');
+            $table->date('latest_accreditation');
             $table->string('status_instance')->default('active');
         });
     }

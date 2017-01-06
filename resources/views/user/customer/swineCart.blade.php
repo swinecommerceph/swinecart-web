@@ -148,24 +148,18 @@
                                     <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
                                 </span>
                                 <p style="margin-left:1.5rem;"> @{{ notification.data.description }} </p>
-                                <p class="right-align grey-text text-darken-1" style="font-size:0.8rem;"> @{{ notification.data.time }} </p>
+                                <p class="right-align grey-text text-darken-1" style="font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
                             </a>
                         </li>
 
                     </ul>
                 </li>
                 <li>
-                    <a class="center-align">See all Notifications</a>
+                    <a href="{{ route('cNotifs') }}" class="center-align">See all Notifications</a>
                 </li>
             </ul>
         </li>
     @endif
-@endsection
-
-@section('navbarDropdown')
-    <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
-    <li class="divider"></li>
-    <li><a> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
 @endsection
 
 @section('content')
@@ -302,7 +296,7 @@
                                 <div class="">
                                     <span class="col s6 right-align">
                                         <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
+                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested | transformToDetailedDate">queue</i>
                                         </a>
                                     </span>
                                     <span class="col s6 left-align">
@@ -330,12 +324,12 @@
                                 <div class="">
                                     <span class="col s6 right-align">
                                         <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
+                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested | transformToDetailedDate">queue</i>
                                         </a>
                                     </span>
                                     <span class="col s6 left-align">
                                         <a href="#">
-                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved">save</i>
+                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved | transformToDetailedDate">save</i>
                                         </a>
                                     </span>
                                     <span class="col s6 right-align">
@@ -358,12 +352,12 @@
                                 <div class="">
                                     <span class="col s6 right-align">
                                         <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
+                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested | transformToDetailedDate">queue</i>
                                         </a>
                                     </span>
                                     <span class="col s6 left-align">
                                         <a href="#">
-                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved">save</i>
+                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved | transformToDetailedDate">save</i>
                                         </a>
                                     </span>
                                     <span class="col s6 right-align">
@@ -373,7 +367,7 @@
                                     </span>
                                     <span class="col s6 left-align">
                                         <a href="#">
-                                            <i class="paid material-icons teal-text tooltipped" data-position="bottom" data-delay="50" :data-tooltip="'Paid, ' + product.status_transactions.paid">payment</i>
+                                            <i class="paid material-icons teal-text tooltipped" data-position="bottom" data-delay="50" :data-tooltip="'Paid, ' + product.status_transactions.paid | transformToDetailedDate">payment</i>
                                         </a>
                                     </span>
                                 </div>
@@ -386,17 +380,17 @@
                                 <div class="">
                                     <span class="col s6 right-align">
                                         <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
+                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested | transformToDetailedDate">queue</i>
                                         </a>
                                     </span>
                                     <span class="col s6 left-align">
                                         <a  href="#">
-                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved">save</i>
+                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved | transformToDetailedDate">save</i>
                                         </a>
                                     </span>
                                     <span class="col s6 right-align">
                                         <a href="#">
-                                            <i class="on-delivery material-icons teal-text tooltipped" data-position="bottom" data-delay="50" :data-tooltip="'On Delivery, ' + product.status_transactions.on_delivery">local_shipping</i>
+                                            <i class="on-delivery material-icons teal-text tooltipped" data-position="bottom" data-delay="50" :data-tooltip="'On Delivery, ' + product.status_transactions.on_delivery | transformToDetailedDate">local_shipping</i>
                                         </a>
                                     </span>
                                     <span class="col s6 left-align">
@@ -413,7 +407,7 @@
                             >
                                 <div class="col s12 center-align">
                                     <a href="#">
-                                      <i class="material-icons md teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Sold, ' + product.status_transactions.sold">attach_money</i>
+                                      <i class="material-icons md teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Sold, ' + product.status_transactions.sold | transformToDetailedDate">attach_money</i>
                                     </a>
                                 </div>
                             </div>
@@ -747,23 +741,23 @@
                                 </div>
                             </div>
                             <div class="col s4">
-                                <div v-if="log.status_transactions.requested">
-                                    Requested <span class="right"> @{{ log.status_transactions.requested }} </span>
+                                <div v-if="log.requested">
+                                    Requested <span class="right"> @{{ log.requested | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.reserved">
-                                    Reserved <span class="right"> @{{ log.status_transactions.reserved }} </span>
+                                <div v-if="log.reserved">
+                                    Reserved <span class="right"> @{{ log.reserved | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.on_delivery">
-                                    On Delivery <span class="right"> @{{ log.status_transactions.on_delivery }} </span>
+                                <div v-if="log.on_delivery">
+                                    On Delivery <span class="right"> @{{ log.on_delivery | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.paid">
-                                    Paid <span class="right"> @{{ log.status_transactions.paid }} </span>
+                                <div v-if="log.paid">
+                                    Paid <span class="right"> @{{ log.paid | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.sold">
-                                    Sold <span class="right"> @{{ log.status_transactions.sold }} </span>
+                                <div v-if="log.sold">
+                                    Sold <span class="right"> @{{ log.sold | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.rated">
-                                    Rated <span class="right"> @{{ log.status_transactions.rated }} </span>
+                                <div v-if="log.rated">
+                                    Rated <span class="right"> @{{ log.rated | transformToDetailedDate }} </span>
                                 </div>
                             </div>
                         </div>
