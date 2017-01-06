@@ -79,6 +79,16 @@ class DashboardController extends Controller
     }
 
     /**
+     * Show the reviews and ratings of the Breeder from the Customers
+     *
+     * @return View
+     */
+    public function showReviewsAndRatings()
+    {
+        return view('user.breeder.reviews');
+    }
+
+    /**
      * Get Customers who requested for a respective Product
      * AJAX
      *

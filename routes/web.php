@@ -81,6 +81,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('dashboard/product-status',['as' => 'dashboard.productStatus', 'uses' => 'DashboardController@showProductStatus']);
         Route::get('dashboard/product-status/retrieve-product-requests',['as' => 'dashboard.productRequests', 'uses' => 'DashboardController@retrieveProductRequests']);
         Route::get('dashboard/sold-products',['as' => 'dashboard.soldProducts', 'uses' => 'DashboardController@retrieveSoldProducts']);
+        Route::get('dashboard/reviews-and-ratings',['as' => 'dashboard.reviews', 'uses' => 'DashboardController@showReviewsAndRatings']);
         Route::patch('dashboard/product-status/update-status',['as' => 'dashboard.reserveProduct', 'uses' => 'DashboardController@updateProductStatus']);
 
         // notification-related

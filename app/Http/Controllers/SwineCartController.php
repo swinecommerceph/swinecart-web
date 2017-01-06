@@ -165,10 +165,15 @@ class SwineCartController extends Controller
                 "id" => $product->id,
                 "name" => $product->name,
                 "type" => $product->type,
+                "img_path" => '/images/product/'.Image::find($product->primary_img_id)->name,
                 "breed" => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
                 "breeder_name" => Breeder::find($product->breeder_id)->users()->first()->name,
                 "farm_from" => FarmAddress::find($product->farm_from_id)->province,
-                "img_path" => '/images/product/'.Image::find($product->primary_img_id)->name
+                "birthdate" => $product->birthdate,
+                "adg" => $product->adg,
+                "fcr" => $product->fcr,
+                "bft" => $product->backfat_thickness,
+                "other_details" => $product->other_details
             ];
 
             // Update Transaction Log
@@ -323,6 +328,14 @@ class SwineCartController extends Controller
     public function getTransactionHistory(Request $request){
         if($request->ajax()){
             $history = Customer::find($request->customerId)->transactionLogs;
+
+            foreach ($history as $log) {
+                $reviews = Breeder::find($log->breeder_id)->reviews()->get();
+
+                $log->avg_delivery = $reviews->avg('rating_delivery');
+                $log->avg_transaction = $reviews->avg('rating_transaction');
+                $log->avg_productQuality = $reviews->avg('rating_productQuality');
+            }
             return collect($history)->toJson();
         }
     }

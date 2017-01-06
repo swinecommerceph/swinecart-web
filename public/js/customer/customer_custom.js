@@ -99,7 +99,7 @@ var notifications = new Vue({
     },
     filters: {
         transformToReadableDate: function(value){
-            return momemnt(value).fromNow();
+            return moment(value).fromNow();
         }
     },
     created: function(){

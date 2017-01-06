@@ -707,7 +707,7 @@
                 </div>
                 <ul id="transaction-cart" class="collection cart">
                     <li class="collection-item"
-                        v-for="log in history"
+                        v-for="(log,index) in history"
                     >
                         <div class="row  swine-cart-item valign-wrapper">
                             <div class="col s2 center-align">
