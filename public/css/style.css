@@ -390,11 +390,11 @@ blockquote{
 
 .summary-data{
 	font-size: 10em;
-   top:0;
-   bottom: 0;
-   left: 0;
-   right: 0;
-   margin: auto;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
 }
 
 .summary-icons{
@@ -405,16 +405,16 @@ blockquote{
 .summary-title{
 	font-size: 2em;
 	vertical-align: middle;
-   text-align: left;
+   	text-align: left;
 
 }
 
 .action-column{
- top:0;
- bottom: 0;
- left: 0;
- right: 0;
- margin: auto;
+	 top:0;
+	 bottom: 0;
+	 left: 0;
+	 right: 0;
+	 margin: auto;
 }
 
 .action-dialog-box{
@@ -508,6 +508,26 @@ blockquote{
 
 #inquiries-card{
    background-color: #67052c;
+}
+
+#statistics-card{
+   background-color: #EB984E;
+}
+
+#statistics-icon{
+	font-size: 9em;
+	vertical-align: middle;
+   	text-align: left;
+}
+
+#statistics-title-wrapper{
+	vertical-align: middle;
+}
+
+#statistics-title{
+	font-size: 5em;
+	vertical-align: middle;
+   	text-align: left;
 }
 
 #adduser{

@@ -22,7 +22,7 @@
         <div class="divider"></div>
         <div class="row">
             <div class="col s12">
-                CONTENT
+                {{-- @barchart('Food Poll', 'poll_div') --}}
             </div>
         </div>
     </div>

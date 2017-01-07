@@ -25,6 +25,7 @@ use DB;
 use Auth;
 use Input;
 
+
 class SpectatorController extends Controller
 {
     protected $user;
@@ -62,6 +63,18 @@ class SpectatorController extends Controller
 
     public function viewStatistics()
     {
+        // $votes  = Lava::DataTable();
+        //
+        // $votes->addStringColumn('Food Poll')
+        //       ->addNumberColumn('Votes')
+        //       ->addRow(['Tacos',  rand(1000,5000)])
+        //       ->addRow(['Salad',  rand(1000,5000)])
+        //       ->addRow(['Pizza',  rand(1000,5000)])
+        //       ->addRow(['Apples', rand(1000,5000)])
+        //       ->addRow(['Fish',   rand(1000,5000)]);
+        //
+        // $lava->BarChart('Votes', $votes);
+
         return view('user.spectator.statistics');
     }
 

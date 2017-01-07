@@ -148,6 +148,7 @@ return [
         Illuminate\Validation\ValidationServiceProvider::class,
         Illuminate\View\ViewServiceProvider::class,
 		Intervention\Image\ImageServiceProvider::class,
+
         /*
          * Application Service Providers...
          */
@@ -159,7 +160,7 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
         AdamWathan\EloquentOAuthL5\EloquentOAuthServiceProvider::class,
-
+        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
     ],
 
     /*
