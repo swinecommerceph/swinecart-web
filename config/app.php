@@ -160,7 +160,7 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
         AdamWathan\EloquentOAuthL5\EloquentOAuthServiceProvider::class,
-        Khill\Lavacharts\Laravel\LavachartsServiceProvider::class,
+        Fx3costa\LaravelChartJs\Providers\ChartjsServiceProvider::class,
     ],
 
     /*

@@ -14,7 +14,7 @@
         "react/promise": "^2.0",
         "pusher/pusher-php-server": "^2.6",
         "intervention/image": "^2.3",
-        "khill/lavacharts": "~3.0"
+        "fx3costa/laravelchartjs": "^2.1"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",

@@ -168,6 +168,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('products',['as'=>'spectator.products', 'uses'=>'SpectatorController@viewProducts']);
         Route::get('logs',['as'=>'spectator.logs', 'uses'=>'SpectatorController@viewLogs']);
         Route::get('statistics',['as'=>'spectator.statistics', 'uses'=>'SpectatorController@viewStatistics']);
+
+        Route::get('home/searchproduct', ['as'=>'spectator.searchProduct', 'uses'=>'SpectatorController@searchProduct']);
     });
 
 

@@ -14,7 +14,6 @@
     <link href="/css/icon.css" rel="stylesheet" type="text/css">
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
 
 
     <script src="/js/vendor/VideoJS/ie8/videojs-ie8.min.js"></script>

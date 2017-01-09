@@ -11,6 +11,8 @@
         <link href="/css/icon.css" rel="stylesheet" type="text/css">
         <link href="/css/style.css" rel="stylesheet" type="text/css">
         <link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
+        <script type="text/javascript" src="/js/vendor/chart.bundle.min.js"></script>
+
     </head>
     <body @yield('pageId')>
         <div class="navbar-fixed">
@@ -63,5 +65,14 @@
             </div>
         </div>
 
+
+        <script src="/js/vendor/jquery.min.js"></script>
+        <script src="/js/vendor/VueJS/vue.js"></script>
+      	<script src="/js/vendor/materialize.min.js"></script>
+      	<script src="/js/vendor/dropzone.js"></script>
+      	<script src="/js/vendor/VideoJS/video.min.js"></script>
+      	<script src="/js/config.js"></script>
+        <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
+        <script src="/js/custom.js"></script>
     </body>
 </html>

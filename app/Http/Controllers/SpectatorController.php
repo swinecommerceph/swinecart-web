@@ -53,7 +53,19 @@ class SpectatorController extends Controller
 
     public function viewProducts()
     {
-        return view('user.spectator.products');
+        $products = DB::table('products')
+                    ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
+                    ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
+                    'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
+                    'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
+                    ->paginate(9);
+        foreach ($products as $product) {
+            $product->image_name = '/images/product/'.$product->image_name;
+            $product->type = ucfirst($product->type);
+            $product->status = ucfirst($product->status);
+        }
+        //dd($products);
+        return view(('user.spectator.products'),compact('products'));
     }
 
     public function viewLogs()
@@ -63,19 +75,63 @@ class SpectatorController extends Controller
 
     public function viewStatistics()
     {
-        // $votes  = Lava::DataTable();
-        //
-        // $votes->addStringColumn('Food Poll')
-        //       ->addNumberColumn('Votes')
-        //       ->addRow(['Tacos',  rand(1000,5000)])
-        //       ->addRow(['Salad',  rand(1000,5000)])
-        //       ->addRow(['Pizza',  rand(1000,5000)])
-        //       ->addRow(['Apples', rand(1000,5000)])
-        //       ->addRow(['Fish',   rand(1000,5000)]);
-        //
-        // $lava->BarChart('Votes', $votes);
+        $charts = [];
+        $lineChart = app()->chartjs
+        ->name('lineChartTest')
+        ->type('line')
+        ->element('lineChartTest')
+        ->labels(['January', 'February', 'March', 'April', 'May', 'June', 'July'])
+        ->datasets([
+            [
+                "label" => "Sample Dataset1",
+                'backgroundColor' => "rgba(38, 185, 154, 0.31)",
+                'borderColor' => "rgba(38, 185, 154, 0.7)",
+                "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
+                "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
+                "pointHoverBackgroundColor" => "#fff",
+                "pointHoverBorderColor" => "rgba(220,220,220,1)",
+                'data' => [65, 59, 80, 81, 56, 55, 40],
+            ],
+            [
+                "label" => "Sample Dataset2",
+                'backgroundColor' => "rgba(38, 185, 154, 0.31)",
+                'borderColor' => "rgba(38, 185, 154, 0.7)",
+                "pointBorderColor" => "rgba(38, 185, 154, 0.7)",
+                "pointBackgroundColor" => "rgba(38, 185, 154, 0.7)",
+                "pointHoverBackgroundColor" => "#fff",
+                "pointHoverBorderColor" => "rgba(220,220,220,1)",
+                'data' => [12, 33, 44, 44, 55, 23, 40],
+            ]
+        ])
+        ->options([]);
+        $charts[] = $lineChart;
+        $barChart = app()->chartjs
+         ->name('barChartTest')
+         ->type('bar')
+         ->element('barChartTest')
+         ->labels(['Label x', 'Label y'])
+         ->datasets([
+             [
+                 "label" => "My First dataset",
+                 'backgroundColor' => ['rgba(255, 99, 132, 0.2)', 'rgba(54, 162, 235, 0.2)'],
+                 'data' => [69, 59]
+             ],
+             [
+                 "label" => "My First dataset",
+                 'backgroundColor' => ['rgba(255, 99, 132, 0.3)', 'rgba(54, 162, 235, 0.3)'],
+                 'data' => [65, 12]
+             ]
+         ])
+         ->options([]);
+         $charts[] = $barChart;
 
-        return view('user.spectator.statistics');
+        //return view('user.spectator.statistics');
+        return view(('user.spectator.statistics'), compact('charts'));
+    }
+
+    public function searchProduct()
+    {
+
     }
 
 }

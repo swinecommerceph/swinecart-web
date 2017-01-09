@@ -22,7 +22,16 @@
         <div class="divider"></div>
         <div class="row">
             <div class="col s12">
-                {{-- @barchart('Food Poll', 'poll_div') --}}
+                <div style="width:75%;">
+                    <canvas id="lineChartTest">
+                        {!! $charts[0]->render() !!}
+                    </canvas>
+                </div>
+                <div style="width:75%;">
+                    <canvas id="barChartTest">
+                        {!! $charts[1]->render() !!}
+                    </canvas>
+                </div>
             </div>
         </div>
     </div>
