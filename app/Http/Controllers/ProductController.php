@@ -121,7 +121,6 @@ class ProductController extends Controller
      */
     public function breederViewProductDetail(Product $product)
     {
-        // $product = Product::find($productId);
         $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
         $product->type = ucfirst($product->type);
@@ -132,7 +131,15 @@ class ProductController extends Controller
         $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
         $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
         $product->videoCollection = $product->videos;
-        return view('user.breeder.viewProductDetail', compact('product'));
+
+        $reviews = Breeder::find($product->breeder_id)->reviews;
+        $breederRatings = [
+            'deliveryRating' => ($reviews->avg('rating_delivery')) ? $reviews->avg('rating_delivery') : 0,
+            'transactionRating' => ($reviews->avg('rating_transaction')) ? $reviews->avg('rating_transaction') : 0,
+            'productQualityRating' => ($reviews->avg('rating_productQuality')) ? $reviews->avg('rating_productQuality') : 0
+        ];
+
+        return view('user.breeder.viewProductDetail', compact('product', 'breederRatings'));
     }
 
     /**
@@ -482,6 +489,19 @@ class ProductController extends Controller
     }
 
     /**
+     * View Breeder's Profile
+     *
+     * @param  Breeder  $breeder
+     * @return View
+     */
+    public function viewBreederProfile(Breeder $breeder)
+    {
+        $breeder->name = $breeder->users()->first()->name;
+        $breeder->farms = $breeder->farmAddresses;
+        return view('user.customer.viewBreederProfile', compact('breeder'));
+    }
+
+    /**
      * View Details of a Product
      *
      * @param  Product  $product
@@ -489,7 +509,6 @@ class ProductController extends Controller
      */
     public function customerViewProductDetail(Product $product)
     {
-        // $product = Product::find($productId);
         $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
         $product->birthdate = $this->transformBirthdateSyntax($product->birthdate);
@@ -503,6 +522,15 @@ class ProductController extends Controller
         $product->userid = Breeder::find($product->breeder_id)->users->first()->id;
 
         return view('user.customer.viewProductDetail', compact('product'));
+
+        $reviews = Breeder::find($product->breeder_id)->reviews;
+        $breederRatings = [
+            'deliveryRating' => ($reviews->avg('rating_delivery')) ? $reviews->avg('rating_delivery') : 0,
+            'transactionRating' => ($reviews->avg('rating_transaction')) ? $reviews->avg('rating_transaction') : 0,
+            'productQualityRating' => ($reviews->avg('rating_productQuality')) ? $reviews->avg('rating_productQuality') : 0
+        ];
+
+        return view('user.customer.viewProductDetail', compact('product', 'breederRatings'));
     }
 
     /**

@@ -140,6 +140,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('breeders', ['as' => 'breedersChange', 'uses'=> 'CustomerController@viewBreedersChange']);
 
 
+        // breeder-related
+        Route::get('view-breeder/{breeder}',['as' => 'viewBProfile', 'uses' => 'ProductController@viewBreederProfile']);
 
     });
 
