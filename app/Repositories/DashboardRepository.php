@@ -68,7 +68,7 @@ class DashboardRepository
             array_push($items, (object)$itemDetail);
         }
 
-        // Include "reserved" / "paid" / "on_delivery" / "sold" products
+        // Include "reserved" / "paid" / "on_delivery" products
         foreach ($reservations as $reservation) {
             $product = Product::find($reservation->product_id);
             $itemDetail = [];
@@ -94,7 +94,6 @@ class DashboardRepository
             array_push($items, (object)$itemDetail);
         }
 
-        // dd($items);
         return collect($items)->toJson();
     }
 
@@ -186,10 +185,10 @@ class DashboardRepository
 
                 for ($i = 0; $i < $diff + 1; $i++) {
 
-                    $boarQuery = $breeder->transactionLogs()->whereYear('requested', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->whereYear('requested', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->whereYear('requested', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->whereYear('requested', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'semen');
 
                     array_push($soldData['labels'], $currentDate->format('M \'y'));
                     // dataSets refer to boar, sow, gilt, and semen respectively
@@ -217,10 +216,10 @@ class DashboardRepository
 
                     if($endDay->gte($endDayOfMonth)) $endDay = $endDayOfMonth;
 
-                    $boarQuery = $breeder->transactionLogs()->whereDate('requested', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->whereDate('requested', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->whereDate('requested', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->whereDate('requested', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'semen');
 
                     array_push($soldData['labels'], $startDay->format('M j'). ' - ' . $endDay->format('M j'));
                     // dataSets refer to boar, sow, gilt, and semen respectively
@@ -246,13 +245,12 @@ class DashboardRepository
 
                 $soldData['title'] = 'No. of Products Sold Daily from ' . $dateFrom->format('M j, Y') . ' - ' . $dateTo->format('M j, Y');
 
-                // dd($dayFromInt);
                 for ($i = 0; $i < $diff + 1; $i++) {
 
-                    $boarQuery = $breeder->transactionLogs()->whereDate('requested', $currentDate->format('Y-m-d'))->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->whereDate('requested', $currentDate->format('Y-m-d'))->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->whereDate('requested', $currentDate->format('Y-m-d'))->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->whereDate('requested', $currentDate->format('Y-m-d'))->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()->whereDate('sold', $currentDate->format('Y-m-d'))->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->whereDate('sold', $currentDate->format('Y-m-d'))->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->whereDate('sold', $currentDate->format('Y-m-d'))->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->whereDate('sold', $currentDate->format('Y-m-d'))->where('product_details->type', 'semen');
 
                     array_push($soldData['labels'], $currentDate->format('M j (D)'));
                     // dataSets refer to boar, sow, gilt, and semen respectively
@@ -273,7 +271,7 @@ class DashboardRepository
     }
 
     /**
-     * Get the ratings of the Breeder.
+     * Get the summary of reviews and ratings of the Breeder.
      * Include overall, delivery,
      * transaction, and product
      * quality rating
@@ -281,7 +279,7 @@ class DashboardRepository
      * @param  Breeder  $breeder
      * @return Array
      */
-    public function getRatings(Breeder $breeder)
+    public function getSummaryReviewsAndRatings(Breeder $breeder)
     {
         $reviewDetails = [];
         $query = $breeder->reviews()->orderBy('created_at','desc')->get();
@@ -320,7 +318,6 @@ class DashboardRepository
      */
     public function getProductRequests($productId)
     {
-        // dd($productId);
         $productRequests = SwineCartItem::where('product_id', $productId)->where('if_requested', 1)->where('reservation_id', 0)->get();
         $productRequestDetails = [];
 

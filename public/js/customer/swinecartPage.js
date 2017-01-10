@@ -211,7 +211,7 @@ Vue.component('order-details',{
         },
 
         transformToDetailedDate: function(value){
-            return moment(value).format("MMM D YYYY (dddd), h:mmA");
+            return moment(value).format("MMM D YYYY (ddd), h:mmA");
         }
     },
     methods: {
@@ -479,24 +479,26 @@ Vue.component('transaction-history',{
         },
 
         transformToDetailedDate: function(value){
-            return moment(value).format("MMM D YYYY (dddd), h:mmA");
+            return moment(value).format("MMM D YYYY (ddd), h:mmA");
         }
     },
     methods: {
         viewProductModalFromHistory: function(index){
-            vm.productInfoModal.imgPath = this.history[index].img_path;
-            vm.productInfoModal.name = this.history[index].product_name;
-            vm.productInfoModal.breeder = this.history[index].breeder;
-            vm.productInfoModal.type = this.history[index].product_type;
-            vm.productInfoModal.breed = this.history[index].product_breed;
-            vm.productInfoModal.age = this.history[index].product_age;
-            vm.productInfoModal.adg = this.history[index].product_adg;
-            vm.productInfoModal.fcr = this.history[index].product_fcr;
-            vm.productInfoModal.bft = this.history[index].product_backfat_thickness;
+            vm.productInfoModal.imgPath = this.history[index].product_details.img_path;
+            vm.productInfoModal.name = this.history[index].product_details.name;
+            vm.productInfoModal.breeder = this.history[index].product_details.breeder_name;
+            vm.productInfoModal.province = this.history[index].product_details.farm_from;
+            vm.productInfoModal.type = this.history[index].product_details.type;
+            vm.productInfoModal.breed = this.history[index].product_details.breed;
+            vm.productInfoModal.birthdate = moment(this.history[index].product_details.birthdate).format('MMMM D, YYYY');
+            vm.productInfoModal.age = moment().diff(moment(this.history[index].product_details.birthdate),'days');
+            vm.productInfoModal.adg = this.history[index].product_details.adg;
+            vm.productInfoModal.fcr = this.history[index].product_details.fcr;
+            vm.productInfoModal.bft = this.history[index].product_details.bft;
             vm.productInfoModal.avgDelivery = this.history[index].avg_delivery;
             vm.productInfoModal.avgTransaction = this.history[index].avg_transaction;
             vm.productInfoModal.avgProductQuality = this.history[index].avg_productQuality;
-            vm.productInfoModal.otherDetails = this.history[index].other_details;
+            vm.productInfoModal.otherDetails = this.history[index].product_details.other_details.split(',');
 
             $('#info-modal').openModal({
                 opacity: 0
