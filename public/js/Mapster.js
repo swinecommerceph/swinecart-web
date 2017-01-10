@@ -21,6 +21,14 @@
 				});
 			},
 
+			clear : function(){
+
+				var size = this.markers.length
+				for(var i=0; i<size; i++){
+					this._removeMarker(this.markers[0]);
+				}
+			},
+
 			addMarker : function(opts){
 				var marker;
 				var infoWindow;

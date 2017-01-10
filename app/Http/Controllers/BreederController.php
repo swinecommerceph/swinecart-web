@@ -276,7 +276,8 @@ class BreederController extends Controller
     }
 
     public function viewCustomers(){
-        $customers = Customer::all();
+        $breeder = $this->user->userable;
+        $customers = $breeder->transactionLogs()->first()->customer()->get();
 
         return view('user.breeder.viewCustomers', compact('customers'));
     }

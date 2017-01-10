@@ -95,6 +95,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages/{customer}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
 
         Route::get('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomers']);
+        Route::post('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomersChange']);
     });
 
 
@@ -136,6 +137,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages/{breader}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
 
         Route::get('breeders', ['as' => 'breeders', 'uses'=> 'CustomerController@viewBreeders']);
+        Route::post('breeders', ['as' => 'breedersChange', 'uses'=> 'CustomerController@viewBreedersChange']);
 
 
 
