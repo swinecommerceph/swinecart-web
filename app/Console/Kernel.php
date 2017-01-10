@@ -14,7 +14,8 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\WSBreederDashboardServer::class
+        \App\Console\Commands\WSBreederDashboardServer::class,
+        \App\Console\Commands\WSChatServer::class
     ];
 
     /**

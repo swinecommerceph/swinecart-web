@@ -244,8 +244,7 @@
                                     >
                                         <i class="material-icons teal-text">add_to_photos</i>
                                     </a>
-                                    <a href="#!"
-                                        class="tooltipped"
+                                    <a v-bind:href="'{{ route('messages') }}/' + customer.userId"
                                         style="margin-left:0.5rem;"
                                         data-position="top"
                                         data-delay="50"

@@ -11,6 +11,7 @@ use App\Http\Requests\BreederFarmProfileRequest;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Breeder;
+use App\Models\Customer;
 use App\Models\FarmAddress;
 use App\Models\Product;
 
@@ -272,6 +273,12 @@ class BreederController extends Controller
             $notification->markAsRead();
             return 'OK';
         }
+    }
+
+    public function viewCustomers(){
+        $customers = Customer::all();
+
+        return view('user.breeder.viewCustomers', compact('customers'));
     }
 
 }

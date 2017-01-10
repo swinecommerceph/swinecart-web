@@ -17,7 +17,7 @@
 @endsection
 
 @section('navbarHead')
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons">message</i></a></li>
+    <li><a href="{{ route('messages') }}"> <i class="material-icons">message</i></a></li>
     <li><a href="{{ route('dashboard') }}"> <i class="material-icons">assessment</i></a></li>
     <li id="notification-main-container">
         <a href="#!" id="notification-icon"

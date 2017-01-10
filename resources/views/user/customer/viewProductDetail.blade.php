@@ -94,7 +94,13 @@
                 <li class="collection-item">Feed Conversion Ratio: {{$product->fcr}}</li>
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
                 <li class="collection-item">
-                    Breeder Ratings<br><br>
+                    Breeder Ratings
+
+                    <a href="/customer/messages/{{ $product->userid }}" class="right tooltipped"  data-position="left" data-delay="50" data-tooltip="Message Breeder">
+                        <i class="material-icons red-text" style="font-size:35px;">message</i>
+                    </a>
+
+                    <br><br>
                     <span class="row">
                         <i class="col s6">Delivery</i>
                         <span class="col s6">

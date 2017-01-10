@@ -333,6 +333,7 @@ class DashboardRepository
                     'swineCartId' => $productRequest->id,
                     'customerId' => $productRequest->customer_id,
                     'customerName' => $name,
+                    'userId' => $customer->users()->first()->id,
                     'customerProvince' => $province,
                     'requestQuantity' => $productRequest->quantity,
                     'dateNeeded' => ($productRequest->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($productRequest->date_needed),

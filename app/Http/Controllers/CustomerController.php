@@ -265,4 +265,12 @@ class CustomerController extends Controller
         }
     }
 
+     public function viewBreeders(){
+        $breeders = Breeder::all();
+
+        //return $breeders->first()->officeAddress_province;
+
+        return view('user.customer.viewBreeders', compact('breeders'));
+    }
+
 }

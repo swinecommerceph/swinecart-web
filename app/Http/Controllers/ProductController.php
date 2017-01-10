@@ -500,6 +500,8 @@ class ProductController extends Controller
         $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
         $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
         $product->videoCollection = $product->videos;
+        $product->userid = Breeder::find($product->breeder_id)->users->first()->id;
+
         return view('user.customer.viewProductDetail', compact('product'));
     }
 
