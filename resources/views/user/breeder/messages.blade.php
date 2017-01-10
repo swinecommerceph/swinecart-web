@@ -66,7 +66,7 @@
 			<div class="panel panel-default">
 				
 				<div id="threadname" class="panel-heading center-align">
-					@if($otherName != '')
+					@if($threadId != '' && sizeof($threads) == 0)
 						{{ $otherName }}
 					@elseif(sizeof($threads) == 0)
 						You have no messages.	

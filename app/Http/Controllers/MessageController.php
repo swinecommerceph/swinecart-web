@@ -63,10 +63,13 @@ class MessageController extends Controller
 	    		$user = User::where('id', $threadId)->first();
 	    		if(!isset($user) || $user->userable_type != 'App\Models\Breeder')
 	    			return Redirect::route('messages');
-	    		else
-	    			$otherName = $user->name;
+	    		$otherName = $user->name;
+	    	}else if($threadId != ''){
+	    		$user = User::where('id', $threadId)->first();
+	    		$otherName = $user->name;
 	    	}
-	    	
+
+			    	
 
 
 			return view('user.customer.messages', compact("chatPort", "userName", "userId", "userType", "threads", "threadId", "messages", "otherName"));
@@ -96,10 +99,11 @@ class MessageController extends Controller
 	    		$user = User::where('id', $threadId)->first();
 	    		if(!isset($user) || $user->userable_type == 'App\Models\Customer')
 	    			return Redirect::route('messages');
-	    		else
-	    			$otherName = $user->name;
+	    		$otherName = $user->name;
+	    	}else if($threadId != ''){
+	    		$user = User::where('id', $threadId)->first();
+	    		$otherName = $user->name;
 	    	}
-	    	
 
 			return view('user.breeder.messages', compact("chatPort", "userName", "userId", "userType", "threads", "threadId", "messages", "otherName"));
     	}

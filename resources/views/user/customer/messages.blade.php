@@ -67,10 +67,10 @@
 			<div class="panel panel-default">
 				
 				<div id="threadname" class="panel-heading center-align">
-					@if(sizeof($threads) == 0)
-						You have no messages.	
-					@elseif($otherName != '')
+					@if($threadId != '' && sizeof($threads) == 0)
 						{{ $otherName }}
+					@elseif(sizeof($threads) == 0)
+						You have no messages.	
 					@else
 						{{ $threads[0]->otherparty() }}
 					@endif
