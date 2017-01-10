@@ -83,7 +83,9 @@
                     </h4>
                     <div class="row">
                         <div class="col">
-                            {{ $product->breeder }} <br>
+                            <a href="{{ route('viewBProfile', ['breeder' => $product->breeder_id]) }}">
+                                {{ $product->breeder }}
+                            </a><br>
                             {{ $product->farm_province }}
                         </div>
                     </div>

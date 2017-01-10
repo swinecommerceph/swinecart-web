@@ -13,7 +13,7 @@
         <div class="container">
             {{--  Logo --}}
             <div class="center" style="padding-top:2em; padding-bottom:2em;">
-                <img src="/images/logoblack.png">
+                <img src="/images/logodark.png">
             </div>
 
             {{-- Search bar --}}

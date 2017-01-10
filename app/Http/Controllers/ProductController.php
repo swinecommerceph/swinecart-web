@@ -496,8 +496,9 @@ class ProductController extends Controller
      */
     public function viewBreederProfile(Breeder $breeder)
     {
-
-        return view();
+        $breeder->name = $breeder->users()->first()->name;
+        $breeder->farms = $breeder->farmAddresses;
+        return view('user.customer.viewBreederProfile', compact('breeder'));
     }
 
     /**
