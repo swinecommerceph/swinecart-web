@@ -21,7 +21,7 @@ $(document).ready(function(){
 		e.preventDefault();
 
 		var img_src = $(this).find('img').attr('src');
-		
+
 		$('#video-display').hide();
 		$('.card-image img').attr('src', img_src);
 		$('.card-image img').show();
@@ -53,6 +53,31 @@ $(document).ready(function(){
 			$('.card-image').append(video_element);
 			videojs("video-display", { "controls": true });
 			$('#video-display').show();
+		}
+	});
+
+	Vue.component('average-star-rating',{
+	    template: '#average-star-rating',
+	    props: ['rating'],
+	    computed: {
+	        ratingToPercentage: function(){
+	            return (100* this.rating / 5);
+	        }
+	    }
+	});
+
+	var starsContainer = new Vue({
+		el: '#stars-container',
+		data: {},
+		filters: {
+			round: function(value){
+	            // Round number according to precision
+	            var precision = 2;
+	            var factor = Math.pow(10, precision);
+	            var tempNumber = value * factor;
+	            var roundedTempNumber = Math.round(tempNumber);
+	            return roundedTempNumber / factor;
+	        }
 		}
 	});
 });
