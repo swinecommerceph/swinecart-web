@@ -224,9 +224,9 @@
                         <ul class="slides teal">
                             @foreach($dashboardStats['ratings']['reviews'] as $review)
                                 <li>
-                                    <img>
+                                    <img src="">
                                     <div class="caption center-align">
-                                        <h4>"{{ $review['comment'] }}"</h4>
+                                        <h5 style="margin:0;">"{{ $review['comment'] }}"</h5>
                                         <h6 class="light grey-text text-lighten-3">- {{ $review['customerName'] }}</h6>
                                     </div>
                                 </li>

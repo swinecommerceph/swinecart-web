@@ -271,7 +271,7 @@ class DashboardRepository
     }
 
     /**
-     * Get the ratings of the Breeder.
+     * Get the summary of reviews and ratings of the Breeder.
      * Include overall, delivery,
      * transaction, and product
      * quality rating
@@ -279,7 +279,7 @@ class DashboardRepository
      * @param  Breeder  $breeder
      * @return Array
      */
-    public function getRatings(Breeder $breeder)
+    public function getSummaryReviewsAndRatings(Breeder $breeder)
     {
         $reviewDetails = [];
         $query = $breeder->reviews()->orderBy('created_at','desc')->get();

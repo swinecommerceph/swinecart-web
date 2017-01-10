@@ -50,7 +50,7 @@ class DashboardController extends Controller
         $dashboardStats['reserved'] = $this->dashboard->getProductStatus($breeder,'reserved');
         $dashboardStats['on_delivery'] = $this->dashboard->getProductStatus($breeder,'on_delivery');
         $dashboardStats['paid'] = $this->dashboard->getProductStatus($breeder,'paid');
-        $dashboardStats['ratings'] = $this->dashboard->getRatings($breeder);
+        $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
 
         $latestAccreditation = $this->user->userable->latest_accreditation;
         $serverDateNow = Carbon::now();
@@ -85,7 +85,23 @@ class DashboardController extends Controller
      */
     public function showReviewsAndRatings()
     {
-        return view('user.breeder.reviews');
+        $breeder = $this->user->userable;
+        $reviews = $breeder->reviews()->orderBy('created_at', 'desc')->get();
+
+        foreach ($reviews as $review) {
+            $review->date = Carbon::createFromFormat('Y-m-d H:i:s', $review->created_at)->toFormattedDateString();
+            $customer = Customer::find($review->customer_id);
+            $review->customerName = $customer->users()->first()->name;
+            $review->customerProvince = $customer->address_province;
+            $review->showDetailedRatings = false;
+        }
+
+        $deliveryRating = $reviews->avg('rating_delivery');
+        $transactionRating = $reviews->avg('rating_transaction');
+        $productQualityRating = $reviews->avg('rating_productQuality');
+        $overallRating = ($deliveryRating + $transactionRating + $productQualityRating)/3;
+
+        return view('user.breeder.reviews', compact('reviews', 'overallRating'));
     }
 
     /**

@@ -261,11 +261,7 @@
     {{-- Template for <order-details> component --}}
     <template id="order-details-template">
 
-        <div class=""
-            @set-delivery-rating="setDeliveryRating"
-            @set-transaction-rating="setTransactionRating"
-            @set-product-rating="setProductRating"
-        >
+        <div class="">
             {{-- Swine Cart --}}
             <div id="swine-cart">
                 <div class="row">
@@ -653,19 +649,30 @@
                     <span class="row">
                         <span class="col s6">Delivery</span>
                         <span id="delivery" class="col s6 right-align">
-                            <star-rating ref="delivery" :type="'delivery'"></star-rating>
+                            <star-rating ref="delivery"
+                                :type="'delivery'"
+                                v-on:set-delivery-rating="setDeliveryRating"
+                            >
+                            </star-rating>
                         </span>
                     </span>
                     <span class="row">
                         <span class="col s6">Transaction</span>
                         <span id="transaction" class="col s6 right-align">
-                            <star-rating ref="transaction" :type="'transaction'"></star-rating>
+                            <star-rating ref="transaction"
+                                :type="'transaction'"
+                                v-on:set-transaction-rating="setTransactionRating"
+                            >
+                            </star-rating>
                         </span>
                     </span>
                     <span class="row">
                         <span class="col s6">Product Quality</span>
                         <span id="productQuality" class="col s6 right-align">
-                            <star-rating ref="productQuality" :type="'productQuality'"></star-rating>
+                            <star-rating ref="productQuality"
+                                :type="'productQuality'"
+                                v-on:set-product-rating="setProductRating"
+                            ></star-rating>
                         </span>
                     </span>
                     <div class="row">
