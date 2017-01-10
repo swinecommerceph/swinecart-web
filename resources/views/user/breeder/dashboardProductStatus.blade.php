@@ -143,7 +143,7 @@
                                     <i class="material-icons teal-text">credit_card</i>
                                 </a>
                                 <a class="col s2 tooltipped"
-                                    href="#"
+                                    :href="'{{ route('messages') }}/' + product.userid" //cjd
                                     :data-breeder-id="product.breeder_id"
                                     :data-customer-id="product.customer_id"
                                     data-position="top"
