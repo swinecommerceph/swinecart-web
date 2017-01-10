@@ -10,7 +10,7 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-	<title>Swine E-Commerce PH @yield('title') </title>
+	<title>SwineCart @yield('title') </title>
 
 	{{-- <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet" type="text/css"> --}}
 	{{-- <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet"> --}}
@@ -38,9 +38,9 @@
 		<nav class="teal darken-3">
 		    <div class="nav-wrapper container">
 		      	@if (Auth::guest())
-					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('index_path') }}">Swine Cart</a>
+					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
 			  	@else
-					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">Swine Cart</a>
+					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
 			  	@endif
 
 		      	<ul id="nav-mobile" class="right hide-on-med-and-down">

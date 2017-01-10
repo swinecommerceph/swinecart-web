@@ -52,4 +52,29 @@ $(document).ready(function(){
 			$('#video-display').show();
 		}
 	});
+
+	Vue.component('average-star-rating',{
+	    template: '#average-star-rating',
+	    props: ['rating'],
+	    computed: {
+	        ratingToPercentage: function(){
+	            return (100* this.rating / 5);
+	        }
+	    }
+	});
+
+	var starsContainer = new Vue({
+		el: '#stars-container',
+		data: {},
+		filters: {
+			round: function(value){
+	            // Round number according to precision
+	            var precision = 2;
+	            var factor = Math.pow(10, precision);
+	            var tempNumber = value * factor;
+	            var roundedTempNumber = Math.round(tempNumber);
+	            return roundedTempNumber / factor;
+	        }
+		}
+	});
 });
