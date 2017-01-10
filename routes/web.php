@@ -90,6 +90,12 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('notifications/count',['as' => 'bNotifs.count', 'uses' => 'BreederController@getNotificationsCount']);
         Route::patch('notifications/seen',['as' => 'bNotifs.seen', 'uses' => 'BreederController@seeNotification']);
 
+        //message-related
+        Route::get('messages', ['as' => 'messages', 'uses'=> 'MessageController@getMessages']);
+        Route::get('messages/{customer}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
+
+        Route::get('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomers']);
+        Route::post('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomersChange']);
     });
 
 
@@ -125,6 +131,14 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('notifications/get',['as' => 'cNotifs.get', 'uses' => 'CustomerController@getNotifications']);
         Route::get('notifications/count',['as' => 'cNotifs.count', 'uses' => 'CustomerController@getNotificationsCount']);
         Route::patch('notifications/seen',['as' => 'cNotifs.seen', 'uses' => 'CustomerController@seeNotification']);
+
+         //message-related
+        Route::get('messages', ['as' => 'messages', 'uses'=> 'MessageController@getMessages']);
+        Route::get('messages/{breader}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
+
+        Route::get('breeders', ['as' => 'breeders', 'uses'=> 'CustomerController@viewBreeders']);
+        Route::post('breeders', ['as' => 'breedersChange', 'uses'=> 'CustomerController@viewBreedersChange']);
+
 
         // breeder-related
         Route::get('view-breeder/{breeder}',['as' => 'viewBProfile', 'uses' => 'ProductController@viewBreederProfile']);
