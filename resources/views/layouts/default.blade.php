@@ -38,9 +38,11 @@
 		<nav class="teal darken-3">
 		    <div class="nav-wrapper container">
 		      	@if (Auth::guest())
-					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
+					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0;"/>
+					&nbsp&nbsp<a class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
 			  	@else
-					<img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
+					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0;"/>
+					&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
 			  	@endif
 
 		      	<ul id="nav-mobile" class="right hide-on-med-and-down">

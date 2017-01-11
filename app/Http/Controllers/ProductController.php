@@ -521,8 +521,6 @@ class ProductController extends Controller
         $product->videoCollection = $product->videos;
         $product->userid = Breeder::find($product->breeder_id)->users->first()->id;
 
-        return view('user.customer.viewProductDetail', compact('product'));
-
         $reviews = Breeder::find($product->breeder_id)->reviews;
         $breederRatings = [
             'deliveryRating' => ($reviews->avg('rating_delivery')) ? $reviews->avg('rating_delivery') : 0,

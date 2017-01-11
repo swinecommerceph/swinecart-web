@@ -18,6 +18,7 @@
 
 @section('breadcrumb')
     <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
+    <a href="{{ route('dashboard') }}" class="breadcrumb">Dashboard</a>
     <a href="#!" class="breadcrumb">Reviews and Ratings</a>
 @endsection
 

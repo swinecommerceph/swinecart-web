@@ -110,7 +110,7 @@ class UserInstancesSeeder extends Seeder
 
                 $image->save();
 
-                $video->name = 'sample_video.avi';
+                $video->name = 'sample_video.mp4';
 
                 $product->farm_from_id = $farm->id;
                 $product->primary_img_id = $image->id;

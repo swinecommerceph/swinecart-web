@@ -2,7 +2,7 @@
     Displays products of all Breeder users
 --}}
 
-@extends('user.customer.home')
+@extends('user.breeder.home')
 
 @section('title')
     | Breeders
@@ -24,13 +24,13 @@
 @section('content')
 
 
-      
+
 
     <div id="map-container">
     <div id="map-canvas"></div>
   </div>
-    
-   
+
+
 
 
 @endsection
@@ -58,7 +58,7 @@
                         var result = results[0];
                         map.addMarker({
                             lat : result.geometry.location.lat(),
-                            lng : result.geometry.location.lng(), 
+                            lng : result.geometry.location.lng(),
                             draggable : true,
                             content: opts.content
                         });
@@ -84,5 +84,5 @@
 
 
     </script>
-    
+
 @endsection

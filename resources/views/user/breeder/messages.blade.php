@@ -62,21 +62,21 @@
 	<div class="col m9 row">
 
 		<div>
-			
+
 			<div class="panel panel-default">
-				
+
 				<div id="threadname" class="panel-heading center-align">
 					@if($threadId != '' && sizeof($threads) == 0)
 						{{ $otherName }}
 					@elseif(sizeof($threads) == 0)
-						You have no messages.	
+						You have no messages.
 					@else
 						{{ $threads[0]->otherparty() }}
 					@endif
 				</div>
 
 				<div class="panel-body" id="chat">
-					
+
 					<ul id="chatMessages">
 
 						@foreach($messages as $message)
@@ -84,7 +84,7 @@
 								<li class="message" :class="mine" style="clear:both">
 									<div class="chat-bubble out">
 										<span class="who">
-											Me: 
+											Me:
 										</span>
 										{{ $message->message }}
 									</div>
@@ -93,7 +93,7 @@
 								<li class="message" :class="user" style="clear:both">
 									<div class="chat-bubble in">
 										<span class="who">
-							    			{{ $message->sender() }}: 
+							    			{{ $message->sender() }}:
 										</span>
 										{{ $message->message }}
 									</div>
@@ -104,7 +104,7 @@
 						<li v-for="message in messages" class="message" :class="message.class" style="display:none;clear:both;">
 							<div class="chat-bubble" v-bind:class="message.dir">
 								<span class="who">
-					    			@{{ message.who }}: 
+					    			@{{ message.who }}:
 								</span>
 								@{{ message.msg }}
 							</div>
@@ -113,10 +113,10 @@
 					</ul>
 
 					<div style="display:table; width: 100%;">
-						
+
 						<input placeholder="Enter your message here."
 						 		style="display:table-cell; width: 100%;"
-							   type="text" 
+							   type="text"
 							   v-model="newMessage"
 							   @keyup.enter="sendMessage"/>
 					</div>
@@ -133,7 +133,7 @@
 @section('customScript')
     <!-- Latest Vue JS CDN -->
 <script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.16/vue.min.js"></script>
-<script> 
+<script>
 $(document).ready(function(){
 	$('.message').show(0);
 });
@@ -146,7 +146,7 @@ $(document).ready(function(){
 	var url = "{{ explode(':', str_replace('http://', '', str_replace('https://', '', App::make('url')->to('/'))))[0] }}";
 	var threadid = "{{ $threadId }}";
 	var otherparty;
-	
+
 </script>
 <script type="text/javascript" src="/js/chat.js"></script>
 @endsection
