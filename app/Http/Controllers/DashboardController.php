@@ -99,7 +99,7 @@ class DashboardController extends Controller
         $deliveryRating = $reviews->avg('rating_delivery');
         $transactionRating = $reviews->avg('rating_transaction');
         $productQualityRating = $reviews->avg('rating_productQuality');
-        $overallRating = ($deliveryRating + $transactionRating + $productQualityRating)/3;
+        $overallRating = round(($deliveryRating + $transactionRating + $productQualityRating)/3, 2);
 
         return view('user.breeder.reviews', compact('reviews', 'overallRating'));
     }

@@ -574,3 +574,8 @@ blockquote{
 #menu{
 	width: 300px;
 }
+
+
+#map-canvas{
+	height: 60vh;
+}

@@ -23,7 +23,7 @@
 
 @section('navbarHead')
     <li><a href="{{ route('products.view') }}"> Products </a></li>
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons">message</i></a></li>
+    <li><a href="{{ route('messages') }}"> <i class="material-icons">message</i></a></li>
     @if(!Auth::user()->update_profile)
         {{-- Swine Cart --}}
         <li><a id="cart-icon" class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="cart-dropdown">

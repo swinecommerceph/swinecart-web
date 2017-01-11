@@ -265,4 +265,29 @@ class CustomerController extends Controller
         }
     }
 
+     public function viewBreeders(){
+
+        $breeders = Breeder::all();
+        return view('user.customer.viewBreeders', compact('breeders'));
+    }
+
+    public function viewBreedersChange(){
+
+
+        $breeders = Breeder::whereHas('products', function($q){
+            $arr = [];
+            $first = true;
+            foreach ($_POST as $key => $value) {
+                if($value == 'on'){
+                    $arr[] = $key;
+                }
+            }
+            $q->whereIn('type', $arr);
+        })->get();
+
+
+        return view('user.customer.viewBreeders', compact('breeders', '_POST'));
+
+    }
+
 }
