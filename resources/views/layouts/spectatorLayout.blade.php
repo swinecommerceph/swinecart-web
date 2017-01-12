@@ -74,5 +74,8 @@
       	<script src="/js/config.js"></script>
         <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
         <script src="/js/custom.js"></script>
+        @yield('initScript')
+        {{-- Custom scripts for certain pages/functionalities --}}
+        @yield('customScript')
     </body>
 </html>

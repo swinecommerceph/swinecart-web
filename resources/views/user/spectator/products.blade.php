@@ -31,10 +31,11 @@
             <div class="divider"></div>
         </div>
 
-        <div class="row">
+        <div id="main-container" class="row">
             @forelse ($products as $product)
                 <div class="col s4">
-                    <div class="card small">
+                    <div class="card small"
+                        data-values="{{ $product->name }}|{{ $product->type }}|{{ $product->adg }}|{{ $product->fcr }}|{{ $product->backfat_thickness }}|{{ $product->status }}|{{ $product->quantity }}|{{ $product->price }}|{{ $product->image_name }}|{{ $product->other_details }}  ">
                         <div class="card-image waves-effect waves-block waves-light">
                             <img class="activator" src="{{$product->image_name}}" alt="Image broken" onerror="this.src='/images/logo.png'">
                         </div>
@@ -51,6 +52,8 @@
                         </div>
                     </div>
                 </div>
+
+
             @empty
                 <div class="center col s12">
                     No Products to Display
@@ -67,13 +70,15 @@
 
     </div>
 
+    {{-- TODO Fix the display of items appearing in the modal not matching the clicked item --}}
+    {{--  Add javascript or use Vue.js to fix this --}}
     <div id="product-modal" class="modal modal-fixed-footer">
         <div class="modal-content">
-            <h4>{{$product->name}}</h4>
+            <h4 id="modal-header"></h4>
             <div class="divider"></div>
             <div class="row">
                 <div class="col s12 center">
-                    <img class="product_image" src="{{$product->image_name}}" alt="Image broken" onerror="this.src='/images/logo.png'" />
+                    <img id="modal-image" class="product_image" src="" alt="Image broken" onerror="this.src='/images/logo.png'" />
                 </div>
                 <div class="col s12">
                     <table>
@@ -92,18 +97,26 @@
 
                         <tbody>
                             <tr>
-                                <td>{{$product->type}}</td>
-                                <td>{{$product->adg}}</td>
-                                <td>{{$product->fcr}}</td>
-                                <td>{{$product->backfat_thickness}}</td>
-                                <td>{{$product->quantity}}</td>
-                                <td>{{$product->price}}</td>
+                                <td id="data-type"></td>
+                                <td id="data-adg"></td>
+                                <td id="data-fcr"></td>
+                                <td id="data-backfat"></td>
+                                <td id="data-status"></td>
+                                <td id="data-quantity"></td>
+                                <td id="data-price"></td>
                             </tr>
                         </tbody>
                     </table>
 
                 </div>
+            </div>
+            <div class="row">
+                <div class="left col s12">
+                    <h5>Other Product Information</h5>
+                </div>
+                <div id="data-information" class="col s12">
 
+                </div>
             </div>
         </div>
         <div class="modal-footer">
@@ -114,9 +127,7 @@
 @endsection
 
 @section('initScript')
-    <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
-    <script type="text/javascript" src="/js/admin/users.js"></script>
-    <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
-    <script type="text/javascript" src="/js/admin/pages.js"></script>
-    <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
+    <script type="text/javascript" src="/js/spectator/spectator_custom.js"></script>
+    <script type="text/javascript" src="/js/spectator/products.js"></script>
+    <script type="text/javascript" src="/js/spectator/productsPage.js"></script>
 @endsection

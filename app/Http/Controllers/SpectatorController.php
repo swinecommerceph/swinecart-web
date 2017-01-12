@@ -64,8 +64,9 @@ class SpectatorController extends Controller
             $product->type = ucfirst($product->type);
             $product->status = ucfirst($product->status);
         }
-        //dd($products);
+        $products->toJson();
         return view(('user.spectator.products'),compact('products'));
+        //return($products);
     }
 
     public function viewLogs()
