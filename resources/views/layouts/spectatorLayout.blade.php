@@ -10,9 +10,9 @@
         <link href="/css/dropzone.css" rel="stylesheet" type="text/css">
         <link href="/css/icon.css" rel="stylesheet" type="text/css">
         <link href="/css/style.css" rel="stylesheet" type="text/css">
+        <link href="/css/nouislider.min.css" rel="stylesheet">
         <link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
         <script type="text/javascript" src="/js/vendor/chart.bundle.min.js"></script>
-
     </head>
     <body @yield('pageId')>
         <div class="navbar-fixed">
@@ -51,9 +51,9 @@
                         <li>
                             <a href="{{route('spectator.products')}}" class="black-text"><div class="collapsible-header"><i class="material-icons">shopping_basket</i>Products</div></a>
                         </li>
-                        <li>
+                        {{-- <li>
                             <a href="{{route('spectator.logs')}}" class="black-text"><div class="collapsible-header"><i class="material-icons">view_headline</i>Logs</div></a>
-                        </li>
+                        </li> --}}
                         <li>
                             <a href="{{route('spectator.statistics')}}" class="black-text"><div class="collapsible-header"><i class="material-icons">trending_up</i>Site Statistics</div></a>
                         </li>

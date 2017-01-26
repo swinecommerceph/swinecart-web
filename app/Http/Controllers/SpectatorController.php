@@ -47,7 +47,7 @@ class SpectatorController extends Controller
 
     public function viewUsers()
     {
-        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->paginate(10);
+        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->whereIn('role_id', [2, 3])->paginate(10);
         return view(('user.spectator.users'), compact('users'));
     }
 
@@ -55,24 +55,75 @@ class SpectatorController extends Controller
     {
         $products = DB::table('products')
                     ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
+                    ->where('quantity', '>=', 0 )
                     ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
                     'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
                     'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
                     ->paginate(9);
+        $minPrice = INF;
+        $maxPrice = 0;
+        $minBackfatThickness = INF;
+        $maxBackfatThickness = 0;
+        $minADG = INF;
+        $maxADG = 0;
+        $minFCR = INF;
+        $maxFCR = 0;
+        $minQuantity = INF;
+        $maxQuantity = 0;
         foreach ($products as $product) {
             $product->image_name = '/images/product/'.$product->image_name;
             $product->type = ucfirst($product->type);
             $product->status = ucfirst($product->status);
+
+            if($minPrice > $product->price){
+                $minPrice = $product->price;
+            }
+
+            if($maxPrice < $product->price){
+                $maxPrice = $product->price;
+            }
+
+            if($minQuantity > $product->quantity){
+                $minQuantity = $product->quantity;
+            }
+
+            if($maxQuantity < $product->quantity){
+                $maxQuantity = $product->quantity;
+            }
+
+            if($minADG > $product->adg){
+                $minADG = $product->adg;
+            }
+
+            if($maxADG < $product->adg){
+                $maxADG = $product->adg;
+            }
+
+            if($minFCR > $product->fcr){
+                $minFCR = $product->fcr;
+            }
+
+            if($maxFCR < $product->fcr){
+                $maxFCR = $product->fcr;
+            }
+
+            if($minBackfatThickness > $product->backfat_thickness){
+                $minBackfatThickness = $product->backfat_thickness;
+            }
+
+            if($maxBackfatThickness < $product->backfat_thickness){
+                $maxBackfatThickness = $product->backfat_thickness;
+            }
         }
-        $products->toJson();
-        return view(('user.spectator.products'),compact('products'));
+
+        return view(('user.spectator.products'),compact('products', 'minPrice', 'maxPrice', 'minQuantity', 'maxQuantity', 'minADG', 'maxADG', 'minFCR', 'maxFCR', 'minBackfatThickness', 'maxBackfatThickness'));
         //return($products);
     }
 
-    public function viewLogs()
-    {
-        return view('user.spectator.logs');
-    }
+    // public function viewLogs()
+    // {
+    //     return view('user.spectator.logs');
+    // }
 
     public function viewStatistics()
     {
@@ -130,9 +181,44 @@ class SpectatorController extends Controller
         return view(('user.spectator.statistics'), compact('charts'));
     }
 
-    public function searchProduct()
+    public function searchProduct(Request $request)
+    {
+        $products = DB::table('products')
+                    ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
+                    ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
+                    'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
+                    'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
+                    ->where('products.name', 'LIKE', "%$request->search%")
+                    ->paginate(9);
+        return view('user.spectator.products', compact('products'));
+    }
+
+    public function advancedSearchProduct(Request $request)
     {
 
+        $type = [];
+        if($request->boar == NULL && $request->sow == NULL && $request->gilt == NULL && $request->semen == NULL){
+            dd("type:null");
+        }else{
+            $type = [$request->boar, $request->sow, $request->gilt, $request->semen];
+            $type = array_filter($type);
+        }
+        $products = DB::table('products')
+                    ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
+                    ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
+                    'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
+                    'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
+                    ->where('products.name', 'LIKE', "%$request->name%")
+                    ->whereIn('type', $type)
+                    ->whereBetween('price', [$request->minPrice, $request->maxPrice])
+                    ->whereBetween('quantity', [$request->minQuantity, $request->maxQuantity])
+                    ->whereBetween('adg', [$request->minADG, $request->maxADG])
+                    ->whereBetween('fcr', [$request->minFCR, $request->maxFCR])
+                    ->whereBetween('backfat_thickness', [$request->minBackfatThickness, $request->maxBackfatThickness])
+                    ->paginate(9);
+        dd($products);
+        // TODO: RETURN ALL MIN AND MAX VALUES AND DISPLAY RESULTS USING INPUT TYPE HIDDEN 
+        // return view('user.spectator.products', compact('products'));
     }
 
 }

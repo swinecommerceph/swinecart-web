@@ -27,28 +27,34 @@
                       <tr>
                           <th data-field="name">Name</th>
                           <th data-field="type">Account Type</th>
+                          <th data-field="transactions">Transaction History</th>
                       </tr>
                     </thead>
-
                     <tbody>
                         @forelse($users as $user)
+
                             <tr>
-                            <td>{{$user->name}}</td>
-                            <td>{{ucfirst($user->title)}}</td>
-                          </tr>
-                      @empty
-                          <tr>
+                                <td>{{$user->name}}</td>
+                                <td>{{ucfirst($user->title)}}</td>
+                                <td><a class="waves-effect waves-light btn modal-trigger"><i class="material-icons left">history</i>View</a></td>
+                            </tr>
+
+                          @empty
+                            <tr>
                               <td></td>
-                              <td class="center">No User</td>
+                              <td class="flow-text">No User</td>
                               <td></td>
-                          </tr>
-                    @endforelse
+                            </tr>
+                        @endforelse
                     </tbody>
                   </table>
                   <div class="pagination center"> {{ $users->links() }} </div>
             </div>
         </div>
     </div>
+
+    
+
 @endsection
 
 @section('initScript')

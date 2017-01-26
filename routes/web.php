@@ -169,7 +169,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('logs',['as'=>'spectator.logs', 'uses'=>'SpectatorController@viewLogs']);
         Route::get('statistics',['as'=>'spectator.statistics', 'uses'=>'SpectatorController@viewStatistics']);
 
-        Route::get('home/searchproduct', ['as'=>'spectator.searchProduct', 'uses'=>'SpectatorController@searchProduct']);
+        Route::get('home/product/search', ['as'=>'spectator.searchProduct', 'uses'=>'SpectatorController@searchProduct']);
+        Route::get('home/product/advancedsearch', ['as'=>'spectator.advancedSearchProduct', 'uses'=>'SpectatorController@advancedSearchProduct']);
     });
 
 
