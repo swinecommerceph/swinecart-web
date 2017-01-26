@@ -23,6 +23,7 @@ class CreateProductReservationsTable extends Migration
             $table->enum('order_status',
                 ['reserved', 'paid', 'on_delivery', 'sold']
                 )->default('reserved');
+            $table->dateTime('expiration_date')->nullable();
         });
     }
 

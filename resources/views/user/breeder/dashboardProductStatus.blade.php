@@ -79,7 +79,7 @@
                     <tr v-for="product in filteredProducts">
                         <td>
                             <div class="row">
-                                <div class="col s3 center-align">
+                                <div class="col s2 center-align">
                                     <a href="#!">
                                         <img v-bind:src="product.img_path" width="75" height="75" class="circle"/>
                                     </a>
@@ -91,7 +91,7 @@
                                         Quantity: @{{ product.quantity }}
                                     </template>
                                 </div>
-                                <div class="col s5">
+                                <div class="col s6">
                                     <template v-if="product.customer_name">
                                         @{{ product.customer_name }} <br>
                                         <a href="#"
@@ -99,8 +99,13 @@
                                             @click.prevent="showReservationDetails(product.uuid)"
                                         >
                                             RESERVATION DETAILS
-                                        </a>
+                                        </a> <br>
                                     </template>
+
+                                    <span v-if="product.expiration_date" class="grey-text">
+                                        Expires after: @{{ product.expiration_date | transformDate }}
+                                    </span>
+
                                 </div>
                             </div>
                         </td>
@@ -216,15 +221,7 @@
                         <tbody>
                             <tr v-for="(customer, index) in productRequest.customers">
                                 <td>
-                                    {{-- <a href="#!"
-                                        class="tooltipped"
-                                        data-position="right"
-                                        data-delay="50"
-                                        data-tooltip="<p> This is the address </p><br> <p> This is another detail </p>"
-                                        data-html="true"
-                                    > --}}
-                                        @{{ customer.customerName }}
-                                    {{-- </a> --}}
+                                    @{{ customer.customerName }}
                                 </td>
                                 <td> @{{ customer.customerProvince }} </td>
                                 <td>
@@ -266,9 +263,28 @@
             <div id="reserve-product-confirmation-modal" class="modal">
                 <div class="modal-content">
                     <h4>Reserve Product Confirmation</h4>
-                    <p>
-                        Are you sure you want to reserve @{{ productRequest.productName }} to @{{ productReserve.customerName }}?
-                    </p>
+                    <div>
+                        <div class="">
+                            Are you sure you want to reserve @{{ productRequest.productName }} to @{{ productReserve.customerName }}?
+                        </div>
+                        <div class="row">
+                            <div class="col s6" style="display:inline-block;">
+                                <div class="left" style="display:inline;">
+                                    <br>
+                                    Reservation expires after
+                                </div>
+
+                                <div class="col s2">
+                                    <day-expiration-input v-model="productReserve.daysAfterExpiration"> </day-expiration-input>
+                                </div>
+
+                                <div class="col s2" style="padding:0px;">
+                                    <br>
+                                    day/s
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
@@ -354,8 +370,7 @@
 @endsection
 
 @section('customScript')
-    <script src="/js/vendor/VueJS/vue.js"></script>
-    <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
+    <script src="/js/vendor/lodash.min.js"></script>
     <script type="text/javascript">
         // Variables
         var rawProducts = {!! $products !!};

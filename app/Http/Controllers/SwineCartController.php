@@ -173,6 +173,7 @@ class SwineCartController extends Controller
                 "adg" => $product->adg,
                 "fcr" => $product->fcr,
                 "bft" => $product->backfat_thickness,
+                "quantity" => $request->requestQuantity,
                 "other_details" => $product->other_details
             ];
 
@@ -276,7 +277,6 @@ class SwineCartController extends Controller
                 $itemDetail['request_status'] = $item->if_requested;
                 $itemDetail['request_quantity'] = $item->quantity;
                 $itemDetail['status'] = ($item->reservation_id) ? ProductReservation::find($item->reservation_id)->order_status : $product->status;
-                $itemDetail['staus'] = $product->status;
                 $itemDetail['item_id'] = $item->id;
                 $itemDetail['customer_id'] = $customer->id;
                 $itemDetail['breeder_id'] = $product->breeder_id;
@@ -296,17 +296,17 @@ class SwineCartController extends Controller
                 $itemDetail['avg_delivery'] = $reviews->avg('rating_delivery');
                 $itemDetail['avg_transaction'] = $reviews->avg('rating_transaction');
                 $itemDetail['avg_productQuality'] = $reviews->avg('rating_productQuality');
-                if($item->date_needed == '0000-00-00') $itemDetail['date_needed'] = '';
-                else $itemDetail['date_needed'] = $this->transformDateSyntax($item->date_needed);
+                $itemDetail['date_needed'] = ($item->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($item->date_needed);
                 $itemDetail['special_request'] = $item->special_request;
                 $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+                $itemDetail['expiration_date'] = (ProductReservation::find($item->reservation_id)->expiration_date) ?? '';
                 $itemDetail['status_transactions'] = [
-                    "requested" => ($item->transactionLog) ? $item->transactionLog->requested : '',
-                    "reserved" => ($item->transactionLog) ? $item->transactionLog->reserved : '',
-                    "on_delivery" => ($item->transactionLog) ? $item->transactionLog->on_delivery : '',
-                    "paid" => ($item->transactionLog) ? $item->transactionLog->paid: '',
-                    "sold" => ($item->transactionLog) ? $item->transactionLog->sold: '',
-                    "rated" => ($item->transactionLog) ? $item->transactionLog->rated: ''
+                    "requested" => ($item->transactionLog->requested) ?? '',
+                    "reserved" => ($item->transactionLog->reserved) ?? '',
+                    "on_delivery" => ($item->transactionLog->on_delivery) ?? '',
+                    "paid" => ($item->transactionLog->paid) ?? '',
+                    "sold" => ($item->transactionLog->sold) ?? '',
+                    "rated" => ($item->transactionLog->rated) ?? ''
                 ];
 
                 array_push($products,(object) $itemDetail);

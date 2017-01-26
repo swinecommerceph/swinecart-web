@@ -1,5 +1,76 @@
 'use strict';
 
+Vue.component('day-expiration-input',{
+    template: '\
+        <div class="col s12" style="padding:0;"> \
+            <input type="text" \
+                ref="input" \
+                class="center-align" \
+                :value="value" \
+                @input="updateValue($event.target.value)" \
+                @focus="selectAll" \
+                @blur="formatValue" \
+            > \
+        </div> \
+    ',
+    props: {
+        value: {
+            type: Number
+        }
+    },
+    methods: {
+        updateValue: function(value){
+            var resultValue = this.validateQuantity(value);
+            this.$refs.input.value = resultValue;
+            this.$emit('input', resultValue);
+        },
+
+        selectAll: function(event){
+            setTimeout(function () {
+                event.target.select()
+            }, 0);
+        },
+
+        formatValue: function(){
+            this.$refs.input.value = this.validateQuantity(this.value);
+        },
+
+        validateQuantity: function(value){
+            var parsedValue = _.toNumber(value);
+            if(_.isFinite(parsedValue) && parsedValue > 0){
+                return parsedValue;
+            }
+            else return 1;
+        }
+    }
+
+});
+
+Vue.component('custom-status-select', {
+    template: '\
+        <div> \
+            <select ref="select" :value="value">\
+                <option value="">All</option> \
+                <option value="requested">Requested</option> \
+                <option value="reserved">Reserved</option> \
+                <option value="on_delivery">On Delivery</option> \
+                <option value="paid">Paid</option> \
+                <option value="sold">Sold</option> \
+            </select> \
+            <label>Status</label> \
+        </div> \
+    ',
+    props:['value'],
+    mounted: function(){
+
+        var self = this;
+        $('select').on('change', function(){
+            self.$emit('status-select',self.$refs.select.value);
+        });
+    }
+
+});
+
 Vue.component('status-table',{
     template: '#status-table-template',
     props: ['products', 'token', 'filterQuery', 'statusFilter'],
@@ -19,11 +90,11 @@ Vue.component('status-table',{
                 customers: []
             },
             productReserve:{
-                productName: '',
                 customerId: 0,
                 customerName: '',
                 swineCartId: 0,
                 requestQuantity: 0,
+                daysAfterExpiration: 3
             },
             productInfoModal:{
                 productId: 0,
@@ -156,6 +227,7 @@ Vue.component('status-table',{
                     request_quantity: this.productReserve.requestQuantity,
                     date_needed: this.productReserve.dateNeeded,
                     special_request: this.productReserve.specialRequest,
+                    days_after_expiration: this.productReserve.daysAfterExpiration,
                     status: 'reserved'
                 }
             ).then(
@@ -176,7 +248,8 @@ Vue.component('status-table',{
                                 'type': this.products[index].type,
                                 'reservationId': responseBody[2],
                                 'customerId': this.productReserve.customerId,
-                                'customerName': this.productReserve.customerName
+                                'customerName': this.productReserve.customerName,
+                                'expirationDate': responseBody[5].date
                             };
 
                             // Update product list on root data
@@ -194,7 +267,8 @@ Vue.component('status-table',{
                                 'customerName': this.productReserve.customerName,
                                 'dateNeeded': this.productReserve.dateNeeded,
                                 'specialRequest': this.productReserve.specialRequest,
-                                'removeParentProductDisplay': responseBody[4]
+                                'removeParentProductDisplay': responseBody[4],
+                                'expirationDate': responseBody[5].date
                             };
 
                             // Update product list on root data
@@ -373,33 +447,11 @@ Vue.component('status-table',{
         capitalize: function(str){
             if (str) return str[0].toUpperCase() + str.slice(1);
             else return '';
+        },
+        transformDate: function(value){
+            return moment(value).format("MMM D YYYY (ddd), h:mmA");
         }
     }
-});
-
-Vue.component('custom-status-select', {
-    template: '\
-        <div> \
-            <select ref="select" :value="value">\
-                <option value="">All</option> \
-                <option value="requested">Requested</option> \
-                <option value="reserved">Reserved</option> \
-                <option value="on_delivery">On Delivery</option> \
-                <option value="paid">Paid</option> \
-                <option value="sold">Sold</option> \
-            </select> \
-            <label>Status</label> \
-        </div> \
-    ',
-    props:['value'],
-    mounted: function(){
-        
-        var self = this;
-        $('select').on('change', function(){
-            self.$emit('status-select',self.$refs.select.value);
-        });
-    }
-
 });
 
 var vm = new Vue({
@@ -429,6 +481,7 @@ var vm = new Vue({
                         this.products[index].reservation_id = updateDetails.reservationId;
                         this.products[index].customer_id = updateDetails.customerId;
                         this.products[index].customer_name = updateDetails.customerName;
+                        this.products[index].expiration_date = updateDetails.expirationDate;
                     }
 
                     // Add another entry to the product list if of type 'semen'
@@ -456,7 +509,8 @@ var vm = new Vue({
                                 'customer_id': updateDetails.customerId,
                                 'customer_name': updateDetails.customerName,
                                 'date_needed': updateDetails.dateNeeded,
-                                'special_request': updateDetails.specialRequest
+                                'special_request': updateDetails.specialRequest,
+                                'expiration_date': updateDetails.expirationDate
                             }
                         );
 

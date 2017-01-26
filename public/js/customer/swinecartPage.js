@@ -4,7 +4,49 @@
 // component to communicate between them.
 var eventHub = new Vue();
 
-// Custom Local component
+// Custom components
+Vue.component('countdown-timer', {
+    template: '#countdown-timer-template',
+    props: ['expiration'],
+    data: function(){
+        return {
+            daysLeft: 0,
+            hoursLeft: 0,
+            minutesLeft: 0,
+            secondsLeft:0
+        }
+    },
+    methods:{
+        getTimeRemaining: function(expiration){
+            var timeDifference = moment(expiration).diff(moment());
+
+            return {
+                'total': timeDifference,
+                'seconds': Math.floor( (timeDifference/1000) % 60 ),
+                'minutes': Math.floor( (timeDifference/1000/60) % 60 ),
+                'hours': Math.floor( (timeDifference/(1000*60*60)) % 24 ),
+                'days': Math.floor( timeDifference/(1000*60*60*24) )
+            };
+        }
+    },
+    mounted: function(){
+        var countdownVM = this;
+
+        var timeInterval = setInterval(function(){
+            var timeDifference = countdownVM.getTimeRemaining(countdownVM.expiration);
+
+            countdownVM.secondsLeft = ('0' + timeDifference.seconds).slice(-2);
+            countdownVM.minutesLeft = timeDifference.minutes;
+            countdownVM.hoursLeft = timeDifference.hours;
+            countdownVM.daysLeft = timeDifference.days;
+
+            if(timeDifference.total <= 0) clearInterval(timeInterval);
+
+        }, 1000);
+    }
+
+});
+
 Vue.component('star-rating',{
     template: '#star-rating-template',
     props: ['type'],
@@ -166,13 +208,9 @@ Vue.component('custom-date-select', {
 
 });
 
-// Custom global component
 Vue.component('order-details',{
     template: '#order-details-template',
     props: ['products', 'token'],
-    components: {
-        // 'star-rating': StarRating
-    },
     data: function(){
         return {
             productRemove:{
@@ -210,8 +248,8 @@ Vue.component('order-details',{
             return value[0].toUpperCase() + value.slice(1);
         },
 
-        transformToDetailedDate: function(value){
-            return moment(value).format("MMM D YYYY (ddd), h:mmA");
+        transformToDetailedDate: function(value, prepend){
+            return prepend + ', ' + moment(value).format("MMM D YYYY (ddd), h:mmA");
         }
     },
     methods: {

@@ -44,12 +44,12 @@ class DashboardController extends Controller
         $dashboardStats = [];
         $breeder = $this->user->userable;
 
-        $dashboardStats['hidden'] = $this->dashboard->getProductStatus($breeder,'hidden');
-        $dashboardStats['displayed'] = $this->dashboard->getProductStatus($breeder,'displayed');
-        $dashboardStats['requested'] = $this->dashboard->getProductStatus($breeder,'requested');
-        $dashboardStats['reserved'] = $this->dashboard->getProductStatus($breeder,'reserved');
-        $dashboardStats['on_delivery'] = $this->dashboard->getProductStatus($breeder,'on_delivery');
-        $dashboardStats['paid'] = $this->dashboard->getProductStatus($breeder,'paid');
+        $dashboardStats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
+        $dashboardStats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
+        $dashboardStats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
+        $dashboardStats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
+        $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
+        $dashboardStats['paid'] = $this->dashboard->getProductNumberStatus($breeder,'paid');
         $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
 
         $latestAccreditation = $this->user->userable->latest_accreditation;
@@ -68,6 +68,7 @@ class DashboardController extends Controller
 
     /**
      * Show the statuses of the Breeder's products
+     * Basically, more like an inventory
      *
      * @return View
      */

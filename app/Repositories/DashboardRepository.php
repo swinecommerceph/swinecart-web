@@ -39,7 +39,7 @@ class DashboardRepository
     public function forBreeder(Breeder $breeder)
     {
         $products = $breeder->products()->where('status','requested')->get();
-        $reservations = $breeder->reservations()->get();
+        $reservations = $breeder->reservations()->with('product')->get();
         $items = [];
 
         // Include all "requested" products
@@ -65,12 +65,48 @@ class DashboardRepository
             $itemDetail['customer_name'] = '';
             $itemDetail['date_needed'] = '';
             $itemDetail['special_request'] = '';
+            $itemDetail['expiration_date'] = '';
             array_push($items, (object)$itemDetail);
         }
 
         // Include "reserved" / "paid" / "on_delivery" products
         foreach ($reservations as $reservation) {
-            $product = Product::find($reservation->product_id);
+            $product = $reservation->product;
+
+            // Check if the reservation has expired already
+            if($reservation->expiration_date && Carbon::now() > $reservation->expiration_date ){
+                // Update Swine Cart item
+                $swineCartItem = SwineCartItem::where('reservation_id', $reservation->id)->first();
+                $swineCartItem->reservation_id = 0;
+                $swineCartItem->quantity = ($product->type == 'semen') ? 2 : 1;
+                $swineCartItem->if_requested = 0;
+                $swineCartItem->date_needed = null;
+                $swineCartItem->special_request = "";
+                $swineCartItem->save();
+
+                // Update product
+                $product->status = "displayed";
+                $product->quantity = ($product->type == 'semen') ? -1 : 0;
+                $product->save();
+
+                // Delete reservation
+                $reservation->delete();
+
+                // Update Transaction Log
+                $transactionLog = $reservation->transactionLog->first();
+                if($transactionLog->expiration_dates == 'null'){
+
+                }
+                else{
+
+                }
+
+                // Notify Customer
+
+
+                continue;
+            }
+
             $itemDetail = [];
             $itemDetail['uuid'] = (string) Uuid::uuid4();
             $itemDetail['id'] = $product->id;
@@ -92,6 +128,7 @@ class DashboardRepository
             $itemDetail['userid'] = Customer::find($reservation->customer_id)->users()->first()->id;
             $itemDetail['date_needed'] = $this->transformDateSyntax($reservation->date_needed);
             $itemDetail['special_request'] = $reservation->special_request;
+            $itemDetail['expiration_date'] = $reservation->expiration_date;
             array_push($items, (object)$itemDetail);
         }
 
@@ -99,7 +136,7 @@ class DashboardRepository
     }
 
     /**
-     * Get the statuses of the products of a Breeder
+     * Get the number statuses of the products of a Breeder
      * Include hidden, displayed, requested,
      * reserved, paid, on_delivery,
      * and sold quantity
@@ -107,7 +144,7 @@ class DashboardRepository
      * @param  Breeder  $breeder
      * @return Array
      */
-    public function getProductStatus(Breeder $breeder, $status)
+    public function getProductNumberStatus(Breeder $breeder, $status)
     {
 
         if($status == 'hidden' || $status == 'displayed' || $status == 'requested'){
@@ -186,10 +223,10 @@ class DashboardRepository
 
                 for ($i = 0; $i < $diff + 1; $i++) {
 
-                    $boarQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('requested', $currentDate->month)->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('sold', $currentDate->month)->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('sold', $currentDate->month)->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('sold', $currentDate->month)->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('sold', $currentDate->month)->where('product_details->type', 'semen');
 
                     array_push($soldData['labels'], $currentDate->format('M \'y'));
                     // dataSets refer to boar, sow, gilt, and semen respectively
@@ -217,10 +254,10 @@ class DashboardRepository
 
                     if($endDay->gte($endDayOfMonth)) $endDay = $endDayOfMonth;
 
-                    $boarQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('requested', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('sold', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('sold', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('sold', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('sold', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'semen');
 
                     array_push($soldData['labels'], $startDay->format('M j'). ' - ' . $endDay->format('M j'));
                     // dataSets refer to boar, sow, gilt, and semen respectively
@@ -306,11 +343,6 @@ class DashboardRepository
         ];
     }
 
-    public function getHeatMap(Breeder $breeder)
-    {
-        # code...
-    }
-
     /**
      * Get Customers who requested for a respective Product
      *
@@ -369,6 +401,7 @@ class DashboardRepository
                     $reservation->date_needed = date_format(date_create($request->date_needed), 'Y-n-j');
                     $reservation->special_request = $request->special_request;
                     $reservation->order_status = 'reserved';
+                    $reservation->expiration_date = Carbon::now()->addDays($request->days_after_expiration);
                     $product->reservations()->save($reservation);
 
                     // Update the Swine Cart item
@@ -417,7 +450,7 @@ class DashboardRepository
                             $product->status = 'displayed';
                             $product->save();
 
-                            return ['success', $product->name.' reserved to '.$customerName, $reservation->id, (string) Uuid::uuid4(), true];
+                            return ['success', $product->name.' reserved to '.$customerName, $reservation->id, (string) Uuid::uuid4(), true, $reservation->expiration_date];
                         }
                     }
 
@@ -426,7 +459,7 @@ class DashboardRepository
                     // [2] - reservation_id
                     // [3] - generated UUID
                     // [4] - flag for removing the parent product display in the UI component
-                    return ['success', $product->name.' reserved to '.$customerName, $reservation->id, (string) Uuid::uuid4(), false];
+                    return ['success', $product->name.' reserved to '.$customerName, $reservation->id, (string) Uuid::uuid4(), false, $reservation->expiration_date];
                 }
                 else {
                     return ['fail', $product->name.' is already reserved to another customer'];
@@ -435,6 +468,7 @@ class DashboardRepository
             case 'on_delivery':
                 $reservation = ProductReservation::find($request->reservation_id);
                 $reservation->order_status = 'on_delivery';
+                $reservation->expiration_date = null;
                 $reservation->save();
 
                 // Update Transaction Log
@@ -458,6 +492,7 @@ class DashboardRepository
             case 'paid':
                 $reservation = ProductReservation::find($request->reservation_id);
                 $reservation->order_status = 'paid';
+                $reservation->expiration_date = null;
                 $reservation->save();
 
                 // Update Transaction Log
