@@ -35,7 +35,8 @@
 				opts.position = {
 					lat : opts.lat,
 					lng : opts.lng
-				}
+				};
+				opts.icon = '/images/pigmarker.png';
 				marker = this._createMarker(opts);
 				this._addMarker(marker);
 				if(opts.event) {
