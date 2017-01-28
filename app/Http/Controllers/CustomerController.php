@@ -273,20 +273,23 @@ class CustomerController extends Controller
 
     public function viewBreedersChange(){
 
-
         $breeders = Breeder::whereHas('products', function($q){
             $arr = [];
             $first = true;
             foreach ($_POST as $key => $value) {
-                if($value == 'on'){
+                if($value == 'on' || $value == 'true'){
                     $arr[] = $key;
                 }
             }
             $q->whereIn('type', $arr);
         })->get();
 
+        foreach ($breeders as $breeder) {
+            $breeder->name = $breeder->users()->first()->name;
+        }
 
-        return view('user.customer.viewBreeders', compact('breeders', '_POST'));
+        return $breeders;
+        //return view('user.customer.viewBreeders', compact('breeders', '_POST'));
 
     }
 

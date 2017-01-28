@@ -15,19 +15,16 @@ class MessageController extends Controller
 {
 
 	/*
-		Cases to catch:
-			Create new thread and place at top of thread list
+		Maps:
+			AJAX change breeder types at customer portal 
+			Map breeders and customers with different icons at admin portal
 
-			Unread/new messages 
-
-		Todo
+		Comm:
+			Build email function similar to mailwoman
+			Build sms function 
+	
+		Todo:
 			Run chat server on php artisan serve
-
-			email when acc is about to expire
-
-			messages admin
-
-
 	*/
 
 

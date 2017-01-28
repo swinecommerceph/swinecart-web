@@ -25,7 +25,6 @@
 
     <form id="map-params" action="breeders" method="post">
         <p>
-
           <input type="checkbox" class="filled-in cb-type" id="cb-gilt" name="gilt" {{ (isset($_POST['gilt']) || !isset($_POST['_token']))?'checked="checked"':''}}/>
           <label for="cb-gilt">Gilt</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -37,14 +36,18 @@
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <input type="checkbox" class="filled-in cb-type" id="cb-semen" name="semen" {{ (isset($_POST['semen']) || !isset($_POST['_token']))?'checked="checked"':''}}/>
           <label for="cb-semen">Semen</label>
+
         </p>
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <br/>
     </form>
-    <div id="map-container">
 
-    <div id="map-canvas"></div>
-  </div>
+    <div class="progress geocoding" style="display:none;">
+      <div class="indeterminate"></div>
+    </div>
+    <div id="map-container">
+        <div id="map-canvas"></div>
+    </div>
     
    
 
@@ -77,14 +80,15 @@
 }
     </script>
     <script>
+        var breeder_i, breeder_interval, breeder_arr;
+
+
         (function(window, google, mapster){
 
             $('.cb-type').change(function(){
+                /*
                 $('#map-params').submit();
-
-                /*    
                 console.log($(this).is(':checked'));
-
                 testajax("breeders",{
                         _token: "{{{ csrf_token() }}}",
                         gilt: $('#cb-gilt').is(':checked'),
@@ -94,7 +98,7 @@
                     });
                 return;
                 */
-                /*
+                $('.geocoding').show();
                 $.ajax({
                     type: "POST",
                     url: "breeders",
@@ -106,23 +110,35 @@
                         semen: $('#cb-semen').is(':checked'),
                     }, 
                     success: function(response){
-
                         map.clear();
-                        breeders = JSON.parse(response);
-                        for(var i=0; i<breeders.length; i++){
+                        breeder_arr = response;
+                        breeder_i = 0;
+                        breeder_interval = setInterval(function(){
+                            //console.log('Adding '+breeder_arr[breeder_i].name);
+                            geocode({
+                                address : breeder_arr[breeder_i].officeAddress_province+', Philippines',
+                                content : breeder_arr[breeder_i].name
+                            });
+                            breeder_i++;
+                            if(breeder_i>=breeder_arr.length) {
+                                clearInterval(breeder_interval);
+                                $('.geocoding').hide();
+                            }
+                        }, 800);
+                        /*for(var i=0; i<breeders.length; i++){
                             console.log(breeders[i]);
                             geocode({
                                 address : breeders[i].officeAddress_province+', Philippines',
-                                content : 'breeders.users().first().name'
+                                content : breeders[i].name
                             });
-                        }
+                        }*/
                     }
                 });
-                */
+                
 
             });
 
-
+            
             var options = mapster.MAP_OPTIONS;
 
             element = document.getElementById('map-canvas');
@@ -156,6 +172,7 @@
                     content : '{{ $breeder->users()->first()->name }}'
                 });
             @endforeach
+            
 
 
         }(window, google, window.Mapster || (window.Mapster = {})))
