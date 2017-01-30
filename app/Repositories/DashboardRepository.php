@@ -14,6 +14,7 @@ use App\Models\Breed;
 use App\Models\SwineCartItem;
 use App\Models\FarmAddress;
 use App\Models\Image;
+use App\Models\TransactionLog;
 use App\Notifications\ProductReserved;
 use App\Notifications\ProductReservationUpdate;
 use App\Notifications\ProductReservedToOtherCustomer;
@@ -223,10 +224,10 @@ class DashboardRepository
 
                 for ($i = 0; $i < $diff + 1; $i++) {
 
-                    $boarQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('sold', $currentDate->month)->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('sold', $currentDate->month)->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('sold', $currentDate->month)->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->whereYear('sold', $currentDate->year)->whereMonth('sold', $currentDate->month)->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()->where('status','sold')->whereYear('created_at', $currentDate->year)->whereMonth('created_at', $currentDate->month)->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->where('status','sold')->whereYear('created_at', $currentDate->year)->whereMonth('created_at', $currentDate->month)->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->where('status','sold')->whereYear('created_at', $currentDate->year)->whereMonth('created_at', $currentDate->month)->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->where('status','sold')->whereYear('created_at', $currentDate->year)->whereMonth('created_at', $currentDate->month)->where('product_details->type', 'semen');
 
                     array_push($soldData['labels'], $currentDate->format('M \'y'));
                     // dataSets refer to boar, sow, gilt, and semen respectively
@@ -254,10 +255,10 @@ class DashboardRepository
 
                     if($endDay->gte($endDayOfMonth)) $endDay = $endDayOfMonth;
 
-                    $boarQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('sold', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('sold', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('sold', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->whereDate('sold', '>=', $startDay->format('Y-m-d'))->whereDate('sold', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', '>=', $startDay->format('Y-m-d'))->whereDate('created_at', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', '>=', $startDay->format('Y-m-d'))->whereDate('created_at', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', '>=', $startDay->format('Y-m-d'))->whereDate('created_at', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', '>=', $startDay->format('Y-m-d'))->whereDate('created_at', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'semen');
 
                     array_push($soldData['labels'], $startDay->format('M j'). ' - ' . $endDay->format('M j'));
                     // dataSets refer to boar, sow, gilt, and semen respectively
@@ -285,10 +286,10 @@ class DashboardRepository
 
                 for ($i = 0; $i < $diff + 1; $i++) {
 
-                    $boarQuery = $breeder->transactionLogs()->whereDate('sold', $currentDate->format('Y-m-d'))->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->whereDate('sold', $currentDate->format('Y-m-d'))->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->whereDate('sold', $currentDate->format('Y-m-d'))->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->whereDate('sold', $currentDate->format('Y-m-d'))->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', $currentDate->format('Y-m-d'))->where('product_details->type', 'boar');
+                    $sowQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', $currentDate->format('Y-m-d'))->where('product_details->type', 'sow');
+                    $giltQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', $currentDate->format('Y-m-d'))->where('product_details->type', 'gilt');
+                    $semenQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', $currentDate->format('Y-m-d'))->where('product_details->type', 'semen');
 
                     array_push($soldData['labels'], $currentDate->format('M j (D)'));
                     // dataSets refer to boar, sow, gilt, and semen respectively
@@ -389,6 +390,7 @@ class DashboardRepository
                 // Check if product is available for reservations
                 if($product->quantity){
                     $customerName = Customer::find($request->customer_id)->users()->first()->name;
+                    $breederUser = $product->breeder->users()->first();
 
                     // Update quantity of product
                     if($product->type != 'semen') $product->quantity = 0;
@@ -409,18 +411,22 @@ class DashboardRepository
                     $swineCartItem->reservation_id = $reservation->id;
                     $swineCartItem->save();
 
-                    // Update Transaction Log
+                    // Add new Transaction Log
                     // This must be put in an event for better performance
-                    $transactionLog = $reservation->transactionLog()->first();
-                    $transactionLog->reserved = Carbon::now();
-                    $transactionLog->save();
+                    $transactionLog = new TransactionLog;
+                    $transactionLog->customer_id = $request->customer_id;
+                    $transactionLog->breeder_id = $product->breeder_id;
+                    $transactionLog->product_id = $product->id;
+                    $transactionLog->status = "reserved";
+                    $transactionLog->created_at = Carbon::now();
+                    $swineCartItem->transactionLogs()->save($transactionLog);
 
                     // Notify reserved customer
                     $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
                     $reservedCustomerUser->notify(new ProductReserved(
                         [
-                            'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been reserved to you',
-                            'time' => $transactionLog->reserved,
+                            'description' => 'Product <b>' . $product->name . '</b> by <b>' . $breederUser->name . '</b> has been <b>reserved</b> to you',
+                            'time' => $transactionLog->created_at,
                             'url' => route('cart.items')
                         ]
                     ));
@@ -429,14 +435,25 @@ class DashboardRepository
                     $productRequests = SwineCartItem::where('product_id', $product->id)->where('customer_id', '<>', $request->customer_id)->where('reservation_id',0);
 
                     if($product->type != 'semen'){
+
                         // Notify Customer users that the product has been reserved to another customer
                         foreach ($productRequests->get() as $productRequest) {
                             $customerUser = $productRequest->customer->users()->first();
-                            $breederName = Product::find($productRequest->product_id)->breeder->users()->first()->name;
+
+                            // Add new Transaction Log
+                            // This must be put in an event for better performance
+                            $transactionLogOther = new TransactionLog;
+                            $transactionLogOther->customer_id = $productRequest->customer_id;
+                            $transactionLogOther->breeder_id = $product->breeder_id;
+                            $transactionLogOther->product_id = $product->id;
+                            $transactionLogOther->status = "reserved_to_another";
+                            $transactionLogOther->created_at = Carbon::now();
+                            $productRequest->transactionLogs()->save($transactionLogOther);
+
                             $customerUser->notify(new ProductReservedToOtherCustomer(
                                 [
-                                    'description' => 'Sorry, product ' . $product->name . ' was reserved by ' . $breederName . ' to another customer',
-                                    'time' => $transactionLog->reserved,
+                                    'description' => 'Sorry, product <b>' . $product->name . '</b> was <b>reserved</b> by <b>' . $breederUser->name . '</b> to <b>another customer</b>',
+                                    'time' => $transactionLogOther->created_at,
                                     'url' => route('cart.items')
                                 ]
                             ));
@@ -450,7 +467,7 @@ class DashboardRepository
                             $product->status = 'displayed';
                             $product->save();
 
-                            return ['success', $product->name.' reserved to '.$customerName, $reservation->id, (string) Uuid::uuid4(), true, $reservation->expiration_date];
+                            return ['success', 'Product ' . $product->name . ' reserved to ' . $customerName, $reservation->id, (string) Uuid::uuid4(), true, $reservation->expiration_date];
                         }
                     }
 
@@ -459,10 +476,10 @@ class DashboardRepository
                     // [2] - reservation_id
                     // [3] - generated UUID
                     // [4] - flag for removing the parent product display in the UI component
-                    return ['success', $product->name.' reserved to '.$customerName, $reservation->id, (string) Uuid::uuid4(), false, $reservation->expiration_date];
+                    return ['success', 'Product ' . $product->name.' reserved to '.$customerName, $reservation->id, (string) Uuid::uuid4(), false, $reservation->expiration_date];
                 }
                 else {
-                    return ['fail', $product->name.' is already reserved to another customer'];
+                    return ['fail', 'Product ' . $product->name.' is already reserved to another customer'];
                 }
 
             case 'on_delivery':
@@ -471,18 +488,22 @@ class DashboardRepository
                 $reservation->expiration_date = null;
                 $reservation->save();
 
-                // Update Transaction Log
+                // Add new Transaction Log
                 // This must be put in an event for better performance
-                $transactionLog = $reservation->transactionLog()->first();
-                $transactionLog->on_delivery = Carbon::now();
-                $transactionLog->save();
+                $transactionLog = new TransactionLog;
+                $transactionLog->customer_id = $reservation->customer_id;
+                $transactionLog->breeder_id = $product->breeder_id;
+                $transactionLog->product_id = $reservation->product_id;
+                $transactionLog->status = "on_delivery";
+                $transactionLog->created_at = Carbon::now();
+                $reservation->swineCartItem->transactionLogs()->save($transactionLog);
 
                 // Notify customer
                 $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
                 $reservedCustomerUser->notify(new ProductReservationUpdate(
                     [
-                        'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery',
-                        'time' => $transactionLog->on_delivery,
+                        'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>on delivery</b>',
+                        'time' => $transactionLog->created_at,
                         'url' => route('cart.items')
                     ]
                 ));
@@ -495,18 +516,22 @@ class DashboardRepository
                 $reservation->expiration_date = null;
                 $reservation->save();
 
-                // Update Transaction Log
+                // Add new Transaction Log
                 // This must be put in an event for better performance
-                $transactionLog = $reservation->transactionLog()->first();
-                $transactionLog->paid = Carbon::now();
-                $transactionLog->save();
+                $transactionLog = new TransactionLog;
+                $transactionLog->customer_id = $reservation->customer_id;
+                $transactionLog->breeder_id = $product->breeder_id;
+                $transactionLog->product_id = $reservation->product_id;
+                $transactionLog->status = "paid";
+                $transactionLog->created_at = Carbon::now();
+                $reservation->swineCartItem->transactionLogs()->save($transactionLog);
 
                 // Notify customer
                 $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
                 $reservedCustomerUser->notify(new ProductReservationUpdate(
                     [
-                        'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as paid',
-                        'time' => $transactionLog->paid,
+                        'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> has been marked as <b>paid</b>',
+                        'time' => $transactionLog->created_at,
                         'url' => route('cart.items')
                     ]
                 ));
@@ -518,18 +543,22 @@ class DashboardRepository
                 $reservation->order_status = 'sold';
                 $reservation->save();
 
-                // Update Transaction Log
+                // Add new Transaction Log
                 // This must be put in an event for better performance
-                $transactionLog = $reservation->transactionLog()->first();
-                $transactionLog->sold = Carbon::now();
-                $transactionLog->save();
+                $transactionLog = new TransactionLog;
+                $transactionLog->customer_id = $reservation->customer_id;
+                $transactionLog->breeder_id = $product->breeder_id;
+                $transactionLog->product_id = $reservation->product_id;
+                $transactionLog->status = "sold";
+                $transactionLog->created_at = Carbon::now();
+                $reservation->swineCartItem->transactionLogs()->save($transactionLog);
 
                 // Notify reserved customer
                 $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
                 $reservedCustomerUser->notify(new ProductReservationUpdate(
                     [
-                        'description' => 'Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as sold',
-                        'time' => $transactionLog->sold,
+                        'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> has been marked as <b>sold</b>',
+                        'time' => $transactionLog->created_at,
                         'url' => route('cart.items')
                     ]
                 ));

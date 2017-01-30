@@ -39,9 +39,17 @@ class ProductReservation extends Model
     /**
      * Get the transaction log related to this product reservation
      */
-    public function transactionLog()
+    public function transactionLogs()
     {
         return $this->hasManyThrough(TransactionLog::class, SwineCartItem::class, 'reservation_id', 'swineCart_id', 'id');
+    }
+
+    /**
+     * Get the Swine Cart item related to this Product Reservation
+     */
+    public function swineCartItem()
+    {
+        return $this->hasOne(SwineCartItem::class, 'reservation_id');
     }
 
 }

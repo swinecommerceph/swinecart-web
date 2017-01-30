@@ -518,6 +518,10 @@ Vue.component('transaction-history',{
 
         transformToDetailedDate: function(value){
             return moment(value).format("MMM D YYYY (ddd), h:mmA");
+        },
+
+        transformToReadableStatus: function(value){
+            return _.startCase(value);
         }
     },
     methods: {
@@ -533,9 +537,9 @@ Vue.component('transaction-history',{
             vm.productInfoModal.adg = this.history[index].product_details.adg;
             vm.productInfoModal.fcr = this.history[index].product_details.fcr;
             vm.productInfoModal.bft = this.history[index].product_details.bft;
-            vm.productInfoModal.avgDelivery = this.history[index].avg_delivery;
-            vm.productInfoModal.avgTransaction = this.history[index].avg_transaction;
-            vm.productInfoModal.avgProductQuality = this.history[index].avg_productQuality;
+            vm.productInfoModal.avgDelivery = this.history[index].product_detailsavg_delivery;
+            vm.productInfoModal.avgTransaction = this.history[index].product_detailsavg_transaction;
+            vm.productInfoModal.avgProductQuality = this.history[index].product_detailsavg_productQuality;
             vm.productInfoModal.otherDetails = this.history[index].product_details.other_details.split(',');
 
             $('#info-modal').openModal({
@@ -624,10 +628,6 @@ var vm = new Vue({
                     // Store fetched data in local component data
                     this.history = JSON.parse(response.body);
 
-                    // Parse JSON objects
-                    for (var i = 0; i < this.history.length; i++) {
-                        this.history[i].product_details = JSON.parse(this.history[i].product_details);
-                    }
                 },
                 function(response){
                     console.log(response.statusText);

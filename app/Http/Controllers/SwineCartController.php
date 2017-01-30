@@ -113,18 +113,22 @@ class SwineCartController extends Controller
             $reviewed->save();
             $reviews->save($review);
 
-            // Update Transaction Log
+            // Add new Transaction Log
             // This must be put in an event for better performance
-            $transactionLog = $reviewed->transactionLog()->first();
-            $transactionLog->rated = Carbon::now();
-            $transactionLog->save();
+            $transactionLog = new TransactionLog;
+            $transactionLog->customer_id = $request->customerId;
+            $transactionLog->breeder_id = $request->breederId;
+            $transactionLog->product_id = $request->productId;
+            $transactionLog->status = "rated";
+            $transactionLog->created_at = Carbon::now();
+            $reviewed->transactionLogs()->save($transactionLog);
 
             // Notify Breeder of the rating
             $breederUser = Breeder::find($request->breederId)->users()->first();
             $breederUser->notify(new BreederRated(
                 [
-                    'description' => 'Customer ' . $this->user->name . ' rated you',
-                    'time' => $transactionLog->rated,
+                    'description' => 'Customer <b>' . $this->user->name . ' rated</b> you',
+                    'time' => $transactionLog->created_at,
                     'url' => route('dashboard')
                 ]
             ));
@@ -150,8 +154,7 @@ class SwineCartController extends Controller
             $requested = $swineCartItems->find($request->itemId);
             $requested->if_requested = 1;
             $requested->quantity = $request->requestQuantity;
-            if($request->dateNeeded) $requested->date_needed = date_format(date_create($request->dateNeeded), 'Y-n-j');
-            else $request->date_needed = '';
+            $requested->date_needed = ($request->dateNeeded) ? date_format(date_create($request->dateNeeded), 'Y-n-j') : '';
             $requested->special_request = $request->specialRequest;
             $requested->save();
 
@@ -161,42 +164,43 @@ class SwineCartController extends Controller
             $product->save();
 
             // Bind Swine Cart to Transaction Log
-            $productDetails = [
-                "id" => $product->id,
-                "name" => $product->name,
-                "type" => $product->type,
-                "img_path" => '/images/product/'.Image::find($product->primary_img_id)->name,
-                "breed" => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
-                "breeder_name" => Breeder::find($product->breeder_id)->users()->first()->name,
-                "farm_from" => FarmAddress::find($product->farm_from_id)->province,
-                "birthdate" => $product->birthdate,
-                "adg" => $product->adg,
-                "fcr" => $product->fcr,
-                "bft" => $product->backfat_thickness,
-                "quantity" => $request->requestQuantity,
-                "other_details" => $product->other_details
-            ];
+            // $productDetails = [
+            //     "id" => $product->id,
+            //     "name" => $product->name,
+            //     "type" => $product->type,
+            //     "img_path" => '/images/product/'.Image::find($product->primary_img_id)->name,
+            //     "breed" => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
+            //     "breeder_name" => Breeder::find($product->breeder_id)->users()->first()->name,
+            //     "farm_from" => FarmAddress::find($product->farm_from_id)->province,
+            //     "birthdate" => $product->birthdate,
+            //     "adg" => $product->adg,
+            //     "fcr" => $product->fcr,
+            //     "bft" => $product->backfat_thickness,
+            //     "quantity" => $request->requestQuantity,
+            //     "other_details" => $product->other_details
+            // ];
 
             // Update Transaction Log
             // This must be put in an event for better performance
             $transactionLog = new TransactionLog;
             $transactionLog->customer_id = $requested->customer_id;
             $transactionLog->breeder_id = $product->breeder_id;
-            $transactionLog->product_details = collect($productDetails)->toJson();
-            $transactionLog->requested = Carbon::now();
-            $requested->transactionLog()->save($transactionLog);
+            $transactionLog->product_id = $product->id;
+            $transactionLog->status = "requested";
+            $transactionLog->created_at = Carbon::now();
+            $requested->transactionLogs()->save($transactionLog);
 
             // Notify Breeder of the request
             $breederUser = Breeder::find($product->breeder_id)->users()->first();
             $breederUser->notify(new ProductRequested(
                 [
-                    'description' => 'Product ' . $product->name . ' is requested by ' . $this->user->name,
-                    'time' => $transactionLog->requested,
+                    'description' => 'Product <b>' . $product->name . '</b> is <b>requested</b> by <b>' . $this->user->name . '</b>',
+                    'time' => $transactionLog->created_at,
                     'url' => route('dashboard.productStatus')
                 ]
             ));
 
-            return [$customer->swineCartItems()->where('if_requested',0)->count(), $transactionLog->requested];
+            return [$customer->swineCartItems()->where('if_requested',0)->count(), $transactionLog->created_at];
         }
     }
 
@@ -301,12 +305,11 @@ class SwineCartController extends Controller
                 $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
                 $itemDetail['expiration_date'] = (ProductReservation::find($item->reservation_id)->expiration_date) ?? '';
                 $itemDetail['status_transactions'] = [
-                    "requested" => ($item->transactionLog->requested) ?? '',
-                    "reserved" => ($item->transactionLog->reserved) ?? '',
-                    "on_delivery" => ($item->transactionLog->on_delivery) ?? '',
-                    "paid" => ($item->transactionLog->paid) ?? '',
-                    "sold" => ($item->transactionLog->sold) ?? '',
-                    "rated" => ($item->transactionLog->rated) ?? ''
+                    "requested" => ($item->transactionLogs->where('status', 'requested')->first()->created_at) ?? '',
+                    "reserved" => ($item->transactionLogs->where('status', 'reserved')->first()->created_at) ?? '',
+                    "on_delivery" => ($item->transactionLogs->where('status', 'on_delivery')->first()->created_at) ?? '',
+                    "paid" => ($item->transactionLogs->where('status', 'paid')->first()->created_at) ?? '',
+                    "sold" => ($item->transactionLogs->where('status', 'sold')->first()->created_at) ?? ''
                 ];
 
                 array_push($products,(object) $itemDetail);
@@ -320,7 +323,7 @@ class SwineCartController extends Controller
     }
 
     /**
-     * Record activity to Logs
+     * Get Transaction History of
      * AJAX
      *
      * @param  Request $request
@@ -329,14 +332,34 @@ class SwineCartController extends Controller
         if($request->ajax()){
             $history = Customer::find($request->customerId)->transactionLogs;
 
-            foreach ($history as $log) {
-                $reviews = Breeder::find($log->breeder_id)->reviews()->get();
+            $restructuredHistory = $history->groupBy('product_id')->map(function($item, $key){
+                $restructuredItem = [];
+                $product = Product::find($key);
+                $reviews = $product->breeder->reviews;
 
-                $log->avg_delivery = $reviews->avg('rating_delivery');
-                $log->avg_transaction = $reviews->avg('rating_transaction');
-                $log->avg_productQuality = $reviews->avg('rating_productQuality');
-            }
-            return collect($history)->toJson();
+                $restructuredItem['logs'] = $item->toArray();
+                $restructuredItem['product_details'] = [
+                    "quantity" => (SwineCartItem::find($restructuredItem['logs'][0]['swineCart_id'])->quantity) ?? '',
+                    "name" => $product->name,
+                    "type" => $product->type,
+                    "img_path" => '/images/product/'.Image::find($product->primary_img_id)->name,
+                    "breed" => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
+                    "breeder_name" => Breeder::find($product->breeder_id)->users()->first()->name,
+                    "farm_from" => FarmAddress::find($product->farm_from_id)->province,
+                    "birthdate" => $product->birthdate,
+                    "adg" => $product->adg,
+                    "fcr" => $product->fcr,
+                    "bft" => $product->backfat_thickness,
+                    "other_details" => $product->other_details,
+                    "avg_delivery" => $reviews->avg('rating_delivery'),
+                    "avg_transaction" => $reviews->avg('rating_transaction'),
+                    "avg_productQuality" => $reviews->avg('rating_productQuality')
+                ];
+
+                return $restructuredItem;
+            });
+
+            return collect($restructuredHistory)->toJson();
         }
     }
 

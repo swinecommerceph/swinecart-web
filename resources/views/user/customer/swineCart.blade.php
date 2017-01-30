@@ -147,7 +147,9 @@
                                 <span class="left" v-else >
                                     <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
                                 </span>
-                                <p style="margin-left:1.5rem;"> @{{ notification.data.description }} </p>
+                                <p style="margin-left:1.5rem;" :class=" (notification.read_at) ? 'grey-text' : '' ">
+                                    <span v-html="notification.data.description"></span>
+                                </p>
                                 <p class="right-align grey-text text-darken-1" style="font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
                             </a>
                         </li>
@@ -720,11 +722,11 @@
                 </div>
                 <ul id="transaction-cart" class="collection cart">
                     <li class="collection-item"
-                        v-for="(log,index) in history"
+                        v-for="(item,index) in history"
                     >
                         <div class="row  swine-cart-item valign-wrapper">
                             <div class="col s2 center-align">
-                                <a href="#"><img :src="log.product_details.img_path" width="75" height="75" class="circle"></a>
+                                <a href="#"><img :src="item.product_details.img_path" width="75" height="75" class="circle"></a>
                             </div>
                             <div class="col s3 verticalLine valign-wrapper">
                                 <div class="valign">
@@ -732,51 +734,42 @@
                                     <a href="#" class="anchor-title teal-text"
                                         @click.prevent="viewProductModalFromHistory(index)"
                                     >
-                                        <span class="col s12">@{{ log.product_details.name }}</span>
+                                        <span class="col s12">@{{ item.product_details.name }}</span>
                                     </a>
 
                                     {{-- Type --}}
                                     <span class="col s12">
-                                        @{{ log.product_details.type | capitalize }} - @{{ log.product_details.breed }}
+                                        @{{ item.product_details.type | capitalize }} - @{{ item.product_details.breed }}
                                     </span>
 
                                     {{-- Quanitity --}}
-                                    <span class="col s12" v-if="log.product_details.type === 'semen'">
-                                        Quantity: @{{ log.product_details.quantity }}
+                                    <span class="col s12"
+                                        v-if="item.product_details.type === 'semen' && item.product_details.quantity"
+                                    >
+                                        Quantity: @{{ item.product_details.quantity }}
                                     </span>
                                 </div>
                             </div>
                             <div class="col s3 verticalLine valign-wrapper">
                                 <div class="valign">
-                                    @{{ log.product_details.breeder_name }} <br>
-                                    @{{ log.product_details.farm_from }}
+                                    @{{ item.product_details.breeder_name }} <br>
+                                    @{{ item.product_details.farm_from }}
                                 </div>
                             </div>
                             <div class="col s4">
-                                <div v-if="log.requested">
-                                    Requested <span class="right"> @{{ log.requested | transformToDetailedDate }} </span>
-                                </div>
-                                <div v-if="log.reserved">
-                                    Reserved <span class="right"> @{{ log.reserved | transformToDetailedDate }} </span>
-                                </div>
-                                <div v-if="log.on_delivery">
-                                    On Delivery <span class="right"> @{{ log.on_delivery | transformToDetailedDate }} </span>
-                                </div>
-                                <div v-if="log.paid">
-                                    Paid <span class="right"> @{{ log.paid | transformToDetailedDate }} </span>
-                                </div>
-                                <div v-if="log.sold">
-                                    Sold <span class="right"> @{{ log.sold | transformToDetailedDate }} </span>
-                                </div>
-                                <div v-if="log.rated">
-                                    Rated <span class="right"> @{{ log.rated | transformToDetailedDate }} </span>
+                                <div class=""
+                                    v-for="log in item.logs"
+                                >
+
+                                    @{{ log.status | transformToReadableStatus }} <span class="right grey-text"> @{{ log.created_at | transformToDetailedDate }} </span>
+
                                 </div>
                             </div>
                         </div>
                     </li>
 
                     {{-- If there is no item in the transacion history --}}
-                    <div class="center-align" v-show="history.length === 0">
+                    <div class="center-align" v-if="history.length === 0">
                         <h5>Your history is empty.</h5>
                     </div>
                 </ul>
