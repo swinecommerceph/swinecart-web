@@ -224,10 +224,37 @@ class DashboardRepository
 
                 for ($i = 0; $i < $diff + 1; $i++) {
 
-                    $boarQuery = $breeder->transactionLogs()->where('status','sold')->whereYear('created_at', $currentDate->year)->whereMonth('created_at', $currentDate->month)->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->where('status','sold')->whereYear('created_at', $currentDate->year)->whereMonth('created_at', $currentDate->month)->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->where('status','sold')->whereYear('created_at', $currentDate->year)->whereMonth('created_at', $currentDate->month)->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->where('status','sold')->whereYear('created_at', $currentDate->year)->whereMonth('created_at', $currentDate->month)->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereYear('created_at', $currentDate->year)
+                        ->whereMonth('created_at', $currentDate->month)
+                        ->whereHas('product', function($query){
+                            $query->where('type','boar');
+                        });
+
+                    $sowQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereYear('created_at', $currentDate->year)
+                        ->whereMonth('created_at', $currentDate->month)
+                        ->whereHas('product', function($query){
+                            $query->where('type','sow');
+                        });
+
+                    $giltQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereYear('created_at', $currentDate->year)
+                        ->whereMonth('created_at', $currentDate->month)
+                        ->whereHas('product', function($query){
+                            $query->where('type','gilt');
+                        });
+
+                    $semenQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereYear('created_at', $currentDate->year)
+                        ->whereMonth('created_at', $currentDate->month)
+                        ->whereHas('product', function($query){
+                            $query->where('type','semen');
+                        });
 
                     array_push($soldData['labels'], $currentDate->format('M \'y'));
                     // dataSets refer to boar, sow, gilt, and semen respectively
@@ -255,10 +282,37 @@ class DashboardRepository
 
                     if($endDay->gte($endDayOfMonth)) $endDay = $endDayOfMonth;
 
-                    $boarQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', '>=', $startDay->format('Y-m-d'))->whereDate('created_at', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', '>=', $startDay->format('Y-m-d'))->whereDate('created_at', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', '>=', $startDay->format('Y-m-d'))->whereDate('created_at', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', '>=', $startDay->format('Y-m-d'))->whereDate('created_at', '<', $endDay->format('Y-m-d'))->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereDate('created_at', '>=', $startDay->format('Y-m-d'))
+                        ->whereDate('created_at', '<', $endDay->format('Y-m-d'))
+                        ->whereHas('product', function($query){
+                            $query->where('type','boar');
+                        });
+
+                    $sowQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereDate('created_at', '>=', $startDay->format('Y-m-d'))
+                        ->whereDate('created_at', '<', $endDay->format('Y-m-d'))
+                        ->whereHas('product', function($query){
+                            $query->where('type','sow');
+                        });
+
+                    $giltQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereDate('created_at', '>=', $startDay->format('Y-m-d'))
+                        ->whereDate('created_at', '<', $endDay->format('Y-m-d'))
+                        ->whereHas('product', function($query){
+                            $query->where('type','gilt');
+                        });
+
+                    $semenQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereDate('created_at', '>=', $startDay->format('Y-m-d'))
+                        ->whereDate('created_at', '<', $endDay->format('Y-m-d'))
+                        ->whereHas('product', function($query){
+                            $query->where('type','semen');
+                        });
 
                     array_push($soldData['labels'], $startDay->format('M j'). ' - ' . $endDay->format('M j'));
                     // dataSets refer to boar, sow, gilt, and semen respectively
@@ -286,10 +340,33 @@ class DashboardRepository
 
                 for ($i = 0; $i < $diff + 1; $i++) {
 
-                    $boarQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', $currentDate->format('Y-m-d'))->where('product_details->type', 'boar');
-                    $sowQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', $currentDate->format('Y-m-d'))->where('product_details->type', 'sow');
-                    $giltQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', $currentDate->format('Y-m-d'))->where('product_details->type', 'gilt');
-                    $semenQuery = $breeder->transactionLogs()->where('status','sold')->whereDate('created_at', $currentDate->format('Y-m-d'))->where('product_details->type', 'semen');
+                    $boarQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereDate('created_at', $currentDate->format('Y-m-d'))
+                        ->whereHas('product', function($query){
+                            $query->where('type','boar');
+                        });
+
+                    $sowQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereDate('created_at', $currentDate->format('Y-m-d'))
+                        ->whereHas('product', function($query){
+                            $query->where('type','sow');
+                        });
+
+                    $giltQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereDate('created_at', $currentDate->format('Y-m-d'))
+                        ->whereHas('product', function($query){
+                            $query->where('type','gilt');
+                        });
+
+                    $semenQuery = $breeder->transactionLogs()
+                        ->where('status','sold')
+                        ->whereDate('created_at', $currentDate->format('Y-m-d'))
+                        ->whereHas('product', function($query){
+                            $query->where('type','semen');
+                        });
 
                     array_push($soldData['labels'], $currentDate->format('M j (D)'));
                     // dataSets refer to boar, sow, gilt, and semen respectively

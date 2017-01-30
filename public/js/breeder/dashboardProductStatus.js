@@ -448,8 +448,13 @@ Vue.component('status-table',{
             if (str) return str[0].toUpperCase() + str.slice(1);
             else return '';
         },
+
         transformDate: function(value){
             return moment(value).format("MMM D YYYY (ddd), h:mmA");
+        },
+
+        transformToReadableStatus: function(value){
+            return _.startCase(value);
         }
     }
 });

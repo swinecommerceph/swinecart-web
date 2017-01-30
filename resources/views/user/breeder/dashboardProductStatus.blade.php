@@ -110,7 +110,7 @@
                             </div>
                         </td>
                         <td>
-                            @{{ product.status }}
+                            @{{ product.status | transformToReadableStatus }}
                         </td>
                         <td>
                             {{--  If product's status is requested --}}
