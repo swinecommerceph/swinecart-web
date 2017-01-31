@@ -1,5 +1,5 @@
 {{--
-    Displays products of all Breeder users
+    Displays all Breeders
 --}}
 
 @extends('user.customer.home')
@@ -157,7 +157,8 @@
                             lat : result.geometry.location.lat(),
                             lng : result.geometry.location.lng(), 
                             draggable : true,
-                            content: opts.content
+                            content: opts.content,
+                            icon: '/images/pigmarker.png'
                         });
 
                     }else{
@@ -166,13 +167,15 @@
                 });
             }
 
+           
             @foreach($breeders as $breeder)
                 geocode({
                     address : '{{ $breeder->officeAddress_province }}, Philippines',
                     content : '{{ $breeder->users()->first()->name }}'
                 });
             @endforeach
-            
+
+           
 
 
         }(window, google, window.Mapster || (window.Mapster = {})))

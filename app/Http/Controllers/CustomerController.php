@@ -265,7 +265,7 @@ class CustomerController extends Controller
         }
     }
 
-     public function viewBreeders(){
+    public function viewBreeders(){
 
         $breeders = Breeder::all();
         return view('user.customer.viewBreeders', compact('breeders'));

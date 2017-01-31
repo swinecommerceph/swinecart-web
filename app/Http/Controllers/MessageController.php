@@ -16,7 +16,6 @@ class MessageController extends Controller
 
 	/*
 		Maps:
-			AJAX change breeder types at customer portal 
 			Map breeders and customers with different icons at admin portal
 
 		Comm:

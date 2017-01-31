@@ -179,6 +179,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::put('home/manage/homepage/editcontent', ['as'=>'admin.manage.editcontent', 'uses'=>'AdminController@editContent']);
         Route::get('home/manage/return/userlist', ['as' => 'admin.return.userlist', 'uses'=> 'AdminController@goToUserlist']);
         Route::get('home/manage/return/pending', ['as' => 'admin.return.pending', 'uses'=> 'AdminController@goToPending']);
+
+        Route::get('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsers']);
+
     });
 
 });
