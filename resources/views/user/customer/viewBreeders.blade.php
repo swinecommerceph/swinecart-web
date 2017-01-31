@@ -80,25 +80,10 @@
 }
     </script>
     <script>
-        var breeder_i, breeder_interval, breeder_arr;
-
-
         (function(window, google, mapster){
 
             $('.cb-type').change(function(){
-                /*
-                $('#map-params').submit();
-                console.log($(this).is(':checked'));
-                testajax("breeders",{
-                        _token: "{{{ csrf_token() }}}",
-                        gilt: $('#cb-gilt').is(':checked'),
-                        sow: $('#cb-sow').is(':checked'),
-                        boar: $('#cb-boar').is(':checked'),
-                        semen: $('#cb-semen').is(':checked'),
-                    });
-                return;
-                */
-                $('.geocoding').show();
+                
                 $.ajax({
                     type: "POST",
                     url: "breeders",
@@ -111,27 +96,15 @@
                     }, 
                     success: function(response){
                         map.clear();
-                        breeder_arr = response;
-                        breeder_i = 0;
-                        breeder_interval = setInterval(function(){
-                            //console.log('Adding '+breeder_arr[breeder_i].name);
-                            geocode({
-                                address : breeder_arr[breeder_i].officeAddress_province+', Philippines',
-                                content : breeder_arr[breeder_i].name
-                            });
-                            breeder_i++;
-                            if(breeder_i>=breeder_arr.length) {
-                                clearInterval(breeder_interval);
-                                $('.geocoding').hide();
-                            }
-                        }, 800);
-                        /*for(var i=0; i<breeders.length; i++){
-                            console.log(breeders[i]);
+                        var breeders = response;
+                        //var breeder_i = 0;
+                        for(var i=0; i<breeders.length; i++){
+                            //console.log(breeders[i]);
                             geocode({
                                 address : breeders[i].officeAddress_province+', Philippines',
                                 content : breeders[i].name
                             });
-                        }*/
+                        }
                     }
                 });
                 
@@ -161,6 +134,11 @@
                             icon: '/images/pigmarker.png'
                         });
 
+                    }
+                    else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {    
+                        setTimeout(function() {
+                            geocode(opts);
+                        }, 200);
                     }else{
                         console.error(status);
                     }
