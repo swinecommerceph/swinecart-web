@@ -36,7 +36,7 @@
                             <tr>
                                 <td>{{$user->name}}</td>
                                 <td>{{ucfirst($user->title)}}</td>
-                                <td><a class="waves-effect waves-light btn modal-trigger"><i class="material-icons left">history</i>View</a></td>
+                                <td><a href="#user-modal" class="waves-effect waves-light btn modal-trigger"><i class="material-icons left">history</i>View</a></td>
                             </tr>
 
                           @empty
@@ -53,7 +53,17 @@
         </div>
     </div>
 
-    
+    <div id="user-modal" class="modal modal-fixed-footer">
+        <div class="modal-content">
+            <h4>Transaction History</h4>
+            <div class="divider"></div>
+            <p>User Transactions</p>
+        </div>
+        <div class="modal-footer">
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+        </div>
+    </div>
+
 
 @endsection
 

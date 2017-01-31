@@ -22,7 +22,7 @@ $( document ).ready(function() {
 
 Vue.component('advanced-search', {
     template: '<div id="search-filter-modal" class="modal modal-fixed-footer">'+
-                    '<form action="home/product/advancedsearch" method="GET" class="spectator_product_advanced_search">'+
+                    '<form action="home/product/advancedsearch" method="GET" class="spectator_product_advanced_search"> '+
                         '<div class="modal-content">'+
                             '<h4>Advanced Search</h4>'+
                             '<div class="divider"></div>'+
@@ -112,13 +112,84 @@ Vue.component('advanced-search', {
                             '</div>'+
                         '</div>'+
                         '<div class="modal-footer">'+
-                            '<button type="submit" class="btn waves-effect waves-light" name="advance-search">Search</button>'+
+                            '<button type="submit" class="btn waves-effect waves-light" name="advance-search" v-on:click="advancedSearchMethod($e)">Search</button>'+
                         '</div>'+
                     '</form>'+
-                '</div>'
+                '</div>',
+
+})
+
+Vue.component('product-modal', {
+    props: [],
+    template: '<div id="product-modal" class="modal modal-fixed-footer">'+
+                '<div class="modal-content">'+
+                    '<h4 id="modal-header"></h4>'+
+                    '<div class="divider"></div>'+
+                    '<div class="row">'+
+                        '<div class="col s12 center">'+
+                            '<img id="modal-image" class="product_image" src="" alt="Image broken" onerror="this.src='+'/images/logo.png'+'" />'+
+                        '</div>'+
+                        '<div class="col s12">'+
+                            '<table>'+
+                                '<thead>'+
+                                    '<tr>'+
+                                        '<th data-field="type">Type</th>'+
+                                        '<th data-field="adg">ADG</th>'+
+                                        '<th data-field="fcr">FCR</th>'+
+                                        '<th data-field="backfat_thickness">Backfat Thickness</th>'+
+                                        '<th data-field="status">Status</th>'+
+                                        '<th data-field="quantity">Quantity</th>'+
+                                        '<th data-field="price">Price</th>'+
+
+                                    '</tr>'+
+                                '</thead>'+
+
+                                '<tbody>'+
+                                    '<tr>'+
+                                        '<td id="data-type"></td>'+
+                                        '<td id="data-adg"></td>'+
+                                        '<td id="data-fcr"></td>'+
+                                        '<td id="data-backfat"></td>'+
+                                        '<td id="data-status"></td>'+
+                                        '<td id="data-quantity"></td>'+
+                                        '<td id="data-price"></td>'+
+                                    '</tr>'+
+                                '</tbody>'+
+                            '</table>'+
+
+                        '</div>'+
+                    '</div>'+
+                    '<div class="row">'+
+                        '<div class="left col s12">'+
+                            '<h5>Other Product Information</h5>'+
+                        '</div>'+
+                        '<div id="data-information" class="col s12">'+
+
+                        '</div>'+
+                    '</div>'+
+                '</div>'+
+                '<div class="modal-footer">'+
+                    '<a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>'+
+                '</div>'+
+            '</div>',
+    methods: {
+
+    }
+
+})
+
+Vue.component('modal-trigger', {
+    template:'<a href="#product-modal" class="modal-trigger" v-on:click="modalData">See more information</a>'
+
+
 })
 
 var vm = new Vue({
     el: '#app-products',
-    data: {}
+    data: {},
+    methods: {
+        advancedSearchMethod: function(e){
+            
+        }
+    }
 })

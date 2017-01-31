@@ -40,6 +40,75 @@ class SpectatorController extends Controller
       });
     }
 
+    public function getMinMax(){
+
+        $products = DB::table('products')
+                    ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
+                    ->where('quantity', '>=', 0 )
+                    ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
+                    'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
+                    'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
+                    ->paginate(9);
+        $minPrice = INF;
+        $maxPrice = 0;
+        $minBackfatThickness = INF;
+        $maxBackfatThickness = 0;
+        $minADG = INF;
+        $maxADG = 0;
+        $minFCR = INF;
+        $maxFCR = 0;
+        $minQuantity = INF;
+        $maxQuantity = 0;
+        foreach ($products as $product) {
+            $product->image_name = '/images/product/'.$product->image_name;
+            $product->type = ucfirst($product->type);
+            $product->status = ucfirst($product->status);
+
+            if($minPrice > $product->price){
+                $minPrice = $product->price;
+            }
+
+            if($maxPrice < $product->price){
+                $maxPrice = $product->price;
+            }
+
+            if($minQuantity > $product->quantity){
+                $minQuantity = $product->quantity;
+            }
+
+            if($maxQuantity < $product->quantity){
+                $maxQuantity = $product->quantity;
+            }
+
+            if($minADG > $product->adg){
+                $minADG = $product->adg;
+            }
+
+            if($maxADG < $product->adg){
+                $maxADG = $product->adg;
+            }
+
+            if($minFCR > $product->fcr){
+                $minFCR = $product->fcr;
+            }
+
+            if($maxFCR < $product->fcr){
+                $maxFCR = $product->fcr;
+            }
+
+            if($minBackfatThickness > $product->backfat_thickness){
+                $minBackfatThickness = $product->backfat_thickness;
+            }
+
+            if($maxBackfatThickness < $product->backfat_thickness){
+                $maxBackfatThickness = $product->backfat_thickness;
+            }
+        }
+
+        $productMinMax = [$minPrice, $maxPrice, $minQuantity, $maxQuantity, $minADG, $maxADG, $minFCR, $maxFCR, $minBackfatThickness,$maxBackfatThickness];
+        return $productMinMax;
+    }
+
     public function index(Request $request)
     {
         return view('user.spectator.home');
@@ -185,6 +254,7 @@ class SpectatorController extends Controller
 
     public function searchProduct(Request $request)
     {
+        $productMinMax = $this->getMinMax();
         $products = DB::table('products')
                     ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
                     ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
@@ -192,12 +262,12 @@ class SpectatorController extends Controller
                     'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
                     ->where('products.name', 'LIKE', "%$request->search%")
                     ->paginate(9);
-        // return view('user.spectator.products', compact('products', 'productMinMax'));
+        return view('user.spectator.search', compact('products', 'productMinMax'));
     }
 
     public function advancedSearchProduct(Request $request)
     {
-
+        $productMinMax = $this->getMinMax();
         $type = [];
         if($request->boar == NULL && $request->sow == NULL && $request->gilt == NULL && $request->semen == NULL){
             $products = DB::table('products')
@@ -231,9 +301,8 @@ class SpectatorController extends Controller
                         ->paginate(9);
         }
 
-        return $products;
-        // TODO: RETURN ALL MIN AND MAX VALUES AND DISPLAY RESULTS USING INPUT TYPE HIDDEN
-        // return view('user.spectator.products', compact('products', 'productMinMax'));
+
+        return view('user.spectator.search', compact('products', 'productMinMax'));
     }
 
 }

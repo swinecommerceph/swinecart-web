@@ -5,7 +5,7 @@
 @endsection
 
 @section('pageId')
-    id="page-spectator-products"
+    id="page-spectator-search"
 @endsection
 
 {{-- @section('header')

@@ -37,7 +37,9 @@ var products = {
             cache: false,
             data: {},
             success: function(data){
-                // display of items here
+                data.foreach(function(data){
+                    console.log(data.name);
+                });
             }
         });
     }
