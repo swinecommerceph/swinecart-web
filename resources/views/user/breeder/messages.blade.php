@@ -50,8 +50,14 @@
 		    	<li class="collection-item avatar">
 	  		@endif
 
-		      <i class="material-icons circle small">chat</i>
-		      <span class="title">{{ $thread->otherparty() }}</span>
+		      <i class="material-icons circle small left">chat</i>
+		      <span class="title">
+		         @if($thread->read_at == NULL)
+		           *
+		         @endif
+		      	{{ $thread->otherparty() }}
+		      	 
+		      </span>
 
 		    </li>
 		    </a>

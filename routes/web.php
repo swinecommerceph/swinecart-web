@@ -91,7 +91,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::patch('notifications/seen',['as' => 'bNotifs.seen', 'uses' => 'BreederController@seeNotification']);
 
         //message-related
-        Route::get('messages', ['as' => 'messages', 'uses'=> 'MessageController@getMessages']);
+        Route::get('messages', ['as' => 'breeder.messages', 'uses'=> 'MessageController@getMessages']);
+        Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
         Route::get('messages/{customer}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
 
         Route::get('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomers']);
@@ -133,7 +134,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::patch('notifications/seen',['as' => 'cNotifs.seen', 'uses' => 'CustomerController@seeNotification']);
 
          //message-related
-        Route::get('messages', ['as' => 'messages', 'uses'=> 'MessageController@getMessages']);
+        Route::get('messages', ['as' => 'customer.messages', 'uses'=> 'MessageController@getMessages']);
+        Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
         Route::get('messages/{breader}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
 
         Route::get('breeders', ['as' => 'breeders', 'uses'=> 'CustomerController@viewBreeders']);
@@ -177,6 +179,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::put('home/manage/homepage/editcontent', ['as'=>'admin.manage.editcontent', 'uses'=>'AdminController@editContent']);
         Route::get('home/manage/return/userlist', ['as' => 'admin.return.userlist', 'uses'=> 'AdminController@goToUserlist']);
         Route::get('home/manage/return/pending', ['as' => 'admin.return.pending', 'uses'=> 'AdminController@goToPending']);
+
+        Route::get('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsers']);
+
     });
 
 });

@@ -60,7 +60,8 @@
                             lat : result.geometry.location.lat(),
                             lng : result.geometry.location.lng(),
                             draggable : true,
-                            content: opts.content
+                            content: opts.content,
+                            icon: '/images/pigmarker.png'
                         });
 
                     }else{

@@ -8,7 +8,7 @@ use Auth;
 class Message extends Model
 {
 
-	protected $fillable = ['customer_id', 'breeder_id', 'message', 'direction'];
+	protected $fillable = ['customer_id', 'breeder_id', 'message', 'direction', 'read_at'];
 
 	public function sender(){
 		if($this->direction == 0){

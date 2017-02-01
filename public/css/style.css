@@ -222,11 +222,11 @@ html{
 }
 
 /* Swine Cart styles */
-#cart-icon i.left, #notification-icon i.left{
+#cart-icon i.left, #notification-icon i.left, #message-icon i.left{
 	margin-right: 0px;
 }
 
-#cart-icon span.badge, #notification-icon span.badge{
+#cart-icon span.badge, #notification-icon span.badge, #message-icon span.badge{
 	color: white;
 	background-color: #ee6e73;
 	border-radius: 5px;

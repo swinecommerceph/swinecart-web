@@ -35,7 +35,7 @@
 				opts.position = {
 					lat : opts.lat,
 					lng : opts.lng
-				}
+				};
 				marker = this._createMarker(opts);
 				this._addMarker(marker);
 				if(opts.event) {

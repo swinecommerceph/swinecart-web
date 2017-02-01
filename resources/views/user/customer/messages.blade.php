@@ -52,7 +52,12 @@
 	  		@endif
 
 		      <i class="material-icons circle small">chat</i>
-		      <span class="title">{{ $thread->otherparty() }}</span>
+		      <span class="title">
+		         @if($thread->read_at == NULL)
+		           *
+		         @endif
+		         {{ $thread->otherparty() }}
+		      </span>
 
 		    </li>
 		    </a>

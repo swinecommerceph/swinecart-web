@@ -15,19 +15,15 @@ class MessageController extends Controller
 {
 
 	/*
-		Cases to catch:
-			Create new thread and place at top of thread list
+		Maps:
+			Map breeders and customers with different icons at admin portal
 
-			Unread/new messages 
-
-		Todo
+		Comm:
+			Build email function similar to mailwoman
+			Build sms function 
+	
+		Todo:
 			Run chat server on php artisan serve
-
-			email when acc is about to expire
-
-			messages admin
-
-
 	*/
 
 
@@ -43,8 +39,9 @@ class MessageController extends Controller
 
     		$threads = Message::where('customer_id', '=', $userId)
 	    		->orderBy('created_at', 'DESC')
-	    		->groupBy('breeder_id')
-	    		->get();
+	    		//->groupBy('breeder_id')
+	    		->get()
+	    		->unique('breeder_id');
 
 	    	$tampered = false;
 	    	if($threadId == '' && isset($threads[0])){
@@ -56,6 +53,14 @@ class MessageController extends Controller
 	    		->where('breeder_id',  $threadId)
 	    		->orderBy('created_at', 'ASC')
 	    		->get();
+
+
+			foreach($messages as $message){
+	    		if($message->read_at == NULL){
+	    			$message->read_at = date('Y-m-d H:i:s');
+	    			$message->save();
+	    		}
+	    	}
 
 
 	    	
@@ -80,8 +85,9 @@ class MessageController extends Controller
 
     		$threads = Message::where('breeder_id', '=', $userId)
 	    		->orderBy('created_at', 'DESC')
-	    		->groupBy('customer_id')
-	    		->get();
+	    		//->groupBy('customer_id')
+	    		->get()
+	    		->unique('customer_id');
 
 	    	$tampered = false;
 	    	if($threadId == '' && isset($threads[0])){
@@ -93,6 +99,13 @@ class MessageController extends Controller
 	    		->where('customer_id',  $threadId)
 	    		->orderBy('created_at', 'ASC')
 	    		->get();
+
+	    	foreach($messages as $message){
+	    		if($message->read_at == NULL){
+	    			$message->read_at = date('Y-m-d H:i:s');
+	    			$message->save();
+	    		}
+	    	}
 
 	    	
 	    	if(!$tampered && sizeof($messages) <= 0 && sizeof($threads) > 0){
@@ -111,6 +124,30 @@ class MessageController extends Controller
     		return 'Unsupported user type.';
     	}
 
+    }
+
+    public function countUnread(){
+    	$userId = Auth::user()->id;
+    	if(Auth::user()->userable_type == 'App\Models\Customer'){
+    		$count = Message::where('customer_id', '=', $userId)
+				->where('read_at', NULL) 
+				->where('direction', 1) //from breeder to customer
+	    		->orderBy('created_at', 'ASC')
+	    		->groupBy('breeder_id')
+	    		->get();
+    	}
+    	else{
+	    	$count = Message::where('breeder_id', '=', $userId)
+				->where('read_at', NULL) 
+				->where('direction', 0) //from customer to breeder
+	    		->orderBy('created_at', 'ASC')
+	    		->groupBy('customer_id')
+	    		->get();
+    		
+    	}
+
+
+    	return sizeof($count);
     }
 
 }

@@ -1,5 +1,5 @@
 {{--
-    Displays products of all Breeder users
+    Displays all Breeders
 --}}
 
 @extends('user.customer.home')
@@ -25,7 +25,6 @@
 
     <form id="map-params" action="breeders" method="post">
         <p>
-
           <input type="checkbox" class="filled-in cb-type" id="cb-gilt" name="gilt" {{ (isset($_POST['gilt']) || !isset($_POST['_token']))?'checked="checked"':''}}/>
           <label for="cb-gilt">Gilt</label>
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
@@ -37,14 +36,18 @@
           &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
           <input type="checkbox" class="filled-in cb-type" id="cb-semen" name="semen" {{ (isset($_POST['semen']) || !isset($_POST['_token']))?'checked="checked"':''}}/>
           <label for="cb-semen">Semen</label>
+
         </p>
         <input type="hidden" name="_token" value="{{ csrf_token() }}">
         <br/>
     </form>
-    <div id="map-container">
 
-    <div id="map-canvas"></div>
-  </div>
+    <div class="progress geocoding" style="display:none;">
+      <div class="indeterminate"></div>
+    </div>
+    <div id="map-container">
+        <div id="map-canvas"></div>
+    </div>
     
    
 
@@ -80,21 +83,7 @@
         (function(window, google, mapster){
 
             $('.cb-type').change(function(){
-                $('#map-params').submit();
-
-                /*    
-                console.log($(this).is(':checked'));
-
-                testajax("breeders",{
-                        _token: "{{{ csrf_token() }}}",
-                        gilt: $('#cb-gilt').is(':checked'),
-                        sow: $('#cb-sow').is(':checked'),
-                        boar: $('#cb-boar').is(':checked'),
-                        semen: $('#cb-semen').is(':checked'),
-                    });
-                return;
-                */
-                /*
+                
                 $.ajax({
                     type: "POST",
                     url: "breeders",
@@ -106,23 +95,23 @@
                         semen: $('#cb-semen').is(':checked'),
                     }, 
                     success: function(response){
-
                         map.clear();
-                        breeders = JSON.parse(response);
+                        var breeders = response;
+                        //var breeder_i = 0;
                         for(var i=0; i<breeders.length; i++){
-                            console.log(breeders[i]);
+                            //console.log(breeders[i]);
                             geocode({
                                 address : breeders[i].officeAddress_province+', Philippines',
-                                content : 'breeders.users().first().name'
+                                content : breeders[i].name
                             });
                         }
                     }
                 });
-                */
+                
 
             });
 
-
+            
             var options = mapster.MAP_OPTIONS;
 
             element = document.getElementById('map-canvas');
@@ -141,21 +130,30 @@
                             lat : result.geometry.location.lat(),
                             lng : result.geometry.location.lng(), 
                             draggable : true,
-                            content: opts.content
+                            content: opts.content,
+                            icon: '/images/pigmarker.png'
                         });
 
+                    }
+                    else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {    
+                        setTimeout(function() {
+                            geocode(opts);
+                        }, 200);
                     }else{
                         console.error(status);
                     }
                 });
             }
 
+           
             @foreach($breeders as $breeder)
                 geocode({
                     address : '{{ $breeder->officeAddress_province }}, Philippines',
                     content : '{{ $breeder->users()->first()->name }}'
                 });
             @endforeach
+
+           
 
 
         }(window, google, window.Mapster || (window.Mapster = {})))

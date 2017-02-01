@@ -10,6 +10,37 @@ $(document).ready(function(){
     });
 });
 
+var messages = new Vue({
+    el: '#message-main-container',
+    data:{
+        token: '',
+        unreadCount: 0
+    },
+    methods:{
+        getNotificationCount: function(){
+            // Get count of customer's notifications
+
+            // Do AJAX
+            this.$http.get(
+                '/breeder/messages/countUnread',
+                {}
+            ).then(
+                function(response){
+                    this.unreadCount = response.body;
+                },
+                function(response){
+                    console.log(response.statusText);
+                }
+            );
+        }
+    },
+    created: function(){
+        // Get notifications count
+        this.getNotificationCount();
+    }
+});
+
+
 var notifications = new Vue({
     el: '#notification-main-container',
     data:{
