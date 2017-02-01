@@ -23,7 +23,23 @@
 
 @section('navbarHead')
     <li><a href="{{ route('products.view') }}"> Products </a></li>
-    <li><a href="{{ route('messages') }}"> <i class="material-icons">message</i></a></li>
+    <li id="message-main-container">
+        <a href="{{ route('customer.messages') }}" id="message-icon"
+            data-alignment="right"
+        >
+            <i class="material-icons left">message</i>
+            <span class="badge"
+                v-if="unreadCount > 0  && unreadCount <= 99"
+            >
+                @{{ unreadCount }}
+            </span>
+            <span class="badge"
+                v-if="unreadCount > 99"
+            >
+                99+
+            </span>
+        </a>
+    </li>
     @if(!Auth::user()->update_profile)
         {{-- Swine Cart --}}
         <li><a id="cart-icon" class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="cart-dropdown">
@@ -794,7 +810,12 @@
 
     <template id="countdown-timer-template">
         <div class="grey-text">
-            Expires after @{{ daysLeft }}d @{{ hoursLeft }}h @{{ minutesLeft }}m @{{ secondsLeft }}s
+            <span v-if="!expired">
+                Expires after @{{ daysLeft }}d @{{ hoursLeft }}h @{{ minutesLeft }}m @{{ secondsLeft }}s
+            </span>
+            <span v-if="expired">
+                RESERVATION EXPIRED
+            </span>
         </div>
     </template>
 

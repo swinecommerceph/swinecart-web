@@ -163,24 +163,7 @@ class SwineCartController extends Controller
             $product->status = "requested";
             $product->save();
 
-            // Bind Swine Cart to Transaction Log
-            // $productDetails = [
-            //     "id" => $product->id,
-            //     "name" => $product->name,
-            //     "type" => $product->type,
-            //     "img_path" => '/images/product/'.Image::find($product->primary_img_id)->name,
-            //     "breed" => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
-            //     "breeder_name" => Breeder::find($product->breeder_id)->users()->first()->name,
-            //     "farm_from" => FarmAddress::find($product->farm_from_id)->province,
-            //     "birthdate" => $product->birthdate,
-            //     "adg" => $product->adg,
-            //     "fcr" => $product->fcr,
-            //     "bft" => $product->backfat_thickness,
-            //     "quantity" => $request->requestQuantity,
-            //     "other_details" => $product->other_details
-            // ];
-
-            // Update Transaction Log
+            // Add new Transaction Log
             // This must be put in an event for better performance
             $transactionLog = new TransactionLog;
             $transactionLog->customer_id = $requested->customer_id;
@@ -305,11 +288,11 @@ class SwineCartController extends Controller
                 $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
                 $itemDetail['expiration_date'] = (ProductReservation::find($item->reservation_id)->expiration_date) ?? '';
                 $itemDetail['status_transactions'] = [
-                    "requested" => ($item->transactionLogs->where('status', 'requested')->first()->created_at) ?? '',
-                    "reserved" => ($item->transactionLogs->where('status', 'reserved')->first()->created_at) ?? '',
-                    "on_delivery" => ($item->transactionLogs->where('status', 'on_delivery')->first()->created_at) ?? '',
-                    "paid" => ($item->transactionLogs->where('status', 'paid')->first()->created_at) ?? '',
-                    "sold" => ($item->transactionLogs->where('status', 'sold')->first()->created_at) ?? ''
+                    "requested" => ($item->transactionLogs()->where('status', 'requested')->latest()->first()->created_at) ?? '',
+                    "reserved" => ($item->transactionLogs()->where('status', 'reserved')->latest()->first()->created_at) ?? '',
+                    "on_delivery" => ($item->transactionLogs()->where('status', 'on_delivery')->first()->created_at) ?? '',
+                    "paid" => ($item->transactionLogs()->where('status', 'paid')->first()->created_at) ?? '',
+                    "sold" => ($item->transactionLogs()->where('status', 'sold')->first()->created_at) ?? ''
                 ];
 
                 array_push($products,(object) $itemDetail);
