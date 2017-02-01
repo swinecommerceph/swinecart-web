@@ -13,7 +13,8 @@ Vue.component('countdown-timer', {
             daysLeft: 0,
             hoursLeft: 0,
             minutesLeft: 0,
-            secondsLeft:0
+            secondsLeft:0,
+            expired: false
         }
     },
     methods:{
@@ -40,7 +41,10 @@ Vue.component('countdown-timer', {
             countdownVM.hoursLeft = timeDifference.hours;
             countdownVM.daysLeft = timeDifference.days;
 
-            if(timeDifference.total <= 0) clearInterval(timeInterval);
+            if(timeDifference.total <= 0) {
+                clearInterval(timeInterval);
+                countdownVM.expired = true;
+            }
 
         }, 1000);
     }

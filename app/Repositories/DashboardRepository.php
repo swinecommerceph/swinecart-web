@@ -18,6 +18,7 @@ use App\Models\TransactionLog;
 use App\Notifications\ProductReserved;
 use App\Notifications\ProductReservationUpdate;
 use App\Notifications\ProductReservedToOtherCustomer;
+use App\Notifications\ProductReservationExpired;
 
 class DashboardRepository
 {
@@ -75,7 +76,9 @@ class DashboardRepository
             $product = $reservation->product;
 
             // Check if the reservation has expired already
-            if($reservation->expiration_date && Carbon::now() > $reservation->expiration_date ){
+            $now = Carbon::now();
+            $expirationDate = Carbon::createFromFormat('Y-m-d H:i:s',$reservation->expiration_date);
+            if($reservation->expiration_date && $now->gt($expirationDate)){
                 // Update Swine Cart item
                 $swineCartItem = SwineCartItem::where('reservation_id', $reservation->id)->first();
                 $swineCartItem->reservation_id = 0;
@@ -90,20 +93,28 @@ class DashboardRepository
                 $product->quantity = ($product->type == 'semen') ? -1 : 0;
                 $product->save();
 
+                // Add new Transaction Log
+                // This must be put in an event for better performance
+                $transactionLog = new TransactionLog;
+                $transactionLog->customer_id = $swineCartItem->customer_id;
+                $transactionLog->breeder_id = $product->breeder_id;
+                $transactionLog->product_id = $product->id;
+                $transactionLog->status = "reservation_expired";
+                $transactionLog->created_at = Carbon::createFromFormat('Y-m-d H:i:s', $reservation->expiration_date)->addSecond();
+                $swineCartItem->transactionLogs()->save($transactionLog);
+
+                // Notify Customer of the product reservation expiration
+                $customerUser = $swineCartItem->customer->users()->first();
+                $customerUser->notify(new ProductReservationExpired(
+                    [
+                        'description' => 'Your product reservation on <b>' . $product->name . '</b> has <b>expired</b>',
+                        'time' => $transactionLog->created_at,
+                        'url' => route('cart.items')
+                    ]
+                ));
+
                 // Delete reservation
                 $reservation->delete();
-
-                // Update Transaction Log
-                $transactionLog = $reservation->transactionLog->first();
-                if($transactionLog->expiration_dates == 'null'){
-
-                }
-                else{
-
-                }
-
-                // Notify Customer
-
 
                 continue;
             }
@@ -470,8 +481,11 @@ class DashboardRepository
                     $breederUser = $product->breeder->users()->first();
 
                     // Update quantity of product
-                    if($product->type != 'semen') $product->quantity = 0;
-                    $product->save();
+                    if($product->type != 'semen'){
+                        $product->status = 'hidden';
+                        $product->quantity = 0;
+                        $product->save();
+                    }
 
                     // Make a product reservation
                     $reservation = new ProductReservation;
