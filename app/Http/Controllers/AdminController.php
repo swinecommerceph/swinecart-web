@@ -716,4 +716,20 @@ class AdminController extends Controller
         $customers = Customer::all();
         return view('user.admin.viewUsers', compact('breeders', 'customers'));
     }
+
+
+    public function messenger(){
+        $users = User::all();
+        return view('user.admin.messenger', compact('users'));
+    }
+
+    public function sendMessage(Request $request){
+        if($request->ajax()){
+            $data = ['message_body' => $_POST['message']];
+
+            Mail::send('emails.email', $data, function ($message) use($data){
+                $message->to($_POST['email'])->subject('Announcement from Swine E-Commerce PH');
+            });
+        }
+    }
 }

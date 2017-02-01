@@ -59,26 +59,7 @@
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjcVoiwU44Pj1fdY8JyxjORa8RElQQlGY"></script>
     <script src="/js/Mapster.js"></script>
     <script src="/js/map-options.js"></script>
-    <script type="text/javascript">
-        function testajax(url, params) {
-    var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
-        action: url
-    }).appendTo(document.body);
-
-    for (var i in params) {
-        if (params.hasOwnProperty(i)) {
-            $('<input type="hidden" />').attr({
-                name: i,
-                value: params[i]
-            }).appendTo(f);
-        }
-    }
-
-    f.submit();
-
-    f.remove();
-}
-    </script>
+   
     <script>
         (function(window, google, mapster){
 

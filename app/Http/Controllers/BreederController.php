@@ -14,8 +14,10 @@ use App\Models\Breeder;
 use App\Models\Customer;
 use App\Models\FarmAddress;
 use App\Models\Product;
+use App\Models\User;
 
 use Auth;
+use Mail;
 
 class BreederController extends Controller
 {
@@ -280,6 +282,13 @@ class BreederController extends Controller
         $customers = $breeder->transactionLogs()->first()->customer()->get();
 
         return view('user.breeder.viewCustomers', compact('customers'));
+    }
+
+    public function test(Request $request)
+    {
+       Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>1], function ($message){
+          $message->to('cjdemafeliz@gmail.com')->subject('Swine E-Commerce PH: Account Notification');
+       });
     }
 
 }
