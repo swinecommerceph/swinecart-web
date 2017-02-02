@@ -8,7 +8,6 @@ var products = {
             cache: false,
             data: {},
             success: function(data){
-
                 if(data.length == 0){
                     Materialize.toast('Products load failed!', 4000);
                 }else{
@@ -25,7 +24,7 @@ var products = {
             cache: false,
             data: {},
             success: function(data){
-                // display of items here
+                Materialize.toast('Search complete!', 4000);
             }
         });
     },
@@ -37,9 +36,7 @@ var products = {
             cache: false,
             data: {},
             success: function(data){
-                data.foreach(function(data){
-                    console.log(data.name);
-                });
+                Materialize.toast('Search complete!', 4000);
             }
         });
     }

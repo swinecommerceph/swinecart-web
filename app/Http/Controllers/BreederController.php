@@ -15,6 +15,7 @@ use App\Models\FarmAddress;
 use App\Models\Product;
 
 use Auth;
+use DB;
 
 class BreederController extends Controller
 {
@@ -43,7 +44,8 @@ class BreederController extends Controller
     public function index(Request $request)
     {
         if($request->user()->updateProfileNeeded()) return view('user.breeder.createProfile');
-        return view('user.breeder.home');
+        $homeContent = DB::table('home_images')->get();
+        return view('user.breeder.home',compact('homeContent'));
     }
 
     /**

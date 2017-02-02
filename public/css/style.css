@@ -380,7 +380,7 @@ blockquote{
 
 #message-panel{
 	overflow: auto;
-  height: 400px;
+  	height: 400px;
 }
 
 #modal1{
@@ -591,6 +591,7 @@ blockquote{
 	word-break:break-all;
 }
 
+/* Spectator CSS */
 #menu{
 	width: 300px;
 }
@@ -598,4 +599,31 @@ blockquote{
 .product_image{
 	width: 300px;
 	height: 300px;
+}
+
+#users-card{
+	background-color: #062F4F;
+}
+
+#products-card{
+	background-color: #813772;
+}
+
+#statistics-card{
+	background-color: #882601;
+}
+
+.spectator-ecommerce-icon{
+	font-family: ecommerce;
+	font-size: 8em;
+	font-style: normal;
+	text-align: left;
+	vertical-align: middle;
+	color: #d1d1d1 ;
+}
+
+.spectator-card-label{
+	font-size: 2em;
+
+	color: #d1d1d1 ;
 }

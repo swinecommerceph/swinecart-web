@@ -18,6 +18,7 @@ use App\Models\Image;
 use App\Models\Breed;
 use App\Models\TransactionLog;
 use Auth;
+use DB;
 
 class CustomerController extends Controller
 {
@@ -46,7 +47,8 @@ class CustomerController extends Controller
     public function index(Request $request)
     {
         if($request->user()->updateProfileNeeded()) return view('user.customer.createProfile');
-        return view('user.customer.home');
+        $homeContent = DB::table('home_images')->get();
+        return view('user.customer.home',compact('homeContent'));
     }
 
     /**
