@@ -21,7 +21,7 @@ $(document).ready(function(){
 		e.preventDefault();
 
 		var img_src = $(this).find('img').attr('src');
-
+		
 		$('#video-display').hide();
 		$('.card-image img').attr('src', img_src);
 		$('.card-image img').show();

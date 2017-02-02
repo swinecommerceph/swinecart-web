@@ -21,7 +21,7 @@
     <li id="message-main-container">
         <a href="{{ route('customer.messages') }}" id="message-icon"
             data-alignment="right"
-        > 
+        >
             <i class="material-icons left">message</i>
             <span class="badge"
                 v-if="unreadCount > 0  && unreadCount <= 99"
@@ -197,7 +197,7 @@
             <form>
                 <div class="input-field">
                     <input id="search" type="search" placeholder="Search for a product" required>
-                    <label for="search"><i class="material-icons teal-text">search</i></label>
+                    <label class="label-icon" for="search"><i class="material-icons teal-text">search</i></label>
                     <i class="material-icons">close</i>
                 </div>
             </form>

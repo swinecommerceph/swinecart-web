@@ -22,7 +22,7 @@
                     <form>
                         <div class="input-field">
                             <input id="search" type="search" placeholder="Search for a product" required>
-                            <label for="search"><i class="material-icons teal-text text-darken-3">search</i></label>
+                            <label class="label-icon" for="search"><i class="material-icons teal-text text-darken-3">search</i></label>
                             <i class="material-icons">close</i>
                         </div>
                     </form>

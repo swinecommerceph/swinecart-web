@@ -288,9 +288,10 @@ Vue.component('order-details',{
             vm.productInfoModal.avgProductQuality = this.products[index].avg_productQuality;
             vm.productInfoModal.otherDetails = this.products[index].other_details.split(',');
 
-            $('#info-modal').openModal({
+            $('#info-modal').modal({
                 opacity: 0
             });
+            $('#info-modal').modal('open');
         },
 
         viewRequestDetails: function(index){
@@ -299,22 +300,20 @@ Vue.component('order-details',{
             this.requestDetails.dateNeeded = this.products[index].date_needed;
             this.requestDetails.specialRequest = this.products[index].special_request;
 
-            $('#product-request-details-modal').openModal({
-                opacity: 0
-            });
+            $('#product-request-details-modal').modal('open');
         },
 
         confirmRemoval: function(index){
             this.productRemove.index = index;
             this.productRemove.name = this.products[index].product_name;
             this.productRemove.id = this.products[index].product_id;
-            $('#remove-product-confirmation-modal').openModal();
+            $('#remove-product-confirmation-modal').modal('open');
         },
 
         removeProduct: function(){
             var index = this.productRemove.index;
 
-            $('#remove-product-confirmation-modal').closeModal();
+            $('#remove-product-confirmation-modal').modal('close');
 
             // Do AJAX
             this.$http.delete(
@@ -368,13 +367,13 @@ Vue.component('order-details',{
             this.productRequest.type = this.products[index].product_type;
             this.productRequest.dateNeeded = '';
             this.productRequest.specialRequest = this.products[index].special_request;
-            $('#request-product-confirmation-modal').openModal();
+            $('#request-product-confirmation-modal').modal('open');
         },
 
         requestProduct: function(){
             var index = this.productRequest.index;
 
-            $('#request-product-confirmation-modal').closeModal();
+            $('#request-product-confirmation-modal').modal('close');
 
             // Do AJAX
             this.$http.patch(
@@ -435,7 +434,7 @@ Vue.component('order-details',{
         },
 
         showRateModal: function(index){
-            $('#rate-modal').openModal();
+            $('#rate-modal').modal('open');
 
             this.breederRate.index = index;
             this.breederRate.breederName = this.products[index].breeder;
@@ -444,7 +443,7 @@ Vue.component('order-details',{
         rateAndRecord: function(){
             var index = this.breederRate.index;
 
-            $('#rate-modal').closeModal();
+            $('#rate-modal').modal('close');
 
             // Do AJAX
             this.$http.post(
@@ -546,9 +545,10 @@ Vue.component('transaction-history',{
             vm.productInfoModal.avgProductQuality = this.history[index].product_detailsavg_productQuality;
             vm.productInfoModal.otherDetails = this.history[index].product_details.other_details.split(',');
 
-            $('#info-modal').openModal({
+            $('#info-modal').modal({
                 opacity: 0
             });
+            $('#info-modal').modal('open');
         }
 
     }

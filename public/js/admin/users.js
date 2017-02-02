@@ -330,7 +330,7 @@ var users = {
       },
       // if block is successful change the status of the user interface to match database status
       success: function(data){
-         $('#block-modal').closeModal();
+         $('#block-modal').modal('close');
           // modify status markers/indicators and user interface to assign changed values
           if($('tr').find('[data-clicked="clicked"]').parents('td').siblings('.status-column').text()==1){
              $('tr').find('[data-clicked="clicked"]').parents('td').siblings('.status-column').text(0);

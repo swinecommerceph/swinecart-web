@@ -92,23 +92,25 @@ $(document).ready(function(){
 
     // Add a product
     $('.add-product-button').click(function(){
-        $('#add-product-modal').openModal({
+        $('#add-product-modal').modal({
             ready: function(){
                 // Programmatically select th 'swine-information' tab
                 $('#add-product-modal ul.tabs').tabs('select_tab', 'swine-information');
             }
         });
+        $('#add-product-modal').modal('open');
         product.modal_history.push('#add-product-modal');
     });
 
     // Edit chosen product
     $('.edit-product-button').click(function(){
-        $('#edit-product-modal').openModal({
+        $('#edit-product-modal').modal({
             ready: function(){
                 // Programmatically select the 'edit-swine-information' tab
                 $('#edit-product-modal ul.tabs').tabs('select_tab', 'edit-swine-information');
             }
         });
+        $('#edit-product-modal').modal('open');
         product.get_product($(this).attr('data-product-id'));
     });
 
@@ -127,7 +129,7 @@ $(document).ready(function(){
     $('.back-button').click(function(e){
         e.preventDefault();
 
-        $(product.modal_history.pop()).closeModal();
+        $(product.modal_history.pop()).modal('close');
 
         // If going back to add-product-modal it must be directed to edit-product-modal
         if(product.modal_history_tos() === '#add-product-modal') {
@@ -143,7 +145,7 @@ $(document).ready(function(){
                 $('.from-edit-process').show();
             }
         }
-        else $(product.modal_history_tos()).openModal();
+        else $(product.modal_history_tos()).modal('open');
     });
 
     /* ----------- Add Product Modal functionalities ----------- */
@@ -270,21 +272,23 @@ $(document).ready(function(){
     // Open Edit Media Modal
     $('#edit-media-button').click(function(e){
         e.preventDefault();
-        $('#edit-product-modal').closeModal();
-        $('#edit-media-modal').openModal({dismissible: false});
+        $('#edit-product-modal').modal('close');
+        $('#edit-media-modal').modal({dismissible: false});
+        $('#edit-media-modal').modal('open');
         product.modal_history.push('#edit-media-modal')
     });
 
     // Open Add Media Modal
     $('#add-media-button').click(function(e){
         e.preventDefault();
-        $('#edit-product-modal').closeModal();
-        $('#add-media-modal').openModal({
+        $('#edit-product-modal').modal('close');
+        $('#add-media-modal').modal({
             dismissible: false,
             ready: function(){
                 product.modal_history.push('#add-media-modal');
             }
         });
+        $('#add-media-modal').modal('open');
     });
 
     /* ----------- Edit Media Modal ----------- */
