@@ -1,20 +1,10 @@
 	$(document).ready(function(){
 
     // Hide certain elements
-
-	// User
-	// $(".dropdown-button").dropdown({
-    //     hover:true,
-    //     constrainwidth:false,
-    //     gutter: 0,
-    //     belowOrigin: true,
-    //     alignment: 'right'
-    // });
-
-	$('.modal-trigger').leanModal();
+	$('.modal-trigger, .modal').modal();
 
     // Initialization for Sliders
-    $('.home-slider').slider({full_width: true});
+    $('.home-slider').slider({fullWidth: true});
 
     // Initialization for Carousels
     $('.carousel').carousel();

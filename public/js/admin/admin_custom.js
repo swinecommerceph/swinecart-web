@@ -4,11 +4,11 @@ $(document).ready(function(){
 
 
     // Modal trigger for admin
-    $('.modal-trigger').leanModal({
+    $('.modal-trigger').modal({
         dismissible: true, // Modal can be dismissed by clicking outside of the modal
         opacity: .5, // Opacity of modal background
-        in_duration: 300, // Transition in duration
-        out_duration: 200, // Transition out duration
+        inDuration: 300, // Transition in duration
+        outDuration: 200, // Transition out duration
     });
 
     $('body').on('mouseenter', ".collection-item", function() {
@@ -30,20 +30,19 @@ $(document).ready(function(){
     });
 
     $('.carousel.carousel-slider').carousel({
-        full_width: true
+        fullWidth: true
     });
 
     setInterval(function(){
-     		$('.carousel').carousel('next');
-      }, carousel_interval);
+        $('.carousel').carousel('next');
+    }, carousel_interval);
 
 
-     $('#menu').pushpin({
-         top:55, offset: 60
-     });
+    $('#menu').pushpin({
+        top:55, offset: 60
+    });
 
-
-  $('select').material_select();
+    $('select').material_select();
 
 
 });

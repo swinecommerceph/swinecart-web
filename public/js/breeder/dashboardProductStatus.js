@@ -187,7 +187,7 @@ Vue.component('status-table',{
 
                     // Store fetched data in local component data
                     this.productRequest.customers = response.body;
-                    $('#product-requests-modal').openModal();
+                    $('#product-requests-modal').modal('open');
 
                     this.$nextTick(function(){
                         // Initialize tooltips
@@ -212,7 +212,7 @@ Vue.component('status-table',{
             this.productReserve.requestQuantity = requestDetails.requestQuantity;
             this.productReserve.dateNeeded = requestDetails.dateNeeded;
             this.productReserve.specialRequest = requestDetails.specialRequest;
-            $('#reserve-product-confirmation-modal').openModal();
+            $('#reserve-product-confirmation-modal').modal('open');
         },
 
         reserveToCustomer: function(){
@@ -235,8 +235,8 @@ Vue.component('status-table',{
                     var responseBody = response.body;
                     var index = this.productRequest.productIndex;
 
-                    $('#reserve-product-confirmation-modal').closeModal();
-                    $('#product-requests-modal').closeModal();
+                    $('#reserve-product-confirmation-modal').modal('close');
+                    $('#product-requests-modal').modal('close');
 
                     // Update product data (root data) based on the response
                     // of the AJAX PATCH method
@@ -301,9 +301,9 @@ Vue.component('status-table',{
             this.productInfoModal.customerName = this.products[index].customer_name;
             this.productInfoModal.productIndex = index;
 
-            if(status === 'delivery') $('#product-delivery-confirmation-modal').openModal();
-            else if(status === 'paid') $('#paid-product-confirmation-modal').openModal();
-            else $('#sold-product-confirmation-modal').openModal();
+            if(status === 'delivery') $('#product-delivery-confirmation-modal').modal('open');
+            else if(status === 'paid') $('#paid-product-confirmation-modal').modal('open');
+            else $('#sold-product-confirmation-modal').modal('open');
         },
 
         productOnDelivery: function(){
@@ -323,7 +323,7 @@ Vue.component('status-table',{
                         customerName = this.productInfoModal.customerName,
                         productName = this.productInfoModal.productName;
 
-                    $('#product-delivery-confirmation-modal').closeModal();
+                    $('#product-delivery-confirmation-modal').modal('close');
 
                     // Set status of the product (root data) to 'on_delivery'
                     // after successful product status change
@@ -364,7 +364,7 @@ Vue.component('status-table',{
                         customerName = this.productInfoModal.customerName,
                         productName = this.productInfoModal.productName;
 
-                    $('#paid-product-confirmation-modal').closeModal();
+                    $('#paid-product-confirmation-modal').modal('close');
 
                     // Set status of the product (root data) to 'paid' after
                     // successful product status change
@@ -405,7 +405,7 @@ Vue.component('status-table',{
                         customerName = this.productInfoModal.customerName,
                         productName = this.productInfoModal.productName;
 
-                    $('#sold-product-confirmation-modal').closeModal();
+                    $('#sold-product-confirmation-modal').modal('close');
 
                     // Set status of the product (root data) to 'sold' after
                     // successful product status change
@@ -439,7 +439,7 @@ Vue.component('status-table',{
             this.reservationDetails.dateNeeded = this.products[index].date_needed;
             this.reservationDetails.specialRequest = this.products[index].special_request;
 
-            $('#product-reservation-details-modal').openModal();
+            $('#product-reservation-details-modal').modal('open');
         }
 
     },

@@ -109,11 +109,11 @@ var product = {
                 $('#add-media-modal h4').append(' to '+data.name);
                 $('.add-product-button').attr('href','#add-media-modal');
                 $('#overlay-preloader-circular').remove();
-                $('#add-product-modal').closeModal();
+                $('#add-product-modal').modal('close');
                 parent_form.find('#submit-button').removeClass('disabled');
 
                 // Open Add Media Modal
-                $('#add-media-modal').openModal({
+                $('#add-media-modal').modal({
                     dismissible: false,
                     ready: function(){
                         // Resize media-dropzone's height
@@ -128,6 +128,7 @@ var product = {
                         });
                     }
                 });
+                $('#add-media-modal').modal('open');
                 product.modal_history.push('#add-media-modal');
             },
             error: function(message){
@@ -185,7 +186,7 @@ var product = {
                 data: data_values,
                 success: function(data){
                     Materialize.toast('Product updated!', 1500, 'green lighten-1');
-                    $('#edit-product-modal').closeModal();
+                    $('#edit-product-modal').modal('close');
                 },
                 error: function(message){
                     console.log(message['responseText']);
@@ -201,7 +202,7 @@ var product = {
         // Check if there are checked products
         if(products.length > 0){
             // Acknowledge first confirmation to remove
-            $('#confirmation-modal').openModal();
+            $('#confirmation-modal').modal('open');
             $('#confirm-remove').click(function(e){
                 e.preventDefault();
 
@@ -335,7 +336,7 @@ var product = {
                     $(details).prependTo(parent_form.find(".other-details-container")).fadeIn(300);
 
                     // Open Edit Product Modal after product information has been fetched
-                    $('#edit-product-modal').openModal({
+                    $('#edit-product-modal').modal({
                         ready: function(){
                             var whole_tab_width = $('#edit-product-modal .tabs').width();
                             var swine_tab_width = $('#edit-product-modal .tab').first().width();
@@ -343,6 +344,7 @@ var product = {
                             $('.indicator').css({"right": whole_tab_width - swine_tab_width, "left": "0px"});
                         }
                     });
+                    $('#edit-product-modal').modal('open');
 
                     // Set-up value of current_modal_id
                     product.modal_history.push('#edit-product-modal');
@@ -400,7 +402,7 @@ var product = {
     },
 
     get_summary: function(product_id){
-        $(product.modal_history_tos()).closeModal();
+        $(product.modal_history_tos()).modal('close');
 
         // Set-up first modal action buttons depending
         // on what modal it came from
@@ -413,7 +415,8 @@ var product = {
             $('.from-edit-process').show();
         }
 
-        $('#product-summary-modal').openModal({ dismissible: false });
+        $('#product-summary-modal').modal({ dismissible: false });
+        $('#product-summary-modal').modal('open');
         product.modal_history.push('#product-summary-modal');
 
         // Attach overlay preloader
