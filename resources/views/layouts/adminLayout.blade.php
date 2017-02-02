@@ -14,7 +14,7 @@
     <link href="/css/icon.css" rel="stylesheet" type="text/css">
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
-
+    <script type="text/javascript" src="/js/vendor/chart.bundle.min.js"></script>
 
     <script src="/js/vendor/VideoJS/ie8/videojs-ie8.min.js"></script>
 

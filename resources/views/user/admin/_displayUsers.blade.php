@@ -71,7 +71,7 @@
                     <td></td>
                 @else
                     <td>
-                        @if ($user->is_blocked != 1)
+                        @if ($user->blocked_at == NULL)
                             <div class="col s6">
                                 <a class="waves-effect waves-light btn orange lighten-1 block-button" data-id ="{{$user->user_id}}" ><i class="material-icons left">block</i>Block</a>
                             </div>

@@ -136,6 +136,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/logs', ['as'=>'admin_logs', 'uses'=>'AdminController@getAdministratorLogs']);
         Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
 
+        Route::get('home/statistics', ['as' => 'admin.statistics', 'uses'=> 'AdminController@showStatistics']);
 
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
         Route::get('home/approved/breeder', ['as'=>'admin.approved.breeder', 'uses'=>'AdminController@displayApprovedBreeders']);

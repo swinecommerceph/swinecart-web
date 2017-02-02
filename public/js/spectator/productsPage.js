@@ -189,7 +189,7 @@ var vm = new Vue({
     data: {},
     methods: {
         advancedSearchMethod: function(e){
-            
+
         }
     }
 })

@@ -29,6 +29,7 @@ use Auth;
 use Input;
 use Storage;
 use File;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -88,7 +89,7 @@ class AdminController extends Controller
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',2)
                         ->where('users.email_verified','=', 1)
-                        ->where('users.is_blocked','=', 0)
+                        ->where('users.blocked_at','=', NULL)
                         ->where('users.deleted_at','=', NULL)
                         ->count();
         return $count;
@@ -106,7 +107,7 @@ class AdminController extends Controller
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',3)
                         ->where('users.email_verified','=', 1)
-                        ->where('users.is_blocked','=', 0)
+                        ->where('users.blocked_at','=', NULL)
                         ->where('users.deleted_at','=', NULL)
                         ->count();
         return $count;
@@ -123,7 +124,7 @@ class AdminController extends Controller
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',2)
-                        ->where('users.approved','=', 0)
+                        ->where('users.approved_at','=', NULL)
                         ->where('users.deleted_at','=', NULL)
                         ->count();
         return $count;
@@ -141,7 +142,7 @@ class AdminController extends Controller
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','!=',1)
                         ->where('users.email_verified','=', 1)
-                        ->where('users.is_blocked','=', 1)
+                        ->whereNotNull('users.blocked_at')
                         ->where('users.deleted_at','=', NULL)
                         ->count();
         return $count;
@@ -173,7 +174,7 @@ class AdminController extends Controller
      */
     public function displayAllUsers(){
         $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('approved','=',1)
+                ->whereNotNull('approved_at')
                 ->whereNull('deleted_at')
                 ->paginate(10);
 
@@ -227,7 +228,7 @@ class AdminController extends Controller
     public function displayPendingUsers(){
         $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
                     ->where('role_id','=',2)
-                    ->where('approved','=',0)
+                    ->where('approved_at','=',NULL)
                     ->whereNull('deleted_at')
                     ->paginate(10);
         return view('user.admin._pendingUsers',compact('users'));
@@ -254,7 +255,7 @@ class AdminController extends Controller
         ]);
 
         // send an email notification to the user's email
-        Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved], function ($message) use($user){
+        Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved_at], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
         });
 
@@ -275,7 +276,7 @@ class AdminController extends Controller
                       ->where('role_user.role_id','!=',1)
                       ->where('users.email_verified','=', 1)
                       ->where('users.deleted_at','=', NULL )
-                      ->where('users.is_blocked','=', 1 )
+                      ->whereNotNull('users.blocked_at')
                       ->paginate(10);
         // foreach ($blockedUsers as $blockedUser) {
         //     $blockedUser->title = ucfirst($blockedUser->title);     // fix the format for the role in each of the users queried
@@ -348,7 +349,7 @@ class AdminController extends Controller
                           ->where('users.name','LIKE', "%$request->search%")
                           ->where('users.email_verified','=', 1)
                           ->where('users.deleted_at','=', NULL )
-                          ->where('users.is_blocked','=', 1 )
+                          ->whereNotNull('users.blocked_at')
                           ->paginate(10);
         }else{
             $values = [$request->breeder, $request->customer];
@@ -364,7 +365,7 @@ class AdminController extends Controller
                           ->where('users.name','LIKE', "%$request->search%")
                           ->where('users.email_verified','=', 1)
                           ->where('users.deleted_at','=', NULL )
-                          ->where('users.is_blocked','=', 1 )
+                          ->whereNotNull('users.blocked_at')
                           ->whereIn('role_user.role_id', $search)
                           ->paginate(10);
         }
@@ -385,10 +386,10 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         $user = User::find($request->id);       // find the user using the user id
-        $user->is_blocked = !$user->is_blocked;     // change the status for is_blocked column
+        $user->blocked_at = Carbon::now();     // change the status for is_blocked column
         $user->save();                              // save the change to the database
         // create a log entry for the action done
-        if($user->is_blocked){
+        if($user->blocked_at!=NULL){
             AdministratorLog::create([
                 'admin_id' => $adminID,
                 'admin_name' => $adminName,
@@ -406,10 +407,10 @@ class AdminController extends Controller
             ]);
         }
         // send an email notification to the email of the user
-        Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->is_blocked], function ($message) use($user){
+        Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->blocked_at], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
         });
-        if($user->is_blocked == 1){
+        if($user->blocked_at != NULL){
             return Redirect::back()->with('message','User Blocked');
         }else{
             return Redirect::back()->with('message','User Unblocked');
@@ -509,7 +510,7 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         $user = User::find($request->id);
-        $user->approved = !$user->approved;     // negate the status to approve user
+        $user->approved_at = Carbon::now();     // negate the status to approve user
         // create a log entry for the action done
         AdministratorLog::create([
             'admin_id' => $adminID,
@@ -539,7 +540,7 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         $user = User::find($request->id);
-        $user->approved = !$user->approved;     // negate the status to approve user
+        $user->approved = NULL;     // negate the status to approve user
         // create a log entry for the action done
         AdministratorLog::create([
             'admin_id' => $adminID,
@@ -703,6 +704,61 @@ class AdminController extends Controller
 
      public function goToPending(){
          return redirect()->route('home/pending/users');
+     }
+
+     public function showStatistics(){
+         $month = [
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('1'))
+                             ->count(),
+             DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('2'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('3'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('4'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('5'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('6'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('7'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('8'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('9'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('10'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('11'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('12'))
+                             ->count(),
+         ];
+
+        return view('user.admin.statistics', compact('month'));
      }
 
     // public function manageTextContent(){

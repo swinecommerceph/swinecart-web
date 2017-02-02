@@ -82,7 +82,7 @@
              </div>
            </div>
         </a>
-        <a href="#!">
+        <a href="#">
            <div class="col s6" >
              <div id="inquiries-card" class="card-panel card-summary hoverable">
                 <div class="center white-text row">
@@ -103,7 +103,7 @@
            </div>
         </a>
 
-        <a href="#!">
+        <a href="{{route('admin.statistics')}}" id="site-statistics-summary">
            <div class="col s12" >
              <div id="statistics-card" class="card-panel card-summary hoverable">
                 <div class="center white-text row">

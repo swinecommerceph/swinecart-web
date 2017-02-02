@@ -13,6 +13,7 @@
 @endsection
 
 @section('content')
+    
     <div class="card-panel">
         <div class="row">
             <div class="col s12">
@@ -22,25 +23,23 @@
         <div class="divider"></div>
         <div class="row">
             <div class="col s12">
-                <div style="width:75%;">
-                    <canvas id="lineChartTest">
-                        {!! $charts[0]->render() !!}
-                    </canvas>
+                <div class="row">
+                    <div class="col s12">
+                        <h5>Label 1</h5>
+                        <canvas id="statsChart" width="400" height="250"></canvas>
+                    </div>
+                    <div class="col s12">
+
+                    </div>
                 </div>
-                <div style="width:75%;">
-                    <canvas id="barChartTest">
-                        {!! $charts[1]->render() !!}
-                    </canvas>
-                </div>
+
             </div>
         </div>
     </div>
 @endsection
 
 @section('initScript')
-    <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
-    <script type="text/javascript" src="/js/admin/users.js"></script>
-    <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
-    <script type="text/javascript" src="/js/admin/pages.js"></script>
-    <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
+    <script type="text/javascript" src="/js/spectator/spectator_custom.js"></script>
+    <script type="text/javascript" src="/js/spectator/statistics_script.js"></script>
+    <script type="text/javascript" src="/js/spectator/statistics.js"></script>
 @endsection

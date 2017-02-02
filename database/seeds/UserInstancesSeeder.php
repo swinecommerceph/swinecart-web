@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class UserInstancesSeeder extends Seeder
 {
@@ -37,7 +38,7 @@ class UserInstancesSeeder extends Seeder
         	$user->assignRole('customer');
             $user->update_profile = 0;
             $user->email_verified = 1;
-            $user->approved = 1;
+            $user->approved_at = Carbon::now();;
 
             // Create Customer Profile
             $customer = factory(App\Models\Customer::class)->create();
@@ -53,7 +54,7 @@ class UserInstancesSeeder extends Seeder
             $user->assignRole('breeder');
             $user->update_profile = 0;
             $user->email_verified = 1;
-            $user->approved = 1;
+            $user->approved_at = Carbon::now();;
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address
