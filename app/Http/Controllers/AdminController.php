@@ -706,13 +706,20 @@ class AdminController extends Controller
          return redirect()->route('home/pending/users');
      }
 
-     public function showStatistics(){
+     /**
+      * Edit show the deleted users statistics per month
+      *
+      * @param none
+      * @return array of counts
+      * @todo optimize the method of getting the count of deleted users per month
+      */
+     public function showStatisticsDeleted(){
          $month = [
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('deleted_at', '=', date('1'))
                              ->count(),
-             DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
+             DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('deleted_at', '=', date('2'))
                              ->count(),
@@ -760,6 +767,60 @@ class AdminController extends Controller
 
         return view('user.admin.statistics', compact('month'));
      }
+
+      public function showStatisticsBlocked(){
+          $month = [
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('1'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('2'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('3'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('4'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('5'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('6'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('7'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('8'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('9'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('10'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('11'))
+                              ->count(),
+              DB::table('users')
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('12'))
+                              ->count(),
+          ];
+          return($month);
+      }
 
     // public function manageTextContent(){
     //     return view('user.admin._manageTextContent');

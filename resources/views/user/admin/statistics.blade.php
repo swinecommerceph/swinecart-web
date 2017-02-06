@@ -5,7 +5,7 @@
 @endsection
 
 @section('pageId')
-    id="home-all"
+    id="stats-page"
 @endsection
 
 @section('header')
@@ -32,7 +32,17 @@
         var nov = {!! $month[10] !!};
         var dec = {!! $month[11] !!};
     </script>
-    <canvas id="chartArea" width="400" height="250"></canvas>
+    <div id="app-statistics">
+    <ul id="tabs-swipe-demo" class="tabs">
+        <li class="tab col s3"><a class="active" href="#deleted-chart">Deleted</a></li>
+        <li class="tab col s3"><a class="tab-header" href="#blocked-chart" v-on:click.prevent="get_blocked_data()">Blocked</a></li>
+        <li class="tab col s3"><a href="#transaction-chart">Transactions</a></li>
+    </ul>
+    <div id="deleted-chart" class="col s12"><canvas id="deleted_chart_area" width="400" height="250"></canvas></div>
+    <div id="blocked-chart" class="col s12"><blocked-chart-area></blocked-chart-area></div>
+    <div id="transaction-chart" class="col s12 green">Test 3</div>
+    </div>
+
 
 @endsection
 

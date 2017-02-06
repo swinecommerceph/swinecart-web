@@ -1,7 +1,22 @@
 // For statistics view functions
 "use strict"
-var chartArea = document.getElementById("chartArea");
-var deletedLineChart = new Chart(chartArea, {
+
+Vue.component('blocked-chart-area', {
+    template: '<canvas id="blocked_chart_area" width="400" height="250"></canvas>'
+});
+
+var vm = new Vue({
+    el: '#app-statistics',
+    data: {},
+    methods: {
+        get_blocked_data: function(){
+            statistics.get_blocked_data();
+        }
+    }
+});
+
+var deletedChartArea = document.getElementById("deleted_chart_area");
+var deletedLineChart = new Chart(deletedChartArea, {
     type: 'line',
     data: {
         labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
