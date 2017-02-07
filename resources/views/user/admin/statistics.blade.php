@@ -33,18 +33,40 @@
         var dec = {!! $month[11] !!};
     </script>
     <div id="app-statistics">
-    <ul id="tabs-swipe-demo" class="tabs">
-        <li class="tab col s3"><a class="active" href="#created-chart">Users Created</a></li>
-        <li class="tab col s3"><a class="tab-header" href="#deleted-chart" v-on:click.prevent="get_deleted_data()">Deleted</a></li>
-        <li class="tab col s3"><a class="tab-header" href="#blocked-chart" v-on:click.prevent="get_blocked_data()">Blocked</a></li>
-        <li class="tab col s3"><a class="tab-header" href="#accepted-chart" v-on:click.prevent="get_accepted_data()">Accepted</a></li>
-        <li class="tab col s3"><a href="#transaction-chart">Transactions</a></li>
-    </ul>
-    <div id="created-chart" class="col s12"><canvas id="created_chart_area" width="400" height="250"></canvas></div>
-    <div id="deleted-chart" class="col s12"><deleted-chart-area></deleted-chart-area></canvas></div>
-    <div id="blocked-chart" class="col s12"><blocked-chart-area></blocked-chart-area></div>
-    <div id="accepted-chart" class="col s12"><accepted-chart-area></accepted-chart-area></div>
-    <div id="transaction-chart" class="col s12">Space for transaction count per category</div>
+        <ul id="tabs-swipe-demo" class="tabs">
+            <li class="tab col s3"><a class="active" href="#created-chart">Users Created</a></li>
+            <li class="tab col s3"><a class="tab-header" href="#deleted-chart" v-on:click.prevent="get_deleted_data()">Deleted</a></li>
+            <li class="tab col s3"><a class="tab-header" href="#blocked-chart" v-on:click.prevent="get_blocked_data()">Blocked</a></li>
+            <li class="tab col s3"><a class="tab-header" href="#accepted-chart" v-on:click.prevent="get_accepted_data()">Accepted</a></li>
+            <li class="tab col s3"><a href="#transaction-chart">Transactions</a></li>
+        </ul>
+        <div id="created-chart" class="col s12">
+
+            {{-- @TODO
+                        1) Select for filter on what chart to display, Deleted, Blocked, Accepted
+                        2) Select filter for the selected chart to display data charts per day, per month or per year
+                            * (optional) for year, can select range of year
+            --}}
+            <div class="row">
+                {{-- <div class="col s6">
+                    <h5>User Statistics</h5>
+                </div> --}}
+                <div class="input-field col s6 right">
+                    <select v-model="selected">
+                        <option v-for="option in options" v-bind:value="option.value">
+                            @{{ option.text }}
+                        </option>
+
+                    </select>
+                    <label>Chart Options</label>
+                </div>
+            </div>
+            <canvas id="created_chart_area" width="400" height="250"></canvas>
+        </div>
+        <div id="deleted-chart" class="col s12"><deleted-chart-area></deleted-chart-area></canvas></div>
+        <div id="blocked-chart" class="col s12"><blocked-chart-area></blocked-chart-area></div>
+        <div id="accepted-chart" class="col s12"><accepted-chart-area></accepted-chart-area></div>
+        <div id="transaction-chart" class="col s12">Space for transaction count per category</div>
     </div>
 
 

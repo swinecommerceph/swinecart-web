@@ -15,7 +15,12 @@ Vue.component('deleted-chart-area', {
 
 var vm = new Vue({
     el: '#app-statistics',
-    data: {},
+    data: {
+        options: [
+            { text: 'Monthly Statistics' },
+            { text: 'Yearly Statistics' },
+        ]
+    },
     methods: {
         get_deleted_data: function(){
             statistics.get_deleted_data();
