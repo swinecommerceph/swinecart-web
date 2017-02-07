@@ -34,13 +34,17 @@
     </script>
     <div id="app-statistics">
     <ul id="tabs-swipe-demo" class="tabs">
-        <li class="tab col s3"><a class="active" href="#deleted-chart">Deleted</a></li>
+        <li class="tab col s3"><a class="active" href="#created-chart">Users Created</a></li>
+        <li class="tab col s3"><a class="tab-header" href="#deleted-chart" v-on:click.prevent="get_deleted_data()">Deleted</a></li>
         <li class="tab col s3"><a class="tab-header" href="#blocked-chart" v-on:click.prevent="get_blocked_data()">Blocked</a></li>
+        <li class="tab col s3"><a class="tab-header" href="#accepted-chart" v-on:click.prevent="get_accepted_data()">Accepted</a></li>
         <li class="tab col s3"><a href="#transaction-chart">Transactions</a></li>
     </ul>
-    <div id="deleted-chart" class="col s12"><canvas id="deleted_chart_area" width="400" height="250"></canvas></div>
+    <div id="created-chart" class="col s12"><canvas id="created_chart_area" width="400" height="250"></canvas></div>
+    <div id="deleted-chart" class="col s12"><deleted-chart-area></deleted-chart-area></canvas></div>
     <div id="blocked-chart" class="col s12"><blocked-chart-area></blocked-chart-area></div>
-    <div id="transaction-chart" class="col s12 green">Test 3</div>
+    <div id="accepted-chart" class="col s12"><accepted-chart-area></accepted-chart-area></div>
+    <div id="transaction-chart" class="col s12">Space for transaction count per category</div>
     </div>
 
 

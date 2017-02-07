@@ -5,18 +5,32 @@ Vue.component('blocked-chart-area', {
     template: '<canvas id="blocked_chart_area" width="400" height="250"></canvas>'
 });
 
+Vue.component('accepted-chart-area', {
+    template: '<canvas id="accepted_chart_area" width="400" height="250"></canvas>'
+});
+
+Vue.component('deleted-chart-area', {
+    template: '<canvas id="deleted_chart_area" width="400" height="250"></canvas>'
+});
+
 var vm = new Vue({
     el: '#app-statistics',
     data: {},
     methods: {
+        get_deleted_data: function(){
+            statistics.get_deleted_data();
+        },
         get_blocked_data: function(){
             statistics.get_blocked_data();
+        },
+        get_accepted_data: function(){
+            statistics.get_accepted_data();
         }
     }
 });
 
-var deletedChartArea = document.getElementById("deleted_chart_area");
-var deletedLineChart = new Chart(deletedChartArea, {
+var createdChartArea = document.getElementById("created_chart_area");
+var createdLineChart = new Chart(createdChartArea, {
     type: 'line',
     data: {
         labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],

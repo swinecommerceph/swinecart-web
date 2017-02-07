@@ -103,7 +103,7 @@
            </div>
         </a>
 
-        <a href="{{route('admin.statistics.deleted')}}" id="site-statistics-summary">
+        <a href="{{route('admin.statistics.created')}}" id="site-statistics-summary">
            <div class="col s12" >
              <div id="statistics-card" class="card-panel card-summary hoverable">
                 <div class="center white-text row">

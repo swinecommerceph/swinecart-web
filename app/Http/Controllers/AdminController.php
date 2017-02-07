@@ -706,6 +706,61 @@ class AdminController extends Controller
          return redirect()->route('home/pending/users');
      }
 
+     public function showStatisticsCreated(){
+         $month = [
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('1'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('2'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('3'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('4'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('5'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('6'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('7'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('8'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('9'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('10'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('11'))
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('12'))
+                             ->count(),
+         ];
+
+        return view('user.admin.statistics', compact('month'));
+     }
+
      /**
       * Edit show the deleted users statistics per month
       *
@@ -765,7 +820,7 @@ class AdminController extends Controller
                              ->count(),
          ];
 
-        return view('user.admin.statistics', compact('month'));
+        return($month);
      }
 
       public function showStatisticsBlocked(){
@@ -817,6 +872,48 @@ class AdminController extends Controller
               DB::table('users')
                               ->whereNotNull('approved_at')
                               ->whereMonth('blocked_at', '=', date('12'))
+                              ->count(),
+          ];
+          return($month);
+      }
+
+      public function showStatisticsAccepted(){
+          $month = [
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('1'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('2'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('3'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('4'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('5'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('6'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('7'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('8'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('9'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('10'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('11'))
+                              ->count(),
+              DB::table('users')
+                              ->whereMonth('approved_at', '=', date('12'))
                               ->count(),
           ];
           return($month);
