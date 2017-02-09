@@ -263,10 +263,19 @@
                     <li class="collection-item product-backfat_thickness">{{--Backfat Thickness: {{$product->backfat_thickness}} --}}
                         Backfat Thickness: <span> @{{ productInfoModal.bft }} </span> mm
                     </li>
-                    <li class="collection-item rating">
-                        <div class="delivery-rating">Delivery:<span class="col right"><span> @{{ productInfoModal.avgDelivery | round }} </span>/5</span></div>
-                        <div class="transaction-rating">Transaction:<span class="col right"><span> @{{ productInfoModal.avgTransaction | round }} </span>/5</span></div>
-                        <div class="product-quality-rating">Product Quality:<span class="col right"><span> @{{ productInfoModal.avgProductQuality | round }} </span>/5</span></div>
+                    <li class="row collection-item rating">
+                        <div class="delivery-rating">
+                            <span class="col s6"> Delivery: </span>
+                            <span class="col s6"> <average-star-rating :rating="productInfoModal.avgDelivery | round"></average-star-rating> </span>
+                        </div>
+                        <div class="transaction-rating">
+                            <span class="col s6"> Transaction: </span>
+                            <span class="col s6"> <average-star-rating :rating="productInfoModal.avgTransaction | round"></average-star-rating> </span>
+                        </div>
+                        <div class="product-quality-rating">
+                            <span class="col s6"> Product Quality: </span>
+                            <span class="col s6"> <average-star-rating :rating="productInfoModal.avgProductQuality | round"></average-star-rating> </span>
+                        </div>
                     </li>
                 </ul>
               </div>
@@ -689,6 +698,24 @@
         </div>
     </template>
 
+    <script type="text/x-template" id="average-star-rating">
+        <div class="ratings-container" style="padding:0; position:relative; display:inline-block">
+            <div class="star-ratings-top" style="position:absolute; z-index:1; overflow:hidden; display:block; white-space:nowrap;" :style="{ width: ratingToPercentage + '%' }">
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+            </div>
+            <div class="star-ratings-bottom" style="padding:0; z-index:0; display:block;">
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+            </div>
+        </div>
+    </script>
 @endsection
 
 @section('customScript')

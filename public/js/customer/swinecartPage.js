@@ -51,6 +51,16 @@ Vue.component('countdown-timer', {
 
 });
 
+Vue.component('average-star-rating',{
+    template: '#average-star-rating',
+    props: ['rating'],
+    computed: {
+        ratingToPercentage: function(){
+            return (100* this.rating / 5);
+        }
+    }
+});
+
 Vue.component('star-rating',{
     template: '#star-rating-template',
     props: ['type'],
@@ -541,9 +551,9 @@ Vue.component('transaction-history',{
             vm.productInfoModal.adg = this.history[index].product_details.adg;
             vm.productInfoModal.fcr = this.history[index].product_details.fcr;
             vm.productInfoModal.bft = this.history[index].product_details.bft;
-            vm.productInfoModal.avgDelivery = this.history[index].product_detailsavg_delivery;
-            vm.productInfoModal.avgTransaction = this.history[index].product_detailsavg_transaction;
-            vm.productInfoModal.avgProductQuality = this.history[index].product_detailsavg_productQuality;
+            vm.productInfoModal.avgDelivery = this.history[index].product_details.avg_delivery;
+            vm.productInfoModal.avgTransaction = this.history[index].product_details.avg_transaction;
+            vm.productInfoModal.avgProductQuality = this.history[index].product_details.avg_productQuality;
             vm.productInfoModal.otherDetails = this.history[index].product_details.other_details.split(',');
 
             $('#info-modal').modal({

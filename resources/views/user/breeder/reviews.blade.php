@@ -43,7 +43,6 @@
                         {{-- Basic Information --}}
                         <span class="">
                             <average-star-rating :rating="averageRatingOfCustomer(index) | round"></average-star-rating> <br>
-                            {{-- <span class="right"> @{{ averageRatingOfCustomer(index) | round }}/5 </span> <br> --}}
                             @{{ review.customerName }}
                             <span class="grey-text"> ( @{{ review.customerProvince }} ) </span>
                         </span><br><br>
