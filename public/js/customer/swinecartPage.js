@@ -142,16 +142,17 @@ Vue.component('star-rating',{
 
 Vue.component('quantity-input',{
     template: '\
-        <div class="col s12" style="padding:0;"> \
+        <span class="col s12" style="padding:0;"> \
             <input type="text" \
                 ref="input" \
                 class="center-align" \
+                style="margin:0;" \
                 :value="value" \
                 @input="updateValue($event.target.value)" \
                 @focus="selectAll" \
                 @blur="formatValue" \
             > \
-        </div> \
+        </span> \
     ',
     props: {
         value: {

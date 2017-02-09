@@ -77,7 +77,7 @@ class DashboardRepository
 
             // Check if the reservation has expired already
             $now = Carbon::now();
-            $expirationDate = Carbon::createFromFormat('Y-m-d H:i:s',$reservation->expiration_date);
+            $expirationDate = ($reservation->expiration_date) ? Carbon::createFromFormat('Y-m-d H:i:s',$reservation->expiration_date) : null;
             if($reservation->expiration_date && $now->gt($expirationDate)){
                 // Update Swine Cart item
                 $swineCartItem = SwineCartItem::where('reservation_id', $reservation->id)->first();
