@@ -334,9 +334,9 @@ class SwineCartController extends Controller
                     "fcr" => $product->fcr,
                     "bft" => $product->backfat_thickness,
                     "other_details" => $product->other_details,
-                    "avg_delivery" => $reviews->avg('rating_delivery'),
-                    "avg_transaction" => $reviews->avg('rating_transaction'),
-                    "avg_productQuality" => $reviews->avg('rating_productQuality')
+                    "avg_delivery" => ($reviews->avg('rating_delivery')) ? $reviews->avg('rating_delivery') : 0,
+                    "avg_transaction" => ($reviews->avg('rating_transaction')) ? $reviews->avg('rating_transaction') : 0,
+                    "avg_productQuality" => ($reviews->avg('rating_productQuality')) ? $reviews->avg('rating_productQuality') : 0
                 ];
 
                 return $restructuredItem;
