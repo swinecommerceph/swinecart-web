@@ -51,6 +51,16 @@ Vue.component('countdown-timer', {
 
 });
 
+Vue.component('average-star-rating',{
+    template: '#average-star-rating',
+    props: ['rating'],
+    computed: {
+        ratingToPercentage: function(){
+            return (100* this.rating / 5);
+        }
+    }
+});
+
 Vue.component('star-rating',{
     template: '#star-rating-template',
     props: ['type'],
