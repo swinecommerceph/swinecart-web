@@ -52,11 +52,10 @@
                     <h5>User Statistics</h5>
                 </div> --}}
                 <div class="input-field col s6 right">
-                    <select v-model="selected">
-                        <option v-for="option in options" v-bind:value="option.value">
-                            @{{ option.text }}
-                        </option>
-
+                    <select>
+                        <option v-on:click.prevent="get_weekly_created()">Weekly Statistics</option>
+                        <option v-on:click.prevent="get_monthly_created()">Monthly Statistics</option>
+                        <option v-on:click.prevent="get_yearly_created()">Yearly Statistics</option>
                     </select>
                     <label>Chart Options</label>
                 </div>

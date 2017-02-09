@@ -601,15 +601,15 @@ blockquote{
 	height: 300px;
 }
 
-#users-card{
+#spectator-users-card{
 	background-color: #062F4F;
 }
 
-#products-card{
+#spectator-products-card{
 	background-color: #813772;
 }
 
-#statistics-card{
+#spectator-statistics-card{
 	background-color: #882601;
 }
 
@@ -623,7 +623,11 @@ blockquote{
 }
 
 .spectator-card-label{
-	font-size: 2em;
-
+	font-size: 1.5em;
+	text-align: center;
 	color: #d1d1d1 ;
+}
+
+.vertical-divider{
+	font-size: 10em;
 }

@@ -23,42 +23,73 @@
         <div class="row">
             <div class="col s12">
                 <div class="row">
-                    <div class="col s12">
-                        <div id="users-card" class="card-panel hoverable">
-                            <div class="white-text row">
-                                <div class="col s2">
-                                    <div class="spectator-ecommerce-icon col s12">p</div>
-                                    <div class="col s12 center-align spectator-card-label">User</div>
-                                </div>
-                                <div class="vertical-divider col s1">|</div>
-                                <div class="spectator-home-summary col s6">Summary</div>
+
+                    <a href="{{route('spectator.users')}}">
+                       <div class="col s12" >
+                         <div id="spectator-users-card" class="card-panel card-summary hoverable">
+                            <div class="center white-text row">
+                               <div class="col s4 label-wrapper">
+                                  <div class="center">
+                                     <i class="ecommerce-icon" id="statistics-icon">p</i>
+                                     <div>
+                                         Users
+                                     </div>
+                                  </div>
+
+                               </div>
+
+                               <div class="center white-text col s8" id="statistics-title-wrapper">
+                                   SUMMARY PLACEHOLDER
+                               </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col s12">
-                        <div id="products-card" class="card-panel hoverable">
-                            <div class="white-text row">
-                                <div class="col s2">
-                                    <div class="ecommerce-icon col s12">v</div>
-                                    <div class="col s12 center">Products</div>
-                                </div>
-                                <div class="vertical-divider col s1">|</div>
-                                <div class="spectator-home-summary col s6">Summary</div>
+                         </div>
+                       </div>
+                    </a>
+
+                    <a href="{{route('spectator.products')}}">
+                       <div class="col s12" >
+                         <div id="spectator-products-card" class="card-panel card-summary hoverable">
+                            <div class="center white-text row">
+                               <div class="col s4 label-wrapper">
+                                  <div class="center">
+                                     <i class="ecommerce-icon" id="statistics-icon">v</i>
+                                     <div>
+                                         Products
+                                     </div>
+                                  </div>
+
+                               </div>
+
+                               <div class="center white-text col s8" id="statistics-title-wrapper">
+                                   SUMMARY PLACEHOLDER
+                               </div>
                             </div>
-                        </div>
-                    </div>
-                    <div class="col s12">
-                        <div id="statistics-card" class="card-panel hoverable">
-                            <div class="white-text row">
-                                <div class="col s4">
-                                    <div class="ecommerce-icon s5"></div>
-                                    <div class="col s5 ">Statistics</div>
-                                </div>
-                                <div class="vertical-divider col s1">|</div>
-                                <div class="spectator-home-summary col s6">Summary</div>
+                         </div>
+                       </div>
+                    </a>
+
+                    <a href="{{route('spectator.statistics')}}">
+                       <div class="col s12" >
+                         <div id="spectator-statistics-card" class="card-panel card-summary hoverable">
+                            <div class="center white-text row">
+                               <div class="col s4 label-wrapper">
+                                  <div class="center">
+                                     <i class="ecommerce-icon" id="statistics-icon">x</i>
+                                     <div>
+                                         Site Statistics
+                                     </div>
+                                  </div>
+
+                               </div>
+
+                               <div class="center white-text col s8" id="statistics-title-wrapper">
+                                   SUMMARY PLACEHOLDER
+                               </div>
                             </div>
-                        </div>
-                    </div>
+                         </div>
+                       </div>
+                    </a>
+
                 </div>
             </div>
         </div>
