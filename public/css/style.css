@@ -119,16 +119,16 @@ html{
 	font-size:2rem;
 }
 
-/* Swine Cart Related */
-.info {
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	margin: auto;
+/* Swine Cart page styles */
+#swine-cart #card-container .status-icons-container i{
+	cursor: pointer;
+	font-size: 1.8rem;
 }
 
-.material-icons.md { font-size: 72px; }
+#swine-cart #card-container .card-content p > span,
+#swine-cart #card-container span.input-quantity-container > span {
+	padding:0;
+}
 
 .swine-cart-item {
 	top: 0;
@@ -138,16 +138,7 @@ html{
 	margin: auto;
 }
 
-.verticalLine {
-    border-right: thin solid #9e9e9e;
-    height: 100px;
-}
-
-#swine-cart {
-	padding-top: 20px;
-}
-
-#transaction-history {
+#swine-cart, #transaction-history {
 	padding-top: 20px;
 }
 
