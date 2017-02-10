@@ -28,13 +28,13 @@ var vm = new Vue({
             statistics.get_accepted_data();
         },
         get_weekly_created: function(){
-            console.log("weekly");
+            alert("weekly");
         },
         get_monthly_created: function(){
-            console.log("monthly");
+            alert("monthly");
         },
         get_yearly_created: function(){
-            console.log("yearly");
+            alert("yearly");
         }
     }
 });

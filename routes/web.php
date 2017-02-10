@@ -136,7 +136,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/logs', ['as'=>'admin_logs', 'uses'=>'AdminController@getAdministratorLogs']);
         Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
 
-        Route::get('home/statistics/created', ['as' => 'admin.statistics.created', 'uses'=> 'AdminController@showStatisticsCreated']);
+        Route::get('home/statistics/default', ['as' => 'admin.statistics.created.default', 'uses'=> 'AdminController@showStatisticsCreatedDefault']);
+        Route::get('home/statistics/year', ['as' => 'admin.statistics.created.year', 'uses'=> 'AdminController@showStatisticsCreated']);
         Route::get('home/statistics/deleted', ['as' => 'admin.statistics.deleted', 'uses'=> 'AdminController@showStatisticsDeleted']);
         Route::get('home/statistics/blocked', ['as' => 'admin.statistics.blocked', 'uses'=> 'AdminController@showStatisticsBlocked']);
         Route::get('home/statistics/accepted', ['as' => 'admin.statistics.accepted', 'uses'=> 'AdminController@showStatisticsAccepted']);

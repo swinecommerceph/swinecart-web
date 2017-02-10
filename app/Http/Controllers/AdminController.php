@@ -713,72 +713,140 @@ class AdminController extends Controller
       * @return array of counts
       * @todo optimize the method of getting the count of created users per month, change query to filter the year
       */
-     public function showStatisticsCreated(){
+     public function showStatisticsCreatedDefault(){
          $date = Carbon::now();
+         $year = $date->year;
          $month = [
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('1'))
-                             ->whereYear('created_at', '=', $date->year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('2'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('3'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('4'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('5'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('6'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('7'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('8'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('9'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('10'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('11'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('created_at', '=', date('12'))
-                             ->whereYear('created_at', '=', $date->year)
+                             ->whereYear('created_at', '=', $year)
                              ->count(),
          ];
 
-        return view('user.admin.statistics', compact('month', 'date->year'));
+        return view('user.admin.statistics', compact('month', 'year'));
+     }
+
+     public function showStatisticsCreated(Request $request){
+         $year = $request->year;
+         $month = [
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('1'))
+                              ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('2'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('3'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('4'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('5'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('6'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('7'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('8'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('9'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('10'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('11'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('created_at', '=', date('12'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+         ];
+
+         return view('user.admin.statistics', compact('month', 'year'));
      }
 
      /**

@@ -48,6 +48,7 @@ class CustomerController extends Controller
     {
         if($request->user()->updateProfileNeeded()) return view('user.customer.createProfile');
         $homeContent = DB::table('home_images')->get();
+        
         return view('user.customer.home',compact('homeContent'));
     }
 
