@@ -29,7 +29,7 @@ class ViewComposerServiceProvider extends ServiceProvider
 
 
     public function adminGetMinMaxYearUserCreation(){
-        view()->composer('user.admin.statistics', function($view){
+        view()->composer('*', function($view){
             $first =  DB::table('users')->orderBy('created_at', 'asc')->first();
             $last =  DB::table('users')->orderBy('created_at', 'desc')->first();
 

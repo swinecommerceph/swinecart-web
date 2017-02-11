@@ -5,7 +5,7 @@
 @endsection
 
 @section('pageId')
-    id="stats-page"
+    id="users-deleted-stats-page"
 @endsection
 
 @section('header')
@@ -34,10 +34,7 @@
     </script>
     <div id="app-statistics">
         <ul id="tabs-swipe-demo" class="tabs">
-            <li class="tab col s3"><a class="active" href="#created-chart">Users Created</a></li>
-            <li class="tab col s3"><a class="tab-header" href="#deleted-chart" v-on:click.prevent="get_deleted_data()">Deleted</a></li>
-            <li class="tab col s3"><a class="tab-header" href="#blocked-chart" v-on:click.prevent="get_blocked_data()">Blocked</a></li>
-            <li class="tab col s3"><a class="tab-header" href="#accepted-chart" v-on:click.prevent="get_accepted_data()">Accepted</a></li>
+            <li class="tab col s3"><a class="active" href="#created-chart">Users</a></li>
             <li class="tab col s3"><a href="#transaction-chart">Transactions</a></li>
         </ul>
         <div id="created-chart" class="col s12">
@@ -53,22 +50,39 @@
                     <a class="waves-effect waves-light btn" v-on:click="get_yearly_created">Yearly</a>
                 </div>
             </div> --}}
+            <div class="row col s12">
+                <div class="col s7"></div>
+                <div class="col s2">
+                    <a class="waves-effect waves-light btn" href="{{route('admin.statistics.created.default')}}">Created</a>
+                </div>
+                <div class="col s2">
+                    <a class="waves-effect waves-light btn disabled" >Deleted</a>
+                </div>
+            </div>
+            <div class="row col s12">
+                <div class="col s7"></div>
+                <div class="col s2">
+                    <a class="waves-effect waves-light btn" href="{{route('admin.statistics.blocked.defualt')}}">Blocked</a>
+                </div>
+                <div class="col s2">
+                    <a class="waves-effect waves-light btn" href="{{route('admin.statistics.accepted.default')}}">Accepted</a>
+                </div>
+            </div>
             <div class="row">
-                {!!Form::open(['route'=>'admin.statistics.created.year', 'method'=>'GET'])!!}
+                {!!Form::open(['route'=>'admin.statistics.deleted.year', 'method'=>'GET'])!!}
                 <div class="col s6 right">
-                    <label for="stats-created-year">Year</label>
-                    <input id="stats-created-year" type="number" name="year" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[1] }}" value="{{ $year }}">
+                    <label for="stats-year">Year</label>
+                    <input id="stats-year" type="number" name="year" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[1] }}" value="{{ $year }}">
                     <div class="center">
-                        <button class="btn waves-effect waves-light" type="submit" name="year-submit">Generate</button>
+                        <button class="btn waves-effect waves-light" type="submit" name="year-submit">Show</button>
                     </div>
                 </div>
+
                 {!!Form::close()!!}
             </div>
             <canvas id="created_chart_area" width="400" height="250"></canvas>
         </div>
-        <div id="deleted-chart" class="col s12"><deleted-chart-area></deleted-chart-area></canvas></div>
-        <div id="blocked-chart" class="col s12"><blocked-chart-area></blocked-chart-area></div>
-        <div id="accepted-chart" class="col s12"><accepted-chart-area></accepted-chart-area></div>
+
         <div id="transaction-chart" class="col s12"></div>
     </div>
 
