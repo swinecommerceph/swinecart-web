@@ -188,7 +188,7 @@ html{
 }
 
 /* Profile Tab styles */
-#personal-information, #farm-information{
+#personal-information, #farm-information, #password-information{
 	margin-top:0;
 }
 
@@ -329,6 +329,11 @@ blockquote{
 	padding-bottom: 1rem;
 	border-left: 5px solid #388e3c;
 	background-color: #e8f5e9;
+}
+
+blockquote.error{
+	border-left: 5px solid #ee6e73;
+	background-color: #fdf0f1;
 }
 
 /* Form component styles */

@@ -62,6 +62,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('edit-profile/farm/add',['as' => 'breeder.addFarm', 'uses' => 'BreederController@addFarm']);
         Route::put('edit-profile/farm/edit',['as' => 'breeder.updateFarm', 'uses' => 'BreederController@updateFarm']);
         Route::delete('edit-profile/farm/delete',['as' => 'breeder.deleteFarm', 'uses' => 'BreederController@deleteFarm']);
+        Route::patch('edit-profile/change-password',['as' => 'breeder.changePassword', 'uses' => 'BreederController@changePassword']);
 
         // product-related
         Route::get('products',['as' => 'products', 'uses' => 'ProductController@showProducts']);
@@ -112,6 +113,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('edit-profile/farm/add',['as' => 'customer.addFarm', 'uses' => 'CustomerController@addFarm']);
         Route::put('edit-profile/farm/edit',['as' => 'customer.updateFarm', 'uses' => 'CustomerController@updateFarm']);
         Route::delete('edit-profile/farm/delete',['as' => 'customer.deleteFarm', 'uses' => 'CustomerController@deleteFarm']);
+        Route::patch('edit-profile/change-password',['as' => 'customer.changePassword', 'uses' => 'CustomerController@changePassword']);
 
         // product-related
         Route::get('view-products',['as' => 'products.view', 'uses' => 'ProductController@viewProducts']);

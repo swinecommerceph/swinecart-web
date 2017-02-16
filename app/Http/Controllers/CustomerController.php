@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Notifications\Notification;
+use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\CustomerProfileRequest;
 use App\Http\Requests\CustomerPersonalProfileRequest;
 use App\Http\Requests\CustomerFarmProfileRequest;
@@ -47,6 +48,23 @@ class CustomerController extends Controller
     {
         if($request->user()->updateProfileNeeded()) return view('user.customer.createProfile');
         return view('user.customer.home');
+    }
+
+    /**
+     * Change password of Customer user
+     *
+     * @param   ChangePasswordRequest $request
+     * @return  String
+     */
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        if($request->ajax()){
+
+            $this->user->password = bcrypt($request->new_password);
+            $this->user->save();
+
+            return "OK";
+        }
     }
 
     /**
