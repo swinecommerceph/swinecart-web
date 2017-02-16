@@ -193,4 +193,10 @@ $(document).ready(function(){
         profile.add($('#create-profile'));
     });
 
+    // Change password
+    $('#change-password-button').click(function(e){
+        e.preventDefault();
+        profile.change_password($('#change-password-form'));
+    });
+
 });

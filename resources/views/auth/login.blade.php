@@ -24,7 +24,7 @@
 						{{-- E-Mail Address --}}
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="email" id="email" name="email" value="{{ old('email') }}" autofocus>
+								<input type="email" id="email" name="email" value="{{ old('email') }}" autofocus required>
 								<label for="email">E-mail</label>
 							</div>
 						</div>
@@ -32,7 +32,7 @@
 						{{-- Password --}}
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="password" id="password" name="password">
+								<input type="password" id="password" name="password" required>
 								<label for="password">Password</label>
 							</div>
 						</div>
@@ -60,6 +60,13 @@
 						{{-- Google Button --}}
 						<div class="col s12">
 							<a href="/login/google" class="btn-large waves-effect waves-light red col s12 social-button"> Login with Google </a>
+						</div>
+					</div>
+
+                    <div class="row">
+						{{-- Forgot Password --}}
+						<div class="col s12 center-align">
+							<a href="/password/reset"> Forgot Password </a>
 						</div>
 					</div>
 				</div>

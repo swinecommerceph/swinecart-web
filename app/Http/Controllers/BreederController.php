@@ -7,6 +7,7 @@ use Illuminate\Support\Collection;
 use App\Http\Requests\BreederProfileRequest;
 use App\Http\Requests\BreederPersonalProfileRequest;
 use App\Http\Requests\BreederFarmProfileRequest;
+use App\Http\Requests\ChangePasswordRequest;
 
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
@@ -45,6 +46,23 @@ class BreederController extends Controller
     {
         if($request->user()->updateProfileNeeded()) return view('user.breeder.createProfile');
         return view('user.breeder.home');
+    }
+
+    /**
+     * Change password of Breeder user
+     *
+     * @param   ChangePasswordRequest $request
+     * @return  String
+     */
+    public function changePassword(ChangePasswordRequest $request)
+    {
+        if($request->ajax()){
+
+            $this->user->password = bcrypt($request->new_password);
+            $this->user->save();
+
+            return "OK";
+        }
     }
 
     /**
