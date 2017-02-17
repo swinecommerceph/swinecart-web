@@ -264,7 +264,7 @@ Vue.component('order-details',{
         },
 
         transformToDetailedDate: function(value, prepend){
-            return prepend + ', ' + moment(value).format("MMM D YYYY (ddd), h:mmA");
+            return '['+ prepend + '] ' + moment(value).format("MMM D YYYY, h:mmA");
         }
     },
     methods: {
@@ -531,7 +531,7 @@ Vue.component('transaction-history',{
         },
 
         transformToDetailedDate: function(value){
-            return moment(value).format("MMM D YYYY (ddd), h:mmA");
+            return moment(value).format("MMM D YYYY, h:mmA");
         },
 
         transformToReadableStatus: function(value){
@@ -560,6 +560,20 @@ Vue.component('transaction-history',{
                 opacity: 0
             });
             $('#info-modal').modal('open');
+        },
+
+        reverseArray : function(value){
+            var tempArray = _.takeRight(value, 3);
+            return _.reverse(tempArray);
+        },
+
+        trimmedArray: function(value){
+            var tempArray = _.take(value, value.length);
+            return _.slice(_.reverse(tempArray),3);
+        },
+
+        toggleShowFullLogs: function(key){
+            this.history[key].showFullLogs = !this.history[key].showFullLogs;
         }
 
     }

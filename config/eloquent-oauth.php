@@ -16,7 +16,7 @@ return [
             'client_id' => env('GOOGLE_ID'),
             'client_secret' => env('GOOGLE_SECRET'),
             'redirect_uri' => env('GOOGLE_REDIRECT'),
-            'scope' => ['https://mail.google.com/'],
+            'scope' => ['https://www.googleapis.com/auth/userinfo.profile', 'https://www.googleapis.com/auth/userinfo.email'],
         ],
         'github' => [
             'client_id' => '12345678',

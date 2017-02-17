@@ -63,6 +63,7 @@ class DashboardRepository
             $itemDetail['fcr'] = $product->fcr;
             $itemDetail['bft'] = $product->backfat_thickness;
             $itemDetail['status'] = $product->status;
+            $itemDetail['status_time'] = '';
             $itemDetail['customer_id'] = 0;
             $itemDetail['customer_name'] = '';
             $itemDetail['date_needed'] = '';
@@ -135,6 +136,7 @@ class DashboardRepository
             $itemDetail['fcr'] = $product->fcr;
             $itemDetail['bft'] = $product->backfat_thickness;
             $itemDetail['status'] = $reservation->order_status;
+            $itemDetail['status_time'] = $reservation->transactionLogs->where('status', $reservation->order_status)->first()->created_at;
             $itemDetail['customer_id'] = $reservation->customer_id;
             $itemDetail['customer_name'] = Customer::find($reservation->customer_id)->users()->first()->name;
             $itemDetail['userid'] = Customer::find($reservation->customer_id)->users()->first()->id;
@@ -558,7 +560,15 @@ class DashboardRepository
                             $product->status = 'displayed';
                             $product->save();
 
-                            return ['success', 'Product ' . $product->name . ' reserved to ' . $customerName, $reservation->id, (string) Uuid::uuid4(), true, $reservation->expiration_date];
+                            return [
+                                'success',
+                                'Product ' . $product->name . ' reserved to ' . $customerName,
+                                $reservation->id,
+                                (string) Uuid::uuid4(),
+                                true,
+                                $reservation->expiration_date,
+                                $transactionLog->created_at
+                            ];
                         }
                     }
 
@@ -567,7 +577,17 @@ class DashboardRepository
                     // [2] - reservation_id
                     // [3] - generated UUID
                     // [4] - flag for removing the parent product display in the UI component
-                    return ['success', 'Product ' . $product->name.' reserved to '.$customerName, $reservation->id, (string) Uuid::uuid4(), false, $reservation->expiration_date];
+                    // [5] - expiration date if there is addQuantity
+                    // [6] - timestamp of reservation
+                    return [
+                        'success',
+                        'Product ' . $product->name.' reserved to '.$customerName,
+                        $reservation->id,
+                        (string) Uuid::uuid4(),
+                        false,
+                        $reservation->expiration_date,
+                        $transactionLog->created_at
+                    ];
                 }
                 else {
                     return ['fail', 'Product ' . $product->name.' is already reserved to another customer'];
@@ -599,7 +619,10 @@ class DashboardRepository
                     ]
                 ));
 
-                return "OK";
+                return [
+                    "OK",
+                    $transactionLog->created_at
+                ];
 
             case 'paid':
                 $reservation = ProductReservation::find($request->reservation_id);
@@ -627,7 +650,10 @@ class DashboardRepository
                     ]
                 ));
 
-                return "OK";
+                return [
+                    "OK",
+                    $transactionLog->created_at
+                ];
 
             case 'sold':
                 $reservation = ProductReservation::find($request->reservation_id);
@@ -654,7 +680,10 @@ class DashboardRepository
                     ]
                 ));
 
-                return "OK";
+                return [
+                    "OK",
+                    $transactionLog->created_at
+                ];
 
             default:
                 return "Invalid operation";

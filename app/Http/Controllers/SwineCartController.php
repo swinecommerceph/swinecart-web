@@ -320,6 +320,7 @@ class SwineCartController extends Controller
                 $product = Product::find($key);
                 $reviews = $product->breeder->reviews;
 
+                $restructuredItem['showFullLogs'] = false;
                 $restructuredItem['logs'] = $item->toArray();
                 $restructuredItem['product_details'] = [
                     "quantity" => (SwineCartItem::find($restructuredItem['logs'][0]['swineCart_id'])->quantity) ?? '',
