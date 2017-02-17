@@ -14,6 +14,9 @@
             <div class="card">
                 <div class="card-content row">
                     <span class="card-title">Reset Password</span>
+                    <blockquote class="info">
+                        Type your e-mail address and we will send a password reset link to it.
+                    </blockquote>
                     {{-- Display Validation Errors --}}
 					@include('common._errors')
 

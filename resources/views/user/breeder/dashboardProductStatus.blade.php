@@ -110,7 +110,10 @@
                             </div>
                         </td>
                         <td>
-                            @{{ product.status | transformToReadableStatus }}
+                            @{{ product.status | transformToReadableStatus }} <br>
+                            <span class="grey-text" v-if="product.status_time">
+                                @{{ product.status_time | transformDate }}
+                            </span>
                         </td>
                         <td>
                             {{--  If product's status is requested --}}
@@ -148,7 +151,7 @@
                                     <i class="material-icons teal-text">credit_card</i>
                                 </a>
                                 <a class="col s2 tooltipped"
-                                    :href="'{{ route('breeder.messages') }}/' + product.userid" //cjd
+                                    :href="'{{ route('breeder.messages') }}/' + product.userid"
                                     :data-breeder-id="product.breeder_id"
                                     :data-customer-id="product.customer_id"
                                     data-position="top"
@@ -242,6 +245,7 @@
                                         <i class="material-icons teal-text">add_to_photos</i>
                                     </a>
                                     <a v-bind:href="'{{ route('breeder.messages') }}/' + customer.userId"
+                                        class="tooltipped"
                                         style="margin-left:0.5rem;"
                                         data-position="top"
                                         data-delay="50"

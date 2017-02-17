@@ -244,6 +244,7 @@ Vue.component('status-table',{
                         if(this.products[index].type !== 'semen'){
                             var updateDetails = {
                                 'status': 'reserved',
+                                'statusTime': responseBody[6].date,
                                 'index': index,
                                 'type': this.products[index].type,
                                 'reservationId': responseBody[2],
@@ -258,6 +259,7 @@ Vue.component('status-table',{
                         else{
                             var updateDetails = {
                                 'status': 'reserved',
+                                'statusTime': responseBody[6].date,
                                 'uuid': responseBody[3],
                                 'index': index,
                                 'type': this.products[index].type,
@@ -330,13 +332,14 @@ Vue.component('status-table',{
                     this.$emit('update-product',
                         {
                             'status': 'on_delivery',
+                            'statusTime': responseBody[1].date,
                             'index': index
                         }
                     );
 
                     // Initialize/Update some DOM elements
                     this.$nextTick(function(){
-                        if(responseBody === "OK") Materialize.toast(productName + ' on delivery to ' + customerName , 2500, 'green lighten-1');
+                        if(responseBody[0] === "OK") Materialize.toast(productName + ' on delivery to ' + customerName , 2500, 'green lighten-1');
                         else Materialize.toast('Failed status change', 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
                     });
@@ -371,13 +374,14 @@ Vue.component('status-table',{
                     this.$emit('update-product',
                         {
                             'status': 'paid',
+                            'statusTime': responseBody[1].date,
                             'index': index
                         }
                     );
 
                     // Initialize/Update some DOM elements
                     this.$nextTick(function(){
-                        if(responseBody === "OK") Materialize.toast(productName + ' already paid by ' + customerName , 2500, 'green lighten-1');
+                        if(responseBody[0] === "OK") Materialize.toast(productName + ' already paid by ' + customerName , 2500, 'green lighten-1');
                         else Materialize.toast('Failed status change', 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
                     });
@@ -412,13 +416,14 @@ Vue.component('status-table',{
                     this.$emit('update-product',
                         {
                             'status': 'sold',
+                            'statusTime': responseBody[1].date,
                             'index': index
                         }
                     );
 
                     // Initialize/Update some DOM elements
                     this.$nextTick(function(){
-                        if(responseBody === "OK") Materialize.toast(productName + ' already sold to ' + customerName , 2500, 'green lighten-1');
+                        if(responseBody[0] === "OK") Materialize.toast(productName + ' already sold to ' + customerName , 2500, 'green lighten-1');
                         else Materialize.toast('Failed status change', 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
                     });
@@ -482,6 +487,7 @@ var vm = new Vue({
                     // Just update the product if it is not of type 'semen'
                     if(updateDetails.type !== 'semen'){
                         this.products[index].status = 'reserved';
+                        this.products[index].status_time = updateDetails.statusTime;
                         this.products[index].quantity = 0;
                         this.products[index].reservation_id = updateDetails.reservationId;
                         this.products[index].customer_id = updateDetails.customerId;
@@ -511,6 +517,7 @@ var vm = new Vue({
                                 'fcr': baseProduct.fcr,
                                 'bft': baseProduct.bft,
                                 'status': 'reserved',
+                                'status_time': updateDetails.statusTime,
                                 'customer_id': updateDetails.customerId,
                                 'customer_name': updateDetails.customerName,
                                 'date_needed': updateDetails.dateNeeded,
@@ -530,16 +537,22 @@ var vm = new Vue({
                 case 'on_delivery':
                     var index = updateDetails.index;
                     this.products[index].status = 'on_delivery';
+                    this.products[index].status_time = updateDetails.statusTime;
+
                     break;
 
                 case 'paid':
                     var index = updateDetails.index;
                     this.products[index].status = 'paid';
+                    this.products[index].status_time = updateDetails.statusTime;
+
                     break;
 
                 case 'sold':
                     var index = updateDetails.index;
                     this.products[index].status = 'sold';
+                    this.products[index].status_time = updateDetails.statusTime;
+
                     break;
 
                 default: break;

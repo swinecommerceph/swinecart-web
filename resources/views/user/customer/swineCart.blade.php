@@ -420,24 +420,24 @@
                                     {{-- Requested --}}
                                     <template v-if="product.request_status && product.status === 'requested'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
-                                        <i class="material-icons tooltipped grey-text" data-position="top" data-delay="50" data-tooltip="Not Reserved">save</i>
-                                        <i class="material-icons tooltipped grey-text" data-position="top" data-delay="50" data-tooltip="Not On Delivery">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text" data-position="top" data-delay="50" data-tooltip="Not Paid">payment</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Reserved">save</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not On Delivery">local_shipping</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Paid">payment</i>
                                     </template>
 
                                     {{-- Reserved --}}
                                     <template v-if="product.status === 'reserved'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
-                                        <i class="material-icons tooltipped grey-text" data-position="top" data-delay="50" data-tooltip="Not On Delivery">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text" data-position="top" data-delay="50" data-tooltip="Not Paid">payment</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not On Delivery">local_shipping</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Paid">payment</i>
                                     </template>
 
                                     {{-- Paid --}}
                                     <template v-if="product.status === 'paid'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
-                                        <i class="material-icons tooltipped grey-text" data-position="top" data-delay="50" data-tooltip="Awaiting Delivery">local_shipping</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Awaiting Delivery">local_shipping</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.paid | transformToDetailedDate('Paid')">payment</i>
                                     </template>
 
@@ -446,7 +446,7 @@
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.on_delivery | transformToDetailedDate('On Delivery')">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text" data-position="top" data-delay="50" data-tooltip="Awaiting Payment">payment</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Awaiting Payment">payment</i>
                                     </template>
 
                                     {{-- Sold --}}
@@ -460,7 +460,7 @@
                     </div>
 
                     {{-- Show the following if there are no products in Swine Cart --}}
-                    <div class="center-align col s12" v-show="!products">
+                    <div class="center-align col s12" v-show="products.length === 0">
                         <h5>Your swine cart is empty.</h5>
                     </div>
                 </div>
@@ -491,6 +491,9 @@
                     <h4>Request Product Confirmation</h4>
                     <p>
                         Are you sure you want to request @{{ productRequest.name }}?
+                        <blockquote class="info" v-show="productRequest.type === 'semen'">
+                            Once requested, request quantity can never be changed.
+                        </blockquote>
                     </p>
                     <div class="row">
                         <div class="col s6">
@@ -616,7 +619,7 @@
                 </div>
                 <ul id="transaction-cart" class="collection cart">
                     <li class="collection-item"
-                        v-for="(item,index) in history"
+                        v-for="(item,key) in history"
                     >
                         <div class="row swine-cart-item valign-wrapper">
                             <div class="col s2 center-align">
@@ -651,12 +654,30 @@
                                 </div>
                             </div>
                             <div class="col s4">
+                                {{-- Just show three of the recent logs --}}
+                                <div v-for="log in reverseArray(item.logs)">
+                                    <span class="col s6"> @{{ log.status | transformToReadableStatus }} </span>
+                                    <span class="col s6 left-align grey-text"> @{{ log.created_at | transformToDetailedDate }} </span>
+                                </div>
+
+                                {{-- Extra logs if there are any --}}
                                 <div class=""
-                                    v-for="log in item.logs"
+                                    v-show="item.showFullLogs"
+                                    v-for="log in trimmedArray(item.logs)"
                                 >
+                                    <span class="col s6"> @{{ log.status | transformToReadableStatus }} </span>
+                                    <span class="col s6 left-align grey-text"> @{{ log.created_at | transformToDetailedDate }} </span>
+                                </div>
 
-                                    @{{ log.status | transformToReadableStatus }} <span class="right grey-text"> @{{ log.created_at | transformToDetailedDate }} </span>
-
+                                {{-- Show toggle button to show more than three recent logs --}}
+                                <div class="" v-if="(item.logs.length > 3)">
+                                    <span class="col s6 left-align">
+                                        <a href="#"
+                                            @click.prevent="toggleShowFullLogs(key)"
+                                        >
+                                            @{{ (!item.showFullLogs) ? 'Show More...' : 'Show Less...' }}
+                                        </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
