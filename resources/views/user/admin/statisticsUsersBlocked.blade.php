@@ -39,21 +39,15 @@
         </ul>
         <div id="created-chart" class="col s12">
             <div class="row col s12">
-                <div class="col s7"></div>
+                <div class="col s5"></div>
                 <div class="col s2">
-                    <a class="waves-effect waves-light btn" href="{{route('admin.statistics.created.default')}}">Created</a>
+                    <a class="waves-effect waves-light btn" href="{{route('admin.statistics.active.default')}}">Active</a>
                 </div>
                 <div class="col s2">
                     <a class="waves-effect waves-light btn " href="{{route('admin.statistics.deleted.default')}}">Deleted</a>
                 </div>
-            </div>
-            <div class="row col s12">
-                <div class="col s7"></div>
                 <div class="col s2">
                     <a class="waves-effect waves-light btn disabled">Blocked</a>
-                </div>
-                <div class="col s2">
-                    <a class="waves-effect waves-light btn" href="{{route('admin.statistics.accepted.default')}}">Accepted</a>
                 </div>
             </div>
             <div class="row">

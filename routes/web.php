@@ -136,14 +136,12 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/logs', ['as'=>'admin_logs', 'uses'=>'AdminController@getAdministratorLogs']);
         Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
 
-        Route::get('home/statistics/created/default', ['as' => 'admin.statistics.created.default', 'uses'=> 'AdminController@showStatisticsCreatedDefault']);
-        Route::get('home/statistics/created/year', ['as' => 'admin.statistics.created.year', 'uses'=> 'AdminController@showStatisticsCreated']);
+        Route::get('home/statistics/active/default', ['as' => 'admin.statistics.active.default', 'uses'=> 'AdminController@showStatisticsActiveDefault']);
+        Route::get('home/statistics/active/year', ['as' => 'admin.statistics.active.year', 'uses'=> 'AdminController@showStatisticsActive']);
         Route::get('home/statistics/deleted/default', ['as' => 'admin.statistics.deleted.default', 'uses'=> 'AdminController@showStatisticsDeletedDefault']);
         Route::get('home/statistics/deleted/year', ['as' => 'admin.statistics.deleted.year', 'uses'=> 'AdminController@showStatisticsDeleted']);
         Route::get('home/statistics/blocked/default', ['as' => 'admin.statistics.blocked.defualt', 'uses'=> 'AdminController@showStatisticsBlockedDefault']);
         Route::get('home/statistics/blocked/year', ['as' => 'admin.statistics.blocked.year', 'uses'=> 'AdminController@showStatisticsBlocked']);
-        Route::get('home/statistics/accepted/default', ['as' => 'admin.statistics.accepted.default', 'uses'=> 'AdminController@showStatisticsAcceptedDefualt']);
-        Route::get('home/statistics/accepted/year', ['as' => 'admin.statistics.accepted.year', 'uses'=> 'AdminController@showStatisticsAccepted']);
 
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
         Route::get('home/approved/breeder', ['as'=>'admin.approved.breeder', 'uses'=>'AdminController@displayApprovedBreeders']);

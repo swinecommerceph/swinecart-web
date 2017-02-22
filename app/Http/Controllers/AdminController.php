@@ -713,137 +713,185 @@ class AdminController extends Controller
       * @return array of counts
       * @todo optimize the method of getting the count of created users per month, change query to filter the year
       */
-     public function showStatisticsCreatedDefault(){
+     public function showStatisticsActiveDefault(){
          $date = Carbon::now();
          $year = $date->year;
          $month = [
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('1'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('1'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('2'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('2'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('3'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('3'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('4'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('4'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('5'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('5'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('6'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('6'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('7'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('7'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('8'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('8'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('9'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('9'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('10'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('10'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('11'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('11'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('12'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('12'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
          ];
 
         return view('user.admin.statisticsDefault', compact('month', 'year'));
      }
 
-     public function showStatisticsCreated(Request $request){
+     public function showStatisticsActive(Request $request){
          $year = $request->year;
          $month = [
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('1'))
-                              ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('1'))
+                              ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('2'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('2'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('3'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('3'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('4'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('4'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('5'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('5'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('6'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('6'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('7'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('7'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('8'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('8'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('9'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('9'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('10'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('10'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('11'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('11'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
-                             ->whereMonth('created_at', '=', date('12'))
-                             ->whereYear('created_at', '=', $year)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('12'))
+                             ->whereYear('approved_at', '=', $year)
                              ->count(),
          ];
 
@@ -864,7 +912,7 @@ class AdminController extends Controller
              DB::table('users')
                              ->whereNotNull('approved_at')
                              ->whereMonth('deleted_at', '=', date('1'))
-                             ->whereYear('deleted_at    ', '=', $year)
+                             ->whereYear('deleted_at', '=', $year)
                              ->count(),
              DB::table('users')
                              ->whereNotNull('approved_at')
@@ -1138,137 +1186,6 @@ class AdminController extends Controller
           return view('user.admin.statisticsUsersBlocked', compact('month', 'year'));
       }
 
-
-      /**
-       * Edit show the accepted users statistics per month
-       *
-       * @param none
-       * @return array of counts
-       * @todo optimize the method of getting the count of accepted users per month, change query to filter the year
-       */
-      public function showStatisticsAcceptedDefualt(){
-          $date = Carbon::now();
-          $year = $date->year;
-          $month = [
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('1'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('2'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('3'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('4'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('5'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('6'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('7'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('8'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('9'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('10'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('11'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereMonth('approved_at', '=', date('12'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-          ];
-          return view('user.admin.statisticsUsersAccepted', compact('month', 'year'));
-      }
-
-      public function showStatisticsAccepted(Request $request){
-          $year = $request->year;
-          $month = [
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('1'))
-                               ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('2'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('3'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('4'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('5'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('6'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('7'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('8'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('9'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('10'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('11'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-              DB::table('users')
-                              ->whereNotNull('approved_at')
-                              ->whereMonth('approved_at', '=', date('12'))
-                              ->whereYear('approved_at', '=', $year)
-                              ->count(),
-          ];
-
-          return view('user.admin.statisticsUsersAccepted', compact('month', 'year'));
-      }
 
 
     // public function manageTextContent(){

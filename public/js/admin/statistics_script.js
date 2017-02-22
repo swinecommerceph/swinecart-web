@@ -1,6 +1,7 @@
 // For statistics view functions
 "use strict"
 
+// @TODO edit javascipt, not used in the application for now due to change in view behavior
 Vue.component('blocked-chart-area', {
     template: '<canvas id="blocked_chart_area" width="400" height="250"></canvas>'
 });
@@ -40,32 +41,45 @@ var vm = new Vue({
 });
 
 var createdChartArea = document.getElementById("created_chart_area");
-var createdLineChart = new Chart(createdChartArea, {
-    type: 'line',
+var createdBarChart = new Chart(createdChartArea, {
+    type: 'bar',
     data: {
         labels: ["January", "February", "March", "April", "May", "June", "July", "August", "September", "October", "November", "December"],
         datasets: [
             {
                 label: "Users",
-                fill: false,
-                lineTension: 0.1,
-                backgroundColor: "rgba(75,192,192,0.4)",
-                borderColor: "rgba(75,192,192,1)",
-                borderCapStyle: 'butt',
-                borderDash: [],
-                borderDashOffset: 0.0,
-                borderJoinStyle: 'miter',
-                pointBorderColor: "rgba(75,192,192,1)",
-                pointBackgroundColor: "#fff",
-                pointBorderWidth: 1,
-                pointHoverRadius: 5,
-                pointHoverBackgroundColor: "rgba(75,192,192,1)",
-                pointHoverBorderColor: "rgba(220,220,220,1)",
-                pointHoverBorderWidth: 2,
-                pointRadius: 1,
-                pointHitRadius: 10,
+                backgroundColor: [
+                    'rgba(255, 99, 132, 0.2)',
+                    'rgba(54, 162, 235, 0.2)',
+                    'rgba(255, 206, 86, 0.2)',
+                    'rgba(75, 192, 192, 0.2)',
+                    'rgba(153, 102, 255, 0.2)',
+                    'rgba(255, 159, 64, 0.2)',
+                    'rgba(119, 158, 203, 0.2)',
+                    'rgba(130, 105, 83, 0.2)',
+                    'rgba(222, 165, 164, 0.2)',
+                    'rgba(225, 209, 220, 0.2)',
+                    'rgba(225, 105, 97, 0.2)',
+                    'rgba(207, 207, 196, 0.2)'
+
+                ],
+                borderColor: [
+                    'rgba(255, 99, 132, 1)',
+                    'rgba(54, 162, 235, 1)',
+                    'rgba(255, 206, 86, 1)',
+                    'rgba(75, 192, 192, 1)',
+                    'rgba(153, 102, 255, 1)',
+                    'rgba(255, 159, 64, 1)',
+                    'rgba(119, 158, 203, 1)',
+                    'rgba(130, 105, 83, 1)',
+                    'rgba(222, 165, 164, 1)',
+                    'rgba(225, 209, 220, 1)',
+                    'rgba(225, 105, 97, 1)',
+                    'rgba(207, 207, 196, 1)'
+                ],
+                borderWidth: 1,
                 data: [jan, feb, mar, apr, may, jun, jul, aug,sep, oct, nov, dec],
-                spanGaps: false,
+
             }
         ]
     }

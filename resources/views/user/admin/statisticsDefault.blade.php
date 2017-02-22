@@ -5,7 +5,7 @@
 @endsection
 
 @section('pageId')
-    id="users-created-stats-page"
+    id="users-active-stats-page"
 @endsection
 
 @section('header')
@@ -51,25 +51,19 @@
                 </div>
             </div> --}}
             <div class="row col s12">
-                <div class="col s7"></div>
+                <div class="col s5"></div>
                 <div class="col s2">
-                    <a class="waves-effect waves-light btn disabled">Created</a>
+                    <a class="waves-effect waves-light btn disabled">Active</a>
                 </div>
                 <div class="col s2">
                     <a class="waves-effect waves-light btn" href="{{route('admin.statistics.deleted.default')}}">Deleted</a>
                 </div>
-            </div>
-            <div class="row col s12">
-                <div class="col s7"></div>
                 <div class="col s2">
                     <a class="waves-effect waves-light btn" href="{{route('admin.statistics.blocked.defualt')}}">Blocked</a>
                 </div>
-                <div class="col s2">
-                    <a class="waves-effect waves-light btn" href="{{route('admin.statistics.accepted.default')}}">Accepted</a>
-                </div>
             </div>
             <div class="row">
-                {!!Form::open(['route'=>'admin.statistics.created.year', 'method'=>'GET'])!!}
+                {!!Form::open(['route'=>'admin.statistics.active.year', 'method'=>'GET'])!!}
                 <div class="col s6 right">
                     <label for="stats-year">Year</label>
                     <input id="stats-year" type="number" name="year" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[1] }}" value="{{ $year }}">
