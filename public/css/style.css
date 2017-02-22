@@ -114,6 +114,46 @@ html{
 		 	filter: grayscale();
 }
 
+#page-customer-view-products .card .card-image,
+#page-customer-swine-cart .card .card-image,
+#page-breeder-manage-products .card .card-image {
+	background-color: white;
+}
+
+#page-customer-view-products .card .card-image img{
+	margin: 0 auto;
+	height: 270px;
+	width: auto;
+	padding: 0.5rem;
+}
+
+#page-customer-swine-cart #card-container .card .card-image img,
+#page-breeder-manage-products .card .card-image img{
+	margin: 0 auto;
+	height: 14rem;
+	width: auto;
+	padding: 0.5rem;
+}
+
+#page-customer-swine-cart #info-modal .card .card-image,
+#page-customer-view-product-details .card .card-image,
+#page-breeder-view-product-details .card .card-image{
+	padding: 0.5rem;
+}
+
+#page-customer-view-product-details .card .card-image img,
+#page-breeder-view-product-details .card .card-image img{
+	margin: 0 auto;
+	height: 25rem;
+	width: auto;
+}
+
+#page-customer-swine-cart #info-modal .card .card-image img{
+	margin: 0 auto;
+	height: 20rem;
+	width: auto;
+}
+
 /* Breeder Dashboard */
 #page-breeder-product-status #product-status-container i{
 	font-size:2rem;

@@ -82,11 +82,11 @@
                 <div class="card-image">
                     @if($product->status == 'hidden')
                         <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
-                            <img height="220" src="{{$product->img_path}}" class="hidden">
+                            <img src="{{$product->img_path}}" class="hidden">
                         </a>
                     @else
                         <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
-                            <img height="220" src="{{$product->img_path}}">
+                            <img src="{{$product->img_path}}">
                         </a>
                     @endif
                 </div>

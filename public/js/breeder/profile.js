@@ -238,7 +238,7 @@ var profile = {
 
 
                 parent_form.find('input[name=current_password], input[name=new_password], input[name=new_password_confirmation]').val('');
-                parent_form.find('label[for=current-password], label[for=new_password], label[for=new_password-confirm]').removeClass('active');
+                parent_form.find('label[for=current-password], label[for=new-password], label[for=new-password-confirm]').removeClass('active');
                 parent_form.find('input[name=current_password], input[name=new_password], input[name=new_password_confirmation]').removeClass('valid');
 
                 Object.keys(error_messages).forEach(function(element){
