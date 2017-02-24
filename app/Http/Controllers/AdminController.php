@@ -22,6 +22,7 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\HomeImage;
 use App\Models\AdministratorLog;
+use App\Repositories\AdminRepository;
 
 use Mail;
 use DB;
@@ -1186,7 +1187,42 @@ class AdminController extends Controller
           return view('user.admin.statisticsUsersBlocked', compact('month', 'year'));
       }
 
+      public function showStatisticsDashboard(){
+        $date = Carbon::now();
+        $year = $date->year;
+        $month = $date->month;
+        $yesterday = new Carbon('yesterday');
+        $lastMonth = new Carbon('last month');
 
+        $stats = [];
+
+        $deleted = DB::table('users')
+                    ->whereMonth('deleted_at', '=', $month)
+                    ->whereYear('deleted_at', '=', $year)
+                    ->count();
+        $blocked = DB::table('users')
+                    ->whereMonth('blocked_at', '=', $month)
+                    ->whereYear('blocked_at', '=', $year)
+                    ->count();
+        $new = DB::table('users')
+                    ->whereMonth('created_at', '=', $month)
+                    ->whereYear('created_at', '=', $year)
+                    ->count();
+        $adminLogs = DB::table('administrator_logs')
+                    ->whereMonth('created_at', '=', $month)
+                    ->whereYear('created_at', '=', $year)
+                    // ->whereDay('created_at', '=', $yesterday)
+                    ->orderBy('created_at', 'ASC')
+                    ->get();
+
+
+        foreach ($adminLogs as $logs) {
+            $logs->created_at = Carbon::parse($logs->created_at)->toDayDateTimeString();
+        }
+
+        $stats = [$deleted, $blocked, $new, $adminLogs];
+        return view('user.admin.statisticsDashboard',compact('stats'));
+      }
 
     // public function manageTextContent(){
     //     return view('user.admin._manageTextContent');

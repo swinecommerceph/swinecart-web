@@ -462,6 +462,7 @@ blockquote{
    display: none;
 }
 
+
 #delete-data {
    color: #D32F2F;
 }
@@ -494,6 +495,7 @@ blockquote{
    margin: auto;
 }
 
+/*Admin dashboard CSS*/
 #total-card{
    background-color: #0a7e7b;
 }
@@ -546,6 +548,109 @@ blockquote{
 
 .brand-logo{
    font-family : Electrolize;
+}
+
+/*Statistics Dashboard*/
+.statsdash-data{
+	font-size: 50px
+}
+.statsdash-link{
+	vertical-align: middle;
+	line-height: 55px;
+}
+
+.statsdash-panel-title{
+	font-size: 25px;
+}
+
+/*CSS for the Horizontal timeline for statistics dashboard
+	Source: http://jsfiddle.net/kthornbloom/zJ6kp/
+*/
+.timeline {
+    white-space:nowrap;
+    overflow-x: scroll;
+    padding:30px 0 10px 0;
+    position:relative;
+}
+
+.entry {
+    display:inline-block;
+    vertical-align:top;
+    background:#FF9797;
+    padding:3px;
+    font-size:12px;
+    text-align:center;
+    position:relative;
+    border-top:5px solid #06182E;
+    border-radius:5px;
+    min-width:200px;
+    max-width:500px;
+}
+
+.entry:after {
+    content:'';
+    display:block;
+    background:#eee;
+    width:5px;
+    height:5px;
+    border-radius:10px;
+    border:3px solid #06182E;
+    position:absolute;
+    left:50%;
+    top:-30px;
+    margin-left:-2px;
+}
+
+.entry:before {
+    content:'';
+    display:block;
+    background:#06182E;
+    width:5px;
+    height:20px;
+    position:absolute;
+    left:50%;
+    top:-20px;
+    margin-left:-2px;
+}
+
+.entry h1 {
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.entry h2 {
+    letter-spacing:.2em;
+    margin-bottom:10px;
+    font-size:14px;
+}
+
+.bar {
+    height:4px;
+    background:#FF7575;
+    width:100%;
+    position:relative;
+    top:9px;
+    left:0;
+}
+
+#dash-transaction-chart{
+	/*fix chart canvas responsiveness in smaller screens*/
+}
+
+#statsdash-transact{
+
+}
+#statsdash-del{
+
+}
+
+#statsdash-block{
+
+}
+
+#statsdash-new{
+
 }
 
 /*for admin forms*/

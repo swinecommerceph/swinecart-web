@@ -44,8 +44,7 @@ class BreederController extends Controller
     public function index(Request $request)
     {
         if($request->user()->updateProfileNeeded()) return view('user.breeder.createProfile');
-        $homeContent = DB::table('home_images')->get();
-        return view('user.breeder.home',compact('homeContent'));
+        return view('user.breeder.home');
     }
 
     /**

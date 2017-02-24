@@ -102,7 +102,7 @@
                      <a href="{{route('admin.pending.users')}}" class="black-text" id='pending-breeder'> <div class="collapsible-header"><i class="material-icons">assignment_late</i>Pending Accounts</div></a>
                     </li>
                     <li>
-                     <a href="{{route('admin.statistics.active.default')}}" class="black-text" id='statistics'> <div class="collapsible-header"><i class="material-icons">trending_up</i>Site Statistics</div></a>
+                     <a href="{{route('admin.statistics.dashboard')}}" class="black-text" id='statistics'> <div class="collapsible-header"><i class="material-icons">trending_up</i>Site Statistics</div></a>
                     </li>
                     <li>
                       <div class="collapsible-header"><i class="material-icons">build</i>Manage Pages</div>

@@ -66,7 +66,7 @@
                             <span class="card-title grey-text text-darken-4">{{$product->name}}<i class="material-icons right">close</i></span>
                             <p>Information</p>
                             <p>
-                                <p> {{$product->other_details}}</p>
+                                <p>{{$product->other_details}}</p>
                                 <p class="center"><a href="#product-modal" class="modal-trigger">See more information</a></p>
                             </p>
                         </div>

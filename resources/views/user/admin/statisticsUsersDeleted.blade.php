@@ -51,7 +51,7 @@
                 </div>
             </div> --}}
             <div class="row col s12">
-                <div class="col s5"></div>
+                <div class="col s6"></div>
                 <div class="col s2">
                     <a class="waves-effect waves-light btn" href="{{route('admin.statistics.active.default')}}">Active</a>
                 </div>

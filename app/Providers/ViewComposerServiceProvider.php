@@ -5,6 +5,7 @@ use App\Models\User;
 use Illuminate\Support\ServiceProvider;
 use DB;
 use Carbon\Carbon;
+
 class ViewComposerServiceProvider extends ServiceProvider
 {
     /**
@@ -15,6 +16,8 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function boot()
     {
         $this->adminGetMinMaxYearUserCreation();
+        $this->getTimeNow();
+        $this->getHomeImages();
     }
 
     /**
@@ -42,5 +45,19 @@ class ViewComposerServiceProvider extends ServiceProvider
 
     }
 
+    public function getTimeNow(){
+        view()->composer('user.admin.*', function($view){
+            $date = Carbon::now();
+            $data = [$date->month, $date->day, $date->year];
+            $view->with('now', $data);
+        });
+    }
 
+    public function getHomeImages(){
+        view()->composer('*',function($view){
+            $homeContent = DB::table('home_images')->get();
+            $view->with('homeContent', $homeContent);
+
+        });
+    }
 }
