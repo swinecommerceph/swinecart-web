@@ -299,7 +299,7 @@ class ProductController extends Controller
      */
     public function uploadMedia(Request $request)
     {
-        // Check if request contains media files
+        // Check if request contains media file input
         if($request->hasFile('media')) {
             $files = $request->file('media.*');
             $fileDetails = [];
@@ -313,6 +313,7 @@ class ProductController extends Controller
                     // Get media (Image/Video) info according to extension
                     if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed);
                     else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed);
+                    else return response()->json('Invalid file extension', 500);
 
                     Storage::disk('public')->put($mediaInfo['directoryPath'].$mediaInfo['filename'], file_get_contents($file));
 
@@ -340,7 +341,7 @@ class ProductController extends Controller
     }
 
     /**
-     * Delete and Image of a Product
+     * Delete a media of a Product
      * AJAX
      *
      * @param  Request $request
@@ -351,22 +352,20 @@ class ProductController extends Controller
         if($request->ajax()){
             if($request->mediaType == 'image'){
                 $image = Image::find($request->mediaId);
+                $fullFilePath = '/images/product/'.$image->name;
 
                 // Check if file exists in the storage
-                if(Storage::disk('public')->exists('/images/product/'.$image->name)){
-                    $fullFilePath = '/images/product/'.$image->name;
-                    Storage::disk('public')->delete($fullFilePath);
-                }
+                if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+
                 $image->delete();
             }
             else if($request->mediaType = 'video'){
                 $video = Video::find($request->mediaId);
+                $fullFilePath = '/videos/product/'.$video->name;
 
                 // Check if file exists in the storage
-                if(Storage::disk('public')->exists('/videos/product/'.$video->name)){
-                    $fullFilePath = '/videos/product/'.$video->name;
-                    Storage::disk('public')->delete($fullFilePath);
-                }
+                if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+
                 $video->delete();
             }
 
@@ -498,6 +497,7 @@ class ProductController extends Controller
     {
         $breeder->name = $breeder->users()->first()->name;
         $breeder->farms = $breeder->farmAddresses;
+        $breeder->logoImage = ($breeder->logo_img_id) ? '/images/breeder/'.Image::find($breeder->logo_img_id)->name : '/images/default_logo.png' ;
         return view('user.customer.viewBreederProfile', compact('breeder'));
     }
 

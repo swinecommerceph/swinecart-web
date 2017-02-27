@@ -10,6 +10,7 @@ var config = {
     viewProducts_url: '/customer/view-products',
     manageProducts_url: '/breeder/products',
     swineCart_url: '/customer/swine-cart',
+    breederLogo_url: '/breeder/edit-profile/logo-upload',
     productMedia_url: '/breeder/products/media',
     productSummary_url: '/breeder/products/product-summary',
     manageSelected_url: '/breeder/products/manage-selected',

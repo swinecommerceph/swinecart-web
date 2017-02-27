@@ -405,6 +405,11 @@ blockquote.info{
 	margin-left:1rem;
 }
 
+/* Dropzone styles */
+#page-breeder-edit-profile #change-logo-modal{
+	width: 30rem;
+}
+
 /*
  * Device-specific styles
  */
