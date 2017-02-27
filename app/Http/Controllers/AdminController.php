@@ -714,7 +714,7 @@ class AdminController extends Controller
       * @return array of counts
       * @todo optimize the method of getting the count of created users per month, change query to filter the year
       */
-     public function showStatisticsActiveDefault(){
+     public function showStatisticsActiveBreeder(){
          $date = Carbon::now();
          $year = $date->year;
          $month = [
@@ -804,10 +804,10 @@ class AdminController extends Controller
                              ->count(),
          ];
 
-        return view('user.admin.statisticsDefault', compact('month', 'year'));
+        return view('user.admin.statisticsBreederActive', compact('month', 'year'));
      }
 
-     public function showStatisticsActive(Request $request){
+     public function showStatisticsActiveBreederYear(Request $request){
          $year = $request->year;
          $month = [
              DB::table('users')
@@ -896,7 +896,7 @@ class AdminController extends Controller
                              ->count(),
          ];
 
-         return view('user.admin.statisticsDefault', compact('month', 'year'));
+         return view('user.admin.statisticsBreederActive', compact('month', 'year'));
      }
 
      /**
@@ -906,7 +906,7 @@ class AdminController extends Controller
       * @return array of counts
       * @todo optimize the method of getting the count of deleted users per month, change query to filter the year
       */
-     public function showStatisticsDeletedDefault(){
+     public function showStatisticsDeletedBreeder(){
          $date = Carbon::now();
          $year = $date->year;
          $month = [
@@ -972,10 +972,10 @@ class AdminController extends Controller
                              ->count(),
          ];
 
-        return view('user.admin.statisticsUsersDeleted', compact('month', 'year'));
+        return view('user.admin.statisticsBreederDeleted', compact('month', 'year'));
      }
 
-     public function showStatisticsDeleted(Request $request){
+     public function showStatisticsDeletedBreederYear(Request $request){
          $year = $request->year;
          $month = [
              DB::table('users')
@@ -1040,7 +1040,7 @@ class AdminController extends Controller
                              ->count(),
          ];
 
-         return view('user.admin.statisticsUsersDeleted', compact('month', 'year'));
+         return view('user.admin.statisticsBreederDeleted', compact('month', 'year'));
      }
 
 
@@ -1051,7 +1051,7 @@ class AdminController extends Controller
       * @return array of counts
       * @todo optimize the method of getting the count of blocked users per month, change query to filter the year
       */
-      public function showStatisticsBlockedDefault(){
+      public function showStatisticsBlockedBreeder(){
           $date = Carbon::now();
           $year = $date->year;
           $month = [
@@ -1116,10 +1116,10 @@ class AdminController extends Controller
                               ->whereYear('blocked_at', '=', $year)
                               ->count(),
           ];
-          return view('user.admin.statisticsUsersBlocked', compact('month', 'year'));
+          return view('user.admin.statisticsBreederBlocked', compact('month', 'year'));
       }
 
-      public function showStatisticsBlocked(Request $request){
+      public function showStatisticsBlockedBreederYear(Request $request){
           $year = $request->year;
           $month = [
               DB::table('users')
@@ -1184,7 +1184,7 @@ class AdminController extends Controller
                               ->count(),
           ];
 
-          return view('user.admin.statisticsUsersBlocked', compact('month', 'year'));
+          return view('user.admin.statisticsBreederBlocked', compact('month', 'year'));
       }
 
       public function showStatisticsDashboard(){

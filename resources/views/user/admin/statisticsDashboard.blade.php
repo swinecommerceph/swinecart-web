@@ -67,7 +67,7 @@
                         </div>
                         <div class="row side-div center">
                             <div class="statsdash-link" class="col s12 m12 l12">
-                                <a href="{{route('admin.statistics.active.default')}}">More Details</a>
+                                <a href="{{route('admin.statistics.breeder.active')}}">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -178,7 +178,7 @@
                                 </div>
                             @empty
                                 <div class="entry">
-                                    <h1>No Happenings at the moment</h1>
+                                    <h1>No Happenings at the Moment</h1>
                                 </div>
                             @endforelse
                         </div>

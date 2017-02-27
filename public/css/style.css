@@ -653,6 +653,10 @@ blockquote{
 
 }
 
+/*for breeder statistics in admin*/
+.selection-buttons{
+	margin-top: 10px;	
+}
 /*for admin forms*/
 #notes{
   width: 640px;

@@ -137,12 +137,12 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
 
         Route::get('home/statistics/dashboard',['as'=>'admin.statistics.dashboard', 'uses'=>'AdminController@showStatisticsDashboard']);
-        Route::get('home/statistics/active/default', ['as' => 'admin.statistics.active.default', 'uses'=> 'AdminController@showStatisticsActiveDefault']);
-        Route::get('home/statistics/active/year', ['as' => 'admin.statistics.active.year', 'uses'=> 'AdminController@showStatisticsActive']);
-        Route::get('home/statistics/deleted/default', ['as' => 'admin.statistics.deleted.default', 'uses'=> 'AdminController@showStatisticsDeletedDefault']);
-        Route::get('home/statistics/deleted/year', ['as' => 'admin.statistics.deleted.year', 'uses'=> 'AdminController@showStatisticsDeleted']);
-        Route::get('home/statistics/blocked/default', ['as' => 'admin.statistics.blocked.defualt', 'uses'=> 'AdminController@showStatisticsBlockedDefault']);
-        Route::get('home/statistics/blocked/year', ['as' => 'admin.statistics.blocked.year', 'uses'=> 'AdminController@showStatisticsBlocked']);
+        Route::get('home/statistics/breeder/active', ['as' => 'admin.statistics.breeder.active', 'uses'=> 'AdminController@showStatisticsActiveBreeder']);
+        Route::get('home/statistics/breeder/active-year', ['as' => 'admin.statistics.breeder.active-year', 'uses'=> 'AdminController@showStatisticsActiveBreederYear']);
+        Route::get('home/statistics/breeder/deleted', ['as' => 'admin.statistics.breeder.deleted', 'uses'=> 'AdminController@showStatisticsDeletedBreeder']);
+        Route::get('home/statistics/breeder/deleted-year', ['as' => 'admin.statistics.breeder.deleted-year', 'uses'=> 'AdminController@showStatisticsDeletedBreederYear']);
+        Route::get('home/statistics/breeder/blocked', ['as' => 'admin.statistics.breeder.blocked', 'uses'=> 'AdminController@showStatisticsBlockedBreeder']);
+        Route::get('home/statistics/breeder/blocked-year', ['as' => 'admin.statistics.breeder.blocked-year', 'uses'=> 'AdminController@showStatisticsBlockedBreederYear']);
 
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
         Route::get('home/approved/breeder', ['as'=>'admin.approved.breeder', 'uses'=>'AdminController@displayApprovedBreeders']);
