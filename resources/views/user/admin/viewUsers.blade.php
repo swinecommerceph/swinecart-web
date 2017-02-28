@@ -23,11 +23,11 @@
 
 @section('content')
 
-    <div class="progress geocoding" style="display:none;">
-      <div class="indeterminate"></div>
-    </div>
     <div id="map-container">
         <div id="map-canvas"></div>
+    </div>
+    <div class="progress geocoding" style="display:none;">
+      <div class="indeterminate"></div>
     </div>
     
    
@@ -75,6 +75,7 @@
             map.zoom(6);
 
             function geocode(opts){
+                $('.geocoding').show();
                 geocoder.geocode({
                     address: opts.address
                 }, function(results, status){
@@ -86,6 +87,7 @@
                             content: opts.content,
                             icon: '/images/pigmarker.png'
                         });
+                        $('.geocoding').hide();
 
                     }else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {    
                         setTimeout(function() {
@@ -98,6 +100,7 @@
             }
 
             function geocode2(opts){
+                $('.geocoding').show();
                 geocoder.geocode({
                     address: opts.address
                 }, function(results, status){
@@ -109,6 +112,7 @@
                             content: opts.content,
                             icon: '/images/pigmarker2.png'
                         });
+                        $('.geocoding').hide();
 
                     }else if (status === google.maps.GeocoderStatus.OVER_QUERY_LIMIT) {    
                         setTimeout(function() {

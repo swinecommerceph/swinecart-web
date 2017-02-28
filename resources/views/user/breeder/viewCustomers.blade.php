@@ -61,7 +61,7 @@
                             lng : result.geometry.location.lng(),
                             draggable : true,
                             content: opts.content,
-                            icon: '/images/pigmarker.png'
+                            icon: '/images/pigmarker2.png'
                         });
 
                     }else{
