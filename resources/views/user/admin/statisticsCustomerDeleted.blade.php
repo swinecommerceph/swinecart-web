@@ -5,13 +5,13 @@
 @endsection
 
 @section('pageId')
-    id="breeder-blocked-stats-page"
+    id="customer-active-stats-page"
 @endsection
 
 @section('header')
     <div class="valign-wrapper row">
         <div class="valign center-block col s5">
-            <h4 id='admin-content-panel-header'>Breeder Statistics</h4>
+            <h4 id='admin-content-panel-header'>Customer Statistics</h4>
         </div>
         <div class="valign center-block col s7">
             <div class="input-field col s12">
@@ -50,18 +50,19 @@
                 <label for="stats-selection-buttons">Chart</label>
                 <div class="col s6">
                     <div id="stats-selection-buttons" class="v-align col s4">
-                        <a class="waves-effect waves-light btn" href="{{route('admin.statistics.breeder.active')}}">Active</a>
+
+                        <a class="waves-effect waves-light btn" href="{{route('admin.statistics.customer.active')}}">Active</a>
                     </div>
                     <div class="v-align col s4">
-                        <a class="waves-effect waves-light btn" href="{{route('admin.statistics.breeder.deleted')}}">Deleted</a>
+                        <a class="waves-effect waves-light btn disabled">Deleted</a>
                     </div>
                     <div class="v-align col s4">
-                        <a class="waves-effect waves-light btn disabled">Blocked</a>
+                        <a class="waves-effect waves-light btn" href="{{route('admin.statistics.customer.blocked')}}">Blocked</a>
                     </div>
                 </div>
 
                 <div class="col s6">
-                    {!!Form::open(['route'=>'admin.statistics.breeder.blocked-year', 'method'=>'GET'])!!}
+                    {!!Form::open(['route'=>'admin.statistics.customer.deleted-year', 'method'=>'GET'])!!}
                     <label for="stats-year">Year</label>
                     <input id="stats-year" type="number" name="year" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[1] }}" value="{{ $year }}">
                     <div class="center">

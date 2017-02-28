@@ -5,7 +5,7 @@
 @endsection
 
 @section('pageId')
-    id="users-deleted-stats-page"
+    id="breeder-deleted-stats-page"
 @endsection
 
 @section('header')
@@ -18,7 +18,7 @@
                 <select onChange="window.location.href=this.value">
                     <option disabled selected>Choose option</option>
                     <option value="{{route('admin.statistics.breeder.active')}}">Breeder</option>
-                    <option value="2">Customer</option>
+                    <option value="{{route('admin.statistics.customer.active')}}">Customer</option>
                     <option value="3">Transactions</option>
                     <option value="3">Logs Timeline</option>
                 </select>
