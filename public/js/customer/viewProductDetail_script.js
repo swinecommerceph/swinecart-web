@@ -19,7 +19,9 @@ $(document).ready(function(){
 	// Change display to respective image upon carousel-item click
 	$('#images-carousel .carousel-item').click(function(e){
 		e.preventDefault();
+
 		var img_src = $(this).find('img').attr('src');
+
 		$('#video-display').hide();
 		$('.card-image img').attr('src', img_src);
 		$('.card-image img').show();
@@ -28,6 +30,7 @@ $(document).ready(function(){
 	// Change display to respective video upon carousel-item click
 	$('.carousel-item .responsive-video').click(function(e){
 		e.preventDefault();
+
 		var video_src = $(this).find('source').attr('src');
 		var video_element =
 			'<video id="video-display" class="responsive-video video-js vjs-default-skin vjs-big-play-centered">'+

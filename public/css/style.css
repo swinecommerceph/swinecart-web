@@ -49,6 +49,14 @@ html{
 	height:200px;
 }
 
+#page-customer-view-products #collapsible-container li p{
+	margin:0px;
+}
+
+#page-customer-view-products #collapsible-container .collapsible-body{
+	padding:0px;
+}
+
 /* Breadcrumb styles */
 #breadcrumb{
 	margin-bottom:5px;
@@ -107,20 +115,21 @@ html{
 }
 
 /* Breeder Dashboard */
-#page-breeder-product-status i{
+#page-breeder-product-status #product-status-container i{
 	font-size:2rem;
 }
 
-/* Swine Cart Related */
-.info {
-	top: 0;
-	bottom: 0;
-	right: 0;
-	left: 0;
-	margin: auto;
+/* Swine Cart page styles */
+#swine-cart #card-container .status-icons-container i{
+	cursor: pointer;
+	font-size: 1.85rem;
+	margin-right: .5rem;
 }
 
-.material-icons.md { font-size: 72px; }
+#swine-cart #card-container .card-content p > span,
+#swine-cart #card-container span.input-quantity-container > span {
+	padding:0;
+}
 
 .swine-cart-item {
 	top: 0;
@@ -130,16 +139,7 @@ html{
 	margin: auto;
 }
 
-.verticalLine {
-    border-right: thin solid #9e9e9e;
-    height: 100px;
-}
-
-#swine-cart {
-	padding-top: 20px;
-}
-
-#transaction-history {
+#swine-cart, #transaction-history {
 	padding-top: 20px;
 }
 
@@ -189,7 +189,7 @@ html{
 }
 
 /* Profile Tab styles */
-#personal-information, #farm-information{
+#personal-information, #farm-information, #password-information{
 	margin-top:0;
 }
 
@@ -230,6 +230,7 @@ html{
 	color: white;
 	background-color: #ee6e73;
 	border-radius: 5px;
+	min-width: 1.5rem;
 }
 
 #cart-dropdown span.title, #cart-dropdown .collection-item a{
@@ -319,12 +320,26 @@ html{
 	color: #b71c1c !important;
 }
 
+.tabs .tab a{
+	font-size: 1rem;
+}
+
 /* Blockquote styles */
 blockquote{
 	padding-top: 1rem;
 	padding-bottom: 1rem;
 	border-left: 5px solid #388e3c;
 	background-color: #e8f5e9;
+}
+
+blockquote.error{
+	border-left: 5px solid #ee6e73;
+	background-color: #fdf0f1;
+}
+
+blockquote.info{
+	border-left: 5px solid #009688;
+	background-color: #e7f5f4;
 }
 
 /* Form component styles */
@@ -336,7 +351,8 @@ blockquote{
 	margin-top: 30px;
 }
 
-#page-breeder-view-product-details .responsive-video{
+#page-breeder-view-product-details .responsive-video,
+#page-customer-view-product-details .responsive-video{
 	width: 100%;
 }
 

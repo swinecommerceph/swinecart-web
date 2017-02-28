@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Customer;
 use App\Models\Breeder;
 use App\Models\SwineCartItem;
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 
 class TransactionLog extends Model
@@ -33,5 +34,13 @@ class TransactionLog extends Model
     public function swineCartItem()
     {
         return $this->belongsTo(SwineCartItem::class);
+    }
+
+    /**
+     * Get the related Product of the Transaction Log
+     */
+    public function product()
+    {
+        return $this->belongsTo(Product::class);
     }
 }

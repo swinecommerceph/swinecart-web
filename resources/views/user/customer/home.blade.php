@@ -21,7 +21,7 @@
     <li id="message-main-container">
         <a href="{{ route('customer.messages') }}" id="message-icon"
             data-alignment="right"
-        > 
+        >
             <i class="material-icons left">message</i>
             <span class="badge"
                 v-if="unreadCount > 0  && unreadCount <= 99"
@@ -158,8 +158,10 @@
                                 <span class="left" v-else >
                                     <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
                                 </span>
-                                <p style="margin-left:1.5rem;"> @{{ notification.data.description }} </p>
-                                <p class="left-align grey-text text-darken-1" style="margin-left:1.5rem; font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
+                                <p style="margin-left:1.5rem;" :class=" (notification.read_at) ? 'grey-text' : '' ">
+                                    <span v-html="notification.data.description"></span>
+                                </p>
+                                <p class="right-align grey-text text-darken-1" style="margin-left:1.5rem; font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
                             </a>
                         </li>
 
@@ -195,7 +197,7 @@
             <form>
                 <div class="input-field">
                     <input id="search" type="search" placeholder="Search for a product" required>
-                    <label for="search"><i class="material-icons teal-text">search</i></label>
+                    <label class="label-icon" for="search"><i class="material-icons teal-text">search</i></label>
                     <i class="material-icons">close</i>
                 </div>
             </form>

@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\Customer;
 use App\Models\TransactionLog;
+use App\Models\ProductReservation;
 use Illuminate\Database\Eloquent\Model;
 
 class SwineCartItem extends Model
@@ -34,10 +35,18 @@ class SwineCartItem extends Model
     }
 
     /**
-     * Get the transaction log that tracks the Swine Cart Item
+     * Get the Transaction Logs that are related to the Swine Cart Item
      */
-    public function transactionLog()
+    public function transactionLogs()
     {
-        return $this->hasOne(TransactionLog::class, 'swineCart_id');
+        return $this->hasMany(TransactionLog::class, 'swineCart_id');
+    }
+
+    /**
+     * Get the Product Reservation tied to this Swine Cart item
+     */
+    public function productReservation()
+    {
+        return $this->belongsTo(ProductReservation::class, 'reservation_id');
     }
 }

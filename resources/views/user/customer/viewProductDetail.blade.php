@@ -36,7 +36,7 @@
 
             <div class="row">
                 <div class="col s12">
-                <ul class="tabs">
+                <ul class="tabs tabs-fixed-width">
                     <li id="image-carousel-tab" class="tab col s3"><a class="active" href="#images-carousel">Images</a></li>
                     <li id="video-carousel-tab" class="tab col s3"><a href="#videos-carousel">Videos</a></li>
                 </ul>
@@ -74,11 +74,13 @@
                             {{ $product->name }}
                         </div>
                         <div class="col right">
-                            {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
-                                <a href="#" class="right tooltipped add-to-cart"  data-position="left" data-delay="50" data-tooltip="Add to Swine Cart">
-                                    <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
-                                </a>
-                            {!! Form::close() !!}
+                            @if ($product->quantity)
+                                {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
+                                    <a href="#" class="right tooltipped add-to-cart"  data-position="left" data-delay="50" data-tooltip="Add to Swine Cart">
+                                        <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
+                                    </a>
+                                {!! Form::close() !!}
+                            @endif
                         </div>
                     </h4>
                     <div class="row">
@@ -97,7 +99,7 @@
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
                 <li id="stars-container" class="collection-item">
                     Breeder Ratings
-                    <a href="/customer/messages/{{ $product->userid }}" class="right tooltipped"  data-position="left" data-delay="50" data-tooltip="Message Breeder">
+                    <a href="/customer/messages/{{ $product->userid }}" class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Message Breeder">
                         <i class="material-icons red-text" style="font-size:35px;">message</i>
                     </a>
                     <br><br>

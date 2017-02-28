@@ -3,28 +3,31 @@ $(document).ready(function(){
     $('body').on('click', '.delete-button', function (e) {
       e.preventDefault();
       $('#form-delete-id').attr("value", $(this).attr("data-id"))
-      $('#delete-modal').openModal({        // open the delete modal
+      $('#delete-modal').modal({        // open the delete modal
         dismissible: true,
         opacity: 0,
       });
+      $('#delete-modal').modal('open');
     });
 
     $('body').on('click', '.block-button', function (e) {
       e.preventDefault();
       $('#form-block-id').attr("value", $(this).attr("data-id"))
-      $('#block-modal').openModal({        // open the delete modal
+      $('#block-modal').modal({        // open the delete modal
         dismissible: true,
         opacity: 0,
       });
+      $('#block-modal').modal('open');
     });
 
     $('body').on('click', '.unblock-button', function (e) {
       e.preventDefault();
       $('#form-unblock-id').attr("value", $(this).attr("data-id"))
-      $('#unblock-modal').openModal({        // open the delete modal
+      $('#unblock-modal').modal({        // open the delete modal
         dismissible: true,
         opacity: 0,
       });
+      $('#unblock-modal').modal('open');
     });
 
     // changing the values of some marker tags used to find a specific row clicked by the user
@@ -51,10 +54,12 @@ $(document).ready(function(){
     $('body').on('click', '.manage-button', function (e){
        e.preventDefault();
        $(this).attr('data-clicked', 'clicked');
-       $('#manage-user-modal').openModal({
+       $('#manage-user-modal').modal({
           dismissible: false,
           opacity: 0,
        });
+       $('#manage-user-modal').modal('open');
+
        // set the appearance of buttons in the user interface depending on the status of the user's attributes
        $('#manage-user-modal h4').text($(this).parents('td').siblings('.name-column').text());
        if($(this).parents('td').siblings('.status-column').text()==1){
@@ -79,10 +84,11 @@ $(document).ready(function(){
        $('#form-accept-id').attr("value", $(this).attr("data-id"));
     //   $('#accept-reject-modal').closeModal();
     //   $('#accept-modal .modal-content h4').text($('#accept-label').text() + " User");
-      $('#accept-modal').openModal({
+      $('#accept-modal').modal({
       dismissible: true,
       opacity: 0,
     });
+      $('#accept-modal').modal('open');
     });
 
 
@@ -96,10 +102,11 @@ $(document).ready(function(){
          e.preventDefault();
          $('#form-reject-id').attr("value", $(this).attr("data-id"));
         //  $('#accept-reject-modal').closeModal();
-         $('#reject-modal').openModal({
+         $('#reject-modal').modal({
            dismissible: true,
            opacity: 0,
          });
+         $('#reject-modal').modal('open');
      });
 
     // if the cancel button is clicked remove the marker to the data attribute

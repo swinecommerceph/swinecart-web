@@ -1,5 +1,76 @@
 'use strict';
 
+Vue.component('day-expiration-input',{
+    template: '\
+        <div class="col s12" style="padding:0;"> \
+            <input type="text" \
+                ref="input" \
+                class="center-align" \
+                :value="value" \
+                @input="updateValue($event.target.value)" \
+                @focus="selectAll" \
+                @blur="formatValue" \
+            > \
+        </div> \
+    ',
+    props: {
+        value: {
+            type: Number
+        }
+    },
+    methods: {
+        updateValue: function(value){
+            var resultValue = this.validateQuantity(value);
+            this.$refs.input.value = resultValue;
+            this.$emit('input', resultValue);
+        },
+
+        selectAll: function(event){
+            setTimeout(function () {
+                event.target.select()
+            }, 0);
+        },
+
+        formatValue: function(){
+            this.$refs.input.value = this.validateQuantity(this.value);
+        },
+
+        validateQuantity: function(value){
+            var parsedValue = _.toNumber(value);
+            if(_.isFinite(parsedValue) && parsedValue > 0){
+                return parsedValue;
+            }
+            else return 1;
+        }
+    }
+
+});
+
+Vue.component('custom-status-select', {
+    template: '\
+        <div> \
+            <select ref="select" :value="value">\
+                <option value="">All</option> \
+                <option value="requested">Requested</option> \
+                <option value="reserved">Reserved</option> \
+                <option value="on_delivery">On Delivery</option> \
+                <option value="paid">Paid</option> \
+                <option value="sold">Sold</option> \
+            </select> \
+            <label>Status</label> \
+        </div> \
+    ',
+    props:['value'],
+    mounted: function(){
+
+        var self = this;
+        $('select').on('change', function(){
+            self.$emit('status-select',self.$refs.select.value);
+        });
+    }
+
+});
+
 Vue.component('status-table',{
     template: '#status-table-template',
     props: ['products', 'token', 'filterQuery', 'statusFilter'],
@@ -19,11 +90,11 @@ Vue.component('status-table',{
                 customers: []
             },
             productReserve:{
-                productName: '',
                 customerId: 0,
                 customerName: '',
                 swineCartId: 0,
                 requestQuantity: 0,
+                daysAfterExpiration: 3
             },
             productInfoModal:{
                 productId: 0,
@@ -116,7 +187,7 @@ Vue.component('status-table',{
 
                     // Store fetched data in local component data
                     this.productRequest.customers = response.body;
-                    $('#product-requests-modal').openModal();
+                    $('#product-requests-modal').modal('open');
 
                     this.$nextTick(function(){
                         // Initialize tooltips
@@ -141,7 +212,7 @@ Vue.component('status-table',{
             this.productReserve.requestQuantity = requestDetails.requestQuantity;
             this.productReserve.dateNeeded = requestDetails.dateNeeded;
             this.productReserve.specialRequest = requestDetails.specialRequest;
-            $('#reserve-product-confirmation-modal').openModal();
+            $('#reserve-product-confirmation-modal').modal('open');
         },
 
         reserveToCustomer: function(){
@@ -156,6 +227,7 @@ Vue.component('status-table',{
                     request_quantity: this.productReserve.requestQuantity,
                     date_needed: this.productReserve.dateNeeded,
                     special_request: this.productReserve.specialRequest,
+                    days_after_expiration: this.productReserve.daysAfterExpiration,
                     status: 'reserved'
                 }
             ).then(
@@ -163,8 +235,8 @@ Vue.component('status-table',{
                     var responseBody = response.body;
                     var index = this.productRequest.productIndex;
 
-                    $('#reserve-product-confirmation-modal').closeModal();
-                    $('#product-requests-modal').closeModal();
+                    $('#reserve-product-confirmation-modal').modal('close');
+                    $('#product-requests-modal').modal('close');
 
                     // Update product data (root data) based on the response
                     // of the AJAX PATCH method
@@ -172,11 +244,13 @@ Vue.component('status-table',{
                         if(this.products[index].type !== 'semen'){
                             var updateDetails = {
                                 'status': 'reserved',
+                                'statusTime': responseBody[6].date,
                                 'index': index,
                                 'type': this.products[index].type,
                                 'reservationId': responseBody[2],
                                 'customerId': this.productReserve.customerId,
-                                'customerName': this.productReserve.customerName
+                                'customerName': this.productReserve.customerName,
+                                'expirationDate': responseBody[5].date
                             };
 
                             // Update product list on root data
@@ -185,6 +259,7 @@ Vue.component('status-table',{
                         else{
                             var updateDetails = {
                                 'status': 'reserved',
+                                'statusTime': responseBody[6].date,
                                 'uuid': responseBody[3],
                                 'index': index,
                                 'type': this.products[index].type,
@@ -194,7 +269,8 @@ Vue.component('status-table',{
                                 'customerName': this.productReserve.customerName,
                                 'dateNeeded': this.productReserve.dateNeeded,
                                 'specialRequest': this.productReserve.specialRequest,
-                                'removeParentProductDisplay': responseBody[4]
+                                'removeParentProductDisplay': responseBody[4],
+                                'expirationDate': responseBody[5].date
                             };
 
                             // Update product list on root data
@@ -227,9 +303,9 @@ Vue.component('status-table',{
             this.productInfoModal.customerName = this.products[index].customer_name;
             this.productInfoModal.productIndex = index;
 
-            if(status === 'delivery') $('#product-delivery-confirmation-modal').openModal();
-            else if(status === 'paid') $('#paid-product-confirmation-modal').openModal();
-            else $('#sold-product-confirmation-modal').openModal();
+            if(status === 'delivery') $('#product-delivery-confirmation-modal').modal('open');
+            else if(status === 'paid') $('#paid-product-confirmation-modal').modal('open');
+            else $('#sold-product-confirmation-modal').modal('open');
         },
 
         productOnDelivery: function(){
@@ -249,20 +325,21 @@ Vue.component('status-table',{
                         customerName = this.productInfoModal.customerName,
                         productName = this.productInfoModal.productName;
 
-                    $('#product-delivery-confirmation-modal').closeModal();
+                    $('#product-delivery-confirmation-modal').modal('close');
 
                     // Set status of the product (root data) to 'on_delivery'
                     // after successful product status change
                     this.$emit('update-product',
                         {
                             'status': 'on_delivery',
+                            'statusTime': responseBody[1].date,
                             'index': index
                         }
                     );
 
                     // Initialize/Update some DOM elements
                     this.$nextTick(function(){
-                        if(responseBody === "OK") Materialize.toast(productName + ' on delivery to ' + customerName , 2500, 'green lighten-1');
+                        if(responseBody[0] === "OK") Materialize.toast(productName + ' on delivery to ' + customerName , 2500, 'green lighten-1');
                         else Materialize.toast('Failed status change', 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
                     });
@@ -290,20 +367,21 @@ Vue.component('status-table',{
                         customerName = this.productInfoModal.customerName,
                         productName = this.productInfoModal.productName;
 
-                    $('#paid-product-confirmation-modal').closeModal();
+                    $('#paid-product-confirmation-modal').modal('close');
 
                     // Set status of the product (root data) to 'paid' after
                     // successful product status change
                     this.$emit('update-product',
                         {
                             'status': 'paid',
+                            'statusTime': responseBody[1].date,
                             'index': index
                         }
                     );
 
                     // Initialize/Update some DOM elements
                     this.$nextTick(function(){
-                        if(responseBody === "OK") Materialize.toast(productName + ' already paid by ' + customerName , 2500, 'green lighten-1');
+                        if(responseBody[0] === "OK") Materialize.toast(productName + ' already paid by ' + customerName , 2500, 'green lighten-1');
                         else Materialize.toast('Failed status change', 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
                     });
@@ -331,20 +409,21 @@ Vue.component('status-table',{
                         customerName = this.productInfoModal.customerName,
                         productName = this.productInfoModal.productName;
 
-                    $('#sold-product-confirmation-modal').closeModal();
+                    $('#sold-product-confirmation-modal').modal('close');
 
                     // Set status of the product (root data) to 'sold' after
                     // successful product status change
                     this.$emit('update-product',
                         {
                             'status': 'sold',
+                            'statusTime': responseBody[1].date,
                             'index': index
                         }
                     );
 
                     // Initialize/Update some DOM elements
                     this.$nextTick(function(){
-                        if(responseBody === "OK") Materialize.toast(productName + ' already sold to ' + customerName , 2500, 'green lighten-1');
+                        if(responseBody[0] === "OK") Materialize.toast(productName + ' already sold to ' + customerName , 2500, 'green lighten-1');
                         else Materialize.toast('Failed status change', 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
                     });
@@ -365,7 +444,7 @@ Vue.component('status-table',{
             this.reservationDetails.dateNeeded = this.products[index].date_needed;
             this.reservationDetails.specialRequest = this.products[index].special_request;
 
-            $('#product-reservation-details-modal').openModal();
+            $('#product-reservation-details-modal').modal('open');
         }
 
     },
@@ -373,33 +452,16 @@ Vue.component('status-table',{
         capitalize: function(str){
             if (str) return str[0].toUpperCase() + str.slice(1);
             else return '';
+        },
+
+        transformDate: function(value){
+            return moment(value).format("MMM D YYYY (ddd), h:mmA");
+        },
+
+        transformToReadableStatus: function(value){
+            return _.startCase(value);
         }
     }
-});
-
-Vue.component('custom-status-select', {
-    template: '\
-        <div> \
-            <select ref="select" :value="value">\
-                <option value="">All</option> \
-                <option value="requested">Requested</option> \
-                <option value="reserved">Reserved</option> \
-                <option value="on_delivery">On Delivery</option> \
-                <option value="paid">Paid</option> \
-                <option value="sold">Sold</option> \
-            </select> \
-            <label>Status</label> \
-        </div> \
-    ',
-    props:['value'],
-    mounted: function(){
-        
-        var self = this;
-        $('select').on('change', function(){
-            self.$emit('status-select',self.$refs.select.value);
-        });
-    }
-
 });
 
 var vm = new Vue({
@@ -425,10 +487,12 @@ var vm = new Vue({
                     // Just update the product if it is not of type 'semen'
                     if(updateDetails.type !== 'semen'){
                         this.products[index].status = 'reserved';
+                        this.products[index].status_time = updateDetails.statusTime;
                         this.products[index].quantity = 0;
                         this.products[index].reservation_id = updateDetails.reservationId;
                         this.products[index].customer_id = updateDetails.customerId;
                         this.products[index].customer_name = updateDetails.customerName;
+                        this.products[index].expiration_date = updateDetails.expirationDate;
                     }
 
                     // Add another entry to the product list if of type 'semen'
@@ -453,10 +517,12 @@ var vm = new Vue({
                                 'fcr': baseProduct.fcr,
                                 'bft': baseProduct.bft,
                                 'status': 'reserved',
+                                'status_time': updateDetails.statusTime,
                                 'customer_id': updateDetails.customerId,
                                 'customer_name': updateDetails.customerName,
                                 'date_needed': updateDetails.dateNeeded,
-                                'special_request': updateDetails.specialRequest
+                                'special_request': updateDetails.specialRequest,
+                                'expiration_date': updateDetails.expirationDate
                             }
                         );
 
@@ -471,16 +537,22 @@ var vm = new Vue({
                 case 'on_delivery':
                     var index = updateDetails.index;
                     this.products[index].status = 'on_delivery';
+                    this.products[index].status_time = updateDetails.statusTime;
+
                     break;
 
                 case 'paid':
                     var index = updateDetails.index;
                     this.products[index].status = 'paid';
+                    this.products[index].status_time = updateDetails.statusTime;
+
                     break;
 
                 case 'sold':
                     var index = updateDetails.index;
                     this.products[index].status = 'sold';
+                    this.products[index].status_time = updateDetails.statusTime;
+
                     break;
 
                 default: break;

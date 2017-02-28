@@ -30,15 +30,13 @@
                 <div class="card">
                     <div class="card-image">
                         <img src="{{$product->img_path}}" data-imagezoom="true">
-
                     </div>
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col s12">
-                <ul class="tabs">
+                <ul class="tabs tabs-fixed-width">
                     <li id="image-carousel-tab" class="tab col s3"><a class="active" href="#images-carousel">Images</a></li>
                     <li id="video-carousel-tab" class="tab col s3"><a href="#videos-carousel">Videos</a></li>
                 </ul>

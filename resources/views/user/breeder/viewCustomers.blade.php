@@ -5,20 +5,20 @@
 @extends('user.breeder.home')
 
 @section('title')
-    | Breeders
+    | Customers
 @endsection
 
 @section('pageId')
-    id="page-customer-view-breeders"
+    id="page-breeder-view-customers"
 @endsection
 
 @section('breadcrumbTitle')
-    Breeders
+    Customers
 @endsection
 
 @section('breadcrumb')
     <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="#!" class="breadcrumb">Breeders</a>
+    <a href="#!" class="breadcrumb">Customers</a>
 @endsection
 
 @section('content')

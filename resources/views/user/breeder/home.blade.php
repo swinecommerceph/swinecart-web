@@ -17,10 +17,11 @@
 @endsection
 
 @section('navbarHead')
+    <li><a href="{{ route('dashboard') }}"> <i class="material-icons">assessment</i></a></li>
     <li id="message-main-container">
         <a href="{{ route('breeder.messages') }}" id="message-icon"
             data-alignment="right"
-        > 
+        >
             <i class="material-icons left">message</i>
             <span class="badge"
                 v-if="unreadCount > 0  && unreadCount <= 99"
@@ -34,7 +35,6 @@
             </span>
         </a>
     </li>
-    <li><a href="{{ route('dashboard') }}"> <i class="material-icons">assessment</i></a></li>
     <li id="notification-main-container">
         <a href="#!" id="notification-icon"
             class="dropdown-button"
@@ -94,8 +94,10 @@
                             <span class="left" v-else >
                                 <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
                             </span>
-                            <p style="margin-left:1.5rem;"> @{{ notification.data.description }} </p>
-                            <p class="left-align grey-text text-darken-1" style="margin-left:1.5rem; font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
+                            <p style="margin-left:1.5rem;" :class=" (notification.read_at) ? 'grey-text' : '' ">
+                                <span v-html="notification.data.description"></span>
+                            </p>
+                            <p class="right-align grey-text text-darken-1" style="margin-left:1.5rem; font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
                         </a>
                     </li>
 

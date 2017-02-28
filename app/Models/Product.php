@@ -5,6 +5,7 @@ namespace App\Models;
 use App\Models\Breeder;
 use App\Models\Image;
 use App\Models\Video;
+use App\Models\TransactionLog;
 use App\Models\ProductReservation;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -85,5 +86,13 @@ class Product extends Model
     public function reservations()
     {
         return $this->hasMany(ProductReservation::class);
+    }
+
+    /**
+     * Get the respective Transaction Log of the Product
+     */
+    public function transactionLog()
+    {
+        return $this->hasOne(TransactionLog::class);
     }
 }
