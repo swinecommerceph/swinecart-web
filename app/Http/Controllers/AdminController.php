@@ -2268,4 +2268,45 @@ class AdminController extends Controller
          return view('user.admin.statisticsCustomerBlocked', compact('month', 'year'));
      }
 
+     public function showStatisticsTimeline(){
+         $date = Carbon::now();
+         $year = $date->year;
+         $month = $date->month;
+         $adminLogs = DB::table('administrator_logs')
+                     ->whereMonth('created_at', '=', $month)
+                     ->whereYear('created_at', '=', $year)
+                     // ->whereDay('created_at', '=', $yesterday)
+                     ->orderBy('created_at', 'ASC')
+                     ->get();
+
+
+         foreach ($adminLogs as $logs) {
+             $logs->created_at = Carbon::parse($logs->created_at)->toTimeString();
+         }
+         $dateNow = $date->toFormattedDateString();
+         return view('user.admin.statisticsTimeline', compact('dateNow','adminLogs'));
+     }
+
+     public function showStatisticsTimelineDate(Request $request){
+         $date = new Carbon($request->date);
+         // dd($date);
+         $year = $date->year;
+         $month = $date->month;
+         $day = $date->day;
+         $adminLogs = DB::table('administrator_logs')
+                     ->whereDay('created_at', '=', $day)
+                     ->whereMonth('created_at', '=', $month)
+                     ->whereYear('created_at', '=', $year)
+                     // ->whereDay('created_at', '=', $yesterday)
+                     ->orderBy('created_at', 'ASC')
+                     ->get();
+
+         foreach ($adminLogs as $logs) {
+             $logs->created_at = Carbon::parse($logs->created_at)->toTimeString();
+         }
+         $dateNow = $date->toFormattedDateString();
+         return view('user.admin.statisticsTimeline', compact('dateNow','adminLogs'));
+     }
+
+
 }

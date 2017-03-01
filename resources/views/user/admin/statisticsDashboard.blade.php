@@ -168,6 +168,11 @@
         <div class="col s12 m12 l12">
             <div class="card-panel orange lighten-5 hoverable">
                 <div class="row">
+                    <div class="col s12 m12 l12 statsdash-panel-title">
+                        Logs Timeline
+                    </div>
+                </div>
+                <div class="row">
                     <div class="col s12 m12 l12">
                         <div class="bar"></div>
                         <div class="timeline">
@@ -186,7 +191,7 @@
                 </div>
                 <div class="row right-align">
                     <div class="col s12 m12 l12">
-                        <a href="#">More Details</a>
+                        <a href="{{route('admin.statistics.timeline')}}">More Details</a>
                     </div>
                 </div>
             </div>

@@ -5,7 +5,7 @@
 @endsection
 
 @section('pageId')
-    id="breeder-blocked-stats-page"
+    id="customer-blocked-stats-page"
 @endsection
 
 @section('header')

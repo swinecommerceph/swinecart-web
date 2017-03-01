@@ -5,7 +5,7 @@
 @endsection
 
 @section('pageId')
-    id="customer-active-stats-page"
+    id="customer-deleted-stats-page"
 @endsection
 
 @section('header')
