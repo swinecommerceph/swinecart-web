@@ -7,7 +7,7 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Swine E-Commerce PH @yield('title') </title>
+    <title>SwineCart @yield('title') </title>
 
     <link href="/css/materialize.min.css" rel="stylesheet" type="text/css">
     <link href="/css/dropzone.css" rel="stylesheet" type="text/css">
@@ -24,7 +24,7 @@
     <div class="navbar-fixed">
       <nav class="teal darken-3">
           <div class="nav-wrapper container">
-            <a href="{{ route('home_path') }}"><img src="/images/logowhite.png" height=65/>&nbsp&nbsp<div class="brand-logo">Swine E-Commerce PH</div></a>
+            <a href="{{ route('home_path') }}"><img src="/images/logowhite.png" height=65/>&nbsp&nbsp<div class="brand-logo">SwineCart</div></a>
 
             <ul id="nav-mobile" class="right hide-on-med-and-down">
               <li><a>{{ Auth::user()->name }}</a> </li>

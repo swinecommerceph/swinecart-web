@@ -27,7 +27,10 @@ class UserInstancesSeeder extends Seeder
             'Pork n Pork',
             'Slow Roast Piggery',
             'Master Piggery',
-            'Pigz em Piggery'
+            'Pigz em Piggery',
+            'PorKed',
+            'Pig Masters'
+
         ];
         // For Administrator
         factory(App\Models\User::class, 2)->create()->each(function($user){
