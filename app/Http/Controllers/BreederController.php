@@ -15,8 +15,10 @@ use App\Models\Breeder;
 use App\Models\Customer;
 use App\Models\FarmAddress;
 use App\Models\Product;
+use App\Models\Image;
 
 use Auth;
+use Storage;
 
 class BreederController extends Controller
 {
@@ -129,6 +131,7 @@ class BreederController extends Controller
     public function editProfile(Request $request)
     {
         $breeder = $this->user->userable;
+        $breeder->logoImage = ($breeder->logo_img_id) ? '/images/breeder/'.Image::find($breeder->logo_img_id)->name : '/images/default_logo.png' ;
         $farmAddresses = $breeder->farmAddresses;
         return view('user.breeder.editProfile', compact('breeder', 'farmAddresses'));
     }
@@ -293,6 +296,11 @@ class BreederController extends Controller
         }
     }
 
+    /**
+     * View Customers of Breeder
+     *
+     * @return View
+     */
     public function viewCustomers(){
         $breeder = $this->user->userable;
         $customers = $breeder->transactionLogs()->first()->customer()->get();
@@ -300,4 +308,126 @@ class BreederController extends Controller
         return view('user.breeder.viewCustomers', compact('customers'));
     }
 
+    /**
+     * Upload logo of Breeder
+     *
+     * @param   Request $request
+     * @return  JSON
+     */
+    public function uploadLogo(Request $request)
+    {
+        // Check request if it contains logo file input
+        if($request->hasFile('logo')){
+            $file = $request->file('logo');
+            $imageDetails = [];
+
+            // Check if the file had a problem in uploading
+            if($file->isValid()){
+                $fileExtension = $file->getClientOriginalExtension();
+
+                if($this->isImage($fileExtension)) $imageInfo = $this->createImageInfo($fileExtension);
+                else return response()->json('Invalid file extension', 500);
+
+                Storage::disk('public')->put($imageInfo['directoryPath'].$imageInfo['filename'], file_get_contents($file));
+
+                if($file){
+                    $breeder = $this->user->userable;
+
+                    // Make Image instance
+                    $image = $imageInfo['type'];
+                    $image->name = $imageInfo['filename'];
+
+                    $breeder->images()->save($image);
+
+                    $imageDetails['id'] = $image->id;
+                    $imageDetails['name'] = $image->name;
+                }
+                else return response()->json('Move file failed', 500);
+            }
+            else return response()->json('Upload failed', 500);
+
+            return response()->json(collect($imageDetails)->toJson(), 200);
+        }
+        else return response()->json('No files detected', 500);
+    }
+
+    /**
+     * Set logo image of Breeder
+     *
+     * @param   Request  $request
+     * @return  String
+     */
+    public function setLogo(Request $request)
+    {
+        if($request->ajax()){
+            $breeder = $this->user->userable;
+            $breeder->logo_img_id = $request->imageId;
+            $breeder->save();
+
+            $redundantImages = $breeder->images->where('id', '<>', $breeder->logo_img_id);
+
+            if(!$redundantImages->isEmpty()){
+                $redundantImages->each(function($item, $key){
+                    $fullFilePath = '/images/breeder/' . $item->name;
+
+                    // Check if file exists in the storage
+                    if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+
+                    $item->delete();
+                });
+            }
+
+            return '/images/breeder/'.Image::find($request->imageId)->name;
+        }
+
+    }
+
+    /**
+     * Delete logo of Breeder
+     *
+     * @param   Request $request
+     * @return  JSON
+     */
+    public function deleteLogo(Request $request)
+    {
+        if($request->ajax()){
+            $image = Image::find($request->imageId);
+            $fullFilePath = '/images/breeder/' . $image->name;
+
+            // Check if file exists in the storage
+            if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+
+            $image->delete();
+
+            return response()->json('Logo deleted', 200);
+        }
+    }
+
+    /**
+     * Get appropriate image info depending on extension
+     *
+     * @param  String           $extension
+     * @return AssociativeArray $imageInfo
+     */
+    private function createImageInfo($extension)
+    {
+        $imageInfo = [];
+
+        $imageInfo['filename'] = snake_case($this->user->name) . '_logo_' . md5(time()) . '_' . $extension;
+        $imageInfo['directoryPath'] = '/images/breeder/';
+        $imageInfo['type'] = new Image;
+
+        return $imageInfo;
+    }
+
+    /**
+     * Check if media is Image depending on extension
+     *
+     * @param  String   $extension
+     * @return Boolean
+     */
+    private function isImage($extension)
+    {
+        return ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') ? true : false;
+    }
 }

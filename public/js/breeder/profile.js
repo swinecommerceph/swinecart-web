@@ -208,6 +208,7 @@ var profile = {
     change_password: function(parent_form){
         config.preloader_progress.fadeIn();
 
+        // Do AJAX
         $.ajax({
             url: parent_form.attr('action'),
             type: "PATCH",
@@ -238,7 +239,7 @@ var profile = {
 
 
                 parent_form.find('input[name=current_password], input[name=new_password], input[name=new_password_confirmation]').val('');
-                parent_form.find('label[for=current-password], label[for=new_password], label[for=new_password-confirm]').removeClass('active');
+                parent_form.find('label[for=current-password], label[for=new-password], label[for=new-password-confirm]').removeClass('active');
                 parent_form.find('input[name=current_password], input[name=new_password], input[name=new_password_confirmation]').removeClass('valid');
 
                 Object.keys(error_messages).forEach(function(element){
@@ -251,6 +252,53 @@ var profile = {
                 config.preloader_progress.fadeOut();
             }
         });
+
+    },
+
+    set_logo: function(parent_form, logo_dropzone){
+
+        // Check if there is image uploaded
+        if($('.dz-image-preview').first().attr('data-image-id')){
+
+            // Do AJAX
+            $.ajax({
+                url: config.breederLogo_url,
+                type: "PATCH",
+                cache: true,
+                data: {
+                    "_token": parent_form.find('input[name=_token]').val(),
+                    "imageId": $('.dz-image-preview').first().attr('data-image-id')
+                },
+                success: function(data){
+
+                    $('#logo-card .card-image img').attr('src', data);
+
+                    $('#change-logo-modal').modal('close');
+                    $('#confirm-change-logo').html('Set Logo');
+                    $('#confirm-change-logo').removeClass('disabled');
+
+                    // Clear the Dropzone
+                    var dropzoneFiles = logo_dropzone.files;
+                    for(var i = 0; i < dropzoneFiles.length; i++){
+                        if(dropzoneFiles[i].previewElement){
+                            var _ref = dropzoneFiles[i].previewElement;
+                            _ref.parentNode.removeChild(dropzoneFiles[i].previewElement);
+                        }
+                    }
+                    logo_dropzone.files = [];
+                    logo_dropzone.emit('reset');
+
+                    Materialize.toast('Logo updated', 2000, 'green lighten-1');
+                },
+                error: function(message){
+                    console.log(message['responseText']);
+                }
+            });
+        }
+        else{
+            $('#confirm-change-logo').html('Set Logo');
+            $('#confirm-change-logo').removeClass('disabled');
+        }
 
     }
 };

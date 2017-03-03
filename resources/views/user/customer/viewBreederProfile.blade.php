@@ -28,7 +28,7 @@
             <li class="collection-header">
                 <h4>
                     {{ $breeder->name }}
-                    <img class="secondary-content" src="/images/sample_logo.png" style="height: 100px; width: auto" alt="" />
+                    <img class="secondary-content" src="{{ $breeder->logoImage }}" style="height: 100px; width: auto" alt="" />
                 </h4>
 
                 <span class="grey-text">

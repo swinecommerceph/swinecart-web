@@ -51,7 +51,7 @@ class DashboardRepository
             $itemDetail['uuid'] = (string) Uuid::uuid4();
             $itemDetail['id'] = $product->id;
             $itemDetail['reservation_id'] = 0;
-            $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $itemDetail['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]);
             $itemDetail['breeder_id'] = $product->breeder_id;
             $itemDetail['farm_province'] = FarmAddress::find($product->farm_from_id)->province;
             $itemDetail['name'] = $product->name;
@@ -124,7 +124,7 @@ class DashboardRepository
             $itemDetail['uuid'] = (string) Uuid::uuid4();
             $itemDetail['id'] = $product->id;
             $itemDetail['reservation_id'] = $reservation->id;
-            $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $itemDetail['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]);
             $itemDetail['breeder_id'] = $product->breeder_id;
             $itemDetail['farm_province'] = FarmAddress::find($product->farm_from_id)->province;
             $itemDetail['name'] = $product->name;

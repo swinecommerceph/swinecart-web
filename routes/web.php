@@ -44,6 +44,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('login/redirect/email/{email}/ver-code/{verCode}', ['as' => 'verCode.send', 'uses' => 'Auth\LoginController@verifyCode']);
     Route::get('login/resend/email/{email}/ver-code/{verCode}', ['as' => 'verCode.resend', 'uses' => 'Auth\LoginController@resendCode']);
 
+    // Serve resized image
+    Route::get('images/product/{size}/{filename}', ['as' => 'serveImage', 'uses' => 'ServeResizedImageController@serveAppropriateImage']);
+
     /**
     * User Routes according to roles
     */
@@ -63,6 +66,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::put('edit-profile/farm/edit',['as' => 'breeder.updateFarm', 'uses' => 'BreederController@updateFarm']);
         Route::delete('edit-profile/farm/delete',['as' => 'breeder.deleteFarm', 'uses' => 'BreederController@deleteFarm']);
         Route::patch('edit-profile/change-password',['as' => 'breeder.changePassword', 'uses' => 'BreederController@changePassword']);
+        Route::post('edit-profile/logo-upload',['as' => 'breeder.logoUpload', 'uses' => 'BreederController@uploadLogo']);
+        Route::delete('edit-profile/logo-upload',['as' => 'breeder.logoDelete', 'uses' => 'BreederController@deleteLogo']);
+        Route::patch('edit-profile/logo-upload',['as' => 'breeder.setLogo', 'uses' => 'BreederController@setLogo']);
 
         // product-related
         Route::get('products',['as' => 'products', 'uses' => 'ProductController@showProducts']);

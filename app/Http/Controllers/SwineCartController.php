@@ -242,7 +242,7 @@ class SwineCartController extends Controller
                 $itemDetail['product_name'] = $product->name;
                 $itemDetail['product_type'] = $product->type;
                 $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
-                $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+                $itemDetail['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]);
                 $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
                 $itemDetail['token'] = csrf_token();
                 array_push($items,$itemDetail);
@@ -285,7 +285,7 @@ class SwineCartController extends Controller
                 $itemDetail['avg_productQuality'] = $reviews->avg('rating_productQuality');
                 $itemDetail['date_needed'] = ($item->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($item->date_needed);
                 $itemDetail['special_request'] = $item->special_request;
-                $itemDetail['img_path'] = '/images/product/'.Image::find($product->primary_img_id)->name;
+                $itemDetail['img_path'] = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
                 $itemDetail['expiration_date'] = (ProductReservation::find($item->reservation_id)->expiration_date) ?? '';
                 $itemDetail['status_transactions'] = [
                     "requested" => ($item->transactionLogs()->where('status', 'requested')->latest()->first()->created_at) ?? '',
@@ -326,7 +326,7 @@ class SwineCartController extends Controller
                     "quantity" => (SwineCartItem::find($restructuredItem['logs'][0]['swineCart_id'])->quantity) ?? '',
                     "name" => $product->name,
                     "type" => $product->type,
-                    "img_path" => '/images/product/'.Image::find($product->primary_img_id)->name,
+                    "img_path" => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
                     "breed" => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
                     "breeder_name" => Breeder::find($product->breeder_id)->users()->first()->name,
                     "farm_from" => FarmAddress::find($product->farm_from_id)->province,
