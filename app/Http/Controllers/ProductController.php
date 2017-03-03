@@ -3,8 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Carbon\Carbon;
 
 use App\Http\Requests;
+use App\Jobs\ResizeUploadedImage;
 use App\Models\Breeder;
 use App\Models\FarmAddress;
 use App\Models\Product;
@@ -14,10 +16,23 @@ use App\Models\Breed;
 use App\Models\SwineCartItem;
 
 use Auth;
+use ImageManipulator;
 use Storage;
 
 class ProductController extends Controller
 {
+    /**
+     * Image and Video constant variable paths
+     */
+    private const IMG_PATH = '/images/';
+    private const VID_PATH = '/videos/';
+    private const BREEDER_IMG_PATH = '/images/breeder/';
+    private const PRODUCT_IMG_PATH = '/images/product/';
+    private const PRODUCT_VID_PATH = '/videos/product/';
+    private const PRODUCT_SIMG_PATH = '/images/product/resize/small/';
+    private const PRODUCT_MIMG_PATH = '/images/product/resize/medium/';
+    private const PRODUCT_LIMG_PATH = '/images/product/resize/large/';
+
     protected $user;
 
 	/**
@@ -102,7 +117,7 @@ class ProductController extends Controller
         ];
 
         foreach ($products as $product) {
-            $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
             $product->type = ucfirst($product->type);
             $product->birthdate = $this->transformBirthdateSyntax($product->birthdate);
             $product->age = $this->computeAge($product->birthdate);
@@ -121,7 +136,8 @@ class ProductController extends Controller
      */
     public function breederViewProductDetail(Product $product)
     {
-        $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+        if($product->status == 'hidden') return back();
+        $product->img_path = route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]);
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
         $product->type = ucfirst($product->type);
         $product->birthdate = $this->transformBirthdateSyntax($product->birthdate);
@@ -257,21 +273,27 @@ class ProductController extends Controller
 
                 // Delete images associated to product
                 foreach ($product->images as $image) {
+                    $fullFilePath = self::PRODUCT_IMG_PATH.$image->name;
+                    $sFullFilePath = self::PRODUCT_SIMG_PATH.$image->name;
+                    $mFullFilePath = self::PRODUCT_MIMG_PATH.$image->name;
+                    $lFullFilePath = self::PRODUCT_LIMG_PATH.$image->name;
+
                     // Check if file exists in the storage
-                    if(Storage::disk('public')->exists('/images/product/'.$image->name)){
-                        $fullFilePath = '/images/product/'.$image->name;
-                        Storage::disk('public')->delete($fullFilePath);
-                    }
+                    if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+                    if(Storage::disk('public')->exists($sFullFilePath)) Storage::disk('public')->delete($sFullFilePath);
+                    if(Storage::disk('public')->exists($mFullFilePath)) Storage::disk('public')->delete($mFullFilePath);
+                    if(Storage::disk('public')->exists($lFullFilePath)) Storage::disk('public')->delete($lFullFilePath);
+
                     $image->delete();
                 }
 
                 // Delete videos associated to product
                 foreach ($product->videos as $video) {
+                    $fullFilePath = self::PRODUCT_VID_PATH.$video->name;
+
                     // Check if file exists in the storage
-                    if(Storage::disk('public')->exists('/videos/product/'.$video->name)){
-                        $fullFilePath = '/videos/product/'.$video->name;
-                        Storage::disk('public')->delete($fullFilePath);
-                    }
+                    if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+
                     $video->delete();
                 }
 
@@ -325,10 +347,15 @@ class ProductController extends Controller
                         $media = $mediaInfo['type'];
                         $media->name = $mediaInfo['filename'];
 
-                        if($this->isImage($fileExtension)) $product->images()->save($media);
+                        if($this->isImage($fileExtension)){
+                            $product->images()->save($media);
+
+                            // Resize images
+                            dispatch(new ResizeUploadedImage($media->name));
+                        }
                         else if($this->isVideo($fileExtension)) $product->videos()->save($media);
 
-                        array_push($fileDetails, ['id' => $media->id, 'name' => $mediaInfo['filename']]);
+                        array_push($fileDetails, ['id' => $media->id, 'name' => $media->name]);
                     }
                     else return response()->json('Move file failed', 500);
                 }
@@ -352,16 +379,22 @@ class ProductController extends Controller
         if($request->ajax()){
             if($request->mediaType == 'image'){
                 $image = Image::find($request->mediaId);
-                $fullFilePath = '/images/product/'.$image->name;
+                $fullFilePath = self::PRODUCT_IMG_PATH.$image->name;
+                $sFullFilePath = self::PRODUCT_SIMG_PATH.$image->name;
+                $mFullFilePath = self::PRODUCT_MIMG_PATH.$image->name;
+                $lFullFilePath = self::PRODUCT_LIMG_PATH.$image->name;
 
                 // Check if file exists in the storage
                 if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+                if(Storage::disk('public')->exists($sFullFilePath)) Storage::disk('public')->delete($sFullFilePath);
+                if(Storage::disk('public')->exists($mFullFilePath)) Storage::disk('public')->delete($mFullFilePath);
+                if(Storage::disk('public')->exists($lFullFilePath)) Storage::disk('public')->delete($lFullFilePath);
 
                 $image->delete();
             }
             else if($request->mediaType = 'video'){
                 $video = Video::find($request->mediaId);
-                $fullFilePath = '/videos/product/'.$video->name;
+                $fullFilePath = self::PRODUCT_VID_PATH.$video->name;
 
                 // Check if file exists in the storage
                 if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
@@ -475,7 +508,7 @@ class ProductController extends Controller
         ];
 
         foreach ($products as $product) {
-            $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+            $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
             $product->type = ucfirst($product->type);
             $product->birthdate = $this->transformBirthdateSyntax($product->birthdate);
             $product->age = $this->computeAge($product->birthdate);
@@ -497,7 +530,7 @@ class ProductController extends Controller
     {
         $breeder->name = $breeder->users()->first()->name;
         $breeder->farms = $breeder->farmAddresses;
-        $breeder->logoImage = ($breeder->logo_img_id) ? '/images/breeder/'.Image::find($breeder->logo_img_id)->name : '/images/default_logo.png' ;
+        $breeder->logoImage = ($breeder->logo_img_id) ? self::BREEDER_IMG_PATH.Image::find($breeder->logo_img_id)->name : self::IMG_PATH.'default_logo.png' ;
         return view('user.customer.viewBreederProfile', compact('breeder'));
     }
 
@@ -509,7 +542,8 @@ class ProductController extends Controller
      */
     public function customerViewProductDetail(Product $product)
     {
-        $product->img_path = '/images/product/'.Image::find($product->primary_img_id)->name;
+        if($product->status == 'hidden') return back();
+        $product->img_path = route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]);
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
         $product->birthdate = $this->transformBirthdateSyntax($product->birthdate);
         $product->age = $this->computeAge($product->birthdate);
@@ -568,17 +602,17 @@ class ProductController extends Controller
         $mediaInfo = [];
         if(str_contains($breed,'+')){
             $part = explode("+", $breed);
-            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . str_random(6) . '.' . $extension;
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . md5(Carbon::now()) . '.' . $extension;
         }
-        else $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . str_random(6) . '.' . $extension;
+        else $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . md5(Carbon::now()) . '.' . $extension;
 
         if($this->isImage($extension)){
-            $mediaInfo['directoryPath'] = '/images/product/';
+            $mediaInfo['directoryPath'] = self::PRODUCT_IMG_PATH;
             $mediaInfo['type'] = new Image;
         }
 
         else if($this->isVideo($extension)){
-            $mediaInfo['directoryPath'] = '/videos/product/';
+            $mediaInfo['directoryPath'] = self::PRODUCT_VID_PATH;
             $mediaInfo['type'] = new Video;
         }
 

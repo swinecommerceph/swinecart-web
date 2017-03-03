@@ -187,9 +187,9 @@ $(document).ready(function(){
                 response = JSON.parse(response);
                 var item = 0;
                 response.forEach(function(element){
-                    preview_element = files[item].previewElement;
+                    var preview_element = files[item].previewElement;
                     preview_element.setAttribute('data-media-id', element.id);
-                    $('.dz-filename span[data-dz-name]').html(element.name);
+                    preview_element.getElementsByClassName('dz-filename')[0].getElementsByTagName('span')[0].innerHTML = element.name;
                     item++;
                 });
 
@@ -314,9 +314,9 @@ $(document).ready(function(){
                 response = JSON.parse(response);
                 var item = 0;
                 response.forEach(function(element){
-                    preview_element = files[item].previewElement;
+                    var preview_element = files[item].previewElement;
                     preview_element.setAttribute('data-media-id', element.id);
-                    $('.dz-filename span[data-dz-name]').html(element.name);
+                    preview_element.getElementsByClassName('dz-filename')[0].getElementsByTagName('span')[0].innerHTML = element.name;
                     item++;
                 });
 
