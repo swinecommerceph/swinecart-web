@@ -1496,7 +1496,7 @@ class AdminController extends Controller
         $adminLogs = DB::table('administrator_logs')
                     ->whereMonth('created_at', '=', $month)
                     ->whereYear('created_at', '=', $year)
-                    // ->whereDay('created_at', '=', $yesterday)
+                    ->whereDay('created_at', '=', $yesterday)
                     ->orderBy('created_at', 'ASC')
                     ->get();
 
@@ -2219,10 +2219,11 @@ class AdminController extends Controller
                              ->whereMonth('blocked_at', '=', date('7'))
                              ->whereYear('blocked_at', '=', $year)
                              ->count(),
-             DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
-             ->join('roles', 'role_user.role_id','=','roles.id')
-             ->where('role_user.role_id','=',3)
-             ->where('users.email_verified','=', 1)
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
                              ->whereNotNull('approved_at')
                              ->whereMonth('blocked_at', '=', date('8'))
                              ->whereYear('blocked_at', '=', $year)
@@ -2272,17 +2273,17 @@ class AdminController extends Controller
          $date = Carbon::now();
          $year = $date->year;
          $month = $date->month;
+         $day = $date->day;
          $adminLogs = DB::table('administrator_logs')
+                     ->whereDay('created_at', '=', $day)
                      ->whereMonth('created_at', '=', $month)
                      ->whereYear('created_at', '=', $year)
-                     // ->whereDay('created_at', '=', $yesterday)
-                     ->orderBy('created_at', 'ASC')
                      ->get();
-
 
          foreach ($adminLogs as $logs) {
              $logs->created_at = Carbon::parse($logs->created_at)->toTimeString();
          }
+
          $dateNow = $date->toFormattedDateString();
          return view('user.admin.statisticsTimeline', compact('dateNow','adminLogs'));
      }
@@ -2297,8 +2298,6 @@ class AdminController extends Controller
                      ->whereDay('created_at', '=', $day)
                      ->whereMonth('created_at', '=', $month)
                      ->whereYear('created_at', '=', $year)
-                     // ->whereDay('created_at', '=', $yesterday)
-                     ->orderBy('created_at', 'ASC')
                      ->get();
 
          foreach ($adminLogs as $logs) {
