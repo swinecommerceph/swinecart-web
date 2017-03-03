@@ -18,7 +18,23 @@
 
 @section('navbarHead')
     <li><a href="{{ route('products.view') }}"> Products </a></li>
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons">message</i></a></li>
+    <li id="message-main-container">
+        <a href="{{ route('customer.messages') }}" id="message-icon"
+            data-alignment="right"
+        >
+            <i class="material-icons left">message</i>
+            <span class="badge"
+                v-if="unreadCount > 0  && unreadCount <= 99"
+            >
+                @{{ unreadCount }}
+            </span>
+            <span class="badge"
+                v-if="unreadCount > 99"
+            >
+                99+
+            </span>
+        </a>
+    </li>
     @if(!Auth::user()->update_profile)
         {{-- Swine Cart --}}
         <li><a href="{{ route('view.cart') }}" id="cart-icon" class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="cart-dropdown">
@@ -142,8 +158,10 @@
                                 <span class="left" v-else >
                                     <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
                                 </span>
-                                <p style="margin-left:1.5rem;"> @{{ notification.data.description }} </p>
-                                <p class="left-align grey-text text-darken-1" style="margin-left:1.5rem; font-size:0.8rem;"> @{{ notification.data.time }} </p>
+                                <p style="margin-left:1.5rem;" :class=" (notification.read_at) ? 'grey-text' : '' ">
+                                    <span v-html="notification.data.description"></span>
+                                </p>
+                                <p class="right-align grey-text text-darken-1" style="margin-left:1.5rem; font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
                             </a>
                         </li>
 
@@ -159,8 +177,6 @@
 
 @section('navbarDropdown')
     <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
-    <li class="divider"></li>
-    <li><a href="{{ route('view.cart') }}"> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
 @endsection
 
 @section('static')
@@ -181,7 +197,7 @@
             <form>
                 <div class="input-field">
                     <input id="search" type="search" placeholder="Search for a product" required>
-                    <label for="search"><i class="material-icons teal-text">search</i></label>
+                    <label class="label-icon" for="search"><i class="material-icons teal-text">search</i></label>
                     <i class="material-icons">close</i>
                 </div>
             </form>
@@ -222,6 +238,7 @@
 @section('initScript')
     <script src="/js/vendor/VueJS/vue.js"></script>
     <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
+    <script src="/js/vendor/moment.min.js"></script>
     <script src="/js/customer/swinecart.js"> </script>
     <script src="/js/customer/customer_custom.js"> </script>
 @endsection

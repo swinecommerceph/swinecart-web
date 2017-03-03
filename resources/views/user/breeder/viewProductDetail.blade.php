@@ -30,15 +30,13 @@
                 <div class="card">
                     <div class="card-image">
                         <img src="{{$product->img_path}}" data-imagezoom="true">
-
                     </div>
                 </div>
             </div>
 
-
             <div class="row">
                 <div class="col s12">
-                <ul class="tabs">
+                <ul class="tabs tabs-fixed-width">
                     <li id="image-carousel-tab" class="tab col s3"><a class="active" href="#images-carousel">Images</a></li>
                     <li id="video-carousel-tab" class="tab col s3"><a href="#videos-carousel">Videos</a></li>
                 </ul>
@@ -95,36 +93,28 @@
                 <li class="collection-item">Average Daily Gain: {{$product->adg}} g</li>
                 <li class="collection-item">Feed Conversion Ratio: {{$product->fcr}}</li>
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
-                <li class="collection-item">
-                    Breeder Ratings<br><br>
+                <li id="stars-container" class="collection-item">
+                    Breeder Ratings
+                    <a href="#!" class="right tooltipped"  data-position="left" data-delay="50" data-tooltip="Message Breeder">
+                        <i class="material-icons red-text" style="font-size:35px;">message</i>
+                    </a>
+                    <br><br>
                     <span class="row">
                         <i class="col s6">Delivery</i>
                         <span class="col s6">
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star_half</i>
-                            <i class="material-icons yellow-text">star_border</i>
+                            <average-star-rating :rating="{{ $breederRatings['deliveryRating'] }}"> </average-star-rating>
                         </span>
                     </span>
                     <span class="row">
                         <i class="col s6">Transaction</i>
                         <span class="col s6">
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star_border</i>
+                            <average-star-rating :rating="{{ $breederRatings['transactionRating'] }}"> </average-star-rating>
                         </span>
                     </span>
                     <span class="row">
                         <i class="col s6">Product Quality</i>
                         <span class="col s6">
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star</i>
-                            <i class="material-icons yellow-text">star_half</i>
+                            <average-star-rating :rating="{{ $breederRatings['productQualityRating'] }}"> </average-star-rating>
                         </span>
                     </span>
                 </li>
@@ -143,6 +133,24 @@
         </div>
     </div>
 
+    <script type="text/x-template" id="average-star-rating">
+        <div class="ratings-container" style="padding:0; position:relative; display:inline-block">
+            <div class="star-ratings-top" style="position:absolute; z-index:1; overflow:hidden; display:block; white-space:nowrap;" :style="{ width: ratingToPercentage + '%' }">
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+            </div>
+            <div class="star-ratings-bottom" style="padding:0; z-index:0; display:block;">
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+            </div>
+        </div>
+    </script>
 @endsection
 
 @section('customScript')

@@ -14,6 +14,7 @@ class CreateBreederUserTable extends Migration
     {
         Schema::create('breeder_user', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('logo_img_id')->unsigned();
             $table->string('officeAddress_addressLine1');
             $table->string('officeAddress_addressLine2');
             $table->string('officeAddress_province');
@@ -24,6 +25,7 @@ class CreateBreederUserTable extends Migration
             $table->string('produce');
             $table->string('contactPerson_name');
             $table->string('contactPerson_mobile');
+            $table->date('latest_accreditation');
             $table->string('status_instance')->default('active');
         });
     }

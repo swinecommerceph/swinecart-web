@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\TransactionLog;
 use App\Models\ProductReservation;
 use App\Models\Image;
 use App\Models\Video;
@@ -91,5 +92,13 @@ class Breeder extends Model
     public function reservations()
     {
         return $this->hasManyThrough(ProductReservation::class,Product::class);
+    }
+
+    /**
+     * Get all transaction logs wher Breeder is associated with
+     */
+    public function transactionLogs()
+    {
+        return $this->hasMany(TransactionLog::class);
     }
 }

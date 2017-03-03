@@ -15,10 +15,15 @@ class CreateTransactionLogsTable extends Migration
         Schema::create('transaction_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('customer_id')->unsigned();
+            $table->integer('breeder_id')->unsigned();
             $table->integer('swineCart_id')->unsigned();
-            $table->json('product_details');
-            $table->json('status_transactions');
-            // $table->timestamps();
+            $table->integer('product_id')->unsigned();
+            $table->enum('status',[
+                'requested', 'reserved', 'on_delivery',
+                'paid', 'sold', 'rated', 'reservation_expired',
+                'reserved_to_another'
+                ]);
+            $table->dateTime('created_at');
         });
     }
 

@@ -13,6 +13,7 @@ use Illuminate\Support\Facades\Validator;
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Breeder;
+use App\Models\Customer;
 use App\Models\FarmAddress;
 use App\Models\Product;
 use App\Models\Image;
@@ -2308,4 +2309,10 @@ class AdminController extends Controller
      }
 
 
+    public function viewUsers(){
+
+        $breeders = Breeder::all();
+        $customers = Customer::all();
+        return view('user.admin.viewUsers', compact('breeders', 'customers'));
+    }
 }

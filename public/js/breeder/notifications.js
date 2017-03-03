@@ -7,6 +7,11 @@ var notificationsPage = new Vue({
         notifications: [],
         notificationCount: 0
     },
+    filters:{
+        transformToReadableDate: function(value){
+            return moment(value).fromNow();
+        }
+    },
     methods:{
         getNotificationInstances: function(){
             // Get notification instances of Customer
@@ -45,7 +50,7 @@ var notificationsPage = new Vue({
                 function(response){
                     window.setTimeout(function(){
                         window.location = vm.notifications[index].data.url;
-                    }, 1000);
+                    }, 500);
                 },
                 function(response){
                     console.log(response.statusText);

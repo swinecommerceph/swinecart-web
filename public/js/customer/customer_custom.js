@@ -26,6 +26,36 @@ $(document).ready(function(){
 
 });
 
+var messages = new Vue({
+    el: '#message-main-container',
+    data:{
+        token: '',
+        unreadCount: 0
+    },
+    methods:{
+        getNotificationCount: function(){
+            // Get count of customer's notifications
+
+            // Do AJAX
+            this.$http.get(
+                '/customer/messages/countUnread',
+                {}
+            ).then(
+                function(response){
+                    this.unreadCount = response.body;
+                },
+                function(response){
+                    console.log(response.statusText);
+                }
+            );
+        }
+    },
+    created: function(){
+        // Get notifications count
+        this.getNotificationCount();
+    }
+});
+
 var notifications = new Vue({
     el: '#notification-main-container',
     data:{
@@ -88,13 +118,18 @@ var notifications = new Vue({
                 function(response){
                     window.setTimeout(function(){
                         window.location = vm.notifications[index].data.url;
-                    }, 1000);
+                    }, 500);
                 },
                 function(response){
                     console.log(response.statusText);
                 }
             );
 
+        }
+    },
+    filters: {
+        transformToReadableDate: function(value){
+            return moment(value).fromNow();
         }
     },
     created: function(){

@@ -4,11 +4,42 @@ $(document).ready(function(){
 
     // For Breeder Dashboard slider
     $('#review-slider').slider({
-        full_width: true,
+        fullWidth: true,
         height: 240,
         interval: 4000
     });
 });
+
+var messages = new Vue({
+    el: '#message-main-container',
+    data:{
+        token: '',
+        unreadCount: 0
+    },
+    methods:{
+        getNotificationCount: function(){
+            // Get count of customer's notifications
+
+            // Do AJAX
+            this.$http.get(
+                '/breeder/messages/countUnread',
+                {}
+            ).then(
+                function(response){
+                    this.unreadCount = response.body;
+                },
+                function(response){
+                    console.log(response.statusText);
+                }
+            );
+        }
+    },
+    created: function(){
+        // Get notifications count
+        this.getNotificationCount();
+    }
+});
+
 
 var notifications = new Vue({
     el: '#notification-main-container',
@@ -72,13 +103,18 @@ var notifications = new Vue({
                 function(response){
                     window.setTimeout(function(){
                         window.location = vm.notifications[index].data.url;
-                    }, 1000);
+                    }, 500);
                 },
                 function(response){
                     console.log(response.statusText);
                 }
             );
 
+        }
+    },
+    filters:{
+        transformToReadableDate: function(value){
+            return moment(value).fromNow();
         }
     },
     created: function(){

@@ -92,23 +92,25 @@ $(document).ready(function(){
 
     // Add a product
     $('.add-product-button').click(function(){
-        $('#add-product-modal').openModal({
+        $('#add-product-modal').modal({
             ready: function(){
                 // Programmatically select th 'swine-information' tab
                 $('#add-product-modal ul.tabs').tabs('select_tab', 'swine-information');
             }
         });
+        $('#add-product-modal').modal('open');
         product.modal_history.push('#add-product-modal');
     });
 
     // Edit chosen product
     $('.edit-product-button').click(function(){
-        $('#edit-product-modal').openModal({
+        $('#edit-product-modal').modal({
             ready: function(){
                 // Programmatically select the 'edit-swine-information' tab
                 $('#edit-product-modal ul.tabs').tabs('select_tab', 'edit-swine-information');
             }
         });
+        $('#edit-product-modal').modal('open');
         product.get_product($(this).attr('data-product-id'));
     });
 
@@ -127,7 +129,7 @@ $(document).ready(function(){
     $('.back-button').click(function(e){
         e.preventDefault();
 
-        $(product.modal_history.pop()).closeModal();
+        $(product.modal_history.pop()).modal('close');
 
         // If going back to add-product-modal it must be directed to edit-product-modal
         if(product.modal_history_tos() === '#add-product-modal') {
@@ -143,7 +145,7 @@ $(document).ready(function(){
                 $('.from-edit-process').show();
             }
         }
-        else $(product.modal_history_tos()).openModal();
+        else $(product.modal_history_tos()).modal('open');
     });
 
     /* ----------- Add Product Modal functionalities ----------- */
@@ -168,9 +170,6 @@ $(document).ready(function(){
         parallelUploads: 1,
         maxFiles: 12,
         maxFilesize: 50,
-        // addRemoveLinks: true,
-        // dictRemoveFile: "Remove",
-        // dictCancelUpload: "Cancel",
         acceptedFiles: "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
         dictDefaultMessage: "<h5 style='font-weight: 300;'> Drop images/videos here to upload </h5>"+
             "<i class='material-icons'>insert_photo</i> <i class='material-icons'>movie</i>"+
@@ -188,9 +187,9 @@ $(document).ready(function(){
                 response = JSON.parse(response);
                 var item = 0;
                 response.forEach(function(element){
-                    preview_element = files[item].previewElement;
+                    var preview_element = files[item].previewElement;
                     preview_element.setAttribute('data-media-id', element.id);
-                    $('.dz-filename span[data-dz-name]').html(element.name);
+                    preview_element.getElementsByClassName('dz-filename')[0].getElementsByTagName('span')[0].innerHTML = element.name;
                     item++;
                 });
 
@@ -270,21 +269,23 @@ $(document).ready(function(){
     // Open Edit Media Modal
     $('#edit-media-button').click(function(e){
         e.preventDefault();
-        $('#edit-product-modal').closeModal();
-        $('#edit-media-modal').openModal({dismissible: false});
+        $('#edit-product-modal').modal('close');
+        $('#edit-media-modal').modal({dismissible: false});
+        $('#edit-media-modal').modal('open');
         product.modal_history.push('#edit-media-modal')
     });
 
     // Open Add Media Modal
     $('#add-media-button').click(function(e){
         e.preventDefault();
-        $('#edit-product-modal').closeModal();
-        $('#add-media-modal').openModal({
+        $('#edit-product-modal').modal('close');
+        $('#add-media-modal').modal({
             dismissible: false,
             ready: function(){
                 product.modal_history.push('#add-media-modal');
             }
         });
+        $('#add-media-modal').modal('open');
     });
 
     /* ----------- Edit Media Modal ----------- */
@@ -295,9 +296,6 @@ $(document).ready(function(){
         parallelUploads: 1,
         maxFiles: 12,
         maxFilesize: 50,
-        // addRemoveLinks: true,
-        // dictRemoveFile: "Remove",
-        // dictCancelUpload: "Cancel",
         acceptedFiles: "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
         dictDefaultMessage: "<h5 style='font-weight: 300;'> Drop images/videos here to upload </h5>"+
             "<i class='material-icons'>insert_photo</i> <i class='material-icons'>movie</i>"+
@@ -316,9 +314,9 @@ $(document).ready(function(){
                 response = JSON.parse(response);
                 var item = 0;
                 response.forEach(function(element){
-                    preview_element = files[item].previewElement;
+                    var preview_element = files[item].previewElement;
                     preview_element.setAttribute('data-media-id', element.id);
-                    $('.dz-filename span[data-dz-name]').html(element.name);
+                    preview_element.getElementsByClassName('dz-filename')[0].getElementsByTagName('span')[0].innerHTML = element.name;
                     item++;
                 });
 

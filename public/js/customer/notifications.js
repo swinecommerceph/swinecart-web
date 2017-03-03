@@ -45,7 +45,7 @@ var notificationsPage = new Vue({
                 function(response){
                     window.setTimeout(function(){
                         window.location = vm.notifications[index].data.url;
-                    }, 1000);
+                    }, 500);
                 },
                 function(response){
                     console.log(response.statusText);

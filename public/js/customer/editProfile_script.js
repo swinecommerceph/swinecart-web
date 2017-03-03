@@ -150,7 +150,7 @@ $(document).ready(function(){
 
         //  Check if there are more than 1 farm information to remove
         if($('#farm-address-body').find('.delete-farm .remove-farm').length > 1){
-            $('#confirmation-modal').openModal();
+            $('#confirmation-modal').modal('open');
             $('#confirm-remove').click(function(e){
                 e.preventDefault();
                 profile.remove(parent_form,row);
@@ -191,6 +191,12 @@ $(document).ready(function(){
     $('body').on('click', '#submit-button' ,function(e){
         e.preventDefault();
         profile.add($('#create-profile'));
+    });
+
+    // Change password
+    $('#change-password-button').click(function(e){
+        e.preventDefault();
+        profile.change_password($('#change-password-form'));
     });
 
 });

@@ -7,6 +7,75 @@ $(document).ready(function(){
      *	Update Profile specific
      */
 
+    Dropzone.options.logoDropzone = false;
+
+    var logoDropzone = new Dropzone('#logo-dropzone', {
+        paramName: 'logo',
+        uploadMultiple: false,
+        maxFiles: 1,
+        maxFilesize: 5,
+        acceptedFiles: "image/png, image/jpeg, image/jpg",
+        dictDefaultMessage: "<h5 style='font-weight: 300;'> Drop image here to upload logo</h5>",
+        previewTemplate: document.getElementById('custom-preview').innerHTML,
+        init: function() {
+
+            // Inject attributes upon success of file upload
+            this.on('success', function(file, response){
+                var response = JSON.parse(response);
+                var previewElement = file.previewElement;
+
+                previewElement.setAttribute('data-image-id', response.id);
+                file.name = response.name;
+                $('.dz-filename span[data-dz-name]').html(response.name);
+
+                $(".tooltipped").tooltip({delay:50});
+            });
+
+            // Remove file from file system and database records
+            this.on('removedfile', function(file){
+                console.log(file.previewElement);
+
+                if(file.previewElement.getAttribute('data-image-id')){
+                    // Do AJAX
+                    $.ajax({
+                        url: config.breederLogo_url,
+                        type: "DELETE",
+                        cache: false,
+                        data:{
+                            "_token" : $('#logo-dropzone').find('input[name=_token]').val(),
+                            "imageId" : file.previewElement.getAttribute('data-image-id')
+                        },
+                        success: function(data){
+
+                        },
+                        error: function(message){
+                            console.log(message['responseText']);
+                        }
+                    });
+                }
+            });
+
+        }
+    });
+
+    // Change Logo
+    $("#change-logo").on('click', function(e){
+        e.preventDefault();
+
+        $("#change-logo-modal").modal({ dismissible: false });
+        $("#change-logo-modal").modal('open');
+    });
+
+    // Confirm Change Logo
+    $("#confirm-change-logo").on('click', function(e){
+        e.preventDefault();
+
+        $(this).html("Setting Logo...");
+        $(this).addClass("disabled");
+
+        profile.set_logo($('#logo-dropzone'), logoDropzone);
+    });
+
     // Add another Farm Address
     $("#add-farm").on('click',function(e){
         e.preventDefault();
@@ -150,7 +219,7 @@ $(document).ready(function(){
 
         //  Check if there are more than 1 farm information to remove
         if($('#farm-address-body').find('.delete-farm .remove-farm').length > 1){
-            $('#confirmation-modal').openModal();
+            $('#confirmation-modal').modal('open');
             $('#confirm-remove').click(function(e){
                 e.preventDefault();
                 profile.remove(parent_form,row);
@@ -193,5 +262,10 @@ $(document).ready(function(){
         profile.add($('#create-profile'));
     });
 
+    // Change password
+    $('#change-password-button').click(function(e){
+        e.preventDefault();
+        profile.change_password($('#change-password-form'));
+    });
 
 });

@@ -191,5 +191,54 @@ var profile = {
                 config.preloader_progress.fadeOut();
             }
         });
+    },
+
+    change_password: function(parent_form){
+        config.preloader_progress.fadeIn();
+
+        $.ajax({
+            url: parent_form.attr('action'),
+            type: "PATCH",
+            cache: false,
+            data: {
+                "_token": parent_form.find('input[name=_token]').val(),
+                "current_password": parent_form.find('input[name=current_password]').val(),
+                "new_password": parent_form.find('input[name=new_password]').val(),
+                "new_password_confirmation": parent_form.find('input[name=new_password_confirmation]').val()
+            },
+            success: function(data){
+                if(data === 'OK') {
+                    parent_form.find('input[name=current_password], input[name=new_password], input[name=new_password_confirmation]').val('');
+                    parent_form.find('label[for=current-password], label[for=new_password], label[for=new_password-confirm]').removeClass('active');
+                    parent_form.find('input[name=current_password], input[name=new_password], input[name=new_password_confirmation]').removeClass('valid');
+
+                    config.preloader_progress.fadeOut();
+                    Materialize.toast('Password change successful', 2000, 'green lighten-1');
+                }
+                else{
+                    config.preloader_progress.fadeOut();
+                    Materialize.toast('Password change unsuccessful', 2500, 'red');
+                }
+            },
+            error: function(message){
+                var error_messages = JSON.parse(message['responseText']),
+                    error_string = '';
+
+
+                parent_form.find('input[name=current_password], input[name=new_password], input[name=new_password_confirmation]').val('');
+                parent_form.find('label[for=current-password], label[for=new-password], label[for=new-password-confirm]').removeClass('active');
+                parent_form.find('input[name=current_password], input[name=new_password], input[name=new_password_confirmation]').removeClass('valid');
+
+                Object.keys(error_messages).forEach(function(element){
+                    error_string += error_messages[element][0] + '<br>';
+                });
+
+                $('#password-error-container').html(error_string);
+                $('#password-error-container').show();
+
+                config.preloader_progress.fadeOut();
+            }
+        });
+
     }
 };

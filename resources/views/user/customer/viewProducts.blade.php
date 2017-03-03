@@ -30,7 +30,7 @@
             <form>
                 <div class="input-field">
                     <input id="search" type="search" placeholder="Search for a product" required>
-                    <label for="search"><i class="material-icons teal-text">search</i></label>
+                    <label class="label-icon" for="search"><i class="material-icons teal-text">search</i></label>
                     <i class="material-icons">close</i>
                 </div>
             </form>
@@ -153,8 +153,8 @@
                 <div class="col s12 m6 l6 ">
                   <div class="card hoverable">
                     <div class="card-image">
-                        <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}" >
-                            <img height="220" src="{{ $product->img_path }}">
+                        <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}">
+                            <img src="{{ $product->img_path }}">
                         </a>
                     </div>
                     <div class="card-content">

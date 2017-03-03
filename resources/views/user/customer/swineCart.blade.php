@@ -23,7 +23,23 @@
 
 @section('navbarHead')
     <li><a href="{{ route('products.view') }}"> Products </a></li>
-    <li><a href="{{ route('home_path') }}"> <i class="material-icons">message</i></a></li>
+    <li id="message-main-container">
+        <a href="{{ route('customer.messages') }}" id="message-icon"
+            data-alignment="right"
+        >
+            <i class="material-icons left">message</i>
+            <span class="badge"
+                v-if="unreadCount > 0  && unreadCount <= 99"
+            >
+                @{{ unreadCount }}
+            </span>
+            <span class="badge"
+                v-if="unreadCount > 99"
+            >
+                99+
+            </span>
+        </a>
+    </li>
     @if(!Auth::user()->update_profile)
         {{-- Swine Cart --}}
         <li><a id="cart-icon" class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="cart-dropdown">
@@ -147,25 +163,21 @@
                                 <span class="left" v-else >
                                     <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
                                 </span>
-                                <p style="margin-left:1.5rem;"> @{{ notification.data.description }} </p>
-                                <p class="right-align grey-text text-darken-1" style="font-size:0.8rem;"> @{{ notification.data.time }} </p>
+                                <p style="margin-left:1.5rem;" :class=" (notification.read_at) ? 'grey-text' : '' ">
+                                    <span v-html="notification.data.description"></span>
+                                </p>
+                                <p class="right-align grey-text text-darken-1" style="font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
                             </a>
                         </li>
 
                     </ul>
                 </li>
                 <li>
-                    <a class="center-align">See all Notifications</a>
+                    <a href="{{ route('cNotifs') }}" class="center-align">See all Notifications</a>
                 </li>
             </ul>
         </li>
     @endif
-@endsection
-
-@section('navbarDropdown')
-    <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
-    <li class="divider"></li>
-    <li><a> <i class="material-icons left">shopping_cart</i> Swine Cart </a> </li>
 @endsection
 
 @section('content')
@@ -173,7 +185,7 @@
     <div class="" id="swine-cart-container">
 
         {{-- Tabs --}}
-        <ul class="tabs">
+        <ul class="tabs tabs-fixed-width">
           <li class="tab col s6"><a href="#swine-cart">Orders</a></li>
           <li class="tab col s6 teal-text"><a href="#transaction-history" @click="getTransactionHistory({{ $customerId }})">Transaction History</a></li>
         </ul>
@@ -251,10 +263,19 @@
                     <li class="collection-item product-backfat_thickness">{{--Backfat Thickness: {{$product->backfat_thickness}} --}}
                         Backfat Thickness: <span> @{{ productInfoModal.bft }} </span> mm
                     </li>
-                    <li class="collection-item rating">
-                        <div class="delivery-rating">Delivery:<span class="col right"><span> @{{ productInfoModal.avgDelivery | round }} </span>/5</span></div>
-                        <div class="transaction-rating">Transaction:<span class="col right"><span> @{{ productInfoModal.avgTransaction | round }} </span>/5</span></div>
-                        <div class="product-quality-rating">Product Quality:<span class="col right"><span> @{{ productInfoModal.avgProductQuality | round }} </span>/5</span></div>
+                    <li class="row collection-item rating">
+                        <div class="delivery-rating">
+                            <span class="col s6"> Delivery: </span>
+                            <span class="col s6"> <average-star-rating :rating="productInfoModal.avgDelivery | round"></average-star-rating> </span>
+                        </div>
+                        <div class="transaction-rating">
+                            <span class="col s6"> Transaction: </span>
+                            <span class="col s6"> <average-star-rating :rating="productInfoModal.avgTransaction | round"></average-star-rating> </span>
+                        </div>
+                        <div class="product-quality-rating">
+                            <span class="col s6"> Product Quality: </span>
+                            <span class="col s6"> <average-star-rating :rating="productInfoModal.avgProductQuality | round"></average-star-rating> </span>
+                        </div>
                     </li>
                 </ul>
               </div>
@@ -267,312 +288,183 @@
     {{-- Template for <order-details> component --}}
     <template id="order-details-template">
 
-        <div class=""
-            @set-delivery-rating="setDeliveryRating"
-            @set-transaction-rating="setTransactionRating"
-            @set-product-rating="setProductRating"
-        >
+        <div class="">
             {{-- Swine Cart --}}
             <div id="swine-cart">
-                <div class="row">
-                    <span class="col s2 left-align">
-                        STATUS
-                    </span>
-                    <div class="col s6">
-                        ITEM(S)
-                    </div>
-                    <div class="col s2">
-                        QUANTITY
-                    </div>
-                    <div class="col s2">
-                        ACTION
-                    </div>
-                </div>
-                <ul id="cart" class="collection cart">
 
-                    {{-- Original Content --}}
-                    <li class="collection-item" :data-product-id="product.item_id" v-for="(product, index) in products">
-                        <div class="row swine-cart-item valign-wrapper">
-                            {{-- Product Status Icons --}}
+                <div id="card-container" class="row">
 
-                            {{-- Requested --}}
-                            <div class="status col s2 m2 verticalLine valign-wrapper"
-                                v-if="product.request_status && product.status === 'requested'"
-                            >
-                                <div class="">
-                                    <span class="col s6 right-align">
-                                        <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 left-align">
-                                        <a href="#">
-                                            <i class="reserved material-icons tooltipped grey-text text-darken-4" data-position="top" data-delay="50" data-tooltip="Not Reserved">save</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 right-align">
-                                        <a href="#">
-                                            <i class="on-delivery material-icons tooltipped grey-text text-darken-4" data-position="bottom" data-delay="50" data-tooltip="Not on Delivery">local_shipping</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 left-align">
-                                        <a href="#">
-                                            <i class="paid material-icons tooltipped grey-text text-darken-4" data-position="bottom" data-delay="50" data-tooltip="Not Paid">payment</i>
-                                        </a>
-                                    </span>
-                                </div>
+                    {{-- Card --}}
+                    <div class="col m4" v-for="(product, index) in products">
+                        <div class="card sticky-action" :class="(product.request_status) ? 'teal' : ''">
+                            {{-- Product Image --}}
+                            <div class="card-image">
+                                <img class="activator" :src="product.img_path">
+
+                                {{-- Show FAB for specific actions --}}
+                                <a class="btn-floating btn-large halfway-fab waves-effect waves-light red tooltipped"
+                                    data-position="top"
+                                    data-delay="50"
+                                    data-tooltip="Message Breeder"
+                                    v-if="product.status === 'reserved' | product.status === 'on_delivery' | product.status === 'paid'"
+                                >
+                                    <i class="material-icons">message</i>
+                                </a>
+
+                                <a class="btn-floating btn-large halfway-fab waves-effect waves-light red tooltipped"
+                                    data-position="top"
+                                    data-delay="50"
+                                    data-tooltip="Rate Breeder"
+                                    v-if="product.status === 'sold'"
+                                    @click.prevent="showRateModal(index)"
+                                >
+                                    <i class="material-icons">grade</i>
+                                </a>
+
                             </div>
-
-                            {{-- Reserved --}}
-                            <div class="status col s2 m2 verticalLine valign-wrapper"
-                                v-if="product.status === 'reserved'"
-                            >
-                                <div class="">
-                                    <span class="col s6 right-align">
-                                        <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 left-align">
-                                        <a href="#">
-                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved">save</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 right-align">
-                                        <a href="#">
-                                            <i class="on-delivery material-icons grey-text text-darken-4 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Waiting Delivery">local_shipping</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 left-align">
-                                        <a href="#">
-                                            <i class="paid material-icons grey-text text-darken-4 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Not Paid">payment</i>
-                                        </a>
-                                    </span>
-                                </div>
-                            </div>
-
-                            {{-- Paid --}}
-                            <div class="status col s2 m2 verticalLine valign-wrapper"
-                                v-if="product.status === 'paid'"
-                            >
-                                <div class="">
-                                    <span class="col s6 right-align">
-                                        <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 left-align">
-                                        <a href="#">
-                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved">save</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 right-align">
-                                        <a href="#">
-                                            <i class="on-delivery material-icons teal-text tooltipped" data-position="bottom" data-delay="50" data-tooltip="Awaiting Delivery">local_shipping</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 left-align">
-                                        <a href="#">
-                                            <i class="paid material-icons teal-text tooltipped" data-position="bottom" data-delay="50" :data-tooltip="'Paid, ' + product.status_transactions.paid">payment</i>
-                                        </a>
-                                    </span>
-                                </div>
-                            </div>
-
-                            {{-- On Delivery --}}
-                            <div class="status col s2 m2 verticalLine valign-wrapper"
-                                v-if="product.status === 'on_delivery'"
-                            >
-                                <div class="">
-                                    <span class="col s6 right-align">
-                                        <a href="#">
-                                            <i class="request material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Requested, ' + product.status_transactions.requested">queue</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 left-align">
-                                        <a  href="#">
-                                            <i class="reserved material-icons teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Reserved, ' + product.status_transactions.reserved">save</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 right-align">
-                                        <a href="#">
-                                            <i class="on-delivery material-icons teal-text tooltipped" data-position="bottom" data-delay="50" :data-tooltip="'On Delivery, ' + product.status_transactions.on_delivery">local_shipping</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 left-align">
-                                        <a href="#">
-                                            <i class="paid material-icons grey-text text-darken-4 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Awaiting Payment">payment</i>
-                                        </a>
-                                    </span>
-                                </div>
-                            </div>
-
-                            {{-- Sold --}}
-                            <div class="status col s2 m2 verticalLine valign-wrapper"
-                                v-if="product.status === 'sold'"
-                            >
-                                <div class="col s12 center-align">
-                                    <a href="#">
-                                      <i class="material-icons md teal-text tooltipped" data-position="top" data-delay="50" :data-tooltip="'Sold, ' + product.status_transactions.sold">attach_money</i>
-                                    </a>
-                                </div>
-                            </div>
-
-                            {{-- Not yet requested --}}
-                            <div class="status col s2 m2 verticalLine valign-wrapper"
-                                v-if="!product.request_status"
-                            >
-                                <div class="">
-                                    <span class="col s6 right-align">
-                                        <a href="#">
-                                            <i class="request material-icons grey-text text-darken-4 tooltipped" data-position="top" data-delay="50" data-tooltip="Not Requested">queue</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 left-align">
-                                        <a href="#">
-                                            <i class="reserved material-icons grey-text text-darken-4 tooltipped" data-position="top" data-delay="50" data-tooltip=" Not Reserved">save</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 right-align">
-                                        <a href="#">
-                                            <i class="on-delivery material-icons grey-text text-darken-4 tooltipped" data-position="bottom" data-delay="50" data-tooltip=" Not On Delivery">local_shipping</i>
-                                        </a>
-                                    </span>
-                                    <span class="col s6 left-align">
-                                        <a href="#">
-                                            <i class="paid material-icons grey-text text-darken-4 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Not Paid">payment</i>
-                                        </a>
-                                    </span>
-                                </div>
-                            </div>
-
-                            {{-- Product image --}}
-                            <div class="col s2 m2 center-align">
-                                <a href="#"><img :src="product.img_path" width="75" height="75" class="circle"></a>
-                            </div>
-
-                            {{-- Product Info --}}
-                            <div class="info col s4 verticalLine valign-wrapper">
-                                <div class="valign">
+                            <div class="card-content" :class="(product.request_status) ? 'white-text' : 'grey-text'">
+                                {{-- Title --}}
+                                <span class="card-title">
                                     <a href="#"
-                                        class="anchor-title teal-text"
+                                        class="anchor-title"
+                                        :class="(product.request_status) ? 'white-text' : 'grey-text'"
                                         @click.prevent="viewProductModalFromCart(index)"
                                     >
-                                        <span class="col s12">@{{ product.product_name }}</span>
+                                        @{{ product.product_name }}
                                     </a>
+                                </span>
+
+                                {{-- Product Info --}}
+                                <p class="row" style="min-height:100px;">
                                     <span class="col s12">
-                                        @{{ product.product_type | capitalize }} - @{{ product.product_breed }}
-                                    </span>
-                                    <span class="col s12">
+                                        @{{ product.product_type | capitalize }} - @{{ product.product_breed }} <br>
                                         @{{ product.breeder }}
                                     </span>
-                                </div>
+
+                                    <span class="col s12 input-quantity-container" v-if="product.product_type === 'semen' && !product.request_status">
+                                        {{-- Request Quantity for semen --}}
+                                        <span class="col s6">
+                                            Quantity:
+                                        </span>
+                                        <span class="col s6">
+                                            <span class="col s4 center-align">
+                                                <a href="#"
+                                                    class="btn col s12"
+                                                    style="padding:0;"
+                                                    @click.prevent="subtractQuantity(index)"
+                                                >
+                                                    <i class="material-icons">remove</i>
+                                                </a>
+                                            </span>
+                                            <span class="col s4 center-align" style="padding:0;">
+                                                <quantity-input v-model="product.request_quantity"> </quantity-input>
+                                            </span>
+                                            <span class="col s4 center-align">
+                                                <a href="#"
+                                                    class="btn col s12"
+                                                    style="padding:0;"
+                                                    @click.prevent="addQuantity(index)"
+                                                >
+                                                    <i class="material-icons">add</i>
+                                                </a>
+                                            </span>
+                                        </span>
+                                    </span>
+
+                                    <span class="col s6" v-else>
+                                        Quantity: @{{ product.request_quantity }}
+                                    </span>
+
+                                    {{-- Show Request Details if product is already requested --}}
+                                    <span class="col s12"
+                                        v-if="product.request_status && product.status === 'requested'"
+                                    >
+                                        <a href="#"
+                                            class="anchor-title white-text"
+                                            @click.prevent="viewRequestDetails(index)"
+                                        >
+                                            REQUEST DETAILS
+                                        </a>
+                                    </span>
+
+                                    {{-- Show Expiration timer if product is already reserved --}}
+                                    <span class="col s6"
+                                        v-if="product.expiration_date"
+                                    >
+                                        <countdown-timer :expiration="product.expiration_date"> </countdown-timer>
+                                    </span>
+
+                                </p>
+
                             </div>
+                            <div class="card-action">
+                                <span class="status-icons-container">
+                                    {{-- Product Status icons --}}
 
-                            {{-- Quantity Check --}}
-                            {{-- If product is semen show quantity --}}
-                            <div class="quantity col s2 m2 verticalLine valign-wrapper"
-                                v-if="product.product_type === 'semen' && !product.request_status"
-                            >
-                                <div class="col s4 center-align">
-                                    <a href="#"
-                                        class="btn col s12"
-                                        style="padding:0;"
-                                        @click.prevent="subtractQuantity(index)"
-                                    >
-                                        <i class="material-icons">remove</i>
-                                    </a>
-                                </div>
-                                <div class="col s4 center-align" style="padding:0;">
-                                    <quantity-input v-model="product.request_quantity"> </quantity-input>
-                                </div>
-                                <div class="col s4 center-align">
-                                    <a href="#"
-                                        class="btn col s12"
-                                        style="padding:0;"
-                                        @click.prevent="addQuantity(index)"
-                                    >
-                                        <i class="material-icons">add</i>
-                                    </a>
-                                </div>
-                            </div>
+                                    {{-- Not yet Requested --}}
+                                    <template v-if="!product.request_status">
+                                        <a class="btn teal"
+                                            href="#!"
+                                            @click.prevent="confirmRequest(index)"
+                                        >
+                                            Request
+                                        </a>
+                                        <a class="btn grey"
+                                            href="#!"
+                                            @click.prevent="confirmRemoval(index)"
+                                        >
+                                            Remove
+                                        </a>
+                                    </template>
 
-                            <div class="quantity col s2 m2 verticalLine" v-else>
-                                <div class="col s12 center-align" style="padding-top:2.2rem;">
-                                    @{{ product.request_quantity }}
-                                </div>
-                            </div>
+                                    {{-- Requested --}}
+                                    <template v-if="product.request_status && product.status === 'requested'">
+                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Reserved">save</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not On Delivery">local_shipping</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Paid">payment</i>
+                                    </template>
 
+                                    {{-- Reserved --}}
+                                    <template v-if="product.status === 'reserved'">
+                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
+                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not On Delivery">local_shipping</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Paid">payment</i>
+                                    </template>
 
-                            {{-- Actions --}}
-                            <div class="action col s2 m2 center-align">
+                                    {{-- Paid --}}
+                                    <template v-if="product.status === 'paid'">
+                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
+                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Awaiting Delivery">local_shipping</i>
+                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.paid | transformToDetailedDate('Paid')">payment</i>
+                                    </template>
 
-                                {{-- Not yet requested --}}
-                                <span v-if="!product.request_status || product.status === 'displayed'">
-                                    <a href="#"
-                                        class="delete-from-swinecart btn"
-                                        @click.prevent="confirmRemoval(index)"
-                                    >
-                                        Remove
-                                    </a>
-                                    <br><br>
-                                    <a href="#"
-                                        class="request-product btn"
-                                        @click.prevent="confirmRequest(index)"
-                                    >
-                                        Request
-                                    </a>
-                                </span>
+                                    {{-- On Delivery --}}
+                                    <template v-if="product.status === 'on_delivery'">
+                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
+                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
+                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.on_delivery | transformToDetailedDate('On Delivery')">local_shipping</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Awaiting Payment">payment</i>
+                                    </template>
 
-                                {{-- Requested --}}
-                                <span v-if="product.request_status && product.status === 'requested'">
-                                    (For Approval)
-                                    <a href="#"
-                                        class="anchor-title teal-text"
-                                        @click.prevent="viewRequestDetails(index)"
-                                    >
-                                        REQUEST DETAILS
-                                    </a>
-                                </span>
+                                    {{-- Sold --}}
+                                    <template v-if="product.status === 'sold'">
+                                        <i class="medium material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.sold | transformToDetailedDate('Sold')">attach_money</i>
+                                    </template>
 
-                                {{-- Reserved --}}
-                                <span v-if="product.status === 'reserved'">
-                                    <a class="message-button btn-large" :data-breeder-id="product.breeder_id" :data-customer-id="product.customer_id">
-                                        Message
-                                    </a>
-                                </span>
-
-                                {{-- On Delivery --}}
-                                <span v-if="product.status === 'on_delivery'">
-                                    (Awaiting Payment)
-                                </span>
-
-                                {{-- Paid --}}
-                                <span v-if="product.status === 'paid'">
-                                    (Awaiting Delivery)
-                                </span>
-
-                                {{-- Sold --}}
-                                <span class="col s12 center-align"
-                                    v-if="product.status === 'sold'"
-                                >
-                                    <a id="rate-button"
-                                        class="btn-large"
-                                        @click.prevent="showRateModal(index)"
-                                    >
-                                        Rate
-                                    </a>
                                 </span>
                             </div>
                         </div>
+                    </div>
 
-                        {{-- Show the following if there are no products in Swine Cart --}}
-                        <div class="center-align" v-show="!products">
-                            <h5>Your swine cart is empty.</h5>
-                        </div>
-                    </li>
+                    {{-- Show the following if there are no products in Swine Cart --}}
+                    <div class="center-align col s12" v-show="products.length === 0">
+                        <h5>Your swine cart is empty.</h5>
+                    </div>
+                </div>
 
-                </ul>
             </div>
 
             {{--  Remove Product Confirmation Modal --}}
@@ -599,6 +491,9 @@
                     <h4>Request Product Confirmation</h4>
                     <p>
                         Are you sure you want to request @{{ productRequest.name }}?
+                        <blockquote class="info" v-show="productRequest.type === 'semen'">
+                            Once requested, request quantity can never be changed.
+                        </blockquote>
                     </p>
                     <div class="row">
                         <div class="col s6">
@@ -659,19 +554,30 @@
                     <span class="row">
                         <span class="col s6">Delivery</span>
                         <span id="delivery" class="col s6 right-align">
-                            <star-rating ref="delivery" :type="'delivery'"></star-rating>
+                            <star-rating ref="delivery"
+                                :type="'delivery'"
+                                v-on:set-delivery-rating="setDeliveryRating"
+                            >
+                            </star-rating>
                         </span>
                     </span>
                     <span class="row">
                         <span class="col s6">Transaction</span>
                         <span id="transaction" class="col s6 right-align">
-                            <star-rating ref="transaction" :type="'transaction'"></star-rating>
+                            <star-rating ref="transaction"
+                                :type="'transaction'"
+                                v-on:set-transaction-rating="setTransactionRating"
+                            >
+                            </star-rating>
                         </span>
                     </span>
                     <span class="row">
                         <span class="col s6">Product Quality</span>
                         <span id="productQuality" class="col s6 right-align">
-                            <star-rating ref="productQuality" :type="'productQuality'"></star-rating>
+                            <star-rating ref="productQuality"
+                                :type="'productQuality'"
+                                v-on:set-product-rating="setProductRating"
+                            ></star-rating>
                         </span>
                     </span>
                     <div class="row">
@@ -708,69 +614,77 @@
                         BREEDER
                     </div>
                     <div class="col s4">
-                        TIME
+                        LOG
                     </div>
                 </div>
                 <ul id="transaction-cart" class="collection cart">
                     <li class="collection-item"
-                        v-for="log in history"
+                        v-for="(item,key) in history"
                     >
-                        <div class="row  swine-cart-item valign-wrapper">
+                        <div class="row swine-cart-item valign-wrapper">
                             <div class="col s2 center-align">
-                                <a href="#"><img :src="log.product_details.img_path" width="75" height="75" class="circle"></a>
+                                <a href="#"><img :src="item.product_details.img_path" width="75" height="75" class="circle"></a>
                             </div>
                             <div class="col s3 verticalLine valign-wrapper">
                                 <div class="valign">
                                     {{-- Name --}}
                                     <a href="#" class="anchor-title teal-text"
-                                        @click.prevent="viewProductModalFromHistory(index)"
+                                        @click.prevent="viewProductModalFromHistory(key)"
                                     >
-                                        <span class="col s12">@{{ log.product_details.name }}</span>
+                                        <span class="col s12">@{{ item.product_details.name }}</span>
                                     </a>
 
                                     {{-- Type --}}
                                     <span class="col s12">
-                                        @{{ log.product_details.breed }} <br>
-                                        @{{ log.product_details.type | capitalize }}
+                                        @{{ item.product_details.type | capitalize }} - @{{ item.product_details.breed }}
                                     </span>
 
                                     {{-- Quanitity --}}
-                                    <span class="col s12" v-if="log.product_type === 'semen'">
-                                        @{{ log.product_quantity }}
+                                    <span class="col s12"
+                                        v-if="item.product_details.type === 'semen' && item.product_details.quantity"
+                                    >
+                                        Quantity: @{{ item.product_details.quantity }}
                                     </span>
                                 </div>
                             </div>
                             <div class="col s3 verticalLine valign-wrapper">
                                 <div class="valign">
-                                    @{{ log.product_details.breeder_name }} <br>
-                                    @{{ log.product_details.farm_from }}
+                                    @{{ item.product_details.breeder_name }} <br>
+                                    @{{ item.product_details.farm_from }}
                                 </div>
                             </div>
                             <div class="col s4">
-                                <div v-if="log.status_transactions.requested">
-                                    Requested <span class="right"> @{{ log.status_transactions.requested }} </span>
+                                {{-- Just show three of the recent logs --}}
+                                <div v-for="log in reverseArray(item.logs)">
+                                    <span class="col s6"> @{{ log.status | transformToReadableStatus }} </span>
+                                    <span class="col s6 left-align grey-text"> @{{ log.created_at | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.reserved">
-                                    Reserved <span class="right"> @{{ log.status_transactions.reserved }} </span>
+
+                                {{-- Extra logs if there are any --}}
+                                <div class=""
+                                    v-show="item.showFullLogs"
+                                    v-for="log in trimmedArray(item.logs)"
+                                >
+                                    <span class="col s6"> @{{ log.status | transformToReadableStatus }} </span>
+                                    <span class="col s6 left-align grey-text"> @{{ log.created_at | transformToDetailedDate }} </span>
                                 </div>
-                                <div v-if="log.status_transactions.on_delivery">
-                                    On Delivery <span class="right"> @{{ log.status_transactions.on_delivery }} </span>
-                                </div>
-                                <div v-if="log.status_transactions.paid">
-                                    Paid <span class="right"> @{{ log.status_transactions.paid }} </span>
-                                </div>
-                                <div v-if="log.status_transactions.sold">
-                                    Sold <span class="right"> @{{ log.status_transactions.sold }} </span>
-                                </div>
-                                <div v-if="log.status_transactions.rated">
-                                    Rated <span class="right"> @{{ log.status_transactions.rated }} </span>
+
+                                {{-- Show toggle button to show more than three recent logs --}}
+                                <div class="" v-if="(item.logs.length > 3)">
+                                    <span class="col s6 left-align">
+                                        <a href="#"
+                                            @click.prevent="toggleShowFullLogs(key)"
+                                        >
+                                            @{{ (!item.showFullLogs) ? 'Show More...' : 'Show Less...' }}
+                                        </a>
+                                    </span>
                                 </div>
                             </div>
                         </div>
                     </li>
 
                     {{-- If there is no item in the transacion history --}}
-                    <div class="center-align" v-show="history.length === 0">
+                    <div class="center-align" v-if="history.length === 0">
                         <h5>Your history is empty.</h5>
                     </div>
                 </ul>
@@ -793,6 +707,36 @@
         </div>
     </template>
 
+    <template id="countdown-timer-template">
+        <div class="white-text right">
+            <span v-if="!expired">
+                Expires after: <br>
+                @{{ daysLeft }}d @{{ hoursLeft }}h @{{ minutesLeft }}m @{{ secondsLeft }}s
+            </span>
+            <span v-if="expired">
+                RESERVATION EXPIRED
+            </span>
+        </div>
+    </template>
+
+    <script type="text/x-template" id="average-star-rating">
+        <div class="ratings-container" style="padding:0; position:relative; display:inline-block">
+            <div class="star-ratings-top" style="position:absolute; z-index:1; overflow:hidden; display:block; white-space:nowrap;" :style="{ width: ratingToPercentage + '%' }">
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+                <i class="material-icons yellow-text"> star </i>
+            </div>
+            <div class="star-ratings-bottom" style="padding:0; z-index:0; display:block;">
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+                <i class="material-icons yellow-text"> star_border </i>
+            </div>
+        </div>
+    </script>
 @endsection
 
 @section('customScript')

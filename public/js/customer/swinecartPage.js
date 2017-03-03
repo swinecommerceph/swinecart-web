@@ -4,7 +4,63 @@
 // component to communicate between them.
 var eventHub = new Vue();
 
-// Custom Local component
+// Custom components
+Vue.component('countdown-timer', {
+    template: '#countdown-timer-template',
+    props: ['expiration'],
+    data: function(){
+        return {
+            daysLeft: 0,
+            hoursLeft: 0,
+            minutesLeft: 0,
+            secondsLeft:0,
+            expired: false
+        }
+    },
+    methods:{
+        getTimeRemaining: function(expiration){
+            var timeDifference = moment(expiration).diff(moment());
+
+            return {
+                'total': timeDifference,
+                'seconds': Math.floor( (timeDifference/1000) % 60 ),
+                'minutes': Math.floor( (timeDifference/1000/60) % 60 ),
+                'hours': Math.floor( (timeDifference/(1000*60*60)) % 24 ),
+                'days': Math.floor( timeDifference/(1000*60*60*24) )
+            };
+        }
+    },
+    mounted: function(){
+        var countdownVM = this;
+
+        var timeInterval = setInterval(function(){
+            var timeDifference = countdownVM.getTimeRemaining(countdownVM.expiration);
+
+            countdownVM.secondsLeft = ('0' + timeDifference.seconds).slice(-2);
+            countdownVM.minutesLeft = timeDifference.minutes;
+            countdownVM.hoursLeft = timeDifference.hours;
+            countdownVM.daysLeft = timeDifference.days;
+
+            if(timeDifference.total <= 0) {
+                clearInterval(timeInterval);
+                countdownVM.expired = true;
+            }
+
+        }, 1000);
+    }
+
+});
+
+Vue.component('average-star-rating',{
+    template: '#average-star-rating',
+    props: ['rating'],
+    computed: {
+        ratingToPercentage: function(){
+            return (100* this.rating / 5);
+        }
+    }
+});
+
 Vue.component('star-rating',{
     template: '#star-rating-template',
     props: ['type'],
@@ -96,16 +152,17 @@ Vue.component('star-rating',{
 
 Vue.component('quantity-input',{
     template: '\
-        <div class="col s12" style="padding:0;"> \
+        <span class="col s12" style="padding:0;"> \
             <input type="text" \
                 ref="input" \
                 class="center-align" \
+                style="margin:0;" \
                 :value="value" \
                 @input="updateValue($event.target.value)" \
                 @focus="selectAll" \
                 @blur="formatValue" \
             > \
-        </div> \
+        </span> \
     ',
     props: {
         value: {
@@ -166,13 +223,9 @@ Vue.component('custom-date-select', {
 
 });
 
-// Custom global component
 Vue.component('order-details',{
     template: '#order-details-template',
     props: ['products', 'token'],
-    components: {
-        // 'star-rating': StarRating
-    },
     data: function(){
         return {
             productRemove:{
@@ -208,6 +261,10 @@ Vue.component('order-details',{
         capitalize: function(value){
             // Capitalize first letter of word
             return value[0].toUpperCase() + value.slice(1);
+        },
+
+        transformToDetailedDate: function(value, prepend){
+            return '['+ prepend + '] ' + moment(value).format("MMM D YYYY, h:mmA");
         }
     },
     methods: {
@@ -242,9 +299,10 @@ Vue.component('order-details',{
             vm.productInfoModal.avgProductQuality = this.products[index].avg_productQuality;
             vm.productInfoModal.otherDetails = this.products[index].other_details.split(',');
 
-            $('#info-modal').openModal({
+            $('#info-modal').modal({
                 opacity: 0
             });
+            $('#info-modal').modal('open');
         },
 
         viewRequestDetails: function(index){
@@ -253,22 +311,20 @@ Vue.component('order-details',{
             this.requestDetails.dateNeeded = this.products[index].date_needed;
             this.requestDetails.specialRequest = this.products[index].special_request;
 
-            $('#product-request-details-modal').openModal({
-                opacity: 0
-            });
+            $('#product-request-details-modal').modal('open');
         },
 
         confirmRemoval: function(index){
             this.productRemove.index = index;
             this.productRemove.name = this.products[index].product_name;
             this.productRemove.id = this.products[index].product_id;
-            $('#remove-product-confirmation-modal').openModal();
+            $('#remove-product-confirmation-modal').modal('open');
         },
 
         removeProduct: function(){
             var index = this.productRemove.index;
 
-            $('#remove-product-confirmation-modal').closeModal();
+            $('#remove-product-confirmation-modal').modal('close');
 
             // Do AJAX
             this.$http.delete(
@@ -320,15 +376,15 @@ Vue.component('order-details',{
             this.productRequest.name = this.products[index].product_name;
             this.productRequest.id = this.products[index].product_id;
             this.productRequest.type = this.products[index].product_type;
-            this.productRequest.dateNeeded = this.products[index].date_needed;
+            this.productRequest.dateNeeded = '';
             this.productRequest.specialRequest = this.products[index].special_request;
-            $('#request-product-confirmation-modal').openModal();
+            $('#request-product-confirmation-modal').modal('open');
         },
 
         requestProduct: function(){
             var index = this.productRequest.index;
 
-            $('#request-product-confirmation-modal').closeModal();
+            $('#request-product-confirmation-modal').modal('close');
 
             // Do AJAX
             this.$http.patch(
@@ -353,7 +409,7 @@ Vue.component('order-details',{
                         requestStatus: 1,
                         dateNeeded: this.productRequest.dateNeeded,
                         specialRequest: this.productRequest.specialRequest,
-                        statusTransaction: data[1]
+                        statusTransaction: data[1].date
                     };
 
                     this.$emit('product-requested', updateDetails);
@@ -389,7 +445,7 @@ Vue.component('order-details',{
         },
 
         showRateModal: function(index){
-            $('#rate-modal').openModal();
+            $('#rate-modal').modal('open');
 
             this.breederRate.index = index;
             this.breederRate.breederName = this.products[index].breeder;
@@ -398,7 +454,7 @@ Vue.component('order-details',{
         rateAndRecord: function(){
             var index = this.breederRate.index;
 
-            $('#rate-modal').closeModal();
+            $('#rate-modal').modal('close');
 
             // Do AJAX
             this.$http.post(
@@ -464,28 +520,6 @@ Vue.component('transaction-history',{
 
         };
     },
-    methods: {
-        viewProductModalFromHistory: function(index){
-            vm.productInfoModal.imgPath = this.history[index].img_path;
-            vm.productInfoModal.name = this.history[index].product_name;
-            vm.productInfoModal.breeder = this.history[index].breeder;
-            vm.productInfoModal.type = this.history[index].product_type;
-            vm.productInfoModal.breed = this.history[index].product_breed;
-            vm.productInfoModal.age = this.history[index].product_age;
-            vm.productInfoModal.adg = this.history[index].product_adg;
-            vm.productInfoModal.fcr = this.history[index].product_fcr;
-            vm.productInfoModal.bft = this.history[index].product_backfat_thickness;
-            vm.productInfoModal.avgDelivery = this.history[index].avg_delivery;
-            vm.productInfoModal.avgTransaction = this.history[index].avg_transaction;
-            vm.productInfoModal.avgProductQuality = this.history[index].avg_productQuality;
-            vm.productInfoModal.otherDetails = this.history[index].other_details;
-
-            $('#info-modal').openModal({
-                opacity: 0
-            });
-        }
-
-    },
     filters: {
         capitalize: function(value){
             // Capitalize first letter of word
@@ -494,7 +528,54 @@ Vue.component('transaction-history',{
                 return str[0].toUpperCase() + str.slice(1);
             }
             return '';
+        },
+
+        transformToDetailedDate: function(value){
+            return moment(value).format("MMM D YYYY, h:mmA");
+        },
+
+        transformToReadableStatus: function(value){
+            return _.startCase(value);
         }
+    },
+    methods: {
+        viewProductModalFromHistory: function(index){
+            vm.productInfoModal.imgPath = this.history[index].product_details.img_path;
+            vm.productInfoModal.name = this.history[index].product_details.name;
+            vm.productInfoModal.breeder = this.history[index].product_details.breeder_name;
+            vm.productInfoModal.province = this.history[index].product_details.farm_from;
+            vm.productInfoModal.type = this.history[index].product_details.type;
+            vm.productInfoModal.breed = this.history[index].product_details.breed;
+            vm.productInfoModal.birthdate = moment(this.history[index].product_details.birthdate).format('MMMM D, YYYY');
+            vm.productInfoModal.age = moment().diff(moment(this.history[index].product_details.birthdate),'days');
+            vm.productInfoModal.adg = this.history[index].product_details.adg;
+            vm.productInfoModal.fcr = this.history[index].product_details.fcr;
+            vm.productInfoModal.bft = this.history[index].product_details.bft;
+            vm.productInfoModal.avgDelivery = this.history[index].product_details.avg_delivery;
+            vm.productInfoModal.avgTransaction = this.history[index].product_details.avg_transaction;
+            vm.productInfoModal.avgProductQuality = this.history[index].product_details.avg_productQuality;
+            vm.productInfoModal.otherDetails = this.history[index].product_details.other_details.split(',');
+
+            $('#info-modal').modal({
+                opacity: 0
+            });
+            $('#info-modal').modal('open');
+        },
+
+        reverseArray : function(value){
+            var tempArray = _.takeRight(value, 3);
+            return _.reverse(tempArray);
+        },
+
+        trimmedArray: function(value){
+            var tempArray = _.take(value, value.length);
+            return _.slice(_.reverse(tempArray),3);
+        },
+
+        toggleShowFullLogs: function(key){
+            this.history[key].showFullLogs = !this.history[key].showFullLogs;
+        }
+
     }
 });
 
@@ -576,11 +657,6 @@ var vm = new Vue({
                     // Store fetched data in local component data
                     this.history = JSON.parse(response.body);
 
-                    // Parse JSON objects
-                    for (var i = 0; i < this.history.length; i++) {
-                        this.history[i].product_details = JSON.parse(this.history[i].product_details);
-                        this.history[i].status_transactions = JSON.parse(this.history[i].status_transactions);
-                    }
                 },
                 function(response){
                     console.log(response.statusText);
