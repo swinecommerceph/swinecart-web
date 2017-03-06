@@ -1,6 +1,7 @@
 <?php
 
 use Illuminate\Database\Seeder;
+use Carbon\Carbon;
 
 class UserInstancesSeeder extends Seeder
 {
@@ -22,7 +23,14 @@ class UserInstancesSeeder extends Seeder
             'Sharoen Fokfun',
             'Wellize Farms',
             'Great Pigs Dutchman',
-            'General Pigs Co.'
+            'General Pigs Co.',
+            'Pork n Pork',
+            'Slow Roast Piggery',
+            'Master Piggery',
+            'Pigz em Piggery',
+            'PorKed',
+            'Pig Masters'
+
         ];
         // For Administrator
         factory(App\Models\User::class, 2)->create()->each(function($user){
@@ -33,11 +41,13 @@ class UserInstancesSeeder extends Seeder
         });
 
     	// For Customers
-        factory(App\Models\User::class, 10)->create()->each(function($user){
-        	$user->assignRole('customer');
+        factory(App\Models\User::class, 100)->create()->each(function($user){
+            $faker = Faker\Factory::create();
+            $user->assignRole('customer');
             $user->update_profile = 0;
             $user->email_verified = 1;
-            $user->approved = 1;
+            $user->created_at = $faker->dateTimeBetween($startDate = '-5 years', $endDate = 'now');
+            $user->approved_at = $faker->dateTimeBetween($startDate = '-5 years', $endDate = 'now');
 
             // Create Customer Profile
             $customer = factory(App\Models\Customer::class)->create();
@@ -49,11 +59,14 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Breeders
-        factory(App\Models\User::class, 10)->create()->each(function($user)use($companyNames){
+        factory(App\Models\User::class, 15)->create()->each(function($user)use($companyNames){
+            $faker = Faker\Factory::create();
             $user->assignRole('breeder');
             $user->update_profile = 0;
             $user->email_verified = 1;
-            $user->approved = 1;
+            $user->created_at = $faker->dateTimeBetween($startDate = '-5 years', $endDate = 'now');
+            $user->approved_at = $faker->dateTimeBetween($startDate = '-5 years', $endDate = 'now');
+
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address
@@ -134,6 +147,14 @@ class UserInstancesSeeder extends Seeder
 
             }
 
+        });
+
+        // For Spectator
+        factory(App\Models\User::class, 50)->create()->each(function($user){
+            $user->assignRole('spectator');
+            // Create Spectator Profile
+            $spectator = factory(App\Models\Spectator::class)->create();
+            $spectator->users()->save($user);
         });
     }
 }

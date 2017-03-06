@@ -22,7 +22,7 @@
       </div>
 
       <div class="col s12">
-
+          
           <div id="slider-button-div">
             <a class="waves-effect waves-teal btn-flat modal-trigger" href="#edit-page-modal">Edit</a>
          </div>
@@ -142,13 +142,13 @@
             @endforeach
 
             {{-- for adding new images and text in the homepage slider --}}
-            <div class="col s4">
-                <div class="card medium">
+            <div class="col s12">
+                <div class="card small hoverable">
                     <div class="col s12 ">
                         {{-- <div class="row "><i class="material-icons">library add</i></div> --}}
                         <div class="add-content">
                             {{-- <a class="waves-effect waves-light btn" href="#add-content-modal">Add Content</a> --}}
-                            <a class="waves-effect waves-light modal-trigger" href="#getInputModal">Add</a>
+                            <a class="btn waves-effect waves-light modal-trigger" href="#getInputModal">Add +</a>
                         </div>
                     </div>
                 </div>

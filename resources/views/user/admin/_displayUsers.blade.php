@@ -63,30 +63,30 @@
 
         <tbody>
             @forelse($users as $user)
-          <tr>
+                <tr>
 
-            <td>{{$user->name}}</td>
-            <td>{{ucfirst($user->title)}}</td>
-            @if ($user->title == 'admin')
-                <td></td>
-            @else
-                <td>
-                    @if ($user->is_blocked != 1)
-                        <div class="col s6">
-                            <a class="waves-effect waves-light btn orange lighten-1 block-button" data-id ="{{$user->user_id}}" ><i class="material-icons left">block</i>Block</a>
-                        </div>
-                    @else
-                        <div class="col s6">
-                            <a class="waves-effect waves-light btn green lighten-1 unblock-button"  data-id ="{{$user->user_id}}"><i class="material-icons left">undo</i>Unblock</a>
-                        </div>
-                    @endif
+                <td>{{$user->name}}</td>
+                <td>{{ucfirst($user->title)}}</td>
+                @if ($user->title == 'admin')
+                    <td></td>
+                @else
+                    <td>
+                        @if ($user->blocked_at == NULL)
+                            <div class="col s6">
+                                <a class="waves-effect waves-light btn orange lighten-1 block-button" data-id ="{{$user->user_id}}" ><i class="material-icons left">block</i>Block</a>
+                            </div>
+                        @else
+                            <div class="col s6">
+                                <a class="waves-effect waves-light btn green lighten-1 unblock-button"  data-id ="{{$user->user_id}}"><i class="material-icons left">remove_circle_outline</i>Unblock</a>
+                            </div>
+                        @endif
 
-                    <div class="col s6">
-                        <a class="waves-effect waves-light btn red lighten-1 delete-button" data-id ="{{$user->user_id}}"><i class="material-icons left">delete</i>Delete</a>
-                    </div>
-                </td>
-            @endif
-          </tr>
+                        <div class="col s6">
+                            <a class="waves-effect waves-light btn red lighten-1 delete-button" data-id ="{{$user->user_id}}"><i class="material-icons left">delete</i>Delete</a>
+                        </div>
+                    </td>
+                @endif
+              </tr>
           @empty
               <tr>
                   <td></td>
