@@ -40,6 +40,13 @@ class SpectatorController extends Controller
       });
     }
 
+    /*
+     * Get product using advanced search creteria
+     *
+     * @param none
+     * @return array of min and maximum product information values
+     *
+     */
     public function getMinMax(){
 
         $products = DB::table('products')
@@ -109,17 +116,38 @@ class SpectatorController extends Controller
         return $productMinMax;
     }
 
-    public function index(Request $request)
+    /*
+     * Display the spectator view
+     *
+     * @param none
+     * @return view
+     *
+     */
+    public function index()
     {
         return view('user.spectator.home');
     }
 
+    /*
+     * Get all breeders and customer accounts
+     *
+     * @param none
+     * @return collection of users
+     *
+     */
     public function viewUsers()
     {
         $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')->whereIn('role_id', [2, 3])->paginate(10);
         return view(('user.spectator.users'), compact('users'));
     }
 
+    /*
+     * Get all product and its information
+     *
+     * @param none
+     * @return collection of products
+     *
+     */
     public function viewProducts()
     {
         $products = DB::table('products')
@@ -196,12 +224,26 @@ class SpectatorController extends Controller
     //     return view('user.spectator.logs');
     // }
 
+    /*
+     * Get the statistics view for the spectator
+     *
+     * @param none
+     * @return view
+     *
+     */
     public function viewStatistics()
     {
         return view('user.spectator.statistics');
         // return view(('user.spectator.statistics'), compact('charts'));
     }
 
+    /*
+     * Search product in the database
+     *
+     * @param string (name of product)
+     * @return collection of products
+     *
+     */
     public function searchProduct(Request $request)
     {
         $productMinMax = $this->getMinMax();
@@ -215,6 +257,13 @@ class SpectatorController extends Controller
         return view('user.spectator.search', compact('products', 'productMinMax'));
     }
 
+    /*
+     * Get product using advanced search creteria
+     *
+     * @param search criterion
+     * @return collection of products
+     *
+     */
     public function advancedSearchProduct(Request $request)
     {
         $productMinMax = $this->getMinMax();

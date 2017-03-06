@@ -40,6 +40,7 @@ var vm = new Vue({
     }
 });
 
+// ChartJS chart instantiation and creation
 var createdChartArea = document.getElementById("created_chart_area");
 var createdBarChart = new Chart(createdChartArea, {
     type: 'bar',

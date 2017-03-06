@@ -1,6 +1,7 @@
 'use strict';
 
 var products = {
+    // for toast notifications of product load
     view: function(product_form){
         $.ajax({
             url: config.spectator_url + '/users',
@@ -17,6 +18,7 @@ var products = {
         });
     },
 
+    // toast notification for search
     search: function(){
         $.ajax({
             url: config.spectator_url + '/search',
@@ -29,6 +31,7 @@ var products = {
         });
     },
 
+    // toast notification for advanced search
     advancedSearch: function(){
         $.ajax({
             url: config.spectator_url + '/advancedSearch',

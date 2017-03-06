@@ -1,5 +1,6 @@
 "use strict";
 
+//  Chart creation in the spectator statistics view
 var chartArea = document.getElementById("statsChart");
 var lineChart = new Chart(chartArea, {
     type: 'line',

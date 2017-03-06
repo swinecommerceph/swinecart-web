@@ -20,7 +20,9 @@ $( document ).ready(function() {
     });
 });
 
+// Component for advanced search
 Vue.component('advanced-search', {
+    // template for component for the advanced search
     template: '<div id="search-filter-modal" class="modal modal-fixed-footer">'+
                     '<form action="home/product/advancedsearch" method="GET" class="spectator_product_advanced_search"> '+
                         '<div class="modal-content">'+
@@ -119,8 +121,10 @@ Vue.component('advanced-search', {
 
 })
 
+// Component for displaying the product information
 Vue.component('product-modal', {
     props: [],
+    // template for component for the product information
     template: '<div id="product-modal" class="modal modal-fixed-footer">'+
                 '<div class="modal-content">'+
                     '<h4 id="modal-header"></h4>'+

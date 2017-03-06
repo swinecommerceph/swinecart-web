@@ -30,6 +30,7 @@
 @endsection
 
 @section('content')
+    {{-- Accept the count per month and save it to a javascript variable for chart use --}}
     <script type="text/javascript">
         var jan = {!! $month[0] !!};
         var feb = {!! $month[1] !!};

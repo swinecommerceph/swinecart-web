@@ -343,6 +343,12 @@ class AdminController extends Controller
         return view('user.admin._pendingUsers',compact('users'));
     }
 
+    /**
+     * Function to search blocked user
+     *
+     * @param  request string
+     * @return collection of blocked user
+     */
     public function searchBlockedUsers(Request $request){
         if($request->breeder==null && $request->customer==null){
             $users = DB::table('users')
@@ -592,6 +598,12 @@ class AdminController extends Controller
         return view('user.admin._adminLogs',compact('logs'));
     }
 
+    /**
+     * Function to search administrator logs
+     *
+     * @param  search string
+     * @return collection of logs from query
+     */
     public function searchAdministratorLogs(Request $request){
 
         if($request->option!=null){
@@ -708,8 +720,8 @@ class AdminController extends Controller
          return redirect()->route('home/pending/users');
      }
 
-     /**
-      * Edit show the created users statistics per month from current year
+     /*
+      * Shows active breeders per month from current year
       *
       * @param none
       * @return array of counts
@@ -855,6 +867,13 @@ class AdminController extends Controller
         return view('user.admin.statisticsBreederActive', compact('month', 'year'));
      }
 
+     /*
+      * Shows the active breeders per month from certain year
+      *
+      * @param year
+      * @return array of counts
+      * @todo optimize the method of getting the count of created users per month, change query to filter the year
+      */
      public function showStatisticsActiveBreederYear(Request $request){
          $year = $request->year;
          $month = [
@@ -995,7 +1014,7 @@ class AdminController extends Controller
      }
 
      /**
-      * Edit show the deleted users statistics per month
+      * Shows the deleted breeders statistics per month
       *
       * @param none
       * @return array of counts
@@ -1118,6 +1137,13 @@ class AdminController extends Controller
         return view('user.admin.statisticsBreederDeleted', compact('month', 'year'));
      }
 
+     /*
+      * Shows the deleted breeders statistics per month from certain year
+      *
+      * @param year
+      * @return array of counts
+      * @todo optimize the method of getting the count of created users per month, change query to filter the year
+      */
      public function showStatisticsDeletedBreederYear(Request $request){
          $year = $request->year;
          $month = [
@@ -1236,7 +1262,7 @@ class AdminController extends Controller
 
 
      /**
-      * Edit show the blocked users statistics per month
+      * Shows the blocked breeders statistics per month from current year
       *
       * @param none
       * @return array of counts
@@ -1358,6 +1384,13 @@ class AdminController extends Controller
           return view('user.admin.statisticsBreederBlocked', compact('month', 'year'));
       }
 
+      /*
+       * Shows the blocked breeders statistics per month from input year
+       *
+       * @param input year
+       * @return array of counts
+       * @todo optimize the method of getting the count of blocked users per month, change query to filter the year
+       */
       public function showStatisticsBlockedBreederYear(Request $request){
           $year = $request->year;
           $month = [
@@ -1424,10 +1457,11 @@ class AdminController extends Controller
                               ->whereMonth('blocked_at', '=', date('7'))
                               ->whereYear('blocked_at', '=', $year)
                               ->count(),
-              DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
-              ->join('roles', 'role_user.role_id','=','roles.id')
-              ->where('role_user.role_id','=',2)
-              ->where('users.email_verified','=', 1)
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
                               ->whereNotNull('approved_at')
                               ->whereMonth('blocked_at', '=', date('8'))
                               ->whereYear('blocked_at', '=', $year)
@@ -1473,6 +1507,13 @@ class AdminController extends Controller
           return view('user.admin.statisticsBreederBlocked', compact('month', 'year'));
       }
 
+      /*
+       * Shows the Statistics dashboard
+       *
+       * @param none
+       * @return summary of statistics
+       *
+       */
       public function showStatisticsDashboard(){
         $date = Carbon::now();
         $year = $date->year;
@@ -1510,8 +1551,14 @@ class AdminController extends Controller
         return view('user.admin.statisticsDashboard',compact('stats'));
       }
 
-
-    public function showStatisticsActiveCustomer(){
+      /*
+       * Shows active customers per month from current year
+       *
+       * @param none
+       * @return array of count
+       *
+       */
+      public function showStatisticsActiveCustomer(){
         $date = Carbon::now();
         $year = $date->year;
         $month = [
@@ -1651,6 +1698,13 @@ class AdminController extends Controller
        return view('user.admin.statisticsCustomerActive', compact('month', 'year'));
     }
 
+    /*
+     * Shows active customers per month from current input
+     *
+     * @param input year
+     * @return array of count
+     *
+     */
     public function showStatisticsActiveCustomerYear(Request $request){
         $year = $request->year;
         $month = [
@@ -1791,7 +1845,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Edit show the deleted users statistics per month
+     * Shows the deleted customers per month of the current year
      *
      * @param none
      * @return array of counts
@@ -1914,6 +1968,13 @@ class AdminController extends Controller
        return view('user.admin.statisticsCustomerDeleted', compact('month', 'year'));
     }
 
+    /*
+     * Shows count of deleted customers per month from input year
+     *
+     * @param input year
+     * @return array of count
+     *
+     */
     public function showStatisticsDeletedCustomerYear(Request $request){
         $year = $request->year;
         $month = [
@@ -2032,7 +2093,7 @@ class AdminController extends Controller
 
 
     /**
-     * Edit show the blocked users statistics per month
+     * Shows the count of blocked customers per month from the current year
      *
      * @param none
      * @return array of counts
@@ -2154,6 +2215,13 @@ class AdminController extends Controller
          return view('user.admin.statisticsCustomerBlocked', compact('month', 'year'));
      }
 
+     /*
+      * Shows the count of blocked customers per month from the input year
+      *
+      * @param input year
+      * @return array of counts
+      * @todo optimize the method of getting the count of blocked users per month, change query to filter the year
+      */
      public function showStatisticsBlockedCustomerYear(Request $request){
          $year = $request->year;
          $month = [
@@ -2270,6 +2338,13 @@ class AdminController extends Controller
          return view('user.admin.statisticsCustomerBlocked', compact('month', 'year'));
      }
 
+     /*
+      * Get all entries in the administrator logs in the current day
+      *
+      * @param none
+      * @return collection of logs
+      *
+      */
      public function showStatisticsTimeline(){
          $date = Carbon::now();
          $year = $date->year;
@@ -2289,6 +2364,13 @@ class AdminController extends Controller
          return view('user.admin.statisticsTimeline', compact('dateNow','adminLogs'));
      }
 
+     /*
+      * Get all entries in the administrator logs in the input day
+      *
+      * @param date
+      * @return collection of logs
+      *
+      */
      public function showStatisticsTimelineDate(Request $request){
          $date = new Carbon($request->date);
          // dd($date);
@@ -2310,7 +2392,6 @@ class AdminController extends Controller
 
 
     public function viewUsers(){
-
         $breeders = Breeder::all();
         $customers = Customer::all();
         return view('user.admin.viewUsers', compact('breeders', 'customers'));

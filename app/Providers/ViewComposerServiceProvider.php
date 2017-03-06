@@ -30,7 +30,13 @@ class ViewComposerServiceProvider extends ServiceProvider
         //
     }
 
-
+    /*
+     * Get the last and latest year of active users in the whole database
+     *
+     * @param none
+     * @return array of Carbon parsed
+     *
+     */
     public function adminGetMinMaxYearUserCreation(){
         view()->composer('*', function($view){
             $first =  DB::table('users')->orderBy('created_at', 'asc')->first();
@@ -40,11 +46,19 @@ class ViewComposerServiceProvider extends ServiceProvider
             $view->with('yearMinMax', $data);
         });
     }
+    
 
     public function spectatorGetMinMaxProductCost(){
 
     }
 
+    /*
+     * Get the current date
+     *
+     * @param none
+     * @return array of Carbon parsed
+     *
+     */
     public function getTimeNow(){
         view()->composer('user.admin.*', function($view){
             $date = Carbon::now();
@@ -53,6 +67,13 @@ class ViewComposerServiceProvider extends ServiceProvider
         });
     }
 
+    /*
+     * Get the images in the homepage view of the Customer and Breeder pages
+     *
+     * @param none
+     * @return collection of images
+     *
+     */
     public function getHomeImages(){
         view()->composer('*',function($view){
             $homeContent = DB::table('home_images')->get();
