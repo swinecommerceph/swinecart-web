@@ -237,24 +237,68 @@ class SpectatorController extends Controller
         $month = $date->month;
         $year = $date->year;
 
-        $customers = DB::table('users')
+        $activeCustomers = DB::table('users')
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                         ->where('role_user.role_id','!=',3)
                         ->where('users.email_verified','=', 1)
                         ->where('users.deleted_at','=', NULL)
                         ->where('users.blocked_at','=', NULL)
+                        ->whereMonth('approved_at', '=', $month)
+                        ->whereYear('approved_at', '=', $year)
                         ->count();
-        $breeder = DB::table('users')
+
+        $deletedCustomers = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->where('role_user.role_id','!=',3)
+                        ->where('users.email_verified','=', 1)
+                        ->whereMonth('deleted_at', '=', $month)
+                        ->whereYear('deleted_at', '=', $year)
+                        ->count();
+
+        $blockedCustomers = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->where('role_user.role_id','!=',3)
+                        ->where('users.email_verified','=', 1)
+                        ->whereMonth('blocked_at', '=', $month)
+                        ->whereYear('blocked_at', '=', $year)
+                        ->count();
+
+
+        $activeBreeders = DB::table('users')
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                         ->where('role_user.role_id','!=',2)
                         ->where('users.email_verified','=', 1)
                         ->where('users.deleted_at','=', NULL)
                         ->where('users.blocked_at','=', NULL)
+                        ->whereMonth('approved_at', '=', $month)
+                        ->whereYear('approved_at', '=', $year)
                         ->count();
 
-        $data = [$customers, $breeder];
-        dd($data);
-        // return view('user.spectator.statisticsDashboard');
+        $deletedBreeders = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->where('role_user.role_id','!=',2)
+                        ->where('users.email_verified','=', 1)
+                        ->whereMonth('deleted_at', '=', $month)
+                        ->whereYear('deleted_at', '=', $year)
+                        ->count();
+
+        $blockedBreeders = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->where('role_user.role_id','!=',2)
+                        ->where('users.email_verified','=', 1)
+                        ->whereMonth('blocked_at', '=', $month)
+                        ->whereYear('blocked_at', '=', $year)
+                        ->count();
+
+
+        $productCount = DB::table('products')
+                        ->where('status', '=', 'displayed')
+                        ->whereNull('deleted_at')
+                        ->count();
+
+        $data = [$activeCustomers, $deletedCustomers, $blockedCustomers, $activeBreeders, $deletedBreeders, $blockedBreeders, $productCount];
+
+        return view('user.spectator.statisticsDashboard', compact('data'));
         // return view(('user.spectator.statistics'), compact('charts'));
     }
 

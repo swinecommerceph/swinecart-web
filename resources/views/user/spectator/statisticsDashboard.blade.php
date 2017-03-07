@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-    
+
     <div class="card-panel">
         <div class="row">
             <div class="col s12">
@@ -24,12 +24,38 @@
         <div class="row">
             <div class="col s12">
                 <div class="row">
-                    <div class="col s12">
-                        <h5>Label 1</h5>
-                        <canvas id="statsChart" width="400" height="250"></canvas>
+                    <div class="col s12 m6 l6">
+                        <div class="card-panel teal">
+                            <div class="row">
+                                <div class="col s12 m12 l12 center-align">
+                                    Customers
+                                </div>
+                                <div class="col s12 m12 l12 center-align">
+                                    {{$data[0]}} New
+                                </div>
+                                <div class=" col s12 m12 l12 center-align">
+                                    {{$data[1]}} Deleted
+                                </div>
+                                <div class=" col s12 m12 l12 center-align">
+                                    {{$data[2]}} Blocked
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div class="col s12">
+                    <div class="col s12 m6 l6">
+                        <div class="card-panel teal">
+                            <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+                                I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+                            </span>
+                        </div>
+                    </div>
 
+                    <div class="col s12 m12 l12">
+                        <div class="card-panel teal">
+                            <span class="white-text">I am a very simple card. I am good at containing small bits of information.
+                                I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
+                            </span>
+                        </div>
                     </div>
                 </div>
 
