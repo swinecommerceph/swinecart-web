@@ -150,7 +150,7 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Spectator
-        factory(App\Models\User::class, 50)->create()->each(function($user){
+        factory(App\Models\User::class, 2)->create()->each(function($user){
             $user->assignRole('spectator');
             // Create Spectator Profile
             $spectator = factory(App\Models\Spectator::class)->create();
