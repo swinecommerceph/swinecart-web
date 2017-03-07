@@ -24,7 +24,7 @@ use App\Models\User;
 use DB;
 use Auth;
 use Input;
-
+use Carbon\Carbon;
 
 class SpectatorController extends Controller
 {
@@ -231,9 +231,30 @@ class SpectatorController extends Controller
      * @return view
      *
      */
-    public function viewStatistics()
+    public function viewStatisticsDashboard()
     {
-        return view('user.spectator.statistics');
+        $date = Carbon::now();
+        $month = $date->month;
+        $year = $date->year;
+
+        $customers = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->where('role_user.role_id','!=',3)
+                        ->where('users.email_verified','=', 1)
+                        ->where('users.deleted_at','=', NULL)
+                        ->where('users.blocked_at','=', NULL)
+                        ->count();
+        $breeder = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->where('role_user.role_id','!=',2)
+                        ->where('users.email_verified','=', 1)
+                        ->where('users.deleted_at','=', NULL)
+                        ->where('users.blocked_at','=', NULL)
+                        ->count();
+        
+        $data = [$customers, $breeder];
+        dd($data);
+        // return view('user.spectator.statisticsDashboard');
         // return view(('user.spectator.statistics'), compact('charts'));
     }
 

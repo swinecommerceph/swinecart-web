@@ -38,7 +38,7 @@ class ViewComposerServiceProvider extends ServiceProvider
      *
      */
     public function adminGetMinMaxYearUserCreation(){
-        view()->composer('*', function($view){
+        view()->composer('user.admin.*', function($view){
             $first =  DB::table('users')->orderBy('created_at', 'asc')->first();
             $last =  DB::table('users')->orderBy('created_at', 'desc')->first();
 
@@ -46,7 +46,7 @@ class ViewComposerServiceProvider extends ServiceProvider
             $view->with('yearMinMax', $data);
         });
     }
-    
+
 
     public function spectatorGetMinMaxProductCost(){
 
