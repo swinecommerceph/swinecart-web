@@ -160,8 +160,7 @@ return [
         App\Providers\ViewComposerServiceProvider::class,
 
         Collective\Html\HtmlServiceProvider::class,
-        AdamWathan\EloquentOAuthL5\EloquentOAuthServiceProvider::class,
-        Fx3costa\LaravelChartJs\Providers\ChartjsServiceProvider::class,
+        AdamWathan\EloquentOAuthL5\EloquentOAuthServiceProvider::class
     ],
 
     /*

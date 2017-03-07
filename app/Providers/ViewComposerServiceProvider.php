@@ -38,7 +38,10 @@ class ViewComposerServiceProvider extends ServiceProvider
      *
      */
     public function adminGetMinMaxYearUserCreation(){
-        view()->composer('user.admin.*', function($view){
+        view()->composer([
+            'user.admin.statisticsBreederActive', 'user.admin.statisticsBreederBlocked', 'user.admin.statisticsBreederDeleted',
+            'user.admin.statisticsCustomerActive', 'user.admin.statisticsCustomerBlocked', 'user.admin.statisticsCustomerDeleted'
+            ], function($view){
             $first =  DB::table('users')->orderBy('created_at', 'asc')->first();
             $last =  DB::table('users')->orderBy('created_at', 'desc')->first();
 
@@ -75,7 +78,7 @@ class ViewComposerServiceProvider extends ServiceProvider
      *
      */
     public function getHomeImages(){
-        view()->composer('*',function($view){
+        view()->composer(['user.breeder.home','user.customer.home'],function($view){
             $homeContent = DB::table('home_images')->get();
             $view->with('homeContent', $homeContent);
 

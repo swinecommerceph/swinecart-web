@@ -228,7 +228,7 @@ class SpectatorController extends Controller
      * Get the statistics view for the spectator
      *
      * @param none
-     * @return view
+     * @return view and count collection
      *
      */
     public function viewStatisticsDashboard()
@@ -251,7 +251,7 @@ class SpectatorController extends Controller
                         ->where('users.deleted_at','=', NULL)
                         ->where('users.blocked_at','=', NULL)
                         ->count();
-        
+
         $data = [$customers, $breeder];
         dd($data);
         // return view('user.spectator.statisticsDashboard');

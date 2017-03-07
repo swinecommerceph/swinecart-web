@@ -13,8 +13,7 @@
 		"react/zmq": "0.2.*|0.3.*",
         "react/promise": "^2.0",
         "pusher/pusher-php-server": "^2.6",
-        "intervention/image": "^2.3",
-        "fx3costa/laravelchartjs": "^2.1"
+        "intervention/image": "^2.3"
     },
     "require-dev": {
         "fzaninotto/faker": "~1.4",
