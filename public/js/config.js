@@ -24,6 +24,7 @@ var config = {
     search_user: 'home/search',
     all_user: 'home/userlist',
     form: 'registration',
+    spectator_url: '/spectator',
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',
     breederWSServer: 'ws://192.168.10.10:8080',

@@ -207,50 +207,31 @@
     <div class="row">
     </div>
 
-    {{-- Slider --}}
-    <div class="slider home-slider">
-        <ul class="slides">
-          <li>
-            <img src="/images/demo/HP1.jpg">
-            <div class="caption center-align">
-              <h3>Efficiency</h3>
-              <h5 class="light grey-text text-lighten-3">Through the internet, the
-system aims for faster and
-hassle-free transaction between
-consumers and retailers.</h5>
-            </div>
-          </li>
-          <li>
-            <img src="/images/demo/HP2.jpg">
-            <div class="caption left-align">
-              <h3>Security</h3>
-              <h5 class="light grey-text text-lighten-3">security and legitimacy of
-both customers and
-breeders is ensured
-through establishing a set
-of criteria/qualifications.</h5>
-            </div>
-          </li>
-          <li>
-            <img src="/images/demo/HP3.jpg">
-            <div class="caption right-align">
-              <h3>Variety</h3>
-              <h5 class="light grey-text text-lighten-3">security and legitimacy of both customers and
-breeders is ensured through establishing a set
-of criteria/qualifications.</h5>
-            </div>
-          </li>
-          <li>
-            <img src="/images/demo/HP4.jpg">
-            <div class="caption center-align">
-              <h3>Swine Security</h3>
-              <h5 class="light grey-text text-lighten-3">security and legitimacy of both customers and
-breeders is ensured through establishing a set
-of criteria/qualifications.</h5>
-            </div>
-          </li>
-        </ul>
-    </div>
+  {{-- Slider --}}
+  <div class="slider home-slider">
+      <ul class="slides">
+        @forelse($homeContent as $content)
+            <li>
+              <img src= {{$content->path.$content->name}}>
+              <div class="caption center-align">
+                <h3>{{$content->title}}</h3>
+                <h5 class="light grey-text text-lighten-3 content-text">{{$content->text}}</h5>
+              </div>
+            </li>
+        @empty
+            <li>
+              <img src="/images/demo/HP1.jpg">
+              <div class="caption center-align">
+                <h3>Efficiency</h3>
+                <h5 class="light grey-text text-lighten-3">Through the internet, the
+  system aims for faster and
+  hassle-free transaction between
+  consumers and retailers.</h5>
+              </div>
+            </li>
+        @endforelse
+      </ul>
+  </div>
 
 @endsection
 

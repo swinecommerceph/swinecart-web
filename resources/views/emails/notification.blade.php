@@ -14,7 +14,7 @@
                 <div class="card green darken-1">
                     <div class="card-content white-text">
                       <span class="card-title">Account Notification:</span>
-                      @if($approved==1)
+                      @if($approved!=NULL)
                         <p>
                            Your account has been deleted.
                         </p>
@@ -30,7 +30,7 @@
                 <div class="card green darken-1">
                     <div class="card-content white-text">
                       <span class="card-title">Account Notification:</span>
-                      @(@if ($status == 1)
+                      @(@if ($status != NULL)
                         <p>
                           Your account has been blocked.
                         </p>

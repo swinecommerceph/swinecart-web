@@ -7,15 +7,14 @@
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
   	<meta name="viewport" content="width=device-width, initial-scale=1">
-    <title>Swine E-Commerce PH @yield('title') </title>
+    <title>SwineCart @yield('title') </title>
 
     <link href="/css/materialize.min.css" rel="stylesheet" type="text/css">
     <link href="/css/dropzone.css" rel="stylesheet" type="text/css">
     <link href="/css/icon.css" rel="stylesheet" type="text/css">
     <link href="/css/style.css" rel="stylesheet" type="text/css">
     <link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
-    <link rel="stylesheet" type="text/css" href="//cdn.datatables.net/1.10.12/css/jquery.dataTables.css">
-
+    <script type="text/javascript" src="/js/vendor/chart.min.js"></script>
 
     <script src="/js/vendor/VideoJS/ie8/videojs-ie8.min.js"></script>
 
@@ -25,7 +24,7 @@
     <div class="navbar-fixed">
       <nav class="teal darken-3">
           <div class="nav-wrapper container">
-            <img src="/images/logowhite.png" height=65/>&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">Swine E-Commerce PH</a>
+            <a href="{{ route('home_path') }}"><img src="/images/logowhite.png" height=65/>&nbsp&nbsp<div class="brand-logo">SwineCart</div></a>
 
             <ul id="nav-mobile" class="right hide-on-med-and-down">
               <li><a>{{ Auth::user()->name }}</a> </li>
@@ -103,6 +102,9 @@
                      <a href="{{route('admin.pending.users')}}" class="black-text" id='pending-breeder'> <div class="collapsible-header"><i class="material-icons">assignment_late</i>Pending Accounts</div></a>
                     </li>
                     <li>
+                     <a href="{{route('admin.statistics.dashboard')}}" class="black-text" id='statistics'> <div class="collapsible-header"><i class="material-icons">trending_up</i>Site Statistics</div></a>
+                    </li>
+                    <li>
                       <div class="collapsible-header"><i class="material-icons">build</i>Manage Pages</div>
                       <div class="collapsible-body center" ><a href="{{route('admin.manage.homepage')}}" class="black-text" id='pages-home-images'><p>Homepage Images</p></a></div>
                       {{-- <div class="collapsible-body center" ><a href="{{route('admin.manage.text')}}" class="black-text" id='pages-home-text'><p>Homepage Text</p></a></div> --}}
@@ -128,8 +130,32 @@
             </div>
 
         </div>
+
     </div>
 
+    <footer class="page-footer teal darken-3">
+      <div class="container">
+        <div class="row">
+          <div class="col l6 s12">
+            <h5 class="white-text">SwineCart</h5>
+            <p class="grey-text text-lighten-4"></p>
+          </div>
+          <div class="col l4 offset-l2 s12">
+            <h5 class="white-text">Links</h5>
+            <ul>
+              <li><a class="grey-text text-lighten-3" href="{{route('admin_path')}}">Home</a></li>
+              <li><a class="grey-text text-lighten-3" href="#!">Link 2</a></li>
+            </ul>
+          </div>
+        </div>
+      </div>
+      <div class="footer-copyright">
+        <div class="container">
+        © 2017 Copyright Text
+        <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+        </div>
+      </div>
+    </footer>
     {{-- Accept modal --}}
     <div id="accept-modal" class="modal action-dialog-box green lighten-5">
       <div class="modal-content">
