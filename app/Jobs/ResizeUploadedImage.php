@@ -8,6 +8,7 @@ use Illuminate\Queue\InteractsWithQueue;
 use Illuminate\Contracts\Queue\ShouldQueue;
 
 use ImageManipulator;
+use Storage;
 
 class ResizeUploadedImage implements ShouldQueue
 {
@@ -53,6 +54,11 @@ class ResizeUploadedImage implements ShouldQueue
                     $constraint->upsize();
                 });
 
+                // Make directory if it does not exist
+                if(!Storage::disk('public')->exists(self::PRODUCT_SIMG_PATH)){
+                    Storage::disk('public')->makeDirectory(self::PRODUCT_SIMG_PATH);
+                }
+
                 $smallImage->save(public_path() . self::PRODUCT_SIMG_PATH . $this->filename);
             }
             else break;
@@ -62,6 +68,11 @@ class ResizeUploadedImage implements ShouldQueue
                     $constraint->upsize();
                 });
 
+                // Make directory if it does not exist
+                if(!Storage::disk('public')->exists(self::PRODUCT_MIMG_PATH)){
+                    Storage::disk('public')->makeDirectory(self::PRODUCT_MIMG_PATH);
+                }
+
                 $mediumImage->save(public_path() . self::PRODUCT_MIMG_PATH . $this->filename, 80);
             }
             else break;
@@ -70,6 +81,11 @@ class ResizeUploadedImage implements ShouldQueue
                 $largeImage =  ImageManipulator::make($absoluteFilePath)->heighten(410, function($constraint){
                     $constraint->upsize();
                 });
+
+                // Make directory if it does not exist
+                if(!Storage::disk('public')->exists(self::PRODUCT_LIMG_PATH)){
+                    Storage::disk('public')->makeDirectory(self::PRODUCT_LIMG_PATH);
+                }
 
                 $largeImage->save(public_path() . self::PRODUCT_LIMG_PATH . $this->filename, 80);
             }
