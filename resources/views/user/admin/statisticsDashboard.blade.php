@@ -79,8 +79,8 @@
     <div class="row">
         <div class="col s12 m12 l12">
             <div class="card-panel indigo lighten-5 hoverable">
-                <div class="row">
-                    <div id="statsdash-productbreakdown" class="col s7 m7 l7">
+                <div class="row valign-wrapper">
+                    <div id="statsdash-productbreakdown" class="col s7 m7 l7 valign">
                         <div class="row">
                             <div class="col s12 m12 l12 statsdash-panel-title">
                                 Product Statistics
@@ -92,7 +92,7 @@
                                 <div class="row center">
                                     <div class="col s12 m12 l12">
                                         <div class="statsdash-data truncate">
-                                            100
+                                            {{$stats[5]}}
                                         </div>
                                         <div class="statsdash-description">
                                             Boars for sale
@@ -102,7 +102,17 @@
                                 <div class="row center">
                                     <div class="col s12 m12 l12">
                                         <div class="statsdash-data truncate">
-                                            50
+                                            {{$stats[6]}}
+                                        </div>
+                                        <div class="statsdash-description">
+                                            Gilts for sale
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row center">
+                                    <div class="col s12 m12 l12">
+                                        <div class="statsdash-data truncate">
+                                            {{$stats[7]}}
                                         </div>
                                         <div class="statsdash-description">
                                             Sows for sale
@@ -112,7 +122,7 @@
                                 <div class="row center">
                                     <div class="col s12 m12 l12">
                                         <div class="statsdash-data truncate">
-                                            100000
+                                            {{$stats[8]}}
                                         </div>
                                         <div class="statsdash-description">
                                             Semen for sale
@@ -122,11 +132,11 @@
                             </div>
                         </div>
                     </div>
-                    <div class="col s5 m5 l5">
+                    <div class="col s5 m5 l5 valign">
                         <div class="row side-div">
                             <div id = "" class="col s12 m12 l12 center tooltipped" data-position="top" data-delay="60" data-tooltip="12 Products added this month">
                                 <div class="statsdash-data truncate">
-                                    12
+                                    #
                                 </div>
                                 <div class="statsdash-description">
                                     Products added this month
@@ -136,7 +146,7 @@
                         <div class="row side-div center">
                             <div id = "" class="col s12 m12 l12 tooltipped" data-position="top" data-delay="60" data-tooltip="100 Products requested">
                                 <div class="statsdash-data truncate">
-                                    100
+                                    #
                                 </div>
                                 <div class="statsdash-description">
                                     Products requested
@@ -146,7 +156,7 @@
                         <div class="row side-div center">
                             <div id = "" class="col s12 m12 l12 tooltipped" data-position="top" data-delay="60" data-tooltip="5000 Products sold">
                                 <div class="statsdash-data truncate">
-                                    5000
+                                    #
                                 </div>
                                 <div class="statsdash-description">
                                     Products sold

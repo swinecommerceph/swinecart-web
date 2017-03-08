@@ -291,12 +291,31 @@ class SpectatorController extends Controller
                         ->count();
 
 
-        $productCount = DB::table('products')
+        $products = DB::table('products')
                         ->where('status', '=', 'displayed')
                         ->whereNull('deleted_at')
-                        ->count();
+                        ->get();
 
-        $data = [$activeCustomers, $deletedCustomers, $blockedCustomers, $activeBreeders, $deletedBreeders, $blockedBreeders, $productCount];
+        $boar = 0;
+        $gilt = 0;
+        $sow = 0;
+        $semen = 0;
+        foreach ($products as $product) {
+            if(strcmp($product->type, 'boar')){
+                $boar++;
+            }
+            if(strcmp($product->type, 'gilt')){
+                $gilt++;
+            }
+            if(strcmp($product->type, 'sow')){
+                $sow++;
+            }
+            if(strcmp($product->type, 'semen')){
+                $semen++;
+            }
+        }
+
+        $data = [$activeCustomers, $deletedCustomers, $blockedCustomers, $activeBreeders, $deletedBreeders, $blockedBreeders, count($products), $boar, $gilt, $sow, $semen];
 
         return view('user.spectator.statisticsDashboard', compact('data'));
         // return view(('user.spectator.statistics'), compact('charts'));

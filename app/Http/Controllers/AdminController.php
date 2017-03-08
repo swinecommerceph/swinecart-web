@@ -1542,12 +1542,35 @@ class AdminController extends Controller
                     ->orderBy('created_at', 'ASC')
                     ->get();
 
-
         foreach ($adminLogs as $logs) {
             $logs->created_at = Carbon::parse($logs->created_at)->toDayDateTimeString();
         }
 
-        $stats = [$deleted, $blocked, $new, $adminLogs];
+        $products = DB::table('products')
+                        ->where('status', '=', 'displayed')
+                        ->whereNull('deleted_at')
+                        ->get();
+
+        $boar = 0;
+        $gilt = 0;
+        $sow = 0;
+        $semen = 0;
+        foreach ($products as $product) {
+            if(strcmp($product->type, 'boar')){
+                $boar++;
+            }
+            if(strcmp($product->type, 'gilt')){
+                $gilt++;
+            }
+            if(strcmp($product->type, 'sow')){
+                $sow++;
+            }
+            if(strcmp($product->type, 'semen')){
+                $semen++;
+            }
+        }
+
+        $stats = [$deleted, $blocked, $new, $adminLogs, count($products), $boar, $gilt, $sow, $semen];
         return view('user.admin.statisticsDashboard',compact('stats'));
       }
 

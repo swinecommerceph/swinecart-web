@@ -977,7 +977,16 @@ blockquote.info{
 
 .vertical-divider{
 	font-size: 10em;
-
+}
 #map-canvas{
 	height: 60vh;
+}
+
+/*Spectator Statistics Dahsboard*/
+.spectator-dashicon{
+	font-size: 8em;
+}
+
+.spectator-dashlabel{
+	font-size: 2em;
 }

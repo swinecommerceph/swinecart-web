@@ -17,7 +17,7 @@
     <div class="card-panel">
         <div class="row">
             <div class="col s12">
-                <h4>Statistics</h4>
+                <h4>Statistics Dashboard</h4>
             </div>
         </div>
         <div class="divider"></div>
@@ -25,9 +25,12 @@
             <div class="col s12">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <div class="card-panel teal">
+                        <div class="card-panel indigo accent-1 hoverable">
                             <div class="row">
                                 <div class="col s12 m12 l12 center-align">
+                                    <i class="material-icons spectator-dashicon">people</i>
+                                </div>
+                                <div class="col s12 m12 l12 center-align spectator-dashlabel">
                                     Customers
                                 </div>
                                 <div class="col s12 m12 l12 center-align">
@@ -43,18 +46,49 @@
                         </div>
                     </div>
                     <div class="col s12 m6 l6">
-                        <div class="card-panel teal">
-                            <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-                                I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-                            </span>
+                        <div class="card-panel pink accent-1 hoverable">
+                            <div class="row">
+                                <div class="col s12 m12 l12 center-align">
+                                    <i class="material-icons spectator-dashicon">local_shipping</i>
+                                </div>
+                                <div class="col s12 m12 l12 center-align spectator-dashlabel">
+                                    Breeders
+                                </div>
+                                <div class="col s12 m12 l12 center-align">
+                                    {{$data[3]}} New
+                                </div>
+                                <div class=" col s12 m12 l12 center-align">
+                                    {{$data[4]}} Deleted
+                                </div>
+                                <div class=" col s12 m12 l12 center-align">
+                                    {{$data[5]}} Blocked
+                                </div>
+                            </div>
                         </div>
                     </div>
 
                     <div class="col s12 m12 l12">
-                        <div class="card-panel teal">
-                            <span class="white-text">I am a very simple card. I am good at containing small bits of information.
-                                I am convenient because I require little markup to use effectively. I am similar to what is called a panel in other frameworks.
-                            </span>
+                        <div class="card-panel amber accent-1 hoverable">
+                            <div class="row">
+                                <div class="col s12 m12 l12 center-align">
+                                    <i class="material-icons spectator-dashicon">shopping_basket</i>
+                                </div>
+                                <div class="col s12 m12 l12 center-align spectator-dashlabel">
+                                    Products
+                                </div>
+                                <div class="col s12 m12 l12 center-align">
+                                    {{$data[6]}} in Inventory
+                                </div>
+                                <div class=" col s12 m12 l12 center-align">
+                                    Product Summary
+                                </div>
+                                <div class=" col s12 m12 l12 center-align">
+                                    {{$data[7]}} Boar
+                                    {{$data[8]}} Gilt
+                                    {{$data[9]}} Sow
+                                    {{$data[10]}} Semen
+                                </div>
+                            </div>
                         </div>
                     </div>
                 </div>
