@@ -5,13 +5,13 @@
 @endsection
 
 @section('pageId')
-    id="customer-deleted-stats-page-spectator"
+    id="breeder-deleted-stats-page-spectator"
 @endsection
 
 @section('header')
     <div class="valign-wrapper row">
         <div class="valign center-block col s5">
-            <h4 id='admin-content-panel-header'>Customer Statistics</h4>
+            <h4 id='admin-content-panel-header'>Breeder Statistics</h4>
         </div>
         <div class="valign center-block col s7">
             <div class="input-field col s12">
@@ -50,18 +50,18 @@
                 <label for="stats-selection-buttons">Chart</label>
                 <div class="col s6">
                     <div id="stats-selection-buttons" class="v-align col s4">
-                        <a class="waves-effect waves-light btn" href="{{route('spectator.statisticsActiveCustomer')}}">Active</a>
+                        <a class="waves-effect waves-light btn" href="{{route('spectator.statisticsActiveBreeder')}}">Active</a>
                     </div>
                     <div class="v-align col s4">
                         <a class="waves-effect waves-light btn disabled">Deleted</a>
                     </div>
                     <div class="v-align col s4">
-                        <a class="waves-effect waves-light btn" href="{{route('spectator.statisticsBlockedCustomer')}}">Blocked</a>
+                        <a class="waves-effect waves-light btn" href="{{route('spectator.statisticsBlockedBreeder')}}">Blocked</a>
                     </div>
                 </div>
 
                 <div class="col s6">
-                    {!!Form::open(['route'=>'spectator.statisticsDeletedCustomerYear', 'method'=>'GET'])!!}
+                    {!!Form::open(['route'=>'spectator.statisticsDeletedBreederYear', 'method'=>'GET'])!!}
                     <label for="stats-year">Year</label>
                     <input id="stats-year" type="number" name="year" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[1] }}" value="{{ $year }}">
                     <div class="center">

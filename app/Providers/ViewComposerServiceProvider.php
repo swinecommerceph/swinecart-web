@@ -40,7 +40,9 @@ class ViewComposerServiceProvider extends ServiceProvider
     public function adminGetMinMaxYearUserCreation(){
         view()->composer([
             'user.admin.statisticsBreederActive', 'user.admin.statisticsBreederBlocked', 'user.admin.statisticsBreederDeleted',
-            'user.admin.statisticsCustomerActive', 'user.admin.statisticsCustomerBlocked', 'user.admin.statisticsCustomerDeleted'
+            'user.admin.statisticsCustomerActive', 'user.admin.statisticsCustomerBlocked', 'user.admin.statisticsCustomerDeleted',
+            'user.spectator.activeBreederStatistics', 'user.spectator.blockedBreederStatistics', 'user.spectator.deletedBreederStatistics',
+            'user.spectator.activeCustomerStatistics', 'user.spectator.blockedCustomerStatistics', 'user.spectator.deletedCustomerStatistics'
             ], function($view){
             $first =  DB::table('users')->orderBy('created_at', 'asc')->first();
             $last =  DB::table('users')->orderBy('created_at', 'desc')->first();

@@ -388,4 +388,791 @@ class SpectatorController extends Controller
         return view('user.spectator.search', compact('products', 'productMinMax'));
     }
 
+    /*
+     * Display the view for the active customer statistics
+     *
+     * @param none
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewActiveCustomerStatistics()
+    {
+        $date = Carbon::now();
+        $year = $date->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',3)
+                ->where('users.email_verified','=', 1)
+                ->whereNull('blocked_at')
+                ->whereNull('deleted_at')
+                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('approved_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+
+        return view('user.spectator.activeCustomerStatistics', compact('monthlyCount', 'year'));
+    }
+
+    /*
+     * Display the view for the active customer statistics
+     *
+     * @param request year
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewActiveCustomerStatisticsYear(Request $request)
+    {
+        $year = $request->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',3)
+                ->where('users.email_verified','=', 1)
+                ->whereNull('blocked_at')
+                ->whereNull('deleted_at')
+                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('approved_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+
+        return view('user.spectator.activeCustomerStatistics', compact('monthlyCount', 'year'));
+    }
+
+
+    /*
+     * Display the view for the blocked customer statistics
+     *
+     * @param none
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewBlockedCustomerStatistics()
+    {
+        $date = Carbon::now();
+        $year = $date->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',3)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('blocked_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+
+        return view('user.spectator.blockedCustomerStatistics', compact('monthlyCount', 'year'));
+    }
+
+    /*
+     * Display the view for the blocked customer statistics
+     *
+     * @param request year
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewBlockedCustomerStatisticsYear(Request $request)
+    {
+        $year = $request->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',3)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('blocked_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+
+        return view('user.spectator.blockedCustomerStatistics', compact('monthlyCount', 'year'));
+    }
+
+    /*
+     * Display the view for the deleted customer statistics
+     *
+     * @param none
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewDeletedCustomerStatistics()
+    {
+        $date = Carbon::now();
+        $year = $date->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',3)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('deleted_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+        return view('user.spectator.deletedCustomerStatistics', compact('monthlyCount', 'year'));
+    }
+
+    /*
+     * Display the view for the blocked customer statistics
+     *
+     * @param none
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewDeletedCustomerStatisticsYear(Request $request)
+    {
+        $year = $request->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',3)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('deleted_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+        return view('user.spectator.deletedCustomerStatistics', compact('monthlyCount', 'year'));
+    }
+
+    /*
+     * Display the view for the active breeder statistics
+     *
+     * @param none
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewActiveBreederStatistics()
+    {
+        $date = Carbon::now();
+        $year = $date->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',2)
+                ->where('users.email_verified','=', 1)
+                ->whereNull('blocked_at')
+                ->whereNull('deleted_at')
+                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('approved_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+
+        return view('user.spectator.activeBreederStatistics', compact('monthlyCount', 'year'));
+    }
+
+    /*
+     * Display the view for the active breeder statistics
+     *
+     * @param request date
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewActiveBreederStatisticsYear(Request $request)
+    {
+        $year = $request->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',2)
+                ->where('users.email_verified','=', 1)
+                ->whereNull('blocked_at')
+                ->whereNull('deleted_at')
+                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('approved_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+
+        return view('user.spectator.activeBreederStatistics', compact('monthlyCount', 'year'));
+    }
+
+
+    /*
+     * Display the view for the blocked breeder statistics
+     *
+     * @param none
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewBlockedBreederStatistics()
+    {
+        $date = Carbon::now();
+        $year = $date->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',2)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('blocked_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+        return view('user.spectator.blockedBreederStatistics', compact('monthlyCount', 'year'));
+    }
+
+    /*
+     * Display the view for the blocked breeder statistics
+     *
+     * @param request year
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewBlockedBreederStatisticsYear(Request $request)
+    {
+        $year = $request->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',2)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('blocked_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+        return view('user.spectator.blockedBreederStatistics', compact('monthlyCount', 'year'));
+    }
+
+
+    /*
+     * Display the view for the deleted breeder statistics
+     *
+     * @param none
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewDeletedBreederStatistics()
+    {
+        $date = Carbon::now();
+        $year = $date->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',2)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('deleted_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+        return view('user.spectator.deletedBreederStatistics', compact('monthlyCount', 'year'));
+    }
+
+    /*
+     * Display the view for the deleted breeder statistics
+     *
+     * @param requst year
+     * @return view with array of counts and year string
+     *
+     */
+    public function viewDeletedBreederStatisticsYear(Request $request)
+    {
+        $year = $request->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=',2)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('deleted_at', $year)
+                ->get();
+
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+        return view('user.spectator.deletedBreederStatistics', compact('monthlyCount', 'year'));
+    }
+
 }

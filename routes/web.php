@@ -221,6 +221,20 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('home/product/search', ['as'=>'spectator.searchProduct', 'uses'=>'SpectatorController@searchProduct']);
         Route::get('home/product/advancedsearch', ['as'=>'spectator.advancedSearchProduct', 'uses'=>'SpectatorController@advancedSearchProduct']);
+
+        Route::get('statistics/customer/active', ['as'=>'spectator.statisticsActiveCustomer', 'uses'=>'SpectatorController@viewActiveCustomerStatistics']);
+        Route::get('statistics/customer/active-year', ['as'=>'spectator.statisticsActiveCustomerYear', 'uses'=>'SpectatorController@viewActiveCustomerStatisticsYear']);
+        Route::get('statistics/customer/blocked', ['as'=>'spectator.statisticsBlockedCustomer', 'uses'=>'SpectatorController@viewBlockedCustomerStatistics']);
+        Route::get('statistics/customer/blocked-year', ['as'=>'spectator.statisticsBlockedCustomerYear', 'uses'=>'SpectatorController@viewBlockedCustomerStatisticsYear']);
+        Route::get('statistics/customer/deleted', ['as'=>'spectator.statisticsDeletedCustomer', 'uses'=>'SpectatorController@viewDeletedCustomerStatistics']);
+        Route::get('statistics/customer/deleted-year', ['as'=>'spectator.statisticsDeletedCustomerYear', 'uses'=>'SpectatorController@viewDeletedCustomerStatisticsYear']);
+
+        Route::get('statistics/breeder/active', ['as'=>'spectator.statisticsActiveBreeder', 'uses'=>'SpectatorController@viewActiveBreederStatistics']);
+        Route::get('statistics/breeder/active-year', ['as'=>'spectator.statisticsActiveBreederYear', 'uses'=>'SpectatorController@viewActiveBreederStatisticsYear']);
+        Route::get('statistics/breeder/blocked', ['as'=>'spectator.statisticsBlockedBreeder', 'uses'=>'SpectatorController@viewBlockedBreederStatistics']);
+        Route::get('statistics/breeder/blocked-year', ['as'=>'spectator.statisticsBlockedBreederYear', 'uses'=>'SpectatorController@viewBlockedBreederStatisticsYear']);
+        Route::get('statistics/breeder/deleted', ['as'=>'spectator.statisticsDeletedBreeder', 'uses'=>'SpectatorController@viewDeletedBreederStatistics']);
+        Route::get('statistics/breeder/deleted-year', ['as'=>'spectator.statisticsDeletedBreederYear', 'uses'=>'SpectatorController@viewDeletedBreederStatisticsYear']);
     });
 
 

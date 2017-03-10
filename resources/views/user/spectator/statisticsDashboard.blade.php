@@ -25,50 +25,54 @@
             <div class="col s12">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <div class="card-panel indigo accent-1 hoverable">
-                            <div class="row">
-                                <div class="col s12 m12 l12 center-align">
-                                    <i class="material-icons spectator-dashicon">people</i>
-                                </div>
-                                <div class="col s12 m12 l12 center-align spectator-dashlabel">
-                                    Customers
-                                </div>
-                                <div class="col s12 m12 l12 center-align">
-                                    {{$data[0]}} New
-                                </div>
-                                <div class=" col s12 m12 l12 center-align">
-                                    {{$data[1]}} Deleted
-                                </div>
-                                <div class=" col s12 m12 l12 center-align">
-                                    {{$data[2]}} Blocked
+                        <a href="{{route('spectator.statisticsActiveCustomer')}}">
+                            <div class="card-panel indigo accent-1 hoverable black-text">
+                                <div class="row">
+                                    <div class="col s12 m12 l12 center-align">
+                                        <i class="material-icons spectator-dashicon">people</i>
+                                    </div>
+                                    <div class="col s12 m12 l12 center-align spectator-dashlabel">
+                                        Customers
+                                    </div>
+                                    <div class="col s12 m12 l12 center-align">
+                                        {{$data[0]}} New
+                                    </div>
+                                    <div class=" col s12 m12 l12 center-align">
+                                        {{$data[1]}} Deleted
+                                    </div>
+                                    <div class=" col s12 m12 l12 center-align">
+                                        {{$data[2]}} Blocked
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
                     <div class="col s12 m6 l6">
-                        <div class="card-panel pink accent-1 hoverable">
-                            <div class="row">
-                                <div class="col s12 m12 l12 center-align">
-                                    <i class="material-icons spectator-dashicon">local_shipping</i>
-                                </div>
-                                <div class="col s12 m12 l12 center-align spectator-dashlabel">
-                                    Breeders
-                                </div>
-                                <div class="col s12 m12 l12 center-align">
-                                    {{$data[3]}} New
-                                </div>
-                                <div class=" col s12 m12 l12 center-align">
-                                    {{$data[4]}} Deleted
-                                </div>
-                                <div class=" col s12 m12 l12 center-align">
-                                    {{$data[5]}} Blocked
+                        <a href="{{route('spectator.statisticsActiveBreeder')}}">
+                            <div class="card-panel pink accent-1 hoverable black-text">
+                                <div class="row">
+                                    <div class="col s12 m12 l12 center-align">
+                                        <i class="material-icons spectator-dashicon">local_shipping</i>
+                                    </div>
+                                    <div class="col s12 m12 l12 center-align spectator-dashlabel">
+                                        Breeders
+                                    </div>
+                                    <div class="col s12 m12 l12 center-align">
+                                        {{$data[3]}} New
+                                    </div>
+                                    <div class=" col s12 m12 l12 center-align">
+                                        {{$data[4]}} Deleted
+                                    </div>
+                                    <div class=" col s12 m12 l12 center-align">
+                                        {{$data[5]}} Blocked
+                                    </div>
                                 </div>
                             </div>
-                        </div>
+                        </a>
                     </div>
 
                     <div class="col s12 m12 l12">
-                        <div class="card-panel amber accent-1 hoverable">
+                        <div class="card-panel amber accent-1 hoverable black-text">
                             <div class="row">
                                 <div class="col s12 m12 l12 center-align">
                                     <i class="material-icons spectator-dashicon">shopping_basket</i>
