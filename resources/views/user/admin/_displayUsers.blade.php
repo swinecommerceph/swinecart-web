@@ -96,7 +96,7 @@
         @endforelse
         </tbody>
       </table>
-      <div class="pagination center"> {{ $users->links() }} </div>
+      <div class="pagination center"> {{ $users->appends(Request::except('page'))->links() }} </div>
 
 
       {{-- Delete modal --}}

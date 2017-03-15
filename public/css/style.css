@@ -496,10 +496,6 @@ blockquote.info{
 	table-layout: fixed;
 }
 
-#search-button{
-	display: none;
-}
-
 #manage-user-modal{
    width: 500px;
 }
@@ -978,8 +974,17 @@ blockquote.info{
 .vertical-divider{
 	font-size: 10em;
 }
+
 #map-canvas{
 	height: 60vh;
+}
+
+/*VueJS transition CSS*/
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+	opacity: 0;
 }
 
 /*Spectator Statistics Dahsboard*/

@@ -18,6 +18,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         $this->adminGetMinMaxYearUserCreation();
         $this->getTimeNow();
         $this->getHomeImages();
+        $this->spectatorGetMinMaxProductValues();
     }
 
     /**
@@ -53,7 +54,21 @@ class ViewComposerServiceProvider extends ServiceProvider
     }
 
 
-    public function spectatorGetMinMaxProductCost(){
+    /*
+     * Get the minimum and maximum product information values for spectator products view
+     *
+     * @param none
+     * @return collection
+     *
+     */
+    public function spectatorGetMinMaxProductValues(){
+        view()->composer('user.spectator.products', function($view){
+            $minmax = DB::table('products')->select(DB::raw('min(price) minprice, max(price) maxprice, min(quantity) minquantity,
+                                                        max(quantity) maxquantity, min(adg) minadg, max(adg) maxadg, min(fcr) minfcr, max(fcr) maxfcr,
+                                                        min(backfat_thickness) minbfat, max(backfat_thickness) maxbfat'))
+                                            ->first();
+            $view->with('minmax', $minmax);
+        });
 
     }
 

@@ -721,18 +721,16 @@ class AdminController extends Controller
      }
 
      /*
-      * Shows active breeders per month from current year
+      * Helper function that gets the count of active users and returns the array of count
       *
-      * @param none
-      * @return array of counts
+      * @param Integer user type or role, Carbon->year
+      * @return count array
       */
-     public function showStatisticsActiveBreeder(){
-         $date = Carbon::now();
-         $year = $date->year;
+     public function getActiveUserStatistics($role, $year){
          $counts = DB::table('users')
                  ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                  ->join('roles', 'role_user.role_id','=','roles.id')
-                 ->where('role_user.role_id','=',2)
+                 ->where('role_user.role_id','=', $role)
                  ->where('users.email_verified','=', 1)
                  ->whereNull('blocked_at')
                  ->whereNull('deleted_at')
@@ -742,6 +740,63 @@ class AdminController extends Controller
                  ->whereYear('approved_at', $year)
                  ->get();
 
+        return $counts;
+     }
+
+     /*
+      * Helper function that gets the count of deleted users and returns the array of count
+      *
+      * @param Integer user type or role, Carbon->year
+      * @return count array
+      */
+     public function getDeletedUserStatistics($role, $year){
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=', $role)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('deleted_at', $year)
+                ->get();
+
+        return $counts;
+     }
+
+     /*
+      * Helper function that gets the count of blocked users and returns the array of count
+      *
+      * @param Integer user type or role, Carbon->year
+      * @return count array
+      */
+     public function getBlockedUserStatistics($role, $year){
+         $counts = DB::table('users')
+                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                 ->join('roles', 'role_user.role_id','=','roles.id')
+                 ->where('role_user.role_id','=',$role)
+                 ->where('users.email_verified','=', 1)
+                 ->whereNotNull('approved_at')
+                 ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
+                 ->groupBy('year')
+                 ->groupBy('month')
+                 ->whereYear('blocked_at', $year)
+                 ->get();
+
+        return $counts;
+     }
+
+     /*
+      * Shows active breeders per month from current year
+      *
+      * @param none
+      * @return array of counts
+      */
+     public function showStatisticsActiveBreeder(){
+         $date = Carbon::now();
+         $year = $date->year;
+         $counts = $this->getActiveUserStatistics(2, $year);
          $month = array_fill(0, 12, 0);
          foreach($counts as $count){
              if($count->month == 1){
@@ -793,19 +848,7 @@ class AdminController extends Controller
       */
      public function showStatisticsActiveBreederYear(Request $request){
          $year = $request->year;
-         $counts = DB::table('users')
-                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                 ->join('roles', 'role_user.role_id','=','roles.id')
-                 ->where('role_user.role_id','=',2)
-                 ->where('users.email_verified','=', 1)
-                 ->whereNull('blocked_at')
-                 ->whereNull('deleted_at')
-                 ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
-                 ->groupBy('year')
-                 ->groupBy('month')
-                 ->whereYear('approved_at', $year)
-                 ->get();
-
+         $counts = $counts = $this->getActiveUserStatistics(2, $year);
          $month = array_fill(0, 12, 0);
          foreach($counts as $count){
              if($count->month == 1){
@@ -859,18 +902,7 @@ class AdminController extends Controller
      public function showStatisticsDeletedBreeder(){
          $date = Carbon::now();
          $year = $date->year;
-         $counts = DB::table('users')
-                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                 ->join('roles', 'role_user.role_id','=','roles.id')
-                 ->where('role_user.role_id','=',2)
-                 ->where('users.email_verified','=', 1)
-                 ->whereNotNull('approved_at')
-                 ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
-                 ->groupBy('year')
-                 ->groupBy('month')
-                 ->whereYear('deleted_at', $year)
-                 ->get();
-
+         $counts = $this->getDeletedUserStatistics(2, $year);
          $month = array_fill(0, 12, 0);
          foreach($counts as $count){
              if($count->month == 1){
@@ -923,18 +955,7 @@ class AdminController extends Controller
       */
      public function showStatisticsDeletedBreederYear(Request $request){
          $year = $request->year;
-         $counts = DB::table('users')
-                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                 ->join('roles', 'role_user.role_id','=','roles.id')
-                 ->where('role_user.role_id','=',2)
-                 ->where('users.email_verified','=', 1)
-                 ->whereNotNull('approved_at')
-                 ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
-                 ->groupBy('year')
-                 ->groupBy('month')
-                 ->whereYear('deleted_at', $year)
-                 ->get();
-
+         $counts = $this->getDeletedUserStatistics(2, $year);
          $month = array_fill(0, 12, 0);
          foreach($counts as $count){
              if($count->month == 1){
@@ -989,18 +1010,7 @@ class AdminController extends Controller
       public function showStatisticsBlockedBreeder(){
           $date = Carbon::now();
           $year = $date->year;
-          $counts = DB::table('users')
-                  ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                  ->join('roles', 'role_user.role_id','=','roles.id')
-                  ->where('role_user.role_id','=',2)
-                  ->where('users.email_verified','=', 1)
-                  ->whereNotNull('approved_at')
-                  ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
-                  ->groupBy('year')
-                  ->groupBy('month')
-                  ->whereYear('blocked_at', $year)
-                  ->get();
-
+          $counts = $this->getBlockedUserStatistics(2, $year);
           $month = array_fill(0, 12, 0);
           foreach($counts as $count){
               if($count->month == 1){
@@ -1052,18 +1062,7 @@ class AdminController extends Controller
        */
       public function showStatisticsBlockedBreederYear(Request $request){
           $year = $request->year;
-          $counts = DB::table('users')
-                  ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                  ->join('roles', 'role_user.role_id','=','roles.id')
-                  ->where('role_user.role_id','=',2)
-                  ->where('users.email_verified','=', 1)
-                  ->whereNotNull('approved_at')
-                  ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
-                  ->groupBy('year')
-                  ->groupBy('month')
-                  ->whereYear('blocked_at', $year)
-                  ->get();
-
+          $counts = $this->getBlockedUserStatistics(2, $year);
           $month = array_fill(0, 12, 0);
           foreach($counts as $count){
               if($count->month == 1){
@@ -1184,19 +1183,7 @@ class AdminController extends Controller
       public function showStatisticsActiveCustomer(){
         $date = Carbon::now();
         $year = $date->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',3)
-                ->where('users.email_verified','=', 1)
-                ->whereNull('blocked_at')
-                ->whereNull('deleted_at')
-                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('approved_at', $year)
-                ->get();
-
+        $counts = $counts = $this->getActiveUserStatistics(3, $year);
         $month = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -1249,19 +1236,7 @@ class AdminController extends Controller
      */
     public function showStatisticsActiveCustomerYear(Request $request){
         $year = $request->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',3)
-                ->where('users.email_verified','=', 1)
-                ->whereNull('blocked_at')
-                ->whereNull('deleted_at')
-                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('approved_at', $year)
-                ->get();
-
+        $counts = $counts = $this->getActiveUserStatistics(3, $year);
         $month = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -1315,18 +1290,7 @@ class AdminController extends Controller
     public function showStatisticsDeletedCustomer(){
         $date = Carbon::now();
         $year = $date->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',3)
-                ->where('users.email_verified','=', 1)
-                ->whereNotNull('approved_at')
-                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('deleted_at', $year)
-                ->get();
-
+        $counts = $this->getDeletedUserStatistics(3, $year);
         $month = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -1379,18 +1343,7 @@ class AdminController extends Controller
      */
     public function showStatisticsDeletedCustomerYear(Request $request){
         $year = $request->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',3)
-                ->where('users.email_verified','=', 1)
-                ->whereNotNull('approved_at')
-                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('deleted_at', $year)
-                ->get();
-
+        $counts = $this->getDeletedUserStatistics(3, $year);
         $month = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -1445,18 +1398,7 @@ class AdminController extends Controller
      public function showStatisticsBlockedCustomer(){
          $date = Carbon::now();
          $year = $date->year;
-         $counts = DB::table('users')
-                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                 ->join('roles', 'role_user.role_id','=','roles.id')
-                 ->where('role_user.role_id','=',3)
-                 ->where('users.email_verified','=', 1)
-                 ->whereNotNull('approved_at')
-                 ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
-                 ->groupBy('year')
-                 ->groupBy('month')
-                 ->whereYear('blocked_at', $year)
-                 ->get();
-
+         $counts = $this->getBlockedUserStatistics(3, $year);
          $month = array_fill(0, 12, 0);
          foreach($counts as $count){
              if($count->month == 1){
@@ -1509,18 +1451,7 @@ class AdminController extends Controller
       */
      public function showStatisticsBlockedCustomerYear(Request $request){
          $year = $request->year;
-         $counts = DB::table('users')
-                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                 ->join('roles', 'role_user.role_id','=','roles.id')
-                 ->where('role_user.role_id','=',3)
-                 ->where('users.email_verified','=', 1)
-                 ->whereNotNull('approved_at')
-                 ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
-                 ->groupBy('year')
-                 ->groupBy('month')
-                 ->whereYear('blocked_at', $year)
-                 ->get();
-
+         $counts = $this->getBlockedUserStatistics(3, $year);
          $month = array_fill(0, 12, 0);
          foreach($counts as $count){
              if($count->month == 1){

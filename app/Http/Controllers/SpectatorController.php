@@ -41,82 +41,6 @@ class SpectatorController extends Controller
     }
 
     /*
-     * Get product using advanced search creteria
-     *
-     * @param none
-     * @return array of min and maximum product information values
-     *
-     */
-    public function getMinMax(){
-
-        $products = DB::table('products')
-                    ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
-                    ->where('quantity', '>=', 0 )
-                    ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
-                    'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
-                    'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
-                    ->paginate(9);
-        $minPrice = INF;
-        $maxPrice = 0;
-        $minBackfatThickness = INF;
-        $maxBackfatThickness = 0;
-        $minADG = INF;
-        $maxADG = 0;
-        $minFCR = INF;
-        $maxFCR = 0;
-        $minQuantity = INF;
-        $maxQuantity = 0;
-        foreach ($products as $product) {
-            $product->image_name = '/images/product/'.$product->image_name;
-            $product->type = ucfirst($product->type);
-            $product->status = ucfirst($product->status);
-
-            if($minPrice > $product->price){
-                $minPrice = $product->price;
-            }
-
-            if($maxPrice < $product->price){
-                $maxPrice = $product->price;
-            }
-
-            if($minQuantity > $product->quantity){
-                $minQuantity = $product->quantity;
-            }
-
-            if($maxQuantity < $product->quantity){
-                $maxQuantity = $product->quantity;
-            }
-
-            if($minADG > $product->adg){
-                $minADG = $product->adg;
-            }
-
-            if($maxADG < $product->adg){
-                $maxADG = $product->adg;
-            }
-
-            if($minFCR > $product->fcr){
-                $minFCR = $product->fcr;
-            }
-
-            if($maxFCR < $product->fcr){
-                $maxFCR = $product->fcr;
-            }
-
-            if($minBackfatThickness > $product->backfat_thickness){
-                $minBackfatThickness = $product->backfat_thickness;
-            }
-
-            if($maxBackfatThickness < $product->backfat_thickness){
-                $maxBackfatThickness = $product->backfat_thickness;
-            }
-        }
-
-        $productMinMax = [$minPrice, $maxPrice, $minQuantity, $maxQuantity, $minADG, $maxADG, $minFCR, $maxFCR, $minBackfatThickness,$maxBackfatThickness];
-        return $productMinMax;
-    }
-
-    /*
      * Display the spectator view
      *
      * @param none
@@ -142,6 +66,34 @@ class SpectatorController extends Controller
     }
 
     /*
+     * Search for user with the name containing the input string
+     *
+     * @param String
+     * @return collection of users
+     *
+     */
+    public function searchUser(Request $request){
+        $in_role = [];
+        if(!is_null($request->breeder)){
+            $in_role[] = 2;
+        }
+        if(!is_null($request->customer)){
+            $in_role[] = 3;
+        }
+        if(is_null($request->breeder) && is_null($request->customer)){
+            $in_role[] = 2;
+            $in_role[] = 3;
+        }
+        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->whereIn('role_id', $in_role)
+                ->where('name', 'LIKE', "%$request->search%")
+                ->paginate(10);
+
+        return view(('user.spectator.users'), compact('users'));
+    }
+
+    /*
      * Get all product and its information
      *
      * @param none
@@ -157,66 +109,8 @@ class SpectatorController extends Controller
                     'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
                     'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
                     ->paginate(9);
-        $minPrice = INF;
-        $maxPrice = 0;
-        $minBackfatThickness = INF;
-        $maxBackfatThickness = 0;
-        $minADG = INF;
-        $maxADG = 0;
-        $minFCR = INF;
-        $maxFCR = 0;
-        $minQuantity = INF;
-        $maxQuantity = 0;
-        foreach ($products as $product) {
-            $product->image_name = '/images/product/'.$product->image_name;
-            $product->type = ucfirst($product->type);
-            $product->status = ucfirst($product->status);
 
-            if($minPrice > $product->price){
-                $minPrice = $product->price;
-            }
-
-            if($maxPrice < $product->price){
-                $maxPrice = $product->price;
-            }
-
-            if($minQuantity > $product->quantity){
-                $minQuantity = $product->quantity;
-            }
-
-            if($maxQuantity < $product->quantity){
-                $maxQuantity = $product->quantity;
-            }
-
-            if($minADG > $product->adg){
-                $minADG = $product->adg;
-            }
-
-            if($maxADG < $product->adg){
-                $maxADG = $product->adg;
-            }
-
-            if($minFCR > $product->fcr){
-                $minFCR = $product->fcr;
-            }
-
-            if($maxFCR < $product->fcr){
-                $maxFCR = $product->fcr;
-            }
-
-            if($minBackfatThickness > $product->backfat_thickness){
-                $minBackfatThickness = $product->backfat_thickness;
-            }
-
-            if($maxBackfatThickness < $product->backfat_thickness){
-                $maxBackfatThickness = $product->backfat_thickness;
-            }
-        }
-
-        $productMinMax = [$minPrice, $maxPrice, $minQuantity, $maxQuantity, $minADG, $maxADG, $minFCR, $maxFCR, $minBackfatThickness,$maxBackfatThickness];
-
-        return view(('user.spectator.products'),compact('products', 'productMinMax'));
-        //return($products);
+        return view(('user.spectator.products'),compact('products'));
     }
 
     // public function viewLogs()
@@ -239,7 +133,7 @@ class SpectatorController extends Controller
 
         $activeCustomers = DB::table('users')
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                        ->where('role_user.role_id','!=',3)
+                        ->where('role_user.role_id','=',3)
                         ->where('users.email_verified','=', 1)
                         ->where('users.deleted_at','=', NULL)
                         ->where('users.blocked_at','=', NULL)
@@ -249,7 +143,7 @@ class SpectatorController extends Controller
 
         $deletedCustomers = DB::table('users')
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                        ->where('role_user.role_id','!=',3)
+                        ->where('role_user.role_id','=',3)
                         ->where('users.email_verified','=', 1)
                         ->whereMonth('deleted_at', '=', $month)
                         ->whereYear('deleted_at', '=', $year)
@@ -257,7 +151,7 @@ class SpectatorController extends Controller
 
         $blockedCustomers = DB::table('users')
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                        ->where('role_user.role_id','!=',3)
+                        ->where('role_user.role_id','=',3)
                         ->where('users.email_verified','=', 1)
                         ->whereMonth('blocked_at', '=', $month)
                         ->whereYear('blocked_at', '=', $year)
@@ -266,7 +160,7 @@ class SpectatorController extends Controller
 
         $activeBreeders = DB::table('users')
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                        ->where('role_user.role_id','!=',2)
+                        ->where('role_user.role_id','=',2)
                         ->where('users.email_verified','=', 1)
                         ->where('users.deleted_at','=', NULL)
                         ->where('users.blocked_at','=', NULL)
@@ -276,7 +170,7 @@ class SpectatorController extends Controller
 
         $deletedBreeders = DB::table('users')
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                        ->where('role_user.role_id','!=',2)
+                        ->where('role_user.role_id','=',2)
                         ->where('users.email_verified','=', 1)
                         ->whereMonth('deleted_at', '=', $month)
                         ->whereYear('deleted_at', '=', $year)
@@ -284,7 +178,7 @@ class SpectatorController extends Controller
 
         $blockedBreeders = DB::table('users')
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                        ->where('role_user.role_id','!=',2)
+                        ->where('role_user.role_id','=',2)
                         ->where('users.email_verified','=', 1)
                         ->whereMonth('blocked_at', '=', $month)
                         ->whereYear('blocked_at', '=', $year)
@@ -315,8 +209,7 @@ class SpectatorController extends Controller
             }
         }
 
-        $data = [$activeCustomers, $deletedCustomers, $blockedCustomers, $activeBreeders, $deletedBreeders, $blockedBreeders, count($products), $boar, $gilt, $sow, $semen];
-
+        $data = [$activeBreeders, $deletedBreeders, $blockedBreeders, $activeCustomers, $deletedCustomers, $blockedCustomers, count($products), $boar, $gilt, $sow, $semen];
         return view('user.spectator.statisticsDashboard', compact('data'));
         // return view(('user.spectator.statistics'), compact('charts'));
     }
@@ -324,68 +217,110 @@ class SpectatorController extends Controller
     /*
      * Search product in the database
      *
-     * @param string (name of product)
+     * @param request array
      * @return collection of products
      *
      */
     public function searchProduct(Request $request)
     {
-        $productMinMax = $this->getMinMax();
+
+        $type = array(
+            $request->boar,
+            $request->gilt,
+            $request->sow,
+            $request->semen
+        );
+
+        $type = array_filter($type);
+        if(empty($type)){
+            $type = ['boar', 'gilt', 'sow', 'semen'];
+        }
+
         $products = DB::table('products')
                     ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
                     ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
                     'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
                     'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
                     ->where('products.name', 'LIKE', "%$request->search%")
+                    ->whereIn('type', $type)
+                    ->whereBetween('price', [$request->minPrice, $request->maxPrice])
+                    ->whereBetween('quantity', [$request->minQuantity, $request->maxQuantity])
+                    ->whereBetween('adg', [$request->minADG, $request->maxADG])
+                    ->whereBetween('fcr', [$request->minFCR, $request->maxFCR])
+                    ->whereBetween('backfat_thickness', [$request->minBackfatThickness, $request->maxBackfatThickness])
                     ->paginate(9);
-        return view('user.spectator.search', compact('products', 'productMinMax'));
+
+
+        return view('user.spectator.products', compact('products', 'productMinMax'));
     }
 
     /*
-     * Get product using advanced search creteria
+     * Helper function to query the active user counts
      *
-     * @param search criterion
-     * @return collection of products
+     * @param integer, Carbon->year
+     * @return Collection count
      *
      */
-    public function advancedSearchProduct(Request $request)
-    {
-        $productMinMax = $this->getMinMax();
-        $type = [];
-        if($request->boar == NULL && $request->sow == NULL && $request->gilt == NULL && $request->semen == NULL){
-            $products = DB::table('products')
-                        ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
-                        ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
-                        'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
-                        'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
-                        ->where('products.name', 'LIKE', "%$request->name%")
-                        ->whereBetween('price', [$request->minPrice, $request->maxPrice])
-                        ->whereBetween('quantity', [$request->minQuantity, $request->maxQuantity])
-                        ->whereBetween('adg', [$request->minADG, $request->maxADG])
-                        ->whereBetween('fcr', [$request->minFCR, $request->maxFCR])
-                        ->whereBetween('backfat_thickness', [$request->minBackfatThickness, $request->maxBackfatThickness])
-                        ->paginate(9);
+    public function getSpectatorActiveUserStatistics($userType, $year){
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=', $userType)
+                ->where('users.email_verified','=', 1)
+                ->whereNull('blocked_at')
+                ->whereNull('deleted_at')
+                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('approved_at', $year)
+                ->get();
+        return $counts;
+    }
 
-        }else{
-            $type = [$request->boar, $request->sow, $request->gilt, $request->semen];
-            $type = array_filter($type);
-            $products = DB::table('products')
-                        ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
-                        ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
-                        'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
-                        'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
-                        ->where('products.name', 'LIKE', "%$request->name%")
-                        ->whereIn('type', $type)
-                        ->whereBetween('price', [$request->minPrice, $request->maxPrice])
-                        ->whereBetween('quantity', [$request->minQuantity, $request->maxQuantity])
-                        ->whereBetween('adg', [$request->minADG, $request->maxADG])
-                        ->whereBetween('fcr', [$request->minFCR, $request->maxFCR])
-                        ->whereBetween('backfat_thickness', [$request->minBackfatThickness, $request->maxBackfatThickness])
-                        ->paginate(9);
-        }
+    /*
+     * Helper function to query the blocked user counts
+     *
+     * @param integer, Carbon->year
+     * @return Collection count
+     *
+     */
+    public function getSpectatorBlockedUserStatistics($userType, $year){
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=', $userType)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('blocked_at', $year)
+                ->get();
 
+        return $counts;
+    }
 
-        return view('user.spectator.search', compact('products', 'productMinMax'));
+    /*
+     * Helper function to query the deleted user counts
+     *
+     * @param integer, Carbon->year
+     * @return Collection count
+     *
+     */
+    public function getSpectatorDeletedUserStatistics($userType, $year){
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_user.role_id','=', $userType)
+                ->where('users.email_verified','=', 1)
+                ->whereNotNull('approved_at')
+                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
+                ->groupBy('year')
+                ->groupBy('month')
+                ->whereYear('deleted_at', $year)
+                ->get();
+
+        return $counts;
     }
 
     /*
@@ -399,19 +334,7 @@ class SpectatorController extends Controller
     {
         $date = Carbon::now();
         $year = $date->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',3)
-                ->where('users.email_verified','=', 1)
-                ->whereNull('blocked_at')
-                ->whereNull('deleted_at')
-                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('approved_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorActiveUserStatistics(3, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -465,19 +388,7 @@ class SpectatorController extends Controller
     public function viewActiveCustomerStatisticsYear(Request $request)
     {
         $year = $request->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',3)
-                ->where('users.email_verified','=', 1)
-                ->whereNull('blocked_at')
-                ->whereNull('deleted_at')
-                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('approved_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorActiveUserStatistics(3, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -533,18 +444,7 @@ class SpectatorController extends Controller
     {
         $date = Carbon::now();
         $year = $date->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',3)
-                ->where('users.email_verified','=', 1)
-                ->whereNotNull('approved_at')
-                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('blocked_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorBlockedUserStatistics(3, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -598,18 +498,7 @@ class SpectatorController extends Controller
     public function viewBlockedCustomerStatisticsYear(Request $request)
     {
         $year = $request->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',3)
-                ->where('users.email_verified','=', 1)
-                ->whereNotNull('approved_at')
-                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('blocked_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorBlockedUserStatistics(3, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -664,18 +553,7 @@ class SpectatorController extends Controller
     {
         $date = Carbon::now();
         $year = $date->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',3)
-                ->where('users.email_verified','=', 1)
-                ->whereNotNull('approved_at')
-                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('deleted_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorDeletedUserStatistics(3, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -728,18 +606,7 @@ class SpectatorController extends Controller
     public function viewDeletedCustomerStatisticsYear(Request $request)
     {
         $year = $request->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',3)
-                ->where('users.email_verified','=', 1)
-                ->whereNotNull('approved_at')
-                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('deleted_at', $year)
-                ->get();
-
+        $counts =$this->getSpectatorDeletedUserStatistics(3, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -793,19 +660,7 @@ class SpectatorController extends Controller
     {
         $date = Carbon::now();
         $year = $date->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',2)
-                ->where('users.email_verified','=', 1)
-                ->whereNull('blocked_at')
-                ->whereNull('deleted_at')
-                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('approved_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorActiveUserStatistics(2, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -859,19 +714,7 @@ class SpectatorController extends Controller
     public function viewActiveBreederStatisticsYear(Request $request)
     {
         $year = $request->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',2)
-                ->where('users.email_verified','=', 1)
-                ->whereNull('blocked_at')
-                ->whereNull('deleted_at')
-                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('approved_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorActiveUserStatistics(2, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -927,18 +770,7 @@ class SpectatorController extends Controller
     {
         $date = Carbon::now();
         $year = $date->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',2)
-                ->where('users.email_verified','=', 1)
-                ->whereNotNull('approved_at')
-                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('blocked_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorBlockedUserStatistics(2, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -991,18 +823,7 @@ class SpectatorController extends Controller
     public function viewBlockedBreederStatisticsYear(Request $request)
     {
         $year = $request->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',2)
-                ->where('users.email_verified','=', 1)
-                ->whereNotNull('approved_at')
-                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('blocked_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorBlockedUserStatistics(2, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -1057,18 +878,7 @@ class SpectatorController extends Controller
     {
         $date = Carbon::now();
         $year = $date->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',2)
-                ->where('users.email_verified','=', 1)
-                ->whereNotNull('approved_at')
-                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('deleted_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorDeletedUserStatistics(2, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){
@@ -1121,18 +931,7 @@ class SpectatorController extends Controller
     public function viewDeletedBreederStatisticsYear(Request $request)
     {
         $year = $request->year;
-        $counts = DB::table('users')
-                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                ->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('role_user.role_id','=',2)
-                ->where('users.email_verified','=', 1)
-                ->whereNotNull('approved_at')
-                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
-                ->groupBy('year')
-                ->groupBy('month')
-                ->whereYear('deleted_at', $year)
-                ->get();
-
+        $counts = $this->getSpectatorDeletedUserStatistics(2, $year);
         $monthlyCount = array_fill(0, 12, 0);
         foreach($counts as $count){
             if($count->month == 1){

@@ -15,24 +15,21 @@
 @section('content')
     <div id="app-products" class="card-panel">
         <div class="row">
-            <div class="col s6">
+            <div class="col s12 m12 l6">
                 <h4>Products</h4>
             </div>
-            <div class="col s6">
+            <div class="col s12 m12 l6">
 
                 <div class="row">
                     {!!Form::open(['route'=>'spectator.searchProduct', 'method'=>'GET', 'class'=>'spectator_product_search'])!!}
-                    <div class="col s12">
-                        <div class="input-field inline">
+                    <div class="col s12 m12 l12 valign-wrapper">
+                        <div class="input-field inline col s12 m12 l10 valign">
                             <input id="search" type="text" class="validate" name="search">
                             <label for="search" data-error="wrong" data-success="right">Search Product Name</label>
                         </div>
-                    </div>
-                    <div class="col hide">
-                        <button id="search-button" class="btn waves-effect waves-light" type="submit">Submit</button>
+                        <button id="search-button" class="btn waves-effect waves-light" type="submit">Search</button>
                     </div>
                     {!!Form::close()!!}
-
                     <div class="col s12 right-align">
                         <a href="#search-filter-modal" class="modal-trigger teal-text">Advanced Search Options</a>
                     </div>
@@ -44,7 +41,6 @@
             <advanced-search></advanced-search>
 
         </div>
-
 
         <div class="row">
             <div class="divider"></div>
@@ -83,7 +79,7 @@
         <div class="row">
             <div class="col s12">
                 <ul class="pagination center">
-                    {{ $products->links() }}
+                    {{ $products->appends(Request::except('page'))->links() }}
                 </ul>
             </div>
         </div>

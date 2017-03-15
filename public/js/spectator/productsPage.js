@@ -190,7 +190,9 @@ Vue.component('modal-trigger', {
 
 var vm = new Vue({
     el: '#app-products',
-    data: {},
+    data: {
+        toggled: false
+    },
     methods: {
         advancedSearchMethod: function(e){
 

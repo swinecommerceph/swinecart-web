@@ -14,9 +14,32 @@
 
 @section('content')
     <div class="card-panel">
-        <div class="row">
-            <div class="col s12">
+        <div class="row valign-wrapper">
+            <div class="col s12 m12 l5 valign">
                 <h4>Users</h4>
+            </div>
+            <div class="col s12 m12 l7 valign">
+                <div class="row">
+                    {!!Form::open(['route'=>'spectator.searchUser', 'method'=>'GET'])!!}
+                        <div class="col s12 m12 l12 valign-wrapper">
+                            <div class="input-field inline col s12 m12 l10 valign">
+                                <input id="spectator-user-search" type="text" class="validate" name="search">
+                                <label for="spectator-user-search">Search User</label>
+                                <div class="row">
+                                    <div class="col s12 m12 l6">
+                                        <input type="checkbox" id="spectatorstats-breeder-checkbox" name="breeder"/>
+                                        <label for="spectatorstats-breeder-checkbox">Breeder</label>
+                                    </div>
+                                    <div class="col s12 m12 l6">
+                                        <input type="checkbox" id="spectatorstats-customer-checkbox" name="customer"/>
+                                        <label for="spectatorstats-customer-checkbox">Customer</label>
+                                    </div>
+                                </div>
+                            </div>
+                            <button class="btn waves-effect waves-light" type="submit">Search</button>
+                        </div>
+                    {!!Form::close()!!}
+                </div>
             </div>
         </div>
         <div class="divider"></div>
@@ -48,7 +71,7 @@
                         @endforelse
                     </tbody>
                   </table>
-                  <div class="pagination center"> {{ $users->links() }} </div>
+                  <div class="pagination center"> {{ $users->appends(Request::except('page'))->links() }} </div>
             </div>
         </div>
     </div>
@@ -60,7 +83,7 @@
             <p>User Transactions</p>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
         </div>
     </div>
 

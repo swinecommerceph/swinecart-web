@@ -25,29 +25,6 @@
             <div class="col s12">
                 <div class="row">
                     <div class="col s12 m6 l6">
-                        <a href="{{route('spectator.statisticsActiveCustomer')}}">
-                            <div class="card-panel indigo accent-1 hoverable black-text">
-                                <div class="row">
-                                    <div class="col s12 m12 l12 center-align">
-                                        <i class="material-icons spectator-dashicon">people</i>
-                                    </div>
-                                    <div class="col s12 m12 l12 center-align spectator-dashlabel">
-                                        Customers
-                                    </div>
-                                    <div class="col s12 m12 l12 center-align">
-                                        {{$data[0]}} New
-                                    </div>
-                                    <div class=" col s12 m12 l12 center-align">
-                                        {{$data[1]}} Deleted
-                                    </div>
-                                    <div class=" col s12 m12 l12 center-align">
-                                        {{$data[2]}} Blocked
-                                    </div>
-                                </div>
-                            </div>
-                        </a>
-                    </div>
-                    <div class="col s12 m6 l6">
                         <a href="{{route('spectator.statisticsActiveBreeder')}}">
                             <div class="card-panel pink accent-1 hoverable black-text">
                                 <div class="row">
@@ -58,13 +35,37 @@
                                         Breeders
                                     </div>
                                     <div class="col s12 m12 l12 center-align">
-                                        {{$data[3]}} New
+                                        {{$data[0]}} New this Month
                                     </div>
                                     <div class=" col s12 m12 l12 center-align">
-                                        {{$data[4]}} Deleted
+                                        {{$data[1]}} Deleted this Month
                                     </div>
                                     <div class=" col s12 m12 l12 center-align">
-                                        {{$data[5]}} Blocked
+                                        {{$data[2]}} Blocked this Month
+                                    </div>
+                                </div>
+                            </div>
+                        </a>
+                    </div>
+
+                    <div class="col s12 m6 l6">
+                        <a href="{{route('spectator.statisticsActiveCustomer')}}">
+                            <div class="card-panel indigo accent-1 hoverable black-text">
+                                <div class="row">
+                                    <div class="col s12 m12 l12 center-align">
+                                        <i class="material-icons spectator-dashicon">people</i>
+                                    </div>
+                                    <div class="col s12 m12 l12 center-align spectator-dashlabel">
+                                        Customers
+                                    </div>
+                                    <div class="col s12 m12 l12 center-align">
+                                        {{$data[3]}} New this Month
+                                    </div>
+                                    <div class=" col s12 m12 l12 center-align">
+                                        {{$data[4]}} Deleted this Month
+                                    </div>
+                                    <div class=" col s12 m12 l12 center-align">
+                                        {{$data[5]}} Blocked this Month
                                     </div>
                                 </div>
                             </div>
@@ -84,12 +85,10 @@
                                     {{$data[6]}} in Inventory
                                 </div>
                                 <div class=" col s12 m12 l12 center-align">
-                                    Product Summary
-                                </div>
-                                <div class=" col s12 m12 l12 center-align">
-                                    {{$data[7]}} Boar
-                                    {{$data[8]}} Gilt
-                                    {{$data[9]}} Sow
+                                    Inventory Summary:
+                                    {{$data[7]}} Boar |
+                                    {{$data[8]}} Gilt |
+                                    {{$data[9]}} Sow |
                                     {{$data[10]}} Semen
                                 </div>
                             </div>
