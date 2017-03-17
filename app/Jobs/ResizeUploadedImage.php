@@ -14,10 +14,10 @@ class ResizeUploadedImage implements ShouldQueue
 {
     use InteractsWithQueue, Queueable, SerializesModels;
 
-    private const PRODUCT_IMG_PATH = '/images/product/';
-    private const PRODUCT_SIMG_PATH = '/images/product/resize/small/';
-    private const PRODUCT_MIMG_PATH = '/images/product/resize/medium/';
-    private const PRODUCT_LIMG_PATH = '/images/product/resize/large/';
+    const PRODUCT_IMG_PATH = '/images/product/';
+    const PRODUCT_SIMG_PATH = '/images/product/resize/small/';
+    const PRODUCT_MIMG_PATH = '/images/product/resize/medium/';
+    const PRODUCT_LIMG_PATH = '/images/product/resize/large/';
 
     protected $filename;
 
