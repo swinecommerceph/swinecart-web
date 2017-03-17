@@ -82,7 +82,10 @@
 @section('customScript')
     <script>
         $(document).ready(function(){
-            $('.modal-trigger').leanModal();
+
+            console.log('test');
+
+            $('.modal-trigger').modal();
 
             $('.add-receipients').click(function(){
                 $('#email').val('');
