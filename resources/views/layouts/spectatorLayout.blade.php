@@ -12,7 +12,7 @@
         <link href="/css/style.css" rel="stylesheet" type="text/css">
         <link href="/css/nouislider.min.css" rel="stylesheet">
         <link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
-        <script type="text/javascript" src="/js/vendor/chart.bundle.min.js"></script>
+        <script type="text/javascript" src="/js/vendor/chart.min.js"></script>
     </head>
     <body @yield('pageId')>
         <div class="navbar-fixed">

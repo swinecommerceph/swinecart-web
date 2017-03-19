@@ -49,7 +49,80 @@ class SpectatorController extends Controller
      */
     public function index()
     {
-        return view('user.spectator.home');
+        $date = Carbon::now();
+        $month = $date->month;
+        $year = $date->year;
+
+        $totalusers = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                                   ->join('roles', 'role_user.role_id','=','roles.id')
+                                   ->whereIn('role_id', [2, 3])
+                                   ->whereNull('blocked_at')
+                                   ->whereNull('deleted_at')
+                                   ->where('email_verified','=','1')
+                                   ->count();
+
+        $totalbreeders = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                                            ->join('roles', 'role_user.role_id','=','roles.id')
+                                            ->where('role_id', '=', 2)
+                                            ->whereNull('blocked_at')
+                                            ->whereNull('deleted_at')
+                                            ->where('email_verified','=','1')
+                                            ->count();
+
+        $totalcustomers = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                                            ->join('roles', 'role_user.role_id','=','roles.id')
+                                            ->where('role_id', '=', 3)
+                                            ->whereNull('blocked_at')
+                                            ->whereNull('deleted_at')
+                                            ->where('email_verified','=','1')
+                                            ->count();
+
+        $products = DB::table('products')->where('status', '=', 'displayed')
+                                        ->whereNull('deleted_at')
+                                        ->get();
+        $totalproduct = count($products);
+        $boar = 0;
+        $gilt = 0;
+        $sow = 0;
+        $semen = 0;
+        foreach ($products as $product) {
+            if(strcmp($product->type, 'boar')){
+                $boar++;
+            }
+            if(strcmp($product->type, 'gilt')){
+                $gilt++;
+            }
+            if(strcmp($product->type, 'sow')){
+                $sow++;
+            }
+            if(strcmp($product->type, 'semen')){
+                $semen++;
+            }
+        }
+
+        $newcustomers = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->where('role_user.role_id','=',3)
+                        ->where('users.email_verified','=', 1)
+                        ->where('users.deleted_at','=', NULL)
+                        ->where('users.blocked_at','=', NULL)
+                        ->whereMonth('approved_at', '=', $month)
+                        ->whereYear('approved_at', '=', $year)
+                        ->count();
+
+
+        $newbreeders = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->where('role_user.role_id','=',2)
+                        ->where('users.email_verified','=', 1)
+                        ->where('users.deleted_at','=', NULL)
+                        ->where('users.blocked_at','=', NULL)
+                        ->whereMonth('approved_at', '=', $month)
+                        ->whereYear('approved_at', '=', $year)
+                        ->count();
+
+
+        return view(('user.spectator.home'), compact('totalusers', 'totalbreeders', 'totalcustomers', 'totalproduct', 'boar', 'gilt', 'sow', 'semen', 'newcustomers', 'newbreeders'));
     }
 
     /*

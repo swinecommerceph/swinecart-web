@@ -30,7 +30,7 @@
                     </div>
 
                     <div class="col s12 right-align">
-                        <a v-on:click="toggled = !toggled" href="#search-filter-modal" class="modal-trigger teal-text">Advanced Search Options</a>
+                            <a v-on:click="toggled = !toggled" href="#" class="teal-text">Advanced Search Options</a>
                     </div>
                     <transition name="fade">
                         <div v-if="toggled" class="col s12 m12 l12">
@@ -128,9 +128,6 @@
                 </div>
                 {!!Form::close()!!}
             </div>
-
-            {{-- <advanced-search></advanced-search> --}}
-
         </div>
 
         <div class="row">
@@ -144,7 +141,7 @@
                     <div class="card small"
                         data-values="{{ $product->name }}|{{ ucfirst($product->type) }}|{{ $product->adg }}|{{ $product->fcr }}|{{ $product->backfat_thickness }}|{{ ucfirst($product->status) }}|{{ $product->quantity }}|{{ $product->price }}|{{ '/images/product/'.$product->image_name }}|{{ $product->other_details }}  ">
                         <div class="card-image waves-effect waves-block waves-light">
-                            <img class="activator" src="{{'/images/product/'.$product->image_name}}" alt="Image broken" onerror="this.src='/images/logo.png'">
+                            <img class="activator" src="{{'/images/product/'.$product->image_name}}" alt="Image broken" onerror="this.src='/images/logo.png'"/>
                         </div>
                         <div class="card-content">
                             <span class="card-title activator grey-text text-darken-4">{{$product->name}}<i class="material-icons right">more_vert</i></span>
@@ -154,12 +151,27 @@
                             <p>Information</p>
                             <p>
                                 <p>{{$product->other_details}}</p>
-                                <p class="center"><a href="#product-modal" class="modal-trigger">See more information</a></p>
+                                <script type="text/javascript">
+                                    var info = [
+                                        "{{ $product->name }}",
+                                        "{{ ucfirst($product->type) }}",
+                                        "{{ $product->adg }}",
+                                        "{{ $product->fcr }}",
+                                        "{{ $product->backfat_thickness }}",
+                                        "{{ ucfirst($product->status) }}",
+                                        "{{ $product->quantity }}",
+                                        "{{ $product->price }}",
+                                        "{{ '/images/product/'.$product->image_name }}",
+                                        "{{ $product->other_details }}"
+                                    ];
+                                </script>
+                                <p class="center"><a href="#product-modal" class="modal-trigger" v-bind:info=info v-on:click="displayProductModal()">See more information</a></p>
                             </p>
                         </div>
                     </div>
                 </div>
 
+                {{-- <product-modal v-if:show></product-modal> --}}
             @empty
                 <div class="center col s12">
                     No Products to Display
@@ -182,12 +194,12 @@
     <div id="product-modal" class="modal modal-fixed-footer">
         <div class="modal-content">
             <h4 id="modal-header"></h4>
-            <div class="divider"></div>
+
             <div class="row">
-                <div class="col s12 center">
-                    <img id="modal-image" class="product_image" src="" alt="Image broken" onerror="this.src='/images/logo.png'" />
+                <div class="col s12 m12 l4">
+                    <img id="modal-image" class="product_image" src="" alt="Image broken" onerror="this.src='/images/logo.png'"/>
                 </div>
-                <div class="col s12">
+                <div class="col s12 m12 l8">
                     <table>
                         <thead>
                             <tr>
@@ -218,7 +230,7 @@
                 </div>
             </div>
             <div class="row">
-                <div class="left col s12">
+                <div class="left col s12 m12 l12">
                     <h5>Other Product Information</h5>
                 </div>
                 <div id="data-information" class="col s12">

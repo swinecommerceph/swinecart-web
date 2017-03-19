@@ -995,3 +995,24 @@ blockquote.info{
 .spectator-dashlabel{
 	font-size: 2em;
 }
+
+.spectator-summary-maintitle{
+	font-size: 2em;
+}
+
+.spectator-summary-maindata{
+	font-size: 5em;
+}
+
+.spectator-summary-title{
+	font-size: 1.5em;
+}
+
+.spectator-summary-data{
+	font-size: 3em;
+}
+
+.spectator-card-summary{
+	max-height: 400px;
+	min-height: 400px;
+}

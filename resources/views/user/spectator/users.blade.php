@@ -50,7 +50,7 @@
                       <tr>
                           <th data-field="name">Name</th>
                           <th data-field="type">Account Type</th>
-                          <th data-field="transactions">Transaction History</th>
+                          <th data-field="transactions">Details</th>
                       </tr>
                     </thead>
                     <tbody>
@@ -59,7 +59,7 @@
                             <tr>
                                 <td>{{$user->name}}</td>
                                 <td>{{ucfirst($user->title)}}</td>
-                                <td><a href="#user-modal" class="waves-effect waves-light btn modal-trigger"><i class="material-icons left">history</i>View</a></td>
+                                <td><a href="#user-modal" class="waves-effect waves-light btn modal-trigger"><i class="material-icons left">view_headline</i>Details</a></td>
                             </tr>
 
                           @empty
@@ -78,9 +78,9 @@
 
     <div id="user-modal" class="modal modal-fixed-footer">
         <div class="modal-content">
-            <h4>Transaction History</h4>
+            <h4>User Details</h4>
             <div class="divider"></div>
-            <p>User Transactions</p>
+            <p>User Information</p>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
