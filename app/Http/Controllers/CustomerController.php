@@ -19,6 +19,7 @@ use App\Models\Image;
 use App\Models\Breed;
 use App\Models\TransactionLog;
 use Auth;
+use DB;
 
 class CustomerController extends Controller
 {

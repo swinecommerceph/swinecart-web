@@ -299,7 +299,7 @@
                         <div class="card sticky-action" :class="(product.request_status) ? 'teal' : ''">
                             {{-- Product Image --}}
                             <div class="card-image">
-                                <img height="270" class="activator" :src="product.img_path">
+                                <img class="activator" :src="product.img_path">
 
                                 {{-- Show FAB for specific actions --}}
                                 <a class="btn-floating btn-large halfway-fab waves-effect waves-light red tooltipped"
@@ -623,13 +623,13 @@
                     >
                         <div class="row swine-cart-item valign-wrapper">
                             <div class="col s2 center-align">
-                                <a href="#"><img :src="item.product_details.img_path" width="75" height="75" class="circle"></a>
+                                <a href="#"><img :src="item.product_details.s_img_path" width="75" height="75" class="circle"></a>
                             </div>
                             <div class="col s3 verticalLine valign-wrapper">
                                 <div class="valign">
                                     {{-- Name --}}
                                     <a href="#" class="anchor-title teal-text"
-                                        @click.prevent="viewProductModalFromHistory(index)"
+                                        @click.prevent="viewProductModalFromHistory(key)"
                                     >
                                         <span class="col s12">@{{ item.product_details.name }}</span>
                                     </a>

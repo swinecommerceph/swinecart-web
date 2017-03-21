@@ -23,6 +23,7 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\HomeImage;
 use App\Models\AdministratorLog;
+use App\Repositories\AdminRepository;
 
 use Mail;
 use DB;
@@ -30,6 +31,7 @@ use Auth;
 use Input;
 use Storage;
 use File;
+use Carbon\Carbon;
 
 class AdminController extends Controller
 {
@@ -89,7 +91,7 @@ class AdminController extends Controller
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',2)
                         ->where('users.email_verified','=', 1)
-                        ->where('users.is_blocked','=', 0)
+                        ->where('users.blocked_at','=', NULL)
                         ->where('users.deleted_at','=', NULL)
                         ->count();
         return $count;
@@ -107,7 +109,7 @@ class AdminController extends Controller
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',3)
                         ->where('users.email_verified','=', 1)
-                        ->where('users.is_blocked','=', 0)
+                        ->where('users.blocked_at','=', NULL)
                         ->where('users.deleted_at','=', NULL)
                         ->count();
         return $count;
@@ -124,7 +126,7 @@ class AdminController extends Controller
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',2)
-                        ->where('users.approved','=', 0)
+                        ->where('users.approved_at','=', NULL)
                         ->where('users.deleted_at','=', NULL)
                         ->count();
         return $count;
@@ -142,7 +144,7 @@ class AdminController extends Controller
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','!=',1)
                         ->where('users.email_verified','=', 1)
-                        ->where('users.is_blocked','=', 1)
+                        ->whereNotNull('users.blocked_at')
                         ->where('users.deleted_at','=', NULL)
                         ->count();
         return $count;
@@ -174,7 +176,7 @@ class AdminController extends Controller
      */
     public function displayAllUsers(){
         $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
-                ->where('approved','=',1)
+                ->whereNotNull('approved_at')
                 ->whereNull('deleted_at')
                 ->paginate(10);
 
@@ -228,7 +230,7 @@ class AdminController extends Controller
     public function displayPendingUsers(){
         $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
                     ->where('role_id','=',2)
-                    ->where('approved','=',0)
+                    ->where('approved_at','=',NULL)
                     ->whereNull('deleted_at')
                     ->paginate(10);
         return view('user.admin._pendingUsers',compact('users'));
@@ -255,7 +257,7 @@ class AdminController extends Controller
         ]);
 
         // send an email notification to the user's email
-        Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved], function ($message) use($user){
+        Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved_at], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
         });
 
@@ -276,7 +278,7 @@ class AdminController extends Controller
                       ->where('role_user.role_id','!=',1)
                       ->where('users.email_verified','=', 1)
                       ->where('users.deleted_at','=', NULL )
-                      ->where('users.is_blocked','=', 1 )
+                      ->whereNotNull('users.blocked_at')
                       ->paginate(10);
         // foreach ($blockedUsers as $blockedUser) {
         //     $blockedUser->title = ucfirst($blockedUser->title);     // fix the format for the role in each of the users queried
@@ -341,6 +343,12 @@ class AdminController extends Controller
         return view('user.admin._pendingUsers',compact('users'));
     }
 
+    /**
+     * Function to search blocked user
+     *
+     * @param  request string
+     * @return collection of blocked user
+     */
     public function searchBlockedUsers(Request $request){
         if($request->breeder==null && $request->customer==null){
             $users = DB::table('users')
@@ -349,7 +357,7 @@ class AdminController extends Controller
                           ->where('users.name','LIKE', "%$request->search%")
                           ->where('users.email_verified','=', 1)
                           ->where('users.deleted_at','=', NULL )
-                          ->where('users.is_blocked','=', 1 )
+                          ->whereNotNull('users.blocked_at')
                           ->paginate(10);
         }else{
             $values = [$request->breeder, $request->customer];
@@ -365,7 +373,7 @@ class AdminController extends Controller
                           ->where('users.name','LIKE', "%$request->search%")
                           ->where('users.email_verified','=', 1)
                           ->where('users.deleted_at','=', NULL )
-                          ->where('users.is_blocked','=', 1 )
+                          ->whereNotNull('users.blocked_at')
                           ->whereIn('role_user.role_id', $search)
                           ->paginate(10);
         }
@@ -386,10 +394,10 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         $user = User::find($request->id);       // find the user using the user id
-        $user->is_blocked = !$user->is_blocked;     // change the status for is_blocked column
+        $user->blocked_at = Carbon::now();     // change the status for is_blocked column
         $user->save();                              // save the change to the database
         // create a log entry for the action done
-        if($user->is_blocked){
+        if($user->blocked_at!=NULL){
             AdministratorLog::create([
                 'admin_id' => $adminID,
                 'admin_name' => $adminName,
@@ -407,10 +415,10 @@ class AdminController extends Controller
             ]);
         }
         // send an email notification to the email of the user
-        Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->is_blocked], function ($message) use($user){
+        Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->blocked_at], function ($message) use($user){
           $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
         });
-        if($user->is_blocked == 1){
+        if($user->blocked_at != NULL){
             return Redirect::back()->with('message','User Blocked');
         }else{
             return Redirect::back()->with('message','User Unblocked');
@@ -510,7 +518,7 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         $user = User::find($request->id);
-        $user->approved = !$user->approved;     // negate the status to approve user
+        $user->approved_at = Carbon::now();     // negate the status to approve user
         // create a log entry for the action done
         AdministratorLog::create([
             'admin_id' => $adminID,
@@ -540,7 +548,7 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         $user = User::find($request->id);
-        $user->approved = !$user->approved;     // negate the status to approve user
+        $user->approved = NULL;     // negate the status to approve user
         // create a log entry for the action done
         AdministratorLog::create([
             'admin_id' => $adminID,
@@ -590,6 +598,12 @@ class AdminController extends Controller
         return view('user.admin._adminLogs',compact('logs'));
     }
 
+    /**
+     * Function to search administrator logs
+     *
+     * @param  search string
+     * @return collection of logs from query
+     */
     public function searchAdministratorLogs(Request $request){
 
         if($request->option!=null){
@@ -706,12 +720,1678 @@ class AdminController extends Controller
          return redirect()->route('home/pending/users');
      }
 
-    // public function manageTextContent(){
-    //     return view('user.admin._manageTextContent');
-    // }
+     /*
+      * Shows active breeders per month from current year
+      *
+      * @param none
+      * @return array of counts
+      * @todo optimize the method of getting the count of created users per month, change query to filter the year
+      */
+     public function showStatisticsActiveBreeder(){
+         $date = Carbon::now();
+         $year = $date->year;
+         $month = [
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('1'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('2'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('3'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('4'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('5'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('6'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('7'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('8'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('9'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('10'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('11'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('12'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+         ];
+
+        return view('user.admin.statisticsBreederActive', compact('month', 'year'));
+     }
+
+     /*
+      * Shows the active breeders per month from certain year
+      *
+      * @param year
+      * @return array of counts
+      * @todo optimize the method of getting the count of created users per month, change query to filter the year
+      */
+     public function showStatisticsActiveBreederYear(Request $request){
+         $year = $request->year;
+         $month = [
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('1'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('2'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('3'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('4'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('5'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('6'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('7'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('8'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('9'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('10'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('11'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereNull('blocked_at')
+                             ->whereNull('deleted_at')
+                             ->whereMonth('approved_at', '=', date('12'))
+                             ->whereYear('approved_at', '=', $year)
+                             ->count(),
+         ];
+
+         return view('user.admin.statisticsBreederActive', compact('month', 'year'));
+     }
+
+     /**
+      * Shows the deleted breeders statistics per month
+      *
+      * @param none
+      * @return array of counts
+      * @todo optimize the method of getting the count of deleted users per month, change query to filter the year
+      */
+     public function showStatisticsDeletedBreeder(){
+         $date = Carbon::now();
+         $year = $date->year;
+         $month = [
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('1'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('2'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('3'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('4'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('5'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('6'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('7'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('8'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('9'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('10'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('11'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('12'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+         ];
+
+        return view('user.admin.statisticsBreederDeleted', compact('month', 'year'));
+     }
+
+     /*
+      * Shows the deleted breeders statistics per month from certain year
+      *
+      * @param year
+      * @return array of counts
+      * @todo optimize the method of getting the count of created users per month, change query to filter the year
+      */
+     public function showStatisticsDeletedBreederYear(Request $request){
+         $year = $request->year;
+         $month = [
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('1'))
+                              ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('2'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('3'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('4'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('5'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('6'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('7'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('8'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('9'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('10'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('11'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',2)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('deleted_at', '=', date('12'))
+                             ->whereYear('deleted_at', '=', $year)
+                             ->count(),
+         ];
+
+         return view('user.admin.statisticsBreederDeleted', compact('month', 'year'));
+     }
+
+
+     /**
+      * Shows the blocked breeders statistics per month from current year
+      *
+      * @param none
+      * @return array of counts
+      * @todo optimize the method of getting the count of blocked users per month, change query to filter the year
+      */
+      public function showStatisticsBlockedBreeder(){
+          $date = Carbon::now();
+          $year = $date->year;
+          $month = [
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('1'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('2'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('3'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('4'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('5'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('6'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('7'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('8'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('9'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('10'))
+                              ->whereYear('created_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('11'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('12'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+          ];
+          return view('user.admin.statisticsBreederBlocked', compact('month', 'year'));
+      }
+
+      /*
+       * Shows the blocked breeders statistics per month from input year
+       *
+       * @param input year
+       * @return array of counts
+       * @todo optimize the method of getting the count of blocked users per month, change query to filter the year
+       */
+      public function showStatisticsBlockedBreederYear(Request $request){
+          $year = $request->year;
+          $month = [
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('1'))
+                               ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('2'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('3'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('4'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('5'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('6'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('7'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('8'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('9'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('10'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('11'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+              DB::table('users')
+                              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                              ->join('roles', 'role_user.role_id','=','roles.id')
+                              ->where('role_user.role_id','=',2)
+                              ->where('users.email_verified','=', 1)
+                              ->whereNotNull('approved_at')
+                              ->whereMonth('blocked_at', '=', date('12'))
+                              ->whereYear('blocked_at', '=', $year)
+                              ->count(),
+          ];
+
+          return view('user.admin.statisticsBreederBlocked', compact('month', 'year'));
+      }
+
+      /*
+       * Shows the Statistics dashboard
+       *
+       * @param none
+       * @return summary of statistics
+       *
+       */
+      public function showStatisticsDashboard(){
+        $date = Carbon::now();
+        $year = $date->year;
+        $month = $date->month;
+        $yesterday = new Carbon('yesterday');
+        $lastMonth = new Carbon('last month');
+
+        $stats = [];
+
+        $deleted = DB::table('users')
+                    ->whereMonth('deleted_at', '=', $month)
+                    ->whereYear('deleted_at', '=', $year)
+                    ->count();
+        $blocked = DB::table('users')
+                    ->whereMonth('blocked_at', '=', $month)
+                    ->whereYear('blocked_at', '=', $year)
+                    ->count();
+        $new = DB::table('users')
+                    ->whereMonth('created_at', '=', $month)
+                    ->whereYear('created_at', '=', $year)
+                    ->count();
+        $adminLogs = DB::table('administrator_logs')
+                    ->whereMonth('created_at', '=', $month)
+                    ->whereYear('created_at', '=', $year)
+                    ->whereDay('created_at', '=', $yesterday)
+                    ->orderBy('created_at', 'ASC')
+                    ->get();
+
+
+        foreach ($adminLogs as $logs) {
+            $logs->created_at = Carbon::parse($logs->created_at)->toDayDateTimeString();
+        }
+
+        $stats = [$deleted, $blocked, $new, $adminLogs];
+        return view('user.admin.statisticsDashboard',compact('stats'));
+      }
+
+      /*
+       * Shows active customers per month from current year
+       *
+       * @param none
+       * @return array of count
+       *
+       */
+      public function showStatisticsActiveCustomer(){
+        $date = Carbon::now();
+        $year = $date->year;
+        $month = [
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('1'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('2'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('3'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('4'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('5'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('6'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('7'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('8'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('9'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('10'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('11'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('12'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+        ];
+
+       return view('user.admin.statisticsCustomerActive', compact('month', 'year'));
+    }
+
+    /*
+     * Shows active customers per month from current input
+     *
+     * @param input year
+     * @return array of count
+     *
+     */
+    public function showStatisticsActiveCustomerYear(Request $request){
+        $year = $request->year;
+        $month = [
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('1'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('2'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('3'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('4'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('5'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('6'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('7'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('8'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('9'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('10'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('11'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereNull('blocked_at')
+                            ->whereNull('deleted_at')
+                            ->whereMonth('approved_at', '=', date('12'))
+                            ->whereYear('approved_at', '=', $year)
+                            ->count(),
+        ];
+
+        return view('user.admin.statisticsCustomerActive', compact('month', 'year'));
+    }
+
+    /**
+     * Shows the deleted customers per month of the current year
+     *
+     * @param none
+     * @return array of counts
+     * @todo optimize the method of getting the count of deleted users per month, change query to filter the year
+     */
+    public function showStatisticsDeletedCustomer(){
+        $date = Carbon::now();
+        $year = $date->year;
+        $month = [
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('1'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('2'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('3'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('4'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('5'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('6'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('7'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('8'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('9'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('10'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('11'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('12'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+        ];
+
+       return view('user.admin.statisticsCustomerDeleted', compact('month', 'year'));
+    }
+
+    /*
+     * Shows count of deleted customers per month from input year
+     *
+     * @param input year
+     * @return array of count
+     *
+     */
+    public function showStatisticsDeletedCustomerYear(Request $request){
+        $year = $request->year;
+        $month = [
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('1'))
+                             ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('2'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('3'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('4'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('5'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('6'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('7'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('8'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('9'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('10'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('11'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+            DB::table('users')
+                            ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                            ->join('roles', 'role_user.role_id','=','roles.id')
+                            ->where('role_user.role_id','=',3)
+                            ->where('users.email_verified','=', 1)
+                            ->whereNotNull('approved_at')
+                            ->whereMonth('deleted_at', '=', date('12'))
+                            ->whereYear('deleted_at', '=', $year)
+                            ->count(),
+        ];
+
+        return view('user.admin.statisticsCustomerDeleted', compact('month', 'year'));
+    }
+
+
+    /**
+     * Shows the count of blocked customers per month from the current year
+     *
+     * @param none
+     * @return array of counts
+     * @todo optimize the method of getting the count of blocked users per month, change query to filter the year
+     */
+     public function showStatisticsBlockedCustomer(){
+         $date = Carbon::now();
+         $year = $date->year;
+         $month = [
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('1'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('2'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('3'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('4'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('5'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('6'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('7'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('8'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('9'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('10'))
+                             ->whereYear('created_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('11'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('12'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+         ];
+         return view('user.admin.statisticsCustomerBlocked', compact('month', 'year'));
+     }
+
+     /*
+      * Shows the count of blocked customers per month from the input year
+      *
+      * @param input year
+      * @return array of counts
+      * @todo optimize the method of getting the count of blocked users per month, change query to filter the year
+      */
+     public function showStatisticsBlockedCustomerYear(Request $request){
+         $year = $request->year;
+         $month = [
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('1'))
+                              ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('2'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('3'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('4'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('5'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('6'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('7'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('8'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('9'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('10'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('11'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+             DB::table('users')
+                             ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                             ->join('roles', 'role_user.role_id','=','roles.id')
+                             ->where('role_user.role_id','=',3)
+                             ->where('users.email_verified','=', 1)
+                             ->whereNotNull('approved_at')
+                             ->whereMonth('blocked_at', '=', date('12'))
+                             ->whereYear('blocked_at', '=', $year)
+                             ->count(),
+         ];
+
+         return view('user.admin.statisticsCustomerBlocked', compact('month', 'year'));
+     }
+
+     /*
+      * Get all entries in the administrator logs in the current day
+      *
+      * @param none
+      * @return collection of logs
+      *
+      */
+     public function showStatisticsTimeline(){
+         $date = Carbon::now();
+         $year = $date->year;
+         $month = $date->month;
+         $day = $date->day;
+         $adminLogs = DB::table('administrator_logs')
+                     ->whereDay('created_at', '=', $day)
+                     ->whereMonth('created_at', '=', $month)
+                     ->whereYear('created_at', '=', $year)
+                     ->get();
+
+         foreach ($adminLogs as $logs) {
+             $logs->created_at = Carbon::parse($logs->created_at)->toTimeString();
+         }
+
+         $dateNow = $date->toFormattedDateString();
+         return view('user.admin.statisticsTimeline', compact('dateNow','adminLogs'));
+     }
+
+     /*
+      * Get all entries in the administrator logs in the input day
+      *
+      * @param date
+      * @return collection of logs
+      *
+      */
+     public function showStatisticsTimelineDate(Request $request){
+         $date = new Carbon($request->date);
+         // dd($date);
+         $year = $date->year;
+         $month = $date->month;
+         $day = $date->day;
+         $adminLogs = DB::table('administrator_logs')
+                     ->whereDay('created_at', '=', $day)
+                     ->whereMonth('created_at', '=', $month)
+                     ->whereYear('created_at', '=', $year)
+                     ->get();
+
+         foreach ($adminLogs as $logs) {
+             $logs->created_at = Carbon::parse($logs->created_at)->toTimeString();
+         }
+         $dateNow = $date->toFormattedDateString();
+         return view('user.admin.statisticsTimeline', compact('dateNow','adminLogs'));
+     }
+
 
     public function viewUsers(){
-
         $breeders = Breeder::all();
         $customers = Customer::all();
         return view('user.admin.viewUsers', compact('breeders', 'customers'));

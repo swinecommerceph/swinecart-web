@@ -170,9 +170,6 @@ $(document).ready(function(){
         parallelUploads: 1,
         maxFiles: 12,
         maxFilesize: 50,
-        // addRemoveLinks: true,
-        // dictRemoveFile: "Remove",
-        // dictCancelUpload: "Cancel",
         acceptedFiles: "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
         dictDefaultMessage: "<h5 style='font-weight: 300;'> Drop images/videos here to upload </h5>"+
             "<i class='material-icons'>insert_photo</i> <i class='material-icons'>movie</i>"+
@@ -190,9 +187,9 @@ $(document).ready(function(){
                 response = JSON.parse(response);
                 var item = 0;
                 response.forEach(function(element){
-                    preview_element = files[item].previewElement;
+                    var preview_element = files[item].previewElement;
                     preview_element.setAttribute('data-media-id', element.id);
-                    $('.dz-filename span[data-dz-name]').html(element.name);
+                    preview_element.getElementsByClassName('dz-filename')[0].getElementsByTagName('span')[0].innerHTML = element.name;
                     item++;
                 });
 
@@ -299,9 +296,6 @@ $(document).ready(function(){
         parallelUploads: 1,
         maxFiles: 12,
         maxFilesize: 50,
-        // addRemoveLinks: true,
-        // dictRemoveFile: "Remove",
-        // dictCancelUpload: "Cancel",
         acceptedFiles: "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
         dictDefaultMessage: "<h5 style='font-weight: 300;'> Drop images/videos here to upload </h5>"+
             "<i class='material-icons'>insert_photo</i> <i class='material-icons'>movie</i>"+
@@ -320,9 +314,9 @@ $(document).ready(function(){
                 response = JSON.parse(response);
                 var item = 0;
                 response.forEach(function(element){
-                    preview_element = files[item].previewElement;
+                    var preview_element = files[item].previewElement;
                     preview_element.setAttribute('data-media-id', element.id);
-                    $('.dz-filename span[data-dz-name]').html(element.name);
+                    preview_element.getElementsByClassName('dz-filename')[0].getElementsByTagName('span')[0].innerHTML = element.name;
                     item++;
                 });
 

@@ -114,6 +114,46 @@ html{
 		 	filter: grayscale();
 }
 
+#page-customer-view-products .card .card-image,
+#page-customer-swine-cart .card .card-image,
+#page-breeder-manage-products .card .card-image {
+	background-color: white;
+}
+
+#page-customer-view-products .card .card-image img{
+	margin: 0 auto;
+	height: 270px;
+	width: auto;
+	padding: 0.5rem;
+}
+
+#page-customer-swine-cart #card-container .card .card-image img,
+#page-breeder-manage-products .card .card-image img{
+	margin: 0 auto;
+	height: 14rem;
+	width: auto;
+	padding: 0.5rem;
+}
+
+#page-customer-swine-cart #info-modal .card .card-image,
+#page-customer-view-product-details .card .card-image,
+#page-breeder-view-product-details .card .card-image{
+	padding: 0.5rem;
+}
+
+#page-customer-view-product-details .card .card-image img,
+#page-breeder-view-product-details .card .card-image img{
+	margin: 0 auto;
+	height: 25rem;
+	width: auto;
+}
+
+#page-customer-swine-cart #info-modal .card .card-image img{
+	margin: 0 auto;
+	height: 20rem;
+	width: auto;
+}
+
 /* Breeder Dashboard */
 #page-breeder-product-status #product-status-container i{
 	font-size:2rem;
@@ -365,6 +405,11 @@ blockquote.info{
 	margin-left:1rem;
 }
 
+/* Dropzone styles */
+#page-breeder-edit-profile #change-logo-modal{
+	width: 30rem;
+}
+
 /*
  * Device-specific styles
  */
@@ -396,7 +441,7 @@ blockquote.info{
 
 #message-panel{
 	overflow: auto;
-  height: 400px;
+  	height: 400px;
 }
 
 #modal1{
@@ -406,11 +451,11 @@ blockquote.info{
 
 .summary-data{
 	font-size: 10em;
-   top:0;
-   bottom: 0;
-   left: 0;
-   right: 0;
-   margin: auto;
+	top:0;
+	bottom: 0;
+	left: 0;
+	right: 0;
+	margin: auto;
 }
 
 .summary-icons{
@@ -421,16 +466,16 @@ blockquote.info{
 .summary-title{
 	font-size: 2em;
 	vertical-align: middle;
-   text-align: left;
+   	text-align: left;
 
 }
 
 .action-column{
- top:0;
- bottom: 0;
- left: 0;
- right: 0;
- margin: auto;
+	 top:0;
+	 bottom: 0;
+	 left: 0;
+	 right: 0;
+	 margin: auto;
 }
 
 .action-dialog-box{
@@ -478,6 +523,7 @@ blockquote.info{
    display: none;
 }
 
+
 #delete-data {
    color: #D32F2F;
 }
@@ -510,6 +556,7 @@ blockquote.info{
    margin: auto;
 }
 
+/*Admin dashboard CSS*/
 #total-card{
    background-color: #0a7e7b;
 }
@@ -524,6 +571,26 @@ blockquote.info{
 
 #inquiries-card{
    background-color: #67052c;
+}
+
+#statistics-card{
+   background-color: #EB984E;
+}
+
+#statistics-icon{
+	font-size: 9em;
+	vertical-align: middle;
+   	text-align: left;
+}
+
+#statistics-title-wrapper{
+	vertical-align: middle;
+}
+
+#statistics-title{
+	font-size: 5em;
+	vertical-align: middle;
+   	text-align: left;
 }
 
 #adduser{
@@ -544,6 +611,290 @@ blockquote.info{
    font-family : Electrolize;
 }
 
+/*Statistics Dashboard*/
+.statsdash-data{
+	font-size: 50px
+}
+.statsdash-link{
+	vertical-align: middle;
+	line-height: 55px;
+}
+
+.statsdash-panel-title{
+	font-size: 25px;
+}
+
+/*CSS for the Horizontal timeline for statistics dashboard
+	Source: http://jsfiddle.net/kthornbloom/zJ6kp/
+*/
+.timeline {
+    white-space:nowrap;
+    overflow-x: scroll;
+    padding:30px 0 10px 0;
+    position:relative;
+}
+
+.entry {
+    display:inline-block;
+    vertical-align:top;
+    background:#FF9797;
+    padding:3px;
+    font-size:12px;
+    text-align:center;
+    position:relative;
+    border-top:5px solid #06182E;
+    border-radius:5px;
+    min-width:200px;
+    max-width:500px;
+}
+
+.entry:after {
+    content:'';
+    display:block;
+    background:#eee;
+    width:5px;
+    height:5px;
+    border-radius:10px;
+    border:3px solid #06182E;
+    position:absolute;
+    left:50%;
+    top:-30px;
+    margin-left:-2px;
+}
+
+.entry:before {
+    content:'';
+    display:block;
+    background:#06182E;
+    width:5px;
+    height:20px;
+    position:absolute;
+    left:50%;
+    top:-20px;
+    margin-left:-2px;
+}
+
+.entry h1 {
+    font-size:18px;
+    font-weight:bold;
+    margin-bottom:10px;
+}
+
+.entry h2 {
+    letter-spacing:.2em;
+    margin-bottom:10px;
+    font-size:14px;
+}
+
+.bar {
+    height:4px;
+    background:#FF7575;
+    width:100%;
+    position:relative;
+    top:9px;
+    left:0;
+}
+
+/*Vertical Timeline*/
+.cbp_tmtimeline {
+	margin: 30px 0 0 0;
+	padding: 0;
+	list-style: none;
+	position: relative;
+}
+
+/* The line */
+.cbp_tmtimeline:before {
+	content: '';
+	position: absolute;
+	top: 0;
+	bottom: 0;
+	width: 10px;
+	background: #00bbbb;
+	left: 20%;
+	margin-left: -10px;
+}
+
+.cbp_tmtimeline > li {
+	position: relative;
+}
+
+/* The date/time */
+.cbp_tmtimeline > li .cbp_tmtime {
+	display: block;
+	width: 25%;
+	padding-right: 100px;
+	position: absolute;
+}
+
+.cbp_tmtimeline > li .cbp_tmtime span {
+	display: block;
+	text-align: right;
+}
+
+/*.cbp_tmtimeline > li .cbp_tmtime span:first-child {
+	color: #000000;
+}*/
+
+.cbp_tmtimeline > li .cbp_tmtime span:last-child {
+	font-size: 1.8em;
+	color: #00bbbb;
+}
+
+.cbp_tmtimeline > li:nth-child(odd) .cbp_tmtime span:last-child {
+	color: #009494;
+}
+
+/* Right content */
+.cbp_tmtimeline > li .cbp_tmlabel {
+	margin: 0 0 15px 25%;
+	background: #00bbbb;
+	color: #fff;
+	padding: 2em;
+	font-size: 1.2em;
+	font-weight: 300;
+	line-height: 1.4;
+	position: relative;
+	border-radius: 5px;
+}
+
+.cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel {
+	background: #009494;
+}
+
+.cbp_tmtimeline > li .cbp_tmlabel h5 {
+	margin-top: 0px;
+	padding: 0 0 10px 0;
+	border-bottom: 1px solid rgba(255,255,255,0.4);
+}
+
+/* The triangle */
+.cbp_tmtimeline > li .cbp_tmlabel:after {
+	right: 100%;
+	border: solid transparent;
+	content: " ";
+	height: 0;
+	width: 0;
+	position: absolute;
+	pointer-events: none;
+	border-right-color: #00bbbb;
+	border-width: 10px;
+	top: 10px;
+}
+
+.cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel:after {
+	border-right-color: #009494;
+}
+
+/* The icons */
+.cbp_tmtimeline > li .cbp_tmicon {
+	width: 40px;
+	height: 40px;
+	speak: none;
+	font-style: normal;
+	font-weight: normal;
+	font-variant: normal;
+	text-transform: none;
+	font-size: 1.4em;
+	line-height: 40px;
+	-webkit-font-smoothing: antialiased;
+	position: absolute;
+	color: #fff;
+	background: #006c6c;
+	border-radius: 50%;
+	box-shadow: 0 0 0 8px #00cece;
+	text-align: center;
+	left: 20%;
+	top: 0;
+	margin: 0 0 0 -25px;
+}
+
+/* Example Media Queries */
+@media screen and (max-width: 65.375em) {
+
+	.cbp_tmtimeline > li .cbp_tmtime span:last-child {
+		font-size: 1em;
+	}
+}
+
+@media screen and (max-width: 47.2em) {
+	.cbp_tmtimeline:before {
+		display: none;
+	}
+
+	.cbp_tmtimeline > li .cbp_tmtime {
+		width: 100%;
+		position: relative;
+		padding: 0 0 20px 0;
+	}
+
+	.cbp_tmtimeline > li .cbp_tmtime span {
+		text-align: left;
+	}
+
+	.cbp_tmtimeline > li .cbp_tmlabel {
+		margin: 0 0 30px 0;
+		padding: 1em;
+		font-weight: 400;
+		font-size: 95%;
+	}
+
+	.cbp_tmtimeline > li .cbp_tmlabel:after {
+		right: auto;
+		left: 20px;
+		border-right-color: transparent;
+		border-bottom-color: #00e2e2;
+		top: -20px;
+	}
+
+	.cbp_tmtimeline > li:nth-child(odd) .cbp_tmlabel:after {
+		border-right-color: transparent;
+		border-bottom-color: #009494;
+	}
+
+	.cbp_tmtimeline > li .cbp_tmicon {
+		position: relative;
+		float: right;
+		left: auto;
+		margin: -55px 5px 0 0px;
+	}
+}
+
+/*Timeline components in Admin Logs Timeline*/
+#timeline-container{
+	overflow: auto;
+	max-height: 800px;
+	min-height: 200px;
+}
+
+.timeline-performed{
+	font-size: 15px;
+}
+
+
+#dash-transaction-chart{
+	/*fix chart canvas responsiveness in smaller screens*/
+}
+
+#statsdash-transact{
+
+}
+#statsdash-del{
+
+}
+
+#statsdash-block{
+
+}
+
+#statsdash-new{
+
+}
+
+/*for breeder statistics in admin*/
+.selection-buttons{
+	margin-top: 10px;
+}
 /*for admin forms*/
 #notes{
   width: 640px;
@@ -587,10 +938,45 @@ blockquote.info{
 	word-break:break-all;
 }
 
+/* Spectator CSS */
 #menu{
 	width: 300px;
 }
 
+.product_image{
+	width: 300px;
+	height: 300px;
+}
+
+#spectator-users-card{
+	background-color: #062F4F;
+}
+
+#spectator-products-card{
+	background-color: #813772;
+}
+
+#spectator-statistics-card{
+	background-color: #882601;
+}
+
+.spectator-ecommerce-icon{
+	font-family: ecommerce;
+	font-size: 8em;
+	font-style: normal;
+	text-align: left;
+	vertical-align: middle;
+	color: #d1d1d1 ;
+}
+
+.spectator-card-label{
+	font-size: 1.5em;
+	text-align: center;
+	color: #d1d1d1 ;
+}
+
+.vertical-divider{
+	font-size: 10em;
 
 #map-canvas{
 	height: 80vh;

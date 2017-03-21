@@ -153,8 +153,8 @@
                 <div class="col s12 m6 l6 ">
                   <div class="card hoverable">
                     <div class="card-image">
-                        <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}" >
-                            <img height="220" src="{{ $product->img_path }}">
+                        <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}">
+                            <img src="{{ $product->img_path }}">
                         </a>
                     </div>
                     <div class="card-content">

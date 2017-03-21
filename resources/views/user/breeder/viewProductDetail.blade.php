@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="card">
                     <div class="card-image">
-                        <img src="{{$product->img_path}}" data-imagezoom="true">
+                        <img src="{{$product->img_path}}" data-imagezoom="{{ $product->def_img_path }}">
                     </div>
                 </div>
             </div>
@@ -95,7 +95,7 @@
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
                 <li id="stars-container" class="collection-item">
                     Breeder Ratings
-                    <a href="" class="right tooltipped"  data-position="left" data-delay="50" data-tooltip="Message Breeder">
+                    <a href="#!" class="right tooltipped"  data-position="left" data-delay="50" data-tooltip="Message Breeder">
                         <i class="material-icons red-text" style="font-size:35px;">message</i>
                     </a>
                     <br><br>

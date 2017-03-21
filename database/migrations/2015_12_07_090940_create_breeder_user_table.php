@@ -14,6 +14,7 @@ class CreateBreederUserTable extends Migration
     {
         Schema::create('breeder_user', function (Blueprint $table) {
             $table->increments('id');
+            $table->integer('logo_img_id')->unsigned();
             $table->string('officeAddress_addressLine1');
             $table->string('officeAddress_addressLine2');
             $table->string('officeAddress_province');

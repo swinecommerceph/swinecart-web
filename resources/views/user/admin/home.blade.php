@@ -82,13 +82,13 @@
              </div>
            </div>
         </a>
-        <a href="#!">
+        <a href="#">
            <div class="col s6" >
              <div id="inquiries-card" class="card-panel card-summary hoverable">
                 <div class="center white-text row">
                    <div class="col s4 label-wrapper">
                       <div class="left">
-                         <i class="ecommerce-icon">d</i>
+                         <i class="ecommerce-icon">u</i>
                       </div>
                       <div class="">
                          <div class="summary-title">USER INQUIRIES</div>
@@ -102,6 +102,26 @@
              </div>
            </div>
         </a>
+
+        <a href="{{route('admin.statistics.dashboard')}}" id="site-statistics-summary">
+           <div class="col s12" >
+             <div id="statistics-card" class="card-panel card-summary hoverable">
+                <div class="center white-text row">
+                   <div class="col s4 label-wrapper">
+                      <div class="center">
+                         <i class="ecommerce-icon" id="statistics-icon">x</i>
+                      </div>
+
+                   </div>
+
+                   <div class="center white-text col s8" id="statistics-title-wrapper">
+                     <div  id="statistics-title">SITE STATISTICS</div>
+                   </div>
+                </div>
+             </div>
+           </div>
+        </a>
+
     </div>
 
 @endsection

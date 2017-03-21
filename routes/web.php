@@ -44,6 +44,9 @@ Route::group(['middleware' => ['web']], function () {
     Route::get('login/redirect/email/{email}/ver-code/{verCode}', ['as' => 'verCode.send', 'uses' => 'Auth\LoginController@verifyCode']);
     Route::get('login/resend/email/{email}/ver-code/{verCode}', ['as' => 'verCode.resend', 'uses' => 'Auth\LoginController@resendCode']);
 
+    // Serve resized image
+    Route::get('images/product/{size}/{filename}', ['as' => 'serveImage', 'uses' => 'ServeResizedImageController@serveAppropriateImage']);
+
     /**
     * User Routes according to roles
     */
@@ -63,6 +66,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::put('edit-profile/farm/edit',['as' => 'breeder.updateFarm', 'uses' => 'BreederController@updateFarm']);
         Route::delete('edit-profile/farm/delete',['as' => 'breeder.deleteFarm', 'uses' => 'BreederController@deleteFarm']);
         Route::patch('edit-profile/change-password',['as' => 'breeder.changePassword', 'uses' => 'BreederController@changePassword']);
+        Route::post('edit-profile/logo-upload',['as' => 'breeder.logoUpload', 'uses' => 'BreederController@uploadLogo']);
+        Route::delete('edit-profile/logo-upload',['as' => 'breeder.logoDelete', 'uses' => 'BreederController@deleteLogo']);
+        Route::patch('edit-profile/logo-upload',['as' => 'breeder.setLogo', 'uses' => 'BreederController@setLogo']);
 
         // product-related
         Route::get('products',['as' => 'products', 'uses' => 'ProductController@showProducts']);
@@ -160,6 +166,25 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/logs', ['as'=>'admin_logs', 'uses'=>'AdminController@getAdministratorLogs']);
         Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
 
+        // Route for statistics pages
+        Route::get('home/statistics/dashboard',['as'=>'admin.statistics.dashboard', 'uses'=>'AdminController@showStatisticsDashboard']);
+        //  Breeder statistics
+        Route::get('home/statistics/breeder/active', ['as' => 'admin.statistics.breeder.active', 'uses'=> 'AdminController@showStatisticsActiveBreeder']);
+        Route::get('home/statistics/breeder/active-year', ['as' => 'admin.statistics.breeder.active-year', 'uses'=> 'AdminController@showStatisticsActiveBreederYear']);
+        Route::get('home/statistics/breeder/deleted', ['as' => 'admin.statistics.breeder.deleted', 'uses'=> 'AdminController@showStatisticsDeletedBreeder']);
+        Route::get('home/statistics/breeder/deleted-year', ['as' => 'admin.statistics.breeder.deleted-year', 'uses'=> 'AdminController@showStatisticsDeletedBreederYear']);
+        Route::get('home/statistics/breeder/blocked', ['as' => 'admin.statistics.breeder.blocked', 'uses'=> 'AdminController@showStatisticsBlockedBreeder']);
+        Route::get('home/statistics/breeder/blocked-year', ['as' => 'admin.statistics.breeder.blocked-year', 'uses'=> 'AdminController@showStatisticsBlockedBreederYear']);
+        // Customer statistics
+        Route::get('home/statistics/customer/active', ['as' => 'admin.statistics.customer.active', 'uses'=> 'AdminController@showStatisticsActiveCustomer']);
+        Route::get('home/statistics/customer/active-year', ['as' => 'admin.statistics.customer.active-year', 'uses'=> 'AdminController@showStatisticsActiveCustomerYear']);
+        Route::get('home/statistics/customer/deleted', ['as' => 'admin.statistics.customer.deleted', 'uses'=> 'AdminController@showStatisticsDeletedCustomer']);
+        Route::get('home/statistics/customer/deleted-year', ['as' => 'admin.statistics.customer.deleted-year', 'uses'=> 'AdminController@showStatisticsDeletedCustomerYear']);
+        Route::get('home/statistics/customer/blocked', ['as' => 'admin.statistics.customer.blocked', 'uses'=> 'AdminController@showStatisticsBlockedCustomer']);
+        Route::get('home/statistics/customer/blocked-year', ['as' => 'admin.statistics.customer.blocked-year', 'uses'=> 'AdminController@showStatisticsBlockedCustomerYear']);
+
+        Route::get('home/statistics/timeline', ['as' => 'admin.statistics.timeline', 'uses'=> 'AdminController@showStatisticsTimeline']);
+        Route::get('home/statistics/timeline-date', ['as' => 'admin.statistics.timeline-date', 'uses'=> 'AdminController@showStatisticsTimelineDate']);
 
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
         Route::get('home/approved/breeder', ['as'=>'admin.approved.breeder', 'uses'=>'AdminController@displayApprovedBreeders']);
@@ -189,5 +214,19 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('home/sendMessage', ['as' => 'users', 'uses'=> 'AdminController@sendMessage']);
 
     });
+
+    Route::group(['prefix'=>'spectator'], function(){
+
+        // Route to admin home page
+        Route::get('home',['as'=>'spectator_path', 'uses'=>'SpectatorController@index']);
+        Route::get('users',['as'=>'spectator.users', 'uses'=>'SpectatorController@viewUsers']);
+        Route::get('products',['as'=>'spectator.products', 'uses'=>'SpectatorController@viewProducts']);
+        Route::get('logs',['as'=>'spectator.logs', 'uses'=>'SpectatorController@viewLogs']);
+        Route::get('statistics',['as'=>'spectator.statistics', 'uses'=>'SpectatorController@viewStatisticsDashboard']);
+
+        Route::get('home/product/search', ['as'=>'spectator.searchProduct', 'uses'=>'SpectatorController@searchProduct']);
+        Route::get('home/product/advancedsearch', ['as'=>'spectator.advancedSearchProduct', 'uses'=>'SpectatorController@advancedSearchProduct']);
+    });
+
 
 });
