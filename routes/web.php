@@ -220,9 +220,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('statistics',['as'=>'spectator.statistics', 'uses'=>'SpectatorController@viewStatisticsDashboard']);
 
         Route::get('users/search',['as'=>'spectator.searchUser', 'uses'=>'SpectatorController@searchUser']);
+        Route::get('users/details', ['as'=>'spectator.fetchUserInformation', 'uses'=>'SpectatorController@fetchUserInformation']);
 
         Route::get('home/product/search', ['as'=>'spectator.searchProduct', 'uses'=>'SpectatorController@searchProduct']);
         Route::get('home/product/advancedsearch', ['as'=>'spectator.advancedSearchProduct', 'uses'=>'SpectatorController@advancedSearchProduct']);
+
 
         Route::get('statistics/customer/active', ['as'=>'spectator.statisticsActiveCustomer', 'uses'=>'SpectatorController@viewActiveCustomerStatistics']);
         Route::get('statistics/customer/active-year', ['as'=>'spectator.statisticsActiveCustomerYear', 'uses'=>'SpectatorController@viewActiveCustomerStatisticsYear']);

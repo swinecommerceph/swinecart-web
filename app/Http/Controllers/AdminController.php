@@ -721,6 +721,57 @@ class AdminController extends Controller
      }
 
      /*
+      * Helper function to get the monthly count in the count collection
+      *
+      * @param collection count
+      * @return array count
+      *
+      */
+     public function getMonthlyCount($counts){
+         $monthlyCount = array_fill(0, 12, 0);
+         foreach($counts as $count){
+             if($count->month == 1){
+                 $monthlyCount[0] = $count->user_count;
+             }
+             if($count->month == 2){
+                 $monthlyCount[1] = $count->user_count;
+             }
+             if($count->month == 3){
+                 $monthlyCount[2] = $count->user_count;
+             }
+             if($count->month == 4){
+                 $monthlyCount[3] = $count->user_count;
+             }
+             if($count->month == 5){
+                 $monthlyCount[4] = $count->user_count;
+             }
+             if($count->month == 6){
+                 $monthlyCount[5] = $count->user_count;
+             }
+             if($count->month == 7){
+                 $monthlyCount[6] = $count->user_count;
+             }
+             if($count->month == 8){
+                 $monthlyCount[7] = $count->user_count;
+             }
+             if($count->month == 9){
+                 $monthlyCount[8] = $count->user_count;
+             }
+             if($count->month == 10){
+                 $monthlyCount[9] = $count->user_count;
+             }
+             if($count->month == 11){
+                 $monthlyCount[10] = $count->user_count;
+             }
+             if($count->month == 12){
+                 $monthlyCount[11] = $count->user_count;
+             }
+         }
+         return $monthlyCount;
+     }
+
+
+     /*
       * Helper function that gets the count of active users and returns the array of count
       *
       * @param Integer user type or role, Carbon->year
@@ -797,45 +848,7 @@ class AdminController extends Controller
          $date = Carbon::now();
          $year = $date->year;
          $counts = $this->getActiveUserStatistics(2, $year);
-         $month = array_fill(0, 12, 0);
-         foreach($counts as $count){
-             if($count->month == 1){
-                 $month[0] = $count->user_count;
-             }
-             if($count->month == 2){
-                 $month[1] = $count->user_count;
-             }
-             if($count->month == 3){
-                 $month[2] = $count->user_count;
-             }
-             if($count->month == 4){
-                 $month[3] = $count->user_count;
-             }
-             if($count->month == 5){
-                 $month[4] = $count->user_count;
-             }
-             if($count->month == 6){
-                 $month[5] = $count->user_count;
-             }
-             if($count->month == 7){
-                 $month[6] = $count->user_count;
-             }
-             if($count->month == 8){
-                 $month[7] = $count->user_count;
-             }
-             if($count->month == 9){
-                 $month[8] = $count->user_count;
-             }
-             if($count->month == 10){
-                 $month[9] = $count->user_count;
-             }
-             if($count->month == 11){
-                 $month[10] = $count->user_count;
-             }
-             if($count->month == 12){
-                 $month[11] = $count->user_count;
-             }
-         }
+         $month = $this->getMonthlyCount($counts);
 
         return view('user.admin.statisticsBreederActive', compact('month', 'year'));
      }
@@ -849,45 +862,7 @@ class AdminController extends Controller
      public function showStatisticsActiveBreederYear(Request $request){
          $year = $request->year;
          $counts = $counts = $this->getActiveUserStatistics(2, $year);
-         $month = array_fill(0, 12, 0);
-         foreach($counts as $count){
-             if($count->month == 1){
-                 $month[0] = $count->user_count;
-             }
-             if($count->month == 2){
-                 $month[1] = $count->user_count;
-             }
-             if($count->month == 3){
-                 $month[2] = $count->user_count;
-             }
-             if($count->month == 4){
-                 $month[3] = $count->user_count;
-             }
-             if($count->month == 5){
-                 $month[4] = $count->user_count;
-             }
-             if($count->month == 6){
-                 $month[5] = $count->user_count;
-             }
-             if($count->month == 7){
-                 $month[6] = $count->user_count;
-             }
-             if($count->month == 8){
-                 $month[7] = $count->user_count;
-             }
-             if($count->month == 9){
-                 $month[8] = $count->user_count;
-             }
-             if($count->month == 10){
-                 $month[9] = $count->user_count;
-             }
-             if($count->month == 11){
-                 $month[10] = $count->user_count;
-             }
-             if($count->month == 12){
-                 $month[11] = $count->user_count;
-             }
-         }
+         $month = $this->getMonthlyCount($counts);
 
          return view('user.admin.statisticsBreederActive', compact('month', 'year'));
      }
@@ -897,51 +872,13 @@ class AdminController extends Controller
       *
       * @param none
       * @return array of counts
-      * @todo optimize the method of getting the count of deleted users per month, change query to filter the year
+      *
       */
      public function showStatisticsDeletedBreeder(){
          $date = Carbon::now();
          $year = $date->year;
          $counts = $this->getDeletedUserStatistics(2, $year);
-         $month = array_fill(0, 12, 0);
-         foreach($counts as $count){
-             if($count->month == 1){
-                 $month[0] = $count->user_count;
-             }
-             if($count->month == 2){
-                 $month[1] = $count->user_count;
-             }
-             if($count->month == 3){
-                 $month[2] = $count->user_count;
-             }
-             if($count->month == 4){
-                 $month[3] = $count->user_count;
-             }
-             if($count->month == 5){
-                 $month[4] = $count->user_count;
-             }
-             if($count->month == 6){
-                 $month[5] = $count->user_count;
-             }
-             if($count->month == 7){
-                 $month[6] = $count->user_count;
-             }
-             if($count->month == 8){
-                 $month[7] = $count->user_count;
-             }
-             if($count->month == 9){
-                 $month[8] = $count->user_count;
-             }
-             if($count->month == 10){
-                 $month[9] = $count->user_count;
-             }
-             if($count->month == 11){
-                 $month[10] = $count->user_count;
-             }
-             if($count->month == 12){
-                 $month[11] = $count->user_count;
-             }
-         }
+         $month = $this->getMonthlyCount($counts);
 
         return view('user.admin.statisticsBreederDeleted', compact('month', 'year'));
      }
@@ -956,45 +893,7 @@ class AdminController extends Controller
      public function showStatisticsDeletedBreederYear(Request $request){
          $year = $request->year;
          $counts = $this->getDeletedUserStatistics(2, $year);
-         $month = array_fill(0, 12, 0);
-         foreach($counts as $count){
-             if($count->month == 1){
-                 $month[0] = $count->user_count;
-             }
-             if($count->month == 2){
-                 $month[1] = $count->user_count;
-             }
-             if($count->month == 3){
-                 $month[2] = $count->user_count;
-             }
-             if($count->month == 4){
-                 $month[3] = $count->user_count;
-             }
-             if($count->month == 5){
-                 $month[4] = $count->user_count;
-             }
-             if($count->month == 6){
-                 $month[5] = $count->user_count;
-             }
-             if($count->month == 7){
-                 $month[6] = $count->user_count;
-             }
-             if($count->month == 8){
-                 $month[7] = $count->user_count;
-             }
-             if($count->month == 9){
-                 $month[8] = $count->user_count;
-             }
-             if($count->month == 10){
-                 $month[9] = $count->user_count;
-             }
-             if($count->month == 11){
-                 $month[10] = $count->user_count;
-             }
-             if($count->month == 12){
-                 $month[11] = $count->user_count;
-             }
-         }
+         $month = $this->getMonthlyCount($counts);
 
          return view('user.admin.statisticsBreederDeleted', compact('month', 'year'));
      }
@@ -1011,45 +910,8 @@ class AdminController extends Controller
           $date = Carbon::now();
           $year = $date->year;
           $counts = $this->getBlockedUserStatistics(2, $year);
-          $month = array_fill(0, 12, 0);
-          foreach($counts as $count){
-              if($count->month == 1){
-                  $month[0] = $count->user_count;
-              }
-              if($count->month == 2){
-                  $month[1] = $count->user_count;
-              }
-              if($count->month == 3){
-                  $month[2] = $count->user_count;
-              }
-              if($count->month == 4){
-                  $month[3] = $count->user_count;
-              }
-              if($count->month == 5){
-                  $month[4] = $count->user_count;
-              }
-              if($count->month == 6){
-                  $month[5] = $count->user_count;
-              }
-              if($count->month == 7){
-                  $month[6] = $count->user_count;
-              }
-              if($count->month == 8){
-                  $month[7] = $count->user_count;
-              }
-              if($count->month == 9){
-                  $month[8] = $count->user_count;
-              }
-              if($count->month == 10){
-                  $month[9] = $count->user_count;
-              }
-              if($count->month == 11){
-                  $month[10] = $count->user_count;
-              }
-              if($count->month == 12){
-                  $month[11] = $count->user_count;
-              }
-          }
+          $month = $this->getMonthlyCount($counts);
+
           return view('user.admin.statisticsBreederBlocked', compact('month', 'year'));
       }
 
@@ -1063,45 +925,7 @@ class AdminController extends Controller
       public function showStatisticsBlockedBreederYear(Request $request){
           $year = $request->year;
           $counts = $this->getBlockedUserStatistics(2, $year);
-          $month = array_fill(0, 12, 0);
-          foreach($counts as $count){
-              if($count->month == 1){
-                  $month[0] = $count->user_count;
-              }
-              if($count->month == 2){
-                  $month[1] = $count->user_count;
-              }
-              if($count->month == 3){
-                  $month[2] = $count->user_count;
-              }
-              if($count->month == 4){
-                  $month[3] = $count->user_count;
-              }
-              if($count->month == 5){
-                  $month[4] = $count->user_count;
-              }
-              if($count->month == 6){
-                  $month[5] = $count->user_count;
-              }
-              if($count->month == 7){
-                  $month[6] = $count->user_count;
-              }
-              if($count->month == 8){
-                  $month[7] = $count->user_count;
-              }
-              if($count->month == 9){
-                  $month[8] = $count->user_count;
-              }
-              if($count->month == 10){
-                  $month[9] = $count->user_count;
-              }
-              if($count->month == 11){
-                  $month[10] = $count->user_count;
-              }
-              if($count->month == 12){
-                  $month[11] = $count->user_count;
-              }
-          }
+          $month = $this->getMonthlyCount($counts);
 
           return view('user.admin.statisticsBreederBlocked', compact('month', 'year'));
       }
@@ -1184,45 +1008,7 @@ class AdminController extends Controller
         $date = Carbon::now();
         $year = $date->year;
         $counts = $counts = $this->getActiveUserStatistics(3, $year);
-        $month = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $month[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $month[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $month[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $month[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $month[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $month[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $month[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $month[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $month[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $month[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $month[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $month[11] = $count->user_count;
-            }
-        }
+        $month = $this->getMonthlyCount($counts);
 
        return view('user.admin.statisticsCustomerActive', compact('month', 'year'));
     }
@@ -1237,45 +1023,7 @@ class AdminController extends Controller
     public function showStatisticsActiveCustomerYear(Request $request){
         $year = $request->year;
         $counts = $counts = $this->getActiveUserStatistics(3, $year);
-        $month = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $month[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $month[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $month[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $month[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $month[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $month[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $month[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $month[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $month[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $month[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $month[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $month[11] = $count->user_count;
-            }
-        }
+        $month = $this->getMonthlyCount($counts);
 
         return view('user.admin.statisticsCustomerActive', compact('month', 'year'));
     }
@@ -1291,45 +1039,7 @@ class AdminController extends Controller
         $date = Carbon::now();
         $year = $date->year;
         $counts = $this->getDeletedUserStatistics(3, $year);
-        $month = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $month[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $month[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $month[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $month[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $month[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $month[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $month[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $month[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $month[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $month[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $month[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $month[11] = $count->user_count;
-            }
-        }
+        $month = $this->getMonthlyCount($counts);
 
        return view('user.admin.statisticsCustomerDeleted', compact('month', 'year'));
     }
@@ -1344,45 +1054,7 @@ class AdminController extends Controller
     public function showStatisticsDeletedCustomerYear(Request $request){
         $year = $request->year;
         $counts = $this->getDeletedUserStatistics(3, $year);
-        $month = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $month[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $month[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $month[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $month[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $month[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $month[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $month[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $month[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $month[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $month[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $month[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $month[11] = $count->user_count;
-            }
-        }
+        $month = $this->getMonthlyCount($counts);
 
         return view('user.admin.statisticsCustomerDeleted', compact('month', 'year'));
     }
@@ -1399,45 +1071,7 @@ class AdminController extends Controller
          $date = Carbon::now();
          $year = $date->year;
          $counts = $this->getBlockedUserStatistics(3, $year);
-         $month = array_fill(0, 12, 0);
-         foreach($counts as $count){
-             if($count->month == 1){
-                 $month[0] = $count->user_count;
-             }
-             if($count->month == 2){
-                 $month[1] = $count->user_count;
-             }
-             if($count->month == 3){
-                 $month[2] = $count->user_count;
-             }
-             if($count->month == 4){
-                 $month[3] = $count->user_count;
-             }
-             if($count->month == 5){
-                 $month[4] = $count->user_count;
-             }
-             if($count->month == 6){
-                 $month[5] = $count->user_count;
-             }
-             if($count->month == 7){
-                 $month[6] = $count->user_count;
-             }
-             if($count->month == 8){
-                 $month[7] = $count->user_count;
-             }
-             if($count->month == 9){
-                 $month[8] = $count->user_count;
-             }
-             if($count->month == 10){
-                 $month[9] = $count->user_count;
-             }
-             if($count->month == 11){
-                 $month[10] = $count->user_count;
-             }
-             if($count->month == 12){
-                 $month[11] = $count->user_count;
-             }
-         }
+         $month = $this->getMonthlyCount($counts);
 
          return view('user.admin.statisticsCustomerBlocked', compact('month', 'year'));
      }
@@ -1452,45 +1086,7 @@ class AdminController extends Controller
      public function showStatisticsBlockedCustomerYear(Request $request){
          $year = $request->year;
          $counts = $this->getBlockedUserStatistics(3, $year);
-         $month = array_fill(0, 12, 0);
-         foreach($counts as $count){
-             if($count->month == 1){
-                 $month[0] = $count->user_count;
-             }
-             if($count->month == 2){
-                 $month[1] = $count->user_count;
-             }
-             if($count->month == 3){
-                 $month[2] = $count->user_count;
-             }
-             if($count->month == 4){
-                 $month[3] = $count->user_count;
-             }
-             if($count->month == 5){
-                 $month[4] = $count->user_count;
-             }
-             if($count->month == 6){
-                 $month[5] = $count->user_count;
-             }
-             if($count->month == 7){
-                 $month[6] = $count->user_count;
-             }
-             if($count->month == 8){
-                 $month[7] = $count->user_count;
-             }
-             if($count->month == 9){
-                 $month[8] = $count->user_count;
-             }
-             if($count->month == 10){
-                 $month[9] = $count->user_count;
-             }
-             if($count->month == 11){
-                 $month[10] = $count->user_count;
-             }
-             if($count->month == 12){
-                 $month[11] = $count->user_count;
-             }
-         }
+         $month = $this->getMonthlyCount($counts);
 
          return view('user.admin.statisticsCustomerBlocked', compact('month', 'year'));
      }

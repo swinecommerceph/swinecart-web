@@ -45,7 +45,7 @@
                                            <div class="spectator-summary-maintitle">
                                                Total Users
                                            </div>
-                                           <div class="spectator-summary-maindata">
+                                           <div class="spectator-summary-maindata truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$totalusers}}">
                                                {{$totalusers}}
                                            </div>
                                        </div>
@@ -56,7 +56,7 @@
                                            <div class="spectator-summary-title">
                                                Breeders
                                            </div>
-                                           <div class="spectator-summary-data">
+                                           <div class="spectator-summary-data truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$totalbreeders}}">
                                                {{$totalbreeders}}
                                            </div>
                                        </div>
@@ -65,7 +65,7 @@
                                            <div class="spectator-summary-title">
                                                Customers
                                            </div>
-                                           <div class="spectator-summary-data">
+                                           <div class="spectator-summary-data truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$totalcustomers}}">
                                                {{$totalcustomers}}
                                            </div>
                                        </div>
@@ -96,7 +96,7 @@
                                             <div class="spectator-summary-maintitle">
                                                 Total Products
                                             </div>
-                                            <div class="spectator-summary-maindata">
+                                            <div class="spectator-summary-maindata truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$totalproduct}}">
                                                 {{$totalproduct}}
                                             </div>
                                         </div>
@@ -107,7 +107,7 @@
                                             <div class="spectator-summary-title">
                                                 Boar
                                             </div>
-                                            <div class="spectator-summary-data">
+                                            <div class="spectator-summary-data truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$boar}}">
                                                 {{$boar}}
                                             </div>
                                         </div>
@@ -116,7 +116,7 @@
                                             <div class="spectator-summary-title">
                                                 Gilt
                                             </div>
-                                            <div class="spectator-summary-data">
+                                            <div class="spectator-summary-data truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$gilt}}">
                                                 {{$gilt}}
                                             </div>
                                         </div>
@@ -125,7 +125,7 @@
                                             <div class="spectator-summary-title">
                                                 Sow
                                             </div>
-                                            <div class="spectator-summary-data">
+                                            <div class="spectator-summary-data truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$sow}}">
                                                 {{$sow}}
                                             </div>
                                         </div>
@@ -134,7 +134,7 @@
                                             <div class="spectator-summary-title">
                                                 Semen
                                             </div>
-                                            <div class="spectator-summary-data">
+                                            <div class="spectator-summary-data truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$semen}}">
                                                 {{$semen}}
                                             </div>
                                         </div>
@@ -166,7 +166,7 @@
                                            <div class="spectator-summary-maintitle">
                                                Total Transactions
                                            </div>
-                                           <div class="spectator-summary-maindata">
+                                           <div class="spectator-summary-maindata truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="#">
                                                #
                                            </div>
                                        </div>
@@ -177,7 +177,7 @@
                                            <div class="spectator-summary-title">
                                                New Breeders
                                            </div>
-                                           <div class="spectator-summary-data">
+                                           <div class="spectator-summary-data truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$newbreeders}}">
                                                {{$newbreeders}}
                                            </div>
                                        </div>
@@ -186,7 +186,7 @@
                                            <div class="spectator-summary-title">
                                                New Customers
                                            </div>
-                                           <div class="spectator-summary-data">
+                                           <div class="spectator-summary-data truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$newcustomers}}">
                                                {{$newcustomers}}
                                            </div>
                                        </div>

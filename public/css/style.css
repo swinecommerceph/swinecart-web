@@ -987,6 +987,21 @@ blockquote.info{
 	opacity: 0;
 }
 
+/*Spectator User Page*/
+#user-modal{
+	height: 520px;
+	width: 1000px;
+	overflow-x: auto;
+}
+
+.spectator-user-modal-data{
+	font-weight: bold;
+}
+.spectator-user-modal-title{
+	font-weight: lighter;
+
+}
+
 /*Spectator Statistics Dahsboard*/
 .spectator-dashicon{
 	font-size: 8em;

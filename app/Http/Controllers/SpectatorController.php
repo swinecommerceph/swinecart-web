@@ -138,6 +138,43 @@ class SpectatorController extends Controller
         return view(('user.spectator.users'), compact('users'));
     }
 
+    public function fetchUserInformation(Request $request){
+        if($request->userRole == 2){
+            $details = DB::table('users')
+                    ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                    ->join('roles', 'role_user.role_id','=','roles.id')
+                    ->where('role_id', '=', 2)
+                    ->where('users.id', '=', $request->userId)
+                    ->join('breeder_user', 'breeder_user.id', '=', 'users.userable_id')
+                    ->select('users.id as user_id', 'users.name as user_name', 'users.email', 'roles.title as role',
+                            'breeder_user.officeAddress_addressLine1 as addressLine1', 'breeder_user.officeAddress_addressLine2 as addressLine2',
+                            'breeder_user.officeAddress_province as province', 'breeder_user.officeAddress_zipCode as zipcode', 'breeder_user.office_landline',
+                            'breeder_user.office_mobile', 'breeder_user.website', 'breeder_user.produce', 'breeder_user.contactPerson_name as contact_person',
+                            'breeder_user.contactPerson_mobile as contact_person_mobile', 'breeder_user.status_instance'
+                            )
+                    ->get();
+        }else{
+            $details = DB::table('users')
+                    ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                    ->join('roles', 'role_user.role_id','=','roles.id')
+                    ->whereIn('role_id', [3])
+                    ->where('users.id', '=', $request->userId)
+                    ->join('customer_user', 'customer_user.id', '=', 'users.userable_id')
+                    ->select('users.id as user_id', 'users.name as user_name', 'users.email', 'roles.title as role',
+                            'customer_user.address_addressLine1 as addressLine1', 'customer_user.address_addressLine2 as addressLine2',
+                            'customer_user.address_province as province', 'customer_user.address_zipCode as zipcode', 'customer_user.landline',
+                            'customer_user.mobile', 'customer_user.status_instance'
+                            )
+                    ->get();
+
+        }
+
+
+        $details->first()->role = ucfirst($details->first()->role);
+        $details->first()->status_instance = ucfirst($details->first()->status_instance);
+        return $details;
+    }
+
     /*
      * Search for user with the name containing the input string
      *
@@ -328,6 +365,56 @@ class SpectatorController extends Controller
     }
 
     /*
+     * Helper function to get the monthly count in the count collection
+     *
+     * @param collection count
+     * @return array count
+     *
+     */
+    public function getMonthlyCount($counts){
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($counts as $count){
+            if($count->month == 1){
+                $monthlyCount[0] = $count->user_count;
+            }
+            if($count->month == 2){
+                $monthlyCount[1] = $count->user_count;
+            }
+            if($count->month == 3){
+                $monthlyCount[2] = $count->user_count;
+            }
+            if($count->month == 4){
+                $monthlyCount[3] = $count->user_count;
+            }
+            if($count->month == 5){
+                $monthlyCount[4] = $count->user_count;
+            }
+            if($count->month == 6){
+                $monthlyCount[5] = $count->user_count;
+            }
+            if($count->month == 7){
+                $monthlyCount[6] = $count->user_count;
+            }
+            if($count->month == 8){
+                $monthlyCount[7] = $count->user_count;
+            }
+            if($count->month == 9){
+                $monthlyCount[8] = $count->user_count;
+            }
+            if($count->month == 10){
+                $monthlyCount[9] = $count->user_count;
+            }
+            if($count->month == 11){
+                $monthlyCount[10] = $count->user_count;
+            }
+            if($count->month == 12){
+                $monthlyCount[11] = $count->user_count;
+            }
+        }
+        return $monthlyCount;
+    }
+
+    /*
      * Helper function to query the active user counts
      *
      * @param integer, Carbon->year
@@ -408,45 +495,7 @@ class SpectatorController extends Controller
         $date = Carbon::now();
         $year = $date->year;
         $counts = $this->getSpectatorActiveUserStatistics(3, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = $this->getMonthlyCount($counts);
 
         return view('user.spectator.activeCustomerStatistics', compact('monthlyCount', 'year'));
     }
@@ -455,52 +504,10 @@ class SpectatorController extends Controller
      * Display the view for the active customer statistics
      *
      * @param request year
-     * @return view with array of counts and year string
-     *
-     */
-    public function viewActiveCustomerStatisticsYear(Request $request)
-    {
-        $year = $request->year;
-        $counts = $this->getSpectatorActiveUserStatistics(3, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+     * @return view with array of counts and year stringYear￼
+2016
+
+        $monthlyCount = $this->getMonthlyCount($counts);
 
         return view('user.spectator.activeCustomerStatistics', compact('monthlyCount', 'year'));
     }
@@ -518,45 +525,7 @@ class SpectatorController extends Controller
         $date = Carbon::now();
         $year = $date->year;
         $counts = $this->getSpectatorBlockedUserStatistics(3, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = $this->getMonthlyCount($counts);
 
         return view('user.spectator.blockedCustomerStatistics', compact('monthlyCount', 'year'));
     }
@@ -572,45 +541,7 @@ class SpectatorController extends Controller
     {
         $year = $request->year;
         $counts = $this->getSpectatorBlockedUserStatistics(3, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = getMonthlyCount($counts);
 
         return view('user.spectator.blockedCustomerStatistics', compact('monthlyCount', 'year'));
     }
@@ -627,45 +558,8 @@ class SpectatorController extends Controller
         $date = Carbon::now();
         $year = $date->year;
         $counts = $this->getSpectatorDeletedUserStatistics(3, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = $this->getMonthlyCount($counts);
+
         return view('user.spectator.deletedCustomerStatistics', compact('monthlyCount', 'year'));
     }
 
@@ -680,45 +574,8 @@ class SpectatorController extends Controller
     {
         $year = $request->year;
         $counts =$this->getSpectatorDeletedUserStatistics(3, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = $this->getMonthlyCount($counts);
+
         return view('user.spectator.deletedCustomerStatistics', compact('monthlyCount', 'year'));
     }
 
@@ -734,45 +591,7 @@ class SpectatorController extends Controller
         $date = Carbon::now();
         $year = $date->year;
         $counts = $this->getSpectatorActiveUserStatistics(2, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = $this->getMonthlyCount($counts);
 
         return view('user.spectator.activeBreederStatistics', compact('monthlyCount', 'year'));
     }
@@ -788,45 +607,7 @@ class SpectatorController extends Controller
     {
         $year = $request->year;
         $counts = $this->getSpectatorActiveUserStatistics(2, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = $this->getMonthlyCount($counts);
 
         return view('user.spectator.activeBreederStatistics', compact('monthlyCount', 'year'));
     }
@@ -844,45 +625,8 @@ class SpectatorController extends Controller
         $date = Carbon::now();
         $year = $date->year;
         $counts = $this->getSpectatorBlockedUserStatistics(2, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = $this->getMonthlyCount($counts);
+
         return view('user.spectator.blockedBreederStatistics', compact('monthlyCount', 'year'));
     }
 
@@ -897,45 +641,8 @@ class SpectatorController extends Controller
     {
         $year = $request->year;
         $counts = $this->getSpectatorBlockedUserStatistics(2, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = $this->getMonthlyCount($counts);
+
         return view('user.spectator.blockedBreederStatistics', compact('monthlyCount', 'year'));
     }
 
@@ -952,45 +659,8 @@ class SpectatorController extends Controller
         $date = Carbon::now();
         $year = $date->year;
         $counts = $this->getSpectatorDeletedUserStatistics(2, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = $this->getMonthlyCount($counts);
+
         return view('user.spectator.deletedBreederStatistics', compact('monthlyCount', 'year'));
     }
 
@@ -1005,45 +675,8 @@ class SpectatorController extends Controller
     {
         $year = $request->year;
         $counts = $this->getSpectatorDeletedUserStatistics(2, $year);
-        $monthlyCount = array_fill(0, 12, 0);
-        foreach($counts as $count){
-            if($count->month == 1){
-                $monthlyCount[0] = $count->user_count;
-            }
-            if($count->month == 2){
-                $monthlyCount[1] = $count->user_count;
-            }
-            if($count->month == 3){
-                $monthlyCount[2] = $count->user_count;
-            }
-            if($count->month == 4){
-                $monthlyCount[3] = $count->user_count;
-            }
-            if($count->month == 5){
-                $monthlyCount[4] = $count->user_count;
-            }
-            if($count->month == 6){
-                $monthlyCount[5] = $count->user_count;
-            }
-            if($count->month == 7){
-                $monthlyCount[6] = $count->user_count;
-            }
-            if($count->month == 8){
-                $monthlyCount[7] = $count->user_count;
-            }
-            if($count->month == 9){
-                $monthlyCount[8] = $count->user_count;
-            }
-            if($count->month == 10){
-                $monthlyCount[9] = $count->user_count;
-            }
-            if($count->month == 11){
-                $monthlyCount[10] = $count->user_count;
-            }
-            if($count->month == 12){
-                $monthlyCount[11] = $count->user_count;
-            }
-        }
+        $monthlyCount = $this->getMonthlyCount($counts);
+
         return view('user.spectator.deletedBreederStatistics', compact('monthlyCount', 'year'));
     }
 

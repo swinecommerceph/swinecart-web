@@ -13,7 +13,7 @@
 @endsection
 
 @section('content')
-    <div class="card-panel">
+    <div id="spectator_users_page" class="card-panel">
         <div class="row valign-wrapper">
             <div class="col s12 m12 l5 valign">
                 <h4>Users</h4>
@@ -55,17 +55,15 @@
                     </thead>
                     <tbody>
                         @forelse($users as $user)
-
                             <tr>
                                 <td>{{$user->name}}</td>
                                 <td>{{ucfirst($user->title)}}</td>
-                                <td><a href="#user-modal" class="waves-effect waves-light btn modal-trigger"><i class="material-icons left">view_headline</i>Details</a></td>
+                                <td><a href="#user-modal" class="waves-effect waves-light btn modal-trigger" :id="{{$user->user_id}}" v-on:click.prevent="clicked('{{$user->user_id}}', '{{$user->role_id}}')"><i class="material-icons left">view_headline</i>Details</a></td>
                             </tr>
-
                           @empty
                             <tr>
                               <td></td>
-                              <td class="flow-text">No User</td>
+                              <td class="center-align">No User</td>
                               <td></td>
                             </tr>
                         @endforelse
@@ -76,11 +74,16 @@
         </div>
     </div>
 
-    <div id="user-modal" class="modal modal-fixed-footer">
+    <div id="user-modal" class="modal modal-fixed-footer s12 m12 l12">
         <div class="modal-content">
             <h4>User Details</h4>
             <div class="divider"></div>
-            <p>User Information</p>
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <div id="spectator-user-modal-content">
+                    </div>
+                </div>
+            </div>
         </div>
         <div class="modal-footer">
             <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
@@ -91,9 +94,7 @@
 @endsection
 
 @section('initScript')
-    <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
-    <script type="text/javascript" src="/js/admin/users.js"></script>
-    <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
-    <script type="text/javascript" src="/js/admin/pages.js"></script>
-    <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
+    <script type="text/javascript" src="/js/spectator/spectator_custom.js"></script>
+    <script type="text/javascript" src="/js/spectator/users.js"></script>
+    <script type="text/javascript" src="/js/spectator/usersPage.js"></script>
 @endsection

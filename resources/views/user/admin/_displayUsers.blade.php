@@ -63,14 +63,12 @@
 
         <tbody>
             @forelse($users as $user)
-                <tr>
 
-                <td>{{$user->name}}</td>
-                <td>{{ucfirst($user->title)}}</td>
-                @if ($user->title == 'admin')
-                    <td></td>
-                @else
+                <tr>
+                    <td><a href="#admin-user-details-modal" class="black-text">{{$user->name}}</a></td>
+                    <td><a href="#admin-user-details-modal" class="black-text">{{ucfirst($user->title)}}</a></td>
                     <td>
+
                         @if ($user->blocked_at == NULL)
                             <div class="col s6">
                                 <a class="waves-effect waves-light btn orange lighten-1 block-button" data-id ="{{$user->user_id}}" ><i class="material-icons left">block</i>Block</a>
@@ -84,9 +82,10 @@
                         <div class="col s6">
                             <a class="waves-effect waves-light btn red lighten-1 delete-button" data-id ="{{$user->user_id}}"><i class="material-icons left">delete</i>Delete</a>
                         </div>
+
                     </td>
-                @endif
-              </tr>
+                </tr>
+
           @empty
               <tr>
                   <td></td>
@@ -149,7 +148,15 @@
         </div>
       </div>
 
-
+        <div id="admin-user-details-modal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <h4>Modal Header</h4>
+                <p>A bunch of text</p>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+            </div>
+        </div>
 @endsection
 
 @section('initScript')

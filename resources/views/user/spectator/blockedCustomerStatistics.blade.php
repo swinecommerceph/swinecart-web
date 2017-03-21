@@ -1,4 +1,4 @@
-@extends('layouts.adminLayout')
+@extends('layouts.spectatorLayout')
 
 @section('title')
     | Admin
@@ -6,26 +6,6 @@
 
 @section('pageId')
     id="customer-blocked-stats-page-spectator"
-@endsection
-
-@section('header')
-    <div class="valign-wrapper row">
-        <div class="valign center-block col s5">
-            <h4 id='admin-content-panel-header'>Customer Statistics</h4>
-        </div>
-        <div class="valign center-block col s7">
-            <div class="input-field col s12">
-                <select onChange="window.location.href=this.value">
-                    <option disabled selected>Choose option</option>
-                    <option value="{{route('spectator.statisticsActiveBreeder')}}">Breeder</option>
-                    <option value="{{route('spectator.statisticsActiveCustomer')}}">Customer</option>
-                    <option value="3">Products</option>
-                </select>
-                <label>Display Statistics</label>
-            </div>
-        </div>
-    </div>
-
 @endsection
 
 @section('content')
@@ -44,36 +24,54 @@
         var nov = {!! $monthlyCount[10] !!};
         var dec = {!! $monthlyCount[11] !!};
     </script>
-    <div id="app-statistics" class="row">
-        <div class="col s12">
-            <div class="valign-wrapper row">
-                <label for="stats-selection-buttons">Chart</label>
-                <div class="col s6">
-                    <div id="stats-selection-buttons" class="v-align col s4">
-                        <a class="waves-effect waves-light btn" href="{{route('spectator.statisticsActiveCustomer')}}">Active</a>
-                    </div>
-                    <div class="v-align col s4">
-                        <a class="waves-effect waves-light btn" href="{{route('spectator.statisticsDeletedCustomer')}}">Deleted</a>
-                    </div>
-                    <div class="v-align col s4">
-                        <a class="waves-effect waves-light btn disabled">Blocked</a>
-                    </div>
-                </div>
-
-                <div class="col s6">
-                    {!!Form::open(['route'=>'spectator.statisticsBlockedCustomerYear', 'method'=>'GET'])!!}
-                    <label for="stats-year">Year</label>
-                    <input id="stats-year" type="number" name="year" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[1] }}" value="{{ $year }}">
-                    <div class="center">
-                        <button class="btn waves-effect waves-light" type="submit" name="year-submit">Show</button>
-                    </div>
-                    {!!Form::close()!!}
+    <div id="app-statistics" class="card-panel">
+        <div class="valign-wrapper row">
+            <div class="valign center-block col s5">
+                <h4 id='admin-content-panel-header'>Customer Statistics</h4>
+            </div>
+            <div class="valign center-block col s7">
+                <div class="input-field col s12">
+                    <select onChange="window.location.href=this.value">
+                        <option disabled selected>Choose option</option>
+                        <option value="{{route('spectator.statisticsActiveBreeder')}}">Breeder</option>
+                        <option value="{{route('spectator.statisticsActiveCustomer')}}">Customer</option>
+                        <option value="3">Products</option>
+                    </select>
+                    <label>Display Statistics</label>
                 </div>
             </div>
-            <canvas id="created_chart_area" width="400" height="250"></canvas>
+        </div>
+
+        <div class="row">
+            <div class="col s12">
+                <div class="valign-wrapper row">
+                    <label for="stats-selection-buttons">Chart</label>
+                    <div class="col s6">
+                        <div id="stats-selection-buttons" class="v-align col s4">
+                            <a class="waves-effect waves-light btn" href="{{route('spectator.statisticsActiveCustomer')}}">Active</a>
+                        </div>
+                        <div class="v-align col s4">
+                            <a class="waves-effect waves-light btn" href="{{route('spectator.statisticsDeletedCustomer')}}">Deleted</a>
+                        </div>
+                        <div class="v-align col s4">
+                            <a class="waves-effect waves-light btn disabled">Blocked</a>
+                        </div>
+                    </div>
+
+                    <div class="col s6">
+                        {!!Form::open(['route'=>'spectator.statisticsBlockedCustomerYear', 'method'=>'GET'])!!}
+                        <label for="stats-year">Year</label>
+                        <input id="stats-year" type="number" name="year" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[1] }}" value="{{ $year }}">
+                        <div class="center">
+                            <button class="btn waves-effect waves-light" type="submit" name="year-submit">Show</button>
+                        </div>
+                        {!!Form::close()!!}
+                    </div>
+                </div>
+                <canvas id="created_chart_area" width="400" height="250"></canvas>
+            </div>
         </div>
     </div>
-
 
 @endsection
 
