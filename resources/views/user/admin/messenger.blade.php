@@ -120,23 +120,23 @@
             });
 
              function testajax(obj) {
-  url = obj.url;
-  params = obj.data;
+                url = obj.url;
+                params = obj.data;
 
-  var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
-    action: url
-  }).appendTo(document.body);
-  for (var i in params) {
-    if (params.hasOwnProperty(i)) {
-      $('<input type="hidden" />').attr({
-        name: i,
-        value: params[i]
-      }).appendTo(f);
-    }
-  }
-  f.submit();
-  f.remove();
-}
+                var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
+                  action: url
+                }).appendTo(document.body);
+                for (var i in params) {
+                  if (params.hasOwnProperty(i)) {
+                    $('<input type="hidden" />').attr({
+                      name: i,
+                      value: params[i]
+                    }).appendTo(f);
+                  }
+                }
+                f.submit();
+                f.remove();
+              }
 
             function send(type){
                 $('#sending').show();
@@ -148,7 +148,7 @@
                 });
                 console.log(rcpts);
 
-                testajax({
+                $.ajax({
                     type: "POST",
                     url: "messenger/send",
                     data:{
