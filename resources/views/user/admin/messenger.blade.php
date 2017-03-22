@@ -27,7 +27,7 @@
 
 <div class="row">
     <div class="input-field col s10">
-        <textarea id="email" name="email" class="materialize-textarea" readonly>cjdemafeliz@gmail.com</textarea>
+        <textarea id="email" name="email" class="materialize-textarea" readonly></textarea>
         <label for="email" class="active to-label">To</label>
     </div>
     <div class="input-field col s2 valign-wrapper">
@@ -118,25 +118,6 @@
              $('#send-sms').click(function(){
                 send('sms');
             });
-
-             function testajax(obj) {
-                url = obj.url;
-                params = obj.data;
-
-                var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
-                  action: url
-                }).appendTo(document.body);
-                for (var i in params) {
-                  if (params.hasOwnProperty(i)) {
-                    $('<input type="hidden" />').attr({
-                      name: i,
-                      value: params[i]
-                    }).appendTo(f);
-                  }
-                }
-                f.submit();
-                f.remove();
-              }
 
             function send(type){
                 $('#sending').show();
