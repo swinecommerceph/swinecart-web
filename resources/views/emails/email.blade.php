@@ -15,6 +15,7 @@
 {{-- @section('email-css')
     <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet" type="text/css">
     <style media="screen">
+
         html{
             line-height: 1.5;
             font-family: "Roboto", sans-serif;
@@ -57,7 +58,7 @@
             <div class="card">
                 <div class="card-content">
                   <p>
-                     {{ $message_body }}
+                     {!! $message_body !!}
                   </p>
                 </div>
             </div>

@@ -5,7 +5,7 @@
 @extends('layouts.adminLayout')
 
 @section('title')
-    | Users
+    | Messenger
 @endsection
 
 @section('pageId')
@@ -27,11 +27,11 @@
 
 <div class="row">
     <div class="input-field col s10">
-        <input autocomplete="off" id="email" name="email" type="text" class="validate">
-        <label for="email" class="active">To</label>
+        <textarea id="email" name="email" class="materialize-textarea" readonly>cjdemafeliz@gmail.com</textarea>
+        <label for="email" class="active to-label">To</label>
     </div>
     <div class="input-field col s2 valign-wrapper">
-        <a class="waves-effect waves-light btn modal-trigger valign" href="#modal1"><i class="material-icons">add</i></a>
+        <a class="waves-effect waves-light btn modal-trigger valign receipients"><i class="material-icons">add</i></a>
     </div>
     <!--div class="input-field col s12">
         <input autocomplete="off" id="subject" name="subject" type="text" class="validate">
@@ -42,7 +42,8 @@
         <label for="message" class="active">Message</label>
     </div>
     <div class="input-field col s12 valign-wrapper">
-        <a class="waves-effect waves-light btn valign" id="send-message"><i class="material-icons left">send</i>Send</a>&nbsp;
+        <a class="waves-effect waves-light btn valign" id="send-mail"><i class="material-icons left">send</i>Send as Email</a>&nbsp;
+        <a class="waves-effect waves-light btn valign" id="send-sms"><i class="material-icons left">send</i>Send as SMS</a>&nbsp;
         <div class="preloader-wrapper small active" id="sending" style="display:none;">
             <div class="spinner-layer spinner-teal-only">
               <div class="circle-clipper left">
@@ -58,13 +59,15 @@
 </div>
 
 
-  <div id="modal1" class="modal">
+  <div id="modal1" class="modal modal-fixed-footer">
+    <div class="modal-header center-align">
+      <h5>Select your recipients</h5>
+    </div>
     <div class="modal-content">
-      <h6>Select your recipients</h6>
       <div class="row">
         @foreach ($users as $user)
             <div class="col s4">
-              <input type="checkbox" class="filled-in receipient" id="userid-{{$user->id}}" value="{{$user->email}}" />
+              <input type="checkbox" class="filled-in receipient" id="userid-{{$user->id}}" username="{{$user->name}}" value="{{$user->id}}"/>
               <label for="userid-{{$user->id}}">{{$user->name}}</label>
             </div>
         @endforeach
@@ -85,41 +88,79 @@
 
             console.log('test');
 
-            $('.modal-trigger').modal();
+            $('#email, .receipients').click(function(){
+                $('#modal1').modal('open');
+            });
 
             $('.add-receipients').click(function(){
                 $('#email').val('');
+                $('.to-label').removeClass('active');
+
                 $( ".receipient" ).each(function( index ) {
                    if($(this).is(':checked') || $(this).prop('checked')){
                         if(!$('#email').val()){
-                            $('#email').val($(this).attr('value'));
+                            $('#email').val($(this).attr('username'));
                         }else{
-                            $('#email').val($('#email').val()+','+$(this).attr('value'));
+                            $('#email').val($('#email').val()+', '+$(this).attr('username'));
                         }
                    }
-                   else{
-                   }
                 });
+                var str = $('#email').val();
+                if(str.trim() != '') $('.to-label').addClass('active');
+
             });
 
 
-            $('#send-message').click(function(){
+            $('#send-mail').click(function(){
+                send('mail');
+            });
+
+             $('#send-sms').click(function(){
+                send('sms');
+            });
+
+             function testajax(obj) {
+  url = obj.url;
+  params = obj.data;
+
+  var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
+    action: url
+  }).appendTo(document.body);
+  for (var i in params) {
+    if (params.hasOwnProperty(i)) {
+      $('<input type="hidden" />').attr({
+        name: i,
+        value: params[i]
+      }).appendTo(f);
+    }
+  }
+  f.submit();
+  f.remove();
+}
+
+            function send(type){
                 $('#sending').show();
+                rcpts = [];
+                $( ".receipient" ).each(function( index ) {
+                   if($(this).is(':checked') || $(this).prop('checked')){
+                        rcpts.push( parseInt( $(this).attr('value') ) );
+                   }
+                });
+                console.log(rcpts);
 
-
-                $.ajax({
+                testajax({
                     type: "POST",
-                    url: "sendMessage",
+                    url: "messenger/send",
                     data:{
+                        type: type,
                         _token: "{{{ csrf_token() }}}",
-                        email: $('#email').val(),
-                        //subject: $('#subject').val(),
+                        receipients: JSON.stringify(rcpts),
                         message: $('#message').val(),
                     }, 
                     success: function(response){
+                        console.log(response);
                         Materialize.toast('Message has been sent.', 3000);
                         $('#email').val('');
-                        //$('#subject').val('');
                         $('#message').val('');
                     },
                     error: function(e){
@@ -131,7 +172,8 @@
 
                     }
                 });
-            });
+            }
+
         });
     </script>
 

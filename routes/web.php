@@ -211,7 +211,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsers']);
 
         Route::get('home/messenger', ['as' => 'users', 'uses'=> 'AdminController@messenger']);
-        Route::post('home/sendMessage', ['as' => 'users', 'uses'=> 'AdminController@sendMessage']);
+        Route::post('home/messenger/send', ['as' => 'users', 'uses'=> 'AdminController@send']);
 
     });
 
