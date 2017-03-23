@@ -421,5 +421,127 @@ var users = {
     },
 
 
+    // Ajax function for getting the users infrormation for the user modal in the users page
+    fetch_user_info: function(id, role, userable){
+        $.ajax({
+            url: config.admin_url+'/home/userlist/details',
+            type: 'GET',
+            cache: false,
+            data: {
+                'userId': id,
+                'userRole': role,
+                'userUserableId': userable
+            },
+            success: function(data){
+                data.forEach(function(data){
+                    if(role == 2){
+                        $('#admin-user-details-content').html('\
+                        <div class="row"> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Name</div><div class="admin-user-modal-data">'+data.user_name+'</div></div> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">User Type</div><div class="admin-user-modal-data">'+data.role+'</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Email</div><div class="admin-user-modal-data">'+data.email+'</div></div> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Status</div><div class="admin-user-modal-data">'+data.status_instance+'</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m12 l12"><div class="admin-user-modal-title grey-text">Produce</div><div class="admin-user-modal-data">'+data.produce+'</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m12 l12"><div class="admin-user-modal-title grey-text">Address</div><div class="admin-user-modal-data">'+data.addressLine1+', '+ data.addressLine2+ '</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Province</div><div class="admin-user-modal-data">'+data.province+'</div></div> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Zipcode</div><div class="admin-user-modal-data">'+data.zipcode+'</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Mobile</div><div class="admin-user-modal-data">'+data.office_mobile+'</div></div> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Landline</div><div class="admin-user-modal-data">'+data.office_landline+'</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Contact Person</div><div class="admin-user-modal-data">'+data.contact_person+'</div></div> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Contact Person Mobile</div><div class="admin-user-modal-data">'+data.contact_person_mobile+'</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m12 l12"><div class="admin-user-modal-title grey-text">Website</div><div class="admin-user-modal-data">'+data.website+'</div></div> \
+                        </div> \
+                        ');
+                    }else{
+                        $('#admin-user-details-content').html('\
+                        <div class="row"> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Name</div><div class="admin-user-modal-data">'+data.user_name+'</div></div> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">User Type</div><div class="admin-user-modal-data">'+data.role+'</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Email</div><div class="admin-user-modal-data">'+data.email+'</div></div> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Status</div><div class="admin-user-modal-data">'+data.status_instance+'</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m12 l12"><div class="admin-user-modal-title grey-text">Address</div><div class="admin-user-modal-data">'+data.addressLine1+', '+ data.addressLine2+ '</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Province</div><div class="admin-user-modal-data">'+data.province+'</div></div> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Zipcode</div><div class="admin-user-modal-data">'+data.zipcode+'</div></div> \
+                        </div> \
+                        <div class="row"> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Mobile</div><div class="admin-user-modal-data">'+data.mobile+'</div></div> \
+                            <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Landline</div><div class="admin-user-modal-data">'+data.landline+'</div></div> \
+                        </div> \
+                        ');
+                    }
+
+                });
+            },
+            error: function(message){
+                console.log(message['responseText']);
+            }
+        });
+    },
+
+    fetch_user_transaction: function(id, role, userable){
+        $.ajax({
+            url: config.admin_url+'/home/userlist/transaction',
+            type: 'GET',
+            cache: false,
+            data: {
+                'userId': id,
+                'userRole': role,
+                'userUserableId': userable
+            },
+            success: function(data){
+                $('#admin-user-transaction-content').empty();
+                if(data.length != 0){
+                    data.forEach(function(data){
+                        $('#admin-user-transaction-content').append('\
+                            <tr>\
+                                <td>'+data.transaction_id +'</td>\
+                                <td>'+data.product_id +'</td>\
+                                <td>'+data.product_name +'</td>\
+                                <td>'+data.breeder_name +'</td>\
+                                <td>'+data.order_status +'</td>\
+                                <td>'+data.date +'</td>\
+                            </tr>\
+                        ');
+                    });
+                    $('#admin-link-transaction-history').append('<a href="#">View More</a>');
+                }else{
+                    $('#admin-user-transaction-content').append('\
+                    <tr>\
+                        <td></td>\
+                        <td></td>\
+                        <td class="center-align">No user transaction</td>\
+                        <td></td>\
+                        <td></td>\
+                        <td></td>\
+                    </tr>\
+                    ');
+                }
+
+            },
+            error: function(message){
+                console.log(message['responseText']);
+            }
+        });
+    }
 
 };

@@ -1,3 +1,18 @@
+'use strict'
+
+var usersPage = new Vue({
+    el: '#admin-users-table',
+    data: {
+    },
+    methods: {
+        clicked: function(id, role, userable){
+            users.fetch_user_info(id, role, userable);
+            users.fetch_user_transaction(id, role, userable);
+        }
+    }
+
+});
+
 $(document).ready(function(){
     // on click of delete icon in manage-user-modal
     $('body').on('click', '.delete-button', function (e) {

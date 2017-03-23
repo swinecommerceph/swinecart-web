@@ -52,7 +52,7 @@
 
 @section('content')
 
-    <table class="bordered highlight responsive-table striped">
+    <table id="admin-users-table" class="bordered highlight responsive-table striped">
         <thead>
           <tr>
               <th data-field="name">Name</th>
@@ -65,8 +65,8 @@
             @forelse($users as $user)
 
                 <tr>
-                    <td><a href="#admin-user-details-modal" class="black-text">{{$user->name}}</a></td>
-                    <td><a href="#admin-user-details-modal" class="black-text">{{ucfirst($user->title)}}</a></td>
+                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{$user->name}}</a></td>
+                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{ucfirst($user->title)}}</a></td>
                     <td>
 
                         @if ($user->blocked_at == NULL)
@@ -150,8 +150,34 @@
 
         <div id="admin-user-details-modal" class="modal modal-fixed-footer">
             <div class="modal-content">
-                <h4>Modal Header</h4>
-                <p>A bunch of text</p>
+                <h4>User Details</h4>
+                <div class="divider"></div>
+                <div id="admin-user-details-content" class="col s12 m12 l12">
+                    No user data
+                </div>
+                <h4>User Transaction</h4>
+                <div class="divider"></div>
+                <table class="responsive-table highlight">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Seller/Customer</th>
+                            <th>Status</th>
+                            <th>Date Added</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="admin-user-transaction-content">
+
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col s12 m12 l12 center align" id="admin-link-transaction-history">
+
+                    </div>
+                </div>
             </div>
             <div class="modal-footer">
                 <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>

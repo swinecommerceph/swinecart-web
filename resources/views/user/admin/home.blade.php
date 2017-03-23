@@ -34,7 +34,7 @@
                      </div>
                   </div>
 
-                   <div class="center white-text summary-data col s8">
+                   <div class="center white-text summary-data col s8 truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$summary[0]}}">
                      {{$summary[0]}}
                    </div>
                </div>
@@ -55,7 +55,7 @@
                       </div>
                    </div>
 
-                    <div class="center white-text summary-data col s8">
+                    <div class="center white-text summary-data col s8 truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$summary[4]}}">
                       {{$summary[4]}}
                     </div>
                 </div>
@@ -75,7 +75,7 @@
                       </div>
                    </div>
 
-                   <div class="center white-text summary-data col s8">
+                   <div class="center white-text summary-data col s8 truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$summary[3]}}">
                       {{$summary[3]}}
                    </div>
                 </div>
@@ -95,7 +95,7 @@
                       </div>
                    </div>
 
-                   <div class="center white-text summary-data col s8">
+                   <div class="center white-text summary-data col s8 truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="3">
                       3
                    </div>
                 </div>

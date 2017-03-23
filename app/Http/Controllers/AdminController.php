@@ -1143,6 +1143,101 @@ class AdminController extends Controller
          return view('user.admin.statisticsTimeline', compact('dateNow','adminLogs'));
      }
 
+     public function fetchUserInformation(Request $request){
+         if($request->userRole == 2){
+             $details = DB::table('users')
+                     ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                     ->join('roles', 'role_user.role_id','=','roles.id')
+                     ->where('role_id', '=', 2)
+                     ->where('users.id', '=', $request->userId)
+                     ->join('breeder_user', 'breeder_user.id', '=', 'users.userable_id')
+                     ->select('users.id as user_id', 'users.name as user_name', 'users.email', 'roles.title as role',
+                             'breeder_user.officeAddress_addressLine1 as addressLine1', 'breeder_user.officeAddress_addressLine2 as addressLine2',
+                             'breeder_user.officeAddress_province as province', 'breeder_user.officeAddress_zipCode as zipcode', 'breeder_user.office_landline',
+                             'breeder_user.office_mobile', 'breeder_user.website', 'breeder_user.produce', 'breeder_user.contactPerson_name as contact_person',
+                             'breeder_user.contactPerson_mobile as contact_person_mobile', 'breeder_user.status_instance'
+                             )
+                     ->get();
+            //  $transaction = DB::table('users')
+            //              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+            //              ->join('roles', 'role_user.role_id','=','roles.id')
+            //              ->where('role_id', '=', 2)
+            //              ->join('transaction_logs', 'transaction_logs.breeder_id', '=' , 'users.userable_id')
+            //              ->join('product_reservations', 'product_reservations.product_id', '=' , 'transaction_logs.product_id')
+            //              ->join('products', 'products.id', '=', 'product_reservations.product_id')
+            //              ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as breeder_name',
+            //                      'transaction_logs.breeder_id as breeder_id','product_reservations.product_id as product_id',
+            //                       'products.name as product_name','product_reservations.order_status as status')
+            //              ->where('transaction_logs.customer_id', '=', $request->userUserableId)
+            //              ->groupBy('product_reservations.product_id')
+            //              ->get();
+
+         }else{
+             $details = DB::table('users')
+                     ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                     ->join('roles', 'role_user.role_id','=','roles.id')
+                     ->whereIn('role_id', [3])
+                     ->where('users.id', '=', $request->userId)
+                     ->join('customer_user', 'customer_user.id', '=', 'users.userable_id')
+                     ->select('users.id as user_id', 'users.name as user_name', 'users.email', 'roles.title as role',
+                             'customer_user.address_addressLine1 as addressLine1', 'customer_user.address_addressLine2 as addressLine2',
+                             'customer_user.address_province as province', 'customer_user.address_zipCode as zipcode', 'customer_user.landline',
+                             'customer_user.mobile', 'customer_user.status_instance'
+                             )
+                     ->get();
+
+
+         }
+
+
+         $details->first()->role = ucfirst($details->first()->role);
+         $details->first()->status_instance = ucfirst($details->first()->status_instance);
+        //  $data = [$details, $transaction];
+         return $details;
+     }
+
+     public function fetchUserTransaction(Request $request){
+          if($request->userRole == 2){
+              $transactions = DB::table('users')
+                          ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                          ->join('roles', 'role_user.role_id','=','roles.id')
+                          ->where('role_id', '=', 3)
+                          ->join('transaction_logs', 'transaction_logs.customer_id', '=' , 'users.userable_id')
+                          ->join('product_reservations', 'product_reservations.product_id', '=' , 'transaction_logs.product_id')
+                          ->join('products', 'products.id', '=', 'product_reservations.product_id')
+                          ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as breeder_name',
+                                  'transaction_logs.breeder_id as breeder_id','product_reservations.product_id as product_id',
+                                   'products.name as product_name','product_reservations.order_status', 'transaction_logs.created_at as date')
+                          ->where('transaction_logs.breeder_id', '=', $request->userUserableId)
+                          ->groupBy('product_reservations.product_id')
+                          ->orderBy('transaction_logs.created_at', 'desc')
+                          ->take(5)
+                          ->get();
+
+          }else{
+              $transactions = DB::table('users')
+                          ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                          ->join('roles', 'role_user.role_id','=','roles.id')
+                          ->where('role_id', '=', 2)
+                          ->join('transaction_logs', 'transaction_logs.breeder_id', '=' , 'users.userable_id')
+                          ->join('product_reservations', 'product_reservations.product_id', '=' , 'transaction_logs.product_id')
+                          ->join('products', 'products.id', '=', 'product_reservations.product_id')
+                          ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as breeder_name',
+                                  'transaction_logs.breeder_id as breeder_id','product_reservations.product_id as product_id',
+                                   'products.name as product_name','product_reservations.order_status', 'transaction_logs.created_at as date')
+                          ->where('transaction_logs.customer_id', '=', $request->userUserableId)
+                          ->groupBy('product_reservations.product_id')
+                          ->orderBy('transaction_logs.created_at', 'desc')
+                          ->take(5)
+                          ->get();
+          }
+
+          foreach ($transactions as $transaction) {
+              $transaction->order_status = ucfirst($transaction->order_status);
+              
+          }
+          return $transactions;
+     }
 
     public function viewUsers(){
         $breeders = Breeder::all();

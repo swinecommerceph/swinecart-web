@@ -620,6 +620,16 @@ blockquote.info{
 	font-size: 25px;
 }
 
+/*Admin user modal content format*/
+.admin-user-modal-data{
+	font-weight: bold;
+}
+.admin-user-modal-title{
+	font-weight: lighter;
+
+}
+
+
 /*CSS for the Horizontal timeline for statistics dashboard
 	Source: http://jsfiddle.net/kthornbloom/zJ6kp/
 */
