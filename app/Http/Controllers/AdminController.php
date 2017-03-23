@@ -1158,19 +1158,6 @@ class AdminController extends Controller
                              'breeder_user.contactPerson_mobile as contact_person_mobile', 'breeder_user.status_instance'
                              )
                      ->get();
-            //  $transaction = DB::table('users')
-            //              ->join('role_user', 'users.id', '=' , 'role_user.user_id')
-            //              ->join('roles', 'role_user.role_id','=','roles.id')
-            //              ->where('role_id', '=', 2)
-            //              ->join('transaction_logs', 'transaction_logs.breeder_id', '=' , 'users.userable_id')
-            //              ->join('product_reservations', 'product_reservations.product_id', '=' , 'transaction_logs.product_id')
-            //              ->join('products', 'products.id', '=', 'product_reservations.product_id')
-            //              ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as breeder_name',
-            //                      'transaction_logs.breeder_id as breeder_id','product_reservations.product_id as product_id',
-            //                       'products.name as product_name','product_reservations.order_status as status')
-            //              ->where('transaction_logs.customer_id', '=', $request->userUserableId)
-            //              ->groupBy('product_reservations.product_id')
-            //              ->get();
 
          }else{
              $details = DB::table('users')
@@ -1192,7 +1179,6 @@ class AdminController extends Controller
 
          $details->first()->role = ucfirst($details->first()->role);
          $details->first()->status_instance = ucfirst($details->first()->status_instance);
-        //  $data = [$details, $transaction];
          return $details;
      }
 
@@ -1234,7 +1220,7 @@ class AdminController extends Controller
 
           foreach ($transactions as $transaction) {
               $transaction->order_status = ucfirst($transaction->order_status);
-              
+
           }
           return $transactions;
      }
