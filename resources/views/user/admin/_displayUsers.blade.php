@@ -10,7 +10,7 @@
 
 @section('header')
     <div class="row">
-        <div class="col s4">
+        <div class="col s12 m12 l4">
             <h4 id='admin-content-panel-header'>Users</h4>
         </div>
 
@@ -65,8 +65,8 @@
             @forelse($users as $user)
 
                 <tr>
-                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{$user->name}}</a></td>
-                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{ucfirst($user->title)}}</a></td>
+                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->name}}','{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{$user->name}}</a></td>
+                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->name}}','{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{ucfirst($user->title)}}</a></td>
                     <td>
 
                         @if ($user->blocked_at == NULL)
@@ -177,6 +177,9 @@
                     <div class="col s12 m12 l12 center align" id="admin-link-transaction-history">
 
                     </div>
+                </div>
+                <div id="admin-view-more-transactions" class="col s12 m12 l12 center">
+
                 </div>
             </div>
             <div class="modal-footer">

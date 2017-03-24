@@ -629,6 +629,10 @@ blockquote.info{
 
 }
 
+/*Admin transaction history view CSS*/
+.admin-transaction-history-name{
+	font-weight: bold;
+}
 
 /*CSS for the Horizontal timeline for statistics dashboard
 	Source: http://jsfiddle.net/kthornbloom/zJ6kp/

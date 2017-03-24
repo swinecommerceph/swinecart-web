@@ -498,12 +498,14 @@ var users = {
         });
     },
 
-    fetch_user_transaction: function(id, role, userable){
+    // Ajax function for getting the last 5 transactions for a user then append the data to DOM
+    fetch_user_transaction: function(name, id, role, userable){
         $.ajax({
             url: config.admin_url+'/home/userlist/transaction',
             type: 'GET',
             cache: false,
             data: {
+                'userName': name,
                 'userId': id,
                 'userRole': role,
                 'userUserableId': userable
@@ -517,24 +519,36 @@ var users = {
                                 <td>'+data.transaction_id +'</td>\
                                 <td>'+data.product_id +'</td>\
                                 <td>'+data.product_name +'</td>\
-                                <td>'+data.breeder_name +'</td>\
+                                <td>'+data.dealer_name +'</td>\
                                 <td>'+data.order_status +'</td>\
                                 <td>'+data.date +'</td>\
                             </tr>\
                         ');
                     });
-                    $('#admin-link-transaction-history').append('<a href="#">View More</a>');
+                    $('#admin-view-more-transactions').html('\
+                    <form name="admin-transaction-history" action="'+config.admin_url+'/home/userlist/transaction-user" method="GET">\
+                        <div class="hide">\
+                            <input type="hidden" name="name" value="'+name+'"><br>\
+                            <input type="hidden" name="id" value="'+id+'"><br>\
+                            <input type="hidden" name="role" value="'+role+'"><br>\
+                            <input type="hidden" name="userable" value="'+userable+'"><br>\
+                        </div>\
+                        <button class="btn waves-effect waves-light" type="submit">View More Transactions\
+                        </button>\
+                    </form>\
+                    ');
                 }else{
                     $('#admin-user-transaction-content').append('\
-                    <tr>\
-                        <td></td>\
-                        <td></td>\
-                        <td class="center-align">No user transaction</td>\
-                        <td></td>\
-                        <td></td>\
-                        <td></td>\
-                    </tr>\
+                        <tr>\
+                            <td></td>\
+                            <td></td>\
+                            <td class="center-align flow-text">Transaction History Empty</td>\
+                            <td></td>\
+                            <td></td>\
+                            <td></td>\
+                        </tr>\
                     ');
+                    $('#admin-view-more-transactions').empty()
                 }
 
             },

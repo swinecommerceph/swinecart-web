@@ -76,7 +76,7 @@
             @endforelse
         </tbody>
       </table>
-      <div class="pagination center"> {{ $logs->links() }} </div>
+      <div class="pagination center"> {{ $logs->appends(Request::except('page'))->links() }} </div>
 
 @endsection
 

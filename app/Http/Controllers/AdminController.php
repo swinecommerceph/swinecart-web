@@ -609,9 +609,12 @@ class AdminController extends Controller
         if($request->option!=null){
             $logs = DB::table('administrator_logs')
                     ->whereIn('category', $request->option)
-                    ->where('user', 'LIKE', "%$request->search%")
-                    ->orWhere('admin_name', 'LIKE', "%$request->search%")
+                    ->where(function ($query) use ($request) {
+                        $query->where('user', 'LIKE', "%$request->search%")
+                              ->orWhere('admin_name', 'LIKE', "%$request->search%");
+                    })
                     ->paginate(10);
+
         }else{
             $logs = DB::table('administrator_logs')
                     ->where('user', 'LIKE', "%$request->search%")
@@ -1143,6 +1146,13 @@ class AdminController extends Controller
          return view('user.admin.statisticsTimeline', compact('dateNow','adminLogs'));
      }
 
+     /*
+      * Get user information and return the data to ajax function
+      *
+      * @param $request (user_id, role_id, userable_id)
+      * @return collection user data
+      *
+      */
      public function fetchUserInformation(Request $request){
          if($request->userRole == 2){
              $details = DB::table('users')
@@ -1182,6 +1192,13 @@ class AdminController extends Controller
          return $details;
      }
 
+     /*
+      * Get user's last 5 transactions
+      *
+      * @param $request (user_id, role_id, userable_id)
+      * @return collection tranasaction data
+      *
+      */
      public function fetchUserTransaction(Request $request){
           if($request->userRole == 2){
               $transactions = DB::table('users')
@@ -1191,12 +1208,12 @@ class AdminController extends Controller
                           ->join('transaction_logs', 'transaction_logs.customer_id', '=' , 'users.userable_id')
                           ->join('product_reservations', 'product_reservations.product_id', '=' , 'transaction_logs.product_id')
                           ->join('products', 'products.id', '=', 'product_reservations.product_id')
-                          ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as breeder_name',
+                          ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as dealer_name',
                                   'transaction_logs.breeder_id as breeder_id','product_reservations.product_id as product_id',
                                    'products.name as product_name','product_reservations.order_status', 'transaction_logs.created_at as date')
                           ->where('transaction_logs.breeder_id', '=', $request->userUserableId)
                           ->groupBy('product_reservations.product_id')
-                          ->orderBy('transaction_logs.created_at', 'desc')
+                          ->orderBy('product_reservations.id', 'desc')
                           ->take(5)
                           ->get();
 
@@ -1208,21 +1225,128 @@ class AdminController extends Controller
                           ->join('transaction_logs', 'transaction_logs.breeder_id', '=' , 'users.userable_id')
                           ->join('product_reservations', 'product_reservations.product_id', '=' , 'transaction_logs.product_id')
                           ->join('products', 'products.id', '=', 'product_reservations.product_id')
-                          ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as breeder_name',
+                          ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as dealer_name',
                                   'transaction_logs.breeder_id as breeder_id','product_reservations.product_id as product_id',
                                    'products.name as product_name','product_reservations.order_status', 'transaction_logs.created_at as date')
                           ->where('transaction_logs.customer_id', '=', $request->userUserableId)
                           ->groupBy('product_reservations.product_id')
-                          ->orderBy('transaction_logs.created_at', 'desc')
+                          ->orderBy('product_reservations.id', 'desc')
                           ->take(5)
                           ->get();
           }
 
           foreach ($transactions as $transaction) {
               $transaction->order_status = ucfirst($transaction->order_status);
-
           }
+
           return $transactions;
+     }
+
+     /*
+      * Get user's transaction history
+      *
+      * @param $request (username, user_id, role_id, userable_id)
+      * @return collection tranasaction data
+      *
+      */
+     public function fetchUserTransactionHistory(Request $request){
+         $username = $request->name;
+         $userable = $request->userable;
+         $role = $request->role;
+         if($request->role == 2){
+             $transactions = DB::table('users')
+                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                         ->join('roles', 'role_user.role_id','=','roles.id')
+                         ->where('role_id', '=', 3)
+                         ->join('transaction_logs', 'transaction_logs.customer_id', '=' , 'users.userable_id')
+                         ->join('product_reservations', 'product_reservations.product_id', '=' , 'transaction_logs.product_id')
+                         ->join('products', 'products.id', '=', 'product_reservations.product_id')
+                         ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as dealer_name',
+                                 'transaction_logs.breeder_id as breeder_id','product_reservations.product_id as product_id',
+                                  'products.name as product_name','product_reservations.order_status', 'transaction_logs.created_at as date')
+                         ->where('transaction_logs.breeder_id', '=', $request->userable)
+                         ->groupBy('product_reservations.product_id')
+                         ->orderBy('product_reservations.id', 'desc')
+                         ->paginate(10);
+         }else{
+             $transactions = DB::table('users')
+                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                         ->join('roles', 'role_user.role_id','=','roles.id')
+                         ->where('role_id', '=', 2)
+                         ->join('transaction_logs', 'transaction_logs.breeder_id', '=' , 'users.userable_id')
+                         ->join('product_reservations', 'product_reservations.product_id', '=' , 'transaction_logs.product_id')
+                         ->join('products', 'products.id', '=', 'product_reservations.product_id')
+                         ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as dealer_name',
+                                 'transaction_logs.breeder_id as breeder_id','product_reservations.product_id as product_id',
+                                  'products.name as product_name','product_reservations.order_status', 'transaction_logs.created_at as date')
+                         ->where('transaction_logs.customer_id', '=', $request->userable)
+                         ->groupBy('product_reservations.product_id')
+                         ->orderBy('product_reservations.id', 'desc')
+                         ->paginate(10);
+         }
+
+         return view('user.admin.usersTransactionHistory', compact('username', 'userable', 'role','transactions'));
+     }
+
+     /*
+      * Get user's transaction history
+      *
+      * @param $request (username, user_id, role_id, userable_id, search string, category array)
+      * @return collection tranasaction data
+      *
+      */
+     public function searchUserTransactionHistory(Request $request){
+         $username = $request->name;
+         $userable = $request->userable;
+         $role = $request->role;
+         if($request->role == 2){
+             $transactions = DB::table('users')
+                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                         ->join('roles', 'role_user.role_id','=','roles.id')
+                         ->where('role_id', '=', 3)
+                         ->join('transaction_logs', 'transaction_logs.customer_id', '=' , 'users.userable_id')
+                         ->join('product_reservations', 'product_reservations.product_id', '=' , 'transaction_logs.product_id')
+                         ->join('products', 'products.id', '=', 'product_reservations.product_id')
+                         ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as dealer_name',
+                                 'transaction_logs.breeder_id as breeder_id','product_reservations.product_id as product_id',
+                                  'products.name as product_name','product_reservations.order_status', 'transaction_logs.created_at as date')
+                         ->where('transaction_logs.breeder_id', '=', $userable)
+                         ->groupBy('product_reservations.product_id')
+                         ->when(!empty($request->option), function ($query) use ($request) {
+                                return $query->whereIn('product_reservations.order_status', $request->option);
+                            })
+                         ->where(function ($query) use ($request) {
+                             $query->where('users.name', 'LIKE', "%$request->search%")
+                                   ->orWhere('products.name', 'LIKE', "%$request->search%");
+                         })
+                         ->orderBy('product_reservations.id', 'desc')
+                         ->paginate(10);
+
+         }else{
+             $transactions = DB::table('users')
+                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                         ->join('roles', 'role_user.role_id','=','roles.id')
+                         ->where('role_id', '=', 2)
+                         ->join('transaction_logs', 'transaction_logs.breeder_id', '=' , 'users.userable_id')
+                         ->join('product_reservations', 'product_reservations.product_id', '=' , 'transaction_logs.product_id')
+                         ->join('products', 'products.id', '=', 'product_reservations.product_id')
+                         ->select('product_reservations.id as transaction_id', 'transaction_logs.customer_id as customer_id', 'users.name as dealer_name',
+                                 'transaction_logs.breeder_id as breeder_id','product_reservations.product_id as product_id',
+                                  'products.name as product_name','product_reservations.order_status', 'transaction_logs.created_at as date')
+                         ->where('transaction_logs.customer_id', '=', $request->userable)
+                         ->groupBy('product_reservations.product_id')
+                         ->when(!empty($request->option), function ($query) use ($request) {
+                                return $query->whereIn('product_reservations.order_status', $request->option);
+                            })
+                         ->where(function ($query) use ($request) {
+                             $query->where('users.name', 'LIKE', "%$request->search%")
+                                   ->orWhere('products.name', 'LIKE', "%$request->search%");
+                         })
+                         ->orderBy('product_reservations.id', 'desc')
+                         ->paginate(10);
+         }
+
+         return view('user.admin.usersTransactionHistory', compact('username', 'userable', 'role','transactions'));
      }
 
     public function viewUsers(){
