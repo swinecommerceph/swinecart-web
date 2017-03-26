@@ -22,17 +22,13 @@
         <div class="col s12 m12 l12">
             <div class="card-panel teal lighten-5 hoverable">
                 <div class="row">
+                    <div class="col s12 m12 l12 statsdash-panel-title">
+                        Users Statistics
+                    </div>
+                </div>
+                <div class="row">
                     <div id="statsdash-transact" class="col s7 m7 l7">
-                        <div class="row">
-                            <div class="col s12 m12 l12 statsdash-panel-title">
-                                Users Statistics
-                            </div>
-                        </div>
-                        <div class="row">
-                            <div class="col s12 m12 l12">
-                                <canvas id="dash-transaction-chart" class="col s12 m12 l12" width="400" height="300"></canvas>
-                            </div>
-                        </div>
+                        <canvas id="dash-transaction-chart" class="col s12 m12 l12" width="400" height="300"></canvas>
                     </div>
                     <div class="col s5 m5 l5">
                         <div class="row side-div">
@@ -80,7 +76,7 @@
         <div class="col s12 m12 l12">
             <div class="card-panel indigo lighten-5 hoverable">
                 <div class="row valign-wrapper">
-                    <div id="statsdash-productbreakdown" class="col s7 m7 l7 valign">
+                    <div class="col s12 m12 l12 valign">
                         <div class="row">
                             <div class="col s12 m12 l12 statsdash-panel-title">
                                 Product Statistics
@@ -88,84 +84,140 @@
                         </div>
                         <div class="row">
                             <div class="col s12 m12 l12">
-                                Product Breakdown
-                                <div class="row center">
-                                    <div class="col s12 m12 l12">
-                                        <div class="statsdash-data truncate">
-                                            {{$stats[5]}}
-                                        </div>
-                                        <div class="statsdash-description">
-                                            Boars for sale
+                                <div class="row">
+                                    <div class="col s6 m6 l6">
+                                        <a href="#">Product Breakdown</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col s12 m12 l12 center-align">
+                                        <div class="row">
+                                            <div class="col s12 m12 l12 statsdash-description">
+                                                Total Products
+                                            </div>
+                                                <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[4]}}">
+                                                {{$stats[4]}}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                                <div class="row center">
-                                    <div class="col s12 m12 l12">
-                                        <div class="statsdash-data truncate">
-                                            {{$stats[6]}}
+                                <div class="row">
+                                    <div class="col s6 m6 l6 center-align">
+                                        <div class="row">
+                                            <div class="col s12 m12 l12 statsdash-description">
+                                                Boar
+                                            </div>
+                                            <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[5]}}">
+                                                {{$stats[5]}}
+                                            </div>
                                         </div>
-                                        <div class="statsdash-description">
-                                            Gilts for sale
+                                        <div class="row">
+                                            <div class="col s12 m12 l12 statsdash-description">
+                                                Gilt
+                                            </div>
+                                            <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[6]}}">
+                                                {{$stats[6]}}
+                                            </div>
                                         </div>
                                     </div>
-                                </div>
-                                <div class="row center">
-                                    <div class="col s12 m12 l12">
-                                        <div class="statsdash-data truncate">
-                                            {{$stats[7]}}
+                                    <div class="col s6 m6 l6 center-align">
+                                        <div class="row">
+                                            <div class="col s12 m12 l12 statsdash-description">
+                                                Sow
+                                            </div>
+                                            <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[7]}}">
+                                                {{$stats[7]}}
+                                            </div>
                                         </div>
-                                        <div class="statsdash-description">
-                                            Sows for sale
-                                        </div>
-                                    </div>
-                                </div>
-                                <div class="row center">
-                                    <div class="col s12 m12 l12">
-                                        <div class="statsdash-data truncate">
-                                            {{$stats[8]}}
-                                        </div>
-                                        <div class="statsdash-description">
-                                            Semen for sale
+                                        <div class="row">
+                                            <div class="col s12 m12 l12 statsdash-description">
+                                                Semen
+                                            </div>
+                                            <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[8]}}">
+                                                {{$stats[8]}}
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    <div class="col s5 m5 l5 valign">
-                        <div class="row side-div">
-                            <div id = "" class="col s12 m12 l12 center tooltipped" data-position="top" data-delay="60" data-tooltip="12 Products added this month">
-                                <div class="statsdash-data truncate">
-                                    #
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                <div class="row">
+                                    <div class="col s12 m12 l12">
+                                        <a href="#">Transaction Breakdown</a>
+                                    </div>
                                 </div>
-                                <div class="statsdash-description">
-                                    Products added this month
+                                <div class="row center-align">
+                                    <div class="col s12 m12 l12">
+                                        <div class="row">
+                                            <div class="col s12 m12 l12 statsdash-description">
+                                                 <span class="tooltipped" data-position="right" data-delay="50" data-tooltip="This month">Total Transactions</span>
+                                            </div>
+                                            <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[9]}}">
+                                                {{$stats[9]}}
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
-                        <div class="row side-div center">
-                            <div id = "" class="col s12 m12 l12 tooltipped" data-position="top" data-delay="60" data-tooltip="100 Products requested">
-                                <div class="statsdash-data truncate">
-                                    #
+                                <div class="row center-align">
+                                    <div class="col s12 m12 l12">
+                                        <div class="col s4 m4 l4">
+                                            <div class="row">
+                                                <div class="col s12 m12 l12 statsdash-description">
+                                                     Requested
+                                                </div>
+                                                <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[10]}}">
+                                                    {{$stats[10]}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col s4 m4 l4">
+                                            <div class="row">
+                                                <div class="col s12 m12 l12 statsdash-description">
+                                                     Reserved
+                                                </div>
+                                                <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[11]}}">
+                                                    {{$stats[11]}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col s4 m4 l4">
+                                            <div class="row">
+                                                <div class="col s12 m12 l12 statsdash-description">
+                                                     Paid
+                                                </div>
+                                                <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[12]}}">
+                                                    {{$stats[12]}}
+                                                </div>
+                                            </div>
+                                        </div>
+
+
+                                    </div>
+                                    <div class="col s12 m12 l12">
+                                        <div class="col s6 m6 l6">
+                                            <div class="row">
+                                                <div class="col s12 m12 l12 statsdash-description">
+                                                    On Delivery
+                                                </div>
+                                                <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[13]}}">
+                                                    {{$stats[13]}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col s6 m6 l6">
+                                            <div class="row">
+                                                <div class="col s12 m12 l12 statsdash-description">
+                                                    Sold
+                                                </div>
+                                                <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[14]}}">
+                                                    {{$stats[14]}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
                                 </div>
-                                <div class="statsdash-description">
-                                    Products requested
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row side-div center">
-                            <div id = "" class="col s12 m12 l12 tooltipped" data-position="top" data-delay="60" data-tooltip="5000 Products sold">
-                                <div class="statsdash-data truncate">
-                                    #
-                                </div>
-                                <div class="statsdash-description">
-                                    Products sold
-                                </div>
-                            </div>
-                        </div>
-                        <div class="row side-div center">
-                            <div class="statsdash-link" class="col s12 m12 l12">
-                                <a href="#">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -180,6 +232,11 @@
                 <div class="row">
                     <div class="col s12 m12 l12 statsdash-panel-title">
                         Logs Timeline
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col s12 m12 l12">
+                        Last 5 Days of Activity
                     </div>
                 </div>
                 <div class="row">

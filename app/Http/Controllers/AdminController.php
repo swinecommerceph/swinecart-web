@@ -996,7 +996,35 @@ class AdminController extends Controller
             }
         }
 
-        $stats = [$deleted, $blocked, $new, $adminLogs, count($products), $boar, $gilt, $sow, $semen];
+        $transactions =DB::table('transaction_logs')
+                        ->leftJoin('product_reservations', 'product_reservations.product_id', '=','transaction_logs.product_id')
+                        ->select(DB::raw('MAX(transaction_logs.created_at) latest_update, product_reservations.*, transaction_logs.*'))
+                        ->groupBy('transaction_logs.product_id')
+                        ->whereMonth('created_at', $month)
+                        ->whereYear('created_at', $year)
+                        ->get();
+
+
+        $requested = 0;
+        $reserved = 0;
+        $paid = 0;
+        $onDelivery = 0;
+        $sold = 0;
+        foreach($transactions as $transaction) {
+            if($transaction->order_status == 'requested'){
+                $requested++;
+            }else if($transaction->order_status == 'reserved'){
+                $reserved++;
+            }else if($transaction->order_status == 'paid'){
+                $paid++;
+            }else if($transaction->order_status == 'on_delivery'){
+                $onDelivery++;
+            }else if($transaction->order_status == 'sold'){
+                $sold++;
+            }
+        }
+
+        $stats = [$deleted, $blocked, $new, $adminLogs, count($products), $boar, $gilt, $sow, $semen, count($transactions), $requested, $reserved, $paid,  $onDelivery, $sold];
         return view('user.admin.statisticsDashboard',compact('stats'));
       }
 
