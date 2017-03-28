@@ -85,6 +85,32 @@
                         <div class="row">
                             <div class="col s12 m12 l12">
                                 <div class="row">
+                                    <div class="col s12 m12 l12">
+                                        Product Breakdown
+                                    </div>
+                                </div>
+                                <div class="row valign-wrapper">
+                                    <div class="col s12 m12 l4 center-align valign">
+                                        <div class="row">
+                                            <div class="col s12 m12 l12 statsdash-description">
+                                                Total Products
+                                            </div>
+                                        </div>
+                                        <div class="row">
+                                            <div class="col s12 m12 l12 statsdash-data truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$stats[4]}}">
+                                                {{$stats[4]}}
+                                            </div>
+                                        </div>
+                                    </div>
+                                    <div class="col s12 m12 l8 center">
+                                        <canvas id="admin-product-breakdown-chart" class="col s12 m12 l12" width="400" height="300"></canvas>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        {{-- <div class="row">
+                            <div class="col s12 m12 l12">
+                                <div class="row">
                                     <div class="col s6 m6 l6">
                                         <a href="#">Product Breakdown</a>
                                     </div>
@@ -140,12 +166,12 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                         <div class="row">
                             <div class="col s12 m12 l12">
                                 <div class="row">
                                     <div class="col s12 m12 l12">
-                                        <a href="#">Transaction Breakdown</a>
+                                        Transaction Breakdown
                                     </div>
                                 </div>
                                 <div class="row center-align">
@@ -192,8 +218,6 @@
                                                 </div>
                                             </div>
                                         </div>
-
-
                                     </div>
                                     <div class="col s12 m12 l12">
                                         <div class="col s6 m6 l6">
@@ -218,6 +242,11 @@
                                         </div>
                                     </div>
                                 </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m12 l12 right-align">
+                                <a href="{{route('admin.statistics.transactions')}}">More Details</a>
                             </div>
                         </div>
                     </div>
@@ -267,6 +296,12 @@
 @endsection
 
 @section('initScript')
+    <script type="text/javascript">
+        var boar = {!! $stats[5] !!};
+        var gilt = {!! $stats[6] !!};
+        var sow = {!! $stats[7] !!};
+        var semen = {!! $stats[8] !!};
+    </script>
     <script type="text/javascript" src="/js/admin/statsDashboard.js"></script>
     <script type="text/javascript" src="/js/admin/statsDashboard_script.js"></script>
 @endsection

@@ -19,8 +19,8 @@
                     <option disabled selected>Choose option</option>
                     <option value="{{route('admin.statistics.breeder.active')}}">Breeder</option>
                     <option value="{{route('admin.statistics.customer.active')}}">Customer</option>
-                    <option value="3">Transactions</option>
-                    <option value="3">Logs Timeline</option>
+                    <option value="{{route('admin.statistics.transactions')}}">Transactions</option>
+                    <option value="{{route('admin.statistics.timeline')}}">Logs Timeline</option>
                 </select>
                 <label>Display Statistics</label>
             </div>

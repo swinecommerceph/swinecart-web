@@ -679,5 +679,6 @@ class SpectatorController extends Controller
 
         return view('user.spectator.deletedBreederStatistics', compact('monthlyCount', 'year'));
     }
+    
 
 }

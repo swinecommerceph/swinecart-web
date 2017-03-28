@@ -34,3 +34,38 @@ var lineChart = new Chart(chartArea, {
         responsive: true
     }
 });
+
+var data = {
+    labels: [
+        "Boar",
+        "Gilt",
+        "Sow",
+        "Semen"
+    ],
+    datasets: [{
+            data: [boar, gilt, sow, semen],
+            backgroundColor: [
+                "#e0fb70",
+                "#92caed",
+                "#ed92ca",
+                "#caed92"
+            ],
+            hoverBackgroundColor: [
+                "#e0fb70",
+                "#92caed",
+                "#ed92ca",
+                "#caed92"
+            ]
+        }]
+};
+
+var productBreakdownChartArea = document.getElementById('admin-product-breakdown-chart');
+var productBreakdownChart = new Chart(productBreakdownChartArea,{
+    type: 'pie',
+    data: data,
+    options: {
+        animation:{
+            animateScale:true
+        }
+    }
+});

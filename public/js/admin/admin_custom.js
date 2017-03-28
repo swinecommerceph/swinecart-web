@@ -2,7 +2,6 @@
 $(document).ready(function(){
     var carousel_interval = 5000;
 
-
     // Modal trigger for admin
     $('.modal-trigger').modal({
         dismissible: true, // Modal can be dismissed by clicking outside of the modal
@@ -44,5 +43,9 @@ $(document).ready(function(){
 
     $('select').material_select();
 
+    $('.datepicker').pickadate({
+        selectMonths: true, // Creates a dropdown to control month
+        selectYears: 20 // Creates a dropdown of 15 years to control year
+    });
 
 });

@@ -184,6 +184,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/statistics/timeline', ['as' => 'admin.statistics.timeline', 'uses'=> 'AdminController@showStatisticsTimeline']);
         Route::get('home/statistics/timeline-date', ['as' => 'admin.statistics.timeline-date', 'uses'=> 'AdminController@showStatisticsTimelineDate']);
 
+        Route::get('home/statistics/transactions', ['as' => 'admin.statistics.transactions', 'uses'=> 'AdminController@showStatisticsTransactions']);
+        Route::get('home/statistics/transactions-date', ['as' => 'admin.statistics.transactions-date', 'uses'=> 'AdminController@showStatisticsTransactionsYear']);
+
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
         Route::get('home/userlist/details', ['as'=>'admin.userlist.details', 'uses'=>'AdminController@fetchUserInformation']);
         Route::get('home/userlist/transaction', ['as'=>'admin.userlist.transaction', 'uses'=>'AdminController@fetchUserTransaction']);

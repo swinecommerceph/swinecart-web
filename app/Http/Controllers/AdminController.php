@@ -1377,6 +1377,79 @@ class AdminController extends Controller
          return view('user.admin.usersTransactionHistory', compact('username', 'userable', 'role','transactions'));
      }
 
+     /*
+      * Helper function to get the monthly count of transaction using the latest update
+      *
+      * @param integer
+      * @return array of count
+      *
+      */
+     public function getTransactionCountPerMonth($year){
+         $transactions =  DB::table('transaction_logs')
+                         ->groupBy('product_id')
+                         ->select('product_id', DB::raw('MAX(YEAR(created_at)) latest_year, MAX(MONTH(created_at)) latest_month, YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name'))
+                         ->whereYear('created_at', $year)
+                         ->get();
+        $monthlyCount = array_fill(0, 12, 0);
+        foreach($transactions as $transaction){
+            if(($transaction->latest_year == $year) && ($transaction->latest_month == 1)){
+                $monthlyCount[0]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 2)){
+                $monthlyCount[1]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 3)){
+                $monthlyCount[2]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 4)){
+                $monthlyCount[3]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 5)){
+                $monthlyCount[4]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 6)){
+                $monthlyCount[5]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 7)){
+                $monthlyCount[6]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 8)){
+                $monthlyCount[7]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 9)){
+                $monthlyCount[8]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 10)){
+                $monthlyCount[9]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 11)){
+                $monthlyCount[10]++;
+            }else if(($transaction->latest_year == $year) && ($transaction->latest_month == 12)){
+                $monthlyCount[11]++;
+            }
+
+        }
+        return($monthlyCount);
+     }
+
+     /*
+      * Function to get the monthly transactions per year
+      *
+      * @param none
+      * @return array of count, integer year
+      *
+      */
+     public function showStatisticsTransactions(){
+        $date = Carbon::now();
+        $year = $date->year;
+        $transactions = $this->getTransactionCountPerMonth($year);
+        return view('user.admin.statisticsTransaction', compact('transactions', 'year'));
+     }
+
+     /*
+      * Function to get the monthly transactions per year
+      *
+      * @param integer
+      * @return array of count, integer year
+      *
+      */
+     public function showStatisticsTransactionsYear(Request $request){
+        $year = $request->year;
+        $transactions = $this->getTransactionCountPerMonth($year);
+
+        return view('user.admin.statisticsTransaction', compact('transactions', 'year'));
+     }
+
     public function viewUsers(){
         $breeders = Breeder::all();
         $customers = Customer::all();
