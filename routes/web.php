@@ -104,6 +104,8 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomers']);
         Route::post('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomersChange']);
+
+        Route::get('test', ['as' => 'test', 'uses'=> 'BreederController@test']);
     });
 
 
@@ -207,6 +209,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/manage/return/pending', ['as' => 'admin.return.pending', 'uses'=> 'AdminController@goToPending']);
 
         Route::get('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsers']);
+
+        Route::get('home/messenger', ['as' => 'users', 'uses'=> 'AdminController@messenger']);
+        Route::post('home/messenger/send', ['as' => 'users', 'uses'=> 'AdminController@send']);
 
     });
 
