@@ -1450,6 +1450,67 @@ class AdminController extends Controller
         return view('user.admin.statisticsTransaction', compact('transactions', 'year'));
      }
 
+     public function getTransactionsCounts(){
+         $transactions =  DB::table('transaction_logs')
+                         ->where('status', '=', 'sold')
+                         ->select(DB::raw('YEAR(created_at) year, COUNT(*) count'))
+                         ->groupBy('year')
+                         ->orderBy('year', 'desc')
+                         ->get();
+        return $transactions;
+     }
+
+     /*
+      * Function to get total completed transactions per year
+      *
+      * @param none
+      * @return collection of transaction and count, min year shown, max year shown
+      *
+      */
+     public function showStatisticsTotalTransactions(){
+        $transactions = $transactions =  DB::table('transaction_logs')
+                        ->where('status', '=', 'sold')
+                        ->select(DB::raw('YEAR(created_at) year, COUNT(*) count'))
+                        ->groupBy('year')
+                        ->orderBy('year', 'desc')
+                        ->get();
+
+        $lastTransactions = $transactions->first()->year; //most recent transaction year in the database
+        $firstTransactions = $transactions->take(5)->last()->year; //oldest transaction year in the last 5 transaction years
+        $showTransactions = $transactions->take(5); // get the last 5 transaction years
+        $selectedMin = $firstTransactions;
+        $selectedMax = $lastTransactions;
+        return view('user.admin.statisticsTotalTransaction',compact('showTransactions', 'selectedMin', 'selectedMax'));
+     }
+
+     /*
+      * Function to get total completed transactions per year in between years in the user request
+      *
+      * @param year string min and max
+      * @return collection of transaction and count, min year shown, max year shown
+      *
+      */
+    public function showStatisticsTotalTransactionsModified(Request $request){
+        $start = $request->minyear."-01-01";
+        $end =  $request->maxyear."-12-31";
+
+        $transactions = $transactions =  DB::table('transaction_logs')
+                        ->where('status', '=', 'sold')
+                        ->whereBetween('created_at', [$start,$end])
+                        ->select(DB::raw('YEAR(created_at) AS year, COUNT(*) AS count'))
+                        ->groupBy('year')
+                        ->orderBy('year', 'desc')
+                        ->get();
+        // dd(sizeof($transactions));
+        $lastTransactions = $transactions->first()->year; //most recent transaction year in the database
+        $firstTransactions = $transactions->take(5)->last()->year; //oldest transaction year in the last 5 transaction years
+        $showTransactions = $transactions->take(5); // get the last 5 transaction years
+        $selectedMin = $firstTransactions;
+        $selectedMax = $lastTransactions;
+        return view('user.admin.statisticsTotalTransaction',compact('showTransactions', 'selectedMin', 'selectedMax'));
+    }
+
+
     public function viewUsers(){
         $breeders = Breeder::all();
         $customers = Customer::all();

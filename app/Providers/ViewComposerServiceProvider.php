@@ -19,6 +19,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         $this->getTimeNow();
         $this->getHomeImages();
         $this->spectatorGetMinMaxProductValues();
+        $this->getTransactionFirstLastYear();
     }
 
     /**
@@ -84,6 +85,29 @@ class ViewComposerServiceProvider extends ServiceProvider
             $date = Carbon::now();
             $data = [$date->month, $date->day, $date->year];
             $view->with('now', $data);
+        });
+    }
+
+    /*
+     * Get the oldest and recent year of completed transaction
+     *
+     * @param none
+     * @return array of string
+     *
+     */
+    public function getTransactionFirstLastYear(){
+        view()->composer('user.admin.statisticsTotalTransaction', function($view){
+            $transactions =  DB::table('transaction_logs')
+                                ->where('status', '=', 'sold')
+                                ->select(DB::raw('YEAR(created_at) year, COUNT(*) count'))
+                                ->groupBy('year')
+                                ->orderBy('year', 'desc')
+                                ->get();
+            $minyear = $transactions->last()->year;
+            $maxyear = $transactions->first()->year;
+            $midyear = ($minyear+$maxyear)/2;
+            $data = [$minyear, $maxyear, $midyear];
+            $view->with('minmaxyear', $data);
         });
     }
 
