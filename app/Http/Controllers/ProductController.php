@@ -14,6 +14,7 @@ use App\Models\Image;
 use App\Models\Video;
 use App\Models\Breed;
 use App\Models\SwineCartItem;
+use App\Repositories\ProductRepository;
 
 use Auth;
 use ImageManipulator;
@@ -470,34 +471,22 @@ class ProductController extends Controller
     /**
      * View Products of all Breeders
      *
-     * @param  Request $request
+     * @param  Request              $request
+     * @param  ProductRepository    $repository
      * @return View
      */
-    public function viewProducts(Request $request)
+    public function viewProducts(Request $request, ProductRepository $repository)
     {
-        // Check if search parameters are empty
-        if (!$request->type && !$request->breed){
-            if($request->sort && $request->sort != 'none'){
-                $part = explode('-',$request->sort);
-                $products = Product::whereIn('status',['displayed','requested'])->where('quantity','!=',0)->orderBy($part[0], $part[1])->paginate(10);
-            }
-            else $products = Product::whereIn('status',['displayed','requested'])->where('quantity','!=',0)->orderBy('id','desc')->paginate(10);
-        }
-        else{
-            if($request->type) $products = Product::whereIn('status',['displayed','requested'])->where('quantity','!=',0)->whereIn('type', explode(' ',$request->type));
-            if($request->breed) {
-                $breedIds = $this->getBreedIds($request->breed);
-                if(!$request->type) $products = Product::whereIn('status',['displayed','requested'])->where('quantity','!=',0)->whereIn('breed_id', $breedIds);
-                else $products = $products->whereIn('breed_id', $breedIds);
-            }
-            if($request->sort) {
-                if($request->sort != 'none'){
-                    $part = explode('-',$request->sort);
-                    $products = $products->orderBy($part[0], $part[1]);
-                }
-            }
-            $products = $products->paginate(10);
-        }
+        // Check if there is a search query
+        $products = ($request->q) ? $repository->search($request->q): Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0);
+
+        $parsedTypes = ($request->type) ? explode(' ',$request->type) : '';
+        $parsedBreedIds = ($request->breed) ? $this->getBreedIds($request->breed) : '';
+        $parsedSort = ($request->sort && $request->sort != 'none') ? explode('-',$request->sort) : ['id', 'desc'];
+
+        if($parsedTypes) $products = $products->whereIn('type', $parsedTypes);
+        if($parsedBreedIds) $products = $products->whereIn('breed_id', $parsedBreedIds);
+        $products = $products->orderBy($parsedSort[0], $parsedSort[1])->paginate(10);
 
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();

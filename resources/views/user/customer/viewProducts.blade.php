@@ -29,7 +29,7 @@
             </div>
             <form>
                 <div class="input-field">
-                    <input id="search" type="search" placeholder="Search for a product" required>
+                    <input id="search" type="search" name="q" placeholder="Search for a product" value="{{ request('q') }}">
                     <label class="label-icon" for="search"><i class="material-icons teal-text">search</i></label>
                     <i class="material-icons">close</i>
                 </div>
@@ -147,8 +147,7 @@
 
             <div class="row">
 
-            <?php $counter = 1; ?>
-            @foreach($products as $product)
+            @forelse($products as $product)
                 {{-- Card --}}
                 <div class="col s12 m6 l6 ">
                   <div class="card hoverable">
@@ -230,14 +229,12 @@
                     </div>
                   </div>
                 </div>
-                <?php $counter++; ?>
-            @endforeach
 
-            @if($counter == 1)
+            @empty
                 <div class="col s12">
                     No results found.
                 </div>
-            @endif
+            @endforelse
             </div>
 
             {{-- Pagination --}}

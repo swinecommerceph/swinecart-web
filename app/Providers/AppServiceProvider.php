@@ -3,6 +3,8 @@
 namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
+use App\Repositories\ProductRepository;
+use App\Repositories\EloquentProductRepository;
 
 use Validator;
 
@@ -25,6 +27,8 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register()
     {
-        //
+        $this->app->bind(ProductRepository::class, function(){
+            return new EloquentProductRepository();
+        });
     }
 }

@@ -31,10 +31,11 @@ $(document).ready(function(){
         offset: 135
     });
 
-    // Show search bar
-    $(window).scroll(function(){
-        if ($(this).scrollTop() >= 170) $('#search-field').fadeIn(200);
-        else $('#search-field').fadeOut(200);
+    $("input#search").keypress(function(e){
+        if(e.which == 13) {
+            e.preventDefault();
+            filter.apply();
+        }
     });
 
     // Redirect to designated link upon checkbox and select value change
