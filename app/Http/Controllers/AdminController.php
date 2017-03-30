@@ -1549,6 +1549,43 @@ class AdminController extends Controller
         return view('user.admin.statisticsTotalTransaction',compact('showTransactions', 'selectedMin', 'selectedMax'));
     }
 
+    /*
+     * Function get all the spectator users
+     *
+     * @param none
+     * @return collection of spectators
+     *
+     */
+    public function displaySpectators(){
+        $spectators = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id', '=', 4)
+                ->whereNull('deleted_at')
+                ->paginate(10);
+
+        return view('user.admin.spectatorList', compact('spectators'));
+    }
+
+    /*
+     * Function search for a spectator using a search string to match the email address or name of the user
+     *
+     * @param search string
+     * @return collection of spectators
+     *
+     */
+    public function searchSpectators(Request $request){
+        $spectators = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where(function ($query) use ($request) {
+                    $query->where('name', 'LIKE', "%$request->search%")
+                          ->orWhere('email', 'LIKE', "%$request->search%");
+                })
+                ->where('role_id', '=', 4)
+                ->whereNull('deleted_at')
+                ->paginate(10);
+
+        return view('user.admin.spectatorList', compact('spectators'));
+    }
 
     public function viewUsers(){
         $breeders = Breeder::all();

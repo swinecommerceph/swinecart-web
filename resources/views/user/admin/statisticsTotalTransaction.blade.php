@@ -33,8 +33,8 @@
     <div class="row valign-wrapper">
         <div class="col s12 m6 l6 valign">
             <select onChange="window.location.href=this.value">
-                <option value="{{route('admin.statistics.transactions')}}">Yearly Transactions</option>
-                <option selected value="{{route('admin.statistics.totaltransactions')}}">Average Yearly Transactions</option>
+                <option value="{{route('admin.statistics.transactions')}}">Monthly Transactions</option>
+                <option selected value="{{route('admin.statistics.totaltransactions')}}">Total Completed Transactions</option>
             </select>
         </div>
         <div class="col s12 m6 l6">

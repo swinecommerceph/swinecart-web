@@ -99,6 +99,9 @@
                       <a href="{{route('admin.userlist')}}" class="black-text" id='all'><div class="collapsible-header active"><i class="material-icons">face</i>All Users</div></a>
                     </li>
                     <li>
+                      <a href="{{route('admin.spectatorlist')}}" class="black-text" id='spectator'><div class="collapsible-header active"><i class="material-icons">supervisor_account</i>Spectator List</div></a>
+                    </li>
+                    <li>
                      <a href="{{route('admin.pending.users')}}" class="black-text" id='pending-breeder'> <div class="collapsible-header"><i class="material-icons">assignment_late</i>Pending Accounts</div></a>
                     </li>
                     <li>

@@ -166,6 +166,7 @@ Route::group(['middleware' => ['web']], function () {
 
         // Route for statistics pages
         Route::get('home/statistics/dashboard',['as'=>'admin.statistics.dashboard', 'uses'=>'AdminController@showStatisticsDashboard']);
+
         //  Breeder statistics
         Route::get('home/statistics/breeder/active', ['as' => 'admin.statistics.breeder.active', 'uses'=> 'AdminController@showStatisticsActiveBreeder']);
         Route::get('home/statistics/breeder/active-year', ['as' => 'admin.statistics.breeder.active-year', 'uses'=> 'AdminController@showStatisticsActiveBreederYear']);
@@ -194,6 +195,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/userlist/transaction', ['as'=>'admin.userlist.transaction', 'uses'=>'AdminController@fetchUserTransaction']);
         Route::get('home/userlist/transaction-user',['as'=>'admin.userlist.transactionHistory', 'uses'=>'AdminController@fetchUserTransactionHistory']);
         Route::get('home/userlist/transaction-user/search',['as'=>'admin.userlist.transactionHistory.search', 'uses'=>'AdminController@searchUserTransactionHistory']);
+
+        Route::get('home/spectatorlist', ['as'=>'admin.spectatorlist', 'uses'=>'AdminController@displaySpectators']);
+        Route::get('home/spectatorlist-search', ['as'=>'admin.spectatorlist-search', 'uses'=>'AdminController@searchSpectators']);
 
         Route::get('home/approved/breeder', ['as'=>'admin.approved.breeder', 'uses'=>'AdminController@displayApprovedBreeders']);
         Route::get('home/approved/customer', ['as'=>'admin.approved.customer', 'uses'=>'AdminController@displayApprovedCustomer']);
