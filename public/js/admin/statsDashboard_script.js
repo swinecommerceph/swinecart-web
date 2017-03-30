@@ -4,10 +4,10 @@ var chartArea = document.getElementById("dash-transaction-chart");
 var lineChart = new Chart(chartArea, {
     type: 'line',
     data: {
-        labels: ["January", "February", "March", "April", "May", "June", "July"],
+        labels: monthlabel,
         datasets: [
             {
-                label: "Sample Dataset",
+                label: "Users",
                 fill: false,
                 lineTension: 0.1,
                 backgroundColor: "rgba(100,8,192,0.4)",
@@ -25,13 +25,21 @@ var lineChart = new Chart(chartArea, {
                 pointHoverBorderWidth: 2,
                 pointRadius: 1,
                 pointHitRadius: 10,
-                data: [65, 59, 80, 81, 56, 55, 40],
+                data: countdata,
                 spanGaps: false,
             }
         ]
     },
     options: {
-        responsive: true
+        responsive: true,
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true,
+                    callback: function(value) {if (value % 1 === 0) {return value;}}
+                }
+            }]
+        }
     }
 });
 

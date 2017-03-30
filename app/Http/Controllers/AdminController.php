@@ -937,7 +937,7 @@ class AdminController extends Controller
        * Shows the Statistics dashboard
        *
        * @param none
-       * @return summary of statistics
+       * @return summary of statistics, month labels, monthly counts
        *
        */
       public function showStatisticsDashboard(){
@@ -945,19 +945,58 @@ class AdminController extends Controller
         $year = $date->year;
         $month = $date->month;
         $yesterday = new Carbon('yesterday');
-        $lastMonth = new Carbon('last month');
+        $monthStart = Carbon::now()->startOfMonth();
 
         $stats = [];
+        $monthNames = [
+                Carbon::now()->startOfMonth()->subMonth(4)->format('F'),
+                Carbon::now()->startOfMonth()->subMonth(3)->format('F'),
+                Carbon::now()->startOfMonth()->subMonth(2)->format('F'),
+                Carbon::now()->startOfMonth()->subMonth()->format('F'),
+                Carbon::now()->startOfMonth()->format('F')];
+        $monthlyCount = array_fill(0, 5, 0);
+
+        $activeLastFiveMonths = DB::table('users')
+                                ->whereNull('deleted_at')
+                                ->whereNull('blocked_at')
+                                ->whereNotNull('approved_at')
+                                ->whereBetween('created_at', [Carbon::now()->startOfMonth()->subMonth(4), Carbon::now()->endOfMonth()])
+                                ->select(DB::raw('YEAR(created_at) AS year, MONTH(created_at) AS month, MONTHNAME(created_at) AS month_name ,COUNT(*) AS count'))
+                                ->groupBy('year')
+                                ->groupBy('month')
+                                ->orderBy('year', 'asc')
+                                ->get();
+
+        foreach ($activeLastFiveMonths as $months) {
+            if($months->month_name == $monthNames[0]){
+                $monthlyCount[0] = $months->count;
+            }
+            else if($months->month_name == $monthNames[1]){
+                $monthlyCount[1] = $months->count;
+            }
+            else if($months->month_name == $monthNames[2]){
+                $monthlyCount[2] = $months->count;
+            }
+            else if($months->month_name == $monthNames[3]){
+                $monthlyCount[3] = $months->count;
+            }else{
+                $monthlyCount[4] = $months->count;
+            }
+        }
 
         $deleted = DB::table('users')
+                    ->whereNotNull('approved_at')
                     ->whereMonth('deleted_at', '=', $month)
                     ->whereYear('deleted_at', '=', $year)
                     ->count();
+
         $blocked = DB::table('users')
+                    ->whereNotNull('approved_at')
                     ->whereMonth('blocked_at', '=', $month)
                     ->whereYear('blocked_at', '=', $year)
                     ->count();
         $new = DB::table('users')
+                    ->whereNotNull('approved_at')
                     ->whereMonth('created_at', '=', $month)
                     ->whereYear('created_at', '=', $year)
                     ->count();
@@ -1025,7 +1064,7 @@ class AdminController extends Controller
         }
 
         $stats = [$deleted, $blocked, $new, $adminLogs, count($products), $boar, $gilt, $sow, $semen, count($transactions), $requested, $reserved, $paid,  $onDelivery, $sold];
-        return view('user.admin.statisticsDashboard',compact('stats'));
+        return view('user.admin.statisticsDashboard',compact('stats','monthNames', 'monthlyCount'));
       }
 
       /*

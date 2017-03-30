@@ -28,7 +28,30 @@
                 </div>
                 <div class="row">
                     <div id="statsdash-transact" class="col s7 m7 l7">
-                        <canvas id="dash-transaction-chart" class="col s12 m12 l12" width="400" height="300"></canvas>
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                Active Users in the last 5 months
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div class="col s12 m12 l12">
+                                <script type="text/javascript">
+                                    var monthlabel = new Array();
+                                    var countdata = new Array();
+                                </script>
+                                @foreach ($monthlyCount as $count)
+                                    <script type="text/javascript">
+                                        countdata.push({!! $count !!});
+                                    </script>
+                                @endforeach
+                                @foreach ($monthNames as $name)
+                                    <script type="text/javascript">
+                                         monthlabel.push("{!! $name !!}");
+                                    </script>
+                                @endforeach
+                                <canvas id="dash-transaction-chart" class="col s12 m12 l12" width="400" height="300"></canvas>
+                            </div>
+                        </div>
                     </div>
                     <div class="col s5 m5 l5">
                         <div class="row side-div">

@@ -29,6 +29,7 @@ var totaltransactionPageChart = new Chart(totalTransactionPageChartArea, {
         }]
     },
     options: {
+        responsive: true,
         legend: {
             display: false
         },
