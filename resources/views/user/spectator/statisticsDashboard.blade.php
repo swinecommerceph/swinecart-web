@@ -91,6 +91,35 @@
                                     {{$data[9]}} Sow |
                                     {{$data[10]}} Semen
                                 </div>
+                                <div class=" col s12 m12 l12 center-align">
+                                    <a href="{{route('spectator.productbreakdown')}}">View Chart</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col s12 m12 l12 center-align spectator-dashlabel">
+                                    Transaction
+                                </div>
+                                <div class="col s12 m12 l12 center-align">
+                                    This Month's Product Status
+                                </div>
+                                <div class="col s12 m12 l12 center-align">
+                                    {{$requested}} Requested
+                                </div>
+                                <div class="col s12 m12 l12 center-align">
+                                    {{$reserved}} Reserved
+                                </div>
+                                <div class="col s12 m12 l12 center-align">
+                                    {{$paid}} Paid
+                                </div>
+                                <div class="col s12 m12 l12 center-align">
+                                    {{$on_delivery}} On Delivery
+                                </div>
+                                <div class="col s12 m12 l12 center-align">
+                                    {{$sold}} Sold
+                                </div>
+                                <div class=" col s12 m12 l12 center-align">
+                                    <a href="{{route('spectator.productbreakdown')}}">View More Information</a>
+                                </div>
                             </div>
                         </div>
                     </div>

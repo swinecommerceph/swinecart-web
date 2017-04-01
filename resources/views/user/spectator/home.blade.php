@@ -31,7 +31,7 @@
                                <div class="col s4 m4 l4 label-wrapper valign">
                                   <div>
                                      <i class="ecommerce-icon" id="statistics-icon">p</i>
-                                     <div>
+                                     <div class="spectator-homedashboard-icon-title center-align">
                                          Users
                                      </div>
                                   </div>
@@ -82,7 +82,7 @@
                                 <div class="col s4 m4 l4 label-wrapper valign">
                                    <div>
                                       <i class="ecommerce-icon" id="statistics-icon">v</i>
-                                      <div>
+                                      <div class="spectator-homedashboard-icon-title center-align">
                                           Products
                                       </div>
                                    </div>
@@ -152,7 +152,7 @@
                                <div class="col s4 m4 l4 label-wrapper valign">
                                   <div>
                                      <i class="ecommerce-icon" id="statistics-icon">x</i>
-                                     <div>
+                                     <div class="spectator-homedashboard-icon-title center-align">
                                          Site Statistics
                                      </div>
                                   </div>
@@ -164,10 +164,10 @@
                                    <div class="row">
                                        <div class="col s12 m12 l12">
                                            <div class="spectator-summary-maintitle">
-                                               Total Transactions
+                                              Completed Transactions<span class="tooltipped" data-position="right" data-delay="50" data-tooltip="This month">*</span>
                                            </div>
-                                           <div class="spectator-summary-maindata truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="#">
-                                               #
+                                           <div class="spectator-summary-maindata truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$transactions}}">
+                                               {{$transactions}}
                                            </div>
                                        </div>
                                    </div>
@@ -204,9 +204,5 @@
 @endsection
 
 @section('initScript')
-    <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
-    <script type="text/javascript" src="/js/admin/users.js"></script>
-    <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
-    <script type="text/javascript" src="/js/admin/pages.js"></script>
-    <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
+    {{-- <script type="text/javascript" src="/js/admin/managePages_script.js"></script> --}}
 @endsection

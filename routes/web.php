@@ -236,6 +236,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('users/search',['as'=>'spectator.searchUser', 'uses'=>'SpectatorController@searchUser']);
         Route::get('users/details', ['as'=>'spectator.fetchUserInformation', 'uses'=>'SpectatorController@fetchUserInformation']);
 
+        Route::get('products/product-details', ['as'=>'spectator.productDetails', 'uses'=>'SpectatorController@fetchProductDetails']);
         Route::get('home/product/search', ['as'=>'spectator.searchProduct', 'uses'=>'SpectatorController@searchProduct']);
         Route::get('home/product/advancedsearch', ['as'=>'spectator.advancedSearchProduct', 'uses'=>'SpectatorController@advancedSearchProduct']);
 
@@ -253,6 +254,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('statistics/breeder/blocked-year', ['as'=>'spectator.statisticsBlockedBreederYear', 'uses'=>'SpectatorController@viewBlockedBreederStatisticsYear']);
         Route::get('statistics/breeder/deleted', ['as'=>'spectator.statisticsDeletedBreeder', 'uses'=>'SpectatorController@viewDeletedBreederStatistics']);
         Route::get('statistics/breeder/deleted-year', ['as'=>'spectator.statisticsDeletedBreederYear', 'uses'=>'SpectatorController@viewDeletedBreederStatisticsYear']);
+
+        Route::get('statistics/productbreakdown', ['as'=>'spectator.productbreakdown', 'uses'=>'SpectatorController@viewProductBreakdown']);
     });
 
 

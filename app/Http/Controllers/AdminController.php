@@ -1014,24 +1014,31 @@ class AdminController extends Controller
         $products = DB::table('products')
                         ->where('status', '=', 'displayed')
                         ->whereNull('deleted_at')
+                        ->select('type',DB::raw('COUNT(*) as count'))
+                        ->groupBy('type')
                         ->get();
 
+        $total = 0;
         $boar = 0;
         $gilt = 0;
         $sow = 0;
         $semen = 0;
-        foreach ($products as $product) {
-            if(strcmp($product->type, 'boar')){
-                $boar++;
+        foreach ($products as $type) {
+            $total = $total + $type->count;
+            if($type->type == 'boar'){
+                $boar = $type->count;
             }
-            if(strcmp($product->type, 'gilt')){
-                $gilt++;
+            else if($type->type == 'boar'){
+                $boar = $type->count;
             }
-            if(strcmp($product->type, 'sow')){
-                $sow++;
+            else if($type->type == 'sow'){
+                $sow = $type->count;
             }
-            if(strcmp($product->type, 'semen')){
-                $semen++;
+            else if($type->type == 'gilt'){
+                $gilt = $type->count;
+            }
+            else if($type->type == 'semen'){
+                $semen = $type->count;
             }
         }
 
@@ -1063,7 +1070,7 @@ class AdminController extends Controller
             }
         }
 
-        $stats = [$deleted, $blocked, $new, $adminLogs, count($products), $boar, $gilt, $sow, $semen, count($transactions), $requested, $reserved, $paid,  $onDelivery, $sold];
+        $stats = [$deleted, $blocked, $new, $adminLogs, $total, $boar, $gilt, $sow, $semen, count($transactions), $requested, $reserved, $paid,  $onDelivery, $sold];
         return view('user.admin.statisticsDashboard',compact('stats','monthNames', 'monthlyCount'));
       }
 
@@ -1507,7 +1514,7 @@ class AdminController extends Controller
       *
       */
      public function showStatisticsTotalTransactions(){
-        $transactions = $transactions =  DB::table('transaction_logs')
+        $transactions =  DB::table('transaction_logs')
                         ->where('status', '=', 'sold')
                         ->select(DB::raw('YEAR(created_at) year, COUNT(*) count'))
                         ->groupBy('year')
@@ -1533,14 +1540,14 @@ class AdminController extends Controller
         $start = $request->minyear."-01-01";
         $end =  $request->maxyear."-12-31";
 
-        $transactions = $transactions =  DB::table('transaction_logs')
+        $transactions =  DB::table('transaction_logs')
                         ->where('status', '=', 'sold')
                         ->whereBetween('created_at', [$start,$end])
                         ->select(DB::raw('YEAR(created_at) AS year, COUNT(*) AS count'))
                         ->groupBy('year')
                         ->orderBy('year', 'desc')
                         ->get();
-        // dd(sizeof($transactions));
+
         $lastTransactions = $transactions->first()->year; //most recent transaction year in the database
         $firstTransactions = $transactions->take(5)->last()->year; //oldest transaction year in the last 5 transaction years
         $showTransactions = $transactions->take(5); // get the last 5 transaction years

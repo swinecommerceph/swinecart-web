@@ -991,6 +991,11 @@ blockquote.info{
 	color: #d1d1d1 ;
 }
 
+.spectator-homedashboard-icon-title{
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
 .spectator-card-label{
 	font-size: 1.5em;
 	text-align: center;
@@ -1003,6 +1008,27 @@ blockquote.info{
 
 #map-canvas{
 	height: 60vh;
+}
+
+/* Product Breakdown */
+.product-breakdown-title{
+	font-size: 1.5em;
+}
+
+.product-breakdown-data{
+	font-size: 2em;
+	font-weight: bold;
+}
+
+/*Product modal*/
+.spectator-product-modal-title{
+	font-size: 1em;
+	color: grey;
+}
+
+.spectator-product-modal-data{
+	font-size: 1.5em;
+	font-weight: bold;
 }
 
 /*VueJS transition CSS*/

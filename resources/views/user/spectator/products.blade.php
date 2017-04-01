@@ -56,14 +56,14 @@
                                 <div class="col s12 m12 l8 valign-wrapper">
                                     <div class="col s12 m12 l5 valign">
                                         <label for="spectatorproductminprice">Min Price</label>
-                                        <input id="spectatorproductminprice" type="number" value='{{$minmax->minprice}}' min ="{{$minmax->minprice}}" max="{{$minmax->maxprice}}" name="minPrice"/>
+                                        <input id="spectatorproductminprice" type="number" value='{{$minmax->minprice}}' min ="{{$minmax->minprice}}" max="{{($minmax->maxprice+$minmax->minprice)/2}}" name="minPrice"/>
                                     </div>
                                     <div class="col s12 m12 l2 valign center-align">
                                         to
                                     </div>
                                     <div class="col s12 m12 l5 valign">
                                         <label for="spectatorproductmaxprice">Max Price</label>
-                                        <input id="spectatorproductmaxprice" type="number" value="{{$minmax->maxprice}}" min ="{{$minmax->minprice}}" max="{{$minmax->maxprice}}" name="maxPrice"/>
+                                        <input id="spectatorproductmaxprice" type="number" value="{{$minmax->maxprice}}" min ="{{($minmax->maxprice+$minmax->minprice)/2}}" max="{{$minmax->maxprice}}" name="maxPrice"/>
                                     </div>
                                 </div>
                             </div>
@@ -71,27 +71,27 @@
                                 <div class="col s12 m12 l6 valign-wrapper">
                                     <div class="col s12 m12 l5">
                                         <label for="spectatorproductminquantity">Min Quantity</label>
-                                        <input id="spectatorproductminquantity" type="number" value="{{$minmax->minquantity}}" min ="{{$minmax->minquantity}}" max="{{$minmax->maxquantity}}" name="minQuantity"/>
+                                        <input id="spectatorproductminquantity" type="number" value="{{$minmax->minquantity}}" min ="{{$minmax->minquantity}}" max="{{($minmax->maxquantity+$minmax->minquantity)/2}}" name="minQuantity"/>
                                     </div>
                                     <div class="col s12 m12 l2 valign center-align">
                                         to
                                     </div>
                                     <div class="col s12 m12 l5">
                                         <label for="spectatorproductmaxquantity">Max Quantity</label>
-                                        <input id="spectatorproductmaxprice" type="number" value="{{$minmax->maxquantity}}" min ="{{$minmax->minquantity}}" max="{{$minmax->maxquantity}}" name="maxQuantity"/>
+                                        <input id="spectatorproductmaxprice" type="number" value="{{$minmax->maxquantity}}" min ="{{($minmax->maxquantity+$minmax->minquantity)/2}}" max="{{$minmax->maxquantity}}" name="maxQuantity"/>
                                     </div>
                                 </div>
                                 <div class="col s12 m12 l6 valign-wrapper">
                                     <div class="col s12 m12 l5">
                                         <label for="spectatorproductminadg">Min ADG</label>
-                                        <input id="spectatorproductminadg" type="number" value="{{$minmax->minadg}}" min ="{{$minmax->minadg}}" max="{{$minmax->maxadg}}" name="minADG"/>
+                                        <input id="spectatorproductminadg" type="number" value="{{$minmax->minadg}}" min ="{{$minmax->minadg}}" max="{{($minmax->maxadg+$minmax->minadg)/2}}" name="minADG"/>
                                     </div>
                                     <div class="col s12 m12 l2 valign center-align">
                                         to
                                     </div>
                                     <div class="col s12 m12 l5">
                                         <label for="spectatorproductmaxadg">Max ADG</label>
-                                        <input id="spectatorproductmaxadg" type="number" value="{{$minmax->maxadg}}" min ="{{$minmax->minadg}}" max="{{$minmax->maxadg}}" name="maxADG"/>
+                                        <input id="spectatorproductmaxadg" type="number" value="{{$minmax->maxadg}}" min ="{{($minmax->maxadg+$minmax->minadg)/2}}" max="{{$minmax->maxadg}}" name="maxADG"/>
                                     </div>
                                 </div>
                             </div>
@@ -99,27 +99,27 @@
                                 <div class="col s12 m12 l6 valign-wrapper">
                                     <div class="col s12 m12 l5">
                                         <label for="spectatorproductminfcr">Min FCR</label>
-                                        <input id="spectatorproductminfcr" type="number" value="{{$minmax->minfcr}}" min ="{{$minmax->minfcr}}" max="{{$minmax->maxfcr}}" name="minFCR"/>
+                                        <input id="spectatorproductminfcr" type="number" value="{{$minmax->minfcr}}" min ="{{$minmax->minfcr}}" max="{{($minmax->maxfcr+$minmax->minfcr)/2}}" name="minFCR"/>
                                     </div>
                                     <div class="col s12 m12 l2 valign center-align">
                                         to
                                     </div>
                                     <div class="col s12 m12 l5">
                                         <label for="spectatorproductmaxfcr">Max FCR</label>
-                                        <input id="spectatorproductmaxfcr" type="number" value="{{$minmax->maxfcr}}" min ="{{$minmax->minfcr}}" max="{{$minmax->maxfcr}}" name="maxFCR"/>
+                                        <input id="spectatorproductmaxfcr" type="number" value="{{$minmax->maxfcr}}" min ="{{($minmax->maxfcr+$minmax->minfcr)/2}}" max="{{$minmax->maxfcr}}" name="maxFCR"/>
                                     </div>
                                 </div>
                                 <div class="col s12 m12 l6 valign-wrapper">
                                     <div class="col s12 m12 l5">
                                         <label for="spectatorproductminbfat">Min Backfat</label>
-                                        <input id="spectatorproductminbfat" type="number" value="{{$minmax->minbfat}}" min ="{{$minmax->minbfat}}" max="{{$minmax->maxbfat}}" name="minBackfatThickness"/>
+                                        <input id="spectatorproductminbfat" type="number" value="{{$minmax->minbfat}}" min ="{{$minmax->minbfat}}" max="{{($minmax->maxbfat+$minmax->minbfat)/2}}" name="minBackfatThickness"/>
                                     </div>
                                     <div class="col s12 m12 l2 valign center-align">
                                         to
                                     </div>
                                     <div class="col s12 m12 l5">
                                         <label for="spectatorproductmaxbfat">Max Backfat</label>
-                                        <input id="spectatorproductmaxbfat" type="number" value="{{$minmax->maxbfat}}" min ="{{$minmax->minbfat}}" max="{{$minmax->maxbfat}}" name="maxBackfatThickness"/>
+                                        <input id="spectatorproductmaxbfat" type="number" value="{{$minmax->maxbfat}}" min ="{{($minmax->maxbfat+$minmax->minbfat)/2}}" max="{{$minmax->maxbfat}}" name="maxBackfatThickness"/>
                                     </div>
                                 </div>
                             </div>
@@ -138,8 +138,7 @@
         <div id="main-container" class="row">
             @forelse ($products as $product)
                 <div class="col s4">
-                    <div class="card small"
-                        data-values="{{ $product->name }}|{{ ucfirst($product->type) }}|{{ $product->adg }}|{{ $product->fcr }}|{{ $product->backfat_thickness }}|{{ ucfirst($product->status) }}|{{ $product->quantity }}|{{ $product->price }}|{{ '/images/product/'.$product->image_name }}|{{ $product->other_details }}  ">
+                    <div class="card small">
                         <div class="card-image waves-effect waves-block waves-light">
                             <img class="activator" src="{{'/images/product/'.$product->image_name}}" alt="Image broken" onerror="this.src='/images/logo.png'"/>
                         </div>
@@ -151,21 +150,7 @@
                             <p>Information</p>
                             <p>
                                 <p>{{$product->other_details}}</p>
-                                <script type="text/javascript">
-                                    var info = [
-                                        "{{ $product->name }}",
-                                        "{{ ucfirst($product->type) }}",
-                                        "{{ $product->adg }}",
-                                        "{{ $product->fcr }}",
-                                        "{{ $product->backfat_thickness }}",
-                                        "{{ ucfirst($product->status) }}",
-                                        "{{ $product->quantity }}",
-                                        "{{ $product->price }}",
-                                        "{{ '/images/product/'.$product->image_name }}",
-                                        "{{ $product->other_details }}"
-                                    ];
-                                </script>
-                                <p class="center"><a href="#product-modal" class="modal-trigger" v-bind:info=info v-on:click="displayProductModal()">See more information</a></p>
+                                <p class="center"><a href="#spectator-product-modal" class="modal-trigger" v-on:click.prevent="displayProductModal('{{$product->id}}')">See more information</a></p>
                             </p>
                         </div>
                     </div>
@@ -189,58 +174,9 @@
 
     </div>
 
-    {{-- TODO Fix the display of items appearing in the modal not matching the clicked item --}}
-    {{--  Add javascript or use Vue.js to fix this --}}
-    <div id="product-modal" class="modal modal-fixed-footer">
-        <div class="modal-content">
-            <h4 id="modal-header"></h4>
 
-            <div class="row">
-                <div class="col s12 m12 l4">
-                    <img id="modal-image" class="product_image" src="" alt="Image broken" onerror="this.src='/images/logo.png'"/>
-                </div>
-                <div class="col s12 m12 l8">
-                    <table>
-                        <thead>
-                            <tr>
-                                <th data-field="type">Type</th>
-                                <th data-field="adg">ADG</th>
-                                <th data-field="fcr">FCR</th>
-                                <th data-field="backfat_thickness">Backfat Thickness</th>
-                                <th data-field="status">Status</th>
-                                <th data-field="quantity">Quantity</th>
-                                <th data-field="price">Price</th>
-
-                            </tr>
-                        </thead>
-
-                        <tbody>
-                            <tr>
-                                <td id="data-type"></td>
-                                <td id="data-adg"></td>
-                                <td id="data-fcr"></td>
-                                <td id="data-backfat"></td>
-                                <td id="data-status"></td>
-                                <td id="data-quantity"></td>
-                                <td id="data-price"></td>
-                            </tr>
-                        </tbody>
-                    </table>
-
-                </div>
-            </div>
-            <div class="row">
-                <div class="left col s12 m12 l12">
-                    <h5>Other Product Information</h5>
-                </div>
-                <div id="data-information" class="col s12">
-
-                </div>
-            </div>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-        </div>
+    <div id="spectator-product-modal" class="modal">
+        {{-- Insert DOM element in ajax call --}}
     </div>
 
 @endsection

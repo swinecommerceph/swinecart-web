@@ -20,6 +20,8 @@ use App\Models\Video;
 use App\Models\Breed;
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\TransactionLog;
+use App\Models\ProductReservation;
 
 use DB;
 use Auth;
@@ -122,7 +124,15 @@ class SpectatorController extends Controller
                         ->count();
 
 
-        return view(('user.spectator.home'), compact('totalusers', 'totalbreeders', 'totalcustomers', 'totalproduct', 'boar', 'gilt', 'sow', 'semen', 'newcustomers', 'newbreeders'));
+        $date = Carbon::now();
+        $start = Carbon::now()->startOfMonth();
+        $end = Carbon::now()->endOfMonth();
+        $transactions =  DB::table('transaction_logs')
+                        ->where('status', '=', 'sold')
+                        ->whereBetween('created_at',[$start, $end])
+                        ->count();
+
+        return view(('user.spectator.home'), compact('totalusers', 'totalbreeders', 'totalcustomers', 'totalproduct', 'boar', 'gilt', 'sow', 'semen', 'newcustomers', 'newbreeders','transactions'));
     }
 
     /*
@@ -223,6 +233,27 @@ class SpectatorController extends Controller
         return view(('user.spectator.products'),compact('products'));
     }
 
+    /*
+     * Get product detail data
+     *
+     * @param id
+     * @return product details
+     *
+     */
+    public function fetchProductDetails(Request $request){
+        $product = DB::table('products')
+                    ->join('images', 'products.primary_img_id', '=', 'images.imageable_id')
+                    ->select('products.id', 'images.name as image_name', 'products.name', 'products.breeder_id',
+                    'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
+                    'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
+                    ->where('products.id','=',$request->id)
+                    ->get();
+        $product->first()->image_name = '/images/product/'.$product->first()->image_name;
+        $product->first()->type = ucfirst($product->first()->type);
+        $product->first()->status = ucfirst($product->first()->status);
+        return $product;
+    }
+
     // public function viewLogs()
     // {
     //     return view('user.spectator.logs');
@@ -240,7 +271,8 @@ class SpectatorController extends Controller
         $date = Carbon::now();
         $month = $date->month;
         $year = $date->year;
-
+        $start = Carbon::now()->startOfMonth();
+        $end = Carbon::now()->endOfMonth();
         $activeCustomers = DB::table('users')
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                         ->where('role_user.role_id','=',3)
@@ -294,33 +326,89 @@ class SpectatorController extends Controller
                         ->whereYear('blocked_at', '=', $year)
                         ->count();
 
-
         $products = DB::table('products')
                         ->where('status', '=', 'displayed')
                         ->whereNull('deleted_at')
+                        ->select('type',DB::raw('COUNT(*) as count'))
+                        ->groupBy('type')
                         ->get();
-
+        $total = 0;
         $boar = 0;
         $gilt = 0;
         $sow = 0;
         $semen = 0;
-        foreach ($products as $product) {
-            if(strcmp($product->type, 'boar')){
-                $boar++;
+        foreach ($products as $type) {
+            $total = $total + $type->count;
+            if($type->type == 'boar'){
+                $boar = $type->count;
             }
-            if(strcmp($product->type, 'gilt')){
-                $gilt++;
+            else if($type->type == 'boar'){
+                $boar = $type->count;
             }
-            if(strcmp($product->type, 'sow')){
-                $sow++;
+            else if($type->type == 'sow'){
+                $sow = $type->count;
             }
-            if(strcmp($product->type, 'semen')){
-                $semen++;
+            else if($type->type == 'gilt'){
+                $gilt = $type->count;
+            }
+            else if($type->type == 'semen'){
+                $semen = $type->count;
             }
         }
 
-        $data = [$activeBreeders, $deletedBreeders, $blockedBreeders, $activeCustomers, $deletedCustomers, $blockedCustomers, count($products), $boar, $gilt, $sow, $semen];
-        return view('user.spectator.statisticsDashboard', compact('data'));
+        $sold =  DB::table('transaction_logs')
+                        ->join('product_reservations', 'product_reservations.product_id', '=','transaction_logs.product_id')
+                        ->where([
+                                ['transaction_logs.status', '=','sold'],
+                                ['product_reservations.order_status', '=','sold']
+                            ])
+                        ->whereBetween('created_at', [$start, $end])
+                        ->groupBy('product_reservations.product_id')
+                        ->get();
+        $sold = count($sold);
+        $reserved =  DB::table('transaction_logs')
+                        ->join('product_reservations', 'product_reservations.product_id', '=','transaction_logs.product_id')
+                        ->where([
+                                ['transaction_logs.status', '=','reserved'],
+                                ['product_reservations.order_status', '=','reserved']
+                            ])
+                        ->whereBetween('created_at', [$start, $end])
+                        ->groupBy('product_reservations.product_id')
+                        ->get();
+
+        $reserved = count($reserved);
+        $paid =  DB::table('transaction_logs')
+                        ->join('product_reservations', 'product_reservations.product_id', '=','transaction_logs.product_id')
+                        ->where([
+                                ['transaction_logs.status', '=','paid'],
+                                ['product_reservations.order_status', '=','paid']
+                            ])
+                        ->whereBetween('created_at', [$start, $end])
+                        ->groupBy('product_reservations.product_id')
+                        ->get();
+
+        $paid = count($paid);
+        $on_delivery =  DB::table('transaction_logs')
+                        ->join('product_reservations', 'product_reservations.product_id', '=','transaction_logs.product_id')
+                        ->where([
+                                ['transaction_logs.status', '=','on_delivery'],
+                                ['product_reservations.order_status', '=','on_delivery']
+                            ])
+                        ->whereBetween('created_at', [$start, $end])
+                        ->groupBy('product_reservations.product_id')
+                        ->get();
+
+        $on_delivery = count($on_delivery);
+        $requested = DB::table('transaction_logs')
+                        ->select('product_id', DB::raw('MAX(created_at) as date, MAX(status) as status'))
+                        ->orderBy('date')->groupBy('product_id')
+                        ->where('status','=','requested')
+                        ->whereBetween('created_at', [$start, $end])
+                        ->get();
+        $requested = count($requested);
+
+        $data = [$activeBreeders, $deletedBreeders, $blockedBreeders, $activeCustomers, $deletedCustomers, $blockedCustomers, $total, $boar, $gilt, $sow, $semen];
+        return view('user.spectator.statisticsDashboard', compact('data', 'sold', 'reserved', 'paid', 'on_delivery', 'requested'));
         // return view(('user.spectator.statistics'), compact('charts'));
     }
 
@@ -352,14 +440,27 @@ class SpectatorController extends Controller
                     'products.farm_from_id', 'products.type', 'products.birthdate', 'products.price', 'products.adg',
                     'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
                     ->where('products.name', 'LIKE', "%$request->search%")
-                    ->whereIn('type', $type)
-                    ->whereBetween('price', [$request->minPrice, $request->maxPrice])
-                    ->whereBetween('quantity', [$request->minQuantity, $request->maxQuantity])
-                    ->whereBetween('adg', [$request->minADG, $request->maxADG])
-                    ->whereBetween('fcr', [$request->minFCR, $request->maxFCR])
-                    ->whereBetween('backfat_thickness', [$request->minBackfatThickness, $request->maxBackfatThickness])
+                    ->when(!(
+                        is_null($type) &&
+                        is_null($request->minPrice) &&
+                        is_null($request->maxPrice) &&
+                        is_null($request->minQuantity) &&
+                        is_null($request->maxQuantity) &&
+                        is_null($request->minADG) &&
+                        is_null($request->maxADG) &&
+                        is_null($request->minFCR) &&
+                        is_null($request->maxFCR) &&
+                        is_null($request->minBackfatThickness) &&
+                        is_null($request->maxBackfatThickness)
+                    ), function($query) use ($request, $type){
+                        return $query->whereIn('type', $type)
+                        ->whereBetween('price', [$request->minPrice, $request->maxPrice])
+                        ->whereBetween('quantity', [$request->minQuantity, $request->maxQuantity])
+                        ->whereBetween('adg', [$request->minADG, $request->maxADG])
+                        ->whereBetween('fcr', [$request->minFCR, $request->maxFCR])
+                        ->whereBetween('backfat_thickness', [$request->minBackfatThickness, $request->maxBackfatThickness]);
+                    })
                     ->paginate(9);
-
 
         return view('user.spectator.products', compact('products', 'productMinMax'));
     }
@@ -680,5 +781,43 @@ class SpectatorController extends Controller
         return view('user.spectator.deletedBreederStatistics', compact('monthlyCount', 'year'));
     }
 
-
+    /*
+     * Get product breakdown data
+     *
+     * @param none
+     * @return product counts
+     *
+     */
+    public function viewProductBreakdown(){
+        $products = DB::table('products')
+                        ->where('status', '=', 'displayed')
+                        ->whereNull('deleted_at')
+                        ->select('type',DB::raw('COUNT(*) as count'))
+                        ->groupBy('type')
+                        ->get();
+        $total = 0;
+        $boar = 0;
+        $gilt = 0;
+        $sow = 0;
+        $semen = 0;
+        foreach ($products as $type) {
+            $total = $total + $type->count;
+            if($type->type == 'boar'){
+                $boar = $type->count;
+            }
+            else if($type->type == 'boar'){
+                $boar = $type->count;
+            }
+            else if($type->type == 'sow'){
+                $sow = $type->count;
+            }
+            else if($type->type == 'gilt'){
+                $gilt = $type->count;
+            }
+            else if($type->type == 'semen'){
+                $semen = $type->count;
+            }
+        }
+        return view('user.spectator.productBreakdown', compact('boar', 'gilt', 'sow', 'semen', 'total'));
+    }
 }
