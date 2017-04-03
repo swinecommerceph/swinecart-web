@@ -150,6 +150,7 @@ class AdminController extends Controller
         return $count;
     }
 
+
     /**
      * Show Home Page of breeder
      *
@@ -158,13 +159,20 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
+
         $all = $this->userCount();
         $breeders = $this->breederCount();
         $customers = $this->customerCount();
         $pending = $this->pendingUserCount();
         $blocked = $this->blockedUserCount();
-        $summary = array($all, $breeders, $customers, $pending, $blocked);
-
+        $summary = array($all, $blocked, $pending);
+        // $customers = DB::table('swine_cart_items')->join('transaction_logs', 'transaction_logs.product_id','=','swine_cart_items.product_id')
+        //             ->whereMonth('date_needed', Carbon::now()->month)
+        //             ->whereYear('date_needed',  Carbon::now()->year)
+        //             ->whereDay('date_needed', Carbon::now()->day-1)
+        //             ->get();
+        //
+        // dd($customers);
         return view(('user.admin.home'), compact('summary'));
     }
 

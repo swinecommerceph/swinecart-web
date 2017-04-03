@@ -52,7 +52,7 @@
 
 @section('content')
 
-    <table class="bordered highlight responsive-table striped">
+    <table id="admin-users-table" class="bordered highlight responsive-table striped">
         <thead>
           <tr>
               <th data-field="name">Name</th>
@@ -65,8 +65,8 @@
             @forelse($users as $user)
           <tr>
 
-            <td>{{$user->name}}</td>
-            <td>{{ucfirst($user->title)}}</td>
+              <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->name}}','{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{$user->name}}</a></td>
+              <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->name}}','{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{ucfirst($user->title)}}</a></td>
             @if ($user->title == 'admin')
                 <td></td>
             @else
@@ -149,13 +149,48 @@
         </div>
       </div>
 
+      <div id="admin-user-details-modal" class="modal modal-fixed-footer">
+          <div class="modal-content">
+              <h4>User Details</h4>
+              <div class="divider"></div>
+              <div id="admin-user-details-content" class="col s12 m12 l12">
+                  No user data
+              </div>
+              <h4>User Transaction</h4>
+              <div class="divider"></div>
+              <table class="responsive-table highlight">
+                  <thead>
+                      <tr>
+                          <th>Transaction ID</th>
+                          <th>Product ID</th>
+                          <th>Product Name</th>
+                          <th>Seller/Customer</th>
+                          <th>Status</th>
+                          <th>Date Added</th>
+                      </tr>
+                  </thead>
 
+                  <tbody id="admin-user-transaction-content">
+
+                  </tbody>
+              </table>
+              <div class="row">
+                  <div class="col s12 m12 l12 center align" id="admin-link-transaction-history">
+
+                  </div>
+              </div>
+              <div id="admin-view-more-transactions" class="col s12 m12 l12 center">
+
+              </div>
+          </div>
+          <div class="modal-footer">
+              <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+          </div>
+      </div>
 @endsection
 
 @section('initScript')
     {{-- <script type="text/javascript" src="/js/admin/admin_custom.js"></script> --}}
     <script type="text/javascript" src="/js/admin/users.js"></script>
     <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
-    <script type="text/javascript" src="/js/admin/pages.js"></script>
-    <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
 @endsection
