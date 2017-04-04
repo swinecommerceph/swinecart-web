@@ -164,6 +164,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/logs', ['as'=>'admin_logs', 'uses'=>'AdminController@getAdministratorLogs']);
         Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
 
+        //message-related
+       Route::get('messages', ['as' => 'admin.messages', 'uses'=> 'MessageController@getMessages']);
+       Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
+       Route::get('messages/{breeder}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
+
         // Route for statistics pages
         Route::get('home/statistics/dashboard',['as'=>'admin.statistics.dashboard', 'uses'=>'AdminController@showStatisticsDashboard']);
 
@@ -189,6 +194,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/statistics/transactions-date', ['as' => 'admin.statistics.transactions-date', 'uses'=> 'AdminController@showStatisticsTransactionsYear']);
         Route::get('home/statistics/totaltransactions', ['as' => 'admin.statistics.totaltransactions', 'uses'=> 'AdminController@showStatisticsTotalTransactions']);
         Route::get('home/statistics/totaltransactions-year', ['as' => 'admin.statistics.totaltransactions-year', 'uses'=> 'AdminController@showStatisticsTotalTransactionsModified']);
+
+        Route::get('home/statistics/average-new-breeder', ['as' => 'admin.statistics.averageNewBreeder', 'uses'=> 'AdminController@averageMonthlyNewBreeders']);
+        Route::get('home/statistics/average-new-customer', ['as' => 'admin.statistics.averageNewCustomers', 'uses'=> 'AdminController@averageMonthlyNewCustomers']);
 
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
         Route::get('home/userlist/details', ['as'=>'admin.userlist.details', 'uses'=>'AdminController@fetchUserInformation']);

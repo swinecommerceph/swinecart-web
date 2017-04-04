@@ -36,7 +36,7 @@
               </li>
 
               <li>
-                <a href="#" class="dropdown-button tooltipped" data-beloworigin="true" data-activates="inquiries-dropdown" data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">feedback</i></a>
+                <a href="{{route('admin.messages')}}" class="dropdown-button tooltipped" data-beloworigin="true" data-activates="inquiries-dropdown" data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">feedback</i></a>
                 <ul id="inquiries-dropdown" class="dropdown-content">
                       <li>
                         <ul class="collection">

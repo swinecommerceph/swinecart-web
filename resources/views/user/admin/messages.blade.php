@@ -1,25 +1,11 @@
-
-{{--
-    Displays Customer profile form upon profile edit
---}}
-
-@extends('user.customer.home')
+@extends('user.admin.layout')
 
 @section('title')
-    | Customer - Messages
+    | Messages
 @endsection
 
 @section('pageId')
-    id="page-customer-messages"
-@endsection
-
-@section('breadcrumbTitle')
-    Messages
-@endsection
-
-@section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="#!" class="breadcrumb">Messages</a>
+    id="page-admin-messages"
 @endsection
 
 @section('content')
@@ -137,8 +123,7 @@
 @endsection
 
 @section('customScript')
-    <!-- Latest Vue JS CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.16/vue.min.js"></script>
+<script src="/js/vendor/VueJS/vue.js"></script>
 <script>
 $(document).ready(function(){
 	$('.message').show(0);

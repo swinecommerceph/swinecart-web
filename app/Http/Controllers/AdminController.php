@@ -1528,12 +1528,18 @@ class AdminController extends Controller
                         ->groupBy('year')
                         ->orderBy('year', 'desc')
                         ->get();
-
-        $lastTransactions = $transactions->first()->year; //most recent transaction year in the database
-        $firstTransactions = $transactions->take(5)->last()->year; //oldest transaction year in the last 5 transaction years
-        $showTransactions = $transactions->take(5); // get the last 5 transaction years
-        $selectedMin = $firstTransactions;
-        $selectedMax = $lastTransactions;
+        if(count($transactions)!=0){
+            $lastTransactions = $transactions->first()->year; //most recent transaction year in the database
+            $firstTransactions = $transactions->take(5)->last()->year; //oldest transaction year in the last 5 transaction years
+            $showTransactions = $transactions->take(5); // get the last 5 transaction years
+            $selectedMin = $firstTransactions;
+            $selectedMax = $lastTransactions;
+        }
+        else{
+            $showTransactions = $transactions->take(5); // get the last 5 transaction years
+            $selectedMin = Carbon::now()->year;
+            $selectedMax = Carbon::now()->year;
+        }
         return view('user.admin.statisticsTotalTransaction',compact('showTransactions', 'selectedMin', 'selectedMax'));
      }
 
@@ -1601,6 +1607,69 @@ class AdminController extends Controller
 
         return view('user.admin.spectatorList', compact('spectators'));
     }
+
+    public function averageMonthlyNewBreeders(){
+        $roleSelector = ['selected', ''];
+        $chartSelector = ['selected','',''];
+        $now = Carbon::now();
+        $yearNow = $now->year;
+        $pastYear = Carbon::now()->subYear(5);
+        $yearPast = $pastYear->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',2)
+                ->whereNotNull('approved_at')
+                ->whereNull('deleted_at')
+                ->whereNull('blocked_at')
+                ->whereBetween('created_at', [$pastYear, $now])
+                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $averageCount = array_fill($yearPast,($yearNow-$yearPast) ,0);
+        // $yearLabel = [];
+        // for($year = $yearPast; $year <= $yearNow; $year++){
+        //      $yearLabel[] = $year;
+        // }
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+        return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'yearPast', 'yearNow', 'averageCount'));
+    }
+
+    public function averageMonthlyNewCustomers(){
+        $roleSelector = ['', 'selected'];
+        $chartSelector = ['selected','',''];
+        $now = Carbon::now();
+        $yearNow = $now->year;
+        $pastYear = Carbon::now()->subYear(5);
+        $yearPast = $pastYear->year;
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',3)
+                ->whereNotNull('approved_at')
+                ->whereNull('deleted_at')
+                ->whereNull('blocked_at')
+                ->whereBetween('created_at', [$pastYear, $now])
+                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $averageCount = array_fill($yearPast,($yearNow-$yearPast) ,0);
+        // $yearLabel = [];
+        // for($year = $yearPast; $year <= $yearNow; $year++){
+        //      $yearLabel[] = $year;
+        // }
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+        return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'yearPast', 'yearNow', 'averageCount'));
+    }
+
 
     public function viewUsers(){
         $breeders = Breeder::all();

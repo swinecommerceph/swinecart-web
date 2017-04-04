@@ -21,6 +21,7 @@
                     <option value="{{route('admin.statistics.customer.active')}}">Customer</option>
                     <option value="{{route('admin.statistics.transactions')}}">Transactions</option>
                     <option value="{{route('admin.statistics.timeline')}}">Logs Timeline</option>
+                    <option value="{{route('admin.statistics.averageNewBreeder')}}">Average Values</option>
                 </select>
                 <label>Display Statistics</label>
             </div>

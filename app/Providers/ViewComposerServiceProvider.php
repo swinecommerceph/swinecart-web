@@ -43,13 +43,13 @@ class ViewComposerServiceProvider extends ServiceProvider
         view()->composer([
             'user.admin.statisticsBreederActive', 'user.admin.statisticsBreederBlocked', 'user.admin.statisticsBreederDeleted',
             'user.admin.statisticsCustomerActive', 'user.admin.statisticsCustomerBlocked', 'user.admin.statisticsCustomerDeleted',
-            'user.spectator.activeBreederStatistics', 'user.spectator.blockedBreederStatistics', 'user.spectator.deletedBreederStatistics',
-            'user.spectator.activeCustomerStatistics', 'user.spectator.blockedCustomerStatistics', 'user.spectator.deletedCustomerStatistics'
+            'user.admin.averageStatistics','user.spectator.activeBreederStatistics', 'user.spectator.blockedBreederStatistics',
+            'user.spectator.deletedBreederStatistics','user.spectator.activeCustomerStatistics', 'user.spectator.blockedCustomerStatistics',
+            'user.spectator.deletedCustomerStatistics',
             ], function($view){
             $first =  DB::table('users')->orderBy('created_at', 'asc')->first();
             $last =  DB::table('users')->orderBy('created_at', 'desc')->first();
-
-            $data = [Carbon::parse($first->created_at)->year, Carbon::parse($last->created_at)->year];
+            $data = [Carbon::parse($first->created_at)->year, Carbon::parse($last->created_at)->year, floor((Carbon::parse($first->created_at)->year + Carbon::parse($last->created_at)->year)/2)];
             $view->with('yearMinMax', $data);
         });
     }

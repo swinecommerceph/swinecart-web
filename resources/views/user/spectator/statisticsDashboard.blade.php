@@ -117,9 +117,9 @@
                                 <div class="col s12 m12 l12 center-align">
                                     {{$sold}} Sold
                                 </div>
-                                <div class=" col s12 m12 l12 center-align">
+                                {{-- <div class=" col s12 m12 l12 center-align">
                                     <a href="{{route('spectator.productbreakdown')}}">View More Information</a>
-                                </div>
+                                </div> --}}
                             </div>
                         </div>
                     </div>
