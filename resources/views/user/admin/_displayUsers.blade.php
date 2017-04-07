@@ -63,10 +63,9 @@
 
         <tbody>
             @forelse($users as $user)
-
                 <tr>
-                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->name}}','{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{$user->name}}</a></td>
-                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->name}}','{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{ucfirst($user->title)}}</a></td>
+                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent='clicked("{{$user->name}}","{{$user->user_id}}", "{{$user->role_id}}", "{{$user->userable_id}}")'>{{$user->name}}</a></td>
+                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent='clicked("{{$user->name}}","{{$user->user_id}}", "{{$user->role_id}}", "{{$user->userable_id}}")'>{{ucfirst($user->title)}}</a></td>
                     <td>
 
                         @if ($user->blocked_at == NULL)

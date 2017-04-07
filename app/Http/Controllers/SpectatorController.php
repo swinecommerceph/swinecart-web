@@ -234,10 +234,10 @@ class SpectatorController extends Controller
     }
 
     /*
-     * Get product detail data
+     * Get product breakdown data
      *
-     * @param id
-     * @return product details
+     * @param none
+     * @return product counts
      *
      */
     public function fetchProductDetails(Request $request){
@@ -254,10 +254,6 @@ class SpectatorController extends Controller
         return $product;
     }
 
-    // public function viewLogs()
-    // {
-    //     return view('user.spectator.logs');
-    // }
 
     /*
      * Get the statistics view for the spectator
@@ -601,13 +597,19 @@ class SpectatorController extends Controller
         return view('user.spectator.activeCustomerStatistics', compact('monthlyCount', 'year'));
     }
 
+
     /*
      * Display the view for the active customer statistics
      *
-     * @param request year
-     * @return view with array of counts and year stringYear￼
-2016
+     * @param integer year
+     * @return view with array of counts and year string
+     *
+     */
+     public function viewActiveCustomerStatisticsYear(Request $request)
+     {
+        $year = $request->year;
 
+        $counts = $this->getSpectatorActiveUserStatistics(3, $year);
         $monthlyCount = $this->getMonthlyCount($counts);
 
         return view('user.spectator.activeCustomerStatistics', compact('monthlyCount', 'year'));
@@ -642,7 +644,7 @@ class SpectatorController extends Controller
     {
         $year = $request->year;
         $counts = $this->getSpectatorBlockedUserStatistics(3, $year);
-        $monthlyCount = getMonthlyCount($counts);
+        $monthlyCount = $this->getMonthlyCount($counts);
 
         return view('user.spectator.blockedCustomerStatistics', compact('monthlyCount', 'year'));
     }
@@ -819,5 +821,9 @@ class SpectatorController extends Controller
             }
         }
         return view('user.spectator.productBreakdown', compact('boar', 'gilt', 'sow', 'semen', 'total'));
+    }
+
+    public function showTest(){
+        return view('user.spectator.testPage');
     }
 }

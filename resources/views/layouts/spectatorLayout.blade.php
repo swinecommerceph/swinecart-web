@@ -19,9 +19,9 @@
             <nav class="teal darken-3">
                 <div class="nav-wrapper container">
                     <a href="{{ route('home_path') }}"><img src="/images/logowhite.png" height=65/>&nbsp&nbsp<div class="brand-logo">SwineCart</div></a>
-
+                    {{-- <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a> --}}
                     <ul id="nav-mobile" class="right hide-on-med-and-down">
-                        <li><a>{{ Auth::user()->name }}</a> </li>
+                        <li><a href="{{ route('home_path') }}">{{ Auth::user()->name }}</a> </li>
                         {{-- <li>
                             <a class="waves-effect waves-light modal-trigger tooltipped" href="{{ route('admin_logs') }}" data-position="bottom" data-delay="40" data-tooltip="Administrator Logs">
                                 <i class="material-icons">class</i>

@@ -22,7 +22,7 @@
                 </div>
 
                 <div class="col s4 m4 l4 valign">
-                    <button id="search-button" class="btn waves-effect waves-light" type="submit">Submit</button>
+                    <button id="search-button" class="btn waves-effect waves-light" type="submit">Search</button>
                 </div>
             {!!Form::close()!!}
         </div>

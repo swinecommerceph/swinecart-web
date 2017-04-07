@@ -36,7 +36,7 @@
                         <option disabled selected>Choose option</option>
                         <option value="{{route('spectator.statisticsActiveBreeder')}}">Breeder</option>
                         <option value="{{route('spectator.statisticsActiveCustomer')}}">Customer</option>
-                        <option value="3">Products</option>
+                        <option value="{{route('spectator.productbreakdown')}}">Product Breakdown</option>
                     </select>
                     <label>Display Statistics</label>
                 </div>

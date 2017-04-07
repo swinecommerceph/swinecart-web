@@ -48,25 +48,30 @@
         <div class="col s12">
             <div class="row">
                 <div class="input-field col s6 m6 l6 xl6">
-                    <select>
+                    <select onChange="window.location.href=this.value">
                         {{-- <option disabled selected>Choose option</option> --}}
-                        <option {{$chartSelector[0]}} value="1">Average Monthly Breeders Created</option>
-                        <option {{$chartSelector[1]}} value="2">Average Monthly Breeders Deleted</option>
-                        <option {{$chartSelector[2]}} value="2">Average Monthly Breeders Blocked</option>
+                        <option {{$chartSelector[0]}} value="{{route($chartRoute[0])}}">Average Monthly Created</option>
+                        <option {{$chartSelector[1]}} value="{{route($chartRoute[1])}}">Average Monthly Blocked</option>
+                        <option {{$chartSelector[2]}} value="{{route($chartRoute[2])}}">Average Monthly Deleted</option>
                     </select>
                     <label>Chart Type</label>
                 </div>
                 <div class="col s6 m6 l6 xl6">
-                    <div class="row">
-                        <div class="input-field col s6 m6 l6 xl6">
-                            <input id="from" type="number" name="yearmin" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[2] }}" value="{{$yearPast}}">
-                            <label for="from">From</label>
-                        </div>
-                        <div class="input-field col s6 m6 l6 xl6">
-                            <input id="to" type="number" name="yearmax" min="{{ $yearMinMax[2] }}" max="{{ $yearMinMax[1] }}" value="{{$yearNow}}">
-                            <label for="to">To</label>
-                        </div>
-                    </div>
+                    {{-- <div class="row valign-wrapper"> --}}
+                        {!!Form::open(['route'=>$route, 'method'=>'GET', 'class'=>'row valign-wrapper'])!!}
+                            <div class="input-field col s4 m4 l4 xl4">
+                                <input id="from" type="number" name="yearmin" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[2] }}" value="{{$yearminimum}}">
+                                <label for="from">From</label>
+                            </div>
+                            <div class="input-field col s4 m4 l4 xl4">
+                                <input id="to" type="number" name="yearmax" min="{{ $yearMinMax[2] }}" max="{{ $yearMinMax[1] }}" value="{{$yearmaximum}}">
+                                <label for="to">To</label>
+                            </div>
+                            <div class="col s4 m4 l4 xl4 valign">
+                                <button class="btn waves-effect waves-light" type="submit" name="select">Select</button>
+                            </div>
+                        {!!Form::close()!!}
+                    {{-- </div> --}}
                 </div>
             </div>
             <div class="row">
@@ -77,7 +82,8 @@
                 </script>
                 @foreach ($averageCount as $count)
                     <script type="text/javascript">
-                        yearLabel.push({!! $yearPast !!}+index);
+                        // since index for the year is not known get the last year input then add an index value since we know that the count array will have the exact number of years to the max input
+                        yearLabel.push({!! $yearminimum !!}+index);
                         counts.push({!!$count !!});
                         index++;
                     </script>

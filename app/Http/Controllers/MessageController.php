@@ -20,8 +20,8 @@ class MessageController extends Controller
 
 		Comm:
 			Build email function similar to mailwoman
-			Build sms function 
-	
+			Build sms function
+
 		Todo:
 			Run chat server on php artisan serve
 	*/
@@ -63,7 +63,7 @@ class MessageController extends Controller
 	    	}
 
 
-	    	
+
 	    	if(!$tampered && sizeof($messages) <= 0 && sizeof($threads) > 0){
 	    		$user = User::where('id', $threadId)->first();
 	    		if(!isset($user) || $user->userable_type != 'App\Models\Breeder')
@@ -74,7 +74,7 @@ class MessageController extends Controller
 	    		$otherName = $user->name;
 	    	}
 
-			    	
+
 
 
 			return view('user.customer.messages', compact("chatPort", "userName", "userId", "userType", "threads", "threadId", "messages", "otherName"));
@@ -107,7 +107,7 @@ class MessageController extends Controller
 	    		}
 	    	}
 
-	    	
+
 	    	if(!$tampered && sizeof($messages) <= 0 && sizeof($threads) > 0){
 	    		$user = User::where('id', $threadId)->first();
 	    		if(!isset($user) || $user->userable_type == 'App\Models\Customer')
@@ -120,31 +120,69 @@ class MessageController extends Controller
 
 			return view('user.breeder.messages', compact("chatPort", "userName", "userId", "userType", "threads", "threadId", "messages", "otherName"));
     	}
+		elseif(Auth::user()->userable_type == 'App\Models\Admin'){
+			$userType = 'Admin';
+    		$otherName = '';
+
+			$threadsCustomer = Message::where('admin_id', '=', $userId)
+	    		->orderBy('created_at', 'DESC')
+	    		//->groupBy('customer_id')
+	    		->get()
+	    		->unique('customer_id');
+			$threadsBreeder = Message::where('admin_id', '=', $userId)
+	    		->orderBy('created_at', 'DESC')
+	    		//->groupBy('customer_id')
+	    		->get()
+	    		->unique('breeder_id');
+
+			$tampered = false;
+	    	if($threadId == '' && isset($threads[0])){
+	    		$tampered = true;
+	    		$threadId = $threads[0]->customer_id;
+	    	}
+			dd($threadsCustomer,$threadsBreeder);
+		}
     	else{
     		return 'Unsupported user type.';
     	}
 
     }
 
+	public function getMessagesAdmin($threadId = ''){
+		$userType = 'Admin';
+		$otherName = '';
+		
+
+	}
+
+
     public function countUnread(){
     	$userId = Auth::user()->id;
     	if(Auth::user()->userable_type == 'App\Models\Customer'){
     		$count = Message::where('customer_id', '=', $userId)
-				->where('read_at', NULL) 
+				->where('read_at', NULL)
 				->where('direction', 1) //from breeder to customer
 	    		->orderBy('created_at', 'ASC')
 	    		->groupBy('breeder_id')
 	    		->get();
     	}
-    	else{
+    	else if(Auth::user()->userable_type == 'App\Models\Breeder'){
 	    	$count = Message::where('breeder_id', '=', $userId)
-				->where('read_at', NULL) 
+				->where('read_at', NULL)
 				->where('direction', 0) //from customer to breeder
 	    		->orderBy('created_at', 'ASC')
 	    		->groupBy('customer_id')
 	    		->get();
-    		
-    	}
+
+    	}else{
+			$count = Message::where('admin_id', '=', $userId)
+				->where('read_at', NULL)
+				->where('direction', 0) //from customer to breeder
+	    		->orderBy('created_at', 'ASC')
+	    		->groupBy('customer_id')
+	    		->get();
+
+		}
 
 
     	return sizeof($count);

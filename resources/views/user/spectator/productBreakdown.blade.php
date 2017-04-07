@@ -15,9 +15,20 @@
 @section('content')
 
     <div class="card-panel">
-        <div class="row">
-            <div class="col s12">
+        <div class="row valign-wrapper">
+            <div class="col s6 m6 l6 xl6">
                 <h4>Product Breakdown</h4>
+            </div>
+            <div class="valign center-block col s6 m6 l6 xl6">
+                <div class="input-field col s12">
+                    <select onChange="window.location.href=this.value">
+                        <option disabled selected>Choose option</option>
+                        <option value="{{route('spectator.statisticsActiveBreeder')}}">Breeder</option>
+                        <option value="{{route('spectator.statisticsActiveCustomer')}}">Customer</option>
+                        <option value="{{route('spectator.productbreakdown')}}">Product Breakdown</option>
+                    </select>
+                    <label>Display Statistics</label>
+                </div>
             </div>
         </div>
         <div class="divider"></div>

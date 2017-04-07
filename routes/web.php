@@ -165,7 +165,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
 
         //message-related
-       Route::get('messages', ['as' => 'admin.messages', 'uses'=> 'MessageController@getMessages']);
+       Route::get('messages', ['as' => 'admin.messages', 'uses'=> 'MessageController@getMessagesAdmin']);
        Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
        Route::get('messages/{breeder}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
 
@@ -195,8 +195,23 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/statistics/totaltransactions', ['as' => 'admin.statistics.totaltransactions', 'uses'=> 'AdminController@showStatisticsTotalTransactions']);
         Route::get('home/statistics/totaltransactions-year', ['as' => 'admin.statistics.totaltransactions-year', 'uses'=> 'AdminController@showStatisticsTotalTransactionsModified']);
 
+        // Average Statistics for Breeders
         Route::get('home/statistics/average-new-breeder', ['as' => 'admin.statistics.averageNewBreeder', 'uses'=> 'AdminController@averageMonthlyNewBreeders']);
+        Route::get('home/statistics/average-new-breeder-year', ['as' => 'admin.statistics.averageNewBreederYear', 'uses'=> 'AdminController@averageMonthlyNewBreedersYear']);
+        Route::get('home/statistics/average-blocked-breeder', ['as' => 'admin.statistics.averageBlockedBreeder', 'uses'=> 'AdminController@averageMonthlyBlockedBreeders']);
+        Route::get('home/statistics/average-blocked-breeder-year', ['as' => 'admin.statistics.averageBlockedBreederYear', 'uses'=> 'AdminController@averageMonthlyBlockedBreedersYear']);
+        Route::get('home/statistics/average-deleted-breeder', ['as' => 'admin.statistics.averageDeletedBreeder', 'uses'=> 'AdminController@averageMonthlyDeletedBreeders']);
+        Route::get('home/statistics/average-deleted-breeder-year', ['as' => 'admin.statistics.averageDeletedBreederYear', 'uses'=> 'AdminController@averageMonthlyDeletedBreedersYear']);
+
+
+        // Average Statistics for Customers
         Route::get('home/statistics/average-new-customer', ['as' => 'admin.statistics.averageNewCustomers', 'uses'=> 'AdminController@averageMonthlyNewCustomers']);
+        Route::get('home/statistics/average-new-customer-year', ['as' => 'admin.statistics.averageNewCustomerYear', 'uses'=> 'AdminController@averageMonthlyNewCustomersYear']);
+        Route::get('home/statistics/average-blocked-customer', ['as' => 'admin.statistics.averageBlockedCustomers', 'uses'=> 'AdminController@averageMonthlyBlockedCustomers']);
+        Route::get('home/statistics/average-blocked-customer-year', ['as' => 'admin.statistics.averageBlockedCustomerYear', 'uses'=> 'AdminController@averageMonthlyBlockedCustomersYear']);
+        Route::get('home/statistics/average-deleted-customer', ['as' => 'admin.statistics.averageDeletedCustomers', 'uses'=> 'AdminController@averageMonthlyDeletedCustomers']);
+        Route::get('home/statistics/average-deleted-customer-year', ['as' => 'admin.statistics.averageDeletedCustomerYear', 'uses'=> 'AdminController@averageMonthlyDeletedCustomersYear']);
+
 
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
         Route::get('home/userlist/details', ['as'=>'admin.userlist.details', 'uses'=>'AdminController@fetchUserInformation']);
@@ -248,7 +263,6 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/product/search', ['as'=>'spectator.searchProduct', 'uses'=>'SpectatorController@searchProduct']);
         Route::get('home/product/advancedsearch', ['as'=>'spectator.advancedSearchProduct', 'uses'=>'SpectatorController@advancedSearchProduct']);
 
-
         Route::get('statistics/customer/active', ['as'=>'spectator.statisticsActiveCustomer', 'uses'=>'SpectatorController@viewActiveCustomerStatistics']);
         Route::get('statistics/customer/active-year', ['as'=>'spectator.statisticsActiveCustomerYear', 'uses'=>'SpectatorController@viewActiveCustomerStatisticsYear']);
         Route::get('statistics/customer/blocked', ['as'=>'spectator.statisticsBlockedCustomer', 'uses'=>'SpectatorController@viewBlockedCustomerStatistics']);
@@ -264,6 +278,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('statistics/breeder/deleted-year', ['as'=>'spectator.statisticsDeletedBreederYear', 'uses'=>'SpectatorController@viewDeletedBreederStatisticsYear']);
 
         Route::get('statistics/productbreakdown', ['as'=>'spectator.productbreakdown', 'uses'=>'SpectatorController@viewProductBreakdown']);
+
+        Route::get('testpage',['as'=>'testpage', 'uses'=>'SpectatorController@showTest']);
     });
 
 

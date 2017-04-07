@@ -27,7 +27,7 @@
             <a href="{{ route('home_path') }}"><img src="/images/logowhite.png" height=65/>&nbsp&nbsp<div class="brand-logo">SwineCart</div></a>
 
             <ul id="nav-mobile" class="right hide-on-med-and-down">
-              <li><a>{{ Auth::user()->name }}</a> </li>
+              <li><a href="{{route('home_path')}}">{{ Auth::user()->name }}</a> </li>
 
               <li>
                 <a class="waves-effect waves-light modal-trigger tooltipped" href="{{ route('admin_logs') }}" data-position="bottom" data-delay="40" data-tooltip="Administrator Logs">
@@ -36,15 +36,15 @@
               </li>
 
               <li>
-                <a href="{{route('admin.messages')}}" class="dropdown-button tooltipped" data-beloworigin="true" data-activates="inquiries-dropdown" data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">feedback</i></a>
-                <ul id="inquiries-dropdown" class="dropdown-content">
+                <a href="{{route('admin.messages')}}" class="tooltipped"  data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">feedback</i></a>
+                {{-- <ul id="inquiries-dropdown" class="dropdown-content">
                       <li>
                         <ul class="collection">
                           <li class="collection-item avatar">
                             <i class="material-icons circle">perm_identity</i>
                             <span class="title">Username</span>
                             <p>
-                              {{-- Insert message here --}}
+
                               message
                             </p>
                              <a class="modal-trigger waves-effect waves-light right" href="#modal1">Read more...</a>
@@ -52,7 +52,7 @@
                         </ul>
                       </li>
                       <li><a href="#" class=" center">Show All</a></li>
-                  </ul>
+                  </ul> --}}
                 </li>
 
                 <li>
