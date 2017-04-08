@@ -1,4 +1,4 @@
-@extends('user.admin.layout')
+@extends('layouts.adminLayout')
 
 @section('title')
     | Messages
@@ -8,118 +8,127 @@
     id="page-admin-messages"
 @endsection
 
+@section('header')
+    <div class="row valign-wrapper">
+        <div class="col s5 m5 l5 xl5 valign">
+            <h4 id='admin-content-panel-header'>Messages</h4>
+        </div>
+        <div class="col s7 m7 l7 xl7 valign">
+            <a href="{{route('admin.customer.messages')}}" class="waves-effect waves-teal btn-flat right">Customers</a>
+            <a href="{{route('admin.breeder.messages')}}" class="waves-effect waves-teal btn-flat right">Breeders</a>
+        </div>
+    </div>
+@endsection
+
+
 @section('content')
-<style>
- 	#chatMessages{ width: 100%; border: 1px solid #ddd; min-height: 100px; list-style: none; padding-left: 0px; height: 400px; overflow-y: auto;}
- 	#chatMessages li { width: 100%; padding: 10px;}
- 	#thread-collection{ height: 500px; overflow-y: auto; }
+    <style>
+        #chatMessages{ width: 100%; border: 1px solid #ddd; min-height: 100px; list-style: none; padding-left: 0px; height: 400px; overflow-y: auto;}
+        #chatMessages li { width: 100%; padding: 10px;}
+        #thread-collection{ height: 500px; overflow-y: auto; }
 
+        .chat-bubble { border-radius: 10px; min-width: 200px; padding:10px; }
+        .chat-bubble.in { float:left; background-color: #4fc3f7; }
+        .chat-bubble.out { float:right; background-color: #e0e0e0; }
+    </style>
+    <div class="row">
+        <div class="col m3 row">
+    	  <ul class="collection" id="thread-collection">
+    	  	@foreach($threads as $thread)
+    	  		@if($userType == 'Breeder')
+    	  			<a id="thread-{{ $thread->breeder_id }}" href="/customer/messages/{{ $thread->breeder_id }}">
+    	  		@else
+    	  			<a id="thread-{{ $thread->customer_id }}" href="/breeder/messages/{{ $thread->customer_id }}">
+    	  		@endif
 
- 	.chat-bubble { border-radius: 10px; min-width: 200px; padding:10px; }
- 	.chat-bubble.in { float:left; background-color: #4fc3f7; }
- 	.chat-bubble.out { float:right; background-color: #e0e0e0; }
-</style>
+    	  		@if(($threadId == $thread->breeder_id && $userType == 'Customer') || ($threadId == $thread->customer_id && $userType == 'Breeder'))
+    		    	<li class="collection-item avatar green lighten-4">
+    	  		@else
+    		    	<li class="collection-item avatar">
+    	  		@endif
 
-<div class="row">
+    		      <i class="material-icons circle small left">chat</i>
+    		      <span class="title">
+    		         @if($thread->read_at == NULL)
+    		           *
+    		         @endif
+    		      	{{ $thread->otherparty() }}
 
-	<div class="col m3 row">
-	  <ul class="collection" id="thread-collection">
-	  	@foreach($threads as $thread)
-	  		@if($userType == 'Customer')
-	  			<a id="thread-{{ $thread->breeder_id }}" href="/customer/messages/{{ $thread->breeder_id }}">
-	  		@else
-	  			<a id="thread-{{ $thread->customer_id }}" href="/breeder/messages/{{ $thread->customer_id }}">
-	  		@endif
+    		      </span>
 
-	  		@if(($threadId == $thread->breeder_id && $userType == 'Customer') || ($threadId == $thread->customer_id && $userType == 'Breeder'))
-		    	<li class="collection-item avatar green lighten-4">
-	  		@else
-		    	<li class="collection-item avatar">
-	  		@endif
+    		    </li>
+    		    </a>
+    	    @endforeach
+    	  </ul>
+    	</div>
 
-		      <i class="material-icons circle small">chat</i>
-		      <span class="title">
-		         @if($thread->read_at == NULL)
-		           *
-		         @endif
-		         {{ $thread->otherparty() }}
-		      </span>
+    	<div class="col m9 row">
 
-		    </li>
-		    </a>
-	    @endforeach
-	  </ul>
-	</div>
+    		<div>
 
-	<div class="col m9 row">
+    			<div class="panel panel-default">
 
-		<div>
+    				<div id="threadname" class="panel-heading center-align">
+    					@if($threadId != '' && sizeof($threads) == 0)
+    						{{ $otherName }}
+    					@elseif(sizeof($threads) == 0)
+    						You have no messages.
+    					@else
+    						{{ $threads[0]->otherparty() }}
+    					@endif
+    				</div>
 
-			<div class="panel panel-default">
+    				<div class="panel-body" id="chat">
 
-				<div id="threadname" class="panel-heading center-align">
-					@if($threadId != '' && sizeof($threads) == 0)
-						{{ $otherName }}
-					@elseif(sizeof($threads) == 0)
-						You have no messages.
-					@else
-						{{ $threads[0]->otherparty() }}
-					@endif
-				</div>
+    					<ul id="chatMessages">
 
-				<div class="panel-body" id="chat">
+    						@foreach($messages as $message)
+    							@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
+    								<li class="message" :class="mine" style="clear:both">
+    									<div class="chat-bubble out">
+    										<span class="who">
+    											Me:
+    										</span>
+    										{{ $message->message }}
+    									</div>
+    								</li>
+    							@else
+    								<li class="message" :class="user" style="clear:both">
+    									<div class="chat-bubble in">
+    										<span class="who">
+    							    			{{ $message->sender() }}:
+    										</span>
+    										{{ $message->message }}
+    									</div>
+    								</li>
+    							@endif
+    						@endforeach
 
-					<ul id="chatMessages">
+    						<li v-for="message in messages" class="message" :class="message.class" style="display:none;clear:both;">
+    							<div class="chat-bubble" v-bind:class="message.dir">
+    								<span class="who">
+    					    			@{{ message.who }}:
+    								</span>
+    								@{{ message.msg }}
+    							</div>
+    						</li>
 
-						@foreach($messages as $message)
-							@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
-								<li class="message" :class="mine" style="clear:both">
-									<div class="chat-bubble out">
-										<span class="who">
-											Me:
-										</span>
-										{{ $message->message }}
-									</div>
-								</li>
-							@else
-								<li class="message" :class="user" style="clear:both">
-									<div class="chat-bubble in">
-										<span class="who">
-							    			{{ $message->sender() }}:
-										</span>
-										{{ $message->message }}
-									</div>
-								</li>
-							@endif
-						@endforeach
+    					</ul>
 
-						<li v-for="message in messages" class="message" :class="message.class" style="display:none;clear:both;">
-							<div class="chat-bubble" v-bind:class="message.dir">
-								<span class="who">
-					    			@{{ message.who }}:
-								</span>
-								@{{ message.msg }}
-							</div>
-						</li>
+    					<div style="display:table; width: 100%;">
 
-					</ul>
+    						<input placeholder="Enter your message here."
+    						 		style="display:table-cell; width: 100%;"
+    							   type="text"
+    							   v-model="newMessage"
+    							   @keyup.enter="sendMessage"/>
+    					</div>
+    				</div>
+    			</div>
+    		</div>
+    	</div>
 
-					<div style="display:table; width: 100%;">
-
-						<input placeholder="Enter your message here."
-						 		style="display:table-cell; width: 100%;"
-							   type="text"
-							   v-model="newMessage"
-							   @keyup.enter="sendMessage"/>
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
-
-</div>
-
-
+    </div>
 @endsection
 
 @section('customScript')

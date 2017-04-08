@@ -21,6 +21,7 @@ use App\Models\Video;
 use App\Models\Breed;
 use App\Models\Admin;
 use App\Models\User;
+use App\Models\Sessions;
 use App\Models\HomeImage;
 use App\Models\AdministratorLog;
 use App\Repositories\AdminRepository;
@@ -38,7 +39,7 @@ class AdminController extends Controller
     protected $user;
 
     /**
-    * Create new BreederController instance
+    * Create new AdminController instance
     */
     public function __construct()
     {
@@ -159,13 +160,14 @@ class AdminController extends Controller
      */
     public function index(Request $request)
     {
-
         $all = $this->userCount();
         $breeders = $this->breederCount();
         $customers = $this->customerCount();
         $pending = $this->pendingUserCount();
         $blocked = $this->blockedUserCount();
-        $summary = array($all, $blocked, $pending);
+        $messages = DB::table('messages')->where('admin_id','=', $this->user->id)->whereNull('read_at')->count();
+        $summary = array($all, $blocked, $pending, $messages);
+
         // $customers = DB::table('swine_cart_items')->join('transaction_logs', 'transaction_logs.product_id','=','swine_cart_items.product_id')
         //             ->whereMonth('date_needed', Carbon::now()->month)
         //             ->whereYear('date_needed',  Carbon::now()->year)
@@ -187,7 +189,7 @@ class AdminController extends Controller
                 ->whereNotNull('approved_at')
                 ->whereNull('deleted_at')
                 ->paginate(10);
-        
+
         return view('user.admin._displayUsers',compact('users'));
     }
 

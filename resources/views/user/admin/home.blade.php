@@ -91,12 +91,12 @@
                          <i class="ecommerce-icon">u</i>
                       </div>
                       <div class="">
-                         <div class="summary-title">USER INQUIRIES</div>
+                         <div class="summary-title">Unread Messages</div>
                       </div>
                    </div>
 
-                   <div class="center white-text summary-data col s8 truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="3">
-                      3
+                   <div class="center white-text summary-data col s8 truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$summary[3]}}">
+                      {{$summary[3]}}
                    </div>
                 </div>
              </div>

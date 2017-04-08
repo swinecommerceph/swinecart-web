@@ -20,6 +20,7 @@ class ViewComposerServiceProvider extends ServiceProvider
         $this->getHomeImages();
         $this->spectatorGetMinMaxProductValues();
         $this->getTransactionFirstLastYear();
+        $this->getOnlineUsers();
     }
 
     /**
@@ -123,6 +124,19 @@ class ViewComposerServiceProvider extends ServiceProvider
             $homeContent = DB::table('home_images')->get();
             $view->with('homeContent', $homeContent);
 
+        });
+    }
+
+    public function getOnlineUsers(){
+        view()->composer('user.admin.*',function($view){
+            $users = User::all();
+            $counter = 0;
+            foreach ($users as $user) {
+                if($user->isOnline()) {
+                    $counter++;
+                }
+            }
+            $view->with('counter', $counter);
         });
     }
 }

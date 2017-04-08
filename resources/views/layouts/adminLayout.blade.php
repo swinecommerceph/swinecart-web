@@ -36,7 +36,7 @@
               </li>
 
               <li>
-                <a href="{{route('admin.messages')}}" class="tooltipped"  data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">feedback</i></a>
+                <a href="{{route('admin.breeder.messages')}}" class="tooltipped"  data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">feedback</i></a>
                 {{-- <ul id="inquiries-dropdown" class="dropdown-content">
                       <li>
                         <ul class="collection">
@@ -155,7 +155,7 @@
       <div class="footer-copyright">
         <div class="container">
         © 2017 Copyright Text
-        <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
+        <div class="grey-text text-lighten-4 right" href="#!">{{$counter}} User Online</div>
         </div>
       </div>
     </footer>
