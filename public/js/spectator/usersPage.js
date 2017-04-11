@@ -7,7 +7,7 @@ var usersPage = new Vue({
     methods: {
         clicked: function(id, role){
             users.fetch_user_info(id, role);
-
+            
         }
     }
 

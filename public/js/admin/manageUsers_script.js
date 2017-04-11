@@ -4,6 +4,7 @@
 var usersPage = new Vue({
     el: '#admin-users-table',
     data: {
+        
     },
     methods: {
         clicked: function(name, id, role, userable){

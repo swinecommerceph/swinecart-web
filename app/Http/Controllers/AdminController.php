@@ -10,6 +10,8 @@ use App\Http\Requests\BreederPersonalProfileRequest;
 use App\Http\Requests\BreederFarmProfileRequest;
 use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Mail;
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Breeder;
@@ -25,8 +27,9 @@ use App\Models\Sessions;
 use App\Models\HomeImage;
 use App\Models\AdministratorLog;
 use App\Repositories\AdminRepository;
+use App\Mail\SwineCartAccountNotification;
+use App\Mail\SwineCartBreederCredentials;
 
-use Mail;
 use DB;
 use Auth;
 use Input;
@@ -265,11 +268,11 @@ class AdminController extends Controller
             'category' => 'Delete',
             'action' => 'Deleted '.$user->name,
         ]);
-
-        // send an email notification to the user's email
-        Mail::send('emails.notification', ['type'=>'deleted', 'approved'=>$user->approved_at], function ($message) use($user){
-          $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
-        });
+        $time = Carbon::now()->addMinutes(10);
+        $notificationType = 2;
+        // Send an email to the user after 10 minutes
+        Mail::to($user->email)
+            ->later($time, new SwineCartAccountNotification($user, $notificationType));
 
         return Redirect::back()->with('message','User Deleted');
     }
@@ -404,7 +407,14 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         $user = User::find($request->id);       // find the user using the user id
-        $user->blocked_at = Carbon::now();     // change the status for is_blocked column
+        $notificationType = NULL;
+        if($user->blocked_at != NULL){
+            $user->blocked_at = NULL;
+            $notificationType = 1;
+        }else{
+            $user->blocked_at = Carbon::now();     // change the status for is_blocked column
+            $notificationType = 0;
+        }
         $user->save();                              // save the change to the database
         // create a log entry for the action done
         if($user->blocked_at!=NULL){
@@ -424,16 +434,13 @@ class AdminController extends Controller
                 'action' => 'Unblocked '.$user->name,
             ]);
         }
-        // send an email notification to the email of the user
-        Mail::send('emails.notification', ['type'=>'blocked', 'status'=>$user->blocked_at], function ($message) use($user){
-          $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
-        });
-        if($user->blocked_at != NULL){
-            return Redirect::back()->with('message','User Blocked');
-        }else{
-            return Redirect::back()->with('message','User Unblocked');
-        }
 
+        // send an email notification to the user's email
+        $time = Carbon::now()->addMinutes(10);
+        Mail::to($user->email)
+            ->later($time, new SwineCartAccountNotification($user, $notificationType));
+
+        return Redirect::back()->with('message','Action Success');
     }
 
     /**
@@ -503,9 +510,9 @@ class AdminController extends Controller
             'action' => 'Created user account for '.$data['email'],
         ]);
 
-        Mail::send('emails.credentials', ['email' => $request->input('email'),'password' => $password], function ($message) use($data){     // send an email containing the credential of the user to the input email
-          $message->to($data['email'])->subject('Breeder Credentials for Swine E-Commerce PH');
-        });
+        $time = Carbon::now()->addMinutes(10);
+        Mail::to($user->email)
+            ->later($time, new SwineCartBreederCredentials($user->email, $password));
 
         return Redirect::back()->withMessage('User Created!'); // redirect to the page and display a toast notification that a user is created
     }
@@ -529,6 +536,7 @@ class AdminController extends Controller
         $adminName = Auth::user()->name;
         $user = User::find($request->id);
         $user->approved_at = Carbon::now();     // negate the status to approve user
+        $notificationType = 3;
         // create a log entry for the action done
         AdministratorLog::create([
             'admin_id' => $adminID,
@@ -538,10 +546,10 @@ class AdminController extends Controller
             'action' => 'Approved '.$user->name,
         ]);
 
-        // send an email notification to the email of the user
-        Mail::send('emails.notification', ['type'=>'accepted'], function ($message) use($user){
-          $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
-        });
+        $time = Carbon::now()->addMinutes(10);
+        // send an email notification to the user's email
+        Mail::to($user->email)
+            ->later($time, new SwineCartAccountNotification($user, $notificationType));
         $user->save();  // save changes to the database
 
         return Redirect::back()->withMessage('User Accepted!'); // redirect to the page and display a toast notification that a user is created
@@ -558,7 +566,8 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         $user = User::find($request->id);
-        $user->approved = NULL;     // negate the status to approve user
+        $user->approved_at = NULL;     // negate the status to approve user
+        $notificationType = 4;
         // create a log entry for the action done
         AdministratorLog::create([
             'admin_id' => $adminID,
@@ -567,10 +576,11 @@ class AdminController extends Controller
             'category' => 'Reject',
             'action' => 'Reject '.$user->name,
         ]);
-        // send an email notification to the email of the user
-        Mail::send('emails.notification', ['type'=>'rejected'], function ($message) use($user){
-          $message->to($user->email)->subject('Swine E-Commerce PH: Account Notification');
-        });
+        $time = Carbon::now()->addMinutes(10);
+        // send an email notification to the user's email
+        Mail::to($user->email)
+            ->later($time, new SwineCartAccountNotification($user, $notificationType));
+
         $user->save();  // save changes to the database
 
         return Redirect::back()->withMessage('User Rejected!'); // redirect to the page and display a toast notification that a user is created

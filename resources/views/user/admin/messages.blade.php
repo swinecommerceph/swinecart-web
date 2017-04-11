@@ -41,7 +41,7 @@
     	  			<a id="thread-{{ $thread->customer_id }}" href="/breeder/messages/{{ $thread->customer_id }}">
     	  		@endif
 
-    	  		@if(($threadId == $thread->breeder_id && $userType == 'Customer') || ($threadId == $thread->customer_id && $userType == 'Breeder'))
+    	  		@if($userType == 'Customer' || $userType == 'Breeder')
     		    	<li class="collection-item avatar green lighten-4">
     	  		@else
     		    	<li class="collection-item avatar">
@@ -83,7 +83,7 @@
     					<ul id="chatMessages">
 
     						@foreach($messages as $message)
-    							@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
+    							@if (($message->direction == 2 && $userType == 'Customer') || ($message->direction == 2 && $userType == 'Breeder'))
     								<li class="message" :class="mine" style="clear:both">
     									<div class="chat-bubble out">
     										<span class="who">
@@ -118,10 +118,10 @@
     					<div style="display:table; width: 100%;">
 
     						<input placeholder="Enter your message here."
-    						 		style="display:table-cell; width: 100%;"
-    							   type="text"
-    							   v-model="newMessage"
-    							   @keyup.enter="sendMessage"/>
+    						 	style="display:table-cell; width: 100%;"
+    						    type="text"
+    							v-model="newMessage"
+    							@keyup.enter="sendMessage"/>
     					</div>
     				</div>
     			</div>
@@ -132,7 +132,6 @@
 @endsection
 
 @section('customScript')
-<script src="/js/vendor/VueJS/vue.js"></script>
 <script>
 $(document).ready(function(){
 	$('.message').show(0);

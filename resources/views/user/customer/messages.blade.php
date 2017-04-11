@@ -150,7 +150,7 @@ $(document).ready(function(){
 
 	var chatport = "{{ $chatPort }}";
 	var url = "{{ explode(':', str_replace('http://', '', str_replace('https://', '', App::make('url')->to('/'))))[0] }}";
-	var threadid = "{{ $threadId }}";
+    var threadid = "{{ $threadId }}";
 	var otherparty;
 
 </script>

@@ -167,9 +167,10 @@ Route::group(['middleware' => ['web']], function () {
         //message-related
         Route::get('messages/breeder', ['as' => 'admin.breeder.messages', 'uses'=> 'MessageController@getBreederMessagesAdmin']);
         Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
-        Route::get('messages/{breeder}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
+        Route::get('messages/breeder/{breeder}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getBreederMessagesAdmin']);
 
         Route::get('messages/customer', ['as' => 'admin.customer.messages', 'uses'=> 'MessageController@getCustomerMessagesAdmin']);
+        Route::get('messages/customer/{customer}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getCustomerMessagesAdmin']);
 
         // Route for statistics pages
         Route::get('home/statistics/dashboard',['as'=>'admin.statistics.dashboard', 'uses'=>'AdminController@showStatisticsDashboard']);

@@ -2,10 +2,14 @@
 
 namespace App\Console;
 
+use App\Models\Product;
+use App\Models\User;
+
 use Illuminate\Console\Scheduling\Schedule;
 use App\Console\Commands\WSBreederDashboardServer;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
 use DB;
+
 use Carbon\Carbon;
 
 class Kernel extends ConsoleKernel
@@ -40,15 +44,16 @@ class Kernel extends ConsoleKernel
                                 ->join('roles', 'role_user.role_id','=','roles.id')
                                 ->where('role_id','=', 2)
                                 ->join('breeder_user','breeder_user.id', '=', 'users.userable_id')
-                                ->select('breeder_user.id as breeder_id','email', 'latest_accreditation', 'status_instance')
+                                ->select('breeder_user.id as breeder_id', 'users.name as username' ,'email', 'latest_accreditation', 'status_instance')
                                 ->where('status_instance','=','active')
                                 ->where('latest_accreditation','=',$expirationAlert1)
                                 ->get();
+
             $breedersGroup2 = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
                                 ->join('roles', 'role_user.role_id','=','roles.id')
                                 ->where('role_id','=', 2)
                                 ->join('breeder_user','breeder_user.id', '=', 'users.userable_id')
-                                ->select('breeder_user.id as breeder_id','email', 'latest_accreditation', 'status_instance')
+                                ->select('breeder_user.id as breeder_id', 'users.name as username', 'email', 'latest_accreditation', 'status_instance')
                                 ->where('status_instance','=','active')
                                 ->where('latest_accreditation','=',$expirationAlert2)
                                 ->get();
@@ -66,33 +71,38 @@ class Kernel extends ConsoleKernel
                         ->whereDay('expiration_date', Carbon::now()->day-1)
                         ->get();
 
-            $breeders = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                        ->join('roles', 'role_user.role_id','=','roles.id')
-                        ->where('role_id','=', 2)
-                        ->get();
-            $customers = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
-                        ->join('roles', 'role_user.role_id','=','roles.id')
-                        ->where('role_id','=', 3)
-                        ->get();
             foreach ($dateNeeded as $date) {
-                Mail::send('emails.notification', ['type'=>'dateNeeded'], function ($message) use($breeders){
-                  $message->to($breeders->where('userable_id', $date->breeder_id)->email)->subject('Swine E-Commerce PH: Account Notification');
-                });
+                $type = 0;
+                $product = Product::where('id', $date->product_id)->first()->name;
+                $user = User::where('userable_type', 'App\Models\Breeder')->where('userable_id', $date->breeder_id)->first();
+                $time = Carbon::now()->addMinutes(10);
+                $date->date_needed = Carbon::parse($date->date_needed)->format('l jS \\of F Y h:i:s A');
+                Mail::to($user->email)
+                    ->later($time, new SwineCartProductNotification($type, $user, $product, $date));
             }
             foreach ($reservation as $date) {
-                Mail::send('emails.notification', ['type'=>'productExpiration'], function ($message) use($customers){
-                  $message->to($customers->where('userable_id', $date->customer_id)->email)->subject('Swine E-Commerce PH: Account Notification');
-                });
+                $type = 1;
+                $product = Product::where('id', $date->product_id)->first()->name;
+                $user = User::where('userable_type', 'App\Models\Customer')->where('userable_id', $date->customer_id)->first();
+                $time = Carbon::now()->addMinutes(10);
+                $date->expiration_date = Carbon::parse($date->expiration_date)->format('l jS \\of F Y h:i:s A');
+                Mail::to($user->email)
+                    ->later($time, new SwineCartProductNotification($type, $user, $product, $date));
             }
+
             foreach ($breedersGroup1 as $breederGr1) {
-                Mail::send('emails.notification', ['type'=>'expirationMonth'], function ($message) use($breederGr1){
-                  $message->to($breederGr1->email)->subject('Swine E-Commerce PH: Account Notification');
-                });
+                $type = 0;
+                $time = Carbon::now()->addMinutes(10);
+                $expiration = Carbon::parse($breederGr1->latest_accreditation)->addYear()->format('l jS \\of F Y h:i:s A');
+                Mail::to($breederGr2->email)
+                    ->later($time, new SwineCartBreederAccreditationExpiration($type, $breederGr1->username, $breederGr1->email, $expiration));
             }
             foreach ($breedersGroup2 as $breederGr2) {
-                Mail::send('emails.notification', ['type'=>'expirationWeek'], function ($message) use($breederGr2){
-                  $message->to($breederGr2->email)->subject('Swine E-Commerce PH: Account Notification');
-                });
+                $type = 1;
+                $time = Carbon::now()->addMinutes(10);
+                $expiration = Carbon::parse($breederGr2->latest_accreditation)->addYear()->format('l jS \\of F Y h:i:s A');
+                Mail::to($breederGr2->email)
+                    ->later($time, new SwineCartBreederAccreditationExpiration($type, $breederGr2->username, $breederGr2->email, $expiration));
             }
         })->dailyAt("00:00");
 

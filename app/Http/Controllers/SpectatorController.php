@@ -22,6 +22,8 @@ use App\Models\Admin;
 use App\Models\User;
 use App\Models\TransactionLog;
 use App\Models\ProductReservation;
+use Illuminate\Support\Facades\Mail;
+use App\Mail\SwineCartProductNotification;
 
 use DB;
 use Auth;
@@ -824,6 +826,24 @@ class SpectatorController extends Controller
     }
 
     public function showTest(){
-        return view('user.spectator.testPage');
+        // $user = User::first();
+        // $type = 1;
+        // $time = Carbon::now()->addMinutes(1);
+        //
+        // Mail::to($user->email)
+        //      ->send(new SwineCartAccountNotification($user, $type));
+        // return view('emails.adminNotifications', compact('notificationType', 'user'));
+        // $reservation = DB::table('product_reservations')
+                    // ->whereMonth('expiration_date', Carbon::now()->month)
+                    // ->whereYear('expiration_date',  Carbon::now()->year)
+                    // ->whereDay('expiration_date', Carbon::now()->day-1)
+                    // ->get();
+        // $reservation->first()->expiration_date = Carbon::parse($reservation->first()->expiration_date)->format('l jS \\of F Y h:i:s A');
+        // $user = User::where('userable_type', 'App\Models\Customer')->where('userable_id', 45)->first();
+        // $product = Product::where('id', 2)->first()->name;
+        // Mail::to($user->email)
+        //       ->send(new SwineCartProductNotification($type, $user, $product, $reservation->first()));
+        dd('Test Function');
     }
+
 }

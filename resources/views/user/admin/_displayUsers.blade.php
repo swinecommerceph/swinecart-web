@@ -149,7 +149,14 @@
 
         <div id="admin-user-details-modal" class="modal modal-fixed-footer">
             <div class="modal-content">
-                <h4>User Details</h4>
+                <div class="row">
+                    <div class="admin-usermodal-title col s9 m9 l9 xl9">
+                        <h4>User Details</h4>
+                    </div>
+                    <div id="user-modal-chatbutton" class="col s3 m3 l3 xl3 right">
+                        
+                    </div>
+                </div>
                 <div class="divider"></div>
                 <div id="admin-user-details-content" class="col s12 m12 l12">
                     No user data
@@ -182,7 +189,7 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
             </div>
         </div>
 @endsection

@@ -10,13 +10,11 @@ $(document).ready(function(){
 			conn: false,
 		},
 		ready : function(){
-
 			// default port
 			this.port = this.port.length == 0 ? '9090' : this.port;
 
 			// init connection
 			this.conn = new WebSocket('ws://'+this.uri+':'+this.port);
-			
 			var me = this;
 
 			this.conn.onclose = function (event) {
@@ -68,7 +66,7 @@ $(document).ready(function(){
 	   	 	};
 
 			this.conn.onopen = function(event) {
-			    //me.addSystemMessage("Connection established.");
+			    // me.addSystemMessage("Connection established.");
 
 			    var message = {};
 				message.from = userid;
@@ -137,7 +135,14 @@ $(document).ready(function(){
 				message.from = userid;
 				message.to = threadid;
 				message.message = this.newMessage;
-				message.direction = (usertype == 'Customer')?0:1;
+				if(usertype == 'Customer'){
+					message.direction = 0;
+				}else if(usertype == 'Breeder'){
+					message.direction = 1;
+				}else{
+					message.direction = 2;
+				}
+				// message.direction = (usertype == 'Customer')?0:1;
 
 				var msgToSend = JSON.stringify(message);
 

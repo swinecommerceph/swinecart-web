@@ -30,7 +30,7 @@
                 <div class="card green darken-1">
                     <div class="card-content white-text">
                       <span class="card-title">Account Notification:</span>
-                      @(@if ($status != NULL)
+                      @if ($status != NULL)
                         <p>
                           Your account has been blocked.
                         </p>
@@ -60,7 +60,7 @@
                     </p>
                    </div>
               </div>
-            @endif
+
             @elseif($type == 'expirationMonth')
                    <div class="card orange lighten-4">
                        <div class="card-content black-text">
@@ -70,7 +70,6 @@
                         </p>
                        </div>
                   </div>
-            @endif
             @elseif($type == 'expirationWeek')
                     <div class="card red lighten-4">
                        <div class="card-content black-text">
@@ -80,8 +79,7 @@
                         </p>
                        </div>
                   </div>
-            @endif
-        @elseif($type == 'dateNeeded')
+            @elseif($type == 'dateNeeded')
                     <div class="card red lighten-4">
                        <div class="card-content black-text">
                         <span class="card-title">Account Notification:</span>
@@ -90,8 +88,7 @@
                         </p>
                        </div>
                   </div>
-            @endif
-        @elseif($type == 'productExpiration')
+            @elseif($type == 'productExpiration')
                 <div class="card red lighten-4">
                    <div class="card-content black-text">
                     <span class="card-title">Account Notification:</span>

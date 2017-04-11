@@ -154,7 +154,7 @@
       </div>
       <div class="footer-copyright">
         <div class="container">
-        © 2017 Copyright Text
+        © {{Carbon\Carbon::now()->year}} Copyright Text
         <div class="grey-text text-lighten-4 right" href="#!">{{$counter}} User Online</div>
         </div>
       </div>

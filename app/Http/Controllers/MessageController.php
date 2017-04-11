@@ -90,11 +90,12 @@ class MessageController extends Controller
 	    		->unique('customer_id');
 
 	    	$tampered = false;
-	    	if($threadId == '' && isset($threads[0])){
+	    	if($threadId == '' && isset($threads[0])){	// no message selected
 	    		$tampered = true;
-	    		$threadId = $threads[0]->customer_id;
+	    		$threadId = $threads[0]->customer_id;	// get the 1st customer's id
 	    	}
 
+			// get the breeder's messages
     		$messages = Message::where('breeder_id', '=', $userId)
 	    		->where('customer_id',  $threadId)
 	    		->orderBy('created_at', 'ASC')
@@ -109,8 +110,8 @@ class MessageController extends Controller
 
 
 	    	if(!$tampered && sizeof($messages) <= 0 && sizeof($threads) > 0){
-	    		$user = User::where('id', $threadId)->first();
-	    		if(!isset($user) || $user->userable_type == 'App\Models\Customer')
+				$user = User::where('id', $threadId)->first();
+				if(!isset($user) || $user->userable_type == 'App\Models\Customer')
 	    			return Redirect::route('messages');
 	    		$otherName = $user->name;
 	    	}else if($threadId != ''){
@@ -120,31 +121,6 @@ class MessageController extends Controller
 
 			return view('user.breeder.messages', compact("chatPort", "userName", "userId", "userType", "threads", "threadId", "messages", "otherName"));
     	}
-		// elseif(Auth::user()->userable_type == 'App\Models\Admin'){
-		// 	$userType = 'Admin';
-    	// 	$otherName = '';
-		//
-		// 	$threadsCustomer = Message::where('admin_id', '=', $userId)
-	    // 		->orderBy('created_at', 'DESC')
-	    // 		//->groupBy('customer_id')
-	    // 		->get()
-	    // 		->unique('customer_id');
-		// 	$threadsBreeder = Message::where('admin_id', '=', $userId)
-	    // 		->orderBy('created_at', 'DESC')
-	    // 		//->groupBy('customer_id')
-	    // 		->get()
-	    // 		->unique('breeder_id');
-		//
-		// 	$tampered = false;
-	    // 	if($threadId == '' && isset($threads[0])){
-	    // 		$tampered = true;
-	    // 		$threadId = $threads[0]->customer_id;
-	    // 	}
-		// 	dd($threadsCustomer,$threadsBreeder);
-		// }
-    	// else{
-    	// 	return 'Unsupported user type.';
-    	// }
 
     }
 
