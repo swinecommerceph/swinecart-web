@@ -1,14 +1,30 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | Pending Accounts
 @endsection
 
 @section('pageId')
-    id="home-pending"
+    id="admin-pending-accounts"
 @endsection
 
-@section('header')
+@section('nav-title')
+    Pending Accounts
+@endsection
+
+@section('pageControl')
+    <div class="row">
+        <div class="col s12 m12 l12 xl12">
+            {!!Form::open(['route'=>'admin.searchPending', 'method'=>'GET', 'class'=>'row input-field valign-wrapper'])!!}
+                <input id="search" type="search" name="search" required>
+                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+            {!!Form::close()!!}
+        </div>
+    </div>
+@endsection
+
+{{-- @section('header')
     <div class="row">
         <div class="col s4">
             <h4 id='admin-content-panel-header'>Pending Users</h4>
@@ -29,11 +45,11 @@
             </div>
         </div>
     </div>
-@endsection
+@endsection --}}
 
 @section('content')
 
-    <table class="bordered highlight responsive-table striped">
+    {{-- <table class="bordered highlight responsive-table striped">
         <thead>
           <tr>
               <th data-field="name">Name</th>
@@ -65,7 +81,50 @@
         @endforelse
         </tbody>
       </table>
-      <div class="pagination center"> {{ $users->links() }} </div>
+      <div class="pagination center"> {{ $users->links() }} </div> --}}
+
+      <table class="bordered highlight responsive-table">
+          <thead>
+            <tr>
+                <th data-field="name">Name</th>
+                 <th data-field="name">Email</th>
+                <th data-field="type">Account Type</th>
+                <th data-field="action">Action</th>
+            </tr>
+          </thead>
+
+          <tbody>
+              @forelse($users as $user)
+            <tr>
+              <td>{{$user->name}}</td>
+              <td>{{$user->email}}</td>
+              <td>{{ucfirst($user->title)}}</td>
+              <td>
+                  <div class="col s12 m12 l6 xl6">
+                      <a class="waves-effect waves-light btn green lighten-1 accept-button"  data-id ="{{$user->user_id}}">
+                          <i class="material-icons left">check</i><span class="hide-on-med-and-down">Accept</span>
+                      </a>
+                  </div>
+                  <div class="col s12 m12 l6 xl6">
+                      <a class="waves-effect waves-light btn red lighten-1 reject-button" data-id ="{{$user->user_id}}">
+                          <i class="material-icons left">close</i><span class="hide-on-med-and-down">Reject</span>
+                      </a>
+                  </div>
+              </td>
+            </tr>
+            @empty
+                 <tr>
+                     <td></td>
+                     <td class="right-align">Search Result Empty</td>
+                     <td></td>
+                     <td></td>
+                 </tr>
+          @endforelse
+          </tbody>
+        </table>
+        <div class="pagination center"> {{ $users->links() }} </div>
+
+
 
       {{-- Accept modal --}}
       <div id="accept-modal" class="modal action-dialog-box green lighten-5">
@@ -107,7 +166,7 @@
 @section('initScript')
     {{-- <script type="text/javascript" src="/js/admin/admin_custom.js"></script> --}}
     <script type="text/javascript" src="/js/admin/users.js"></script>
-    <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
+    <script type="text/javascript" src="/js/admin/userPages_script.js"></script>
     <script type="text/javascript" src="/js/admin/pages.js"></script>
     <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
 @endsection

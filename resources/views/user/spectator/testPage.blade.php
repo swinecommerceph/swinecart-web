@@ -1,9 +1,24 @@
-@extends('layouts.testLayout')
+@extends('layouts.newSpectatorLayout')
 
 @section('title')
-    | Test
+    | Spectator
 @endsection
 
 @section('pageId')
-    id="test-layout"
+    id="admin-spectator-dashboard"
+@endsection
+
+@section('nav-title')
+    Spectator Dashboard
+@endsection
+
+@section('pageControl')
+
+@endsection
+
+@section('content')
+
+@endsection
+@section('initScript')
+
 @endsection

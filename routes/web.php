@@ -1,4 +1,4 @@
-<?php
+    <?php
 
 /*
 |--------------------------------------------------------------------------
@@ -247,7 +247,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/manage/return/pending', ['as' => 'admin.return.pending', 'uses'=> 'AdminController@goToPending']);
 
         Route::get('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsers']);
-
+        Route::get('admin_info',['as'=>'admin_info', 'uses'=>'AdminController@getAdminInformation']);
     });
 
     Route::group(['prefix'=>'spectator'], function(){
@@ -281,8 +281,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('statistics/breeder/deleted-year', ['as'=>'spectator.statisticsDeletedBreederYear', 'uses'=>'SpectatorController@viewDeletedBreederStatisticsYear']);
 
         Route::get('statistics/productbreakdown', ['as'=>'spectator.productbreakdown', 'uses'=>'SpectatorController@viewProductBreakdown']);
-
-        Route::get('testpage',['as'=>'testpage', 'uses'=>'SpectatorController@showTest']);
+        Route::get('spectator_info',['as'=>'spectator_info', 'uses'=>'SpectatorController@getSpectatorInformation']);
+        
     });
 
 

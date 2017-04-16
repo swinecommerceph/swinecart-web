@@ -1,4 +1,4 @@
-@extends('layouts.spectatorLayout')
+@extends('layouts.newSpectatorLayout')
 
 @section('title')
     | Spectator
@@ -8,18 +8,11 @@
     id="page-spectator-home"
 @endsection
 
-{{-- @section('breadcrumbTitle')
-    Home
-@endsection --}}
+@section('nav-title')
+    Spectator Dashboard
+@endsection
 
 @section('content')
-    <div class="card-panel">
-        <div class="row">
-            <div class="col s12">
-                <h4>Spectator Dashboard</h4>
-            </div>
-        </div>
-        <div class="divider"></div>
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="row">
@@ -200,7 +193,6 @@
                 </div>
             </div>
         </div>
-    </div>
 @endsection
 
 @section('initScript')

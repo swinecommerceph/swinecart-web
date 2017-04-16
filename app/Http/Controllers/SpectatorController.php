@@ -439,7 +439,7 @@ class SpectatorController extends Controller
                     'products.fcr', 'products.backfat_thickness', 'products.other_details', 'products.status', 'products.quantity')
                     ->where('products.name', 'LIKE', "%$request->search%")
                     ->when(!(
-                        is_null($type) &&
+                        // is_null($type) &&
                         is_null($request->minPrice) &&
                         is_null($request->maxPrice) &&
                         is_null($request->minQuantity) &&
@@ -525,7 +525,7 @@ class SpectatorController extends Controller
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_user.role_id','=', $userType)
-                ->where('users.email_verified','=', 1)
+                // ->where('users.email_verified','=', 1)
                 ->whereNull('blocked_at')
                 ->whereNull('deleted_at')
                 ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
@@ -548,7 +548,7 @@ class SpectatorController extends Controller
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_user.role_id','=', $userType)
-                ->where('users.email_verified','=', 1)
+                // ->where('users.email_verified','=', 1)
                 ->whereNotNull('approved_at')
                 ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
                 ->groupBy('year')
@@ -571,7 +571,7 @@ class SpectatorController extends Controller
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_user.role_id','=', $userType)
-                ->where('users.email_verified','=', 1)
+                // ->where('users.email_verified','=', 1)
                 ->whereNotNull('approved_at')
                 ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
                 ->groupBy('year')
@@ -825,25 +825,16 @@ class SpectatorController extends Controller
         return view('user.spectator.productBreakdown', compact('boar', 'gilt', 'sow', 'semen', 'total'));
     }
 
-    public function showTest(){
-        // $user = User::first();
-        // $type = 1;
-        // $time = Carbon::now()->addMinutes(1);
-        //
-        // Mail::to($user->email)
-        //      ->send(new SwineCartAccountNotification($user, $type));
-        // return view('emails.adminNotifications', compact('notificationType', 'user'));
-        // $reservation = DB::table('product_reservations')
-                    // ->whereMonth('expiration_date', Carbon::now()->month)
-                    // ->whereYear('expiration_date',  Carbon::now()->year)
-                    // ->whereDay('expiration_date', Carbon::now()->day-1)
-                    // ->get();
-        // $reservation->first()->expiration_date = Carbon::parse($reservation->first()->expiration_date)->format('l jS \\of F Y h:i:s A');
-        // $user = User::where('userable_type', 'App\Models\Customer')->where('userable_id', 45)->first();
-        // $product = Product::where('id', 2)->first()->name;
-        // Mail::to($user->email)
-        //       ->send(new SwineCartProductNotification($type, $user, $product, $reservation->first()));
-        dd('Test Function');
+    /*
+     * Get current user's information
+     *
+     * @param none
+     * @return array
+     *
+     */
+    public function getSpectatorInformation(){
+        $user_data = [$this->user->id, $this->user->userable_id, $this->user->name, $this->user->email];
+        return $user_data;
     }
 
 }

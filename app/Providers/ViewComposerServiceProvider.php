@@ -139,4 +139,5 @@ class ViewComposerServiceProvider extends ServiceProvider
             $view->with('counter', $counter);
         });
     }
+
 }

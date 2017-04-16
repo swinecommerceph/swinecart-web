@@ -1,24 +1,23 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | Site Statistics: Administrator Log Timeline
 @endsection
 
 @section('pageId')
-    id="users-stats-timeline"
+    id="admin-site-statistics-timeline"
 @endsection
 
-@section('header')
+@section('nav-title')
+    Site Statistics
+@endsection
+
+@section('pageControl')
     <div class="row valign-wrapper">
         <div class="col s12 m6 l6">
             <div class="row">
                 <div class="col s12 m12 l12">
                     <h4 id='admin-content-panel-header'>Logs Timeline</h4>
-                </div>
-            </div>
-            <div class="row">
-                <div class="col s12 m12 l12 admin-log-timeline-datetitle">
-                        {{$dateNow}}
                 </div>
             </div>
         </div>
@@ -31,6 +30,7 @@
                         <option value="{{route('admin.statistics.customer.active')}}">Customer</option>
                         <option value="{{route('admin.statistics.transactions')}}">Transactions</option>
                         <option value="{{route('admin.statistics.timeline')}}">Logs Timeline</option>
+                        <option value="{{route('admin.statistics.averageNewBreeder')}}">Average Values</option>
                     </select>
                     <label>Display Statistics</label>
                 </div>
@@ -55,7 +55,7 @@
 @section('content')
     <div class="row">
         <div class="col s12 l12 m12">
-            <h5>Timeline</h5>
+            <h5>{{$dateNow}}</h5>
         </div>
     </div>
     <div class="row" id="timeline-container">

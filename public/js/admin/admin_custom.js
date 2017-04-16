@@ -48,4 +48,9 @@ $(document).ready(function(){
         selectYears: 20 // Creates a dropdown of 15 years to control year
     });
 
+    $('#this_user_information_trigger').click(function(e){
+        e.preventDefault();
+        admin_layout.show_admin_information();
+    });
+
 });

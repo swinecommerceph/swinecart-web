@@ -1,37 +1,37 @@
-@extends('layouts.spectatorLayout')
+@extends('layouts.newSpectatorLayout')
 
 @section('title')
-    | Spectator
+    | Site Statistics
 @endsection
 
 @section('pageId')
-    id="page-spectator-users"
+    id="page-statistics-product-breakdown"
 @endsection
 
-@section('header')
-    <h4>Admin Dashboard</h4>
+@section('nav-title')
+    Site Statistics
+@endsection
+
+@section('pageControl')
+    <div class="row valign-wrapper">
+        <div class="col s12 m12 l6 xl6">
+            <h4>Product Breakdown</h4>
+        </div>
+        <div class="valign center-block col s12 m12 l6 xl6">
+            <div class="input-field col s12 m12 l12 xl12">
+                <select onChange="window.location.href=this.value">
+                    <option disabled selected>Choose option</option>
+                    <option value="{{route('spectator.statisticsActiveBreeder')}}">Breeder</option>
+                    <option value="{{route('spectator.statisticsActiveCustomer')}}">Customer</option>
+                    <option value="{{route('spectator.productbreakdown')}}">Product Breakdown</option>
+                </select>
+                <label>Display Statistics</label>
+            </div>
+        </div>
+    </div>
 @endsection
 
 @section('content')
-
-    <div class="card-panel">
-        <div class="row valign-wrapper">
-            <div class="col s6 m6 l6 xl6">
-                <h4>Product Breakdown</h4>
-            </div>
-            <div class="valign center-block col s6 m6 l6 xl6">
-                <div class="input-field col s12">
-                    <select onChange="window.location.href=this.value">
-                        <option disabled selected>Choose option</option>
-                        <option value="{{route('spectator.statisticsActiveBreeder')}}">Breeder</option>
-                        <option value="{{route('spectator.statisticsActiveCustomer')}}">Customer</option>
-                        <option value="{{route('spectator.productbreakdown')}}">Product Breakdown</option>
-                    </select>
-                    <label>Display Statistics</label>
-                </div>
-            </div>
-        </div>
-        <div class="divider"></div>
         <div class="row">
             <div class="product-breakdown-title col s12 m12 l12 center-align">
                 Total Products
@@ -48,7 +48,7 @@
                 <canvas id="productBreakdownChartArea" width="300" height="200"></canvas>
             </div>
         </div>
-    </div>
+
 @endsection
 
 @section('initScript')

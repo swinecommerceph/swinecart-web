@@ -1,19 +1,20 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
     | Messages
 @endsection
 
 @section('pageId')
-    id="page-admin-messages"
+    id="admin-messages"
 @endsection
 
-@section('header')
+@section('nav-title')
+    Messages
+@endsection
+
+@section('pageControl')
     <div class="row valign-wrapper">
-        <div class="col s5 m5 l5 xl5 valign">
-            <h4 id='admin-content-panel-header'>Messages</h4>
-        </div>
-        <div class="col s7 m7 l7 xl7 valign">
+        <div class="col s12 m12 l12 xl12 valign">
             <a href="{{route('admin.customer.messages')}}" class="waves-effect waves-teal btn-flat right">Customers</a>
             <a href="{{route('admin.breeder.messages')}}" class="waves-effect waves-teal btn-flat right">Breeders</a>
         </div>
@@ -32,7 +33,7 @@
         .chat-bubble.out { float:right; background-color: #e0e0e0; }
     </style>
     <div class="row">
-        <div class="col m3 row">
+        <div class="col s3 m3 l3 xl3 row">
     	  <ul class="collection" id="thread-collection">
     	  	@foreach($threads as $thread)
     	  		@if($userType == 'Breeder')
@@ -62,7 +63,7 @@
     	  </ul>
     	</div>
 
-    	<div class="col m9 row">
+    	<div class="col s9 m9 l9 xl9 row">
 
     		<div>
 

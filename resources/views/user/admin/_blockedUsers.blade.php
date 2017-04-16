@@ -1,39 +1,35 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | Blocked Users
 @endsection
 
 @section('pageId')
-    id="home-blocked"
+    id="admin-blocked-users"
 @endsection
 
-@section('header')
-    <div class="row">
-        <div class="col s4">
-            <h4 id='admin-content-panel-header'>Blocked Users</h4>
-        </div>
+@section('nav-title')
+    Blocked Users
+@endsection
 
-        <div class="col s8">
+@section('pageControl')
+    <div class="row">
+        <div class="col s12 m12 l12 xl12">
             <div class="row">
-                {!!Form::open(['route'=>'admin.searchBlocked', 'method'=>'GET', 'class'=>'search-user-form col s12'])!!}
-                    <div class="input-field col s12">
-                        <div class="col s7">
+                {!!Form::open(['route'=>'admin.searchBlocked', 'method'=>'GET', 'class'=>'search-user-form col s12 m12 l12 xl12'])!!}
+                    <div class="input-field col s12 m12 l12 xl12">
+                        <div class="col s12 m12 l7 xl7">
                             <input id="search-input" class="validate" type="text" name="search">
                             <label for="search-input">Search</label>
                         </div>
-                        <div class="col s5">
-                            {{-- <div class="col s6">
-                                <input type="checkbox" id="check-admin" name ="admin" value="1"/>
-                                <label for="check-admin">Admin</label>
-                            </div> --}}
+                        <div class="col s12 m12 l5 xl5">
 
-                            <div class="col s6">
+                            <div class="col s6 m6 l6 xl6">
                                 <input type="checkbox" id="check-breeder" name ="breeder" value="2"/>
                                 <label for="check-breeder">Breeder</label>
                             </div>
 
-                            <div class="col s6">
+                            <div class="col s6 m6 l6 xl6">
                                 <input type="checkbox" id="check-customer" name="customer" value="3"/>
                                 <label for="check-customer">Customer</label>
                             </div>
@@ -52,7 +48,7 @@
 
 @section('content')
 
-    <table id="admin-users-table" class="bordered highlight responsive-table striped">
+    <table id="admin-users-table" class="bordered highlight responsive-table">
         <thead>
           <tr>
               <th data-field="name">Name</th>
@@ -154,7 +150,19 @@
               <h4>User Details</h4>
               <div class="divider"></div>
               <div id="admin-user-details-content" class="col s12 m12 l12">
-                  No user data
+                  <div class="center">
+                      <div class="preloader-wrapper small active">
+                          <div class="spinner-layer spinner-green-only">
+                              <div class="circle-clipper left">
+                                  <div class="circle"></div>
+                              </div><div class="gap-patch">
+                                  <div class="circle"></div>
+                              </div><div class="circle-clipper right">
+                                  <div class="circle"></div>
+                              </div>
+                          </div>
+                      </div>
+                  </div>
               </div>
               <h4>User Transaction</h4>
               <div class="divider"></div>
@@ -190,7 +198,7 @@
 @endsection
 
 @section('initScript')
-    {{-- <script type="text/javascript" src="/js/admin/admin_custom.js"></script> --}}
+    <script type="text/javascript" src="/js/admin/userPages_script.js"></script>
     <script type="text/javascript" src="/js/admin/users.js"></script>
     <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
 @endsection

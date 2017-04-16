@@ -1,13 +1,29 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | Spectator List
 @endsection
 
 @section('pageId')
-    id="spectatorlist"
+    id="admin-spectator-list"
 @endsection
 
+@section('nav-title')
+    Spectator List
+@endsection
+
+@section('pageControl')
+    <div class="row">
+        <div class="col s12 m12 l12 xl12">
+            {!!Form::open(['route'=>'admin.spectatorlist-search', 'method'=>'GET', 'class'=>'row input-field valign-wrapper'])!!}
+                <input id="search" type="search" name="search" required>
+                <label class="label-icon" for="search"><i class="material-icons">search</i></label>
+                <i class="material-icons">close</i>
+            {!!Form::close()!!}
+        </div>
+    </div>
+@endsection
+{{--
 @section('header')
     <div class="row valign-wrapper">
         <div class="col s12 m12 l6">
@@ -27,10 +43,10 @@
             {!!Form::close()!!}
         </div>
     </div>
-@endsection
+@endsection --}}
 
 @section('content')
-    <table class="responsive-table bordered striped">
+    {{-- <table class="responsive-table bordered striped">
         <thead>
             <tr>
                 <th>ID</th>
@@ -61,9 +77,47 @@
 
         </tbody>
     </table>
-    <div class="pagination center"> {{ $spectators->appends(Request::except('page'))->links() }} </div>
+    <div class="pagination center"> {{ $spectators->appends(Request::except('page'))->links() }} </div> --}}
+
+    <div class="row">
+        <div class="col s12 m12 l12 xl12">
+            <table class="responsive-table bordered highlight">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Name</th>
+                        <th>Email</th>
+                        <th>Role</th>
+                        <th>Join Date</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @forelse ($spectators as $spectator)
+                        <tr>
+                            <td>{{$spectator->userable_id}}</td>
+                            <td>{{$spectator->name}}</td>
+                            <td>{{$spectator->email}}</td>
+                            <td>{{ucfirst($spectator->title)}}</td>
+                            <td>{{$spectator->created_at}}</td>
+                        </tr>
+                    @empty
+                        <tr>
+                            <td></td>
+                            <td></td>
+                            <td class="center-align">Search Result Empty</td>
+                            <td></td>
+                            <td></td>
+                        </tr>
+                    @endforelse
+
+                </tbody>
+            </table>
+            <div class="pagination center"> {{ $spectators->appends(Request::except('page'))->links() }} </div>
+        </div>
+    </div>
 @endsection
 
 @section('initScript')
-    <script type="text/javascript" src="/js/admin/transaction_script.js"></script>
+    {{-- <script type="text/javascript" src="/js/admin/transaction_script.js"></script> --}}
 @endsection

@@ -1,21 +1,29 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | Site Statistics: Statistics Dashboard 
 @endsection
 
 @section('pageId')
-    id="users-stats-dashboard"
+    id="admin-site-statistics"
 @endsection
 
-@section('header')
+@section('nav-title')
+    Site Statistics
+@endsection
+
+@section('pageControl')
+
+@endsection
+
+{{-- @section('header')
     <div class="row">
         <div class="col s4">
             <h4 id='admin-content-panel-header'>Site Statistics</h4>
         </div>
     </div>
 
-@endsection
+@endsection --}}
 
 @section('content')
     <div class="row">

@@ -436,6 +436,7 @@ var users = {
                 data.forEach(function(data){
                     if(role == 2){
                         $('#user-modal-chatbutton').html('<a href="'+config.admin_url+'/messages/customer/'+id+'" class="btn-flat"><i class="material-icons left">chat</i>Message</a>');
+                        $('#admin-user-details-content').empty();
                         $('#admin-user-details-content').html('\
                         <div class="row"> \
                             <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Name</div><div class="admin-user-modal-data">'+data.user_name+'</div></div> \
@@ -470,6 +471,7 @@ var users = {
                     }else{
                         $('#user-modal-chatbutton').html('<a href="'+config.admin_url+'/messages/customer/'+id+'" class="btn-flat"><i class="material-icons left">chat</i>Message</a>');
                         // $('#user-modal-chatbutton').html('<a href="messages/customer/{+'id'+}" class="waves-effect waves-teal btn-flat"><i class="material-icons left">chat</i>Message</a>');
+                        $('#admin-user-details-content').empty();
                         $('#admin-user-details-content').html('\
                         <div class="row"> \
                             <div class="col s12 m6 l6"><div class="admin-user-modal-title grey-text">Name</div><div class="admin-user-modal-data">'+data.user_name+'</div></div> \

@@ -1,3 +1,6 @@
+
+{{--  *REMOVE AFTER USER INTERFACE CHANGES ARE FINALIZED* --}}
+
 {{--
     Displays Home page of Admin
 --}}

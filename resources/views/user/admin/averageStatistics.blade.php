@@ -1,14 +1,18 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | Site Statistics: Average Statistics
 @endsection
 
 @section('pageId')
-    id="average-breeder-stats-page"
+    id="admin-site-statistics-average"
 @endsection
 
-@section('header')
+@section('nav-title')
+    Site Statistics
+@endsection
+
+@section('pageControl')
     <div class="valign-wrapper row">
         <div class="valign center-block col s5 m5 l5 xl5">
             <div class="row">

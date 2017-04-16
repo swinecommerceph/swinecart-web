@@ -178,7 +178,7 @@ class AdminController extends Controller
         //             ->get();
         //
         // dd($customers);
-        return view(('user.admin.home'), compact('summary'));
+        return view(('user.admin.homeDashboard'), compact('summary'));
     }
 
     /**
@@ -243,7 +243,7 @@ class AdminController extends Controller
     public function displayPendingUsers(){
         $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
                     ->where('role_id','=',2)
-                    ->where('approved_at','=',NULL)
+                    ->whereNull('approved_at')
                     ->whereNull('deleted_at')
                     ->paginate(10);
         return view('user.admin._pendingUsers',compact('users'));
@@ -348,9 +348,11 @@ class AdminController extends Controller
         $users = DB::table('users')
                       ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                       ->join('roles', 'role_user.role_id','=','roles.id')
+                      ->where('role_id','=', 2)
                       ->where('users.name','LIKE', "%$request->search%")
-                      ->where('users.email_verified','=', 0)
+                    //   ->where('users.email_verified','=', 0)
                       ->where('users.deleted_at','=', NULL )
+                      ->whereNull('approved_at')
                       ->paginate(10);
 
         return view('user.admin._pendingUsers',compact('users'));
@@ -556,7 +558,6 @@ class AdminController extends Controller
     }
 
     /**
-    * @TODO Separate DELETE and REJECT user function for better notifications
     *
     * Reject a pending user request and send an email verification to the user's email
     *
@@ -567,6 +568,7 @@ class AdminController extends Controller
         $adminName = Auth::user()->name;
         $user = User::find($request->id);
         $user->approved_at = NULL;     // negate the status to approve user
+        $user->deleted_at = Carbon::now();
         $notificationType = 4;
         // create a log entry for the action done
         AdministratorLog::create([
@@ -805,7 +807,7 @@ class AdminController extends Controller
                  ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                  ->join('roles', 'role_user.role_id','=','roles.id')
                  ->where('role_user.role_id','=', $role)
-                 ->where('users.email_verified','=', 1)
+                //  ->where('users.email_verified','=', 1)
                  ->whereNull('blocked_at')
                  ->whereNull('deleted_at')
                  ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*) user_count'))
@@ -828,7 +830,7 @@ class AdminController extends Controller
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_user.role_id','=', $role)
-                ->where('users.email_verified','=', 1)
+                // ->where('users.email_verified','=', 1)
                 ->whereNotNull('approved_at')
                 ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*) user_count'))
                 ->groupBy('year')
@@ -850,7 +852,7 @@ class AdminController extends Controller
                  ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                  ->join('roles', 'role_user.role_id','=','roles.id')
                  ->where('role_user.role_id','=',$role)
-                 ->where('users.email_verified','=', 1)
+                //  ->where('users.email_verified','=', 1)
                  ->whereNotNull('approved_at')
                  ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*) user_count'))
                  ->groupBy('year')
@@ -1979,9 +1981,22 @@ class AdminController extends Controller
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
 
+    /*
+     * Get current user's information
+     *
+     * @param none
+     * @return array
+     *
+     */
+    public function getAdminInformation(){
+        $user_data = [$this->user->id, $this->user->userable_id, $this->user->name, $this->user->email];
+        return $user_data;
+    }
+
     public function viewUsers(){
         $breeders = Breeder::all();
         $customers = Customer::all();
         return view('user.admin.viewUsers', compact('breeders', 'customers'));
     }
+
 }

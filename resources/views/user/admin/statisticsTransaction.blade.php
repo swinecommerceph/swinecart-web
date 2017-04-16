@@ -1,14 +1,18 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | Site Statistics: Transaction Statistics
 @endsection
 
 @section('pageId')
-    id="transactions-stats-page"
+    id="admin-site-statistics-monthly-transaction"
 @endsection
 
-@section('header')
+@section('nav-title')
+    Site Statistics
+@endsection
+
+@section('pageControl')
     <div class="valign-wrapper row">
         <div class="valign center-block col s12 m12 l6">
             <h4 id='admin-content-panel-header'>Transaction Statistics</h4>

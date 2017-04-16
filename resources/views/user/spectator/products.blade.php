@@ -1,24 +1,25 @@
-@extends('layouts.spectatorLayout')
+@extends('layouts.newSpectatorLayout')
 
 @section('title')
-    | Spectator
+    | Products
 @endsection
 
 @section('pageId')
     id="page-spectator-products"
 @endsection
 
-{{-- @section('header')
-    <h4>Admin Dashboard</h4>
-@endsection --}}
+@section('nav-title')
+    Products
+@endsection
+
+@section('pageControl')
+
+@endsection
 
 @section('content')
-    <div id="app-products" class="card-panel">
+    <div id="app-products">
         <div class="row">
-            <div class="col s12 m12 l3">
-                <h4>Products</h4>
-            </div>
-            <div class="col s12 m12 l9">
+            <div class="col s12 m12 l12 xl12">
                 {!!Form::open(['route'=>'spectator.searchProduct', 'method'=>'GET', 'class'=>'spectator_product_search'])!!}
                 <div class="row">
                     <div class="col s12 m12 l12 valign-wrapper">
@@ -29,7 +30,7 @@
                         <button id="search-button" class="btn waves-effect waves-light" type="submit">Search</button>
                     </div>
 
-                    <div class="col s12 right-align">
+                    <div class="col s12 m12 l12 xl12 right-align">
                             <a v-on:click="toggled = !toggled" href="#" class="teal-text">Advanced Search Options</a>
                     </div>
                     <transition name="fade">
@@ -130,11 +131,6 @@
             </div>
         </div>
 
-        <div class="row">
-            <div class="divider"></div>
-        </div>
-
-        {{-- MAKE COMPONENT FOR THIS --}}
         <div id="main-container" class="row">
             @forelse ($products as $product)
                 <div class="col s4">
