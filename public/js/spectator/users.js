@@ -11,7 +11,7 @@ var users = {
                 'userRole' : role
             },
             success: function(data) {
-
+                $('#spectator-user-modal-content').empty();
                 data.forEach(function(data){
                     if(role == 2){
                         $('#spectator-user-modal-content').html('\
