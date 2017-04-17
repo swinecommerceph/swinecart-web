@@ -81,29 +81,6 @@ class SpectatorController extends Controller
                                             ->where('email_verified','=','1')
                                             ->count();
 
-        // $products = DB::table('products')->where('status', '=', 'displayed')
-        //                                 ->whereNull('deleted_at')
-        //                                 ->get();
-        // $totalproduct = count($products);
-        // $boar = 0;
-        // $gilt = 0;
-        // $sow = 0;
-        // $semen = 0;
-        // foreach ($products as $product) {
-        //     if(strcmp($product->type, 'boar')){
-        //         $boar++;
-        //     }
-        //     if(strcmp($product->type, 'gilt')){
-        //         $gilt++;
-        //     }
-        //     if(strcmp($product->type, 'sow')){
-        //         $sow++;
-        //     }
-        //     if(strcmp($product->type, 'semen')){
-        //         $semen++;
-        //     }
-        // }
-
         $products = DB::table('products')
                         ->where('status', '=', 'displayed')
                         ->whereNull('deleted_at')
