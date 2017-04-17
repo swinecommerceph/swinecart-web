@@ -56,6 +56,9 @@
                             <option value="{{route('spectator.statisticsActiveCustomer')}}">Active Customers</option>
                             <option selected value="{{route('spectator.statisticsBlockedCustomer')}}">Blocked Customers</option>
                             <option value="{{route('spectator.statisticsDeletedCustomer')}}">Deleted Customers</option>
+                            <option value="{{route('spectator.averageCustomerStatisticsCreated')}}">Average Monthly Customers Created</option>
+                            <option value="{{route('spectator.averageCustomerStatisticsBlocked')}}">Average Monthly Customers Blocked</option>
+                            <option value="{{route('spectator.averageCustomerStatisticsDeleted')}}">Average Monthly Customers Deleted</option>
                         </select>
                         <label>Chart</label>
                     </div>

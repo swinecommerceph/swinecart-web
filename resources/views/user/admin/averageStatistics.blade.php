@@ -92,7 +92,7 @@
                         index++;
                     </script>
                 @endforeach
-                <div class="input-field col s12 m12 l12 xl12">
+                <div class="col s12 m12 l12 xl12">
                     <canvas id="average-chart-area" width="400" height="250"></canvas>
                 </div>
             </div>

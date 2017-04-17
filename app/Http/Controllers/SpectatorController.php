@@ -837,4 +837,485 @@ class SpectatorController extends Controller
         return $user_data;
     }
 
+    /*
+     * Display average statistics for monthly breeders created
+     *
+     * @param none
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageBreedersCreated(){
+        $select = ['selected','',''];
+        $formroute = 'spectator.averageBreederStatisticsCreatedYear';
+        $now = Carbon::now()->endOfYear();
+        $yearnow = $now->year;
+        $past =  Carbon::now()->subYear(5)->startofYear();
+        $yearpast = $past->year;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',2)
+                // ->whereNull('deleted_at')
+                // ->whereNull('blocked_at')
+                ->whereBetween('created_at', $temp)
+                ->select(DB::raw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear,$temp[1]->year];
+
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+
+        return view('user.spectator.averageBreederStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly breeders created
+     *
+     * @param year
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageBreedersCreatedYear(Request $request){
+        $select = ['selected','',''];
+        $formroute = 'spectator.averageBreederStatisticsCreatedYear';
+        $now = $request->yearmax."-12-31";
+        $now = Carbon::parse($now);
+        $yearnow = $request->yearmax;
+        $past =  $request->yearmin."-01-01";
+        $past = Carbon::parse($past);
+        $yearpast = $request->yearmin;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+        sort($temp);
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',2)
+                // ->whereNull('deleted_at')
+                // ->whereNull('blocked_at')
+                ->whereBetween('created_at', $temp)
+                ->select(DB::raw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear, $temp[1]->year];
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+        return view('user.spectator.averageBreederStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly breeders blocked
+     *
+     * @param none
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageBreedersBlocked(){
+        $select = ['','selected',''];
+        $formroute = 'spectator.averageBreederStatisticsBlockedYear';
+
+        $now = Carbon::now()->endOfYear();
+        $yearnow = $now->year;
+        $past =  Carbon::now()->subYear(5)->startofYear();
+        $yearpast = $past->year;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',2)
+                ->whereNotNull('approved_at')
+                // ->whereNull('deleted_at')
+                ->whereBetween('blocked_at', $temp)
+                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear,$temp[1]->year];
+
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+
+        return view('user.spectator.averageBreederStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly breeders blocked
+     *
+     * @param year
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageBreedersBlockedYear(Request $request){
+        $select = ['','selected',''];
+        $formroute = 'spectator.averageBreederStatisticsBlockedYear';
+        $now = $request->yearmax."-12-31";
+        $now = Carbon::parse($now);
+        $yearnow = $request->yearmax;
+        $past =  $request->yearmin."-01-01";
+        $past = Carbon::parse($past);
+        $yearpast = $request->yearmin;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+        sort($temp);
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',2)
+                ->whereNotNull('approved_at')
+                // ->whereNull('deleted_at')
+                ->whereBetween('blocked_at', $temp)
+                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear, $temp[1]->year];
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+        return view('user.spectator.averageBreederStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly breeders deleted
+     *
+     * @param none
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageBreedersDeleted(){
+        $select = ['','','selected'];
+        $formroute = 'spectator.averageBreederStatisticsDeletedYear';
+        $now = Carbon::now()->endOfYear();
+        $yearnow = $now->year;
+        $past =  Carbon::now()->subYear(5)->startofYear();
+        $yearpast = $past->year;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',2)
+                ->whereNotNull('approved_at')
+                ->whereNotNull('deleted_at')
+                ->whereBetween('deleted_at', $temp)
+                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear,$temp[1]->year];
+
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+        return view('user.spectator.averageBreederStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly breeders deleted
+     *
+     * @param year
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageBreedersDeletedYear(Request $request){
+        $select = ['','','selected'];
+        $formroute = 'spectator.averageBreederStatisticsDeletedYear';
+        $now = $request->yearmax."-12-31";
+        $now = Carbon::parse($now);
+        $yearnow = $request->yearmax;
+        $past =  $request->yearmin."-01-01";
+        $past = Carbon::parse($past);
+        $yearpast = $request->yearmin;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+        sort($temp);
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',2)
+                ->whereNotNull('approved_at')
+                ->whereNotNull('deleted_at')
+                ->whereBetween('deleted_at', $temp)
+                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear, $temp[1]->year];
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+        return view('user.spectator.averageBreederStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly customers created
+     *
+     * @param none
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageCustomerCreated(){
+        $select = ['selected','',''];
+        $formroute = 'spectator.averageCustomerStatisticsCreatedYear';
+        $now = Carbon::now()->endOfYear();
+        $yearnow = $now->year;
+        $past =  Carbon::now()->subYear(5)->startofYear();
+        $yearpast = $past->year;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',3)
+                // ->whereNull('deleted_at')
+                // ->whereNull('blocked_at')
+                ->whereBetween('created_at', $temp)
+                ->select(DB::raw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear,$temp[1]->year];
+
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+
+        return view('user.spectator.averageCustomerStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly customers created
+     *
+     * @param year
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageCustomerCreatedYear(Request $request){
+        $select = ['selected','',''];
+        $formroute = 'spectator.averageCustomerStatisticsCreatedYear';
+        $now = $request->yearmax."-12-31";
+        $now = Carbon::parse($now);
+        $yearnow = $request->yearmax;
+        $past =  $request->yearmin."-01-01";
+        $past = Carbon::parse($past);
+        $yearpast = $request->yearmin;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+        sort($temp);
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',3)
+                // ->whereNull('deleted_at')
+                // ->whereNull('blocked_at')
+                ->whereBetween('created_at', $temp)
+                ->select(DB::raw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear, $temp[1]->year];
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+        return view('user.spectator.averageCustomerStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly customers blocked
+     *
+     * @param none
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageCustomerBlocked(){
+        $select = ['','selected',''];
+        $formroute = 'spectator.averageCustomerStatisticsBlockedYear';
+        $now = Carbon::now()->endOfYear();
+        $yearnow = $now->year;
+        $past =  Carbon::now()->subYear(5)->startofYear();
+        $yearpast = $past->year;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',3)
+                ->whereNotNull('approved_at')
+                // ->whereNull('deleted_at')
+                ->whereBetween('blocked_at', $temp)
+                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear,$temp[1]->year];
+
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+
+        return view('user.spectator.averageCustomerStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly customers blocked
+     *
+     * @param year
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageCustomerBlockedYear(Request $request){
+        $select = ['','selected',''];
+        $formroute = 'spectator.averageCustomerStatisticsBlockedYear';
+        $now = $request->yearmax."-12-31";
+        $now = Carbon::parse($now);
+        $yearnow = $request->yearmax;
+        $past =  $request->yearmin."-01-01";
+        $past = Carbon::parse($past);
+        $yearpast = $request->yearmin;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+        sort($temp);
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',3)
+                ->whereNotNull('approved_at')
+                // ->whereNull('deleted_at')
+                ->whereBetween('blocked_at', $temp)
+                ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear,$temp[1]->year];
+
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+
+        return view('user.spectator.averageCustomerStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly customers deleted
+     *
+     * @param none
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageCustomerDeleted(){
+        $select = ['','','selected'];
+        $formroute = 'spectator.averageCustomerStatisticsDeletedYear';
+        $now = Carbon::now()->endOfYear();
+        $yearnow = $now->year;
+        $past =  Carbon::now()->subYear(5)->startofYear();
+        $yearpast = $past->year;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',3)
+                ->whereNotNull('approved_at')
+                ->whereNotNull('deleted_at')
+                ->whereBetween('deleted_at', $temp)
+                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear,$temp[1]->year];
+
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+        return view('user.spectator.averageCustomerStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+
+    /*
+     * Display average statistics for monthly customers deleted
+     *
+     * @param year
+     * @return view, string array, string route, array of year, array of count
+     *
+     */
+    public function averageCustomerDeletedYear(Request $request){
+        $select = ['','','selected'];
+        $formroute = 'spectator.averageCustomerStatisticsDeletedYear';
+        $now = $request->yearmax."-12-31";
+        $now = Carbon::parse($now);
+        $yearnow = $request->yearmax;
+        $past =  $request->yearmin."-01-01";
+        $past = Carbon::parse($past);
+        $yearpast = $request->yearmin;
+        $midyear = ceil(($yearpast+$yearnow)/2);
+        $temp = [$past, $now];
+        sort($temp);
+        $counts = DB::table('users')
+                ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                ->join('roles', 'role_user.role_id','=','roles.id')
+                ->where('role_id','=',3)
+                ->whereNotNull('approved_at')
+                ->whereNotNull('deleted_at')
+                ->whereBetween('deleted_at', $temp)
+                ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*)/12 as average_count'))
+                ->groupBy('year')
+                ->get();
+
+        $year = [$temp[0]->year, $midyear,$temp[1]->year];
+
+        $averageCount = array_fill($year[0],($year[2]-$year[0])+1 ,0);
+        // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
+        foreach ($counts as $count) {
+            $averageCount[$count->year] = ceil($count->average_count);
+        }
+
+        return view('user.spectator.averageCustomerStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
 }

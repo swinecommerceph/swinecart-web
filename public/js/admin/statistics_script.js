@@ -99,9 +99,3 @@ var createdBarChart = new Chart(createdChartArea, {
         }
     }
 });
-
-
-// var dashboardTransactionArea = document.getElementById("dash-transaction-chart");
-// var dashTransactionChart = new Chart(dashboardTransactionArea, {
-//
-// });

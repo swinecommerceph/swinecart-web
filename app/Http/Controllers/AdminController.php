@@ -1627,19 +1627,19 @@ class AdminController extends Controller
         $chartSelector = ['selected','',''];
         $route = 'admin.statistics.averageNewBreederYear';
         $chartRoute = ['admin.statistics.averageNewBreeder','admin.statistics.averageBlockedBreeder', 'admin.statistics.averageDeletedBreeder'];
-        $now = Carbon::now();
+        $now = Carbon::now()->endOfYear();
         $yearmaximum = $now->year;
-        $pastYear = Carbon::now()->subYear(5);
+        $pastYear = Carbon::now()->subYear(5)->startofYear();
         $yearminimum = $pastYear->year;
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_id','=',2)
-                ->whereNotNull('approved_at')
-                ->whereNull('deleted_at')
-                ->whereNull('blocked_at')
-                ->whereBetween('approved_at', [$pastYear, $now])
-                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*)/12 as average_count'))
+                // ->whereNotNull('approved_at')
+                // ->whereNull('deleted_at')
+                // ->whereNull('blocked_at')
+                ->whereBetween('created_at', [$pastYear, $now])
+                ->select(DB::raw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name, COUNT(*)/12 as average_count'))
                 ->groupBy('year')
                 ->get();
         // make an array and fill it with 0, starting index from the last year, size of year now-last year
@@ -1659,21 +1659,24 @@ class AdminController extends Controller
         $route = 'admin.statistics.averageNewBreederYear';
         $chartRoute = ['admin.statistics.averageNewBreeder','admin.statistics.averageBlockedBreeder', 'admin.statistics.averageDeletedBreeder'];
         $now = $request->yearmax."-12-31";
-        $yearmaximum = $request->yearmax;
+        $now = Carbon::parse($now);
         $pastYear =  $request->yearmin."-01-01";
-        $yearminimum = $request->yearmin;
+        $pastYear = Carbon::parse($pastYear);
+        $temp = [$pastYear, $now];
+        sort($temp);
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_id','=',2)
-                ->whereNotNull('approved_at')
-                ->whereNull('deleted_at')
-                ->whereNull('blocked_at')
-                ->whereBetween('approved_at', [$pastYear, $now])
-                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*)/12 as average_count'))
+                // ->whereNotNull('approved_at')
+                // ->whereNull('deleted_at')
+                // ->whereNull('blocked_at')
+                ->whereBetween('created_at', $temp)
+                ->select(DB::raw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name, COUNT(*)/12 as average_count'))
                 ->groupBy('year')
                 ->get();
-
+        $yearminimum = $temp[0]->year;
+        $yearmaximum = $temp[1]->year;
         // make an array and fill it with 0, starting index from the last year, size of year now-last year
         $averageCount = array_fill($yearminimum,($yearmaximum-$yearminimum)+1 ,0);
         // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
@@ -1689,9 +1692,9 @@ class AdminController extends Controller
         $chartSelector = ['','selected',''];
         $route = 'admin.statistics.averageBlockedBreederYear';
         $chartRoute = ['admin.statistics.averageNewBreeder','admin.statistics.averageBlockedBreeder', 'admin.statistics.averageDeletedBreeder'];
-        $now = Carbon::now();
+        $now = Carbon::now()->endOfYear();
         $yearmaximum = $now->year;
-        $pastYear = Carbon::now()->subYear(5);
+        $pastYear = Carbon::now()->subYear(5)->startofYear();
         $yearminimum = $pastYear->year;
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
@@ -1699,7 +1702,7 @@ class AdminController extends Controller
                 ->where('role_id','=',2)
                 ->whereNotNull('approved_at')
                 ->whereNotNull('blocked_at')
-                ->whereNull('deleted_at')
+                // ->whereNull('deleted_at')
                 ->whereBetween('blocked_at', [$pastYear, $now])
                 ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*)/12 as average_count'))
                 ->groupBy('year')
@@ -1720,21 +1723,24 @@ class AdminController extends Controller
         $route = 'admin.statistics.averageBlockedBreederYear';
         $chartRoute = ['admin.statistics.averageNewBreeder','admin.statistics.averageBlockedBreeder', 'admin.statistics.averageDeletedBreeder'];
         $now = $request->yearmax."-12-31";
-        $yearmaximum = $request->yearmax;
+        $now = Carbon::parse($now);
         $pastYear =  $request->yearmin."-01-01";
-        $yearminimum = $request->yearmin;
+        $pastYear = Carbon::parse($pastYear);
+        $temp = [$pastYear, $now];
+        sort($temp);
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_id','=',2)
                 ->whereNotNull('approved_at')
                 ->whereNotNull('blocked_at')
-                ->whereNull('deleted_at')
-                ->whereBetween('blocked_at', [$pastYear, $now])
+                // ->whereNull('deleted_at')
+                ->whereBetween('blocked_at', $temp)
                 ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*)/12 as average_count'))
                 ->groupBy('year')
                 ->get();
-
+        $yearminimum = $temp[0]->year;
+        $yearmaximum = $temp[1]->year;
         $averageCount = array_fill($yearminimum,($yearmaximum-$yearminimum)+1 ,0);
         // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
         foreach ($counts as $count) {
@@ -1748,9 +1754,9 @@ class AdminController extends Controller
         $chartSelector = ['','','selected'];
         $route = 'admin.statistics.averageDeletedBreederYear';
         $chartRoute = ['admin.statistics.averageNewBreeder','admin.statistics.averageBlockedBreeder', 'admin.statistics.averageDeletedBreeder'];
-        $now = Carbon::now();
+        $now = Carbon::now()->endOfYear();
         $yearmaximum = $now->year;
-        $pastYear = Carbon::now()->subYear(5);
+        $pastYear = Carbon::now()->subYear(5)->startofYear();
         $yearminimum = $pastYear->year;
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
@@ -1777,20 +1783,23 @@ class AdminController extends Controller
         $route = 'admin.statistics.averageDeletedBreederYear';
         $chartRoute = ['admin.statistics.averageNewBreeder','admin.statistics.averageBlockedBreeder', 'admin.statistics.averageDeletedBreeder'];
         $now = $request->yearmax."-12-31";
-        $yearmaximum = $request->yearmax;
+        $now = Carbon::parse($now);
         $pastYear =  $request->yearmin."-01-01";
-        $yearminimum = $request->yearmin;
+        $pastYear = Carbon::parse($pastYear);
+        $temp = [$pastYear, $now];
+        sort($temp);
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_id','=',2)
                 ->whereNotNull('approved_at')
                 ->whereNotNull('deleted_at')
-                ->whereBetween('deleted_at', [$pastYear, $now])
+                ->whereBetween('deleted_at', $temp)
                 ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*)/12 as average_count'))
                 ->groupBy('year')
                 ->get();
-
+        $yearminimum = $temp[0]->year;
+        $yearmaximum = $temp[1]->year;
         $averageCount = array_fill($yearminimum,($yearmaximum-$yearminimum)+1 ,0);
         // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
         foreach ($counts as $count) {
@@ -1805,19 +1814,19 @@ class AdminController extends Controller
         $chartSelector = ['selected','',''];
         $route = 'admin.statistics.averageNewCustomerYear';
         $chartRoute = ['admin.statistics.averageNewCustomers','admin.statistics.averageBlockedCustomers', 'admin.statistics.averageDeletedCustomers'];
-        $now = Carbon::now();
+        $now = Carbon::now()->endOfYear();
         $yearmaximum = $now->year;
-        $pastYear = Carbon::now()->subYear(5);
+        $pastYear = Carbon::now()->subYear(5)->startofYear();
         $yearminimum = $pastYear->year;
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_id','=',3)
-                ->whereNotNull('approved_at')
-                ->whereNull('deleted_at')
-                ->whereNull('blocked_at')
-                ->whereBetween('approved_at', [$pastYear, $now])
-                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*)/12 as average_count'))
+                // ->whereNotNull('approved_at')
+                // ->whereNull('deleted_at')
+                // ->whereNull('blocked_at')
+                ->whereBetween('created_at', [$pastYear, $now])
+                ->select(DB::raw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name, COUNT(*)/12 as average_count'))
                 ->groupBy('year')
                 ->get();
         // make an array and fill it with 0, starting index from the last year, size of year now-last year
@@ -1836,21 +1845,24 @@ class AdminController extends Controller
         $route = 'admin.statistics.averageNewCustomerYear';
         $chartRoute = ['admin.statistics.averageNewCustomers','admin.statistics.averageBlockedCustomers', 'admin.statistics.averageDeletedCustomers'];
         $now = $request->yearmax."-12-31";
-        $yearmaximum = $request->yearmax;
+        $now = Carbon::parse($now);
         $pastYear =  $request->yearmin."-01-01";
-        $yearminimum = $request->yearmin;
+        $pastYear = Carbon::parse($pastYear);
+        $temp = [$pastYear, $now];
+        sort($temp);
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_id','=',3)
-                ->whereNotNull('approved_at')
-                ->whereNull('deleted_at')
-                ->whereNull('blocked_at')
-                ->whereBetween('approved_at', [$pastYear, $now])
-                ->select(DB::raw('YEAR(approved_at) year, MONTH(approved_at) month, MONTHNAME(approved_at) month_name, COUNT(*)/12 as average_count'))
+                // ->whereNotNull('approved_at')
+                // ->whereNull('deleted_at')
+                // ->whereNull('blocked_at')
+                ->whereBetween('created_at', $temp)
+                ->select(DB::raw('YEAR(created_at) year, MONTH(created_at) month, MONTHNAME(created_at) month_name, COUNT(*)/12 as average_count'))
                 ->groupBy('year')
                 ->get();
-
+        $yearminimum = $temp[0]->year;
+        $yearmaximum = $temp[1]->year;
         // make an array and fill it with 0, starting index from the last year, size of year now-last year
         $averageCount = array_fill($yearminimum,($yearmaximum-$yearminimum)+1 ,0);
         // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
@@ -1866,9 +1878,9 @@ class AdminController extends Controller
         $chartSelector = ['','selected',''];
         $route = 'admin.statistics.averageBlockedCustomerYear';
         $chartRoute = ['admin.statistics.averageNewCustomers','admin.statistics.averageBlockedCustomers', 'admin.statistics.averageDeletedCustomers'];
-        $now = Carbon::now();
+        $now = Carbon::now()->endOfYear();
         $yearmaximum = $now->year;
-        $pastYear = Carbon::now()->subYear(5);
+        $pastYear = Carbon::now()->subYear(5)->startofYear();
         $yearminimum = $pastYear->year;
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
@@ -1876,7 +1888,7 @@ class AdminController extends Controller
                 ->where('role_id','=',3)
                 ->whereNotNull('approved_at')
                 ->whereNotNull('blocked_at')
-                ->whereNull('deleted_at')
+                // ->whereNull('deleted_at')
                 ->whereBetween('blocked_at', [$pastYear, $now])
                 ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*)/12 as average_count'))
                 ->groupBy('year')
@@ -1897,21 +1909,25 @@ class AdminController extends Controller
         $route = 'admin.statistics.averageBlockedCustomerYear';
         $chartRoute = ['admin.statistics.averageNewCustomers','admin.statistics.averageBlockedCustomers', 'admin.statistics.averageDeletedCustomers'];
         $now = $request->yearmax."-12-31";
-        $yearmaximum = $request->yearmax;
+        $now = Carbon::parse($now);
         $pastYear =  $request->yearmin."-01-01";
-        $yearminimum = $request->yearmin;
+        $pastYear = Carbon::parse($pastYear);
+        $temp = [$pastYear, $now];
+        sort($temp);
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_id','=',3)
                 ->whereNotNull('approved_at')
                 ->whereNotNull('blocked_at')
-                ->whereNull('deleted_at')
-                ->whereBetween('blocked_at', [$pastYear, $now])
+                // ->whereNull('deleted_at')
+                ->whereBetween('blocked_at', $temp)
                 ->select(DB::raw('YEAR(blocked_at) year, MONTH(blocked_at) month, MONTHNAME(blocked_at) month_name, COUNT(*)/12 as average_count'))
                 ->groupBy('year')
                 ->get();
 
+        $yearminimum = $temp[0]->year;
+        $yearmaximum = $temp[1]->year;
         // make an array and fill it with 0, starting index from the last year, size of year now-last year
         $averageCount = array_fill($yearminimum,($yearmaximum-$yearminimum)+1 ,0);
         // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.
@@ -1927,9 +1943,9 @@ class AdminController extends Controller
         $chartSelector = ['','','selected'];
         $route = 'admin.statistics.averageDeletedCustomerYear';
         $chartRoute = ['admin.statistics.averageNewCustomers','admin.statistics.averageBlockedCustomers', 'admin.statistics.averageDeletedCustomers'];
-        $now = Carbon::now();
+        $now = Carbon::now()->endOfYear();
         $yearmaximum = $now->year;
-        $pastYear = Carbon::now()->subYear(5);
+        $pastYear = Carbon::now()->subYear(5)->startofYear();
         $yearminimum = $pastYear->year;
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
@@ -1957,20 +1973,23 @@ class AdminController extends Controller
         $route = 'admin.statistics.averageDeletedCustomerYear';
         $chartRoute = ['admin.statistics.averageNewCustomers','admin.statistics.averageBlockedCustomers', 'admin.statistics.averageDeletedCustomers'];
         $now = $request->yearmax."-12-31";
-        $yearmaximum = $request->yearmax;
+        $now = Carbon::parse($now);
         $pastYear =  $request->yearmin."-01-01";
-        $yearminimum = $request->yearmin;
+        $pastYear = Carbon::parse($pastYear);
+        $temp = [$pastYear, $now];
+        sort($temp);
         $counts = DB::table('users')
                 ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                 ->join('roles', 'role_user.role_id','=','roles.id')
                 ->where('role_id','=',3)
                 ->whereNotNull('approved_at')
                 ->whereNotNull('deleted_at')
-                ->whereBetween('deleted_at', [$pastYear, $now])
+                ->whereBetween('deleted_at', $temp)
                 ->select(DB::raw('YEAR(deleted_at) year, MONTH(deleted_at) month, MONTHNAME(deleted_at) month_name, COUNT(*)/12 as average_count'))
                 ->groupBy('year')
                 ->get();
-
+        $yearminimum = $temp[0]->year;
+        $yearmaximum = $temp[1]->year;
         // make an array and fill it with 0, starting index from the last year, size of year now-last year
         $averageCount = array_fill($yearminimum,($yearmaximum-$yearminimum)+1 ,0);
         // fill the array of counts using the year from the query as the index while the value is the cieling of count average to allow integers only.

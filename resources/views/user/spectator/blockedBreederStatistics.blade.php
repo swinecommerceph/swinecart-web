@@ -56,6 +56,9 @@
                             <option value="{{route('spectator.statisticsActiveBreeder')}}">Active Breeders</option>
                             <option selected value="{{route('spectator.statisticsBlockedBreeder')}}">Blocked Breeders</option>
                             <option value="{{route('spectator.statisticsDeletedBreeder')}}">Deleted Breeders</option>
+                            <option value="{{route('spectator.averageBreederStatisticsCreated')}}">Average Monthly Breeders Created</option>
+                            <option value="{{route('spectator.averageBreederStatisticsBlocked')}}">Average Monthly Breeders Blocked</option>
+                            <option value="{{route('spectator.averageBreederStatisticsDeleted')}}">Average Monthly Breeders Deleted</option>
                         </select>
                         <label>Chart</label>
                     </div>
