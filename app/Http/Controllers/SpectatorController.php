@@ -81,26 +81,56 @@ class SpectatorController extends Controller
                                             ->where('email_verified','=','1')
                                             ->count();
 
-        $products = DB::table('products')->where('status', '=', 'displayed')
-                                        ->whereNull('deleted_at')
-                                        ->get();
-        $totalproduct = count($products);
+        // $products = DB::table('products')->where('status', '=', 'displayed')
+        //                                 ->whereNull('deleted_at')
+        //                                 ->get();
+        // $totalproduct = count($products);
+        // $boar = 0;
+        // $gilt = 0;
+        // $sow = 0;
+        // $semen = 0;
+        // foreach ($products as $product) {
+        //     if(strcmp($product->type, 'boar')){
+        //         $boar++;
+        //     }
+        //     if(strcmp($product->type, 'gilt')){
+        //         $gilt++;
+        //     }
+        //     if(strcmp($product->type, 'sow')){
+        //         $sow++;
+        //     }
+        //     if(strcmp($product->type, 'semen')){
+        //         $semen++;
+        //     }
+        // }
+
+        $products = DB::table('products')
+                        ->where('status', '=', 'displayed')
+                        ->whereNull('deleted_at')
+                        ->select('type',DB::raw('COUNT(*) as count'))
+                        ->groupBy('type')
+                        ->get();
+        $totalproduct = 0;
         $boar = 0;
         $gilt = 0;
         $sow = 0;
         $semen = 0;
-        foreach ($products as $product) {
-            if(strcmp($product->type, 'boar')){
-                $boar++;
+        foreach ($products as $type) {
+            $totalproduct = $totalproduct + $type->count;
+            if($type->type == 'boar'){
+                $boar = $type->count;
             }
-            if(strcmp($product->type, 'gilt')){
-                $gilt++;
+            else if($type->type == 'boar'){
+                $boar = $type->count;
             }
-            if(strcmp($product->type, 'sow')){
-                $sow++;
+            else if($type->type == 'sow'){
+                $sow = $type->count;
             }
-            if(strcmp($product->type, 'semen')){
-                $semen++;
+            else if($type->type == 'gilt'){
+                $gilt = $type->count;
+            }
+            else if($type->type == 'semen'){
+                $semen = $type->count;
             }
         }
 
