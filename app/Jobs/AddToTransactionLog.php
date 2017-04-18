@@ -19,6 +19,7 @@ class AddToTransactionLog implements ShouldQueue
     /**
      * Create a new job instance.
      *
+     * @param  Array    $transactionDetails
      * @return void
      */
     public function __construct($transactionDetails)

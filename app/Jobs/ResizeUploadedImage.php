@@ -24,6 +24,7 @@ class ResizeUploadedImage implements ShouldQueue
     /**
      * Create a new job instance.
      *
+     * @param  String   filename
      * @return void
      */
     public function __construct($filename)

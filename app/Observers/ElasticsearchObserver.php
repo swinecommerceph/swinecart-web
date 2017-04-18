@@ -3,6 +3,8 @@
 namespace App\Observers;
 
 use Elasticsearch\Client;
+use App\Jobs\IndexProductToElasticsearch;
+use App\Jobs\DeleteProductFromElasticsearch;
 
 class ElasticsearchObserver
 {
@@ -27,12 +29,14 @@ class ElasticsearchObserver
      */
     public function saved($model)
     {
-        $this->elasticsearch->index([
-            'index' => $model->getSearchIndex(),
-            'type' => $model->getSearchType(),
-            'id' => $model->id,
-            'body' => $model->toSearchArray()
-        ]);
+        $modelDetails = [];
+        $modelDetails['index'] = $model->getSearchIndex();
+        $modelDetails['type'] = $model->getSearchType();
+        $modelDetails['id'] = $model->id;
+        $modelDetails['body'] = $model->toSearchArray();
+
+        // Queue IndexProductToElasticsearch job
+        dispatch(new IndexProductToElasticsearch($modelDetails));
     }
 
     /**
@@ -43,10 +47,12 @@ class ElasticsearchObserver
      */
     public function deleted($model)
     {
-        $this->elasticsearch->delete([
-            'index' => $model->getSearchIndex(),
-            'type' => $model->getSearchType(),
-            'id' => $model->id
-        ]);
+        $modelDetails = [];
+        $modelDetails['index'] = $model->getSearchIndex();
+        $modelDetails['type'] = $model->getSearchType();
+        $modelDetails['id'] = $model->id;
+
+        // Queue IndexProductToElasticsearch job
+        dispatch(new DeleteProductFromElasticsearch($modelDetails));
     }
 }
