@@ -10,6 +10,7 @@
 * VueJS v2
 * jQuery v2.1
 * Materialize CSS v0.98
+* Elasticsearch v5.2
 
 ### Configured Laradock environment can be found at:
 

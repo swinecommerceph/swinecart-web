@@ -29,13 +29,17 @@
             </div>
             <form>
                 <div class="input-field">
-                    <input id="search" type="search" name="q" placeholder="Search for a product" value="{{ request('q') }}">
+                    <input id="search" type="search" name="q" placeholder="Search for a product" value="{{ request('q') }}" autocomplete="off">
                     <label class="label-icon" for="search"><i class="material-icons teal-text">search</i></label>
                     <i class="material-icons">close</i>
                 </div>
             </form>
         </div>
     </nav>
+
+    <div id="search-results" class="z-depth-2" style="display:none; position:absolute; background-color:white; z-index:9999;">
+        <ul></ul>
+    </div>
 
     <div class="row" style="padding-top:1rem;">
         {{-- Chips --}}
@@ -250,6 +254,7 @@
 @endsection
 
 @section('customScript')
+    <script src="/js/vendor/elasticsearch.jquery.min.js"></script>
     <script src="/js/customer/filter.js"> </script>
     <script src="/js/customer/viewProducts_script.js"> </script>
 @endsection

@@ -61,10 +61,38 @@ class AppServiceProvider extends ServiceProvider
      */
     private function bindSearchClient()
     {
-        $this->app->bind(Client::class, function($app){
-            return ClientBuilder::create()
-                ->setHosts(config('services.search.hosts'))
-                ->build();
+        $client = ClientBuilder::create()
+            ->setHosts(config('services.search.hosts'))
+            ->build();
+
+        $indexParameters['index'] = 'swinecart';
+
+        // Check if swinecart index is not yet existing
+        if (!$client->indices()->exists($indexParameters)){
+            
+            // Setup mapping for the suggester
+            $parameters = [
+                'index' => 'swinecart',
+                'body' => [
+                    'mappings' => [
+                        'products' => [
+                            'properties' => [
+
+                                'suggest' => [
+                                    'type' => 'completion'
+                                ]
+
+                            ]
+                        ]
+                    ]
+                ]
+            ];
+
+            $response = $client->indices()->create($parameters);
+        }
+
+        $this->app->bind(Client::class, function($app)use($client){
+            return $client;
         });
     }
 }
