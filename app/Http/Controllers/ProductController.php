@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 
 use App\Http\Requests;
@@ -477,8 +478,9 @@ class ProductController extends Controller
      */
     public function viewProducts(Request $request, ProductRepository $repository)
     {
-        // Check if there is a search query
+        // Check if from a search query
         $products = ($request->q) ? $repository->search($request->q): Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0);
+        $scores = ($request->q) ? $products->scores : [];
 
         $parsedTypes = ($request->type) ? explode(' ',$request->type) : '';
         $parsedBreedIds = ($request->breed) ? $this->getBreedIds($request->breed) : '';
@@ -486,16 +488,7 @@ class ProductController extends Controller
 
         if($parsedTypes) $products = $products->whereIn('type', $parsedTypes);
         if($parsedBreedIds) $products = $products->whereIn('breed_id', $parsedBreedIds);
-        $products = $products->orderBy($parsedSort[0], $parsedSort[1])->paginate(10);
-
-        $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
-        $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
-        $urlFilters = [
-            'type' => $request->type,
-            'breed' => $request->breed,
-            'sort' => $request->sort,
-            'page' => $products->currentPage()
-        ];
+        $products = ($request->q) ? $products->get() : $products->orderBy($parsedSort[0], $parsedSort[1])->get();
 
         foreach ($products as $product) {
             $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
@@ -505,7 +498,33 @@ class ProductController extends Controller
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
             $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+            $product->score = ($request->q) ? $scores[$product->id] : 0;
         }
+
+        // Sort according to score if from a search query
+        if($request->q) $products = $products->sortByDesc('score');
+
+        // Manual pagination
+        $page = ($request->page) ? $request->page : 1;
+        $perPage = 10;
+        $offset = ($page * $perPage) - $perPage;
+        $products = new LengthAwarePaginator(
+                array_slice($products->all(), $offset, $perPage, true),
+                count($products),
+                $perPage,
+                $page,
+                ['path' => $request->url(), 'query' => $request->query()]
+            );
+
+        $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
+        $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
+        $urlFilters = [
+            'q' => $request->q,
+            'type' => $request->type,
+            'breed' => $request->breed,
+            'sort' => $request->sort,
+            'page' => $products->currentPage()
+        ];
 
         return view('user.customer.viewProducts', compact('products', 'filters', 'breedFilters', 'urlFilters'));
     }

@@ -54,7 +54,29 @@ trait Searchable
             'breeder_name' => Breeder::find($this->breeder_id)->users()->first()->name,
             'province' => FarmAddress::find($this->farm_from_id)->province,
             'type' => $this->type,
-            'breed' => Breed::find($this->breed_id)->name
+            'breed' => Breed::find($this->breed_id)->name,
+            'suggest' => [
+                [
+                    'input' => Breeder::find($this->breeder_id)->users()->first()->name,
+                    'weight' => 12,
+                ],
+                [
+                    'input' => FarmAddress::find($this->farm_from_id)->province,
+                    'weight' => 9,
+                ],
+                [
+                    'input' => Breed::find($this->breed_id)->name,
+                    'weight' => 5,
+                ],
+                [
+                    'input' => $this->type,
+                    'weight' => 3,
+                ]
+            ],
+            'output' => [
+                $this->type . " " . Breed::find($this->breed_id)->name,
+                Breeder::find($this->breeder_id)->users()->first()->name . " " . FarmAddress::find($this->farm_from_id)->province . " " . $this->type . " " . Breed::find($this->breed_id)->name 
+            ]
         ];
     }
 

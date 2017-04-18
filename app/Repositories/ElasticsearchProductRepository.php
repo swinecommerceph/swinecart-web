@@ -45,13 +45,15 @@ class ElasticsearchProductRepository implements ProductRepository
     {
         $instance = new Product;
 
-        $items = $this->search->search([
+        $items = $this->elasticsearch->search([
             'index' => $instance->getSearchIndex(),
             'type' => $instance->getSearchType(),
             'body' =>[
+                'from' => 0,
+                'size' => 100,
                 'query' => [
                     'multi_match' => [
-                        'fields' => ['breeder_name', 'province', 'type', 'breed'],
+                        'fields' => ['breeder_name^5', 'province^3', 'type', 'breed'],
                         'query' => $query
                     ]
                 ]
@@ -71,8 +73,9 @@ class ElasticsearchProductRepository implements ProductRepository
      */
     private function buildQueryBuilder(array $items)
     {
-        $productIds = array_pluck($items['hits']['hits'], '_source.id') ? : [];
-        $productsQueryBuilder = Product::whereIn('id', $productIds);
+        $productDetails = array_pluck($items['hits']['hits'], '_score', '_source.id') ? : [];
+        $productsQueryBuilder = Product::whereIn('id', array_keys($productDetails));
+        $productsQueryBuilder->scores = $productDetails;
 
         return $productsQueryBuilder;
     }
