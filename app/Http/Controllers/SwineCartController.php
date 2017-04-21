@@ -22,6 +22,7 @@ use Auth;
 use App\Notifications\BreederRated;
 use App\Notifications\ProductRequested;
 use App\Jobs\AddToTransactionLog;
+use App\Jobs\SendSMS;
 
 class SwineCartController extends Controller
 {
@@ -114,25 +115,36 @@ class SwineCartController extends Controller
             $reviewed->save();
             $reviews->save($review);
 
-            // Add new Transaction Log
-            // This must be put in an event for better performance
-            $transactionLog = new TransactionLog;
-            $transactionLog->customer_id = $request->customerId;
-            $transactionLog->breeder_id = $request->breederId;
-            $transactionLog->product_id = $request->productId;
-            $transactionLog->status = "rated";
-            $transactionLog->created_at = Carbon::now();
-            $reviewed->transactionLogs()->save($transactionLog);
+            $breeder = Breeder::find($request->breederId);
+
+            $transactionDetails = [
+                'swineCart_id' => $reviewed->id,
+                'customer_id' => $request->customerId,
+                'breeder_id' => $request->breederId,
+                'product_id' => $request->productId,
+                'status' => 'rated',
+                'created_at' => Carbon::now()
+            ];
+
+            $notificationDetails = [
+                'description' => 'Customer <b>' . $this->user->name . ' rated</b> you',
+                'time' => $transactionDetails['created_at'],
+                'url' => route('dashboard')
+            ];
+
+            $smsDetails = [
+                'message' => 'SwineCart: Customer ' . $this->user->name . ' rated you with an overall average rating of .',
+                'recepient' => $breeder->office_mobile
+            ];
+
+            // Add new Transaction Log. Queue AddToTransactionLog job
+            dispatch(new AddToTransactionLog($transactionDetails));
+            // Queue SendSMS job
+            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
 
             // Notify Breeder of the rating
-            $breederUser = Breeder::find($request->breederId)->users()->first();
-            $breederUser->notify(new BreederRated(
-                [
-                    'description' => 'Customer <b>' . $this->user->name . ' rated</b> you',
-                    'time' => $transactionLog->created_at,
-                    'url' => route('dashboard')
-                ]
-            ));
+            $breederUser = $breeder->users()->first();
+            $breederUser->notify(new BreederRated($notificationDetails));
 
             return "OK";
         }
@@ -164,6 +176,8 @@ class SwineCartController extends Controller
             $product->status = "requested";
             $product->save();
 
+            $breeder = Breeder::find($product->breeder_id);
+
             $transactionDetails = [
                 'swineCart_id' => $requested->id,
                 'customer_id' => $requested->customer_id,
@@ -173,18 +187,25 @@ class SwineCartController extends Controller
                 'created_at' => Carbon::now()
             ];
 
+            $notificationDetails = [
+                'description' => 'Product <b>' . $product->name . '</b> is <b>requested</b> by <b>' . $this->user->name . '</b>',
+                'time' => $transactionDetails['created_at'],
+                'url' => route('dashboard.productStatus')
+            ];
+
+            $smsDetails = [
+                'message' => 'SwineCart: Product ' . $product->name . ' is requested by ' . $this->user->name . 'at (date/time).',
+                'recepient' => $breeder->office_mobile
+            ];
+
             // Add new Transaction Log. Queue AddToTransactionLog job
             dispatch(new AddToTransactionLog($transactionDetails));
+            // Queue SendSMS job
+            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
 
             // Notify Breeder of the request
-            $breederUser = Breeder::find($product->breeder_id)->users()->first();
-            $breederUser->notify(new ProductRequested(
-                [
-                    'description' => 'Product <b>' . $product->name . '</b> is <b>requested</b> by <b>' . $this->user->name . '</b>',
-                    'time' => $transactionDetails['created_at'],
-                    'url' => route('dashboard.productStatus')
-                ]
-            ));
+            $breederUser = $breeder->users()->first();
+            $breederUser->notify(new ProductRequested($notificationDetails));
 
             return [$customer->swineCartItems()->where('if_requested',0)->count(), $transactionDetails['created_at']];
         }
