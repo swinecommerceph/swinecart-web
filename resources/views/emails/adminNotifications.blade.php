@@ -20,7 +20,7 @@
             @endif
         </div>
     </div>
-    <div class="divider"></div>
+    <hr>
 @endsection
 
 @section('content')

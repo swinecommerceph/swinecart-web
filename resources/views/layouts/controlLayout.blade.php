@@ -89,7 +89,7 @@
             </div>
             <div class="footer-copyright">
                 <div class="container">
-                    © {{Carbon\Carbon::now()->year}} SwineCart
+                    © 2017 SwineCart
                     <span class="grey-text text-lighten-4 right">{{$counter}} Online Users</span>
                 </div>
             </div>

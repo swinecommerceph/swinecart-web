@@ -104,9 +104,16 @@ class ViewComposerServiceProvider extends ServiceProvider
                                 ->groupBy('year')
                                 ->orderBy('year', 'desc')
                                 ->get();
-            $minyear = $transactions->last()->year;
-            $maxyear = $transactions->first()->year;
-            $midyear = ($minyear+$maxyear)/2;
+            if(count($transactions) == 0){
+                $minyear = Carbon::now()->subYear(4)->year;
+                $maxyear = Carbon::now()->year;
+                $midyear = ($minyear+$maxyear)/2;
+            }else{
+                $minyear = $transactions->last()->year;
+                $maxyear = $transactions->first()->year;
+                $midyear = ($minyear+$maxyear)/2;
+            }
+
             $data = [$minyear, $maxyear, $midyear];
             $view->with('minmaxyear', $data);
         });

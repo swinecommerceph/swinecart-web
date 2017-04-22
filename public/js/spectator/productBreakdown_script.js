@@ -6,16 +6,16 @@ var data = {
     datasets: [{
             data: products,
             backgroundColor: [
-                "#e0fb70",
-                "#92caed",
-                "#ed92ca",
-                "#caed92"
+                "#edf26d",
+                "#3db0bf",
+                "#d38393",
+                "#519370"
             ],
             hoverBackgroundColor: [
-                "#e0fb70",
-                "#92caed",
-                "#ed92ca",
-                "#caed92"
+                "#edf26d",
+                "#3db0bf",
+                "#d38393",
+                "#519370"
             ]
         }]
 }
