@@ -28,14 +28,14 @@
             </li>
             <li>
                 <div class="side-nav-user-info">
-                    <a id="this_user_information_trigger" href="#this_user_information" ><img class="circle side-nav-user-image" src="/images/logoblack.png" height=40/>{{ Auth::user()->name }}</a>
+                    <a id="this_user_information_trigger" href="#this_user_information" class="white-text"><img class="circle side-nav-user-image" src="/images/logoblack.png" height=40/>{{ Auth::user()->name }}</a>
                 </div>
             </li>
-            <li><a class="subheader">Menu</a></li>
-            <li><a class="waves-effect" href="{{route('spectator.users')}}"><i class="material-icons">account_circle</i>All Users</a></li>
-            <li><a class="waves-effect" href="{{route('spectator.products')}}"><i class="material-icons">shopping_basket</i>Products</a></li>
-            <li><a class="waves-effect" href="{{route('spectator.statistics')}}"><i class="material-icons">trending_up</i>Site Statistics</a></li>
-            <li><a class="waves-effect" href="{{ url('logout') }}"><i class="material-icons">power_settings_new</i>Log Out</a></li>
+            <li><a class="subheader white-text">Menu</a></li>
+            <li><a class="waves-effect white-text" href="{{route('spectator.users')}}"><i class="material-icons white-text">account_circle</i>All Users</a></li>
+            <li><a class="waves-effect white-text" href="{{route('spectator.products')}}"><i class="material-icons white-text">shopping_basket</i>Products</a></li>
+            <li><a class="waves-effect white-text" href="{{route('spectator.statistics')}}"><i class="material-icons white-text">trending_up</i>Site Statistics</a></li>
+            <li><a class="waves-effect white-text" href="{{ url('logout') }}"><i class="material-icons white-text">power_settings_new</i>Log Out</a></li>
         </ul>
         <main @yield('pageId')class="admin-layout-main">
             <div class="container">

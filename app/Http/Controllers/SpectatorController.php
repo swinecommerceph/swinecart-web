@@ -165,11 +165,10 @@ class SpectatorController extends Controller
                     ->where('role_id', '=', 2)
                     ->where('users.id', '=', $request->userId)
                     ->join('breeder_user', 'breeder_user.id', '=', 'users.userable_id')
-                    ->select('users.id as user_id', 'users.name as user_name', 'users.email', 'roles.title as role',
+                    ->select('users.id as user_id', 'users.name as user_name', 'roles.title as role',
                             'breeder_user.officeAddress_addressLine1 as addressLine1', 'breeder_user.officeAddress_addressLine2 as addressLine2',
                             'breeder_user.officeAddress_province as province', 'breeder_user.officeAddress_zipCode as zipcode', 'breeder_user.office_landline',
-                            'breeder_user.office_mobile', 'breeder_user.website', 'breeder_user.produce', 'breeder_user.contactPerson_name as contact_person',
-                            'breeder_user.contactPerson_mobile as contact_person_mobile', 'breeder_user.status_instance'
+                            'breeder_user.website', 'breeder_user.produce','breeder_user.status_instance'
                             )
                     ->get();
         }else{
@@ -179,10 +178,10 @@ class SpectatorController extends Controller
                     ->whereIn('role_id', [3])
                     ->where('users.id', '=', $request->userId)
                     ->join('customer_user', 'customer_user.id', '=', 'users.userable_id')
-                    ->select('users.id as user_id', 'users.name as user_name', 'users.email', 'roles.title as role',
+                    ->select('users.id as user_id', 'users.name as user_name', 'roles.title as role',
                             'customer_user.address_addressLine1 as addressLine1', 'customer_user.address_addressLine2 as addressLine2',
-                            'customer_user.address_province as province', 'customer_user.address_zipCode as zipcode', 'customer_user.landline',
-                            'customer_user.mobile', 'customer_user.status_instance'
+                            'customer_user.address_province as province', 'customer_user.address_zipCode as zipcode',
+                            'customer_user.status_instance'
                             )
                     ->get();
 
@@ -840,7 +839,7 @@ class SpectatorController extends Controller
      *
      */
     public function getSpectatorInformation(){
-        $user_data = [$this->user->id, $this->user->userable_id, $this->user->name, $this->user->email];
+        $user_data = [$this->user->name, $this->user->email];
         return $user_data;
     }
 

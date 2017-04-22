@@ -54,7 +54,7 @@
                 <div class="input-field col s6 m6 l6 xl6">
                     <select onChange="window.location.href=this.value">
                         {{-- <option disabled selected>Choose option</option> --}}
-                        <option {{$chartSelector[0]}} value="{{route($chartRoute[0])}}">Average Monthly Created</option>
+                        <option {{$chartSelector[0]}} value="{{route($chartRoute[0])}}">Average Monthly Added</option>
                         <option {{$chartSelector[1]}} value="{{route($chartRoute[1])}}">Average Monthly Blocked</option>
                         <option {{$chartSelector[2]}} value="{{route($chartRoute[2])}}">Average Monthly Deleted</option>
                     </select>

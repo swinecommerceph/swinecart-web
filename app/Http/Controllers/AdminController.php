@@ -19,9 +19,11 @@ use App\Models\Customer;
 use App\Models\FarmAddress;
 use App\Models\Product;
 use App\Models\Image;
+use App\Models\Attachments;
 use App\Models\Video;
 use App\Models\Breed;
 use App\Models\Admin;
+use App\Models\Spectator;
 use App\Models\User;
 use App\Models\Sessions;
 use App\Models\HomeImage;
@@ -29,6 +31,8 @@ use App\Models\AdministratorLog;
 use App\Repositories\AdminRepository;
 use App\Mail\SwineCartAccountNotification;
 use App\Mail\SwineCartBreederCredentials;
+use App\Mail\SwineCartSpectatorCredentials;
+use App\Mail\SwineCartAnnouncement;
 
 use DB;
 use Auth;
@@ -492,8 +496,13 @@ class AdminController extends Controller
         $verCode = str_random('10');        // create a verification code
         $password = $this->generatePassword();  // generate the initial password for the breeder and save it to a variable to get the original password before encryption
         $user = $this->create($request->all(), $verCode, $password); // create a user instance
-        $user->assignRole('breeder');       // assign a breeder role to it
-        $breeder = Breeder::create([])->users()->save($user);   // create a breeder instance for that user
+        if($request->type == 0){
+            $user->assignRole('breeder');       // assign a breeder role to it
+            $breeder = Breeder::create([])->users()->save($user);   // create a breeder instance for that user
+        }else{
+            $user->assignRole('spectator');       // assign a breeder role to it
+            $breeder = Spectator::create([])->users()->save($user);   // create a spectator instance for that user
+        }
 
         // data to be passed in the email
         $data = [
@@ -504,17 +513,30 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         // create a log entry for the action done
-        AdministratorLog::create([
-            'admin_id' => $adminID,
-            'admin_name' => $adminName,
-            'user' => $data['email'],
-            'category' => 'Create',
-            'action' => 'Created user account for '.$data['email'],
-        ]);
+        if($request->type == 0){
+            AdministratorLog::create([
+                'admin_id' => $adminID,
+                'admin_name' => $adminName,
+                'user' => $data['email'],
+                'category' => 'Create',
+                'action' => 'Created breeder account for '.$data['email'],
+            ]);
+            $type = 0;
+            Mail::to($user->email)
+                ->queue(new SwineCartBreederCredentials($user->email, $password, $request->type));
 
-        $time = Carbon::now()->addMinutes(10);
-        Mail::to($user->email)
-            ->later($time, new SwineCartBreederCredentials($user->email, $password));
+        }else{
+            AdministratorLog::create([
+                'admin_id' => $adminID,
+                'admin_name' => $adminName,
+                'user' => $data['email'],
+                'category' => 'Create',
+                'action' => 'Created spectator account for '.$data['email'],
+            ]);
+            $type = 0;
+            Mail::to($user->email)
+                ->queue(new SwineCartSpectatorCredentials($user->email, $password, $request->type));
+        }
 
         return Redirect::back()->withMessage('User Created!'); // redirect to the page and display a toast notification that a user is created
     }
@@ -2008,14 +2030,89 @@ class AdminController extends Controller
      *
      */
     public function getAdminInformation(){
-        $user_data = [$this->user->id, $this->user->userable_id, $this->user->name, $this->user->email];
+        $user_data = [$this->user->name, $this->user->email];
         return $user_data;
     }
-
+    
     public function viewUsers(){
         $breeders = Breeder::all();
         $customers = Customer::all();
         return view('user.admin.viewUsers', compact('breeders', 'customers'));
     }
 
+    /*
+     * View broadcast announcement page
+     *
+     * @param none
+     * @return view
+     *
+     */
+    public function broadcastMessagePage(){
+        return view('user.admin.broadcastMessage');
+    }
+
+    /*
+     * Make broadcast announcements to users in the admin
+     *
+     * @param form input
+     * @return none
+     *
+     */
+    public function sendBroadcastMessage(Request $request){
+        $path = [];
+        if ($request->hasFile('attachment')) {
+            $files = Input::file('attachment');
+            foreach ($files as $file) {
+                $filename = $file->getClientOriginalName().'-'.date('d-m-y-H-i-s',time());
+                $filename = str_replace(' ', '_', $filename);
+                $upload_success = $file->move(public_path('/announcements'), $filename);
+                $pathfile = '/announcements'.'/'.$filename;
+                $data = new Attachments;
+                $data->name = $filename;
+                $data->path = $pathfile;
+                $data->save();
+                $path[] = $data;
+            }
+        }else{
+            $path = NULL;
+        }
+
+        if($request->sendto == 0){
+            $users = User::where('userable_type', 'App\Models\Breeder')->orWhere('userable_type', 'App\Models\Customer')->whereNull('deleted_at')->get();
+            // $users = User::where('userable_type', 'App\Models\Breeder')->orWhere('userable_type', 'App\Models\Customer')->whereNull('deleted_at')->pluck('email');
+            // $users = ['snretuerma@gmail.com', 'shannonfrancisretuerma@gmail.com', 'snretuerma@up.edu.ph'];
+            // $others =  array_slice($users,1);
+            // $email = Mail::to($users[0]);
+            // foreach ($others as $otherUsers) {
+            //     $email->bcc($otherUsers)
+            //     ->queue(new SwineCartAnnouncement($request->announcement, $path));
+            //
+            // }
+
+            // foreach ($users as $user) {
+            //     Mail::to($user)
+            //         ->queue(new SwineCartAnnouncement($request->announcement, $path));
+            // }
+            foreach ($users as $user) {
+                Mail::to($user->email)
+                    ->queue(new SwineCartAnnouncement($request->announcement, $path));
+            }
+        }
+        else if($request->sendto == 1){
+            $users = User::where('userable_type', 'App\Models\Breeder')->whereNull('deleted_at')->get();
+            foreach ($users as $user) {
+                Mail::to($user->email)
+                    ->queue(new SwineCartAnnouncement($request->announcement, $path));
+            }
+        }
+        else{
+            $users = User::where('userable_type', 'App\Models\Customer')->whereNull('deleted_at')->get();
+            foreach ($users as $user) {
+                Mail::to($user->email)
+                    ->queue(new SwineCartAnnouncement($request->announcement, $path));
+            }
+        }
+
+        return Redirect::back()->with('message','Sending');
+    }
 }

@@ -12,73 +12,31 @@
     All Users
 @endsection
 
-{{-- @section('header')
-    <div class="row">
-        <div class="col s12 m12 l4">
-            <h4 id='admin-content-panel-header'>Users</h4>
-        </div>
-
-        <div class="col s8">
-            <div class="row">
-                {!!Form::open(['route'=>'admin.search', 'method'=>'GET', 'class'=>'search-user-form col s12'])!!}
-                    <div class="input-field col s12">
-                        <div class="col s7">
-                            <input id="search-input" class="validate" type="text" name="search">
-                            <label for="search-input">Search</label>
-                        </div>
-                        <div class="col s5">
-                            <div class="col s6">
-                                <input type="checkbox" id="check-breeder" name ="breeder" value="2"/>
-                                <label for="check-breeder">Breeder</label>
-                            </div>
-
-                            <div class="col s6">
-                                <input type="checkbox" id="check-customer" name="customer" value="3"/>
-                                <label for="check-customer">Customer</label>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="col hide">
-                        <button id="search-button" class="btn waves-effect waves-light" type="submit">Submit</button>
-                    </div>
-                {!!Form::close()!!}
-            </div>
-        </div>
-    </div>
-
-@endsection --}}
-
 @section('pageControl')
     <div class="row">
         <div class="col s12 m12 l12 xl12">
             {!!Form::open(['route'=>'admin.search', 'method'=>'GET', 'class'=>'search-user-form col s12 m12 l12 xl12'])!!}
                 <div class="input-field col s12 m12 l12 xl12">
-                    <div class="col s7 m7 l7 xl7">
+                    <div class="col s12 m12 l6 xl6">
                         <input id="search-input" class="validate" type="text" name="search">
                         <label for="search-input">Search</label>
                     </div>
-                    <div class="col s5 m5 l5 xl5">
-                        {{-- <div class="col s6">
-                            <input type="checkbox" id="check-admin" name ="admin" value="1"/>
-                            <label for="check-admin">Admin</label>
-                        </div> --}}
-
-                        <div class="col s6 m6 l6 xl6">
+                    <div class="col s12 m12 l6 xl6">
+                        <div class="col s4 m4 l4 xl4">
                             <input type="checkbox" id="check-breeder" name ="breeder" value="2"/>
                             <label for="check-breeder">Breeder</label>
                         </div>
 
-                        <div class="col s6 m6 l6 xl6">
+                        <div class="col s4 m4 l4 xl4">
                             <input type="checkbox" id="check-customer" name="customer" value="3"/>
                             <label for="check-customer">Customer</label>
+                        </div>
+                        <div class="col s12 m12 l2 xl2">
+                            <button id="search-button" class="btn waves-effect waves-light" type="submit">Search</button>
                         </div>
                     </div>
                 </div>
 
-                <div class="col hide">
-                    <button id="search-button" class="btn waves-effect waves-light" type="submit">Submit</button>
-                </div>
             {!!Form::close()!!}
         </div>
     </div>

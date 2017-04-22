@@ -94,27 +94,6 @@
     {!!Form::close()!!}
  </div>
 
-{{-- Modal for user inquiries --}}
-<div id="modal1" class="modal modal-fixed-footer">
-  <div id="message-modal-content" class="modal-content">
-    <div class="center"><h5>"Username" Message</h5></div>
-      <div class="center">Timestamp</div>
-      <div class="divider"></div>
-      <div class="row">
-      <div class="col s12">
-      <div id="message-panel" class="card-panel">
-        <span class="black-text">
-          Sample Text
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Resolve</a>
-  </div>
-</div>
-
 {{-- Modal for manage pages --}}
 <div id="edit-page-modal" class="modal modal-fixed-footer">
     <div class="modal-content">

@@ -246,6 +246,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/manage/return/userlist', ['as' => 'admin.return.userlist', 'uses'=> 'AdminController@goToUserlist']);
         Route::get('home/manage/return/pending', ['as' => 'admin.return.pending', 'uses'=> 'AdminController@goToPending']);
 
+        Route::get('broadcast', ['as'=>'admin.broadcast','uses'=>'AdminController@broadcastMessagePage']);
+        Route::post('broadcast/send', ['as'=>'admin.broadcast.send','uses'=>'AdminController@sendBroadcastMessage']);
+
         Route::get('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsers']);
         Route::get('admin_info',['as'=>'admin_info', 'uses'=>'AdminController@getAdminInformation']);
     });

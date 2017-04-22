@@ -13,15 +13,17 @@ class SwineCartBreederCredentials extends Mailable
 
     protected $email;
     protected $password;
+    protected $type;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($email, $password)
+    public function __construct($email, $password, $type)
     {
         $this->email = $email;
         $this->password = $password;
+        $this->type = $type;
     }
 
     /**
@@ -34,7 +36,8 @@ class SwineCartBreederCredentials extends Mailable
         return $this->view('emails.credentials')
                     ->with([
                         'email'=>$this->email,
-                        'password'=>$this->password
+                        'password'=>$this->password,
+                        'type' => $this->type
                     ]);
     }
 }
