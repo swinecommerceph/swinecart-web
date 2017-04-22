@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 
 use App\Http\Requests;
@@ -14,6 +15,8 @@ use App\Models\Image;
 use App\Models\Video;
 use App\Models\Breed;
 use App\Models\SwineCartItem;
+use App\Repositories\ProductRepository;
+use App\Repositories\CustomHelpers;
 
 use Auth;
 use ImageManipulator;
@@ -21,17 +24,24 @@ use Storage;
 
 class ProductController extends Controller
 {
+    use CustomHelpers {
+        transformBreedSyntax as private;
+        transformDateSyntax as private;
+        transformOtherDetailsSyntax as private;
+        computeAge as private;
+    }
+
     /**
      * Image and Video constant variable paths
      */
-     const IMG_PATH = '/images/';
-     const VID_PATH = '/videos/';
-     const BREEDER_IMG_PATH = '/images/breeder/';
-     const PRODUCT_IMG_PATH = '/images/product/';
-     const PRODUCT_VID_PATH = '/videos/product/';
-     const PRODUCT_SIMG_PATH = '/images/product/resize/small/';
-     const PRODUCT_MIMG_PATH = '/images/product/resize/medium/';
-     const PRODUCT_LIMG_PATH = '/images/product/resize/large/';
+    const IMG_PATH = '/images/';
+    const VID_PATH = '/videos/';
+    const BREEDER_IMG_PATH = '/images/breeder/';
+    const PRODUCT_IMG_PATH = '/images/product/';
+    const PRODUCT_VID_PATH = '/videos/product/';
+    const PRODUCT_SIMG_PATH = '/images/product/resize/small/';
+    const PRODUCT_MIMG_PATH = '/images/product/resize/medium/';
+    const PRODUCT_LIMG_PATH = '/images/product/resize/large/';
 
     protected $user;
 
@@ -119,7 +129,7 @@ class ProductController extends Controller
         foreach ($products as $product) {
             $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
             $product->type = ucfirst($product->type);
-            $product->birthdate = $this->transformBirthdateSyntax($product->birthdate);
+            $product->birthdate = $this->transformDateSyntax($product->birthdate);
             $product->age = $this->computeAge($product->birthdate);
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
@@ -138,9 +148,10 @@ class ProductController extends Controller
     {
         if($product->status == 'hidden') return back();
         $product->img_path = route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]);
+        $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => Image::find($product->primary_img_id)->name]);
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
         $product->type = ucfirst($product->type);
-        $product->birthdate = $this->transformBirthdateSyntax($product->birthdate);
+        $product->birthdate = $this->transformDateSyntax($product->birthdate);
         $product->age = $this->computeAge($product->birthdate);
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
         $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
@@ -419,7 +430,7 @@ class ProductController extends Controller
             $product->type = ucfirst($product->type);
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-            $product->birthdate = $this->transformBirthdateSyntax($product->birthdate);
+            $product->birthdate = $this->transformDateSyntax($product->birthdate);
             $product->imageCollection = $product->images;
             $product->videoCollection = $product->videos;
             return $product->toJson();
@@ -469,53 +480,59 @@ class ProductController extends Controller
     /**
      * View Products of all Breeders
      *
-     * @param  Request $request
+     * @param  Request              $request
+     * @param  ProductRepository    $repository
      * @return View
      */
-    public function viewProducts(Request $request)
+    public function viewProducts(Request $request, ProductRepository $repository)
     {
-        // Check if search parameters are empty
-        if (!$request->type && !$request->breed){
-            if($request->sort && $request->sort != 'none'){
-                $part = explode('-',$request->sort);
-                $products = Product::whereIn('status',['displayed','requested'])->where('quantity','!=',0)->orderBy($part[0], $part[1])->paginate(10);
-            }
-            else $products = Product::whereIn('status',['displayed','requested'])->where('quantity','!=',0)->orderBy('id','desc')->paginate(10);
+        // Check if from a search query
+        $products = ($request->q) ? $repository->search($request->q): Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0);
+        $scores = ($request->q) ? $products->scores : [];
+
+        $parsedTypes = ($request->type) ? explode(' ',$request->type) : '';
+        $parsedBreedIds = ($request->breed) ? $this->getBreedIds($request->breed) : '';
+        $parsedSort = ($request->sort && $request->sort != 'none') ? explode('-',$request->sort) : ['id', 'desc'];
+
+        if($parsedTypes) $products = $products->whereIn('type', $parsedTypes);
+        if($parsedBreedIds) $products = $products->whereIn('breed_id', $parsedBreedIds);
+        $products = ($request->q) ? $products->get() : $products->orderBy($parsedSort[0], $parsedSort[1])->get();
+
+        foreach ($products as $product) {
+            $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
+            $product->type = ucfirst($product->type);
+            $product->birthdate = $this->transformDateSyntax($product->birthdate);
+            $product->age = $this->computeAge($product->birthdate);
+            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
+            $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+            $product->score = ($request->q) ? $scores[$product->id] : 0;
         }
-        else{
-            if($request->type) $products = Product::whereIn('status',['displayed','requested'])->where('quantity','!=',0)->whereIn('type', explode(' ',$request->type));
-            if($request->breed) {
-                $breedIds = $this->getBreedIds($request->breed);
-                if(!$request->type) $products = Product::whereIn('status',['displayed','requested'])->where('quantity','!=',0)->whereIn('breed_id', $breedIds);
-                else $products = $products->whereIn('breed_id', $breedIds);
-            }
-            if($request->sort) {
-                if($request->sort != 'none'){
-                    $part = explode('-',$request->sort);
-                    $products = $products->orderBy($part[0], $part[1]);
-                }
-            }
-            $products = $products->paginate(10);
-        }
+
+        // Sort according to score if from a search query
+        if($request->q) $products = $products->sortByDesc('score');
+
+        // Manual pagination
+        $page = ($request->page) ? $request->page : 1;
+        $perPage = 10;
+        $offset = ($page * $perPage) - $perPage;
+        $products = new LengthAwarePaginator(
+                array_slice($products->all(), $offset, $perPage, true),
+                count($products),
+                $perPage,
+                $page,
+                ['path' => $request->url(), 'query' => $request->query()]
+            );
 
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
         $urlFilters = [
+            'q' => $request->q,
             'type' => $request->type,
             'breed' => $request->breed,
             'sort' => $request->sort,
             'page' => $products->currentPage()
         ];
-
-        foreach ($products as $product) {
-            $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
-            $product->type = ucfirst($product->type);
-            $product->birthdate = $this->transformBirthdateSyntax($product->birthdate);
-            $product->age = $this->computeAge($product->birthdate);
-            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-            $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
-            $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-        }
 
         return view('user.customer.viewProducts', compact('products', 'filters', 'breedFilters', 'urlFilters'));
     }
@@ -544,8 +561,9 @@ class ProductController extends Controller
     {
         if($product->status == 'hidden') return back();
         $product->img_path = route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]);
+        $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => Image::find($product->primary_img_id)->name]);
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
-        $product->birthdate = $this->transformBirthdateSyntax($product->birthdate);
+        $product->birthdate = $this->transformDateSyntax($product->birthdate);
         $product->age = $this->computeAge($product->birthdate);
         $product->type = ucfirst($product->type);
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
@@ -699,63 +717,6 @@ class ProductController extends Controller
         }
 
         return $tempBreedIds;
-    }
-
-    /**
-     * Parse $breed if it contains '+' (ex. landrace+duroc)
-     * to "Landrace x Duroc"
-     *
-     * @param  String   $breed
-     * @return String
-     */
-    private function transformBreedSyntax($breed)
-    {
-        if(str_contains($breed,'+')){
-            $part = explode("+", $breed);
-            $breed = ucfirst($part[0])." x ".ucfirst($part[1]);
-            return $breed;
-        }
-
-        return ucfirst($breed);
-    }
-
-    /**
-     * Parse $other_details
-     *
-     * @param  String   $otherDetails
-     * @return String
-     */
-    private function transformOtherDetailsSyntax($otherDetails)
-    {
-        $details = explode(',',$otherDetails);
-        $transformedSyntax = '';
-        foreach ($details as $detail) {
-            $transformedSyntax .= $detail."<br>";
-        }
-        return $transformedSyntax;
-    }
-
-    /**
-     * Transform birthdate original (YYYY-MM-DD) syntax to Month Day, Year
-     * @param  String   $birthdate
-     * @return String
-     */
-    private function transformBirthdateSyntax($birthdate)
-    {
-        return date_format(date_create($birthdate), 'F j, Y');
-    }
-
-    /**
-     * Compute age (in days) of product with the use of its birthdate
-     *
-     * @param  String   $birthdate
-     * @return Integer
-     */
-    private function computeAge($birthdate)
-    {
-        $rawSeconds = time() - strtotime($birthdate);
-        $age = ((($rawSeconds/60)/60))/24;
-        return floor($age);
     }
 
 }
