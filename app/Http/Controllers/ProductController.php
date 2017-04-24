@@ -747,6 +747,7 @@ class ProductController extends Controller
 
     /**
      * Transform birthdate original (YYYY-MM-DD) syntax to Month Day, Year
+     * 
      * @param  String   $birthdate
      * @return String
      */

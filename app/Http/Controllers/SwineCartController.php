@@ -127,13 +127,13 @@ class SwineCartController extends Controller
             ];
 
             $notificationDetails = [
-                'description' => 'Customer <b>' . $this->user->name . ' rated</b> you',
+                'description' => 'Customer <b>' . $this->user->name . ' rated</b> you with ' . round(($review->rating_delivery + $review->rating_transaction + $review->rating_productQuality)/3, 2) . ' (overall average).',
                 'time' => $transactionDetails['created_at'],
                 'url' => route('dashboard')
             ];
 
             $smsDetails = [
-                'message' => 'SwineCart: Customer ' . $this->user->name . ' rated you with an overall average rating of .',
+                'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Customer ' . $this->user->name . ' rated you with ' . round(($review->rating_delivery + $review->rating_transaction + $review->rating_productQuality)/3, 2) . ' (overall average).',
                 'recepient' => $breeder->office_mobile
             ];
 
@@ -188,13 +188,13 @@ class SwineCartController extends Controller
             ];
 
             $notificationDetails = [
-                'description' => 'Product <b>' . $product->name . '</b> is <b>requested</b> by <b>' . $this->user->name . '</b>',
+                'description' => '<b>' . $this->user->name . '</b> requested for Product <b>' . $product->name . '</b>.',
                 'time' => $transactionDetails['created_at'],
                 'url' => route('dashboard.productStatus')
             ];
 
             $smsDetails = [
-                'message' => 'SwineCart: Product ' . $product->name . ' is requested by ' . $this->user->name . ' at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
+                'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: ' . $this->user->name . ' requested for Product ' . $product->name . '.',
                 'recepient' => $breeder->office_mobile
             ];
 
@@ -418,14 +418,23 @@ class SwineCartController extends Controller
     }
 
     /**
-     * Transform birthdate original (YYYY-MM-DD) syntax to Month Day, Year
+     * Transform date to desired date format
      *
-     * @param  String   $birthdate
+     * @param  String   $date
      * @return String
      */
-    private function transformDateSyntax($birthdate)
+    private function transformDateSyntax($date, $format = 0)
     {
-        return date_format(date_create($birthdate), 'F j, Y');
+        switch ($format) {
+            case 1:
+                // Log format for SMS
+                return date_format(date_create($date), 'm-d-Y h:i:sA');
+
+            default:
+                // Default format would be fully-spelled month, date with leading zeros, and full year
+                return date_format(date_create($date), 'F j, Y');
+        }
+
     }
 
 }
