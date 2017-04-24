@@ -106,13 +106,13 @@ class DashboardRepository
                 ];
 
                 $notificationDetails = [
-                    'description' => 'Your product reservation on <b>' . $product->name . '</b> has <b>expired</b>',
+                    'description' => 'Your <b>reservation</b> for Product <b>' . $product->name . '</b> is already <b>expired</b>.',
                     'time' => $transactionDetails['created_at'],
                     'url' => route('cart.items')
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart: Your product reservation on ' . $product->name . ' has expired at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Your reservation for Product ' . $product->name . ' is already expired.',
                     'recepient' => $swineCartItem->customer->mobile
                 ];
 
@@ -525,13 +525,13 @@ class DashboardRepository
                     ];
 
                     $notificationDetailsReserved = [
-                        'description' => 'Product <b>' . $product->name . '</b> by <b>' . $breederUser->name . '</b> has been <b>reserved</b> to you',
+                        'description' => 'Product <b>' . $product->name . '</b> was <b>reserved</b> to you. Reservation will expire on ' . $this->transformDateSyntax($reservation->expiration_date, 2) . '.',
                         'time' => $transactionDetails['created_at'],
                         'url' => route('cart.items')
                     ];
 
                     $smsDetails = [
-                        'message' => 'SwineCart: Product ' . $product->name . ' by ' . $breederUser->name . ' has been reserved to you. Reservation expires after ' . date_format(date_create($reservation->expiration_date), 'm-d-Y h:i:sA') . '.' ,
+                        'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' was reserved to you. Reservation will expire on ' . $this->transformDateSyntax($reservation->expiration_date, 2) . '.' ,
                         'recepient' => $swineCartItem->customer->mobile
                     ];
 
@@ -563,13 +563,13 @@ class DashboardRepository
                             ];
 
                             $notificationDetailsOther = [
-                                'description' => 'Sorry, product <b>' . $product->name . '</b> was <b>reserved</b> by <b>' . $breederUser->name . '</b> to <b>another customer</b>',
+                                'description' => 'Sorry, product <b>' . $product->name . '</b> is <b>already reserved</b>.',
                                 'time' => $transactionDetailsOther['created_at'],
                                 'url' => route('cart.items')
                             ];
 
                             $smsDetails = [
-                                'message' => 'SwineCart: Sorry, product ' . $product->name . ' was reserved by ' . $breederUser->name . ' to another customer at ' . date_format(date_create($transactionDetailsOther['created_at']), 'm-d-Y h:i:sA') . '.',
+                                'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetailsOther['created_at'], 1) .']: Sorry, product ' . $product->name . ' is already reserved.',
                                 'recepient' => $productRequest->customer->mobile
                             ];
 
@@ -646,7 +646,7 @@ class DashboardRepository
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery.',
                     'recepient' => $customer->mobile
                 ];
 
@@ -682,13 +682,13 @@ class DashboardRepository
                 ];
 
                 $notificationDetails = [
-                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> has been marked as <b>paid</b>',
+                    'description' => 'You already <b>paid</b> for Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b>.',
                     'time' => $transactionDetails['created_at'],
                     'url' => route('cart.items')
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as paid at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: You already paid for ' . $product->name . ' by ' . $product->breeder->users()->first()->name . '.',
                     'recepient' => $customer->mobile
                 ];
 
@@ -723,13 +723,13 @@ class DashboardRepository
                 ];
 
                 $notificationDetails = [
-                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> has been marked as <b>sold</b>',
+                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>sold</b>',
                     'time' => $transactionDetails['created_at'],
                     'url' => route('cart.items')
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as sold at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is sold.',
                     'recepient' => $customer->mobile
                 ];
 
@@ -771,14 +771,27 @@ class DashboardRepository
     }
 
     /**
-     * Transform date original (YYYY-MM-DD) syntax to Month Day, Year
+     * Transform date to desired date format
      *
-     * @param  String   $birthdate
+     * @param  String   $date
      * @return String
      */
-    private function transformDateSyntax($date)
+    private function transformDateSyntax($date, $format = 0)
     {
-        return date_format(date_create($date), 'M j, Y');
+        switch ($format) {
+            case 1:
+                // Log format for SMS
+                return date_format(date_create($date), 'm-d-Y h:i:sA');
+
+            case 2:
+                // Same as log format for SMS except that it has fully-spelled month, date with leading zeros, and full year
+                return date_format(date_create($date), 'F j, Y h:i:sA');
+
+            default:
+                // Default format would be fully-spelled month, date with leading zeros, and full year
+                return date_format(date_create($date), 'F j, Y');
+        }
+
     }
 
     /**
