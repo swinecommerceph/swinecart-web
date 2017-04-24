@@ -20,6 +20,7 @@ use App\Notifications\ProductReservationUpdate;
 use App\Notifications\ProductReservedToOtherCustomer;
 use App\Notifications\ProductReservationExpired;
 use App\Jobs\AddToTransactionLog;
+use App\Jobs\SendSMS;
 
 class DashboardRepository
 {
@@ -104,18 +105,25 @@ class DashboardRepository
                     'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', $reservation->expiration_date)->addSecond()
                 ];
 
+                $notificationDetails = [
+                    'description' => 'Your product reservation on <b>' . $product->name . '</b> has <b>expired</b>',
+                    'time' => $transactionDetails['created_at'],
+                    'url' => route('cart.items')
+                ];
+
+                $smsDetails = [
+                    'message' => 'SwineCart: Your product reservation on ' . $product->name . ' has expired at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
+                    'recepient' => $swineCartItem->customer->mobile
+                ];
+
                 // Add new Transaction Log. Queue AddToTransactionLog job
                 dispatch(new AddToTransactionLog($transactionDetails));
+                // Queue SendSMS job
+                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
 
                 // Notify Customer of the product reservation expiration
                 $customerUser = $swineCartItem->customer->users()->first();
-                $customerUser->notify(new ProductReservationExpired(
-                    [
-                        'description' => 'Your product reservation on <b>' . $product->name . '</b> has <b>expired</b>',
-                        'time' => $transactionDetails['created_at'],
-                        'url' => route('cart.items')
-                    ]
-                ));
+                $customerUser->notify(new ProductReservationExpired($notificationDetails));
 
                 // Delete reservation
                 $reservation->delete();
@@ -516,18 +524,25 @@ class DashboardRepository
                         'created_at' => Carbon::now()
                     ];
 
+                    $notificationDetailsReserved = [
+                        'description' => 'Product <b>' . $product->name . '</b> by <b>' . $breederUser->name . '</b> has been <b>reserved</b> to you',
+                        'time' => $transactionDetails['created_at'],
+                        'url' => route('cart.items')
+                    ];
+
+                    $smsDetails = [
+                        'message' => 'SwineCart: Product ' . $product->name . ' by ' . $breederUser->name . ' has been reserved to you. Reservation expires after ' . date_format(date_create($reservation->expiration_date), 'm-d-Y h:i:sA') . '.' ,
+                        'recepient' => $swineCartItem->customer->mobile
+                    ];
+
                     // Add new Transaction Log. Queue AddToTransactionLog job
                     dispatch(new AddToTransactionLog($transactionDetails));
+                    // Queue SendSMS job
+                    dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
 
                     // Notify reserved customer
                     $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
-                    $reservedCustomerUser->notify(new ProductReserved(
-                        [
-                            'description' => 'Product <b>' . $product->name . '</b> by <b>' . $breederUser->name . '</b> has been <b>reserved</b> to you',
-                            'time' => $transactionDetails['created_at'],
-                            'url' => route('cart.items')
-                        ]
-                    ));
+                    $reservedCustomerUser->notify(new ProductReserved($notificationDetailsReserved));
 
                     // If product type is not semen remove other requests to this product
                     $productRequests = SwineCartItem::where('product_id', $product->id)->where('customer_id', '<>', $request->customer_id)->where('reservation_id',0);
@@ -547,16 +562,23 @@ class DashboardRepository
                                 'created_at' => Carbon::now()
                             ];
 
+                            $notificationDetailsOther = [
+                                'description' => 'Sorry, product <b>' . $product->name . '</b> was <b>reserved</b> by <b>' . $breederUser->name . '</b> to <b>another customer</b>',
+                                'time' => $transactionDetailsOther['created_at'],
+                                'url' => route('cart.items')
+                            ];
+
+                            $smsDetails = [
+                                'message' => 'SwineCart: Sorry, product ' . $product->name . ' was reserved by ' . $breederUser->name . ' to another customer at ' . date_format(date_create($transactionDetailsOther['created_at']), 'm-d-Y h:i:sA') . '.',
+                                'recepient' => $productRequest->customer->mobile
+                            ];
+
                             // Add new Transaction Log. Queue AddToTransactionLog job
                             dispatch(new AddToTransactionLog($transactionDetailsOther));
+                            // Queue SendSMS job
+                            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
 
-                            $customerUser->notify(new ProductReservedToOtherCustomer(
-                                [
-                                    'description' => 'Sorry, product <b>' . $product->name . '</b> was <b>reserved</b> by <b>' . $breederUser->name . '</b> to <b>another customer</b>',
-                                    'time' => $transactionDetailsOther['created_at'],
-                                    'url' => route('cart.items')
-                                ]
-                            ));
+                            $customerUser->notify(new ProductReservedToOtherCustomer($notificationDetailsOther));
                         }
 
                         // Delete requests to this product after notifying Customer users
@@ -606,6 +628,8 @@ class DashboardRepository
                 $reservation->expiration_date = null;
                 $reservation->save();
 
+                $customer = Customer::find($reservation->customer_id);
+
                 $transactionDetails = [
                     'swineCart_id' => $reservation->swineCartItem->id,
                     'customer_id' => $reservation->customer_id,
@@ -615,18 +639,25 @@ class DashboardRepository
                     'created_at' => Carbon::now()
                 ];
 
+                $notificationDetails = [
+                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>on delivery</b>',
+                    'time' => $transactionDetails['created_at'],
+                    'url' => route('cart.items')
+                ];
+
+                $smsDetails = [
+                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
+                    'recepient' => $customer->mobile
+                ];
+
                 // Add new Transaction Log. Queue AddToTransactionLog job
                 dispatch(new AddToTransactionLog($transactionDetails));
+                // Queue SendSMS job
+                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
 
                 // Notify customer
-                $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
-                $reservedCustomerUser->notify(new ProductReservationUpdate(
-                    [
-                        'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>on delivery</b>',
-                        'time' => $transactionDetails['created_at'],
-                        'url' => route('cart.items')
-                    ]
-                ));
+                $reservedCustomerUser = $customer->users()->first();
+                $reservedCustomerUser->notify(new ProductReservationUpdate($notificationDetails));
 
                 return [
                     "OK",
@@ -639,6 +670,8 @@ class DashboardRepository
                 $reservation->expiration_date = null;
                 $reservation->save();
 
+                $customer = Customer::find($reservation->customer_id);
+
                 $transactionDetails = [
                     'swineCart_id' => $reservation->swineCartItem->id,
                     'customer_id' => $reservation->customer_id,
@@ -648,18 +681,25 @@ class DashboardRepository
                     'created_at' => Carbon::now()
                 ];
 
+                $notificationDetails = [
+                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> has been marked as <b>paid</b>',
+                    'time' => $transactionDetails['created_at'],
+                    'url' => route('cart.items')
+                ];
+
+                $smsDetails = [
+                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as paid at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
+                    'recepient' => $customer->mobile
+                ];
+
                 // Add new Transaction Log. Queue AddToTransactionLog job
                 dispatch(new AddToTransactionLog($transactionDetails));
+                // Queue SendSMS job
+                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
 
                 // Notify customer
-                $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
-                $reservedCustomerUser->notify(new ProductReservationUpdate(
-                    [
-                        'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> has been marked as <b>paid</b>',
-                        'time' => $transactionDetails['created_at'],
-                        'url' => route('cart.items')
-                    ]
-                ));
+                $reservedCustomerUser = $customer->users()->first();
+                $reservedCustomerUser->notify(new ProductReservationUpdate($notificationDetails));
 
                 return [
                     "OK",
@@ -671,6 +711,8 @@ class DashboardRepository
                 $reservation->order_status = 'sold';
                 $reservation->save();
 
+                $customer = Customer::find($reservation->customer_id);
+
                 $transactionDetails = [
                     'swineCart_id' => $reservation->swineCartItem->id,
                     'customer_id' => $reservation->customer_id,
@@ -680,18 +722,25 @@ class DashboardRepository
                     'created_at' => Carbon::now()
                 ];
 
+                $notificationDetails = [
+                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> has been marked as <b>sold</b>',
+                    'time' => $transactionDetails['created_at'],
+                    'url' => route('cart.items')
+                ];
+
+                $smsDetails = [
+                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as sold at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
+                    'recepient' => $customer->mobile
+                ];
+
                 // Add new Transaction Log. Queue AddToTransactionLog job
                 dispatch(new AddToTransactionLog($transactionDetails));
+                // Queue SendSMS job
+                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
 
                 // Notify reserved customer
-                $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
-                $reservedCustomerUser->notify(new ProductReservationUpdate(
-                    [
-                        'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> has been marked as <b>sold</b>',
-                        'time' => $transactionDetails['created_at'],
-                        'url' => route('cart.items')
-                    ]
-                ));
+                $reservedCustomerUser = $customer->users()->first();
+                $reservedCustomerUser->notify(new ProductReservationUpdate($notificationDetails));
 
                 return [
                     "OK",
@@ -723,6 +772,7 @@ class DashboardRepository
 
     /**
      * Transform date original (YYYY-MM-DD) syntax to Month Day, Year
+     *
      * @param  String   $birthdate
      * @return String
      */
