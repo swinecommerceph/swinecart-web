@@ -112,7 +112,7 @@ class DashboardRepository
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart: Your product reservation on ' . $product->name . ' has expired at (date/time)',
+                    'message' => 'SwineCart: Your product reservation on ' . $product->name . ' has expired at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
                     'recepient' => $swineCartItem->customer->mobile
                 ];
 
@@ -531,7 +531,7 @@ class DashboardRepository
                     ];
 
                     $smsDetails = [
-                        'message' => 'SwineCart: Product ' . $product->name . ' by ' . $breederUser->name . ' has been reserved to you. Reservation expires after M D Y tAM' ,
+                        'message' => 'SwineCart: Product ' . $product->name . ' by ' . $breederUser->name . ' has been reserved to you. Reservation expires after ' . date_format(date_create($reservation->expiration_date), 'm-d-Y h:i:sA') . '.' ,
                         'recepient' => $swineCartItem->customer->mobile
                     ];
 
@@ -569,7 +569,7 @@ class DashboardRepository
                             ];
 
                             $smsDetails = [
-                                'message' => 'SwineCart: Sorry, product ' . $product->name . ' was reserved by ' . $breederUser->name . ' to another customer at (date/time)',
+                                'message' => 'SwineCart: Sorry, product ' . $product->name . ' was reserved by ' . $breederUser->name . ' to another customer at ' . date_format(date_create($transactionDetailsOther['created_at']), 'm-d-Y h:i:sA') . '.',
                                 'recepient' => $productRequest->customer->mobile
                             ];
 
@@ -646,7 +646,7 @@ class DashboardRepository
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery at (date/time)',
+                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
                     'recepient' => $customer->mobile
                 ];
 
@@ -688,7 +688,7 @@ class DashboardRepository
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as paid at (date/time)',
+                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as paid at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
                     'recepient' => $customer->mobile
                 ];
 
@@ -729,7 +729,7 @@ class DashboardRepository
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as sold at (date/time)',
+                    'message' => 'SwineCart: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' has been marked as sold at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
                     'recepient' => $customer->mobile
                 ];
 

@@ -194,7 +194,7 @@ class SwineCartController extends Controller
             ];
 
             $smsDetails = [
-                'message' => 'SwineCart: Product ' . $product->name . ' is requested by ' . $this->user->name . 'at (date/time).',
+                'message' => 'SwineCart: Product ' . $product->name . ' is requested by ' . $this->user->name . ' at ' . date_format(date_create($transactionDetails['created_at']), 'm-d-Y h:i:sA') . '.',
                 'recepient' => $breeder->office_mobile
             ];
 
@@ -419,6 +419,7 @@ class SwineCartController extends Controller
 
     /**
      * Transform birthdate original (YYYY-MM-DD) syntax to Month Day, Year
+     *
      * @param  String   $birthdate
      * @return String
      */
