@@ -27,7 +27,7 @@ var config = {
     spectator_url: '/spectator',
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',
-    breederWSServer: 'ws://192.168.10.10:8080',
+    breederWSServer: 'ws://swinecommerceph.dev/pusher',
     preloader_progress: $('#preloader-progress'),
     preloader_circular: $('#preloader-circular')
 

@@ -6,6 +6,8 @@ use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Carbon\Carbon;
 
+use App\Jobs\AddToTransactionLog;
+use App\Jobs\SendSMS;
 use App\Http\Requests;
 use App\Models\Customer;
 use App\Models\Breeder;
@@ -17,15 +19,20 @@ use App\Models\Product;
 use App\Models\Review;
 use App\Models\TransactionLog;
 use App\Models\ProductReservation;
-
-use Auth;
 use App\Notifications\BreederRated;
 use App\Notifications\ProductRequested;
-use App\Jobs\AddToTransactionLog;
-use App\Jobs\SendSMS;
+use App\Repositories\CustomHelpers;
+
+use Auth;
 
 class SwineCartController extends Controller
 {
+    use CustomHelpers {
+        transformBreedSyntax as private;
+        transformDateSyntax as private;
+        computeAge as private;
+    }
+    
     protected $user;
 
     /**
@@ -385,56 +392,6 @@ class SwineCartController extends Controller
             $customer = $this->user->userable;
             return $customer->swineCartItems()->where('if_requested',0)->count();
         }
-    }
-
-    /**
-    * Parse $breed if it contains '+' (ex. landrace+duroc)
-    * to "Landrace x Duroc"
-    *
-    * @param  String   $breed
-    * @return String
-    */
-    private function transformBreedSyntax($breed)
-    {
-       if(str_contains($breed,'+')){
-           $part = explode("+", $breed);
-           $breed = ucfirst($part[0])." x ".ucfirst($part[1]);
-           return $breed;
-       }
-       return ucfirst($breed);
-    }
-
-    /**
-     * Compute age (in days) of product with the use of its birthdate
-     *
-     * @param  String   $birthdate
-     * @return Integer
-     */
-    private function computeAge($birthdate)
-    {
-        $rawSeconds = time() - strtotime($birthdate);
-        $age = ((($rawSeconds/60)/60))/24;
-        return floor($age);
-    }
-
-    /**
-     * Transform date to desired date format
-     *
-     * @param  String   $date
-     * @return String
-     */
-    private function transformDateSyntax($date, $format = 0)
-    {
-        switch ($format) {
-            case 1:
-                // Log format for SMS
-                return date_format(date_create($date), 'm-d-Y h:i:sA');
-
-            default:
-                // Default format would be fully-spelled month, date with leading zeros, and full year
-                return date_format(date_create($date), 'F j, Y');
-        }
-
     }
 
 }
