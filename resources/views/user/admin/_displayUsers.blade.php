@@ -1,58 +1,51 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | All Users
 @endsection
 
 @section('pageId')
-    id="home-all"
+    id="admin-all_users"
 @endsection
 
-@section('header')
+@section('nav-title')
+    All Users
+@endsection
+
+@section('pageControl')
     <div class="row">
-        <div class="col s4">
-            <h4 id='admin-content-panel-header'>Users</h4>
-        </div>
-
-        <div class="col s8">
-            <div class="row">
-                {!!Form::open(['route'=>'admin.search', 'method'=>'GET', 'class'=>'search-user-form col s12'])!!}
-                    <div class="input-field col s12">
-                        <div class="col s7">
-                            <input id="search-input" class="validate" type="text" name="search">
-                            <label for="search-input">Search</label>
+        <div class="col s12 m12 l12 xl12">
+            {!!Form::open(['route'=>'admin.search', 'method'=>'GET', 'class'=>'search-user-form col s12 m12 l12 xl12'])!!}
+                <div class="input-field col s12 m12 l12 xl12">
+                    <div class="col s12 m12 l6 xl6">
+                        <input id="search-input" class="validate" type="text" name="search">
+                        <label for="search-input">Search</label>
+                    </div>
+                    <div class="col s12 m12 l6 xl6">
+                        <div class="col s4 m4 l4 xl4">
+                            <input type="checkbox" id="check-breeder" name ="breeder" value="2"/>
+                            <label for="check-breeder">Breeder</label>
                         </div>
-                        <div class="col s5">
-                            {{-- <div class="col s6">
-                                <input type="checkbox" id="check-admin" name ="admin" value="1"/>
-                                <label for="check-admin">Admin</label>
-                            </div> --}}
 
-                            <div class="col s6">
-                                <input type="checkbox" id="check-breeder" name ="breeder" value="2"/>
-                                <label for="check-breeder">Breeder</label>
-                            </div>
-
-                            <div class="col s6">
-                                <input type="checkbox" id="check-customer" name="customer" value="3"/>
-                                <label for="check-customer">Customer</label>
-                            </div>
+                        <div class="col s4 m4 l4 xl4">
+                            <input type="checkbox" id="check-customer" name="customer" value="3"/>
+                            <label for="check-customer">Customer</label>
+                        </div>
+                        <div class="col s12 m12 l2 xl2">
+                            <button id="search-button" class="btn waves-effect waves-light" type="submit">Search</button>
                         </div>
                     </div>
+                </div>
 
-                    <div class="col hide">
-                        <button id="search-button" class="btn waves-effect waves-light" type="submit">Submit</button>
-                    </div>
-                {!!Form::close()!!}
-            </div>
+            {!!Form::close()!!}
         </div>
     </div>
-
 @endsection
+
 
 @section('content')
 
-    <table class="bordered highlight responsive-table striped">
+    <table id="admin-users-table" class="bordered highlight responsive-table">
         <thead>
           <tr>
               <th data-field="name">Name</th>
@@ -64,13 +57,10 @@
         <tbody>
             @forelse($users as $user)
                 <tr>
-
-                <td>{{$user->name}}</td>
-                <td>{{ucfirst($user->title)}}</td>
-                @if ($user->title == 'admin')
-                    <td></td>
-                @else
+                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent='clicked("{{$user->name}}","{{$user->user_id}}", "{{$user->role_id}}", "{{$user->userable_id}}")'>{{$user->name}}</a></td>
+                    <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent='clicked("{{$user->name}}","{{$user->user_id}}", "{{$user->role_id}}", "{{$user->userable_id}}")'>{{ucfirst($user->title)}}</a></td>
                     <td>
+
                         @if ($user->blocked_at == NULL)
                             <div class="col s6">
                                 <a class="waves-effect waves-light btn orange lighten-1 block-button" data-id ="{{$user->user_id}}" ><i class="material-icons left">block</i>Block</a>
@@ -84,9 +74,10 @@
                         <div class="col s6">
                             <a class="waves-effect waves-light btn red lighten-1 delete-button" data-id ="{{$user->user_id}}"><i class="material-icons left">delete</i>Delete</a>
                         </div>
+
                     </td>
-                @endif
-              </tr>
+                </tr>
+
           @empty
               <tr>
                   <td></td>
@@ -96,7 +87,7 @@
         @endforelse
         </tbody>
       </table>
-      <div class="pagination center"> {{ $users->links() }} </div>
+      <div class="pagination center"> {{ $users->appends(Request::except('page'))->links() }} </div>
 
 
       {{-- Delete modal --}}
@@ -149,13 +140,72 @@
         </div>
       </div>
 
+        <div id="admin-user-details-modal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+                <div class="row">
+                    <div class="admin-usermodal-title col s9 m9 l9 xl9">
+                        <h4>User Details</h4>
+                    </div>
+                    <div id="user-modal-chatbutton" class="col s3 m3 l3 xl3 right">
 
+                    </div>
+                </div>
+                <div class="divider"></div>
+                <div id="admin-user-details-content" class="col s12 m12 l12">
+                    <div class="center">
+                        <div class="preloader-wrapper small active">
+                            <div class="spinner-layer spinner-green-only">
+                                <div class="circle-clipper left">
+                                    <div class="circle"></div>
+                                </div><div class="gap-patch">
+                                    <div class="circle"></div>
+                                </div><div class="circle-clipper right">
+                                    <div class="circle"></div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <h4>User Transaction</h4>
+                <div class="divider"></div>
+                <table class="responsive-table highlight">
+                    <thead>
+                        <tr>
+                            <th>Transaction ID</th>
+                            <th>Product ID</th>
+                            <th>Product Name</th>
+                            <th>Seller/Customer</th>
+                            <th>Status</th>
+                            <th>Date Added</th>
+                        </tr>
+                    </thead>
+
+                    <tbody id="admin-user-transaction-content">
+
+                    </tbody>
+                </table>
+                <div class="row">
+                    <div class="col s12 m12 l12 center align" id="admin-link-transaction-history">
+
+                    </div>
+                </div>
+                <div id="admin-view-more-transactions" class="col s12 m12 l12 center">
+
+                </div>
+            </div>
+            <div class="modal-footer">
+                <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+        </div>
 @endsection
 
 @section('initScript')
     {{-- <script type="text/javascript" src="/js/admin/admin_custom.js"></script> --}}
-    <script type="text/javascript" src="/js/admin/users.js"></script>
-    <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
+    {{-- <script type="text/javascript" src="/js/admin/users.js"></script>
+    <script type="text/javascript" src="/js/admin/userPages_script.js"></script>
     <script type="text/javascript" src="/js/admin/pages.js"></script>
-    <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
+    <script type="text/javascript" src="/js/admin/managePages_script.js"></script> --}}
+    <script type="text/javascript" src="/js/admin/users.js"></script>
+    <script type="text/javascript" src="/js/admin/userPages_script.js"></script>
+    <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
 @endsection

@@ -17,8 +17,9 @@ class CreateMessagesTable extends Migration
             $table->increments('id');
             $table->integer('customer_id')->unsigned();
             $table->integer('breeder_id')->unsigned();
+            $table->integer('admin_id')->unsigned();
             $table->mediumText('message');
-            $table->boolean('direction')->default(0); //0 from customer | 1 from breeder 
+            $table->boolean('direction')->default(0); //0 from customer | 1 from breeder | 2 from admin
             $table->datetime('read_at')->nullable();
             $table->timestamps();
         });

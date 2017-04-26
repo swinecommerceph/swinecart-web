@@ -15,6 +15,7 @@ use Illuminate\Foundation\Auth\Access\Authorizable;
 use Illuminate\Contracts\Auth\Authenticatable as AuthenticatableContract;
 use Illuminate\Contracts\Auth\Access\Authorizable as AuthorizableContract;
 use Illuminate\Contracts\Auth\CanResetPassword as CanResetPasswordContract;
+use Illuminate\Support\Facades\Cache;
 
 class User extends Model implements AuthenticatableContract,
                                     AuthorizableContract,
@@ -108,4 +109,7 @@ class User extends Model implements AuthenticatableContract,
         return false;
     }
 
+    public function isOnline(){
+        return Cache::has('user-online-'.$this->id);
+    }
 }

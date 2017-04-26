@@ -41,6 +41,7 @@ var vm = new Vue({
 });
 
 // ChartJS chart instantiation and creation
+
 var createdChartArea = document.getElementById("created_chart_area");
 var createdBarChart = new Chart(createdChartArea, {
     type: 'bar',
@@ -83,11 +84,18 @@ var createdBarChart = new Chart(createdChartArea, {
 
             }
         ]
+    },
+    options: {
+        legend: {
+            display: false
+        },
+        scales: {
+            yAxes: [{
+                ticks: {
+                    beginAtZero:true,
+                    callback: function(value) {if (value % 1 === 0) {return value;}}
+                }
+            }]
+        }
     }
 });
-
-
-// var dashboardTransactionArea = document.getElementById("dash-transaction-chart");
-// var dashTransactionChart = new Chart(dashboardTransactionArea, {
-//
-// });

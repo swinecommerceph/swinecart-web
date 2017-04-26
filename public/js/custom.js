@@ -38,6 +38,8 @@
         else $('#back-to-top').fadeOut(200);
     });
 
+	$(".button-collapse").sideNav();
+	
     $('#back-to-top').click(function(){
         $('body,html').animate({
             scrollTop : 0

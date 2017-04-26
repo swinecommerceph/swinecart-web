@@ -1,27 +1,54 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | Site Statistics: Administrator Log Timeline
 @endsection
 
 @section('pageId')
-    id="users-stats-timeline"
+    id="admin-site-statistics-timeline"
 @endsection
 
-@section('header')
+@section('nav-title')
+    Site Statistics
+@endsection
+
+@section('pageControl')
     <div class="row valign-wrapper">
         <div class="col s12 m6 l6">
-            <h4 id='admin-content-panel-header'>Logs Timeline</h4>
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    <h4 id='admin-content-panel-header'>Logs Timeline</h4>
+                </div>
+            </div>
         </div>
-        {!!Form::open(['route'=>'admin.statistics.timeline-date', 'method'=>'GET', 'class'=>'col s12 m6 l6 valign-wrapper'])!!}
-        <div class="col s6 m8 l8 valign">
-            <label for="timeline-datepicker">Choose date</label>
-            <input id="timeline-datepicker" type="date" class="datepicker" name="date"></input>
+        <div class="col s12 m6 l6">
+            <div class="row valign-wrapper">
+                <div class="input-field col s12 m12 l12 valign">
+                    <select onChange="window.location.href=this.value">
+                        <option disabled selected>Choose option</option>
+                        <option value="{{route('admin.statistics.breeder.active')}}">Breeder</option>
+                        <option value="{{route('admin.statistics.customer.active')}}">Customer</option>
+                        <option value="{{route('admin.statistics.transactions')}}">Transactions</option>
+                        <option value="{{route('admin.statistics.timeline')}}">Logs Timeline</option>
+                        <option value="{{route('admin.statistics.averageNewBreeder')}}">Average Values</option>
+                    </select>
+                    <label>Display Statistics</label>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col s12 m12 l12">
+                    {!!Form::open(['route'=>'admin.statistics.timeline-date', 'method'=>'GET', 'class'=>'row valign-wrapper'])!!}
+                        <div class="col s6 m8 l8">
+                            <label for="timeline-datepicker">Choose date</label>
+                            <input id="timeline-datepicker" type="date" class="datepicker" name="date"></input>
+                        </div>
+                        <div class="col s6 m4 l4">
+                            <button class="btn waves-effect waves-light" type="submit" name="action">Select</button>
+                        </div>
+                    {!!Form::close()!!}
+                </div>
+            </div>
         </div>
-        <div class="col s6 m4 l4 valign">
-            <button class="btn waves-effect waves-light" type="submit" name="action">Submit</button>
-        </div>
-        {!!Form::close()!!}
     </div>
 @endsection
 

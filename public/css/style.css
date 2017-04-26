@@ -470,7 +470,7 @@ input#search{
 
 
 .summary-data{
-	font-size: 10em;
+	font-size: 8em;
 	top:0;
 	bottom: 0;
 	left: 0;
@@ -514,10 +514,6 @@ input#search{
 
 .table-header {
 	table-layout: fixed;
-}
-
-#search-button{
-	display: none;
 }
 
 #manage-user-modal{
@@ -631,10 +627,16 @@ input#search{
    font-family : Electrolize;
 }
 
-/*Statistics Dashboard*/
+/*Admin Statistics Dashboard*/
 .statsdash-data{
-	font-size: 50px
+	font-size: 55px;
+	font-weight: bold;
 }
+
+.statsdash-description{
+	font-size: 20px;
+}
+
 .statsdash-link{
 	vertical-align: middle;
 	line-height: 55px;
@@ -643,6 +645,24 @@ input#search{
 .statsdash-panel-title{
 	font-size: 25px;
 }
+
+/*Admin user modal content format*/
+.admin-user-modal-data{
+	font-weight: bold;
+}
+.admin-user-modal-title{
+	font-weight: lighter;
+
+}
+
+/*Admin transaction history view CSS*/
+.admin-transaction-history-name{
+	font-weight: bold;
+}
+
+/*.admin-usermodal-title{
+	font-size:
+}*/
 
 /*CSS for the Horizontal timeline for statistics dashboard
 	Source: http://jsfiddle.net/kthornbloom/zJ6kp/
@@ -829,7 +849,7 @@ input#search{
 	margin: 0 0 0 -25px;
 }
 
-/* Example Media Queries */
+/* Media Queries */
 @media screen and (max-width: 65.375em) {
 
 	.cbp_tmtimeline > li .cbp_tmtime span:last-child {
@@ -878,6 +898,12 @@ input#search{
 		left: auto;
 		margin: -55px 5px 0 0px;
 	}
+}
+
+/*Admin logs timeline page*/
+.admin-log-timeline-datetitle{
+	font-weight: bold;
+	font-size: 1.2em;
 }
 
 /*Timeline components in Admin Logs Timeline*/
@@ -989,6 +1015,11 @@ input#search{
 	color: #d1d1d1 ;
 }
 
+.spectator-homedashboard-icon-title{
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
 .spectator-card-label{
 	font-size: 1.5em;
 	text-align: center;
@@ -997,7 +1028,84 @@ input#search{
 
 .vertical-divider{
 	font-size: 10em;
+}
 
 #map-canvas{
 	height: 80vh;
 }
+
+/* Product Breakdown */
+.product-breakdown-title{
+	font-size: 1.5em;
+}
+
+.product-breakdown-data{
+	font-size: 2em;
+	font-weight: bold;
+}
+
+/*Product modal*/
+.spectator-product-modal-title{
+	font-size: 1em;
+	color: grey;
+}
+
+.spectator-product-modal-data{
+	font-size: 1.5em;
+	font-weight: bold;
+}
+
+/*VueJS transition CSS*/
+.fade-enter-active, .fade-leave-active {
+	transition: opacity .5s;
+}
+.fade-enter, .fade-leave-to /* .fade-leave-active in <2.1.8 */ {
+	opacity: 0;
+}
+
+/*Spectator User Page*/
+#user-modal{
+	height: 520px;
+	width: 1000px;
+	overflow-x: auto;
+}
+
+.spectator-user-modal-data{
+	font-weight: bold;
+}
+.spectator-user-modal-title{
+	font-weight: lighter;
+
+}
+
+/*Spectator Statistics Dahsboard*/
+.spectator-dashicon{
+	font-size: 8em;
+}
+
+.spectator-dashlabel{
+	font-size: 2em;
+}
+
+.spectator-summary-maintitle{
+	font-size: 2em;
+}
+
+.spectator-summary-maindata{
+	font-size: 5em;
+}
+
+.spectator-summary-title{
+	font-size: 1.5em;
+}
+
+.spectator-summary-data{
+	font-size: 3em;
+}
+
+.spectator-card-summary{
+	max-height: 400px;
+	min-height: 400px;
+}
+
+/*Test Layout CSS*/

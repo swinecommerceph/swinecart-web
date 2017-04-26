@@ -15,6 +15,7 @@ use App\Models\Breeder;
 use App\Models\Customer;
 use App\Models\FarmAddress;
 use App\Models\Product;
+use App\Models\Sessions;
 use App\Models\User;
 
 use Auth;

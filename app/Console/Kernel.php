@@ -2,9 +2,19 @@
 
 namespace App\Console;
 
+use App\Models\Product;
+use App\Models\User;
+
 use Illuminate\Console\Scheduling\Schedule;
 use App\Console\Commands\WSBreederDashboardServer;
+use App\Console\Commands\BreederAccreditationNotification;
+use App\Console\Commands\ProductNotification;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
+use App\Mail\SwineCartProductNotification;
+
+use DB;
+
+use Carbon\Carbon;
 
 class Kernel extends ConsoleKernel
 {
@@ -15,7 +25,9 @@ class Kernel extends ConsoleKernel
      */
     protected $commands = [
         \App\Console\Commands\WSBreederDashboardServer::class,
-        \App\Console\Commands\WSChatServer::class
+        \App\Console\Commands\WSChatServer::class,
+        \App\Console\Commands\BreederAccreditationNotification::class,
+        \App\Console\Commands\ProductNotification::class
     ];
 
     /**
@@ -28,6 +40,10 @@ class Kernel extends ConsoleKernel
     {
         // $schedule->command('inspire')
         //          ->hourly();
+
+        // schedule a mail notification daily at 12 midnight to breeders regarding accreditation expiration (month before and week before)
+        $schedule->command('breeder:accreditationexpire')->daily();
+        $schedule->command('product:notification')->daily();
     }
 
     /**
