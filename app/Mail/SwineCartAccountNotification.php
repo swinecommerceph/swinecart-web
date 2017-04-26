@@ -34,6 +34,7 @@ class SwineCartAccountNotification extends Mailable
     public function build()
     {
         return $this->view('emails.adminNotifications')
+                    ->subject('SwineCart Account Notification')
                     ->with([
                         'type'=>$this->type,
                         'user'=>$this->user

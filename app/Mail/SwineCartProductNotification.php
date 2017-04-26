@@ -36,6 +36,7 @@ class SwineCartProductNotification extends Mailable
     public function build()
     {
         return $this->view('emails.productNotification')
+                    ->subject('SwineCart Product Notification')
                     ->with([
                         'type'=> $this->type,
                         'user'=> $this->user,

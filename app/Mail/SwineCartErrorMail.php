@@ -29,6 +29,7 @@ class SwineCartErrorMail extends Mailable
     public function build()
     {
         return $this->view('emails.mailError')
+                    ->subject('SwineCart Error Mail')
                     ->with([
                         'type'=> $this->type,
                     ]);

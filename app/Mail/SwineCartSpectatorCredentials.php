@@ -34,6 +34,7 @@ class SwineCartSpectatorCredentials extends Mailable
     public function build()
     {
         return $this->view('emails.credentials')
+                    ->subject('SwineCart Spectator Account Credentials')
                     ->with([
                         'email'=> $this->email,
                         'password'=> $this->password,

@@ -32,6 +32,7 @@ class SwineCartAnnouncement extends Mailable implements ShouldQueue
     {
         if($this->attachment==NULL){
             return $this->view('emails.announcement')
+                        ->subject('SwineCart Announcement')
                         ->with([
                             'announcement'=>$this->announcement
                         ]);
