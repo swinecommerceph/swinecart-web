@@ -23,11 +23,9 @@
 
 @section('content')
 
-
-
-<div class="row">
+<div class="row" style="min-height:60vh;">
     <div class="input-field col s10">
-        <textarea id="email" name="email" class="materialize-textarea" readonly></textarea>
+        <input type="text" id="email" name="email" class="input-field" />
         <label for="email" class="active to-label">To</label>
     </div>
     <div class="input-field col s2 valign-wrapper">
@@ -66,7 +64,7 @@
     <div class="modal-content">
       <div class="row">
         @foreach ($users as $user)
-            <div class="col s4">
+            <div class="col s12">
               <input type="checkbox" class="filled-in receipient" id="userid-{{$user->id}}" username="{{$user->name}}" value="{{$user->id}}"/>
               <label for="userid-{{$user->id}}">{{$user->name}}</label>
             </div>
@@ -83,12 +81,112 @@
 @endsection
 
 @section('customScript')
+    <script src="//code.jquery.com/ui/1.11.4/jquery-ui.js"></script>
+
+    <script>
+        function split( val ) {
+            return val.split( /,\s*/ );
+        }
+        function extractLast( term ) {
+            return split( term ).pop();
+        }
+        
+        $( "#email" ).bind( "keydown", function( event ) {
+            if ( event.keyCode === $.ui.keyCode.TAB &&
+                $( this ).autocomplete( "instance" ).menu.active ) {
+                event.preventDefault();
+            }
+        })
+        .autocomplete({
+            minLength: 1,
+            source: function( request, response ) {
+                // delegate back to autocomplete, but extract the last term
+                $.getJSON("messenger/receipients", { term : extractLast( request.term )},response);
+            },
+            focus: function() {
+                // prevent value inserted on focus
+                return false;
+            },
+            select: function( event, ui ) {
+                //console.log(ui.item.value);
+                $("input[username='"+ui.item.value+"']").prop('checked', 'checked');
+                var terms = split( this.value );
+                // remove the current input
+                terms.pop();
+                // add the selected item
+                terms.push( ui.item.value );
+                // add placeholder to get the comma-and-space at the end
+                terms.push( "" );
+                this.value = terms.join( ", " );
+                return false;
+            }
+        });
+
+        $.fn.getCursorPosition = function() {
+            var el = $(this).get(0);
+            var pos = 0;
+            var posEnd = 0;
+            if('selectionStart' in el) {
+                pos = el.selectionStart;
+                posEnd = el.selectionEnd;
+            } else if('selection' in document) {
+                el.focus();
+                var Sel = document.selection.createRange();
+                var SelLength = document.selection.createRange().text.length;
+                Sel.moveStart('character', -el.value.length);
+                pos = Sel.text.length - SelLength;
+                posEnd = Sel.text.length;
+            }
+            // return both selection start and end;
+            return [pos, posEnd];
+        };
+
+        $('#email').keydown(function (e) {
+            var position = $(this).getCursorPosition();
+            var deleted = '';
+            var val = $(this).val();
+            if (e.which == 8) {
+                if (position[0] == position[1]) {
+                    if (position[0] == 0)
+                        deleted = '';
+                    else
+                        deleted = val.substr(position[0] - 1, 1);
+                }
+                else {
+                    deleted = val.substring(position[0], position[1]);
+                }
+            }
+            else if (e.which == 46) {
+                var val = $(this).val();
+                if (position[0] == position[1]) {
+
+                    if (position[0] === val.length)
+                        deleted = '';
+                    else
+                        deleted = val.substr(position[0], 1);
+                }
+                else {
+                    deleted = val.substring(position[0], position[1]);
+                }
+            }
+
+            if(deleted == ','){
+                var rcpts = $("#email").val();
+                rcpts = rcpts.slice(0, -1);
+                c = rcpts.substr(rcpts.lastIndexOf(",")+1, rcpts.length).trim();
+                rcpts = rcpts.substr(0, rcpts.lastIndexOf(","));
+                $("#email").val(rcpts + ' ');
+                $("input[username='"+c+"']").prop('checked', '');
+            }
+
+        });
+    </script>
+
+
     <script>
         $(document).ready(function(){
 
-            console.log('test');
-
-            $('#email, .receipients').click(function(){
+            $('.receipients').click(function(){
                 $('#modal1').modal('open');
             });
 
@@ -98,11 +196,7 @@
 
                 $( ".receipient" ).each(function( index ) {
                    if($(this).is(':checked') || $(this).prop('checked')){
-                        if(!$('#email').val()){
-                            $('#email').val($(this).attr('username'));
-                        }else{
-                            $('#email').val($('#email').val()+', '+$(this).attr('username'));
-                        }
+                        $('#email').val($('#email').val()+$(this).attr('username')+', ');
                    }
                 });
                 var str = $('#email').val();
@@ -127,7 +221,6 @@
                         rcpts.push( parseInt( $(this).attr('value') ) );
                    }
                 });
-                console.log(rcpts);
 
                 $.ajax({
                     type: "POST",
