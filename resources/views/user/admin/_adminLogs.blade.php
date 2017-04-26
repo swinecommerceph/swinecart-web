@@ -51,13 +51,13 @@
 @section('pageControl')
     <div class="row">
         <div class="col s12 m12 l12 xl12">
-            {!!Form::open(['route'=>'admin.search.logs', 'method'=>'GET', 'class'=>'search-user-form col s12 m12 l12 xl12'])!!}
-                <div class="input-field col s12">
-                    <div class="col s12 m12 l8 xl8">
+            {!!Form::open(['route'=>'admin.search.logs', 'method'=>'GET', 'class'=>'search-user-form row valign-wrapper'])!!}
+                <div class="input-field col s12 m12 l12 xl12">
+                    <div class="col s12 m12 l6 xl6">
                         <input id="search-input" type="text" name="search">
                         <label for="search-input">Search</label>
                     </div>
-                    <div class="col s12 m12 l4 xl4">
+                    <div class="col s12 m7 l4 xl4">
                         <select multiple name="option[]">
                             <option disabled selected>Choose category</option>
                             <option value="Block" name="block">Block</option>
@@ -68,10 +68,9 @@
                             <option value="Reject" name="reject">Reject</option>
                         </select>
                     </div>
-                </div>
-
-                <div class="col hide">
-                    <button id="search-button" class="btn waves-effect waves-light" type="submit">Submit</button>
+                    <div class="col s12 m3 l2 xl2">
+                        <button id="search-button" class="btn waves-effect waves-light" type="submit">Submit</button>
+                    </div>
                 </div>
             {!!Form::close()!!}
         </div>

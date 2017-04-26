@@ -272,11 +272,11 @@ class AdminController extends Controller
             'category' => 'Delete',
             'action' => 'Deleted '.$user->name,
         ]);
-        $time = Carbon::now()->addMinutes(10);
+        //$time = Carbon::now()->addMinutes(10);
         $notificationType = 2;
         // Send an email to the user after 10 minutes
         Mail::to($user->email)
-            ->later($time, new SwineCartAccountNotification($user, $notificationType));
+            ->queue(new SwineCartAccountNotification($user, $notificationType));
 
         return Redirect::back()->with('message','User Deleted');
     }
@@ -442,9 +442,8 @@ class AdminController extends Controller
         }
 
         // send an email notification to the user's email
-        $time = Carbon::now()->addMinutes(10);
         Mail::to($user->email)
-            ->later($time, new SwineCartAccountNotification($user, $notificationType));
+            ->queue(new SwineCartAccountNotification($user, $notificationType));
 
         return Redirect::back()->with('message','Action Success');
     }
@@ -570,10 +569,9 @@ class AdminController extends Controller
             'action' => 'Approved '.$user->name,
         ]);
 
-        $time = Carbon::now()->addMinutes(10);
         // send an email notification to the user's email
         Mail::to($user->email)
-            ->later($time, new SwineCartAccountNotification($user, $notificationType));
+            ->queue(new SwineCartAccountNotification($user, $notificationType));
         $user->save();  // save changes to the database
 
         return Redirect::back()->withMessage('User Accepted!'); // redirect to the page and display a toast notification that a user is created
@@ -600,10 +598,9 @@ class AdminController extends Controller
             'category' => 'Reject',
             'action' => 'Reject '.$user->name,
         ]);
-        $time = Carbon::now()->addMinutes(10);
         // send an email notification to the user's email
         Mail::to($user->email)
-            ->later($time, new SwineCartAccountNotification($user, $notificationType));
+            ->queue(new SwineCartAccountNotification($user, $notificationType));
 
         $user->save();  // save changes to the database
 
@@ -1644,6 +1641,13 @@ class AdminController extends Controller
         return view('user.admin.spectatorList', compact('spectators'));
     }
 
+    /*
+     * Function to get the the average new breeders
+     *
+     * @param none
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyNewBreeders(){
         $roleSelector = ['selected', ''];
         $chartSelector = ['selected','',''];
@@ -1674,6 +1678,13 @@ class AdminController extends Controller
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
 
+    /*
+     * Function to get the the average new breeders
+     *
+     * @param year
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyNewBreedersYear(Request $request){
 
         $roleSelector = ['selected', ''];
@@ -1709,6 +1720,13 @@ class AdminController extends Controller
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
 
+    /*
+     * Function to get the the average blocked breeders
+     *
+     * @param none
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyBlockedBreeders(){
         $roleSelector = ['selected', ''];
         $chartSelector = ['','selected',''];
@@ -1739,6 +1757,14 @@ class AdminController extends Controller
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
 
     }
+
+    /*
+     * Function to get the the average blocked breeders
+     *
+     * @param year
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyBlockedBreedersYear(Request $request){
         $roleSelector = ['selected', ''];
         $chartSelector = ['','selected',''];
@@ -1771,6 +1797,14 @@ class AdminController extends Controller
 
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
+
+    /*
+     * Function to get the the average deleted breeders
+     *
+     * @param none
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyDeletedBreeders(){
         $roleSelector = ['selected', ''];
         $chartSelector = ['','','selected'];
@@ -1799,6 +1833,14 @@ class AdminController extends Controller
 
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
+
+    /*
+     * Function to get the the average deleted breeders
+     *
+     * @param year
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyDeletedBreedersYear(Request $request){
         $roleSelector = ['selected', ''];
         $chartSelector = ['','','selected'];
@@ -1831,6 +1873,13 @@ class AdminController extends Controller
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
 
+    /*
+     * Function to get the the average new customers
+     *
+     * @param none
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyNewCustomers(){
         $roleSelector = ['', 'selected'];
         $chartSelector = ['selected','',''];
@@ -1861,6 +1910,13 @@ class AdminController extends Controller
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
 
+    /*
+     * Function to get the the average new customers
+     *
+     * @param year
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyNewCustomersYear(Request $request){
         $roleSelector = ['', 'selected'];
         $chartSelector = ['selected','',''];
@@ -1895,6 +1951,13 @@ class AdminController extends Controller
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
 
+    /*
+     * Function to get the the average blocked customers
+     *
+     * @param none
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyBlockedCustomers(){
         $roleSelector = ['', 'selected'];
         $chartSelector = ['','selected',''];
@@ -1925,6 +1988,13 @@ class AdminController extends Controller
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
 
+    /*
+     * Function to get the the average blocked customers
+     *
+     * @param year
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyBlockedCustomersYear(Request $request){
         $roleSelector = ['', 'selected'];
         $chartSelector = ['','selected',''];
@@ -1960,6 +2030,13 @@ class AdminController extends Controller
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
 
+    /*
+     * Function to get the the average deleted customers
+     *
+     * @param none
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyDeletedCustomers(){
         $roleSelector = ['', 'selected'];
         $chartSelector = ['','','selected'];
@@ -1989,6 +2066,13 @@ class AdminController extends Controller
         return view('user.admin.averageStatistics', compact('roleSelector', 'chartSelector', 'route', 'chartRoute', 'yearminimum', 'yearmaximum', 'averageCount'));
     }
 
+    /*
+     * Function to get the the average deleted customers
+     *
+     * @param year
+     * @return arrays, integers, string
+     *
+     */
     public function averageMonthlyDeletedCustomersYear(Request $request){
         $roleSelector = ['', 'selected'];
         $chartSelector = ['','','selected'];
