@@ -19,7 +19,7 @@
 
 					{{-- Login Form --}}
 					<form action="{{ url('login') }}" method="POST" class="col s12">
-						{{ csrf_field() }}
+						{!! csrf_field() !!}
 
 						{{-- E-Mail Address --}}
 						<div class="row">
