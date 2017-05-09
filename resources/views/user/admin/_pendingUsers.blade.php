@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col s12 m12 l12 xl12">
             {!!Form::open(['route'=>'admin.searchPending', 'method'=>'GET', 'class'=>'row input-field valign-wrapper'])!!}
-                <input id="search" type="search" name="search" required>
+                <input id="search" type="search" name="search">
                 <label class="label-icon" for="search"><i class="material-icons">search</i></label>
                 <i class="material-icons">close</i>
             {!!Form::close()!!}
@@ -83,7 +83,7 @@
       </table>
       <div class="pagination center"> {{ $users->links() }} </div> --}}
 
-      <table class="bordered highlight responsive-table">
+      <table class="bordered responsive-table">
           <thead>
             <tr>
                 <th data-field="name">Name</th>
@@ -115,7 +115,7 @@
             @empty
                  <tr>
                      <td></td>
-                     <td class="right-align">Search Result Empty</td>
+                     <td class="right-align">No users found</td>
                      <td></td>
                      <td></td>
                  </tr>
@@ -169,4 +169,13 @@
     <script type="text/javascript" src="/js/admin/userPages_script.js"></script>
     <script type="text/javascript" src="/js/admin/pages.js"></script>
     <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
+    @if(Session::has('alert-accept'))
+        <script type="text/javascript">
+             Materialize.toast('User Successfully Added', 4000)
+        </script>
+    @elseif (Session::has('alert-reject'))
+        <script type="text/javascript">
+             Materialize.toast('User Application Rejected', 4000)
+        </script>
+    @endif
 @endsection

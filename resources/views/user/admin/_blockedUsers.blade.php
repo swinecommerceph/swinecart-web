@@ -61,8 +61,8 @@
             @forelse($users as $user)
           <tr>
 
-              <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->name}}','{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{$user->name}}</a></td>
-              <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent="clicked('{{$user->name}}','{{$user->user_id}}', '{{$user->role_id}}', '{{$user->userable_id}}')">{{ucfirst($user->title)}}</a></td>
+              <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent='clicked("{{$user->name}}","{{$user->user_id}}", "{{$user->role_id}}", "{{$user->userable_id}}")'>{{$user->name}}</a></td>
+              <td><a href="#admin-user-details-modal" class="black-text" v-on:click.prevent='clicked("{{$user->name}}","{{$user->user_id}}", "{{$user->role_id}}", "{{$user->userable_id}}")'>{{ucfirst($user->title)}}</a></td>
             @if ($user->title == 'admin')
                 <td></td>
             @else
@@ -103,10 +103,22 @@
           <p>Are you sure you want to delete this user?</p>
         </div>
         <div class="modal-footer red lighten-5">
-          <a href="#!" id="cancel-delete" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
             {!!Form::open(['route'=>'admin.delete', 'method'=>'DELETE', 'class'=>'delete-user-form'])!!}
                 <input id="form-delete-id" type="hidden" name="id" value="">
-                {{-- <a href="#!" id="confirm-delete" class=" modal-action modal-close waves-effect waves-red btn-flat"  type="submit" >Confirm</a> --}}
+                <label for="delete-reason">Delete Reasons</label>
+                <div id="delete-reason" class="row">
+                    <div class="col s12 m12 l12 xl12">
+                        @foreach ($violations as $violation)
+                            @if ($violation->violation_type==1)
+                              <input type="radio" name="reason" value="{{$violation->description}}" id="{{$violation->form_id}}" />
+                              <label for="{{$violation->form_id}}">{{$violation->description}}</label><br>
+                            @endif
+                        @endforeach
+                        <input type="radio" name="reason" value="others" id="others" />
+                        <label for="others">Others</label>
+                     </div>
+                </div>
+                <a href="#!" id="cancel-delete" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
                 <button id="confirm-delete" class=" modal-action modal-close waves-effect waves-red btn-flat" type="submit">Confirm</button>
             {!!Form::close()!!}
 
@@ -121,9 +133,23 @@
           <p>Are you sure you want to block this user?</p>
         </div>
         <div class="modal-footer orange lighten-5">
-          <a href="#!" id="cancel-block" class=" modal-action modal-close waves-effect waves-orange btn-flat">Cancel</a>
           {!!Form::open(['route'=>'admin.block', 'method'=>'PUT', 'class'=>'block-user-form'])!!}
               <input id="form-block-id" type="hidden" name="id" value="">
+              <label for="block-reason">Block Reasons</label>
+              <div id="block-reason" class="row">
+                  <div class="col s12 m12 l12 xl12">
+                      @foreach ($violations as $violation)
+                          @if ($violation->violation_type==0)
+                            <input type="radio" name="reason" value="{{$violation->description}}" id="{{$violation->form_id}}" />
+                            <label for="{{$violation->form_id}}">{{$violation->description}}</label><br>
+                          @endif
+                      @endforeach
+                      <input type="radio" name="reason" value="others" id="others" />
+                      <label for="others">Others</label>
+                   </div>
+              </div>
+
+              <a href="#!" id="cancel-block" class=" modal-action modal-close waves-effect waves-orange btn-flat">Cancel</a>
               <button id="confirm-block" class=" modal-action modal-close waves-effect waves-orange btn-flat" type="submit">Confirm</button>
           {!!Form::close()!!}
         </div>
@@ -201,4 +227,17 @@
     <script type="text/javascript" src="/js/admin/userPages_script.js"></script>
     <script type="text/javascript" src="/js/admin/users.js"></script>
     <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
+    @if(Session::has('alert-block'))
+        <script type="text/javascript">
+             Materialize.toast('User Blocked', 4000)
+        </script>
+    @elseif (Session::has('alert-unblock'))
+        <script type="text/javascript">
+             Materialize.toast('User Unblocked', 4000)
+        </script>
+    @elseif (Session::has('alert-delete'))
+        <script type="text/javascript">
+             Materialize.toast('User Deleted', 4000)
+        </script>
+    @endif
 @endsection

@@ -59,6 +59,7 @@
             <li><a class="waves-effect white-text" href="{{route('admin.pending.users')}}"><i class="material-icons white-text">verified_user</i>Pending Accounts</a></li>
             <li><a class="waves-effect white-text" href="{{route('admin.broadcast')}}"><i class="material-icons white-text">announcement</i>Send Announcement</a></li>
             <li class="hide-on-med-and-up"><a class="waves-effect white-text" href="{{ route('admin_logs') }}"><i class="material-icons white-text">book</i>Administrator Logs</a></li>
+            <li><a class="waves-effect white-text" href="{{ route('maps') }}"><i class="material-icons white-text">map</i>Maps</a></li>
             <li><a class="waves-effect white-text" href="{{route('admin.statistics.dashboard')}}"><i class="material-icons white-text">trending_up</i>Site Statistics</a></li>
             <li><a class="waves-effect white-text" href="{{route('admin.manage.homepage')}}"><i class="material-icons white-text">build</i>Manage Pages</a></li>
             <li class="hide-on-med-and-up"><a class="waves-effect white-text" href="{{ url('logout') }}"><i class="material-icons white-text">power_settings_new</i>Log Out</a></li>
@@ -110,7 +111,7 @@
                             <div class = "addusercontainer" class="row">
                             <div class="input-field col s11">
                                 <i class="material-icons prefix">account_circle</i>
-                                <input id="icon_prefix" type="text" class="validate" name="name">
+                                <input required id="icon_prefix" type="text" class="validate" name="name">
                                 <label for="icon_prefix">Username</label>
                             </div>
                             </div>
@@ -120,7 +121,7 @@
                             <div class = "addusercontainer" class="row">
                                 <div class="input-field col s11">
                                     <i class="material-icons prefix">email</i>
-                                    <input id="icon_prefix" type="email" class="validate" name="email">
+                                    <input required id="icon_prefix" type="email" class="validate" name="email">
                                     <label for="icon_prefix">Email Address</label>
                                 </div>
                             </div>
@@ -128,7 +129,7 @@
 
                         <div class="row">
                             <div class="col s12 m12 l3 xl3">
-                                <input name="type" value=0 type="radio" id="breeder"  />
+                                <input name="type" value=0 type="radio" id="breeder" />
                                 <label for="breeder">Breeder</label>
                             </div>
                             <div class="col s12 m12 l3 xl3">
@@ -188,5 +189,10 @@
         @yield('initScript')
             {{-- Custom scripts for certain pages/functionalities --}}
         @yield('customScript')
+        @if(Session::has('alert-create'))
+            <script type="text/javascript">
+                 Materialize.toast('User Successfully Created', 4000)
+            </script>
+        @endif
     </body>
 </html>

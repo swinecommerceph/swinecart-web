@@ -69,7 +69,7 @@
                         </select>
                     </div>
                     <div class="col s12 m3 l2 xl2">
-                        <button id="search-button" class="btn waves-effect waves-light" type="submit">Submit</button>
+                        <button id="search-button" class="btn waves-effect waves-light" type="submit">Search</button>
                     </div>
                 </div>
             {!!Form::close()!!}
@@ -82,9 +82,10 @@
         <thead>
           <tr>
               <th data-field="time">Time</th>
-              <th data-field="name">Admin Name</th>
-              <th data-field="name">User Name</th>
-              <th data-field="name">Category</th>
+              <th data-field="adminname">Admin Name</th>
+              <th data-field="username">User Name</th>
+              <th data-field="category">Category</th>
+              <th data-field="reason">Reason</th>
               <th data-field="action">Action</th>
           </tr>
         </thead>
@@ -95,7 +96,20 @@
                     <td>{{$log->created_at}}</td>
                     <td>{{$log->admin_name}}</td>
                     <td>{{$log->user}}</td>
-                    <td>{{$log->category}}</td>
+                    @if ($log->category == 'Block')
+                        <td class="orange-text">{{$log->category}}</td>
+                    @elseif ($log->category == 'Unblock')
+                        <td class="blue-text">{{$log->category}}</td>
+                    @elseif ($log->category == 'Accept')
+                        <td class="green-text">{{$log->category}}</td>
+                    @elseif ($log->category == 'Reject')
+                        <td class="red-text">{{$log->category}}</td>
+                    @elseif ($log->category == 'Create')
+                        <td class="green-text">{{$log->category}}</td>
+                    @elseif ($log->category == 'Delete')
+                        <td class="red-text">{{$log->category}}</td>
+                    @endif
+                    <td>{{$log->reason}}</td>
                     <td>{{$log->action}}</td>
                 </tr>
             @empty
@@ -103,6 +117,7 @@
                     <td></td>
                     <td></td>
                     <td class="center">Administrator Log Empty</td>
+                    <td></td>
                     <td></td>
                     <td></td>
                 </tr>

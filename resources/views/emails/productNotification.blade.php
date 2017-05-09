@@ -8,11 +8,11 @@
     <div class="row">
         <div class="col s12 m12 l12 xl12">
             @if ($type == 0)
-                <h1>Product Needed<h4>
+                <h1>Product Needed</h1>
             @elseif ($type == 1)
-                <h1>Product Reservation Expiring<h4>
+                <h1>Product Reservation Expiring</h1>
             @else
-                <h1>Transaction Cancelled<h4>
+                <h1>Transaction Cancelled</h1>
             @endif
 
         </div>

@@ -18,6 +18,7 @@ use App\Models\Breeder;
 use App\Models\Customer;
 use App\Models\FarmAddress;
 use App\Models\Product;
+use App\Models\Review;
 use App\Models\Image;
 use App\Models\Attachments;
 use App\Models\Video;
@@ -158,6 +159,14 @@ class AdminController extends Controller
         return $count;
     }
 
+    public function topBreeders(){
+        $reviews = DB::table('reviews')->groupBy('breeder_id')->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->orderBy('count','desc')->take(5)->get();
+        foreach ($reviews as $review) {
+            $review->overall = round(($review->delivery + $review->transaction + $review->quality)/3, 2);
+            $review->breeder_name = User::where('userable_type','App\Models\Breeder')->where('userable_id', $review->breeder_id)->first()->name;
+        }
+        return $reviews;
+    }
 
     /**
      * Show Home Page of breeder
@@ -173,7 +182,8 @@ class AdminController extends Controller
         $pending = $this->pendingUserCount();
         $blocked = $this->blockedUserCount();
         $messages = DB::table('messages')->where('admin_id','=', $this->user->id)->whereNull('read_at')->count();
-        $summary = array($all, $blocked, $pending, $messages);
+        $reviews = $this->topBreeders();
+        $summary = array($all, $blocked, $pending, $messages, $reviews);
 
         // $customers = DB::table('swine_cart_items')->join('transaction_logs', 'transaction_logs.product_id','=','swine_cart_items.product_id')
         //             ->whereMonth('date_needed', Carbon::now()->month)
@@ -183,6 +193,47 @@ class AdminController extends Controller
         //
         // dd($customers);
         return view(('user.admin.homeDashboard'), compact('summary'));
+    }
+
+    public function getbreederStatus(){
+        $breeders = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->whereNull('deleted_at')->paginate(8);
+        $reviews = DB::table('reviews')->groupBy('breeder_id')->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->get();
+        foreach ($breeders as $breeder) {
+            $breeder->delivery = 0;
+            $breeder->transaction = 0;
+            $breeder->quality = 0;
+            $breeder->overall = 0;
+            $breeder->review_count = 0;
+            foreach ($reviews as $review) {
+                if($breeder->userable_id == $review->breeder_id){
+                    $breeder->delivery = $review->delivery;
+                    $breeder->transaction = $review->transaction;
+                    $breeder->quality = $review->quality;
+                    $breeder->overall = round(($review->delivery + $review->transaction + $review->quality)/3, 2);
+                    $breeder->review_count = $review->count;;
+                }
+            }
+
+        }
+
+        return view('user.admin.breederStatus', compact('breeders'));
+    }
+
+    public function editAccreditation($breederid=null){
+        $breeder = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->where('userable_id','=', $breederid)->select('name','userable_id', 'users.id')->first();
+        return view('user.admin.editAccreditation', compact('breeder'));
+    }
+
+    public function editAccreditationAction(Request $request){
+        $accreditationDate = Carbon::parse($request->accreditdate)->toDateString();
+        $notificationDate = Carbon::parse($request->notifdate)->toDateString();
+        $breeder = Breeder::find($request->breeder_id);
+        $breeder->registration_number = $request->accreditnumber;
+        $breeder->latest_accreditation = $accreditationDate;
+        $breeder->notification_date = $notificationDate;
+        $breeder->save();
+        $breeder->name = $request->name;
+        return Redirect::back()->with('message','Edit Successful');
     }
 
     /**
@@ -196,8 +247,8 @@ class AdminController extends Controller
                 ->whereNotNull('approved_at')
                 ->whereNull('deleted_at')
                 ->paginate(10);
-
-        return view('user.admin._displayUsers',compact('users'));
+        $violations = DB::table('user_violations')->get();
+        return view('user.admin._displayUsers',compact('users', 'violations'));
     }
 
     /**
@@ -263,6 +314,8 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         $user = User::find($request->id);           // find the user
+        $user->delete_reason = $request->reason;
+        $user->save();
         $user->delete();                                // delete it in the database
         // create a AdministratorLog entry for the action done
         AdministratorLog::create([
@@ -271,13 +324,14 @@ class AdminController extends Controller
             'user' => $user->name,
             'category' => 'Delete',
             'action' => 'Deleted '.$user->name,
+            'reason' => $user->delete_reason
         ]);
         //$time = Carbon::now()->addMinutes(10);
         $notificationType = 2;
         // Send an email to the user after 10 minutes
         Mail::to($user->email)
             ->queue(new SwineCartAccountNotification($user, $notificationType));
-
+        $request->session()->flash('alert-delete', 'User Deleted');
         return Redirect::back()->with('message','User Deleted');
     }
 
@@ -293,7 +347,7 @@ class AdminController extends Controller
                       ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                       ->join('roles', 'role_user.role_id','=','roles.id')
                       ->where('role_user.role_id','!=',1)
-                      ->where('users.email_verified','=', 1)
+                      ->whereNotNull('approved_at')
                       ->where('users.deleted_at','=', NULL )
                       ->whereNotNull('users.blocked_at')
                       ->paginate(10);
@@ -301,7 +355,8 @@ class AdminController extends Controller
         //     $blockedUser->title = ucfirst($blockedUser->title);     // fix the format for the role in each of the users queried
         //     $blockedUser->token = csrf_token();                     // get the token
         // }
-        return view('user.admin._blockedUsers',compact('users'));
+        $violations = DB::table('user_violations')->get();
+        return view('user.admin._blockedUsers',compact('users', 'violations'));
     }
 
     /**
@@ -317,8 +372,8 @@ class AdminController extends Controller
                           ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                           ->join('roles', 'role_user.role_id','=','roles.id')
                           ->where('users.name','LIKE', "%$request->search%")
-                          ->where('users.email_verified','=', 1)
                           ->where('users.deleted_at','=', NULL )
+                          ->whereNotNull('approved_at')
                           ->paginate(10);
         }else{
             $values = [$request->breeder, $request->customer];
@@ -332,14 +387,14 @@ class AdminController extends Controller
                           ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                           ->join('roles', 'role_user.role_id','=','roles.id')
                           ->where('users.name','LIKE', "%$request->search%")
-                          ->where('users.email_verified','=', 1)
                           ->where('users.deleted_at','=', NULL )
+                          ->whereNotNull('approved_at')
                           ->whereIn('role_user.role_id', $search)
                           ->paginate(10);
         }
 
-
-        return view('user.admin._displayUsers',compact('users'));
+        $violations = DB::table('user_violations')->get();
+        return view('user.admin._displayUsers',compact('users', 'violations'));
     }
 
     /**
@@ -374,7 +429,7 @@ class AdminController extends Controller
                           ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                           ->join('roles', 'role_user.role_id','=','roles.id')
                           ->where('users.name','LIKE', "%$request->search%")
-                          ->where('users.email_verified','=', 1)
+                          ->whereNotNull('approved_at')
                           ->where('users.deleted_at','=', NULL )
                           ->whereNotNull('users.blocked_at')
                           ->paginate(10);
@@ -390,15 +445,15 @@ class AdminController extends Controller
                           ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                           ->join('roles', 'role_user.role_id','=','roles.id')
                           ->where('users.name','LIKE', "%$request->search%")
-                          ->where('users.email_verified','=', 1)
+                          ->whereNotNull('approved_at')
                           ->where('users.deleted_at','=', NULL )
                           ->whereNotNull('users.blocked_at')
                           ->whereIn('role_user.role_id', $search)
                           ->paginate(10);
         }
 
-
-        return view('user.admin._blockedUsers',compact('users'));
+        $violations = DB::table('user_violations')->get();
+        return view('user.admin._blockedUsers',compact('users', 'violations'));
     }
 
 
@@ -416,10 +471,13 @@ class AdminController extends Controller
         $notificationType = NULL;
         if($user->blocked_at != NULL){
             $user->blocked_at = NULL;
+            $user->block_reason = NULL;
             $notificationType = 1;
         }else{
             $user->blocked_at = Carbon::now();     // change the status for is_blocked column
             $notificationType = 0;
+            $user->block_frequency = $user->block_frequency+1;
+            $user->block_reason = $request->reason;
         }
         $user->save();                              // save the change to the database
         // create a log entry for the action done
@@ -430,6 +488,7 @@ class AdminController extends Controller
                 'user' => $user->name,
                 'category' => 'Block',
                 'action' => 'Blocked '.$user->name,
+                'reason' => $user->block_reason
             ]);
         }else{
             AdministratorLog::create([
@@ -444,6 +503,11 @@ class AdminController extends Controller
         // send an email notification to the user's email
         Mail::to($user->email)
             ->queue(new SwineCartAccountNotification($user, $notificationType));
+        if($notificationType==1){
+            $request->session()->flash('alert-unblock', 'User Blocked');
+        }else{
+            $request->session()->flash('alert-block', 'User Blocked');
+        }
 
         return Redirect::back()->with('message','Action Success');
     }
@@ -536,7 +600,7 @@ class AdminController extends Controller
             Mail::to($user->email)
                 ->queue(new SwineCartSpectatorCredentials($user->email, $password, $request->type));
         }
-
+        $request->session()->flash('alert-create', 'User Created');
         return Redirect::back()->withMessage('User Created!'); // redirect to the page and display a toast notification that a user is created
     }
 
@@ -573,7 +637,7 @@ class AdminController extends Controller
         Mail::to($user->email)
             ->queue(new SwineCartAccountNotification($user, $notificationType));
         $user->save();  // save changes to the database
-
+        $request->session()->flash('alert-accept', 'User Accepted');
         return Redirect::back()->withMessage('User Accepted!'); // redirect to the page and display a toast notification that a user is created
     }
 
@@ -603,7 +667,7 @@ class AdminController extends Controller
             ->queue(new SwineCartAccountNotification($user, $notificationType));
 
         $user->save();  // save changes to the database
-
+        $request->session()->flash('alert-reject', 'User Rejected');
         return Redirect::back()->withMessage('User Rejected!'); // redirect to the page and display a toast notification that a user is created
     }
 
@@ -1042,9 +1106,10 @@ class AdminController extends Controller
                     ->whereYear('created_at', '=', $year)
                     ->count();
         $adminLogs = DB::table('administrator_logs')
-                    ->whereMonth('created_at', '=', $month)
-                    ->whereYear('created_at', '=', $year)
-                    ->whereDay('created_at', '=', $yesterday)
+                    // ->whereMonth('created_at', $month)
+                    // ->whereYear('created_at', $year)
+                    // ->whereDay('created_at', $yesterday)
+                    ->whereDate('created_at', $yesterday)
                     ->orderBy('created_at', 'ASC')
                     ->get();
 
@@ -1280,9 +1345,42 @@ class AdminController extends Controller
                              'breeder_user.officeAddress_addressLine1 as addressLine1', 'breeder_user.officeAddress_addressLine2 as addressLine2',
                              'breeder_user.officeAddress_province as province', 'breeder_user.officeAddress_zipCode as zipcode', 'breeder_user.office_landline',
                              'breeder_user.office_mobile', 'breeder_user.website', 'breeder_user.produce', 'breeder_user.contactPerson_name as contact_person',
-                             'breeder_user.contactPerson_mobile as contact_person_mobile', 'breeder_user.status_instance'
+                             'breeder_user.contactPerson_mobile as contact_person_mobile', 'breeder_user.status_instance', 'breeder_user.id as breeder_id'
                              )
                      ->get();
+
+                $details->first()->delivery = 0;
+                $details->first()->transaction = 0;
+                $details->first()->quality = 0;
+                $details->first()->count = 0;
+                $details->first()->overall = 0;
+                $review = Review::where('breeder_id',$request->userUserableId)->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->first();
+                $review->overall = round(($review->delivery + $review->transaction + $review->quality)/3, 2);
+                if($review->delivery == null){
+                    $details->first()->delivery = 0;
+                }else{
+                    $details->first()->delivery = $review->delivery;
+                }
+
+                if($review->transaction == null){
+                    $details->first()->transaction = 0;
+                }else{
+                    $details->first()->transaction = $review->transaction;
+                }
+
+                if($review->quality == null){
+                    $details->first()->quality = 0;
+                }else{
+                    $details->first()->quality = $review->quality;
+                }
+
+                if($review->count == null){
+                    $details->first()->count = 0;
+                }else{
+                    $details->first()->count = $review->count;
+                }
+                $details->first()->overall = $review->overall;
+
 
          }else{
              $details = DB::table('users')
@@ -1399,7 +1497,6 @@ class AdminController extends Controller
                          ->orderBy('product_reservations.id', 'desc')
                          ->paginate(10);
          }
-
          return view('user.admin.usersTransactionHistory', compact('username', 'userable', 'role','transactions'));
      }
 
@@ -1561,6 +1658,7 @@ class AdminController extends Controller
                         ->groupBy('year')
                         ->orderBy('year', 'desc')
                         ->get();
+
         if(count($transactions)!=0){
             $lastTransactions = $transactions->first()->year; //most recent transaction year in the database
             $firstTransactions = $transactions->take(5)->last()->year; //oldest transaction year in the last 5 transaction years
@@ -2118,10 +2216,10 @@ class AdminController extends Controller
         return $user_data;
     }
 
-    public function viewUsers(){
+    public function viewMaps(){
         $breeders = Breeder::all();
         $customers = Customer::all();
-        return view('user.admin.viewUsers', compact('breeders', 'customers'));
+        return view('user.admin.viewMaps', compact('breeders', 'customers'));
     }
 
     /*

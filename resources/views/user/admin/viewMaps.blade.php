@@ -1,35 +1,24 @@
-{{--
-    Displays all users
---}}
-
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Users
+    | User Maps
 @endsection
 
 @section('pageId')
-    id="page-admin-view-users"
+    id="admin-maps-users"
 @endsection
 
-@section('breadcrumbTitle')
-    Users
-@endsection
-
-@section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="#!" class="breadcrumb">Users</a>
+@section('nav-title')
+    User Maps
 @endsection
 
 @section('content')
-
     <div class="progress geocoding" style="display:none;">
       <div class="indeterminate"></div>
     </div>
     <div id="map-container">
         <div id="map-canvas" style="height:85vh;"></div>
     </div>
-
 @endsection
 
 @section('customScript')
@@ -88,6 +77,7 @@
                             lng : result.geometry.location.lng(),
                             content: opts.content,
                             icon: '/images/maps/breeder.png',
+                            // icon: '/images/pigmarker.png',
                             //link: '/customer/view-breeder/'+opts.id
                         });
                         loadingtimeout = setTimeout(function(){
@@ -117,6 +107,7 @@
                             lng : result.geometry.location.lng(),
                             content: opts.content,
                             icon: '/images/maps/customer.png',
+                            // icon: '/images/pigmarker2.png',
                             //link: '/breeder/view-customer/'+opts.id
                         });
                         loadingtimeout = setTimeout(function(){
@@ -136,19 +127,18 @@
             @foreach($breeders as $breeder)
                 geocode({
                     address : '{{ $breeder->officeAddress_province }}, Philippines',
-                    content : '{{ $breeder->users()->first()->name }}',
+                    content : '{{ $breeder->name }}',
                     id : '{{ $breeder->id }}'
                 });
             @endforeach
+
             @foreach($customers as $customer)
                 geocode2({
                     address : '{{ $customer->address_province }}, Philippines',
-                    content : '{{ $customer->users()->first()->name }}',
+                    content : '{{ $customer->name }}',
                     id : '{{ $customer->id }}'
                 });
             @endforeach
-
-
 
         }(window, google, window.Mapster || (window.Mapster = {})))
     </script>

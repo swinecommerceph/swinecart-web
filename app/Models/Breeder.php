@@ -35,8 +35,12 @@ class Breeder extends Model
         'office_mobile',
         'website',
         'produce',
+        'registration_number',
         'contactPerson_name',
-        'contactPerson_mobile'];
+        'contactPerson_mobile',
+        'latest_accreditation',
+        'notification_date'
+    ];
 
     /**
      * Get all Breeder type users
