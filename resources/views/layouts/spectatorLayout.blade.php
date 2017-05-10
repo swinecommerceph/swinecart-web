@@ -12,16 +12,16 @@
         <link href="/css/style.css" rel="stylesheet" type="text/css">
         <link href="/css/nouislider.min.css" rel="stylesheet">
         <link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
-        <script type="text/javascript" src="/js/vendor/chart.bundle.min.js"></script>
+        <script type="text/javascript" src="/js/vendor/chart.min.js"></script>
     </head>
     <body @yield('pageId')>
         <div class="navbar-fixed">
             <nav class="teal darken-3">
                 <div class="nav-wrapper container">
                     <a href="{{ route('home_path') }}"><img src="/images/logowhite.png" height=65/>&nbsp&nbsp<div class="brand-logo">SwineCart</div></a>
-
+                    {{-- <a href="#" data-activates="mobile-demo" class="button-collapse"><i class="material-icons">menu</i></a> --}}
                     <ul id="nav-mobile" class="right hide-on-med-and-down">
-                        <li><a>{{ Auth::user()->name }}</a> </li>
+                        <li><a href="{{ route('home_path') }}">{{ Auth::user()->name }}</a> </li>
                         {{-- <li>
                             <a class="waves-effect waves-light modal-trigger tooltipped" href="{{ route('admin_logs') }}" data-position="bottom" data-delay="40" data-tooltip="Administrator Logs">
                                 <i class="material-icons">class</i>
@@ -34,10 +34,6 @@
                     </ul>
                 </div>
 
-                {{-- Preloader Progress --}}
-                <div id="preloader-progress" class="progress red lighten-4" style="display:none;">
-                  <div class="indeterminate red"></div>
-                </div>
             </nav>
         </div>
 
@@ -83,7 +79,7 @@
           </div>
           <div class="footer-copyright">
             <div class="container">
-            © 2017 Copyright Text
+            © {{Carbon\Carbon::now()->year}} Copyright Text
             <a class="grey-text text-lighten-4 right" href="#!">More Links</a>
             </div>
           </div>

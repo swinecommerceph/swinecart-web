@@ -25,6 +25,7 @@ var config = {
     all_user: 'home/userlist',
     form: 'registration',
     spectator_url: '/spectator',
+    admin_url: '/admin',
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',
     breederWSServer: 'ws://swinecommerceph.dev/pusher',

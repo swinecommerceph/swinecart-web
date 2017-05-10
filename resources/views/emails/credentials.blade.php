@@ -1,25 +1,36 @@
 
-@extends('layouts.messageOneColumn')
+@extends('layouts.adminNotificationsLayout')
 
 @section('title')
-    - User Credentials
+    @if ($type == 0)
+        - SwineCart Breeder Credentials
+    @else
+        - SwineCart Spectator Credentials
+    @endif
+
 @endsection
 
-@section('page-id')
-    id="page-credentials"
+@section('header')
+    <div class="row">
+        <div class="col s12 m12 l12 xl12">
+            @if ($type == 0)
+                <h1>Breeder Credentials<h4>
+            @else
+                <h1>Spectator Credentials<h4>
+            @endif
+
+        </div>
+    </div>
+    <hr>
 @endsection
 
 @section('content')
-   <div class="row credentials">
-      <div class="col s12">
-         Login Credentials for the Swine E-Commerce PH website
+  <div class="row">
+      <div class="col s12 m12 l12 xl12">
+          <p>The following are your credentials to access SwineCart.</p>
+          <p>Email: <em><strong>{{$email}}</em></strong></p>
+          <p>Password: <em><strong>{{$password}}</strong></em></p>
+          <p><em>Note: Your password is randomly generated. Please be advised to change your password as soon as possible</em><p>
       </div>
-      <div class="col s12">
-         Email: {{$email}}
-      </div>
-      <div class="col s12">
-         Password: {{$password}}
-      </div>
-   </div>
-
+  </div>
 @endsection

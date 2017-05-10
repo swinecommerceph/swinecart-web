@@ -72,11 +72,11 @@ class LoginController extends Controller
             else return response('Not Found', 404);
         } catch (ApplicationRejectedException $e) {
             // User rejected application
-            return redirect()->route('getRegister_path');
+            return redirect()->route('register');
         } catch (InvalidAuthorizationCodeException $e) {
             // Authorization was attempted with invalid
             // code,likely forgery attempt
-            return redirect()->route('getLogin_path');
+            return redirect()->route('login');
         }
 
         return redirect()->route('home_path');
@@ -127,7 +127,7 @@ class LoginController extends Controller
 
             return view('emails.message', $data);
         }
-        else return redirect()->route('getRegister_path')->with('message','Verification code invalid!');
+        else return redirect()->route('register')->with('message','Verification code invalid!');
     }
 
 }

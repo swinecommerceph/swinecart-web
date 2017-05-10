@@ -56,7 +56,7 @@
 		           *
 		         @endif
 		      	{{ $thread->otherparty() }}
-		      	 
+
 		      </span>
 
 		    </li>

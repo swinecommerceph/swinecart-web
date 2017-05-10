@@ -1,0 +1,161 @@
+/*CSS files for Admin and Spectator Views*/
+
+/*
+     Admin CSS
+*/
+
+/*General Admin CSS*/
+
+/*Materialize Sticky Footer*/
+#admin-body {
+    display: flex;
+    min-height: 100vh;
+    flex-direction: column;
+  }
+
+.admin-layout-main {
+    flex: 1 0 auto;
+ }
+
+ul .swinecart-logo{
+	height: 150px;
+	padding-top: 30px;
+
+}
+ul .swinecart-logo a:hover{
+	 background-color: transparent;
+}
+#admin-brand-logo{
+	vertical-align: middle !important;
+}
+
+ul .brand-logo{
+	font-size: 35px;
+}
+ul #admin-brand-logo{
+	height: 65px;
+}
+
+ul .side-nav-user-info{
+	height: 50px;
+
+}
+ul .side-nav-user-image{
+	vertical-align: middle !important;
+	margin-right: 10px;
+}
+
+@media only screen and (min-width: 995px){
+	.admin-layout-footer, .admin-layout-nav, .admin-layout-main{
+		padding-left: 300px;
+	}
+
+	.admin-layout-nav{
+		height: 100px;
+	}
+	.admin-layout-nav-div-wrapper{
+		height: 100px;
+	}
+
+	.admin-layout-nav-title{
+		padding-left: 50px;
+		font-size: 30px;
+	}
+	.admin-layout-nav-menu{
+		height: 100px;
+	}
+	.admin-layout-nav-menu-items{
+		height: 100px;
+		display: flex;
+    	align-items: center;
+	}
+
+}
+
+.current-user-label{
+    font-weight: lighter;
+    font-size: 18px;
+}
+
+.current-user-data{
+    font-weight: bold;
+    font-size: 22px;
+}
+
+/*Admin Dashboard*/
+.admin-dashboard-ecommerce-icon{
+   font-family: ecommerce;
+   font-size: 6em;
+   font-style: normal;
+   text-align: left;
+   vertical-align: middle;
+   color: #d1d1d1;
+}
+.admin-dashboard-summary-title{
+	font-size: 2em;
+	vertical-align: middle;
+   	text-align: left;
+    color: #d1d1d1;
+}
+
+.admin-dashboard-summary-data{
+	font-size: 5.5em;
+}
+
+@media only screen and (max-width: 1300px){
+    .admin-dashboard-summary-data{
+    	font-size: 3.5em;
+    }
+}
+
+#admin-dashboard-total-card{
+   background-color: #0a7e7b;
+}
+
+#admin-dashboard-blocked-card{
+   background-color: #ed5272;
+}
+
+#admin-dashboard-pending-card{
+   background-color: #636564;
+}
+
+#admin-dashboard-messages-card{
+   background-color: #67052c;
+}
+
+#admin-dashboard-statistics-card{
+   background-color: #EB984E;
+}
+
+#admin-dashboard-statistics-icon{
+	font-size: 7em;
+	vertical-align: middle;
+   	text-align: left;
+}
+
+#admin-dashboard-statistics-title{
+	font-size: 5em;
+	vertical-align: middle;
+   	text-align: left;
+    color: #d1d1d1;
+}
+
+@media only screen and (max-width: 1300px){
+    #admin-dashboard-statistics-icon{
+    	font-size: 6.5em;
+       	text-align: left;
+    }
+
+    #admin-dashboard-statistics-title{
+    	font-size: 2.5em;
+       	text-align: left;
+        color: #d1d1d1;
+    }
+}
+
+
+
+/*
+     Spectator CSS
+*/

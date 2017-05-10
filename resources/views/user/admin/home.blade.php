@@ -1,3 +1,6 @@
+
+{{--  *REMOVE AFTER USER INTERFACE CHANGES ARE FINALIZED* --}}
+
 {{--
     Displays Home page of Admin
 --}}
@@ -34,7 +37,7 @@
                      </div>
                   </div>
 
-                   <div class="center white-text summary-data col s8">
+                   <div class="center white-text summary-data col s8 truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$summary[0]}}">
                      {{$summary[0]}}
                    </div>
                </div>
@@ -55,8 +58,8 @@
                       </div>
                    </div>
 
-                    <div class="center white-text summary-data col s8">
-                      {{$summary[4]}}
+                    <div class="center white-text summary-data col s8 truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$summary[1]}}">
+                      {{$summary[1]}}
                     </div>
                 </div>
              </div>
@@ -75,8 +78,8 @@
                       </div>
                    </div>
 
-                   <div class="center white-text summary-data col s8">
-                      {{$summary[3]}}
+                   <div class="center white-text summary-data col s8 truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$summary[2]}}">
+                      {{$summary[2]}}
                    </div>
                 </div>
              </div>
@@ -91,12 +94,12 @@
                          <i class="ecommerce-icon">u</i>
                       </div>
                       <div class="">
-                         <div class="summary-title">USER INQUIRIES</div>
+                         <div class="summary-title">Unread Messages</div>
                       </div>
                    </div>
 
-                   <div class="center white-text summary-data col s8">
-                      3
+                   <div class="center white-text summary-data col s8 truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$summary[3]}}">
+                      {{$summary[3]}}
                    </div>
                 </div>
              </div>
@@ -128,8 +131,4 @@
 
 @section('initScript')
     <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
-    <script type="text/javascript" src="/js/admin/users.js"></script>
-    <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
-    <script type="text/javascript" src="/js/admin/pages.js"></script>
-    <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
 @endsection

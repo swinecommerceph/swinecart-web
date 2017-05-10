@@ -166,8 +166,17 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/logs', ['as'=>'admin_logs', 'uses'=>'AdminController@getAdministratorLogs']);
         Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
 
+        //message-related
+        Route::get('messages/breeder', ['as' => 'admin.breeder.messages', 'uses'=> 'MessageController@getBreederMessagesAdmin']);
+        Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
+        Route::get('messages/breeder/{breeder}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getBreederMessagesAdmin']);
+
+        Route::get('messages/customer', ['as' => 'admin.customer.messages', 'uses'=> 'MessageController@getCustomerMessagesAdmin']);
+        Route::get('messages/customer/{customer}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getCustomerMessagesAdmin']);
+
         // Route for statistics pages
         Route::get('home/statistics/dashboard',['as'=>'admin.statistics.dashboard', 'uses'=>'AdminController@showStatisticsDashboard']);
+
         //  Breeder statistics
         Route::get('home/statistics/breeder/active', ['as' => 'admin.statistics.breeder.active', 'uses'=> 'AdminController@showStatisticsActiveBreeder']);
         Route::get('home/statistics/breeder/active-year', ['as' => 'admin.statistics.breeder.active-year', 'uses'=> 'AdminController@showStatisticsActiveBreederYear']);
@@ -186,7 +195,38 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/statistics/timeline', ['as' => 'admin.statistics.timeline', 'uses'=> 'AdminController@showStatisticsTimeline']);
         Route::get('home/statistics/timeline-date', ['as' => 'admin.statistics.timeline-date', 'uses'=> 'AdminController@showStatisticsTimelineDate']);
 
+        Route::get('home/statistics/transactions', ['as' => 'admin.statistics.transactions', 'uses'=> 'AdminController@showStatisticsTransactions']);
+        Route::get('home/statistics/transactions-date', ['as' => 'admin.statistics.transactions-date', 'uses'=> 'AdminController@showStatisticsTransactionsYear']);
+        Route::get('home/statistics/totaltransactions', ['as' => 'admin.statistics.totaltransactions', 'uses'=> 'AdminController@showStatisticsTotalTransactions']);
+        Route::get('home/statistics/totaltransactions-year', ['as' => 'admin.statistics.totaltransactions-year', 'uses'=> 'AdminController@showStatisticsTotalTransactionsModified']);
+
+        // Average Statistics for Breeders
+        Route::get('home/statistics/average-new-breeder', ['as' => 'admin.statistics.averageNewBreeder', 'uses'=> 'AdminController@averageMonthlyNewBreeders']);
+        Route::get('home/statistics/average-new-breeder-year', ['as' => 'admin.statistics.averageNewBreederYear', 'uses'=> 'AdminController@averageMonthlyNewBreedersYear']);
+        Route::get('home/statistics/average-blocked-breeder', ['as' => 'admin.statistics.averageBlockedBreeder', 'uses'=> 'AdminController@averageMonthlyBlockedBreeders']);
+        Route::get('home/statistics/average-blocked-breeder-year', ['as' => 'admin.statistics.averageBlockedBreederYear', 'uses'=> 'AdminController@averageMonthlyBlockedBreedersYear']);
+        Route::get('home/statistics/average-deleted-breeder', ['as' => 'admin.statistics.averageDeletedBreeder', 'uses'=> 'AdminController@averageMonthlyDeletedBreeders']);
+        Route::get('home/statistics/average-deleted-breeder-year', ['as' => 'admin.statistics.averageDeletedBreederYear', 'uses'=> 'AdminController@averageMonthlyDeletedBreedersYear']);
+
+
+        // Average Statistics for Customers
+        Route::get('home/statistics/average-new-customer', ['as' => 'admin.statistics.averageNewCustomers', 'uses'=> 'AdminController@averageMonthlyNewCustomers']);
+        Route::get('home/statistics/average-new-customer-year', ['as' => 'admin.statistics.averageNewCustomerYear', 'uses'=> 'AdminController@averageMonthlyNewCustomersYear']);
+        Route::get('home/statistics/average-blocked-customer', ['as' => 'admin.statistics.averageBlockedCustomers', 'uses'=> 'AdminController@averageMonthlyBlockedCustomers']);
+        Route::get('home/statistics/average-blocked-customer-year', ['as' => 'admin.statistics.averageBlockedCustomerYear', 'uses'=> 'AdminController@averageMonthlyBlockedCustomersYear']);
+        Route::get('home/statistics/average-deleted-customer', ['as' => 'admin.statistics.averageDeletedCustomers', 'uses'=> 'AdminController@averageMonthlyDeletedCustomers']);
+        Route::get('home/statistics/average-deleted-customer-year', ['as' => 'admin.statistics.averageDeletedCustomerYear', 'uses'=> 'AdminController@averageMonthlyDeletedCustomersYear']);
+
+
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
+        Route::get('home/userlist/details', ['as'=>'admin.userlist.details', 'uses'=>'AdminController@fetchUserInformation']);
+        Route::get('home/userlist/transaction', ['as'=>'admin.userlist.transaction', 'uses'=>'AdminController@fetchUserTransaction']);
+        Route::get('home/userlist/transaction-user',['as'=>'admin.userlist.transactionHistory', 'uses'=>'AdminController@fetchUserTransactionHistory']);
+        Route::get('home/userlist/transaction-user/search',['as'=>'admin.userlist.transactionHistory.search', 'uses'=>'AdminController@searchUserTransactionHistory']);
+
+        Route::get('home/spectatorlist', ['as'=>'admin.spectatorlist', 'uses'=>'AdminController@displaySpectators']);
+        Route::get('home/spectatorlist-search', ['as'=>'admin.spectatorlist-search', 'uses'=>'AdminController@searchSpectators']);
+
         Route::get('home/approved/breeder', ['as'=>'admin.approved.breeder', 'uses'=>'AdminController@displayApprovedBreeders']);
         Route::get('home/approved/customer', ['as'=>'admin.approved.customer', 'uses'=>'AdminController@displayApprovedCustomer']);
         Route::get('home/pending/users', ['as'=>'admin.pending.users', 'uses'=>'AdminController@displayPendingUsers']);
@@ -208,7 +248,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/manage/return/userlist', ['as' => 'admin.return.userlist', 'uses'=> 'AdminController@goToUserlist']);
         Route::get('home/manage/return/pending', ['as' => 'admin.return.pending', 'uses'=> 'AdminController@goToPending']);
 
+        Route::get('broadcast', ['as'=>'admin.broadcast','uses'=>'AdminController@broadcastMessagePage']);
+        Route::post('broadcast/send', ['as'=>'admin.broadcast.send','uses'=>'AdminController@sendBroadcastMessage']);
+
         Route::get('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsers']);
+        Route::get('admin_info',['as'=>'admin_info', 'uses'=>'AdminController@getAdminInformation']);
 
         Route::get('home/messenger', ['as' => 'admin.messenger', 'uses'=> 'AdminController@messenger']);
         Route::post('home/messenger/send', ['as' => 'admin.messenger.send', 'uses'=> 'AdminController@send']);
@@ -225,8 +269,46 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('logs',['as'=>'spectator.logs', 'uses'=>'SpectatorController@viewLogs']);
         Route::get('statistics',['as'=>'spectator.statistics', 'uses'=>'SpectatorController@viewStatisticsDashboard']);
 
+        Route::get('users/search',['as'=>'spectator.searchUser', 'uses'=>'SpectatorController@searchUser']);
+        Route::get('users/details', ['as'=>'spectator.fetchUserInformation', 'uses'=>'SpectatorController@fetchUserInformation']);
+
+        Route::get('products/product-details', ['as'=>'spectator.productDetails', 'uses'=>'SpectatorController@fetchProductDetails']);
         Route::get('home/product/search', ['as'=>'spectator.searchProduct', 'uses'=>'SpectatorController@searchProduct']);
         Route::get('home/product/advancedsearch', ['as'=>'spectator.advancedSearchProduct', 'uses'=>'SpectatorController@advancedSearchProduct']);
+
+        Route::get('statistics/customer/active', ['as'=>'spectator.statisticsActiveCustomer', 'uses'=>'SpectatorController@viewActiveCustomerStatistics']);
+        Route::get('statistics/customer/active-year', ['as'=>'spectator.statisticsActiveCustomerYear', 'uses'=>'SpectatorController@viewActiveCustomerStatisticsYear']);
+        Route::get('statistics/customer/blocked', ['as'=>'spectator.statisticsBlockedCustomer', 'uses'=>'SpectatorController@viewBlockedCustomerStatistics']);
+        Route::get('statistics/customer/blocked-year', ['as'=>'spectator.statisticsBlockedCustomerYear', 'uses'=>'SpectatorController@viewBlockedCustomerStatisticsYear']);
+        Route::get('statistics/customer/deleted', ['as'=>'spectator.statisticsDeletedCustomer', 'uses'=>'SpectatorController@viewDeletedCustomerStatistics']);
+        Route::get('statistics/customer/deleted-year', ['as'=>'spectator.statisticsDeletedCustomerYear', 'uses'=>'SpectatorController@viewDeletedCustomerStatisticsYear']);
+
+        Route::get('statistics/customer/averagecreated', ['as'=>'spectator.averageCustomerStatisticsCreated', 'uses'=>'SpectatorController@averageCustomerCreated']);
+        Route::get('statistics/customer/averagecreated-year', ['as'=>'spectator.averageCustomerStatisticsCreatedYear', 'uses'=>'SpectatorController@averageCustomerCreatedYear']);
+        Route::get('statistics/customer/averageblocked', ['as'=>'spectator.averageCustomerStatisticsBlocked', 'uses'=>'SpectatorController@averageCustomerBlocked']);
+        Route::get('statistics/customer/averageblocked-year', ['as'=>'spectator.averageCustomerStatisticsBlockedYear', 'uses'=>'SpectatorController@averageCustomerBlockedYear']);
+        Route::get('statistics/customer/averagedeleted', ['as'=>'spectator.averageCustomerStatisticsDeleted', 'uses'=>'SpectatorController@averageCustomerDeleted']);
+        Route::get('statistics/customer/averagedeleted-year', ['as'=>'spectator.averageCustomerStatisticsDeletedYear', 'uses'=>'SpectatorController@averageCustomerDeletedYear']);
+
+
+
+        Route::get('statistics/breeder/active', ['as'=>'spectator.statisticsActiveBreeder', 'uses'=>'SpectatorController@viewActiveBreederStatistics']);
+        Route::get('statistics/breeder/active-year', ['as'=>'spectator.statisticsActiveBreederYear', 'uses'=>'SpectatorController@viewActiveBreederStatisticsYear']);
+        Route::get('statistics/breeder/blocked', ['as'=>'spectator.statisticsBlockedBreeder', 'uses'=>'SpectatorController@viewBlockedBreederStatistics']);
+        Route::get('statistics/breeder/blocked-year', ['as'=>'spectator.statisticsBlockedBreederYear', 'uses'=>'SpectatorController@viewBlockedBreederStatisticsYear']);
+        Route::get('statistics/breeder/deleted', ['as'=>'spectator.statisticsDeletedBreeder', 'uses'=>'SpectatorController@viewDeletedBreederStatistics']);
+        Route::get('statistics/breeder/deleted-year', ['as'=>'spectator.statisticsDeletedBreederYear', 'uses'=>'SpectatorController@viewDeletedBreederStatisticsYear']);
+
+        Route::get('statistics/breeder/averagecreated', ['as'=>'spectator.averageBreederStatisticsCreated', 'uses'=>'SpectatorController@averageBreedersCreated']);
+        Route::get('statistics/breeder/averagecreated-year', ['as'=>'spectator.averageBreederStatisticsCreatedYear', 'uses'=>'SpectatorController@averageBreedersCreatedYear']);
+        Route::get('statistics/breeder/averageblocked', ['as'=>'spectator.averageBreederStatisticsBlocked', 'uses'=>'SpectatorController@averageBreedersBlocked']);
+        Route::get('statistics/breeder/averageblocked-year', ['as'=>'spectator.averageBreederStatisticsBlockedYear', 'uses'=>'SpectatorController@averageBreedersBlockedYear']);
+        Route::get('statistics/breeder/averagedeleted', ['as'=>'spectator.averageBreederStatisticsDeleted', 'uses'=>'SpectatorController@averageBreedersDeleted']);
+        Route::get('statistics/breeder/averagedeleted-year', ['as'=>'spectator.averageBreederStatisticsDeletedYear', 'uses'=>'SpectatorController@averageBreedersDeletedYear']);
+
+        Route::get('statistics/productbreakdown', ['as'=>'spectator.productbreakdown', 'uses'=>'SpectatorController@viewProductBreakdown']);
+        Route::get('spectator_info',['as'=>'spectator_info', 'uses'=>'SpectatorController@getSpectatorInformation']);
+
     });
 
 

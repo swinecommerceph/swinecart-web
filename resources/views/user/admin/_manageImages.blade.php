@@ -1,31 +1,38 @@
-{{--
-    Displays Home page of Admin
---}}
-@extends('layouts.adminLayout')
+
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | Manage Homepage
 @endsection
 
 @section('pageId')
-    id="pages-home-images"
+    id="admin-manage-homepage"
 @endsection
 
-@section('header')
+@section('nav-title')
+    Manage Homepage
+@endsection
+
+{{-- @section('header')
     <h4 id='admin-content-panel-header'>Manage Home Page</h4>
+@endsection --}}
+
+@section('pageControl')
+    <div class="row valign-wrapper">
+        <div class="col s9 m9 l9 xl9 valign">
+            <h5>Edit Homepage</h5>
+        </div>
+        <div class="col s3 m3 l3 xl3 valign center">
+            <a class="waves-effect waves-teal btn modal-trigger" href="#edit-page-modal"><i class="material-icons left">settings</i>Edit</a>
+        </div>
+    </div>
 @endsection
 
 @section('content')
     <div class="row">
-      <div class="col s12">
-          <h5>Edit Images and Text</h5>
-      </div>
 
-      <div class="col s12">
-          
-          <div id="slider-button-div">
-            <a class="waves-effect waves-teal btn-flat modal-trigger" href="#edit-page-modal">Edit</a>
-         </div>
+      <div class="col s12 m12 l12 xl12">
+
           {{-- Slider --}}
           <div class="slider home-slider">
               <ul class="slides">
@@ -44,11 +51,6 @@
       </div>
 
     </div>
-
-    {{-- <div id="boo" v-cloak>
-        <input type="text" v-model="message">
-        <span>@{{ message }}</span>
-    </div> --}}
 
 @endsection
 
@@ -91,27 +93,6 @@
    </div>
     {!!Form::close()!!}
  </div>
-
-{{-- Modal for user inquiries --}}
-<div id="modal1" class="modal modal-fixed-footer">
-  <div id="message-modal-content" class="modal-content">
-    <div class="center"><h5>"Username" Message</h5></div>
-      <div class="center">Timestamp</div>
-      <div class="divider"></div>
-      <div class="row">
-      <div class="col s12">
-      <div id="message-panel" class="card-panel">
-        <span class="black-text">
-          Sample Text
-        </span>
-      </div>
-    </div>
-  </div>
-</div>
-  <div class="modal-footer">
-    <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat ">Resolve</a>
-  </div>
-</div>
 
 {{-- Modal for manage pages --}}
 <div id="edit-page-modal" class="modal modal-fixed-footer">

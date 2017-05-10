@@ -20,8 +20,6 @@
 
 @section('initScript')
     <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
-    <script type="text/javascript" src="/js/admin/users.js"></script>
-    <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
     <script type="text/javascript" src="/js/admin/pages.js"></script>
     <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
 @endsection

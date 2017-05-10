@@ -1,14 +1,18 @@
-@extends('layouts.adminLayout')
+@extends('layouts.controlLayout')
 
 @section('title')
-    | Admin
+    | Administrator Logs
 @endsection
 
 @section('pageId')
     id="admin-logs"
 @endsection
 
-@section('header')
+@section('nav-title')
+    Administrator Logs
+@endsection
+
+{{-- @section('header')
     <div class="row">
         <div class="col s5">
             <h4 id='admin-content-panel-header'>Administrator Logs</h4>
@@ -40,6 +44,35 @@
                     </div>
                 {!!Form::close()!!}
             </div>
+        </div>
+    </div>
+@endsection --}}
+
+@section('pageControl')
+    <div class="row">
+        <div class="col s12 m12 l12 xl12">
+            {!!Form::open(['route'=>'admin.search.logs', 'method'=>'GET', 'class'=>'search-user-form row valign-wrapper'])!!}
+                <div class="input-field col s12 m12 l12 xl12">
+                    <div class="col s12 m12 l6 xl6">
+                        <input id="search-input" type="text" name="search">
+                        <label for="search-input">Search</label>
+                    </div>
+                    <div class="col s12 m7 l4 xl4">
+                        <select multiple name="option[]">
+                            <option disabled selected>Choose category</option>
+                            <option value="Block" name="block">Block</option>
+                            <option value="Unblock" name="unblock">Unblock</option>
+                            <option value="Delete" name="delete">Delete</option>
+                            <option value="Create" name="create">Create</option>
+                            <option value="Accept" name="accept">Accept</option>
+                            <option value="Reject" name="reject">Reject</option>
+                        </select>
+                    </div>
+                    <div class="col s12 m3 l2 xl2">
+                        <button id="search-button" class="btn waves-effect waves-light" type="submit">Submit</button>
+                    </div>
+                </div>
+            {!!Form::close()!!}
         </div>
     </div>
 @endsection
@@ -76,14 +109,14 @@
             @endforelse
         </tbody>
       </table>
-      <div class="pagination center"> {{ $logs->links() }} </div>
+      <div class="pagination center"> {{ $logs->appends(Request::except('page'))->links() }} </div>
 
 @endsection
 
 @section('initScript')
     {{-- <script type="text/javascript" src="/js/admin/admin_custom.js"></script> --}}
-    <script type="text/javascript" src="/js/admin/users.js"></script>
+    {{-- <script type="text/javascript" src="/js/admin/users.js"></script>
     <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
     <script type="text/javascript" src="/js/admin/pages.js"></script>
-    <script type="text/javascript" src="/js/admin/managePages_script.js"></script>
+    <script type="text/javascript" src="/js/admin/managePages_script.js"></script> --}}
 @endsection

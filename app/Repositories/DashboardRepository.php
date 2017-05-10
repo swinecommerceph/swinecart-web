@@ -694,7 +694,7 @@ class DashboardRepository
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: You already paid for ' . $product->name . ' by ' . $product->breeder->users()->first()->name . '.',
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: You already paid for Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . '.',
                     'recepient' => $customer->mobile
                 ];
 
