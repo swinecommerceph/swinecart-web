@@ -138,8 +138,6 @@
                 success: function(response){
                     map.clear();
                     map.markerClusterer.clearMarkers();
-                    console.log(response);
-                    google.maps.event.trigger(map, 'resize');
                     var breeders = response['breeders'];
                     var customers = response['customers'];
                     for(var i=0; i<breeders.length; i++){

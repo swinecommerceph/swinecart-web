@@ -275,6 +275,7 @@ class SwineCartController extends Controller
                 $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
                 $itemDetail['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]);
                 $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+                $itemDetail['user_id'] = Breeder::find($product->breeder_id)->users()->first()->id;
                 $itemDetail['token'] = csrf_token();
                 array_push($items,$itemDetail);
             }
@@ -299,6 +300,7 @@ class SwineCartController extends Controller
                 $itemDetail['customer_id'] = $customer->id;
                 $itemDetail['breeder_id'] = $product->breeder_id;
                 $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+                $itemDetail['user_id'] = Breeder::find($product->breeder_id)->users()->first()->id;
                 $itemDetail['product_id'] = $item->product_id;
                 $itemDetail['product_province'] = FarmAddress::find($product->farm_from_id)->province;
                 $itemDetail['product_name'] = $product->name;
