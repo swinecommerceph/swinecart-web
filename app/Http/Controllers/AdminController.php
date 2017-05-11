@@ -2124,6 +2124,19 @@ class AdminController extends Controller
         return view('user.admin.viewUsers', compact('breeders', 'customers'));
     }
 
+    public function viewUsersChange(Request $request){
+        if($request->ajax()){
+
+
+            $breeders = ($request->breeders == 'true')? Breeder::all(): [];
+            $customers = ($request->customers == 'true')? Customer::all(): [];
+
+
+            return array('breeders'=>$breeders, 'customers'=>$customers);
+        }
+
+    }
+
     /*
      * View broadcast announcement page
      *
@@ -2202,7 +2215,7 @@ class AdminController extends Controller
 
 
     public function messenger(){
-        $users = User::all();
+        $users = User::whereIn('userable_type', array('App\Models\Customer', 'App\Models\Breeder'))->orderBy('name')->get();
         return view('user.admin.messenger', compact('users'));
     }
 
@@ -2236,6 +2249,16 @@ class AdminController extends Controller
                $message->to($rcpt['email'])->subject('Announcement from Swine E-Commerce PH');
             });
         }
+    }
+
+    public function receipients(Request $request){
+        $searchTerm = $request->term;
+        $rcpts = User::whereIn('userable_type', array('App\Models\Customer', 'App\Models\Breeder'))->where('name', 'LIKE', '%'.$searchTerm.'%')->limit(7)->get();
+        $arr = [];
+        foreach ($rcpts as $rcpt) {
+            $arr[] = $rcpt['name'];
+        }
+        echo json_encode($arr);
     }
 
     public function str_replace_first($from, $to, $subject){

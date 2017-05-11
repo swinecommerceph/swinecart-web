@@ -81,6 +81,7 @@
                     }, 
                     success: function(response){
                         map.clear();
+                        map.markerClusterer.clearMarkers();
                         var breeders = response;
                         //var breeder_i = 0;
                         for(var i=0; i<breeders.length; i++){
