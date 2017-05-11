@@ -2124,6 +2124,19 @@ class AdminController extends Controller
         return view('user.admin.viewUsers', compact('breeders', 'customers'));
     }
 
+    public function viewUsersChange(Request $request){
+        if($request->ajax()){
+
+
+            $breeders = ($request->breeders == 'true')? Breeder::all(): [];
+            $customers = ($request->customers == 'true')? Customer::all(): [];
+
+
+            return array('breeders'=>$breeders, 'customers'=>$customers);
+        }
+
+    }
+
     /*
      * View broadcast announcement page
      *

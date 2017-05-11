@@ -23,13 +23,24 @@
 
 @section('content')
 
-    <div class="progress geocoding" style="display:none;">
-      <div class="indeterminate"></div>
-    </div>
-    <div id="map-container">
-        <div id="map-canvas" style="height:85vh;"></div>
-    </div>
-   
+        <div class="progress geocoding" style="display:none;">
+          <div class="indeterminate"></div>
+        </div>
+        <div id="map-container">
+            <div id="map-canvas" style="height:85vh;"></div>
+        </div>
+        <br>
+        <form class="col s12 row" id="map-params" action="users" method="post">
+            <div class="col s6">
+              <input type="checkbox" class="filled-in cb-type" id="cb-breeders" name="breeders" {{ (isset($_POST['breeders']) || !isset($_POST['_token']))?'checked="checked"':''}}/>
+              <label for="cb-breeders">Breeders</label>
+            </div>
+            <div class="col s6">
+              <input type="checkbox" class="filled-in cb-type" id="cb-customers" name="customers" {{ (isset($_POST['customers']) || !isset($_POST['_token']))?'checked="checked"':''}}/>
+              <label for="cb-customers">Customers</label>
+            </div>
+            <input type="hidden" name="_token" value="{{ csrf_token() }}">
+        </form>
 @endsection
 
 @section('customScript')
@@ -39,24 +50,7 @@
     <script src="/js/Mapster.js"></script>
     <script src="/js/map-options.js"></script>
     <script type="text/javascript">
-        function testajax(url, params) {
-    var f = $("<form target='_blank' method='POST' style='display:none;'></form>").attr({
-        action: url
-    }).appendTo(document.body);
 
-    for (var i in params) {
-        if (params.hasOwnProperty(i)) {
-            $('<input type="hidden" />').attr({
-                name: i,
-                value: params[i]
-            }).appendTo(f);
-        }
-    }
-
-    f.submit();
-
-    f.remove();
-}
     </script>
     <script>
         var breeder_i, breeder_interval, breeder_arr;
@@ -74,8 +68,7 @@
 
             var loadingtimeout;
 
-
-            function geocode(opts){
+                    function geocode(opts){
                 clearTimeout(loadingtimeout);
                 $('.geocoding').show();
                 geocoder.geocode({
@@ -132,6 +125,43 @@
                     }
                 });
             }
+    
+        $('.cb-type').change(function(){
+            $.ajax({
+                type: "POST",
+                url: "users",
+                data:{
+                    _token: "{{{ csrf_token() }}}",
+                    customers: $('#cb-customers').is(':checked'),
+                    breeders: $('#cb-breeders').is(':checked'),
+                }, 
+                success: function(response){
+                    map.clear();
+                    map.markerClusterer.clearMarkers();
+                    console.log(response);
+                    google.maps.event.trigger(map, 'resize');
+                    var breeders = response['breeders'];
+                    var customers = response['customers'];
+                    for(var i=0; i<breeders.length; i++){
+                        geocode({
+                            address : breeders[i].officeAddress_province+', Philippines',
+                            content : breeders[i].name
+                        });
+                    }
+                    for(var i=0; i<customers.length; i++){
+                        geocode2({
+                            address : customers[i].address_province +', Philippines',
+                            content : customers[i].name
+                        });
+                    }
+                }
+            });
+            
+
+        });
+
+
+            
 
             @foreach($breeders as $breeder)
                 geocode({
