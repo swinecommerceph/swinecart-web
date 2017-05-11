@@ -23,7 +23,6 @@
 			},
 
 			clear : function(){
-
 				var size = this.markers.length
 				for(var i=0; i<size; i++){
 					this._removeMarker(this.markers[0]);
@@ -36,16 +35,12 @@
 
 				//add cristian's algorithm here
 
-
-				console.log(opts);
 				for (var i = 0; i < this.markers.length; i++) {
 					if(this.markers[i].lat == opts.lat && this.markers[i].lng == opts.lng){
 						opts.lat += 0.1;
 						opts.lng += 0.1;
-						console.log('here');
 					}
 				}
-				console.log(opts);
 
 				opts.position = {
 					lat : opts.lat,
