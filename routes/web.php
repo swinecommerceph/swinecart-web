@@ -257,7 +257,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('home/messenger', ['as' => 'admin.messenger', 'uses'=> 'AdminController@messenger']);
         Route::post('home/messenger/send', ['as' => 'admin.messenger.send', 'uses'=> 'AdminController@send']);
-        Route::get('home/messenger/receipients', ['as' => 'admin.messenger.receipients', 'uses'=> 'AdminController@receipients']);
+        Route::get('home/messenger/recipients', ['as' => 'admin.messenger.recipients', 'uses'=> 'AdminController@recipients']);
 
     });
 

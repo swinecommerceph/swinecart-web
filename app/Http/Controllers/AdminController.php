@@ -2221,7 +2221,7 @@ class AdminController extends Controller
 
     public function send(Request $request){
         if($request->ajax()){
-            $rcpts = User::whereIn('id', json_decode($_POST['receipients']))->get();
+            $rcpts = User::whereIn('id', json_decode($_POST['recipients']))->get();
             if($request->type == 'mail'){
                 $this->sendMail($request->message, $rcpts);
             }
@@ -2251,7 +2251,7 @@ class AdminController extends Controller
         }
     }
 
-    public function receipients(Request $request){
+    public function recipients(Request $request){
         $searchTerm = $request->term;
         $rcpts = User::whereIn('userable_type', array('App\Models\Customer', 'App\Models\Breeder'))->where('name', 'LIKE', '%'.$searchTerm.'%')->limit(7)->get();
         $arr = [];

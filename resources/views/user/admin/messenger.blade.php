@@ -29,7 +29,7 @@
         <label for="email" class="active to-label">To</label>
     </div>
     <div class="input-field col s2 valign-wrapper">
-        <a class="waves-effect waves-light btn modal-trigger valign receipients"><i class="material-icons">add</i></a>
+        <a class="waves-effect waves-light btn modal-trigger valign recipients"><i class="material-icons">add</i></a>
     </div>
     <!--div class="input-field col s12">
         <input autocomplete="off" id="subject" name="subject" type="text" class="validate">
@@ -65,14 +65,14 @@
       <div class="row">
         @foreach ($users as $user)
             <div class="col s12">
-              <input type="checkbox" class="filled-in receipient" id="userid-{{$user->id}}" username="{{$user->name}}" value="{{$user->id}}"/>
+              <input type="checkbox" class="filled-in recipient" id="userid-{{$user->id}}" username="{{$user->name}}" value="{{$user->id}}"/>
               <label for="userid-{{$user->id}}">{{$user->name}}</label>
             </div>
         @endforeach
       </div>
     </div>
     <div class="modal-footer">
-      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat add-receipients">Add Recepients</a>
+      <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat add-recipients">Add Recepients</a>
     </div>
   </div>
 
@@ -101,7 +101,7 @@
             minLength: 1,
             source: function( request, response ) {
                 // delegate back to autocomplete, but extract the last term
-                $.getJSON("messenger/receipients", { term : extractLast( request.term )},response);
+                $.getJSON("messenger/recipients", { term : extractLast( request.term )},response);
             },
             focus: function() {
                 // prevent value inserted on focus
@@ -186,15 +186,15 @@
     <script>
         $(document).ready(function(){
 
-            $('.receipients').click(function(){
+            $('.recipients').click(function(){
                 $('#modal1').modal('open');
             });
 
-            $('.add-receipients').click(function(){
+            $('.add-recipients').click(function(){
                 $('#email').val('');
                 $('.to-label').removeClass('active');
 
-                $( ".receipient" ).each(function( index ) {
+                $( ".recipient" ).each(function( index ) {
                    if($(this).is(':checked') || $(this).prop('checked')){
                         $('#email').val($('#email').val()+$(this).attr('username')+', ');
                    }
@@ -216,7 +216,7 @@
             function send(type){
                 $('#sending').show();
                 rcpts = [];
-                $( ".receipient" ).each(function( index ) {
+                $( ".recipient" ).each(function( index ) {
                    if($(this).is(':checked') || $(this).prop('checked')){
                         rcpts.push( parseInt( $(this).attr('value') ) );
                    }
@@ -228,7 +228,7 @@
                     data:{
                         type: type,
                         _token: "{{{ csrf_token() }}}",
-                        receipients: JSON.stringify(rcpts),
+                        recipients: JSON.stringify(rcpts),
                         message: $('#message').val(),
                     }, 
                     success: function(response){
