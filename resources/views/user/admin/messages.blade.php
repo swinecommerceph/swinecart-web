@@ -85,7 +85,7 @@
 
     						@foreach($messages as $message)
     							@if (($message->direction == 2 && $userType == 'Customer') || ($message->direction == 2 && $userType == 'Breeder'))
-    								<li class="message" :class="mine" style="clear:both">
+    								<li class="message mine" style="clear:both">
     									<div class="chat-bubble out">
     										<span class="who">
     											Me:
@@ -94,7 +94,7 @@
     									</div>
     								</li>
     							@else
-    								<li class="message" :class="user" style="clear:both">
+    								<li class="message user" style="clear:both">
     									<div class="chat-bubble in">
     										<span class="who">
     							    			{{ $message->sender() }}:
