@@ -12,6 +12,7 @@ use Illuminate\Support\Facades\Redirect;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Mail;
 
+
 use App\Http\Requests;
 use App\Http\Controllers\Controller;
 use App\Models\Breeder;
@@ -169,7 +170,7 @@ class AdminController extends Controller
     }
 
     /**
-     * Show Home Page of breeder
+     * Show Home Page of admin
      *
      * @param  Request $request
      * @return View
@@ -195,8 +196,14 @@ class AdminController extends Controller
         return view(('user.admin.homeDashboard'), compact('summary'));
     }
 
-    public function getbreederStatus(){
-        $breeders = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->whereNull('deleted_at')->paginate(8);
+    /**
+     * Show Breeder Status Page
+     *
+     * @param  none
+     * @return View
+     */
+    public function getBreederStatus(){
+        $breeders = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->whereNull('deleted_at')->orderBy('breeder_user.latest_accreditation', 'asc')->paginate(8);
         $reviews = DB::table('reviews')->groupBy('breeder_id')->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->get();
         foreach ($breeders as $breeder) {
             $breeder->delivery = 0;
@@ -219,11 +226,52 @@ class AdminController extends Controller
         return view('user.admin.breederStatus', compact('breeders'));
     }
 
+    public function searchBreederStatus(Request $request){
+        $breeders = User::where('userable_type', 'App\Models\Breeder')
+                    ->where('name','LIKE', "%$request->search%")
+                    ->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')
+                    ->whereNull('deleted_at')
+                    ->orderBy('breeder_user.latest_accreditation', 'asc')
+                    ->paginate(8);
+        $reviews = DB::table('reviews')->groupBy('breeder_id')->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->get();
+        foreach ($breeders as $breeder) {
+            $breeder->delivery = 0;
+            $breeder->transaction = 0;
+            $breeder->quality = 0;
+            $breeder->overall = 0;
+            $breeder->review_count = 0;
+            foreach ($reviews as $review) {
+                if($breeder->userable_id == $review->breeder_id){
+                    $breeder->delivery = $review->delivery;
+                    $breeder->transaction = $review->transaction;
+                    $breeder->quality = $review->quality;
+                    $breeder->overall = round(($review->delivery + $review->transaction + $review->quality)/3, 2);
+                    $breeder->review_count = $review->count;;
+                }
+            }
+
+        }
+
+        return view('user.admin.breederStatus', compact('breeders'));
+    }
+
+    /**
+     * Show page for editing breeder status
+     *
+     * @param breeder_id
+     * @return View
+     */
     public function editAccreditation($breederid=null){
         $breeder = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->where('userable_id','=', $breederid)->select('name','userable_id', 'users.id')->first();
         return view('user.admin.editAccreditation', compact('breeder'));
     }
 
+    /**
+     * Submit the change for breeder status
+     *
+     * @param Request request
+     * @return redirect
+     */
     public function editAccreditationAction(Request $request){
         $accreditationDate = Carbon::parse($request->accreditdate)->toDateString();
         $notificationDate = Carbon::parse($request->notifdate)->toDateString();
@@ -2364,5 +2412,25 @@ class AdminController extends Controller
         $response = curl_exec($curl_handler);
         $info = curl_getinfo($curl_handler, CURLINFO_HTTP_CODE);
         curl_close($curl_handler);
+    }
+
+    /*
+     * Activate maintenance mode for application in click of button
+     *
+     * @param request
+     * @return none
+     *
+     */
+    public function activateMaintenanceMode(Request $request){
+        if(\App::isDownForMaintenance()){
+            \Artisan::call('up');
+            $request->session()->flash('alert-maintenance-off', 'Maintenance Mode Turned Off');
+            return Redirect::back()->with('message','Application in Maintenence Mode');
+        }else{
+            \Artisan::call('down');
+            $request->session()->flash('alert-maintenance-on', 'Maintenance Mode Turned On');
+            return Redirect::back()->with('message','Application in Maintenence Mode');
+        }
+
     }
 }

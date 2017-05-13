@@ -18,6 +18,7 @@
           <li><a href="#adduser">Add User</a></li>
           <li><a href="{{route('admin.breeder.messages')}}">Messages</a></li>
           <li><a href="{{ route('admin_logs') }}">Admin Logs</a></li>
+          <li><a href="{{ route('maintenance_mode') }}">Maintenance Mode</a></li>
           <li><a href="{{ url('logout') }}">Log Out</a></li>
         </ul>
 
@@ -37,6 +38,7 @@
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="#adduser" data-position="bottom" data-delay="40" data-tooltip="Add User"><i class="material-icons">perm_identity</i></a></li>
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="{{route('admin.breeder.messages')}}" data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">message</i></a></li>
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ route('admin_logs') }}" data-position="bottom" data-delay="40" data-tooltip="Administrator Logs"><i class="material-icons">book</i></a></li>
+                        <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ route('maintenance_mode') }}" data-position="bottom" data-delay="40" data-tooltip="Maintenance Mode"><i class="material-icons">settings</i></a></li>
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ url('logout') }}" data-position="bottom" data-delay="40" data-tooltip="Log Out"><i class="material-icons">power_settings_new</i></a></li>
                     </ul>
                 </div>
@@ -192,6 +194,14 @@
         @if(Session::has('alert-create'))
             <script type="text/javascript">
                  Materialize.toast('User Successfully Created', 4000)
+            </script>
+        @elseif(Session::has('alert-maintenance-off'))
+            <script type="text/javascript">
+                 Materialize.toast('Maintenance Mode Turned Off', 4000)
+            </script>
+        @elseif(Session::has('alert-maintenance-on'))
+            <script type="text/javascript">
+                 Materialize.toast('Maintenance Mode Turned On' , 4000)
             </script>
         @endif
     </body>

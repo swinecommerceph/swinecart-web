@@ -165,7 +165,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('form/register', ['as'=>'admin.register.submit', 'uses'=>'AdminController@submitRegistrationForms']);
         Route::get('home/logs', ['as'=>'admin_logs', 'uses'=>'AdminController@getAdministratorLogs']);
         Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
-        Route::get('home/breeder_status', ['as' => 'admin.breederstatus', 'uses' => 'AdminController@getbreederStatus']);
+        Route::get('home/breeder_status', ['as' => 'admin.breederstatus', 'uses' => 'AdminController@getBreederStatus']);
+        Route::post('home/breeder_status/search', ['as' => 'admin.searchbreederstatus', 'uses' => 'AdminController@searchBreederStatus']);
+
         Route::get('home/edit_accreditation/{breeder}', ['as' => 'admin.editaccreditation', 'uses' => 'AdminController@editAccreditation']);
         Route::post('home/edit_accreditation_action', ['as' => 'admin.editaccreditationaction', 'uses' => 'AdminController@editAccreditationAction']);
 
@@ -261,6 +263,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/messenger', ['as' => 'users', 'uses'=> 'AdminController@messenger']);
         Route::post('home/messenger/send', ['as' => 'users', 'uses'=> 'AdminController@send']);
 
+        Route::get('maintenance_mode', ['as' => 'maintenance_mode', 'uses'=> 'AdminController@activateMaintenanceMode']);
     });
 
     Route::group(['prefix'=>'spectator'], function(){

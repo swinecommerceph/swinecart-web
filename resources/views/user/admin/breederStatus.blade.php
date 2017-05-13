@@ -13,7 +13,33 @@
 @endsection
 
 @section('pageControl')
+    <div class="row valign-wrapper">
+        <div class="col s12 m12 l12 xl12 valign">
+            {!!Form::open(['route'=>'admin.searchbreederstatus', 'method'=>'POST'])!!}
+                <div class="row">
+                    <div class="input-field col s12 l12 m12 xl12">
+                        <input id="search-input" type="text" name="search">
+                        <label for="search-input">Search</label>
+                    </div>
+                </div>
+                {{-- <div class="row">
+                    <label for="quantity">Quantity</label>
+                    <div class="col input-field" id="quantity">
+                        <input type="radio" name="quantity" value="desc" id="quantitydesc" />
+                        <label for="quantitydesc">DESC</label>
+                        <input type="radio" name="quantity" value="asc" id="quantityasc" />
+                        <label for="quantityasc">ASC</label>
+                    </div>
 
+                </div> --}}
+                <div class="row center">
+                    <button class="btn waves-effect waves-light" type="submit" name="action">Search
+                        <i class="material-icons right">send</i>
+                    </button>
+                </div>
+            {!!Form::close()!!}
+        </div>
+    </div>
 @endsection
 
 @section('content')
