@@ -252,10 +252,12 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('broadcast/send', ['as'=>'admin.broadcast.send','uses'=>'AdminController@sendBroadcastMessage']);
 
         Route::get('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsers']);
+        Route::post('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsersChange']);
         Route::get('admin_info',['as'=>'admin_info', 'uses'=>'AdminController@getAdminInformation']);
 
-        Route::get('home/messenger', ['as' => 'users', 'uses'=> 'AdminController@messenger']);
-        Route::post('home/messenger/send', ['as' => 'users', 'uses'=> 'AdminController@send']);
+        Route::get('home/messenger', ['as' => 'admin.messenger', 'uses'=> 'AdminController@messenger']);
+        Route::post('home/messenger/send', ['as' => 'admin.messenger.send', 'uses'=> 'AdminController@send']);
+        Route::get('home/messenger/recipients', ['as' => 'admin.messenger.recipients', 'uses'=> 'AdminController@recipients']);
 
     });
 

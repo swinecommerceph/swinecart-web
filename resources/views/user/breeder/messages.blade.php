@@ -137,8 +137,6 @@
 @endsection
 
 @section('customScript')
-    <!-- Latest Vue JS CDN -->
-<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/1.0.16/vue.min.js"></script>
 <script>
 $(document).ready(function(){
 	$('.message').show(0);

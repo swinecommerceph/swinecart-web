@@ -1,4 +1,6 @@
 $(document).ready(function(){
+
+	
 	var vue = new Vue({
 		el: '#chat',
 		data : {
@@ -8,8 +10,10 @@ $(document).ready(function(){
 			port: chatport,
 			uri: url,
 			conn: false,
+			user: "",
+			mine: "",
 		},
-		ready : function(){
+		mounted : function(){
 			// default port
 			this.port = this.port.length == 0 ? '9090' : this.port;
 
@@ -157,4 +161,6 @@ $(document).ready(function(){
 			}
 		}
 	});
+
+
 });
