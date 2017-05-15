@@ -44,6 +44,7 @@ var messages = new Vue({
 var notifications = new Vue({
     el: '#notification-main-container',
     data:{
+        topic: window.pubsubTopic,
         token: '',
         notifications: [],
         notificationCount: 0
@@ -120,5 +121,36 @@ var notifications = new Vue({
     created: function(){
         // Get notifications count
         this.getNotificationCount();
+    },
+    mounted: function(){
+        var self = this;
+
+        var onConnectCallback = function(session){
+            
+            session.subscribe(self.topic, function(topic, data) {
+                // Update notificationCount and prompt a toast
+                data = JSON.parse(data);
+                if(data.type === 'notification'){
+                    self.notificationCount++;
+                    Materialize.toast('You have a notification.', 4000);
+                }
+            });
+        };
+
+        var onHangupCallback = function(code, reason, detail){
+            console.warn('WebSocket connection closed');
+            console.warn(code+': '+reason);
+        };
+
+        var conn = new ab.connect(
+            config.pubsubWSServer,
+            onConnectCallback,
+            onHangupCallback,
+            {
+                'maxRetries': 30,
+                'retryDelay': 2000,
+                'skipSubprotocolCheck': true
+            }
+        );
     }
 });

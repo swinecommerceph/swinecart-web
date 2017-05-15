@@ -14,7 +14,7 @@ $(document).ready(function(){
 			this.port = this.port.length == 0 ? '9090' : this.port;
 
 			// init connection
-			this.conn = new WebSocket('ws://'+this.uri+':'+this.port);
+			this.conn = new WebSocket('ws://'+this.uri+'/chat');
 			var me = this;
 
 			this.conn.onclose = function (event) {

@@ -272,7 +272,7 @@
         };
 
         var conn = new ab.connect(
-            config.breederWSServer,
+            config.pubsubWSServer,
             onConnectCallback,
             onHangupCallback,
             {

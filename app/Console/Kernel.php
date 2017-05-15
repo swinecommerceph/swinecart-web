@@ -2,15 +2,8 @@
 
 namespace App\Console;
 
-use App\Models\Product;
-use App\Models\User;
-
 use Illuminate\Console\Scheduling\Schedule;
-use App\Console\Commands\WSBreederDashboardServer;
-use App\Console\Commands\BreederAccreditationNotification;
-use App\Console\Commands\ProductNotification;
 use Illuminate\Foundation\Console\Kernel as ConsoleKernel;
-use App\Mail\SwineCartProductNotification;
 
 use DB;
 
@@ -24,7 +17,7 @@ class Kernel extends ConsoleKernel
      * @var array
      */
     protected $commands = [
-        \App\Console\Commands\WSBreederDashboardServer::class,
+        \App\Console\Commands\WSPubSubServer::class,
         \App\Console\Commands\WSChatServer::class,
         \App\Console\Commands\BreederAccreditationNotification::class,
         \App\Console\Commands\ProductNotification::class
