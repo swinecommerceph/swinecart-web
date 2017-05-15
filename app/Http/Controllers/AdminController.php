@@ -161,7 +161,8 @@ class AdminController extends Controller
     }
 
     public function topBreeders(){
-        $reviews = DB::table('reviews')->groupBy('breeder_id')->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->orderBy('count','desc')->take(5)->get();
+        $now = Carbon::now();
+        $reviews = DB::table('reviews')->groupBy('breeder_id')->whereMonth('created_at',$now->month)->whereYear('created_at', $now->year)->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->orderBy('count','desc')->take(5)->get();
         foreach ($reviews as $review) {
             $review->overall = round(($review->delivery + $review->transaction + $review->quality)/3, 2);
             $review->breeder_name = User::where('userable_type','App\Models\Breeder')->where('userable_id', $review->breeder_id)->first()->name;

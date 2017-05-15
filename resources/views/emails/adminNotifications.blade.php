@@ -29,6 +29,7 @@
             @if ($type == 0)
                 <p>Dear {{$user->name}},</p>
                 <p>Your account <em><strong>{{$user->email}}</em></strong> has been <strong>blocked</strong>.</p>
+                <p>Reason: <em><strong>{{$user->block_reason}}</strong></em>.</p>
                 <p>Please contact the site adminitstrator for more details and how to resolve this <em><strong>swinecommerceph@gmail.com</strong></em>.</p>
             @elseif ($type == 1)
                 <p>Dear {{$user->name}},</p>
@@ -36,6 +37,7 @@
             @elseif ($type == 2)
                 <p>Dear {{$user->name}},</p>
                 <p>Your account <em><strong>{{$user->email}}</em></strong> has been <strong>deleted</strong>.</p>
+                <p>Reason: <em><strong>{{$user->delete_reason}}</strong></em>.</p>
                 <p>Please contact the site adminitstrator for more details at <em><strong>swinecommerceph@gmail.com</strong></em>.</p>
             @elseif ($type == 3)
                 <p>Dear {{$user->name}},</p>

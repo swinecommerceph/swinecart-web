@@ -58,6 +58,8 @@ class SpectatorController extends Controller
         $month = $date->month;
         $year = $date->year;
 
+        if(\App::isDownForMaintenance()) return view('errors.503_home');
+
         $totalusers = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
                                    ->join('roles', 'role_user.role_id','=','roles.id')
                                    ->whereIn('role_id', [2, 3])

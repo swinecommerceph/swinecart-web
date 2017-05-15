@@ -34,7 +34,7 @@
                 </div> --}}
                 <div class="row center">
                     <button class="btn waves-effect waves-light" type="submit" name="action">Search
-                        <i class="material-icons right">send</i>
+                        <i class="material-icons right">search</i>
                     </button>
                 </div>
             {!!Form::close()!!}

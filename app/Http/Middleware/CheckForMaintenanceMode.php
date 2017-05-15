@@ -18,12 +18,7 @@ class CheckForMaintenanceMode
 
     protected function shouldPassThrough($request)
     {
-
-        $except = ['/', 'login', 'home', 'logout',
-                    'admin/home', 'admin/',
-                    ];
-                    
-        if(preg_match('/\b^admin\/*|^login|^\/|^logout|^home\b\m+/', $request->path()) == 0){
+        if(preg_match('/\b^admin\/*|^login|^\/|^logout|^home|^customer\/home|^breeder\/home|^spectator\/home\b\m+/', $request->path()) == 0){
             return true;
         }else{
             return false;

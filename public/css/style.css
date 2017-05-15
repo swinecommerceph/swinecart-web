@@ -507,6 +507,16 @@ input#search{
 	height: 220px;
 }
 
+#reject-modal{
+	width: 500px;
+	height: 220px;
+}
+
+#accept-modal{
+	width: 500px;
+	height: 220px;
+}
+
 .card-summary{
 	height: 280px;
 }

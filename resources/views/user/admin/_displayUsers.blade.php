@@ -110,8 +110,8 @@
                               <label for="{{$violation->form_id}}">{{$violation->description}}</label><br>
                             @endif
                         @endforeach
-                        <input type="radio" name="reason" value="others" id="others" />
-                        <label for="others">Others</label>
+                        <input type="radio" name="reason" value="others" id="others-delete" />
+                        <label for="others-delete">Others</label>
                      </div>
                 </div>
                 <a href="#!" id="cancel-delete" class=" modal-action modal-close waves-effect waves-red btn-flat">Cancel</a>
@@ -140,8 +140,8 @@
                             <label for="{{$violation->form_id}}">{{$violation->description}}</label><br>
                           @endif
                       @endforeach
-                      <input type="radio" name="reason" value="others" id="others" />
-                      <label for="others">Others</label>
+                      <input type="radio" name="reason" value="others" id="others-block" />
+                      <label for="others-block">Others</label>
                    </div>
               </div>
 

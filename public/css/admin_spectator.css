@@ -130,6 +130,7 @@ ul .side-nav-user-image{
 
 #admin-dashboard-topbreeder-card{
 	background-color: #9250B3;
+    min-height: 425px;
 }
 
 #admin-dashboard-statistics-icon{
