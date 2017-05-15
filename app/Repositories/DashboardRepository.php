@@ -99,7 +99,7 @@ class DashboardRepository
 
                 // Update product
                 $product->status = "displayed";
-                $product->quantity = ($product->type == 'semen') ? -1 : 0;
+                $product->quantity = ($product->type == 'semen') ? -1 : 1;
                 $product->save();
 
                 $transactionDetails = [
@@ -130,6 +130,12 @@ class DashboardRepository
                 // Notify Customer of the product reservation expiration
                 $customerUser = $swineCartItem->customer->users()->first();
                 $customerUser->notify(new ProductReservationExpired($notificationDetails));
+                $this->sendToPubSubServer('notification', $customerUser->email);
+                $this->sendToPubSubServer('sc-reservationExpiration', $customerUser->email,
+                    [
+                        'item_id' => $transactionDetails['swineCart_id']
+                    ]
+                );
 
                 // Delete reservation
                 $reservation->delete();
@@ -549,6 +555,14 @@ class DashboardRepository
                     // Notify reserved customer
                     $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
                     $reservedCustomerUser->notify(new ProductReserved($notificationDetailsReserved));
+                    $this->sendToPubSubServer('notification', $reservedCustomerUser->email);
+                    $this->sendToPubSubServer('sc-reserved', $reservedCustomerUser->email,
+                        [
+                            'item_id' => $transactionDetails['swineCart_id'],
+                            'reserved' => $transactionDetails['created_at']->date,
+                            'expiration_date' => $reservation->expiration_date->toDateTimeString(),
+                        ]
+                    );
 
                     // If product type is not semen remove other requests to this product
                     $productRequests = SwineCartItem::where('product_id', $product->id)->where('customer_id', '<>', $request->customer_id)->where('reservation_id',0);
@@ -585,6 +599,12 @@ class DashboardRepository
                             dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
 
                             $customerUser->notify(new ProductReservedToOtherCustomer($notificationDetailsOther));
+                            $this->sendToPubSubServer('notification', $customerUser->email);
+                            $this->sendToPubSubServer('sc-reservedToOthers', $customerUser->email,
+                                [
+                                    'item_id' => $transactionDetailsOther['swineCart_id']
+                                ]
+                            );
                         }
 
                         // Delete requests to this product after notifying Customer users
@@ -623,7 +643,8 @@ class DashboardRepository
                         $reservation->expiration_date,
                         $transactionDetails['created_at']
                     ];
-                }
+
+                } // End of if product is available for reservation
                 else {
                     return ['fail', 'Product ' . $product->name.' is already reserved to another customer'];
                 }
@@ -664,6 +685,13 @@ class DashboardRepository
                 // Notify customer
                 $reservedCustomerUser = $customer->users()->first();
                 $reservedCustomerUser->notify(new ProductReservationUpdate($notificationDetails));
+                $this->sendToPubSubServer('notification', $reservedCustomerUser->email);
+                $this->sendToPubSubServer('sc-onDelivery', $reservedCustomerUser->email,
+                    [
+                        'item_id' => $transactionDetails['swineCart_id'],
+                        'on_delivery' => $transactionDetails['created_at']->date
+                    ]
+                );
 
                 return [
                     "OK",
@@ -706,6 +734,13 @@ class DashboardRepository
                 // Notify customer
                 $reservedCustomerUser = $customer->users()->first();
                 $reservedCustomerUser->notify(new ProductReservationUpdate($notificationDetails));
+                $this->sendToPubSubServer('notification', $reservedCustomerUser->email);
+                $this->sendToPubSubServer('sc-paid', $reservedCustomerUser->email,
+                    [
+                        'item_id' => $transactionDetails['swineCart_id'],
+                        'paid' => $transactionDetails['created_at']->date
+                    ]
+                );
 
                 return [
                     "OK",
@@ -747,6 +782,13 @@ class DashboardRepository
                 // Notify reserved customer
                 $reservedCustomerUser = $customer->users()->first();
                 $reservedCustomerUser->notify(new ProductReservationUpdate($notificationDetails));
+                $this->sendToPubSubServer('notification', $reservedCustomerUser->email);
+                $this->sendToPubSubServer('sc-sold', $reservedCustomerUser->email,
+                    [
+                        'item_id' => $transactionDetails['swineCart_id'],
+                        'sold' => $transactionDetails['created_at']->date
+                    ]
+                );
 
                 return [
                     "OK",

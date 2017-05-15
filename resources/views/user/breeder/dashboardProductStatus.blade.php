@@ -5,7 +5,7 @@
 @extends('user.breeder.home')
 
 @section('title')
-    | Breeder - Product Status
+    | Breeder - Product Inventory & Status
 @endsection
 
 @section('pageId')
@@ -13,13 +13,13 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Product Status
+    Product Inventory & Status
 @endsection
 
 @section('breadcrumb')
     <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
     <a href="{{ route('dashboard') }}" class="breadcrumb">Dashboard</a>
-    <a href="#!" class="breadcrumb">Product Status</a>
+    <a href="#!" class="breadcrumb">Product Inventory & Status</a>
 @endsection
 
 @section('content')

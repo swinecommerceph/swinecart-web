@@ -24,12 +24,12 @@
 	<link href="/css/icon.css" rel="stylesheet" type="text/css">
 	<link href="/css/style.css" rel="stylesheet" type="text/css">
 	<link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
-	<link href="/js/vendor/DataTables/datatables.min.css" rel="stylesheet">
 
 	<!-- If you'd like to support IE8 -->
   	{{-- <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> --}}
 
-	<script src="/js/vendor/VideoJS/ie8/videojs-ie8.min.js"></script>
+	{{-- <script src="/js/vendor/VideoJS/ie8/videojs-ie8.min.js"></script> --}}
+	@yield('pubsubTopic')
 </head>
 
 <body @yield('pageId')>

@@ -583,6 +583,7 @@ Vue.component('transaction-history',{
 var vm = new Vue({
     el:'#swine-cart-container',
     data: {
+        topic: window.pubsubTopic,
         products: rawProducts,
         history: [],
         productInfoModal:{
@@ -614,6 +615,13 @@ var vm = new Vue({
         }
     },
     methods: {
+        searchProduct : function(swineCart_id){
+            // Return index of productId to find
+            for(var i = 0; i < this.products.length; i++) {
+                if(this.products[i].item_id === swineCart_id) return i;
+            }
+        },
+
         subtractProductQuantity: function(index){
             // Listener to 'subtract-quantity' from order-details component
             if(this.products[index].request_quantity > 2) this.products[index].request_quantity -= 2;
@@ -674,5 +682,88 @@ var vm = new Vue({
             var roundedTempNumber = Math.round(tempNumber);
             return roundedTempNumber / factor;
         }
+    },
+    mounted: function(){
+
+        var self = this;
+
+        var onConnectCallback = function(session){
+            
+            session.subscribe(self.topic, function(topic, data) {
+                // Update products
+                data = JSON.parse(data);
+                switch(data.type) {
+                    case 'sc-reserved':
+                        var index = self.searchProduct(data.item_id);
+
+                        self.products[index].status = 'reserved';
+                        self.products[index].status_transactions.reserved = data.reserved;
+                        self.products[index].expiration_date = data.expiration_date;
+
+                        break;
+                    case 'sc-onDelivery':
+                        var index = self.searchProduct(data.item_id);
+
+                        self.products[index].status = 'on_delivery';
+                        self.products[index].status_transactions.on_delivery = data.on_delivery;
+                        self.products[index].expiration_date = '';
+
+                        break;
+                    case 'sc-paid':
+                        var index = self.searchProduct(data.item_id);
+
+                        self.products[index].status = 'paid';
+                        self.products[index].status_transactions.paid = data.paid;
+                        self.products[index].expiration_date = '';
+
+                        break;
+                    case 'sc-sold':
+                        var index = self.searchProduct(data.item_id);
+
+                        self.products[index].status = 'sold';
+                        self.products[index].status_transactions.sold = data.sold;
+
+                        break;
+                    case 'sc-reservationExpiration':
+                        var index = self.searchProduct(data.item_id);
+
+                        self.products.splice(index,1);
+                        Materialize.toast('Product is already expired', 4000);
+
+                        break;
+                    case 'sc-reservedToOthers':
+                        var index = self.searchProduct(data.item_id);
+
+                        self.products.splice(index,1);
+                        Materialize.toast('Product is already reserved to others', 4000);
+
+                        break;
+                    default:
+                        break;
+
+                }
+
+                // Update some DOM elements
+                self.$nextTick(function(){
+                    $('.tooltipped').tooltip({delay:50});
+                });
+            });
+        };
+
+        var onHangupCallback = function(code, reason, detail){
+            console.warn('WebSocket connection closed');
+            console.warn(code+': '+reason);
+        };
+
+        var conn = new ab.connect(
+            config.pubsubWSServer,
+            onConnectCallback,
+            onHangupCallback,
+            {
+                'maxRetries': 30,
+                'retryDelay': 2000,
+                'skipSubprotocolCheck': true
+            }
+        );
     }
 });

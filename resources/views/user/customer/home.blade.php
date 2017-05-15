@@ -8,6 +8,12 @@
     | Customer
 @endsection
 
+@section('pubsubTopic')
+    <script type="text/javascript">
+        window.pubsubTopic = '{{ crypt(Auth::user()->email, md5(Auth::user()->email)) }}';
+    </script>
+@endsection
+
 @section('pageId')
     id="page-customer-home"
 @endsection
@@ -245,6 +251,7 @@
     <script src="/js/vendor/VueJS/vue.js"></script>
     <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
     <script src="/js/vendor/moment.min.js"></script>
+    <script src="/js/vendor/autobahn.min.js"></script>
     <script src="/js/customer/swinecart.js"> </script>
     <script src="/js/customer/customer_custom.js"> </script>
 @endsection

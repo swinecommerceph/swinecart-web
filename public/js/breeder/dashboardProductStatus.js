@@ -467,11 +467,19 @@ Vue.component('status-table',{
 var vm = new Vue({
     el: '#product-status-container',
     data:{
+        topic: window.pubsubTopic,
         searchQuery: '',
         statusFilter: '',
         products: rawProducts,
     },
     methods:{
+        searchProduct : function(swineCart_id){
+            // Return index of productId to find
+            for(var i = 0; i < this.products.length; i++) {
+                if(this.products[i].id === swineCart_id) return i;
+            }
+        },
+
         statusChange: function(value){
             this.statusFilter = value;
         },
@@ -565,5 +573,45 @@ var vm = new Vue({
             var status = location.search.slice(1).split('=');
             this.statusFilter = status[1];
         }
+    },
+    mounted: function(){
+        var self = this;
+
+        var onConnectCallback = function(session){
+
+            session.subscribe(self.topic, function(topic, data) {
+                // Update notificationCount and prompt a toast
+                data = JSON.parse(data);
+                if(data.type === 'db-productRequest'){
+                    var index = self.searchProduct(data.body.id);
+
+                    // Add another entry in the table if no current entry yet for the product
+                    if(self.products[index] === undefined || self.products[index].status !== 'requested'){
+                        self.products.unshift(data.body);
+                    }
+                }
+
+                // Update some DOM elements
+                self.$nextTick(function(){
+                    $('.tooltipped').tooltip({delay:50});
+                });
+            });
+        };
+
+        var onHangupCallback = function(code, reason, detail){
+            console.warn('WebSocket connection closed');
+            console.warn(code+': '+reason);
+        };
+
+        var conn = new ab.connect(
+            config.pubsubWSServer,
+            onConnectCallback,
+            onHangupCallback,
+            {
+                'maxRetries': 30,
+                'retryDelay': 2000,
+                'skipSubprotocolCheck': true
+            }
+        );
     }
 });

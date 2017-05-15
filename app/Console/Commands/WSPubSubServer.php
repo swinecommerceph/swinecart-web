@@ -13,21 +13,21 @@ use Ratchet\WebSocket\WsServer;
 use Ratchet\Wamp\WampServer;
 use App\Models\Pusher;
 
-class WSBreederDashboardServer extends Command
+class WSPubSubServer extends Command
 {
     /**
      * The name and signature of the console command.
      *
      * @var string
      */
-    protected $signature = 'breeder:serve';
+    protected $signature = 'pubsub:serve';
 
     /**
      * The console command description.
      *
      * @var string
      */
-    protected $description = 'Start websocket server for Breeder Dashboard real-time functionalities';
+    protected $description = 'Start publish-subscribe websocket server for Product status real-time changes';
 
     /**
      * Create a new command instance.
@@ -48,18 +48,21 @@ class WSBreederDashboardServer extends Command
     {
         $loop   = Factory::create();
 	    $pusher = new Pusher;
+        $zmqHost = env('ZMQ_HOST', 'localhost');
+        $zmqPort = env('ZMQ_PORT', '5555');
+        $pubsubServerPort = env('PUBSUBSERVER_HOST', '8080');
 
 	    // Listen for the web server to make a ZeroMQ push after an ajax request
 	    $context = new Context($loop);
 	    $pull = $context->getSocket(\ZMQ::SOCKET_PULL);
-	    $pull->bind('tcp://127.0.0.1:5555'); // Binding to 127.0.0.1 means the only client that can connect is itself
-	    $pull->on('message', array($pusher, 'onProductUpdate'));
+	    $pull->bind("tcp://" . $zmqHost . ":" . $zmqPort);
+	    $pull->on('message', array($pusher, 'onDatabaseChange'));
 
-		$this->info("Starting websocket server for breeder dashboard on port 8080");
+		$this->info("Starting publish-subscribe websocket server on port 8080");
 
 	    // Set up our WebSocket server for clients wanting real-time updates
 	    $webSock = new Server($loop);
-	    $webSock->listen(8080, '0.0.0.0'); // Binding to 0.0.0.0 means remotes can connect
+	    $webSock->listen($pubsubServerPort, '0.0.0.0'); // Binding to 0.0.0.0 means remotes can connect
 	    $webServer = new IoServer(
 	        new HttpServer(
 	            new WsServer(
