@@ -38,7 +38,12 @@
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="#adduser" data-position="bottom" data-delay="40" data-tooltip="Add User"><i class="material-icons">perm_identity</i></a></li>
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="{{route('admin.breeder.messages')}}" data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">message</i></a></li>
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ route('admin_logs') }}" data-position="bottom" data-delay="40" data-tooltip="Administrator Logs"><i class="material-icons">book</i></a></li>
-                        <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ route('maintenance_mode') }}" data-position="bottom" data-delay="40" data-tooltip="Maintenance Mode"><i class="material-icons">settings</i></a></li>
+                        @if (\App::isDownForMaintenance())
+                            <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ route('maintenance_mode') }}" data-position="bottom" data-delay="40" data-tooltip="Maintenance Mode"><i class="material-icons red-text">settings</i></a></li>
+                        @else
+                            <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ route('maintenance_mode') }}" data-position="bottom" data-delay="40" data-tooltip="Maintenance Mode"><i class="material-icons">settings</i></a></li>
+                        @endif
+
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ url('logout') }}" data-position="bottom" data-delay="40" data-tooltip="Log Out"><i class="material-icons">power_settings_new</i></a></li>
                     </ul>
                 </div>

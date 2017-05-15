@@ -363,7 +363,11 @@ class AdminController extends Controller
         $adminID = Auth::user()->id;
         $adminName = Auth::user()->name;
         $user = User::find($request->id);           // find the user
-        $user->delete_reason = $request->reason;
+        if($request->reason == "Others"){
+            $user->delete_reason = $request->reason." : ".$request->others_reason;
+        }else{
+            $user->delete_reason = $request->reason;
+        }
         $user->save();
         $user->delete();                                // delete it in the database
         // create a AdministratorLog entry for the action done
@@ -526,7 +530,11 @@ class AdminController extends Controller
             $user->blocked_at = Carbon::now();     // change the status for is_blocked column
             $notificationType = 0;
             $user->block_frequency = $user->block_frequency+1;
-            $user->block_reason = $request->reason;
+            if($request->reason == "Others"){
+                $user->block_reason = $request->reason." : ".$request->others_reason;
+            }else{
+                $user->block_reason = $request->reason;
+            }
         }
         $user->save();                              // save the change to the database
         // create a log entry for the action done
