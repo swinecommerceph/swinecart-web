@@ -52,7 +52,7 @@ Vue.component('custom-date-to-select', {
 });
 
 var vm = new Vue({
-    el: '#charts-container',
+    el: '#card-status',
     data: {
         barChartData: '',
         barChart: '',
@@ -61,8 +61,10 @@ var vm = new Vue({
         dateToInput: '',
         dateFromObject: {},
         dateToObject: {},
+        dashboardStats: {},
         latestAccreditation: '',
-        serverDateNow: ''
+        serverDateNow: '',
+        pubsubTopic: window.pubsubTopic
     },
     methods: {
         valueChange: function(){
@@ -194,8 +196,10 @@ var vm = new Vue({
         this.barChartData = rawBarChartData;
         this.latestAccreditation = rawLatestAccreditation;
         this.serverDateNow = rawServerDateNow;
+        this.dashboardStats = rawDashboardStats;
     },
     mounted: function(){
+        var self = this;
 
         // Declaring global defaults
         Chart.defaults.global.defaultFontFamily = 'Poppins';
@@ -234,5 +238,31 @@ var vm = new Vue({
         // Store Date Picker object to root component
         this.dateFromObject = $('#date-from').pickadate('picker');
         this.dateToObject = $('#date-to').pickadate('picker');
+
+        // Set-up configuration and subscribe to a topic in the pubsub server
+        var onConnectCallback = function(session){
+            console.log('Session is open!');
+            session.subscribe(self.pubsubTopic, function(topic, data) {
+                // This is where you would add the new article to the DOM (beyond the scope of this tutorial)
+                console.log('New task name added "' + topic + '"');
+                console.log(data);
+            });
+        };
+
+        var onHangupCallback = function(code, reason, detail){
+            console.warn('WebSocket connection closed');
+            console.warn(code+': '+reason);
+        };
+
+        var conn = new ab.connect(
+            config.pubsubWSServer,
+            onConnectCallback,
+            onHangupCallback,
+            {
+                'maxRetries': 30,
+                'retryDelay': 2000,
+                'skipSubprotocolCheck': true
+            }
+        );
     }
 });

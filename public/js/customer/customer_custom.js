@@ -140,8 +140,9 @@ var notifications = new Vue({
     mounted: function(){
         var self = this;
 
+        // Set-up configuration and subscribe to a topic in the pubsub server
         var onConnectCallback = function(session){
-            
+
             session.subscribe(self.topic, function(topic, data) {
                 // Update notificationCount and prompt a toast
                 data = JSON.parse(data);

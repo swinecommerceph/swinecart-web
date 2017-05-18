@@ -102,8 +102,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
         Route::get('messages/{customer}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
 
-        Route::get('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomers']);
-        Route::post('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomersChange']);
+        Route::get('customers', ['as' => 'map.customers', 'uses'=> 'BreederController@viewCustomers']);
+        Route::post('customers', ['as' => 'map.customersChange', 'uses'=> 'BreederController@viewCustomersChange']);
 
         Route::get('test', ['as' => 'test', 'uses'=> 'BreederController@test']);
     });
@@ -148,8 +148,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
         Route::get('messages/{breeder}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
 
-        Route::get('breeders', ['as' => 'breeders', 'uses'=> 'CustomerController@viewBreeders']);
-        Route::post('breeders', ['as' => 'breedersChange', 'uses'=> 'CustomerController@viewBreedersChange']);
+        Route::get('breeders', ['as' => 'map.breeders', 'uses'=> 'CustomerController@viewBreeders']);
+        Route::post('breeders', ['as' => 'map.breedersChange', 'uses'=> 'CustomerController@viewBreedersChange']);
 
         // breeder-related
         Route::get('view-breeder/{breeder}',['as' => 'viewBProfile', 'uses' => 'ProductController@viewBreederProfile']);

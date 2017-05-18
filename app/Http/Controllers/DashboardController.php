@@ -61,9 +61,7 @@ class DashboardController extends Controller
                 'frequency' => 'monthly'
             ], $breeder);
 
-        $topic = str_slug($this->user->name);
-
-        return view('user.breeder.dashboard', compact('dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData', 'topic'));
+        return view('user.breeder.dashboard', compact('dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
     }
 
     /**
