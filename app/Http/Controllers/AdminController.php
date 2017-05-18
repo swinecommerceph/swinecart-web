@@ -364,7 +364,7 @@ class AdminController extends Controller
         $adminName = Auth::user()->name;
         $user = User::find($request->id);           // find the user
         if($request->reason == "Others"){
-            $user->delete_reason = $request->reason." : ".$request->others_reason;
+            $user->delete_reason = $request->others_reason;
         }else{
             $user->delete_reason = $request->reason;
         }
@@ -531,7 +531,7 @@ class AdminController extends Controller
             $notificationType = 0;
             $user->block_frequency = $user->block_frequency+1;
             if($request->reason == "Others"){
-                $user->block_reason = $request->reason." : ".$request->others_reason;
+                $user->block_reason = $request->others_reason;
             }else{
                 $user->block_reason = $request->reason;
             }
@@ -2427,7 +2427,7 @@ class AdminController extends Controller
      * Activate maintenance mode for application in click of button
      *
      * @param request
-     * @return none
+     * @return redirect
      *
      */
     public function activateMaintenanceMode(Request $request){
