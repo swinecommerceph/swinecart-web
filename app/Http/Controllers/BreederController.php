@@ -37,7 +37,6 @@ class BreederController extends Controller
         $this->middleware('updateProfile:breeder',['except' => ['index','storeProfile']]);
         $this->middleware(function($request, $next){
             $this->user = Auth::user();
-
             return $next($request);
         });
     }
@@ -51,6 +50,8 @@ class BreederController extends Controller
     public function index(Request $request)
     {
         if($request->user()->updateProfileNeeded()) return view('user.breeder.createProfile');
+        if(\App::isDownForMaintenance()) return view('errors.503_home');
+        if($request->user()->blocked_at != NULL) return view('errors.user_blocked');
         return view('user.breeder.home');
     }
 

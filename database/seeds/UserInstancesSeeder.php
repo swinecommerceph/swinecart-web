@@ -46,11 +46,12 @@ class UserInstancesSeeder extends Seeder
         });
 
     	// For Customers
-        factory(App\Models\User::class, 5)->create()->each(function($user){
+        factory(App\Models\User::class, 10)->create()->each(function($user){
             $faker = Faker\Factory::create();
             $user->assignRole('customer');
             $user->update_profile = 0;
             $user->email_verified = 1;
+
             $user->created_at = $faker->dateTimeBetween($startDate = '-5 years', $endDate = 'now');
             $user->approved_at = $faker->dateTimeBetween($startDate = '-5 years', $endDate = 'now');
 
@@ -64,7 +65,7 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Breeders
-        factory(App\Models\User::class, 5)->create()->each(function($user)use($companyNames){
+        factory(App\Models\User::class, 10)->create()->each(function($user)use($companyNames){
             $faker = Faker\Factory::create();
             $user->assignRole('breeder');
             $user->update_profile = 0;
@@ -76,10 +77,8 @@ class UserInstancesSeeder extends Seeder
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address
             $farm = factory(App\Models\FarmAddress::class)->create();
-
             $breeder->users()->save($user);
             $breeder->farmAddresses()->save($farm);
-
             // Change name if Breeder
             $user->name = $companyNames[$breeder->id-1];
             $user->save();

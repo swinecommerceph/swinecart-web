@@ -69,7 +69,7 @@
     <div class="divider"></div>
     <div class="row">
         <div class="col s12 m12 l12 xl12">
-            {!!Form::open(['route'=>'admin.userlist.transactionHistory.search', 'method'=>'GET', 'class'=>'input-field col s12 m12 l12'])!!}
+            {!!Form::open(['route'=>'admin.userlist.transactionHistory.search', 'method'=>'POST', 'class'=>'input-field col s12 m12 l12'])!!}
                 {{-- <div class="input-field col s12 m12 l12"> --}}
                     <div class="col s12 m12 l6 xl6">
                         <input type="hidden" name="name" value="{{$username}}">
@@ -92,6 +92,7 @@
                         <button id="search-button" class="btn waves-effect waves-light" type="submit">Search</button>
                     </div>
                 {{-- </div> --}}
+                {!!Form::close()!!}
         </div>
     </div>
 @endsection

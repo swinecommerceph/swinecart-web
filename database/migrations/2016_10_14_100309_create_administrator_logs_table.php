@@ -20,6 +20,7 @@ class CreateAdministratorLogsTable extends Migration
             $table->string('user');
             $table->string('category');
             $table->string('action');
+            $table->string('reason')->nullable();
             $table->timestamps();
         });
     }

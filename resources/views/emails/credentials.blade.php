@@ -14,9 +14,9 @@
     <div class="row">
         <div class="col s12 m12 l12 xl12">
             @if ($type == 0)
-                <h1>Breeder Credentials<h4>
+                <h1>Breeder Credentials</h1>
             @else
-                <h1>Spectator Credentials<h4>
+                <h1>Spectator Credentials</h1>
             @endif
 
         </div>
