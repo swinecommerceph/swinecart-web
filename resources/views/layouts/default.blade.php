@@ -48,6 +48,7 @@
 		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 		        @if(Auth::guest())
 					<li><a href="{{ route('home_path') }}"> Products </a></li>
+					<li><a href="{{ route('login') }}"> Login </a></li>
 					<li><a href="{{ route('home_path') }}"> ASBAP </a></li>
 					@if(!Request::is('/'))
 						@if(!Request::is('login'))

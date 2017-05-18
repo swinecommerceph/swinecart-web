@@ -76,9 +76,9 @@
                     </div>
                     <div class="col s12" style="margin:0 auto;">
                         {{-- <p class="left-align"> --}}
-                            Get accredited. <br>
+                            <a href="#!" class="btn-flat"><i class="material-icons right">chevron_right</i> Get accredited </a> <br>
                             <a href="{{ url('login') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
-                            <a href="{{ url('login') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Learn More </a>
+                            <a href="#!" class="btn-flat"><i class="material-icons right">chevron_right</i> Learn More </a>
                         {{-- </p> --}}
                     </div>
                 </div>
@@ -98,9 +98,9 @@
                     </div>
                     <div class="col s12" style="margin:0 auto;">
                         {{-- <p class="left-align"> --}}
-                            Register. <br>
+                            <a href="{{ url('register') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Register </a> <br>
                             <a href="{{ url('login') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
-                            <a href="{{ url('login') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Learn More </a>
+                            <a href="#!" class="btn-flat"><i class="material-icons right">chevron_right</i> Learn More </a>
                         {{-- </p> --}}
                     </div>
                 </div>
