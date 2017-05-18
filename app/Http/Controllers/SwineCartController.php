@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
+use Ramsey\Uuid\Uuid;
 use Carbon\Carbon;
 
 use App\Jobs\AddToTransactionLog;
@@ -32,7 +33,7 @@ class SwineCartController extends Controller
         transformDateSyntax as private;
         computeAge as private;
     }
-    
+
     protected $user;
 
     /**
@@ -62,20 +63,6 @@ class SwineCartController extends Controller
             $customer = $this->user->userable;
             $swineCartItems = $customer->swineCartItems();
             $checkProduct = $swineCartItems->where('product_id',$request->productId)->where('reservation_id', 0)->get();
-
-            // --------- WEBSOCKET SEND DATA -------------
-            // $product = Product::find($request->productId);
-            // $breeder = $product->breeder;
-            // $topic = $breeder->users()->first()->name;
-            // $data = $repo->forBreeder($breeder);
-            // $data['topic'] = str_slug($topic);
-            //
-            // // This is our new stuff
-    	    // $context = new \ZMQContext();
-    	    // $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'Breeder Dashboard Pusher');
-    	    // $socket->connect("tcp://127.0.0.1:5555");
-            //
-    	    // $socket->send(collect($data)->toJson());
 
             // Check first if product is already in Swine Cart
             if(!$checkProduct->isEmpty()){
@@ -152,6 +139,7 @@ class SwineCartController extends Controller
             // Notify Breeder of the rating
             $breederUser = $breeder->users()->first();
             $breederUser->notify(new BreederRated($notificationDetails));
+            $this->sendToPubSubServer('notification', $breederUser->email);
 
             return "OK";
         }
@@ -213,6 +201,34 @@ class SwineCartController extends Controller
             // Notify Breeder of the request
             $breederUser = $breeder->users()->first();
             $breederUser->notify(new ProductRequested($notificationDetails));
+            $this->sendToPubSubServer('notification', $breederUser->email);
+            $this->sendToPubSubServer('db-productRequest', $breederUser->email,
+                [
+                    'body' => [
+                        'uuid' => (string) Uuid::uuid4(),
+                        'id' => $product->id,
+                        'reservation_id' => 0,
+                        'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
+                        'breeder_id' => $product->breeder_id,
+                        'farm_province' => FarmAddress::find($product->farm_from_id)->province,
+                        'name' => $product->name,
+                        'type' => $product->type,
+                        'age' => $this->computeAge($product->birthdate),
+                        'breed' => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
+                        'quantity' => $product->quantity,
+                        'adg' => $product->adg,
+                        'fcr' => $product->fcr,
+                        'bft' => $product->backfat_thickness,
+                        'status' => $product->status,
+                        'status_time' => '',
+                        'customer_id' => 0,
+                        'customer_name' => '',
+                        'date_needed' => '',
+                        'special_request' => '',
+                        'expiration_date' => ''
+                    ]
+                ]
+            );
 
             return [$customer->swineCartItems()->where('if_requested',0)->count(), $transactionDetails['created_at']];
         }
@@ -275,6 +291,7 @@ class SwineCartController extends Controller
                 $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
                 $itemDetail['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]);
                 $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+                $itemDetail['user_id'] = Breeder::find($product->breeder_id)->users()->first()->id;
                 $itemDetail['token'] = csrf_token();
                 array_push($items,$itemDetail);
             }
@@ -299,6 +316,7 @@ class SwineCartController extends Controller
                 $itemDetail['customer_id'] = $customer->id;
                 $itemDetail['breeder_id'] = $product->breeder_id;
                 $itemDetail['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+                $itemDetail['user_id'] = Breeder::find($product->breeder_id)->users()->first()->id;
                 $itemDetail['product_id'] = $item->product_id;
                 $itemDetail['product_province'] = FarmAddress::find($product->farm_from_id)->province;
                 $itemDetail['product_name'] = $product->name;

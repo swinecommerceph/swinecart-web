@@ -306,6 +306,7 @@
                                     data-position="top"
                                     data-delay="50"
                                     data-tooltip="Message Breeder"
+                                    :href="'/customer/messages/' + product.user_id"
                                     v-if="product.status === 'reserved' | product.status === 'on_delivery' | product.status === 'paid'"
                                 >
                                     <i class="material-icons">message</i>

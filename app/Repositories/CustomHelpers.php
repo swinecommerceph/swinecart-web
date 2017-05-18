@@ -73,4 +73,30 @@ trait CustomHelpers
         }
         return $transformedSyntax;
     }
+
+    /**
+     * Send details to ZMQ server to prompt sending of
+     * data from the Publish-Subscribe server
+     * to its subscribers
+     *
+     * @param   String  $type
+     * @param   String  $topic
+     * @param   Array   $data
+     * @return  void
+     */
+    public function sendToPubSubServer($type, $email, $data = [])
+    {
+        $zmqHost = env('ZMQ_HOST', 'localhost');
+        $zmqPort = env('ZMQ_PORT', '5555');
+        $data = $data;
+        $data['type'] = $type;
+        $data['topic'] = crypt($email,md5($email));
+
+        // This is our new stuff
+        $context = new \ZMQContext();
+        $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'Product Status Pusher');
+        $socket->connect("tcp://" . $zmqHost . ":" . $zmqPort);
+
+        $socket->send(json_encode($data));
+    }
 }

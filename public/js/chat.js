@@ -1,4 +1,6 @@
 $(document).ready(function(){
+
+	
 	var vue = new Vue({
 		el: '#chat',
 		data : {
@@ -8,13 +10,15 @@ $(document).ready(function(){
 			port: chatport,
 			uri: url,
 			conn: false,
+			user: "",
+			mine: "",
 		},
-		ready : function(){
+		mounted : function(){
 			// default port
 			this.port = this.port.length == 0 ? '9090' : this.port;
 
 			// init connection
-			this.conn = new WebSocket('ws://'+this.uri+':'+this.port);
+			this.conn = new WebSocket('ws://'+this.uri+'/chat');
 			var me = this;
 
 			this.conn.onclose = function (event) {
@@ -157,4 +161,6 @@ $(document).ready(function(){
 			}
 		}
 	});
+
+
 });

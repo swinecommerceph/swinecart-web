@@ -21,7 +21,7 @@ class Pusher extends Model implements WampServerInterface
 	/**
      * @param string JSON'ified string we'll receive from ZeroMQ
      */
-    public function onProductUpdate($product)
+    public function onDatabaseChange($product)
     {
         $productData = json_decode($product, true);
 
@@ -33,7 +33,7 @@ class Pusher extends Model implements WampServerInterface
         $topic = $this->subscribedTopics[$productData['topic']];
 
         // re-send the data to all the clients subscribed to that category
-        $topic->broadcast($productData);
+        $topic->broadcast(json_encode($productData));
     }
 
 	public function onUnSubscribe(ConnectionInterface $conn, $topic)
