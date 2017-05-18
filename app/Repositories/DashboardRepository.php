@@ -119,13 +119,13 @@ class DashboardRepository
 
                 $smsDetails = [
                     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Your reservation for Product ' . $product->name . ' is already expired.',
-                    'recepient' => $swineCartItem->customer->mobile
+                    'recipient' => $swineCartItem->customer->mobile
                 ];
 
                 // Add new Transaction Log. Queue AddToTransactionLog job
                 dispatch(new AddToTransactionLog($transactionDetails));
                 // Queue SendSMS job
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
+                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
 
                 // Notify Customer of the product reservation expiration
                 $customerUser = $swineCartItem->customer->users()->first();
@@ -544,13 +544,13 @@ class DashboardRepository
 
                     $smsDetails = [
                         'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' was reserved to you. Reservation will expire on ' . $this->transformDateSyntax($reservation->expiration_date, 2) . '.' ,
-                        'recepient' => $swineCartItem->customer->mobile
+                        'recipient' => $swineCartItem->customer->mobile
                     ];
 
                     // Add new Transaction Log. Queue AddToTransactionLog job
                     dispatch(new AddToTransactionLog($transactionDetails));
                     // Queue SendSMS job
-                    dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
+                    dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
 
                     // Notify reserved customer
                     $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
@@ -590,13 +590,13 @@ class DashboardRepository
 
                             $smsDetails = [
                                 'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetailsOther['created_at'], 1) .']: Sorry, product ' . $product->name . ' is already reserved.',
-                                'recepient' => $productRequest->customer->mobile
+                                'recipient' => $productRequest->customer->mobile
                             ];
 
                             // Add new Transaction Log. Queue AddToTransactionLog job
                             dispatch(new AddToTransactionLog($transactionDetailsOther));
                             // Queue SendSMS job
-                            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
+                            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
 
                             $customerUser->notify(new ProductReservedToOtherCustomer($notificationDetailsOther));
                             $this->sendToPubSubServer('notification', $customerUser->email);
@@ -674,13 +674,13 @@ class DashboardRepository
 
                 $smsDetails = [
                     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery.',
-                    'recepient' => $customer->mobile
+                    'recipient' => $customer->mobile
                 ];
 
                 // Add new Transaction Log. Queue AddToTransactionLog job
                 dispatch(new AddToTransactionLog($transactionDetails));
                 // Queue SendSMS job
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
+                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
 
                 // Notify customer
                 $reservedCustomerUser = $customer->users()->first();
@@ -723,13 +723,13 @@ class DashboardRepository
 
                 $smsDetails = [
                     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: You already paid for Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . '.',
-                    'recepient' => $customer->mobile
+                    'recipient' => $customer->mobile
                 ];
 
                 // Add new Transaction Log. Queue AddToTransactionLog job
                 dispatch(new AddToTransactionLog($transactionDetails));
                 // Queue SendSMS job
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
+                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
 
                 // Notify customer
                 $reservedCustomerUser = $customer->users()->first();
@@ -771,13 +771,13 @@ class DashboardRepository
 
                 $smsDetails = [
                     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is sold.',
-                    'recepient' => $customer->mobile
+                    'recipient' => $customer->mobile
                 ];
 
                 // Add new Transaction Log. Queue AddToTransactionLog job
                 dispatch(new AddToTransactionLog($transactionDetails));
                 // Queue SendSMS job
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
+                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
 
                 // Notify reserved customer
                 $reservedCustomerUser = $customer->users()->first();

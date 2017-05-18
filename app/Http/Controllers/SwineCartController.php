@@ -128,13 +128,13 @@ class SwineCartController extends Controller
 
             $smsDetails = [
                 'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Customer ' . $this->user->name . ' rated you with ' . round(($review->rating_delivery + $review->rating_transaction + $review->rating_productQuality)/3, 2) . ' (overall average).',
-                'recepient' => $breeder->office_mobile
+                'recipient' => $breeder->office_mobile
             ];
 
             // Add new Transaction Log. Queue AddToTransactionLog job
             dispatch(new AddToTransactionLog($transactionDetails));
             // Queue SendSMS job
-            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
+            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
 
             // Notify Breeder of the rating
             $breederUser = $breeder->users()->first();
@@ -190,13 +190,13 @@ class SwineCartController extends Controller
 
             $smsDetails = [
                 'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: ' . $this->user->name . ' requested for Product ' . $product->name . '.',
-                'recepient' => $breeder->office_mobile
+                'recipient' => $breeder->office_mobile
             ];
 
             // Add new Transaction Log. Queue AddToTransactionLog job
             dispatch(new AddToTransactionLog($transactionDetails));
             // Queue SendSMS job
-            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
+            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
 
             // Notify Breeder of the request
             $breederUser = $breeder->users()->first();

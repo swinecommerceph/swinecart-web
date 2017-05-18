@@ -12,19 +12,19 @@ class SendSMS implements ShouldQueue
     use InteractsWithQueue, Queueable, SerializesModels;
 
     protected $message;
-    protected $recepient;
+    protected $recipient;
 
     /**
      * Create a new job instance.
      *
      * @param  String   $message
-     * @param  String   $recepient
+     * @param  String   $recipient
      * @return void
      */
-    public function __construct($message, $recepient)
+    public function __construct($message, $recipient)
     {
         $this->message = $message;
-        $this->recepient = $recepient;
+        $this->recipient = $recipient;
     }
 
     /**
@@ -36,7 +36,7 @@ class SendSMS implements ShouldQueue
     {
         $arr_post_body = array(
             "message_type" => "SEND",
-            "mobile_number" => $this->str_replace_first('0', '63', $this->recepient),
+            "mobile_number" => $this->str_replace_first('0', '63', $this->recipient),
             "shortcode" => "292909000",
             "message_id" => rand(0,1000000), //to be improved if messages will be stored in db
             "message" => $this->message,
