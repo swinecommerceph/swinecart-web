@@ -258,7 +258,9 @@ $factory->define(App\Models\Breeder::class, function (Faker\Generator $faker) {
         'produce' => $faker->word,
         'contactPerson_name' => $faker->name,
         'contactPerson_mobile' => $faker->regexify('09[0-9]{9}'),
-        'latest_accreditation' => \Carbon\Carbon::now()->subYear()
+        'registration_number'  => random_int(1,1000),
+        'latest_accreditation' => \Carbon\Carbon::now()->subYear(),
+        'notification_date' => \Carbon\Carbon::now()->addYear()
     ];
 });
 

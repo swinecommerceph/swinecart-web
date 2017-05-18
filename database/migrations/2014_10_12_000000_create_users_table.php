@@ -19,6 +19,9 @@ class CreateUsersTable extends Migration
             $table->string('password', 60);
             $table->integer('userable_id')->unsigned();
             $table->string('userable_type');
+            $table->string('delete_reason')->nullable();
+            $table->string('block_reason')->nullable();
+            $table->integer('block_frequency')->unsigned();
             $table->boolean('update_profile')->default('1');
             $table->string('verification_code');
             $table->boolean('email_verified')->default('0');

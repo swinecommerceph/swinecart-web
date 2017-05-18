@@ -9,7 +9,7 @@ use Illuminate\Database\Eloquent\Model;
 class AdministratorLog extends Model
 {
     protected $table = 'administrator_logs';
-    protected $fillable = ['admin_id', 'admin_name', 'user', 'category', 'action'];
+    protected $fillable = ['admin_id', 'admin_name', 'user', 'category', 'action', 'reason'];
 
     public function admin()
     {

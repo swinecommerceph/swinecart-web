@@ -128,6 +128,11 @@ ul .side-nav-user-image{
    background-color: #EB984E;
 }
 
+#admin-dashboard-topbreeder-card{
+	background-color: #7979FF;
+    min-height: 425px;
+}
+
 #admin-dashboard-statistics-icon{
 	font-size: 7em;
 	vertical-align: middle;
@@ -154,6 +159,13 @@ ul .side-nav-user-image{
     }
 }
 
+.hidden{
+    display: none;
+}
+
+.rating-info{
+    font-weight: bold;
+}
 
 
 /*

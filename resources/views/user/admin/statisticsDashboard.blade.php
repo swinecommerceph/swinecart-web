@@ -1,7 +1,7 @@
 @extends('layouts.controlLayout')
 
 @section('title')
-    | Site Statistics: Statistics Dashboard 
+    | Site Statistics: Statistics Dashboard
 @endsection
 
 @section('pageId')
@@ -296,7 +296,7 @@
                 </div>
                 <div class="row">
                     <div class="col s12 m12 l12">
-                        Last 5 Days of Activity
+                        Yesterday's Activity
                     </div>
                 </div>
                 <div class="row">
@@ -310,7 +310,7 @@
                                 </div>
                             @empty
                                 <div class="entry">
-                                    <h1>No Happenings at the Moment</h1>
+                                    <h1>No Events Happened</h1>
                                 </div>
                             @endforelse
                         </div>

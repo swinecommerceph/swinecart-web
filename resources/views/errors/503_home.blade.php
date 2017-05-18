@@ -1,14 +1,14 @@
-{{--
-    Displays Home Page of the E-Commerce website
---}}
-@extends('layouts.errorlayout')
+@extends('layouts.default')
 
 @section('title')
-    | Site Not Available at the Moment
+    | | Site Not Available at the Moment
 @endsection
 
+@section('pageId')
+    id="maintenenace"
+@endsection
 
-@section('homeContent')
+@section('content')
     <div id="home-page" class="row teal lighten-5" style="height:100vh; margin-bottom:0px;">
         <div class="container">
             {{--  Logo --}}
@@ -30,4 +30,8 @@
 
         </div>
     </div>
+@endsection
+
+@section('initScript')
+
 @endsection

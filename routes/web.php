@@ -165,6 +165,11 @@ Route::group(['middleware' => ['web']], function () {
         Route::post('form/register', ['as'=>'admin.register.submit', 'uses'=>'AdminController@submitRegistrationForms']);
         Route::get('home/logs', ['as'=>'admin_logs', 'uses'=>'AdminController@getAdministratorLogs']);
         Route::get('home/logs/search', ['as' => 'admin.search.logs', 'uses' => 'AdminController@searchAdministratorLogs']);
+        Route::get('home/breeder_status', ['as' => 'admin.breederstatus', 'uses' => 'AdminController@getBreederStatus']);
+        Route::post('home/breeder_status/search', ['as' => 'admin.searchbreederstatus', 'uses' => 'AdminController@searchBreederStatus']);
+
+        Route::get('home/edit_accreditation/{breeder}', ['as' => 'admin.editaccreditation', 'uses' => 'AdminController@editAccreditation']);
+        Route::post('home/edit_accreditation_action', ['as' => 'admin.editaccreditationaction', 'uses' => 'AdminController@editAccreditationAction']);
 
         //message-related
         Route::get('messages/breeder', ['as' => 'admin.breeder.messages', 'uses'=> 'MessageController@getBreederMessagesAdmin']);
@@ -222,7 +227,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/userlist/details', ['as'=>'admin.userlist.details', 'uses'=>'AdminController@fetchUserInformation']);
         Route::get('home/userlist/transaction', ['as'=>'admin.userlist.transaction', 'uses'=>'AdminController@fetchUserTransaction']);
         Route::get('home/userlist/transaction-user',['as'=>'admin.userlist.transactionHistory', 'uses'=>'AdminController@fetchUserTransactionHistory']);
-        Route::get('home/userlist/transaction-user/search',['as'=>'admin.userlist.transactionHistory.search', 'uses'=>'AdminController@searchUserTransactionHistory']);
+        Route::post('home/userlist/transaction-user/search',['as'=>'admin.userlist.transactionHistory.search', 'uses'=>'AdminController@searchUserTransactionHistory']);
 
         Route::get('home/spectatorlist', ['as'=>'admin.spectatorlist', 'uses'=>'AdminController@displaySpectators']);
         Route::get('home/spectatorlist-search', ['as'=>'admin.spectatorlist-search', 'uses'=>'AdminController@searchSpectators']);
@@ -251,19 +256,21 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('broadcast', ['as'=>'admin.broadcast','uses'=>'AdminController@broadcastMessagePage']);
         Route::post('broadcast/send', ['as'=>'admin.broadcast.send','uses'=>'AdminController@sendBroadcastMessage']);
 
-        Route::get('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsers']);
-        Route::post('home/users', ['as' => 'users', 'uses'=> 'AdminController@viewUsersChange']);
+        // maps
+        Route::get('home/users-maps', ['as' => 'maps', 'uses'=> 'AdminController@viewMaps']);
+
         Route::get('admin_info',['as'=>'admin_info', 'uses'=>'AdminController@getAdminInformation']);
 
         Route::get('home/messenger', ['as' => 'admin.messenger', 'uses'=> 'AdminController@messenger']);
         Route::post('home/messenger/send', ['as' => 'admin.messenger.send', 'uses'=> 'AdminController@send']);
         Route::get('home/messenger/recipients', ['as' => 'admin.messenger.recipients', 'uses'=> 'AdminController@recipients']);
 
+        Route::get('maintenance_mode', ['as' => 'maintenance_mode', 'uses'=> 'AdminController@activateMaintenanceMode']);
     });
 
     Route::group(['prefix'=>'spectator'], function(){
 
-        // Route to admin home page
+        // Route to spectator home page
         Route::get('home',['as'=>'spectator_path', 'uses'=>'SpectatorController@index']);
         Route::get('users',['as'=>'spectator.users', 'uses'=>'SpectatorController@viewUsers']);
         Route::get('products',['as'=>'spectator.products', 'uses'=>'SpectatorController@viewProducts']);
@@ -291,7 +298,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('statistics/customer/averagedeleted', ['as'=>'spectator.averageCustomerStatisticsDeleted', 'uses'=>'SpectatorController@averageCustomerDeleted']);
         Route::get('statistics/customer/averagedeleted-year', ['as'=>'spectator.averageCustomerStatisticsDeletedYear', 'uses'=>'SpectatorController@averageCustomerDeletedYear']);
 
-
+        Route::get('statistics/account_settings', ['as'=>'spectator.account_settings', 'uses'=>'SpectatorController@accountSettings']);
+        Route::patch('statistics/change_password', ['as'=>'spectator.change_password', 'uses'=>'SpectatorController@changePassword']);
 
         Route::get('statistics/breeder/active', ['as'=>'spectator.statisticsActiveBreeder', 'uses'=>'SpectatorController@viewActiveBreederStatistics']);
         Route::get('statistics/breeder/active-year', ['as'=>'spectator.statisticsActiveBreederYear', 'uses'=>'SpectatorController@viewActiveBreederStatisticsYear']);

@@ -396,7 +396,6 @@ var users = {
 
     },
 
-    // @TODO: Remove row automatically after rejection of request
     //  reject a pending breeder request
     reject_user: function(button,name, change, token, id){
         $.ajax({
@@ -420,6 +419,24 @@ var users = {
 
     },
 
+    show_action_notification: function(){
+        $.ajax({
+            url: config.admin_url+'/home/block',
+            type: 'GET',
+            cache: false,
+            data: {},
+            success: function(){
+                Materialize.toast('Action completed', 4000);
+                location.reload();
+
+            },
+            error: function(){
+                Materialize.toast('Action failed', 4000);
+                location.reload();
+
+            }
+        });
+    },
 
     // Ajax function for getting the users infrormation for the user modal in the users page
     fetch_user_info: function(id, role, userable){
@@ -467,7 +484,24 @@ var users = {
                         <div class="row"> \
                             <div class="col s12 m12 l12"><div class="admin-user-modal-title grey-text">Website</div><div class="admin-user-modal-data">'+data.website+'</div></div> \
                         </div> \
+                        <div class="row"> \
+                            <div class="col s12 m12 l12 xl12">\
+                                <h5>User Reviews</h5>\
+                            </div>\
+                            <div class="col s12 m12 l12 xl12">\
+                                <div class="row">\
+                                    <div class="col s4 m4 l4 xl4 center-align rating-info">Delivery: '+data.delivery+'</div>\
+                                    <div class="col s4 m4 l4 xl4 center-align rating-info">Transaction: '+data.transaction+'</div>\
+                                    <div class="col s4 m4 l4 xl4 center-align rating-info">Product Quality: '+data.quality+'</div>\
+                                </div>\
+                                <div class="row">\
+                                    <div class="col s6 m6 l6 xl6 center-align rating-info">Transaction Count: '+data.count+'</div>\
+                                    <div class="col s6 m6 l6 xl6 center-align rating-info">Overall: '+data.overall+'</div>\
+                                </div>\
+                            </div>\
+                        </div> \
                         ');
+
                     }else{
                         $('#user-modal-chatbutton').html('<a href="'+config.admin_url+'/messages/customer/'+id+'" class="btn-flat"><i class="material-icons left">chat</i>Message</a>');
                         // $('#user-modal-chatbutton').html('<a href="messages/customer/{+'id'+}" class="waves-effect waves-teal btn-flat"><i class="material-icons left">chat</i>Message</a>');

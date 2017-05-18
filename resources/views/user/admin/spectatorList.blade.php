@@ -16,7 +16,7 @@
     <div class="row">
         <div class="col s12 m12 l12 xl12">
             {!!Form::open(['route'=>'admin.spectatorlist-search', 'method'=>'GET', 'class'=>'row input-field valign-wrapper'])!!}
-                <input id="search" type="search" name="search" required>
+                <input id="search" type="search" name="search">
                 <label class="label-icon" for="search"><i class="material-icons">search</i></label>
                 <i class="material-icons">close</i>
             {!!Form::close()!!}

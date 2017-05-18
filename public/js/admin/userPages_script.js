@@ -20,6 +20,11 @@ $(document).ready(function(){
       $('#block-modal').modal('open');
     });
 
+    // $('body').on('click', '#confirm-block', function (e) {
+    //     e.preventDefault();
+    //     users.show_action_notification();
+    // });
+
     $('body').on('click', '.unblock-button', function (e) {
       e.preventDefault();
       $('#form-unblock-id').attr("value", $(this).attr("data-id"))
@@ -37,17 +42,17 @@ $(document).ready(function(){
     });
 
     $('body').on('click', '#cancel-delete', function (e){
-     $('tr').find('[data-clicked="clicked"]').attr('data-clicked','');
+        $('tr').find('[data-clicked="clicked"]').attr('data-clicked','');
     });
 
     // for accept and reject modal cancel
     $('body').on('click', '#cancel-accept-reject', function (e){
-    $('tr').find('[data-manage-clicked="clicked"]').attr('data-manage-clicked', '');
+        $('tr').find('[data-manage-clicked="clicked"]').attr('data-manage-clicked', '');
     });
 
     // for manage user modal cancel
     $('body').on('click', '#cancel-manage', function (e){
-    $('tr').find('[data-clicked="clicked"]').attr('data-clicked', '');
+        $('tr').find('[data-clicked="clicked"]').attr('data-clicked', '');
     });
 
     // on click of the manage button
@@ -135,5 +140,6 @@ $(document).ready(function(){
     e.preventDefault();
     $('#testing-facilities-wrapper').append('<input placeholder="Testing Facility" type="text" class="validate">');
     });
+
 
 });

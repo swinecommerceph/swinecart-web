@@ -24,6 +24,7 @@ use App\Models\TransactionLog;
 use App\Models\ProductReservation;
 use Illuminate\Support\Facades\Mail;
 use App\Mail\SwineCartProductNotification;
+use App\Http\Requests\ChangePasswordRequest;
 
 use DB;
 use Auth;
@@ -56,6 +57,8 @@ class SpectatorController extends Controller
         $date = Carbon::now();
         $month = $date->month;
         $year = $date->year;
+
+        if(\App::isDownForMaintenance()) return view('errors.503_home');
 
         $totalusers = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
                                    ->join('roles', 'role_user.role_id','=','roles.id')
@@ -1323,5 +1326,12 @@ class SpectatorController extends Controller
         }
 
         return view('user.spectator.averageCustomerStatistics',compact('select', 'formroute', 'year', 'averageCount'));
+    }
+    public function accountSettings(){
+        return view('user.spectator.accountSettings');
+    }
+    public function changePassword(ChangePasswordRequest $request){
+        dd($request);
+        return view('user.spectator.accountSettings');
     }
 }

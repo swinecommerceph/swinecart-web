@@ -18,6 +18,7 @@
           <li><a href="#adduser">Add User</a></li>
           <li><a href="{{route('admin.breeder.messages')}}">Messages</a></li>
           <li><a href="{{ route('admin_logs') }}">Admin Logs</a></li>
+          <li><a href="{{ route('maintenance_mode') }}">Maintenance Mode</a></li>
           <li><a href="{{ url('logout') }}">Log Out</a></li>
         </ul>
 
@@ -37,6 +38,12 @@
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="#adduser" data-position="bottom" data-delay="40" data-tooltip="Add User"><i class="material-icons">perm_identity</i></a></li>
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="{{route('admin.breeder.messages')}}" data-position="bottom" data-delay="40" data-tooltip="Messages"><i class="material-icons">message</i></a></li>
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ route('admin_logs') }}" data-position="bottom" data-delay="40" data-tooltip="Administrator Logs"><i class="material-icons">book</i></a></li>
+                        @if (\App::isDownForMaintenance())
+                            <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ route('maintenance_mode') }}" data-position="bottom" data-delay="40" data-tooltip="Maintenance Mode"><i class="material-icons red-text">settings</i></a></li>
+                        @else
+                            <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ route('maintenance_mode') }}" data-position="bottom" data-delay="40" data-tooltip="Maintenance Mode"><i class="material-icons">settings</i></a></li>
+                        @endif
+
                         <li><a class="admin-layout-nav-menu-items tooltipped" href="{{ url('logout') }}" data-position="bottom" data-delay="40" data-tooltip="Log Out"><i class="material-icons">power_settings_new</i></a></li>
                     </ul>
                 </div>
@@ -59,6 +66,7 @@
             <li><a class="waves-effect white-text" href="{{route('admin.pending.users')}}"><i class="material-icons white-text">verified_user</i>Pending Accounts</a></li>
             <li><a class="waves-effect white-text" href="{{route('admin.broadcast')}}"><i class="material-icons white-text">announcement</i>Send Announcement</a></li>
             <li class="hide-on-med-and-up"><a class="waves-effect white-text" href="{{ route('admin_logs') }}"><i class="material-icons white-text">book</i>Administrator Logs</a></li>
+            <li><a class="waves-effect white-text" href="{{ route('maps') }}"><i class="material-icons white-text">map</i>Maps</a></li>
             <li><a class="waves-effect white-text" href="{{route('admin.statistics.dashboard')}}"><i class="material-icons white-text">trending_up</i>Site Statistics</a></li>
             <li><a class="waves-effect white-text" href="{{route('admin.manage.homepage')}}"><i class="material-icons white-text">build</i>Manage Pages</a></li>
             <li class="hide-on-med-and-up"><a class="waves-effect white-text" href="{{ url('logout') }}"><i class="material-icons white-text">power_settings_new</i>Log Out</a></li>
@@ -110,7 +118,7 @@
                             <div class = "addusercontainer" class="row">
                             <div class="input-field col s11">
                                 <i class="material-icons prefix">account_circle</i>
-                                <input id="icon_prefix" type="text" class="validate" name="name">
+                                <input required id="icon_prefix" type="text" class="validate" name="name">
                                 <label for="icon_prefix">Username</label>
                             </div>
                             </div>
@@ -120,7 +128,7 @@
                             <div class = "addusercontainer" class="row">
                                 <div class="input-field col s11">
                                     <i class="material-icons prefix">email</i>
-                                    <input id="icon_prefix" type="email" class="validate" name="email">
+                                    <input required id="icon_prefix" type="email" class="validate" name="email">
                                     <label for="icon_prefix">Email Address</label>
                                 </div>
                             </div>
@@ -128,7 +136,7 @@
 
                         <div class="row">
                             <div class="col s12 m12 l3 xl3">
-                                <input name="type" value=0 type="radio" id="breeder"  />
+                                <input name="type" value=0 type="radio" id="breeder" />
                                 <label for="breeder">Breeder</label>
                             </div>
                             <div class="col s12 m12 l3 xl3">
@@ -188,5 +196,18 @@
         @yield('initScript')
             {{-- Custom scripts for certain pages/functionalities --}}
         @yield('customScript')
+        @if(Session::has('alert-create'))
+            <script type="text/javascript">
+                 Materialize.toast('User Successfully Created', 4000)
+            </script>
+        @elseif(Session::has('alert-maintenance-off'))
+            <script type="text/javascript">
+                 Materialize.toast('Maintenance Mode Turned Off', 4000)
+            </script>
+        @elseif(Session::has('alert-maintenance-on'))
+            <script type="text/javascript">
+                 Materialize.toast('Maintenance Mode Turned On' , 4000)
+            </script>
+        @endif
     </body>
 </html>

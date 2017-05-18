@@ -1,4 +1,3 @@
-
 html{
 	font-family:Poppins;
 	font-size:1rem;
@@ -412,7 +411,7 @@ blockquote.info{
 
 /* Search components style */
 input#search{
-	color: black;	
+	color: black;
 }
 
 #search-results ul{
@@ -499,6 +498,21 @@ input#search{
 }
 
 .action-dialog-box{
+	width: 700px;
+	height: 350px;
+}
+
+#unblock-modal{
+	width: 500px;
+	height: 220px;
+}
+
+#reject-modal{
+	width: 500px;
+	height: 220px;
+}
+
+#accept-modal{
 	width: 500px;
 	height: 220px;
 }
