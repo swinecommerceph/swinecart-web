@@ -8,6 +8,7 @@
 
     // Initialization for Carousels
     $('.carousel').carousel();
+	$('#home-carousel').carousel({fullWidth:true});
 
     // Initialization for Material Boxes
     $('.materialboxed').materialbox();
@@ -39,7 +40,7 @@
     });
 
 	$(".button-collapse").sideNav();
-	
+
     $('#back-to-top').click(function(){
         $('body,html').animate({
             scrollTop : 0
