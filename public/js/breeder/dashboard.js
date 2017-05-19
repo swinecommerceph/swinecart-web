@@ -66,6 +66,42 @@ var vm = new Vue({
         serverDateNow: '',
         pubsubTopic: window.pubsubTopic
     },
+    computed: {
+        overallPaid: function(){
+            var sum = this.dashboardStats.paid.boar + this.dashboardStats.paid.gilt + this.dashboardStats.paid.semen + this.dashboardStats.paid.sow;
+            return sum;
+        },
+
+        overallOnDelivery: function(){
+            var sum = this.dashboardStats.on_delivery.boar + this.dashboardStats.on_delivery.gilt + this.dashboardStats.on_delivery.semen + this.dashboardStats.on_delivery.sow;
+            return sum;
+        },
+
+        overallReserved: function(){
+            var sum = this.dashboardStats.reserved.boar + this.dashboardStats.reserved.gilt + this.dashboardStats.reserved.semen + this.dashboardStats.reserved.sow;
+            return sum;
+        },
+
+        overallHidden: function(){
+            var sum = this.dashboardStats.hidden.boar + this.dashboardStats.hidden.gilt + this.dashboardStats.hidden.semen + this.dashboardStats.hidden.sow;
+            return sum;
+        },
+
+        overallDisplayed: function(){
+            var sum = this.dashboardStats.displayed.boar + this.dashboardStats.displayed.gilt + this.dashboardStats.displayed.semen + this.dashboardStats.displayed.sow;
+            return sum;
+        },
+
+        overallRequested: function(){
+            var sum = this.dashboardStats.requested.boar + this.dashboardStats.requested.gilt + this.dashboardStats.requested.semen + this.dashboardStats.requested.sow;
+            return sum;
+        },
+
+        overallRatings: function(){
+            var overallAvgRating = (this.dashboardStats.ratings.delivery + this.dashboardStats.ratings.transaction + this.dashboardStats.ratings.productQuality)/3;
+            return this.round(overallAvgRating, 2);
+        }
+    },
     methods: {
         valueChange: function(){
             // Clear date objects
@@ -188,7 +224,21 @@ var vm = new Vue({
                 );
             }
             else console.log('Nope!');
-        }
+        },
+
+        computeAverageRating: function(currentAverage, newValue){
+            var size = this.dashboardStats.ratings.reviewsSize;
+            var continuousAverage = ((size * currentAverage) + newValue) / (size+1);
+            return this.round(continuousAverage, 1);
+        },
+
+        round: function(number, precision){
+            // Round number according to precision
+            var factor = Math.pow(10, precision);
+            var tempNumber = number * factor;
+            var roundedTempNumber = Math.round(tempNumber);
+            return roundedTempNumber / factor;
+        },
     },
     created: function(){
 
@@ -241,11 +291,66 @@ var vm = new Vue({
 
         // Set-up configuration and subscribe to a topic in the pubsub server
         var onConnectCallback = function(session){
-            console.log('Session is open!');
+
             session.subscribe(self.pubsubTopic, function(topic, data) {
-                // This is where you would add the new article to the DOM (beyond the scope of this tutorial)
-                console.log('New task name added "' + topic + '"');
-                console.log(data);
+                // Update product status numbers
+                data = JSON.parse(data);
+                switch (data.type) {
+                    case 'db-requested':
+                        self.dashboardStats.displayed[data.product_type]--;
+                        self.dashboardStats.requested[data.product_type]++;
+
+                        break;
+                    case 'db-reserved':
+                        self.dashboardStats.requested[data.product_type]--;
+                        self.dashboardStats.reserved[data.product_type]++;
+                        self.dashboardStats.hidden[data.product_type]++;
+
+                        break;
+                    case 'db-reservationExpiration':
+                        self.dashboardStats.reserved[data.product_type]--;
+                        self.dashboardStats.requested[data.product_type]++;
+                        self.dashboardStats.hidden[data.product_type]--;
+
+                        break;
+                    case 'db-onDelivery':
+                        self.dashboardStats.reserved[data.product_type]--;
+                        self.dashboardStats.on_delivery[data.product_type]++;
+
+                        break;
+                    case 'db-paid':
+                        self.dashboardStats.reserved[data.product_type]--;
+                        self.dashboardStats.paid[data.product_type]++;
+
+                        break;
+                    case 'db-sold':
+                        self.dashboardStats[data.previous_status][data.product_type]--;
+
+                        break;
+                    case 'db-rated':
+                        var currentDeliveryRating = self.dashboardStats.ratings.delivery,
+                            currentTransactionRating = self.dashboardStats.ratings.transaction,
+                            currentProductQualityRating = self.dashboardStats.ratings.productQuality;
+
+                        // Compute new averages
+                        self.dashboardStats.ratings.delivery = self.computeAverageRating(currentDeliveryRating, data.rating_delivery);
+                        self.dashboardStats.ratings.transaction = self.computeAverageRating(currentTransactionRating, data.rating_transaction);
+                        self.dashboardStats.ratings.productQuality = self.computeAverageRating(currentProductQualityRating, data.rating_productQuality);
+
+                        // Update reviews
+                        self.dashboardStats.ratings.reviews.pop();
+                        self.dashboardStats.ratings.reviews.unshift(
+                            {
+                                comment: data.review_comment,
+                                customerName: data.review_customerName
+                            }
+                        );
+
+                        break;
+                    default:
+                        break;
+                }
+
             });
         };
 

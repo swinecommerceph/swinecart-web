@@ -22,6 +22,8 @@ use App\Notifications\ProductReservationExpired;
 use App\Jobs\AddToTransactionLog;
 use App\Jobs\SendSMS;
 
+use Auth;
+
 class DashboardRepository
 {
     use CustomHelpers {
@@ -136,6 +138,7 @@ class DashboardRepository
                         'item_id' => $transactionDetails['swineCart_id']
                     ]
                 );
+                $this->sendToPubSubServer('db-reservationExpiration', Auth::user()->email, ['product_type' => $product->type]);
 
                 // Delete reservation
                 $reservation->delete();
@@ -187,14 +190,12 @@ class DashboardRepository
         if($status == 'hidden' || $status == 'displayed' || $status == 'requested'){
             $products = $breeder->products;
 
-            $overallQuery = $products->where('status',$status);
             $boarQuery = $products->where('status',$status)->where('type','boar');
             $sowQuery = $products->where('status',$status)->where('type','sow');
             $giltQuery = $products->where('status',$status)->where('type','gilt');
             $semenQuery = $products->where('status',$status)->where('type','semen');
 
             return [
-                'overall' => $overallQuery->count(),
                 'boar' => $boarQuery->count(),
                 'sow' => $sowQuery->count(),
                 'gilt' => $giltQuery->count(),
@@ -207,14 +208,13 @@ class DashboardRepository
             foreach ($reservations as $reservation) {
                 $reservation->type = $reservation->product->type;
             }
-            $overallQuery = $reservations->where('order_status',$status);
+
             $boarQuery = $reservations->where('order_status',$status)->where('type','boar');
             $sowQuery = $reservations->where('order_status',$status)->where('type','sow');
             $giltQuery = $reservations->where('order_status',$status)->where('type','gilt');
             $semenQuery = $reservations->where('order_status',$status)->where('type','semen');
 
             return [
-                'overall' => $overallQuery->count(),
                 'boar' => $boarQuery->count(),
                 'sow' => $sowQuery->count(),
                 'gilt' => $giltQuery->count(),
@@ -435,6 +435,7 @@ class DashboardRepository
     {
         $reviewDetails = [];
         $query = $breeder->reviews()->orderBy('created_at','desc')->get();
+        $reviewsSize = $query->count();
         $reviews = $query->take(3);
         $deliveryRating = $query->avg('rating_delivery');
         $transactionRating = $query->avg('rating_transaction');
@@ -453,6 +454,7 @@ class DashboardRepository
             'delivery' => round($deliveryRating,1),
             'transaction' => round($transactionRating,1),
             'productQuality' => round($productQualityRating,1),
+            'reviewsSize' => $reviewsSize,
             'reviews' => $reviewDetails
         ];
     }
@@ -563,6 +565,7 @@ class DashboardRepository
                             'expiration_date' => $reservation->expiration_date->toDateTimeString(),
                         ]
                     );
+                    $this->sendToPubSubServer('db-reserved', Auth::user()->email, ['product_type' => $product->type]);
 
                     // If product type is not semen remove other requests to this product
                     $productRequests = SwineCartItem::where('product_id', $product->id)->where('customer_id', '<>', $request->customer_id)->where('reservation_id',0);
@@ -692,6 +695,7 @@ class DashboardRepository
                         'on_delivery' => $transactionDetails['created_at']->date
                     ]
                 );
+                $this->sendToPubSubServer('db-onDelivery', Auth::user()->email, ['product_type' => $product->type]);
 
                 return [
                     "OK",
@@ -741,6 +745,7 @@ class DashboardRepository
                         'paid' => $transactionDetails['created_at']->date
                     ]
                 );
+                $this->sendToPubSubServer('db-paid', Auth::user()->email, ['product_type' => $product->type]);
 
                 return [
                     "OK",
@@ -749,6 +754,8 @@ class DashboardRepository
 
             case 'sold':
                 $reservation = ProductReservation::find($request->reservation_id);
+                // Store previous reservation status
+                $oldStatus = $reservation->order_status;
                 $reservation->order_status = 'sold';
                 $reservation->save();
 
@@ -787,6 +794,12 @@ class DashboardRepository
                     [
                         'item_id' => $transactionDetails['swineCart_id'],
                         'sold' => $transactionDetails['created_at']->date
+                    ]
+                );
+                $this->sendToPubSubServer('db-sold', Auth::user()->email,
+                    [
+                        'product_type' => $product->type,
+                        'previous_status' => $oldStatus
                     ]
                 );
 

@@ -93,7 +93,7 @@
                         <span class="card-title">
                             <a href="{{route('dashboard.productStatus',['status' => 'paid'])}}" class="white-text">Paid</a>
                         </span>
-                        <h3>@{{ dashboardStats.paid.overall }}</h3>
+                        <h3>@{{ overallPaid }}</h3>
                     </div>
                     <div class="card-action teal">
                         <a class="white-text">Boar: @{{ dashboardStats.paid.boar }} </a>
@@ -112,7 +112,7 @@
                         <span class="card-title">
                             <a href="{{route('dashboard.productStatus',['status' => 'on_delivery'])}}" class="white-text">On Delivery</a>
                         </span>
-                        <h3>@{{ dashboardStats.on_delivery.overall }}</h3>
+                        <h3>@{{ overallOnDelivery }}</h3>
                     </div>
                     <div class="card-action grey">
                         <a class="white-text">Boar: @{{ dashboardStats.on_delivery.boar }} </a>
@@ -130,7 +130,7 @@
                         <span class="card-title">
                             <a href="{{route('dashboard.productStatus',['status' => 'reserved'])}}" class="white-text">Reserved</a>
                         </span>
-                        <h3>@{{ dashboardStats.reserved.overall }}</h3>
+                        <h3>@{{ overallReserved }}</h3>
                     </div>
                     <div class="card-action pink">
                         <a class="white-text">Boar: @{{ dashboardStats.reserved.boar }} </a>
@@ -148,7 +148,7 @@
                         <span class="card-title">
                             <a href="{{route('products',['type' => 'all-type', 'status' => 'hidden', 'sort' => 'none'])}}" class="black-text">Hidden</a>
                         </span>
-                        <h3>@{{ dashboardStats.hidden.overall }}</h3>
+                        <h3>@{{ overallHidden }}</h3>
                     </div>
                     <div class="card-action pink">
                         <a class="white-text">Boar: @{{ dashboardStats.hidden.boar }} </a>
@@ -166,7 +166,7 @@
                         <span class="card-title">
                             <a href="{{route('products',['type' => 'all-type', 'status' => 'displayed', 'sort' => 'none'])}}" class="black-text">Displayed</a>
                         </span>
-                        <h3>@{{ dashboardStats.displayed.overall }}</h3>
+                        <h3>@{{ overallDisplayed }}</h3>
                     </div>
                     <div class="card-action teal">
                         <a class="white-text">Boar: @{{ dashboardStats.displayed.boar }} </a>
@@ -184,7 +184,7 @@
                         <span class="card-title">
                             <a href="{{route('dashboard.productStatus',['status' => 'requested'])}}" class="black-text">Requested</a>
                         </span>
-                        <h3>@{{ dashboardStats.requested.overall }}</h3>
+                        <h3>@{{ overallRequested }}</h3>
                     </div>
                     <div class="card-action grey">
                         <a class="white-text">Boar: @{{ dashboardStats.requested.boar }} </a>
@@ -203,7 +203,7 @@
                     <span class="card-title">
                         <a href="{{route('dashboard.reviews')}}" class="white-text">Overall Average Rating</a>
                     </span>
-                    <h3>@{{ dashboardStats.ratings.overall }}/5</h3>
+                    <h3>@{{ overallRatings }}/5</h3>
                 </div>
                 <div class="card-action grey">
                     <a class="white-text">Delivery: @{{ dashboardStats.ratings.delivery }} </a>
@@ -222,15 +222,13 @@
                     </span>
                     <div id="review-slider" class="slider">
                         <ul class="slides teal">
-                            @foreach($dashboardStats['ratings']['reviews'] as $review)
-                                <li>
-                                    <img src="">
-                                    <div class="caption center-align">
-                                        <h5 style="margin:0;">"{{ $review['comment'] }}"</h5>
-                                        <h6 class="light grey-text text-lighten-3">- {{ $review['customerName'] }}</h6>
-                                    </div>
-                                </li>
-                            @endforeach
+                            <li v-for="review in dashboardStats.ratings.reviews">
+                                <img src="">
+                                <div class="caption center-align">
+                                    <h5 style="margin:0;">"@{{ review.comment }}"</h5>
+                                    <h6 class="light grey-text text-lighten-3">- @{{ review.customerName }}</h6>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>

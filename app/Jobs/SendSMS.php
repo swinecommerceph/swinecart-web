@@ -34,32 +34,37 @@ class SendSMS implements ShouldQueue
      */
     public function handle()
     {
-        $arr_post_body = array(
-            "message_type" => "SEND",
-            "mobile_number" => $this->str_replace_first('0', '63', $this->recipient),
-            "shortcode" => "292909000",
-            "message_id" => rand(0,1000000), //to be improved if messages will be stored in db
-            "message" => $this->message,
-            "client_id" => config('services.chikka.id'),
-            "secret_key" => config('services.chikka.secret')
-        );
+        $chikkaEnabled = env('CHIKKA_ENABLED', false);
 
-        $query_string = http_build_query($arr_post_body);
-        $URL = config('services.chikka.url');
+        if($chikkaEnabled){
+            
+            $arr_post_body = array(
+                "message_type" => "SEND",
+                "mobile_number" => $this->str_replace_first('0', '63', $this->recipient),
+                "shortcode" => "292909000",
+                "message_id" => rand(0,1000000), //to be improved if messages will be stored in db
+                "message" => $this->message,
+                "client_id" => config('services.chikka.id'),
+                "secret_key" => config('services.chikka.secret')
+            );
 
-        $curl_handler = curl_init($URL);
+            $query_string = http_build_query($arr_post_body);
+            $URL = config('services.chikka.url');
 
-        curl_setopt($curl_handler, CURLOPT_URL, $URL);
-        curl_setopt($curl_handler, CURLOPT_SSL_VERIFYPEER, false);
-        curl_setopt($curl_handler, CURLOPT_SSL_VERIFYHOST, false);
-        curl_setopt($curl_handler, CURLOPT_POST, count($arr_post_body));
-        curl_setopt($curl_handler, CURLOPT_POSTFIELDS, $query_string);
-        curl_setopt($curl_handler, CURLOPT_RETURNTRANSFER, TRUE);
+            $curl_handler = curl_init($URL);
 
-        $response = curl_exec($curl_handler);
-        $info = curl_getinfo($curl_handler, CURLINFO_HTTP_CODE);
+            curl_setopt($curl_handler, CURLOPT_URL, $URL);
+            curl_setopt($curl_handler, CURLOPT_SSL_VERIFYPEER, false);
+            curl_setopt($curl_handler, CURLOPT_SSL_VERIFYHOST, false);
+            curl_setopt($curl_handler, CURLOPT_POST, count($arr_post_body));
+            curl_setopt($curl_handler, CURLOPT_POSTFIELDS, $query_string);
+            curl_setopt($curl_handler, CURLOPT_RETURNTRANSFER, TRUE);
 
-        curl_close($curl_handler);
+            $response = curl_exec($curl_handler);
+            $info = curl_getinfo($curl_handler, CURLINFO_HTTP_CODE);
+
+            curl_close($curl_handler);
+        }
     }
 
     /**
