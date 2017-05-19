@@ -2279,19 +2279,6 @@ class AdminController extends Controller
         return view('user.admin.viewMaps', compact('breeders', 'customers'));
     }
 
-    public function viewUsersChange(Request $request){
-        if($request->ajax()){
-
-
-            $breeders = ($request->breeders == 'true')? Breeder::all(): [];
-            $customers = ($request->customers == 'true')? Customer::all(): [];
-
-
-            return array('breeders'=>$breeders, 'customers'=>$customers);
-        }
-
-    }
-
     /*
      * View broadcast announcement page
      *
@@ -2370,13 +2357,13 @@ class AdminController extends Controller
 
 
     public function messenger(){
-        $users = User::whereIn('userable_type', array('App\Models\Customer', 'App\Models\Breeder'))->orderBy('name')->get();
+        $users = User::all();
         return view('user.admin.messenger', compact('users'));
     }
 
     public function send(Request $request){
         if($request->ajax()){
-            $rcpts = User::whereIn('id', json_decode($_POST['recipients']))->get();
+            $rcpts = User::whereIn('id', json_decode($_POST['receipients']))->get();
             if($request->type == 'mail'){
                 $this->sendMail($request->message, $rcpts);
             }
@@ -2404,16 +2391,6 @@ class AdminController extends Controller
                $message->to($rcpt['email'])->subject('Announcement from Swine E-Commerce PH');
             });
         }
-    }
-
-    public function recipients(Request $request){
-        $searchTerm = $request->term;
-        $rcpts = User::whereIn('userable_type', array('App\Models\Customer', 'App\Models\Breeder'))->where('name', 'LIKE', '%'.$searchTerm.'%')->limit(7)->get();
-        $arr = [];
-        foreach ($rcpts as $rcpt) {
-            $arr[] = $rcpt['name'];
-        }
-        echo json_encode($arr);
     }
 
     public function str_replace_first($from, $to, $subject){
