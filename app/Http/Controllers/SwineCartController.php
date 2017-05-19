@@ -86,66 +86,6 @@ class SwineCartController extends Controller
     }
 
     /**
-     * Rates breeder from Swine Cart
-     * AJAX
-     *
-     * @param  Request $request
-     */
-    public function rateBreeder(Request $request){
-        if($request->ajax()){
-            $customer = $this->user->userable;
-            $reviews = Breeder::find($request->breederId)->reviews();
-
-            $review = new Review;
-            $review->customer_id = $request->customerId;
-            $review->comment = $request->comment;
-            $review->rating_delivery = $request->delivery;
-            $review->rating_transaction = $request->transaction;
-            $review->rating_productQuality = $request->productQuality;
-
-            $swineCartItems = $customer->swineCartItems();
-            $reviewed = $swineCartItems->where('product_id',$request->productId)->first();
-            $reviewed->if_rated = 1;
-            $reviewed->save();
-            $reviews->save($review);
-
-            $breeder = Breeder::find($request->breederId);
-
-            $transactionDetails = [
-                'swineCart_id' => $reviewed->id,
-                'customer_id' => $request->customerId,
-                'breeder_id' => $request->breederId,
-                'product_id' => $request->productId,
-                'status' => 'rated',
-                'created_at' => Carbon::now()
-            ];
-
-            $notificationDetails = [
-                'description' => 'Customer <b>' . $this->user->name . ' rated</b> you with ' . round(($review->rating_delivery + $review->rating_transaction + $review->rating_productQuality)/3, 2) . ' (overall average).',
-                'time' => $transactionDetails['created_at'],
-                'url' => route('dashboard')
-            ];
-
-            $smsDetails = [
-                'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Customer ' . $this->user->name . ' rated you with ' . round(($review->rating_delivery + $review->rating_transaction + $review->rating_productQuality)/3, 2) . ' (overall average).',
-                'recepient' => $breeder->office_mobile
-            ];
-
-            // Add new Transaction Log. Queue AddToTransactionLog job
-            dispatch(new AddToTransactionLog($transactionDetails));
-            // Queue SendSMS job
-            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
-
-            // Notify Breeder of the rating
-            $breederUser = $breeder->users()->first();
-            $breederUser->notify(new BreederRated($notificationDetails));
-            $this->sendToPubSubServer('notification', $breederUser->email);
-
-            return "OK";
-        }
-    }
-
-    /**
      * Requests item from Swine Cart
      * AJAX
      *
@@ -155,6 +95,7 @@ class SwineCartController extends Controller
     public function requestSwineCartItem(Request $request)
     {
         if ($request->ajax()) {
+            $alreadyRequestedFlag = 0;
             $customer = $this->user->userable;
             $swineCartItems = $customer->swineCartItems();
 
@@ -166,10 +107,15 @@ class SwineCartController extends Controller
             $requested->special_request = $request->specialRequest;
             $requested->save();
 
-            // Update Product
+            // Update Product if status is not yet updated
             $product = Product::find($request->productId);
-            $product->status = "requested";
-            $product->save();
+            if($product->status == "requested"){
+                $alreadyRequestedFlag = 1;
+            }
+            else{
+                $product->status = "requested";
+                $product->save();
+            }
 
             $breeder = Breeder::find($product->breeder_id);
 
@@ -190,13 +136,13 @@ class SwineCartController extends Controller
 
             $smsDetails = [
                 'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: ' . $this->user->name . ' requested for Product ' . $product->name . '.',
-                'recepient' => $breeder->office_mobile
+                'recipient' => $breeder->office_mobile
             ];
 
             // Add new Transaction Log. Queue AddToTransactionLog job
             dispatch(new AddToTransactionLog($transactionDetails));
             // Queue SendSMS job
-            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recepient']));
+            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
 
             // Notify Breeder of the request
             $breederUser = $breeder->users()->first();
@@ -229,6 +175,7 @@ class SwineCartController extends Controller
                     ]
                 ]
             );
+            if(!$alreadyRequestedFlag) $this->sendToPubSubServer('db-requested', $breederUser->email, ['product_type' => $product->type]);
 
             return [$customer->swineCartItems()->where('if_requested',0)->count(), $transactionDetails['created_at']];
         }
@@ -409,6 +356,75 @@ class SwineCartController extends Controller
         if($request->ajax()){
             $customer = $this->user->userable;
             return $customer->swineCartItems()->where('if_requested',0)->count();
+        }
+    }
+
+    /**
+     * Rates breeder from Swine Cart
+     * AJAX
+     *
+     * @param  Request $request
+     */
+    public function rateBreeder(Request $request){
+        if($request->ajax()){
+            $customer = $this->user->userable;
+            $reviews = Breeder::find($request->breederId)->reviews();
+
+            $review = new Review;
+            $review->customer_id = $request->customerId;
+            $review->comment = $request->comment;
+            $review->rating_delivery = $request->delivery;
+            $review->rating_transaction = $request->transaction;
+            $review->rating_productQuality = $request->productQuality;
+
+            $swineCartItems = $customer->swineCartItems();
+            $reviewed = $swineCartItems->where('product_id',$request->productId)->first();
+            $reviewed->if_rated = 1;
+            $reviewed->save();
+            $reviews->save($review);
+
+            $breeder = Breeder::find($request->breederId);
+
+            $transactionDetails = [
+                'swineCart_id' => $reviewed->id,
+                'customer_id' => $request->customerId,
+                'breeder_id' => $request->breederId,
+                'product_id' => $request->productId,
+                'status' => 'rated',
+                'created_at' => Carbon::now()
+            ];
+
+            $notificationDetails = [
+                'description' => 'Customer <b>' . $this->user->name . ' rated</b> you with ' . round(($review->rating_delivery + $review->rating_transaction + $review->rating_productQuality)/3, 2) . ' (overall average).',
+                'time' => $transactionDetails['created_at'],
+                'url' => route('dashboard')
+            ];
+
+            $smsDetails = [
+                'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Customer ' . $this->user->name . ' rated you with ' . round(($review->rating_delivery + $review->rating_transaction + $review->rating_productQuality)/3, 2) . ' (overall average).',
+                'recipient' => $breeder->office_mobile
+            ];
+
+            // Add new Transaction Log. Queue AddToTransactionLog job
+            dispatch(new AddToTransactionLog($transactionDetails));
+            // Queue SendSMS job
+            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+
+            // Notify Breeder of the rating
+            $breederUser = $breeder->users()->first();
+            $breederUser->notify(new BreederRated($notificationDetails));
+            $this->sendToPubSubServer('notification', $breederUser->email);
+            $this->sendToPubSubServer('db-rated', $breederUser->email,
+                [
+                    'rating_delivery' => $review->rating_delivery,
+                    'rating_transaction' => $review->rating_transaction,
+                    'rating_productQuality' => $review->productQuality,
+                    'review_comment' => $review->comment,
+                    'review_customerName' => $this->user->name
+                ]
+            );
+
+            return "OK";
         }
     }
 
