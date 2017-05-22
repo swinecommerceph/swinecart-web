@@ -359,9 +359,9 @@ Vue.component('order-details',{
                         // Update (remove product) list of products on root data
                         this.$emit('remove-product', index);
 
-                        Materialize.toast(data[1] + ' removed from Swine Cart', 1800, 'green lighten-1');
+                        Materialize.toast(data[1] + ' removed from Swine Cart', 2000, 'green lighten-1');
 
-                    } else Materialize.toast(data[1] + ' is ' + data[0], 1500, 'orange accent-2');
+                    } else Materialize.toast(data[1] + ' is ' + data[0], 2000, 'orange accent-2');
 
                 },
                 function(response){
@@ -381,10 +381,11 @@ Vue.component('order-details',{
             $('#request-product-confirmation-modal').modal('open');
         },
 
-        requestProduct: function(){
+        requestProduct: function(event){
             var index = this.productRequest.index;
+            var requestButtons = document.querySelectorAll('.request-product-buttons');
 
-            $('#request-product-confirmation-modal').modal('close');
+            this.disableButtons('request', requestButtons, event.target);
 
             // Do AJAX
             this.$http.patch(
@@ -412,6 +413,7 @@ Vue.component('order-details',{
                         statusTransaction: data[1].date
                     };
 
+                    $('#request-product-confirmation-modal').modal('close');
                     this.$emit('product-requested', updateDetails);
 
                     // Put quantity of Swine Cart to sessionStorage
@@ -427,13 +429,14 @@ Vue.component('order-details',{
                     }
                     else span.html(sessionStorage.getItem('swine_cart_quantity'));
 
-                    Materialize.toast(this.products[index].product_name + ' requested', 1800, 'green lighten-1')
+                    Materialize.toast(this.products[index].product_name + ' requested', 2000, 'green lighten-1')
 
                     // Update some DOM elements
                     this.$nextTick(function(){
                         $('.tooltipped').tooltip({delay:50});
                         $('label[for="special-request"]').removeClass('active');
                         $('label[for="date-needed"]').removeClass('active');
+                        this.enableButtons('request', requestButtons, event.target);
                     });
 
                 },
@@ -451,10 +454,11 @@ Vue.component('order-details',{
             this.breederRate.breederName = this.products[index].breeder;
         },
 
-        rateAndRecord: function(){
+        rateAndRecord: function(event){
             var index = this.breederRate.index;
+            var rateButtons = document.querySelectorAll('.rate-breeder-buttons');
 
-            $('#rate-modal').modal('close');
+            this.disableButtons('rate', rateButtons, event.target);
 
             // Do AJAX
             this.$http.post(
@@ -471,9 +475,10 @@ Vue.component('order-details',{
                 }
             ).then(
                 function(response){
-                    Materialize.toast(this.products[index].breeder + ' rated', 1800, 'green lighten-1');
+                    $('#rate-modal').modal('close');
+                    Materialize.toast(this.products[index].breeder + ' rated', 2000, 'green lighten-1');
 
-                    // Update local storage of the products
+                    // Update local storage of the ratings modal
                     this.breederRate.commentField = '';
                     this.breederRate.deliveryValue = 0;
                     this.breederRate.transactionValue = 0;
@@ -483,6 +488,8 @@ Vue.component('order-details',{
                     this.$emit('update-history',
                         { 'index': index }
                     );
+
+                    this.enableButtons('rate', rateButtons, event.target);
                 },
                 function(response){
                     console.log(response.statusText);
@@ -493,6 +500,42 @@ Vue.component('order-details',{
             this.$refs.delivery.normalizeClasses(-1);
             this.$refs.transaction.normalizeClasses(-1);
             this.$refs.productQuality.normalizeClasses(-1);
+        },
+
+        disableButtons: function(operation, buttons, actionBtnElement){
+            buttons.forEach(function(element){
+                element.classList.add('disabled');
+            });
+
+            switch (operation) {
+                case 'request':
+                    actionBtnElement.innerHTML = 'Requesting ...';
+
+                    break;
+                case 'rate':
+                    actionBtnElement.innerHTML = 'Rating ...';
+
+                    break;
+                default: break
+            }
+        },
+
+        enableButtons: function(operation, buttons, actionBtnElement){
+            buttons.forEach(function(element){
+                element.classList.remove('disabled');
+            });
+
+            switch (operation){
+                case 'request':
+                    actionBtnElement.innerHTML = 'Yes';
+
+                    break;
+                case 'rate':
+                    actionBtnElement.innerHTML = 'Rate';
+
+                    break;
+                default: break
+            }
         },
 
         setDeliveryRating: function(value){

@@ -215,7 +215,10 @@ Vue.component('status-table',{
             $('#reserve-product-confirmation-modal').modal('open');
         },
 
-        reserveToCustomer: function(){
+        reserveToCustomer: function(event){
+            var reserveButtons = document.querySelectorAll('.reserve-product-buttons');
+            this.disableButtons(reserveButtons, event.target);
+
             // Do AJAX
             this.$http.patch(
                 config.dashboard_url+'/product-status/update-status',
@@ -237,7 +240,7 @@ Vue.component('status-table',{
 
                     $('#reserve-product-confirmation-modal').modal('close');
                     $('#product-requests-modal').modal('close');
-
+                    
                     // Update product data (root data) based on the response
                     // of the AJAX PATCH method
                     if(responseBody[0] === "success"){
@@ -284,6 +287,7 @@ Vue.component('status-table',{
                         if(responseBody[0] === "success") Materialize.toast(responseBody[1], 2500, 'green lighten-1');
                         else Materialize.toast(responseBody[1], 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
+                        this.enableButtons(reserveButtons, event.target);
                     });
                 },
                 function(response){
@@ -308,7 +312,10 @@ Vue.component('status-table',{
             else $('#sold-product-confirmation-modal').modal('open');
         },
 
-        productOnDelivery: function(){
+        productOnDelivery: function(event){
+            var deliveryButtons = document.querySelectorAll('.delivery-product-buttons');
+            this.disableButtons(deliveryButtons, event.target);
+
             // Do AJAX
             this.$http.patch(
                 config.dashboard_url+'/product-status/update-status',
@@ -342,6 +349,7 @@ Vue.component('status-table',{
                         if(responseBody[0] === "OK") Materialize.toast(productName + ' on delivery to ' + customerName , 2500, 'green lighten-1');
                         else Materialize.toast('Failed status change', 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
+                        this.enableButtons(deliveryButtons, event.target);
                     });
                 },
                 function(response){
@@ -350,7 +358,10 @@ Vue.component('status-table',{
             );
         },
 
-        productPaid: function(){
+        productPaid: function(event){
+            var payButtons = document.querySelectorAll('.pay-product-buttons');
+            this.disableButtons(payButtons, event.target);
+
             // Do AJAX
             this.$http.patch(
                 config.dashboard_url+'/product-status/update-status',
@@ -384,6 +395,7 @@ Vue.component('status-table',{
                         if(responseBody[0] === "OK") Materialize.toast(productName + ' already paid by ' + customerName , 2500, 'green lighten-1');
                         else Materialize.toast('Failed status change', 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
+                        this.enableButtons(payButtons, event.target);
                     });
                 },
                 function(response){
@@ -393,6 +405,9 @@ Vue.component('status-table',{
         },
 
         productOnSold: function(){
+            var soldButtons = document.querySelectorAll('.sold-product-buttons');
+            this.disableButtons(soldButtons, event.target);
+
             // Do AJAX
             this.$http.patch(
                 config.dashboard_url+'/product-status/update-status',
@@ -426,6 +441,7 @@ Vue.component('status-table',{
                         if(responseBody[0] === "OK") Materialize.toast(productName + ' already sold to ' + customerName , 2500, 'green lighten-1');
                         else Materialize.toast('Failed status change', 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
+                        this.enableButtons(soldButtons, event.target);
                     });
                 },
                 function(response){
@@ -445,7 +461,23 @@ Vue.component('status-table',{
             this.reservationDetails.specialRequest = this.products[index].special_request;
 
             $('#product-reservation-details-modal').modal('open');
-        }
+        },
+
+        disableButtons: function(buttons, actionBtnElement){
+            buttons.forEach(function(element){
+                element.classList.add('disabled');
+            });
+
+            actionBtnElement.innerHTML = '...';
+        },
+
+        enableButtons: function(buttons, actionBtnElement){
+            buttons.forEach(function(element){
+                element.classList.remove('disabled');
+            });
+
+            actionBtnElement.innerHTML = 'Yes';
+        },
 
     },
     filters: {

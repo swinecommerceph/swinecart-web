@@ -1,7 +1,9 @@
 	$(document).ready(function(){
 
     // Hide certain elements
-	$('.modal-trigger, .modal').modal();
+	$('.modal-trigger, .modal').modal({
+		dismissible: false
+	});
 
     // Initialization for Sliders
     $('.home-slider').slider({fullWidth: true});

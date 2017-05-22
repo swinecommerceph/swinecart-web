@@ -291,8 +291,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-                    <a class="modal-action waves-effect waves-green btn-flat" @click.prevent="reserveToCustomer">Yes</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat reserve-product-buttons">Close</a>
+                    <a class="modal-action waves-effect waves-green btn-flat reserve-product-buttons" @click.prevent="reserveToCustomer($event)">Yes</a>
                 </div>
             </div>
 
@@ -305,8 +305,8 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-                    <a class="modal-action waves-effect waves-green btn-flat" @click.prevent="productOnDelivery">Yes</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat delivery-product-buttons">Close</a>
+                    <a class="modal-action waves-effect waves-green btn-flat delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes</a>
                 </div>
             </div>
 
@@ -319,8 +319,8 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-                    <a class="modal-action waves-effect waves-green btn-flat" @click.prevent="productPaid">Yes</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat pay-product-buttons">Close</a>
+                    <a class="modal-action waves-effect waves-green btn-flat pay-product-buttons" @click.prevent="productPaid($event)">Yes</a>
                 </div>
             </div>
 
@@ -333,8 +333,8 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-                    <a class="modal-action waves-effect waves-green btn-flat" @click.prevent="productOnSold">Yes</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat sold-product-buttons">Close</a>
+                    <a class="modal-action waves-effect waves-green btn-flat sold-product-buttons" @click.prevent="productOnSold($event)">Yes</a>
                 </div>
             </div>
 

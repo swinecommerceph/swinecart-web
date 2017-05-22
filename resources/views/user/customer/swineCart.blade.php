@@ -511,9 +511,9 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-                    <a class="modal-action waves-effect waves-green btn-flat request-product-button"
-                        @click.prevent="requestProduct"
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons">Close</a>
+                    <a class="modal-action waves-effect waves-green btn-flat request-product-buttons"
+                        @click.prevent="requestProduct($event)"
                     >
                         Yes
                     </a>
@@ -590,10 +590,10 @@
                 </div>
               </div>
               <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn-flat"
-                        @click.prevent="rateAndRecord"
+                    <a class="modal-action waves-effect waves-green btn-flat rate-breeder-buttons"
+                        @click.prevent="rateAndRecord($event)"
                     >
-                        Submit
+                        Rate
                     </a>
               </div>
             </div>
