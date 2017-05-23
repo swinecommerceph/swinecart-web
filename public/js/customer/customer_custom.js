@@ -9,12 +9,7 @@ $(document).ready(function(){
     // Add product to Swine Cart
     $(".add-to-cart").click(function(e){
         e.preventDefault();
-        // $($(this).find('i')[0]).html('refresh');
-        // setTimeout(function(){
-        //     console.log(this);
-        //     $($(this).find('i')[0]).html('add_shopping_cart');
-        // }.bind(this), 1000);
-        swinecart.add($(this).parents('form'));
+        swinecart.add($(this));
     })
 
     // Get items from Swine Cart

@@ -1,7 +1,13 @@
 'use strict';
 
 var swinecart = {
-    add: function(parent_form) {
+    add: function(add_button) {
+        var parent_form = add_button.parents('form');
+        var add_icon = $(add_button.find('i')[0]);
+
+        // Disable button and show preloader
+        add_icon.addClass('grey-text');
+        config.preloader_progress.show();
 
         // Do AJAX
         $.ajax({
@@ -14,6 +20,10 @@ var swinecart = {
                 "type": parent_form.attr('data-type'),
             },
             success: function(data) {
+                // Enable button and hide preloader
+                add_icon.removeClass('grey-text');
+                config.preloader_progress.hide();
+
                 // If product is not yet in Swine Cart
                 if (data[0] === 'success') {
                     var span = $('#cart-icon span');
