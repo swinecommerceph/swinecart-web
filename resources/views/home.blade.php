@@ -12,45 +12,55 @@
     <div class="row"> </div>
     {{-- First row --}}
     <div class="row">
-        <div class="container">
 
-            <div class="col s8">
-                <div id="home-carousel" class="carousel carousel-slider center" data-indicators="true" style="height:35rem;">
-                    {{-- <div class="carousel-fixed-item center">
-                        <a class="btn waves-effect white grey-text darken-text-2">button</a>
-                    </div> --}}
-                    <div class="carousel-item white-text" href="#one!" style="background-image:url('/images/demo/HP1.jpg'); background-size:cover;">
-                        <h2>First Panel</h2>
-                        <p class="black-text">The first panel</p>
-                    </div>
-                    <div class="carousel-item white-text" href="#two!" style="background-image:url('/images/demo/HP2.jpg'); background-size:cover;">
-                        <h2>Second Panel</h2>
-                        <p class="black-text">The second panel</p>
-                    </div>
-                    <div class="carousel-item white-text" href="#three!" style="background-image:url('/images/demo/HP3.jpg'); background-size:cover;">
-                        <h2>Third Panel</h2>
-                        <p class="black-text">The third panel</p>
-                    </div>
-                    <div class="carousel-item white-text" href="#four!" style="background-image:url('/images/demo/HP4.jpg'); background-size:cover;">
-                        <h2>Fourth Panel</h2>
-                        <p class="black-text">The fourth panel</p>
-                    </div>
-                </div>
+        <div class="col s7 offset-s1">
+            <div id="homepage-slider" class="slider">
+                <ul class="slides">
+                    <li>
+                        <img src="/images/demo/home1.jpg"> <!-- random image -->
+                        <div class="caption center-align">
+                            <h3>Welcome to SwineCart!</h3>
+                            <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                        </div>
+                    </li>
+                    <li>
+                        <img src="/images/demo/home2.jpg"> <!-- random image -->
+                        <div class="caption left-align">
+                            <h3>Left Aligned Caption</h3>
+                            <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                        </div>
+                    </li>
+                    <li>
+                        <img src="/images/demo/home3.jpg"> <!-- random image -->
+                        <div class="caption right-align">
+                            <h3>Right Aligned Caption</h3>
+                            <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                        </div>
+                    </li>
+                </ul>
             </div>
-            <div class="col s4 valign-wrapper">
-                <div class="center">
-                    <img src="/images/logodark.png" alt="" />
-                    <h2>SwineCart</h2>
-                    <p>
+        </div>
+        <div class="col s3 valign-wrapper">
+            <div>
+                <div class="col s12">
+                    <p><br><br></p>
+                    <img class="right" src="/images/logodark.png" alt="" width="180" height="180"/>
+                </div>
+                <div class="col s12">
+                    <h2 class="right teal-text text-darken-4" style="margin:0; font-family:Electrolize;">SwineCart</h2>
+                </div>
+                <div class="col s12">
+                    <h5 class="right-align grey-text" style="margin:0">
                         Your next premium breed is just a click away
-                    </p>
-                    <p>
+                    </h5>
+                    <p class="grey-text">
                         SwineCart is an e-commerce system that facilitates secure business transactions
                         between buyers and sellers of breeder swine and semen
                     </p>
                 </div>
             </div>
         </div>
+
     </div>
 
     {{-- Second row --}}
@@ -61,20 +71,20 @@
             </p>
         </div>
         <div class="container">
-            <div class="col s6 center" style="margin: 3rem 0 2rem 0; border-right: thick solid #00695c;">
+            <div class="col s6" style="margin: 3rem 0 2rem 0; border-right: thick solid #00695c;">
                 <div class="col s12">
-                    <div class="col s12">
-                        <i class="ecommerce-icon grey-text text-darken-2">n</i>
+                    <div class="col s12 center">
+                        <i class="ecommerce-icon grey-text text-darken-2" style="font-size:10rem;">n</i>
                     </div>
-                    <div class="col s12">
+                    <div class="col s12 center">
                         <h4 class="teal-text text-darken-2">BREEDER</h4>
                     </div>
-                    <div class="col s12">
+                    <div class="col s12 center">
                         <p class="grey-text text-darken-1">
                             SBFAP Accredited Breeder Farm? Sell your products here.
                         </p>
                     </div>
-                    <div class="col s12" style="margin:0 auto;">
+                    <div class="col s12" style="">
                         {{-- <p class="left-align"> --}}
                             <a href="#!" class="btn-flat"><i class="material-icons right">chevron_right</i> Get accredited </a> <br>
                             <a href="{{ url('login') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
@@ -83,20 +93,20 @@
                     </div>
                 </div>
             </div>
-            <div class="col s6 center" style="margin: 3rem 0 2rem 0;">
+            <div class="col s6" style="margin: 3rem 0 2rem 0;">
                 <div class="col s12">
-                    <div class="col s12">
-                        <i class="ecommerce-icon grey-text text-darken-2">v</i>
+                    <div class="col s12 center">
+                        <i class="ecommerce-icon grey-text text-darken-2" style="font-size:10rem;">v</i>
                     </div>
-                    <div class="col s12">
+                    <div class="col s12 center">
                         <h4 class="teal-text text-darken-2">CUSTOMER</h4>
                     </div>
-                    <div class="col s12">
+                    <div class="col s12 center">
                         <p class="grey-text text-darken-1">
                             Commercial hog raiser or backyard farmer? Find the good breeds here.
                         </p>
                     </div>
-                    <div class="col s12" style="margin:0 auto;">
+                    <div class="col s12" style="">
                         {{-- <p class="left-align"> --}}
                             <a href="{{ url('register') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Register </a> <br>
                             <a href="{{ url('login') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Log-in </a> <br>

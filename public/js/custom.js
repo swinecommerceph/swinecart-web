@@ -6,11 +6,16 @@
 	});
 
     // Initialization for Sliders
-    $('.home-slider').slider({fullWidth: true});
+	$('.home-slider').slider({fullWidth: true});
+    $('#homepage-slider').slider(
+		{
+			fullWidth: true,
+			height: 500
+		}
+	);
 
     // Initialization for Carousels
     $('.carousel').carousel();
-	$('#home-carousel').carousel({fullWidth:true});
 
     // Initialization for Material Boxes
     $('.materialboxed').materialbox();
