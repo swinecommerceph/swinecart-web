@@ -70,48 +70,50 @@
                 <h4 class="white-text">SWINECART USERS</h4>
             </p>
         </div>
-        <div class="container">
-            <div class="col s6" style="margin: 3rem 0 2rem 0; border-right: thick solid #00695c;">
-                <div class="col s12">
-                    <div class="col s12 center">
-                        <i class="ecommerce-icon grey-text text-darken-2" style="font-size:10rem;">n</i>
-                    </div>
-                    <div class="col s12 center">
-                        <h4 class="teal-text text-darken-2">BREEDER</h4>
-                    </div>
-                    <div class="col s12 center">
-                        <p class="grey-text text-darken-1">
-                            SBFAP Accredited Breeder Farm? Sell your products here.
-                        </p>
-                    </div>
-                    <div class="col s12" style="">
-                        {{-- <p class="left-align"> --}}
-                            <a href="#!" class="btn-flat"><i class="material-icons right">chevron_right</i> Get accredited </a> <br>
-                            <a href="{{ url('login') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
-                            <a href="#!" class="btn-flat"><i class="material-icons right">chevron_right</i> Learn More </a>
-                        {{-- </p> --}}
+        <div class="col s12 teal darken-3">
+            <div class="container">
+                <div class="col s6" style="margin: 3rem 0 2rem 0; border-right: thick solid #fff;">
+                    <div class="col s12 white-text">
+                        <div class="col s12 center">
+                            <i class="ecommerce-icon white-text" style="font-size:10rem;">n</i>
+                        </div>
+                        <div class="col s12 center">
+                            <h4 class="">BREEDER</h4>
+                        </div>
+                        <div class="col s12 center">
+                            <p class="">
+                                SBFAP Accredited Breeder Farm? Sell your products here.
+                            </p>
+                        </div>
+                        <div class="col s12" style="">
+                            {{-- <p class="left-align"> --}}
+                                <a href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Get accredited </a> <br>
+                                <a href="{{ url('login') }}" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
+                                <a href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
+                            {{-- </p> --}}
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col s6" style="margin: 3rem 0 2rem 0;">
-                <div class="col s12">
-                    <div class="col s12 center">
-                        <i class="ecommerce-icon grey-text text-darken-2" style="font-size:10rem;">v</i>
-                    </div>
-                    <div class="col s12 center">
-                        <h4 class="teal-text text-darken-2">CUSTOMER</h4>
-                    </div>
-                    <div class="col s12 center">
-                        <p class="grey-text text-darken-1">
-                            Commercial hog raiser or backyard farmer? Find the good breeds here.
-                        </p>
-                    </div>
-                    <div class="col s12" style="">
-                        {{-- <p class="left-align"> --}}
-                            <a href="{{ url('register') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Register </a> <br>
-                            <a href="{{ url('login') }}" class="btn-flat"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
-                            <a href="#!" class="btn-flat"><i class="material-icons right">chevron_right</i> Learn More </a>
-                        {{-- </p> --}}
+                <div class="col s6" style="margin: 3rem 0 2rem 0;">
+                    <div class="col s12 white-text">
+                        <div class="col s12 center">
+                            <i class="ecommerce-icon white-text" style="font-size:10rem;">v</i>
+                        </div>
+                        <div class="col s12 center">
+                            <h4 class="">CUSTOMER</h4>
+                        </div>
+                        <div class="col s12 center">
+                            <p class="">
+                                Commercial hog raiser or backyard farmer? Find the good breeds here.
+                            </p>
+                        </div>
+                        <div class="col s12" style="">
+                            {{-- <p class="left-align"> --}}
+                                <a href="{{ url('register') }}" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Register </a> <br>
+                                <a href="{{ url('login') }}" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
+                                <a href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
+                            {{-- </p> --}}
+                        </div>
                     </div>
                 </div>
             </div>
@@ -121,7 +123,7 @@
     {{-- Third row --}}
     <div class="row" style="margin-bottom:0;">
         <div class="col s12 center-align">
-            <p class="teal-text text-darken-2">
+            <p class="teal-text text-darken-3">
                 <h4>KEY FEATURES AND ADVANTAGES FOR BREEDERS</h4>
             </p>
         </div>
@@ -164,24 +166,24 @@
         </div>
 
         {{-- Last three features --}}
-        <div class="col s12 teal darken-4">
+        <div class="col s12">
             <div class="col s4 center" style="margin: 2rem 0 2rem 0;">
                 <div class="col s12">
                     <i class="ecommerce-icon black-text">b</i>
-                    <h4 class="white-text">CONNECT WITH CUSTOMERS</h4>
-                    <p class="white-text">
+                    <h4 class="teal-text text-darken-2">CONNECT WITH CUSTOMERS</h4>
+                    <p class="teal-text text-darken-1">
                         SwineCart supports various platforms to allow you to talk with your potential and exising customers.
                     </p>
-                    <p class="white-text">
+                    <p class="teal-text text-darken-1">
                         It supports chat, email, and SMS.
                     </p>
                 </div>
             </div>
-            <div class="col s4 center" style="margin: 2rem 0 2rem 0; border-left: thick solid white; border-right: thick solid white;">
+            <div class="col s4 center" style="margin: 2rem 0 2rem 0; border-left: thick solid #00695c; border-right: thick solid #00695c;">
                 <div class="col s12">
                     <i class="ecommerce-icon black-text">n</i>
-                    <h4 class="white-text">MANAGE INVENTORIES</h4>
-                    <p class="white-text">
+                    <h4 class="teal-text text-darken-2">MANAGE INVENTORIES</h4>
+                    <p class="teal-text text-darken-1">
                         Get real-time sales updates on all your farms in your SwineCart dashboard and prevent inventory outage and overstock through SwineCart's inventory tracking.
                     </p>
                 </div>
@@ -189,8 +191,8 @@
             <div class="col s4 center" style="margin: 2rem 0 2rem 0;">
                 <div class="col s12">
                     <i class="ecommerce-icon black-text">a</i>
-                    <h4 class="white-text">ENGAGE YOUR CUSTOMERS</h4>
-                    <p class="white-text">
+                    <h4 class="teal-text text-darken-2">ENGAGE YOUR CUSTOMERS</h4>
+                    <p class="teal-text text-darken-1">
                         Boost your product sales by letting your customers leave feedback and ratings in your breeder profile.
                     </p>
                 </div>
@@ -200,40 +202,40 @@
 
     {{-- Fourth row --}}
     <div class="row">
-        <div class="col s12 center-align teal darken-4">
+        <div class="col s12 center-align teal darken-3">
             <p>
                 <h4 class="white-text">KEY FEATURES AND ADVANTAGES FOR CUSTOMERS</h4>
             </p>
         </div>
 
         {{-- First three features --}}
-        <div class="col s12 teal darken-4">
+        <div class="col s12 teal darken-3">
             <div class="col s4 center" style="margin: 2rem 0 2rem 0;">
-                <div class="col s12">
-                    <i class="ecommerce-icon black-text">n</i>
-                    <h4 class="white-text">TRUSTED SELLERS</h4>
-                    <p class="white-text">
+                <div class="col s12 white-text">
+                    <i class="ecommerce-icon white-text">n</i>
+                    <h4 class="">TRUSTED SELLERS</h4>
+                    <p class="">
                         Only farms accredited by Swine Breeders Farm Accreditation Program (SBFAP) can sell their products in SwineCart.
                     </p>
-                    <p class="white-text">
+                    <p class="">
                         SBFAP is a program by  Bureau of Animal Industry (BAI) that ensures the availability of quality breeder swines in farms
                     </p>
                 </div>
             </div>
             <div class="col s4 center" style="margin: 2rem 0 2rem 0; border-left: thick solid white; border-right: thick solid white;">
-                <div class="col s12">
-                    <i class="ecommerce-icon black-text">a</i>
-                    <h4 class="white-text">FIND VARIETY OF BREEDERS</h4>
-                    <p class="white-text">
+                <div class="col s12 white-text">
+                    <i class="ecommerce-icon white-text">a</i>
+                    <h4 class="">FIND VARIETY OF BREEDERS</h4>
+                    <p class="">
                         Search for sellers near your area through an integrated map that approximates the location of accredited breeders.
                     </p>
                 </div>
             </div>
             <div class="col s4 center" style="margin: 2rem 0 2rem 0;">
-                <div class="col s12">
-                    <i class="ecommerce-icon black-text">d</i>
-                    <h4 class="white-text">HIGH QUALITY PRODUCTS</h4>
-                    <p class="white-text">
+                <div class="col s12 white-text">
+                    <i class="ecommerce-icon white-text">d</i>
+                    <h4 class="">HIGH QUALITY PRODUCTS</h4>
+                    <p class="">
                         Search for premium quality breeder swine and boar semen and browse through a wide variety of products from accredited breeders. Select products with the aid photos, videos, and complete product specifications
                     </p>
                 </div>
@@ -241,34 +243,36 @@
         </div>
 
         {{-- Last two features --}}
-        <div class="container">
-            <div class="col s6" style="margin: 3rem 0 2rem 0; border-right: thick solid #00695c;">
-                <div class="col s12">
-                    <div class="col s12 center">
-                        <i class="ecommerce-icon black-text">c</i>
-                    </div>
-                    <div class="col s12 center">
-                        <h4 class="teal-text text-darken-2">FAST TRANSACTION</h4>
-                    </div>
-                    <div class="col s12 center">
-                        <p class="grey-text text-darken-1">
-                            Communicate with breeders through SwineCart's built-in chat feature. You can also monitor your orders in real-time from reservation to delivery and get updates via SMS and email.
-                        </p>
+        <div class="col s12 teal darken-3">
+            <div class="container">
+                <div class="col s6" style="margin: 3rem 0 2rem 0; border-right: thick solid #fff;">
+                    <div class="col s12 white-text">
+                        <div class="col s12 center">
+                            <i class="ecommerce-icon white-text">c</i>
+                        </div>
+                        <div class="col s12 center">
+                            <h4 class="">FAST TRANSACTION</h4>
+                        </div>
+                        <div class="col s12 center">
+                            <p class="">
+                                Communicate with breeders through SwineCart's built-in chat feature. You can also monitor your orders in real-time from reservation to delivery and get updates via SMS and email.
+                            </p>
+                        </div>
                     </div>
                 </div>
-            </div>
-            <div class="col s6" style="margin: 3rem 0 2rem 0;">
-                <div class="col s12">
-                    <div class="col s12 center">
-                        <i class="ecommerce-icon black-text">v</i>
-                    </div>
-                    <div class="col s12 center">
-                        <h4 class="teal-text text-darken-2">RATING AND FEEDBACK</h4>
-                    </div>
-                    <div class="col s12 center">
-                        <p class="grey-text text-darken-1">
-                            After buying from SwineCart, share your experience with the SwineCart community by posting product and breeder ratings. By sharing your feedback, you can help other customers understand the product and easily find what they need.
-                        </p>
+                <div class="col s6" style="margin: 3rem 0 2rem 0;">
+                    <div class="col s12 white-text">
+                        <div class="col s12 center">
+                            <i class="ecommerce-icon white-text">v</i>
+                        </div>
+                        <div class="col s12 center">
+                            <h4 class="">RATING AND FEEDBACK</h4>
+                        </div>
+                        <div class="col s12 center">
+                            <p class="">
+                                After buying from SwineCart, share your experience with the SwineCart community by posting product and breeder ratings. By sharing your feedback, you can help other customers understand the product and easily find what they need.
+                            </p>
+                        </div>
                     </div>
                 </div>
             </div>
