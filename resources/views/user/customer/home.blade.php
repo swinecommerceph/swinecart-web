@@ -8,8 +8,9 @@
     | Customer
 @endsection
 
-@section('pubsubTopic')
+@section('globalVariables')
     <script type="text/javascript">
+        window.hostUrl = '{{ env('APP_URL') }}';
         window.pubsubTopic = '{{ crypt(Auth::user()->email, md5(Auth::user()->email)) }}';
         window.elasticsearchHost = '{{ env('APP_URL') }}' + ':9200';
     </script>

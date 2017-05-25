@@ -1,7 +1,7 @@
 'use strict';
 
 var config = {
-    host_url: 'http://localhost:8000',
+    host_url: window.hostUrl,
     authUser_url: '/home',
     customer_url: '/customer/home',
     breeder_url: '/breeder/home',
@@ -28,7 +28,7 @@ var config = {
     admin_url: '/admin',
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',
-    pubsubWSServer: 'ws://swinecommerceph.dev/pusher',
+    pubsubWSServer: 'ws://' + window.hostUrl + '/pusher',
     preloader_progress: $('#preloader-progress'),
     preloader_circular: $('#preloader-circular')
 

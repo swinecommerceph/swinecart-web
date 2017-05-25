@@ -29,7 +29,7 @@
   	{{-- <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> --}}
 
 	{{-- <script src="/js/vendor/VideoJS/ie8/videojs-ie8.min.js"></script> --}}
-	@yield('pubsubTopic')
+	@yield('globalVariables')
 </head>
 
 <body @yield('pageId')>

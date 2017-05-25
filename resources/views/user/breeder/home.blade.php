@@ -8,8 +8,9 @@
     | Breeder
 @endsection
 
-@section('pubsubTopic')
+@section('globalVariables')
     <script type="text/javascript">
+        window.hostUrl = '{{ env('APP_URL') }}';
         window.pubsubTopic = '{{ crypt(Auth::user()->email, md5(Auth::user()->email)) }}';
     </script>
 @endsection
