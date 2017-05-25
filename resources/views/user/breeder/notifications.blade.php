@@ -18,7 +18,7 @@
 
 @section('breadcrumb')
     <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="#!" class="breadcrumb">Notifcations</a>
+    <a href="#!" class="breadcrumb">Notifications</a>
 @endsection
 
 @section('content')

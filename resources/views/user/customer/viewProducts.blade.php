@@ -131,17 +131,14 @@
 
                           </div>
                         </li>
-                        {{-- <li id="filter-location">
-                            <div class="collapsible-header"><i class="material-icons">place</i>Province Location</div>
+                        <li id="filter-location">
+                            <div class="collapsible-header"><i class="material-icons">place</i>Breeder Locations</div>
                             <div class="collapsible-body">
-                                <div class="input-field col">
-                                    <select>
-                                        <option value="reg1" selected>Region I</option>
-                                        <option value="reg2">Region II</option>
-                                    </select>
-                                </div>
+                                <p>
+                                    <a href="{{ route('map.breeders') }}">Check locations</a>
+                                </p>
                             </div>
-                        </li> --}}
+                        </li>
                 </ul>
             </div>
         </div>

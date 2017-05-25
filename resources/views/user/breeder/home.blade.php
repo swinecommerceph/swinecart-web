@@ -8,8 +8,9 @@
     | Breeder
 @endsection
 
-@section('pubsubTopic')
+@section('globalVariables')
     <script type="text/javascript">
+        window.hostUrl = '{{ env('APP_URL') }}';
         window.pubsubTopic = '{{ crypt(Auth::user()->email, md5(Auth::user()->email)) }}';
     </script>
 @endsection
@@ -178,8 +179,6 @@
 @endsection
 
 @section('initScript')
-    <script src="/js/vendor/VueJS/vue.js"></script>
-    <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
     <script src="/js/vendor/moment.min.js"></script>
     <script src="/js/vendor/autobahn.min.js"></script>
     <script src="/js/breeder/breeder_custom.js"> </script>

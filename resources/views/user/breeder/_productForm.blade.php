@@ -12,7 +12,7 @@
 		<h4>Add Product <i class="material-icons right modal-action modal-close">close</i> </h4>
 		<div class="row">
 			<div id="tabs-container" class="col s12">
-				<ul class="tabs grey lighten-5">
+				<ul class="tabs tabs-fixed-width grey lighten-5">
 					<li class="tab col s4"><a href="#swine-information">Swine Information</a></li>
 					<li class="tab col s4"><a href="#breed-information">Breed Information</a></li>
 					<li class="tab col s4"><a href="#other-details">Other Details</a></li>
@@ -171,7 +171,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action"> Submit
+		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action" style="display:none;"> Submit
 			<i class="material-icons right">send</i>
 		</button>
 	</div>
@@ -273,7 +273,7 @@
 		<h4>Edit Product <i class="material-icons right modal-action modal-close">close</i> </h4>
 		<div class="row">
 			<div id="tabs-container" class="col s12">
-				<ul class="tabs grey lighten-5">
+				<ul class="tabs tabs-fixed-width grey lighten-5">
 					<li class="tab col s4"><a href="#edit-swine-information">Swine Information</a></li>
 					<li class="tab col s4"><a href="#edit-breed-information">Breed Information</a></li>
 					<li class="tab col s4"><a href="#edit-other-details">Other Details</a></li>
