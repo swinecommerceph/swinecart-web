@@ -39,6 +39,8 @@
 @endsection
 
 @section('customScript')
+    <script src="/js/vendor/VideoJS/video.min.js"></script>
+    <script src="/js/vendor/dropzone.js"></script>
     <script src="/js/breeder/product.js"> </script>
     <script src="/js/breeder/filter.js"> </script>
     <script src="/js/breeder/manageProducts_script.js"> </script>

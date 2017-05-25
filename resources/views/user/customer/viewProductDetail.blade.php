@@ -158,6 +158,7 @@
 @endsection
 
 @section('customScript')
+    <script src="/js/vendor/VideoJS/video.min.js"></script>
     <script src="/js/vendor/imagezoom.js"> </script>
     <script src="/js/customer/viewProductDetail_script.js"> </script>
 @endsection

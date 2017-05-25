@@ -178,8 +178,6 @@
 @endsection
 
 @section('initScript')
-    <script src="/js/vendor/VueJS/vue.js"></script>
-    <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
     <script src="/js/vendor/moment.min.js"></script>
     <script src="/js/vendor/autobahn.min.js"></script>
     <script src="/js/breeder/breeder_custom.js"> </script>

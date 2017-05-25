@@ -132,8 +132,8 @@
 
 	<script src="/js/vendor/jquery.min.js"></script>
 	<script src="/js/vendor/materialize.min.js"></script>
-	<script src="/js/vendor/dropzone.js"></script>
-	<script src="/js/vendor/VideoJS/video.min.js"></script>
+	<script src="/js/vendor/VueJS/vue.js"></script>
+    <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
 	<script src="/js/config.js"></script>
 	<script src="/js/custom.js"></script>
 	{{-- For user-specific initialization scripts --}}
