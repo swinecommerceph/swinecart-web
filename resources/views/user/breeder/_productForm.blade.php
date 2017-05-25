@@ -171,7 +171,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action"> Submit
+		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action" style="display:none;"> Submit
 			<i class="material-icons right">send</i>
 		</button>
 	</div>

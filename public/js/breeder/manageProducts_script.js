@@ -155,6 +155,10 @@ $(document).ready(function(){
         product.add($('#create-product'));
     });
 
+    $("#add-product-modal .tabs li").last().click(function(e){
+        $('#submit-button').show();
+    });
+
     /* ----------- Add Media Modal functionalities ----------- */
     // Move to Product Summary Modal
     $('#next-button').click(function(e){
