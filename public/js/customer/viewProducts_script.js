@@ -4,7 +4,7 @@ $(document).ready(function(){
 
     // Setup Elasticsearch
     var client = new $.es.Client({
-        hosts: 'http://localhost:9200'
+        hosts: window.elasticsearchHost
     });
 
     document.querySelector('#search-results').style.width = document.querySelector('#search-field').offsetWidth+'px';

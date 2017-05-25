@@ -11,6 +11,7 @@
 @section('pubsubTopic')
     <script type="text/javascript">
         window.pubsubTopic = '{{ crypt(Auth::user()->email, md5(Auth::user()->email)) }}';
+        window.elasticsearchHost = '{{ env('APP_URL') }}' + ':9200';
     </script>
 @endsection
 
@@ -263,7 +264,7 @@
 
             // Setup Elasticsearch
             var client = new $.es.Client({
-                hosts: 'http://localhost:9200'
+                hosts: window.elasticsearchHost
             });
 
             document.querySelector('#search-results').style.width = document.querySelector('#search-field').offsetWidth+'px';
