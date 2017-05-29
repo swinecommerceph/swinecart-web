@@ -26,8 +26,8 @@
 <div class="row">
 	<div class="col s12">
 		<ul class="tabs z-depth-1">
-			<li id="personal-tab" class="tab col s6"><a class="active" href="#personal-information"><i class="material-icons">domain</i>Office Information</a></li>
-			<li id="farm-tab" class="tab col s6"><a href="#farm-information"><i class="material-icons">store</i>Farm Information</a></li>
+			<li id="personal-tab" class="tab col s6"><a class="active" href="#personal-information">Office Information</a></li>
+			<li id="farm-tab" class="tab col s6"><a href="#farm-information">Farm Information</a></li>
 		</ul>
 	</div>
 	<div class="col s12">
