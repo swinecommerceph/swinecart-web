@@ -1,4 +1,4 @@
-    {{--
+{{--
     Displays Breeder profile form upon profile edit
 --}}
 
@@ -94,6 +94,7 @@
 @endsection
 
 @section('customScript')
+    <script src="/js/vendor/dropzone.js"></script>
     <script src="/js/breeder/profile.js"> </script>
     <script src="/js/breeder/editProfile_script.js"> </script>
     @if(Session::has('message'))
