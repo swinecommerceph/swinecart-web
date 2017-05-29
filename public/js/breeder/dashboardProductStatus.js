@@ -240,7 +240,7 @@ Vue.component('status-table',{
 
                     $('#reserve-product-confirmation-modal').modal('close');
                     $('#product-requests-modal').modal('close');
-                    
+
                     // Update product data (root data) based on the response
                     // of the AJAX PATCH method
                     if(responseBody[0] === "success"){
@@ -551,7 +551,6 @@ var vm = new Vue({
                                 'type': baseProduct.type,
                                 'age': baseProduct.age,
                                 'breed': baseProduct.breed,
-                                'img_path': baseProduct.img_path,
                                 'quantity': updateDetails.quantity,
                                 'adg': baseProduct.adg,
                                 'fcr': baseProduct.fcr,
