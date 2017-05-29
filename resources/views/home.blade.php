@@ -89,7 +89,7 @@
                             {{-- <p class="left-align"> --}}
                                 <a href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Get accredited </a> <br>
                                 <a href="{{ url('login') }}" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
-                                <a href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
+                                <a id="learn-more-breeder" href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
                             {{-- </p> --}}
                         </div>
                     </div>
@@ -111,7 +111,7 @@
                             {{-- <p class="left-align"> --}}
                                 <a href="{{ url('register') }}" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Register </a> <br>
                                 <a href="{{ url('login') }}" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
-                                <a href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
+                                <a id="learn-more-customer" href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
                             {{-- </p> --}}
                         </div>
                     </div>
@@ -121,7 +121,7 @@
     </div>
 
     {{-- Third row --}}
-    <div class="row" style="margin-bottom:0;">
+    <div id="breeder-features" class="row" style="margin-bottom:0;">
         <div class="col s12 center-align">
             <p class="teal-text text-darken-3">
                 <h4>KEY FEATURES AND ADVANTAGES FOR BREEDERS</h4>
@@ -201,7 +201,7 @@
     </div>
 
     {{-- Fourth row --}}
-    <div class="row">
+    <div id="customer-features" class="row">
         <div class="col s12 center-align teal darken-3">
             <p>
                 <h4 class="white-text">KEY FEATURES AND ADVANTAGES FOR CUSTOMERS</h4>

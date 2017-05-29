@@ -54,6 +54,19 @@
         }, 500);
     });
 
+	// Scroll animation on learn more
+	$('#learn-more-breeder').click(function(){
+		$('html,body').animate({
+        	scrollTop: $("#breeder-features").offset().top - $('nav').height()
+		}, 'slow');
+	});
+
+	$('#learn-more-customer').click(function(){
+		$('html,body').animate({
+        	scrollTop: $("#customer-features").offset().top - $('nav').height()
+		}, 'slow');
+	});
+
 	// Change left and right icons in Pagination
     if($('.pagination li:first-child a').length == 1)
         $('.pagination li:first-child a').html('<i class="material-icons">chevron_left</i>');
