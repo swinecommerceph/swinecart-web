@@ -9,7 +9,7 @@ $(document).ready(function(){
 
     var select_province = function(i){
         // Dynamically produce select element with options based on provinces
-        var selectElement = '<select name="farmAddress[' + i + '][province]">';
+        var selectElement = '<select name="farmAddress['+i+'][province]">';
 
         for(var key in provinces){
             selectElement += '<option value="' + key + '">' + key + '</option>';

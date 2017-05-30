@@ -6,6 +6,20 @@ $(document).ready(function(){
     /*
      * Create Profile specific
      */
+
+    var select_province = function(i){
+        // Dynamically produce select element with options based on provinces
+        var selectElement = '<select name="farmAddress['+i+'][province]">';
+
+        for(var key in provinces){
+         selectElement += '<option value="' + key + '">' + key + '</option>';
+        }
+
+        selectElement += '</select>';
+
+        return selectElement;
+    };
+
     $('#create-profile #farm-tab').addClass('disabled');
 
     // Next and previous buttons
@@ -88,7 +102,7 @@ $(document).ready(function(){
                 '<div class="row">'+
                     // Farm Address: Province
                     '<div class="input-field col s5 push-s1">'+
-                        '<input name="farmAddress['+i+'][province]" type="text">'+
+                        select_province(i) +
                         '<label for="farmAddress['+i+'][province]">Province*</label>'+
                     '</div>'+
 
@@ -134,6 +148,7 @@ $(document).ready(function(){
         '</div>'+
         '</div>').appendTo('#farm-address-body').fadeIn('slow');
 
+        $('#farm-address-body select').material_select();
         // Redirect to specified section
         location.href = '#farm-'+i;
         $("#remove-farm").tooltip({delay:50});
