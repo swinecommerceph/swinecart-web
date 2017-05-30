@@ -16,7 +16,7 @@ var profile = {
                 'name': $(this).find('input[name="farmAddress[][name]"]').val(),
                 'addressLine1': $(this).find('input[name="farmAddress[][addressLine1]"]').val(),
                 'addressLine2': $(this).find('input[name="farmAddress[][addressLine2]"]').val(),
-                'province': $(this).find('input[name="farmAddress[][province]"]').val(),
+                'province': $(this).find('select[name="farmAddress[][province]"] option:checked').val(),
                 'zipCode': $(this).find('input[name="farmAddress[][zipCode]"]').val(),
                 'farmType': $(this).find('input[name="farmAddress[][farmType]"]').val(),
                 'landline': $(this).find('input[name="farmAddress[][landline]"]').val(),
@@ -50,7 +50,10 @@ var profile = {
 
     edit: function(parent_form, edit_button, cancel_button){
         config.preloader_progress.fadeIn();
-        $.when(parent_form.find('input').prop('disabled',false)).done(function(){
+        $.when(
+            parent_form.find('input, select').prop('disabled',false),
+            parent_form.find('select').material_select()
+        ).done(function(){
             profile.edit_farm_name = edit_button.attr('data-tooltip');
             // Edit tooltip animation to Done
             edit_button.attr('data-tooltip','Done');
@@ -73,7 +76,7 @@ var profile = {
                 "id": parent_form.attr('data-personal-id'),
                 "address_addressLine1": parent_form.find('input[name=address_addressLine1]').val(),
                 "address_addressLine2": parent_form.find('input[name=address_addressLine2]').val(),
-                "address_province": parent_form.find('input[name=address_province]').val(),
+                "address_province": parent_form.find('select[name=address_province] option:checked').val(),
                 "address_zipCode": parent_form.find('input[name=address_zipCode]').val(),
                 "landline": parent_form.find('input[name=landline]').val(),
                 "mobile": parent_form.find('input[name=mobile]').val(),
@@ -86,7 +89,7 @@ var profile = {
                 "name": parent_form.find('input[name=name]').val(),
                 "addressLine1": parent_form.find('input[name=addressLine1]').val(),
                 "addressLine2": parent_form.find('input[name=addressLine2]').val(),
-                "province": parent_form.find('input[name=province]').val(),
+                "province": parent_form.find('select[name=province] option:checked').val(),
                 "zipCode": parent_form.find('input[name=zipCode]').val(),
                 "farmType": parent_form.find('input[name=farmType]').val(),
                 "landline": parent_form.find('input[name=landline]').val(),
@@ -110,13 +113,14 @@ var profile = {
             data: data_values,
             success: function(data){
                 var data = JSON.parse(data);
-                parent_form.find('input').prop('disabled',true);
+                parent_form.find('input, select').prop('disabled',true);
+                parent_form.find('.caret').addClass('disabled');
 
                 // Change the values of the input
                 if(parent_form.attr('data-personal-id')){
                     parent_form.find('input[name=address_addressLine1]').val(data.address_addressLine1);
                     parent_form.find('input[name=address_addressLine2]').val(data.address_addressLine2);
-                    parent_form.find('input[name=address_province]').val(data.address_province);
+                    parent_form.find('select[name=address_province]').val(data.address_province);
                     parent_form.find('input[name=address_zipCode]').val(data.address_zipCode);
                     parent_form.find('input[name=landline]').val(data.landline);
                     parent_form.find('input[name=mobile]').val(data.mobile);
@@ -126,12 +130,15 @@ var profile = {
                     parent_form.find('.farm-title').html(data.name);
                     parent_form.find('input[name=addressLine1]').val(data.addressLine1);
                     parent_form.find('input[name=addressLine2]').val(data.addressLine2);
-                    parent_form.find('input[name=province]').val(data.province);
+                    parent_form.find('select[name=province]').val(data.province);
                     parent_form.find('input[name=zipCode]').val(data.zipCode);
                     parent_form.find('input[name=farmType]').val(data.farmType);
                     parent_form.find('input[name=landline]').val(data.landline);
                     parent_form.find('input[name=mobile]').val(data.mobile);
                 }
+
+                // Re-initialize Materialize select
+                parent_form.find('select').material_select();
 
                 // Done tooltip animation to Edit
                 edit_button.attr('data-tooltip',profile.edit_farm_name);
@@ -153,7 +160,10 @@ var profile = {
     cancel: function(parent_form, edit_button, cancel_button){
         config.preloader_progress.fadeIn();
         cancel_button.tooltip('remove');
-        $.when(parent_form.find('input').prop('disabled',true)).done(function(){
+        $.when(
+            parent_form.find('input, select').prop('disabled',true),
+            parent_form.find('.caret').addClass('disabled')
+        ).done(function(){
             // Done tooltip animation to Edit
             edit_button.attr('data-tooltip',profile.edit_farm_name);
             edit_button.attr('data-position','left');
@@ -240,5 +250,20 @@ var profile = {
             }
         });
 
+    },
+
+    select_province: function(){
+        // Dynamically produce select element with options based on provinces
+        var selectElement = '<select name="farmAddress[][province]">' +
+            '<option value="" disabled selected> Choose Province </option>';
+
+        for(var key in provinces){
+            selectElement += '<option value="' + key + '">' + key + '</option>';
+        }
+
+        selectElement += '</select>';
+
+        return selectElement;
     }
+
 };

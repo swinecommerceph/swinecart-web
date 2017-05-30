@@ -6,7 +6,7 @@ html{
 /* Navigation dropdown styles */
 #nav-dropdown{
 	/*display:block;*/
-	width: 185px !important;
+	width: 220px !important;
 }
 
 #inquiries-dropdown{
@@ -160,7 +160,7 @@ html{
 
 /* Swine Cart page styles */
 #swine-cart #card-container .status-icons-container i{
-	cursor: pointer;
+	cursor: default;
 	font-size: 1.85rem;
 	margin-right: .5rem;
 }

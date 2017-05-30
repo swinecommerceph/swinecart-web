@@ -40,7 +40,7 @@ class UserController extends Controller
             }
             return redirect()->action('CustomerController@index');
         }
-        else redirect()->route('logout_path');
+        else redirect()->route('logout');
 
     }
 }

@@ -22,13 +22,13 @@
 	<div class="col s12">
 		<ul class="tabs z-depth-1">
 			<li id="personal-tab" class="tab col s4">
-				<a class="active" href="#personal-information"><i class="material-icons">person_outline</i>Personal Information</a>
+				<a class="active" href="#personal-information">Personal Information</a>
 			</li>
 			<li id="farm-tab" class="tab col s4">
-				<a href="#farm-information"><i class="material-icons">store</i>Farm Information</a>
+				<a href="#farm-information">Farm Information</a>
 			</li>
 			<li id="password-tab" class="tab col s4">
-				<a href="#password-information"><i class="material-icons">lock</i>Change Password</a>
+				<a href="#password-information">Change Password</a>
 			</li>
 		</ul>
 	</div>
@@ -57,7 +57,7 @@
 			<div class="row">
 				{{-- Address: Province --}}
 				<div class="input-field col s5 push-s1">
-					{!! Form::text('address_province', null, ['disabled' => 'disabled'])!!}
+					{!! Form::select('address_province', $provinces, null, ['disabled' => 'disabled']); !!}
 					{!! Form::label('address_province', 'Province*') !!}
 				</div>
 
@@ -134,7 +134,7 @@
 								<div class="row">
 									{{-- Farm Address: Province --}}
 									<div class="input-field col s5 push-s1">
-										{!! Form::text('province', $farmAddress->province, ['disabled' => 'disabled'])!!}
+										{!! Form::select('province', $provinces, $farmAddress->province, ['disabled' => 'disabled']); !!}
 										{!! Form::label('province', 'Province*') !!}
 									</div>
 

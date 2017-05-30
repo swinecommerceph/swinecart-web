@@ -38,5 +38,8 @@
 @endsection
 
 @section('customScript')
+    <script type="text/javascript">
+        var provinces = {!! $provinces !!};
+    </script>
     <script src="/js/customer/createProfile_script.js"> </script>
 @endsection

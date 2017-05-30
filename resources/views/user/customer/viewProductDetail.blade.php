@@ -43,7 +43,7 @@
                 </div>
                 {{-- Image Carousel --}}
                 <div id="images-carousel" class="col s12">
-                    <div class="carousel" style="height:220px;">
+                    <div class="carousel" style="height:14rem;">
                         <a class="carousel-item" href="#!"><img src="{{$product->img_path}}"></a>
                         @foreach($product->imageCollection as $image)
                             <a class="carousel-item" href="#!"><img src="/images/product/{{$image->name}}"></a>
@@ -52,15 +52,17 @@
                 </div>
                 {{--  Video Carousel --}}
                 <div id="videos-carousel" class="col s12">
-                    <div class="carousel" style="height:220px;">
-                        @foreach($product->videoCollection as $video)
-                            <a class="carousel-item" href="#!">
-                                <video class="responsive-video" controls>
-                                    <source src="/videos/product/{{$video->name}}" type="{{$video->type}}">
-                                </video>
-                            </a>
-                        @endforeach
-                    </div>
+                    @if(count($product->videoCollection) > 0)
+                        <div class="carousel" style="height:14rem;">
+                            @foreach($product->videoCollection as $video)
+                                <a class="carousel-item" href="#!">
+                                    <video class="responsive-video" controls>
+                                        <source src="/videos/product/{{$video->name}}" type="{{$video->type}}">
+                                    </video>
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
 

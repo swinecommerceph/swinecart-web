@@ -118,8 +118,8 @@
 @endsection
 
 @section('navbarDropdown')
+    <li><a href="{{ route('products') }}"> <i class="material-icons left">store</i> Manage Products </a></li>
     <li><a href="{{ route('breeder.edit') }}"> <i class="material-icons left">mode_edit</i> Update Profile </a></li>
-    <li><a href="{{ route('products') }}"> <i class="material-icons left">shop</i> Products </a></li>
     <li><a href="{{ route('dashboard.reviews') }}"> <i class="material-icons left">grade</i> Reviews </a></li>
 @endsection
 

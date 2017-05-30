@@ -122,7 +122,7 @@ $(document).ready(function(){
                  '<div class="row">'+
                      // Farm Address: Province
                      '<div class="input-field col s5 push-s1">'+
-                         '<input name="farmAddress[][province]" type="text">'+
+                         profile.select_province() +
                          '<label for="farmAddress[][province]">Province*</label>'+
                      '</div>'+
 
@@ -177,6 +177,7 @@ $(document).ready(function(){
          '</div>'+
         '</div>').appendTo('#create-profile').fadeIn('slow');
 
+        $('#create-profile select').material_select();
         location.href = '#farm-'+i;
         $(".remove-farm, #submit-button").tooltip({delay:50});
         Materialize.toast('New Farm Information added', 2000);
@@ -249,6 +250,7 @@ $(document).ready(function(){
                 $( '<button class="btn-floating btn-medium waves-effect waves-light teal darken-1 tooltipped submit-button" data-position="left" data-delay="50" data-tooltip="Submit added farms">'+
                      '<i class="material-icons">send</i>'+
                  '</button>').appendTo(prev_submit_button_field).fadeIn('slow');
+                $('.tooltipped').tooltip({delay:50});
             }
 
             location.href = '#'+prev_farm.find('.card-panel').attr('id');
