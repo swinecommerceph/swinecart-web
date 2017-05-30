@@ -42,6 +42,9 @@
 @endsection
 
 @section('customScript')
+    <script type="text/javascript">
+        var provinces = {!! $provinces !!};
+    </script>
     <script src="/js/customer/profile.js"> </script>
     <script src="/js/customer/editProfile_script.js"> </script>
     @if(Session::has('message'))

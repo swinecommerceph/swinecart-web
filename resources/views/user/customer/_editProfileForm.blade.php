@@ -57,7 +57,7 @@
 			<div class="row">
 				{{-- Address: Province --}}
 				<div class="input-field col s5 push-s1">
-					{!! Form::text('address_province', null, ['disabled' => 'disabled'])!!}
+					{!! Form::select('address_province', $provinces, null, ['disabled' => 'disabled']); !!}
 					{!! Form::label('address_province', 'Province*') !!}
 				</div>
 
@@ -134,7 +134,7 @@
 								<div class="row">
 									{{-- Farm Address: Province --}}
 									<div class="input-field col s5 push-s1">
-										{!! Form::text('province', $farmAddress->province, ['disabled' => 'disabled'])!!}
+										{!! Form::select('province', $provinces, $farmAddress->province, ['disabled' => 'disabled']); !!}
 										{!! Form::label('province', 'Province*') !!}
 									</div>
 
