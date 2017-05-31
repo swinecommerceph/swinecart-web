@@ -266,7 +266,8 @@
                 hosts: window.elasticsearchHost
             });
 
-            document.querySelector('#search-results').style.width = document.querySelector('#search-field').offsetWidth+'px';
+            // Adjust width of search results according to the search input
+            $('#search-results').width($('#search-field').width());
 
             $("input#search").keydown(function(e){
                 // Perform GET request upon pressing the Enter key
@@ -274,11 +275,22 @@
                 // and output it on search results
                 if(e.which == 13) {
                     e.preventDefault();
-                    filter.apply();
+
+                    // Setup search query parameter
+                    var filter_parameters = '?';
+                    var search_query = document.getElementById('search').value;
+
+                    // Check if there is search query
+                    if(search_query){
+                        filter_parameters += 'q=' + search_query + '&sort=none';
+                    }
+
+                    // Redirect to view products page with designated search query parameter
+                    window.location = config.viewProducts_url+filter_parameters;
                 }
                 else{
                     setTimeout(function(){
-                        searchPhrase = document.querySelector('input#search').value;
+                        searchPhrase = $('input#search').val();
 
                         // Execute of searchPhrase is not empty
                         if(searchPhrase){
@@ -318,7 +330,7 @@
                                             '</li>';
                                     }
 
-                                    document.querySelector("#search-results ul").innerHTML = searchResultsTop + searchResultsBot;
+                                    $("#search-results ul").html(searchResultsTop + searchResultsBot);
 
                                     $("#search-results").show();
                                 }
@@ -338,7 +350,7 @@
             $('body').on('click', 'li.search-item', function(e){
                 e.preventDefault();
 
-                var searchInput = document.querySelector('input#search');
+                var searchInput = $('input#search');
                 searchInput.value = $(this).html();
 
                 $("#search-results").hide();
