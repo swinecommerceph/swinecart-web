@@ -120,8 +120,7 @@ $(document).ready(function(){
     $('body').on('click', 'li.search-item', function(e){
         e.preventDefault();
 
-        var searchInput = $('input#search');
-        searchInput.value = $(this).html();
+        $('input#search').val($(this).html());
 
         $("#search-results").hide();
         filter.apply();
