@@ -216,7 +216,7 @@ Vue.component('status-table',{
         },
 
         reserveToCustomer: function(event){
-            var reserveButtons = document.querySelectorAll('.reserve-product-buttons');
+            var reserveButtons = $('.reserve-product-buttons');
             this.disableButtons(reserveButtons, event.target);
 
             // Do AJAX
@@ -313,7 +313,7 @@ Vue.component('status-table',{
         },
 
         productOnDelivery: function(event){
-            var deliveryButtons = document.querySelectorAll('.delivery-product-buttons');
+            var deliveryButtons = $('.delivery-product-buttons');
             this.disableButtons(deliveryButtons, event.target);
 
             // Do AJAX
@@ -359,7 +359,7 @@ Vue.component('status-table',{
         },
 
         productPaid: function(event){
-            var payButtons = document.querySelectorAll('.pay-product-buttons');
+            var payButtons = $('.pay-product-buttons');
             this.disableButtons(payButtons, event.target);
 
             // Do AJAX
@@ -405,7 +405,7 @@ Vue.component('status-table',{
         },
 
         productOnSold: function(){
-            var soldButtons = document.querySelectorAll('.sold-product-buttons');
+            var soldButtons = $('.sold-product-buttons');
             this.disableButtons(soldButtons, event.target);
 
             // Do AJAX
@@ -464,17 +464,13 @@ Vue.component('status-table',{
         },
 
         disableButtons: function(buttons, actionBtnElement){
-            buttons.forEach(function(element){
-                element.classList.add('disabled');
-            });
+            buttons.addClass('disabled');
 
             actionBtnElement.innerHTML = '...';
         },
 
         enableButtons: function(buttons, actionBtnElement){
-            buttons.forEach(function(element){
-                element.classList.remove('disabled');
-            });
+            buttons.removeClass('disabled');
 
             actionBtnElement.innerHTML = 'Yes';
         },

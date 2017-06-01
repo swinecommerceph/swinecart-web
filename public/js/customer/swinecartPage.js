@@ -383,7 +383,7 @@ Vue.component('order-details',{
 
         requestProduct: function(event){
             var index = this.productRequest.index;
-            var requestButtons = document.querySelectorAll('.request-product-buttons');
+            var requestButtons = $('.request-product-buttons');
 
             this.disableButtons('request', requestButtons, event.target);
 
@@ -456,7 +456,7 @@ Vue.component('order-details',{
 
         rateAndRecord: function(event){
             var index = this.breederRate.index;
-            var rateButtons = document.querySelectorAll('.rate-breeder-buttons');
+            var rateButtons = $('.rate-breeder-buttons');
 
             this.disableButtons('rate', rateButtons, event.target);
 
@@ -503,9 +503,7 @@ Vue.component('order-details',{
         },
 
         disableButtons: function(operation, buttons, actionBtnElement){
-            buttons.forEach(function(element){
-                element.classList.add('disabled');
-            });
+            buttons.addClass('disabled');
 
             switch (operation) {
                 case 'request':
@@ -521,9 +519,7 @@ Vue.component('order-details',{
         },
 
         enableButtons: function(operation, buttons, actionBtnElement){
-            buttons.forEach(function(element){
-                element.classList.remove('disabled');
-            });
+            buttons.removeClass('disabled');
 
             switch (operation){
                 case 'request':

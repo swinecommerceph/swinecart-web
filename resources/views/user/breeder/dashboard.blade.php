@@ -204,6 +204,7 @@
                         <a href="{{route('dashboard.reviews')}}" class="white-text">Overall Average Rating</a>
                     </span>
                     <h3>@{{ overallRatings }}/5</h3>
+                    <span>No. of users who rated: @{{ dashboardStats.ratings.reviewsSize }}</span>
                 </div>
                 <div class="card-action grey">
                     <a class="white-text">Delivery: @{{ dashboardStats.ratings.delivery }} </a>

@@ -7,7 +7,7 @@ $(document).ready(function(){
         hosts: window.elasticsearchHost
     });
 
-    document.querySelector('#search-results').style.width = document.querySelector('#search-field').offsetWidth+'px';
+    $('#search-results').width($('#search-field').width());
 
     // Find all ticked checkboxes for producing chips
     if($('input:checked').length > 0) chips += 'Filtered by: ';
@@ -48,7 +48,7 @@ $(document).ready(function(){
         }
         else{
             setTimeout(function(){
-                searchPhrase = document.querySelector('input#search').value;
+                searchPhrase = $('input#search').val();
 
                 // Execute of searchPhrase is not empty
                 if(searchPhrase){
@@ -88,7 +88,7 @@ $(document).ready(function(){
                                     '</li>';
                             }
 
-                            document.querySelector("#search-results ul").innerHTML = searchResultsTop + searchResultsBot;
+                            $("#search-results ul").html(searchResultsTop + searchResultsBot);
 
                             $("#search-results").show();
                         }
@@ -120,7 +120,7 @@ $(document).ready(function(){
     $('body').on('click', 'li.search-item', function(e){
         e.preventDefault();
 
-        var searchInput = document.querySelector('input#search');
+        var searchInput = $('input#search');
         searchInput.value = $(this).html();
 
         $("#search-results").hide();
