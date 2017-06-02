@@ -112,6 +112,9 @@ var product = {
                 $('#add-product-modal').modal('close');
                 parent_form.find('#submit-button').removeClass('disabled');
 
+                $('#submit-button').removeClass('disabled');
+                $('#submit-button').html('Add');
+
                 // Open Add Media Modal
                 $('#add-media-modal').modal({
                     dismissible: false,
@@ -138,7 +141,7 @@ var product = {
         });
     },
 
-    edit: function(parent_form){
+    edit: function(parent_form, update_button){
         var data_values = {
             "id": parent_form.find('input[name=productId]').val(),
             "name": parent_form.find('input[name=name]').val(),
@@ -193,6 +196,10 @@ var product = {
                 }
             })
         ).done(function(){
+            // Enable update-button
+            update_button.removeClass('disabled');
+            update_button.html('Update Product');
+
             // Then get the product summary
             product.get_summary($('#edit-product').find('input[name="productId"]').val());
         });
@@ -366,8 +373,8 @@ var product = {
                                         '<span class="card-title"></span>'+
                                     '</div>'+
                                     '<div class="card-action">'+
-                                        '<a href="#!" class="set-display-photo" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
-                                        '<a href="#!" class="delete-image right" data-media-id="'+element.id+'">Delete</a>'+
+                                        '<a href="#!" class="set-display-photo btn-flat" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
+                                        '<a href="#!" class="delete-image btn-flat right" data-media-id="'+element.id+'">Delete</a>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>';
@@ -491,7 +498,7 @@ var product = {
                                     '<span class="card-title"></span>'+
                                 '</div>'+
                                 '<div class="card-action">'+
-                                    '<a href="#!" class="set-display-photo" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
+                                    '<a href="#!" class="set-display-photo btn-flat" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
@@ -523,6 +530,9 @@ var product = {
     },
 
     set_display_photo: function(anchor_tag, parent_form, product_id, img_id){
+        // Disable the Display photo anchor tag
+        anchor_tag.addClass('disabled');
+        anchor_tag.html('Setting ...');
 
         // Do AJAX
         $.ajax({
@@ -540,6 +550,7 @@ var product = {
 
                 // New Display Photo id
                 product.current_display_photo = img_id;
+                anchor_tag.removeClass('disabled');
                 anchor_tag.html('<i class="material-icons left teal-text">photo</i> Display Photo');
             },
             error: function(message){

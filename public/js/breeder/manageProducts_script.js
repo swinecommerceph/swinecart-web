@@ -152,6 +152,11 @@ $(document).ready(function(){
     // Submit add product
     $("#create-product").submit(function(e){
         e.preventDefault();
+
+        // Disable submit/add product button
+        $('#submit-button').addClass('disabled');
+        $('#submit-button').html('Adding Product ...');
+
         product.add($('#create-product'));
     });
 
@@ -164,7 +169,6 @@ $(document).ready(function(){
     $('#next-button').click(function(e){
         e.preventDefault();
         product.get_summary($('#add-media-modal form').find('input[name="productId"]').val());
-        $(this).removeClass('disabled');
     });
 
     // media-dropzone initialization and configuration
@@ -229,7 +233,12 @@ $(document).ready(function(){
     // Save as Draft the Product created
     $('#save-draft-button').click(function(e){
         e.preventDefault();
+
+        // Disable save-draft-button and display-button
+        $('#display-button').addClass('disabled');
+        $(this).addClass('disabled');
         $(this).html('Saving as Draft ...');
+
         window.setTimeout(function(){
             location.reload(true);
         }, 1200);
@@ -239,7 +248,12 @@ $(document).ready(function(){
     // Display Product created
     $('#display-button').click(function(e){
         e.preventDefault();
+
+        // Disable display-button and save-draft-button
+        $('#save-draft-button').addClass('disabled');
+        $(this).addClass('disabled');
         $(this).html('Displaying ...');
+
         product.display_product($(this).parents('form'));
     });
 
@@ -255,7 +269,11 @@ $(document).ready(function(){
 
     $('#save-button').click(function(e){
         e.preventDefault();
+
+        // Disable save-button
+        $(this).addClass('disabled');
         $(this).html('Saving ...');
+
         window.setTimeout(function(){
             location.reload(true);
         }, 1200);
@@ -265,9 +283,12 @@ $(document).ready(function(){
     // Update details of a product
     $('.update-button').click(function(e){
         e.preventDefault();
+
+        // Disable update-button
         $(this).addClass('disabled');
-        product.edit($('#edit-product'));
-        $(this).removeClass('disabled');
+        $(this).html('Updating...');
+
+        product.edit($('#edit-product'), $(this));
     });
 
     // Open Edit Media Modal
@@ -356,6 +377,10 @@ $(document).ready(function(){
     $('body').on('click', '.delete-image, .delete-video' ,function(e){
         e.preventDefault();
 
+        // Disable delete-image/delete-video button
+        $(this).addClass('disabled');
+        $(this).html('Deleting ...');
+
         var card_container = $(this).parents('.card').first().parent();
         var data_values = {
             "_token" : $('#media-dropzone').find('input[name=_token]').val(),
@@ -365,6 +390,10 @@ $(document).ready(function(){
         // Check if the chosen media is an image and is the current display photo
         if($(this).hasClass('delete-image') && $(this).attr('data-media-id') == product.current_display_photo){
             Materialize.toast('Cannot delete display photo!', 1500 , 'orange accent-2');
+
+            // Enable delete-image/delete-video button
+            $(this).removeClass('disabled');
+            $(this).html('Delete');
         }
         else{
             // Initialize mediaType value

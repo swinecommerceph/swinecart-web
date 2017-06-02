@@ -112,8 +112,6 @@
 					<div class="input-field col s6">
 						<input type="date" id="birthdate" name="birthdate" class="datepicker"/>
 						<label for="birthdate">Birth Date</label>
-						{{-- {!! Form::date('birthday', null, ['class' => 'datepicker'])!!}
-						{!! Form::label('birthday', 'Birth Date') !!} --}}
 					</div>
 
 					{{-- ADG --}}
@@ -171,9 +169,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action" style="display:none;"> Submit
-			<i class="material-icons right">send</i>
-		</button>
+		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action" style="display:none;"> Add </button>
 	</div>
 	{!! Form::close() !!}
 </div>
@@ -191,9 +187,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button id="next-button" type="submit" class="btn waves-effect waves-light modal-action"> Product Summary
-			<i class="material-icons right">send</i>
-		</button>
+		<button id="next-button" type="submit" class="btn waves-effect waves-light modal-action"> Product Summary </button>
 		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
@@ -248,19 +242,12 @@
 	<div class="modal-footer">
 		<div class="from-add-process">
 			{!! Form::open(['route' => 'products.display', 'class' => 's12', 'id' => 'display-product-form']) !!}
-				<button id="display-button" class="btn waves-effect waves-light modal-action"> Display
-					<i class="material-icons right">publish</i>
-				</button>
+				<button id="display-button" class="btn waves-effect waves-light modal-action"> Display </button>
 			{!! Form::close() !!}
-			{{-- <a href="#!" id="save-draft-button" class="modal-action waves-effect waves-green btn-flat ">Save as Draft</a> --}}
-			<button id="save-draft-button" class="btn waves-effect waves-light modal-action"> Save as Draft
-				{{-- <i class="material-icons right">publish</i> --}}
-			</button>
+			<button id="save-draft-button" class="btn waves-effect waves-light modal-action"> Save as Draft </button>
 		</div>
 		<div class="from-edit-process">
-			<button id="save-button" class="btn waves-effect waves-light modal-action"> Save
-				<i class="material-icons right">send</i>
-			</button>
+			<button id="save-button" class="btn waves-effect waves-light modal-action"> Save </button>
 		</div>
 		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
@@ -373,8 +360,6 @@
 					<div class="input-field col s6">
 						<input type="date" id="birthdate" name="birthdate" class="datepicker"/>
 						<label for="birthdate">Birth Date</label>
-						{{-- {!! Form::text('birthdate', null)!!}
-						{!! Form::label('birthdate', 'Birthdate') !!} --}}
 					</div>
 
 					{{-- ADG --}}
@@ -433,17 +418,11 @@
 	</div>
 	<div class="modal-footer">
 		<div class="from-add-process" style="display:none;">
-			<button id="add-media-button" class="btn waves-effect waves-light modal-action"> Add Media
-				{{-- <i class="material-icons right">send</i> --}}
-			</button>
+			<button id="add-media-button" class="btn waves-effect waves-light modal-action"> Add Media </button>
 		</div>
 		<div class="from-edit-process">
-			<button class="btn waves-effect waves-light modal-action update-button"> Update Product
-				<i class="material-icons right">send</i>
-			</button>
-			<button id="edit-media-button" class="btn waves-effect waves-light modal-action"> Edit Media
-				{{-- <i class="material-icons right">send</i> --}}
-			</button>
+			<button class="btn waves-effect waves-light modal-action update-button"> Update Product </button>
+			<button id="edit-media-button" class="btn waves-effect waves-light modal-action"> Edit Media </button>
 		</div>
 	</div>
 	{!! Form::close() !!}
@@ -485,9 +464,7 @@
 	</div>
 
 	<div class="modal-footer">
-		<button class="btn waves-effect waves-light modal-action update-button"> Update Product
-			<i class="material-icons right">send</i>
-		</button>
+		<button class="btn waves-effect waves-light modal-action update-button"> Update Product </button>
 		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
@@ -498,8 +475,8 @@
 	  <p>Are you sure you want to remove the products chosen?</p>
 	</div>
 	<div class="modal-footer">
-	  <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons">done</i></a>
-	  <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons">clear</i></a>
+	  <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
+	  <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
 	</div>
 </div>
 
