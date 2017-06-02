@@ -342,10 +342,11 @@ class ProductController extends Controller
                 // Check if file has no problems in uploading
                 if($file->isValid()){
                     $fileExtension = $file->getClientOriginalExtension();
+                    $fileName = $file->getClientOriginalName();
 
                     // Get media (Image/Video) info according to extension
-                    if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed);
-                    else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed);
+                    if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileName, $fileExtension, $request->productId, $request->type, $request->breed);
+                    else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileName, $fileExtension, $request->productId, $request->type, $request->breed);
                     else return response()->json('Invalid file extension', 500);
 
                     Storage::disk('public')->put($mediaInfo['directoryPath'].$mediaInfo['filename'], file_get_contents($file));
@@ -609,20 +610,21 @@ class ProductController extends Controller
     /**
      * Get appropriate media (Image/Video) info depending on extension
      *
+     * @param  String           $filename
      * @param  String           $extension
      * @param  Integer          $productId
      * @param  String           $type
      * @param  String           $breed
      * @return AssociativeArray $mediaInfo
      */
-    private function createMediaInfo($extension, $productId, $type, $breed)
+    private function createMediaInfo($filename, $extension, $productId, $type, $breed)
     {
         $mediaInfo = [];
         if(str_contains($breed,'+')){
             $part = explode("+", $breed);
-            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . md5(Carbon::now()) . '.' . $extension;
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
         }
-        else $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . md5(Carbon::now()) . '.' . $extension;
+        else $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
 
         if($this->isImage($extension)){
             $mediaInfo['directoryPath'] = self::PRODUCT_IMG_PATH;

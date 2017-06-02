@@ -72,7 +72,7 @@ $(document).ready(function(){
                             }
                         }
                     }).then(function(response){
-                        var options = response.suggest.productSuggest[0].options;
+                        var options = (response.suggest) ? response.suggest.productSuggest[0].options : '';
                         var searchResultsTop = '';
                         var searchResultsBot = '';
 
@@ -120,8 +120,7 @@ $(document).ready(function(){
     $('body').on('click', 'li.search-item', function(e){
         e.preventDefault();
 
-        var searchInput = $('input#search');
-        searchInput.value = $(this).html();
+        $('input#search').val($(this).html());
 
         $("#search-results").hide();
         filter.apply();

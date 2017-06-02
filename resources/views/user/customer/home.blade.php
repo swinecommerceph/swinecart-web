@@ -314,7 +314,7 @@
                                     }
                                 }
                             }).then(function(response){
-                                var options = response.suggest.productSuggest[0].options;
+                                var options = (response.suggest) ? response.suggest.productSuggest[0].options : '';
                                 var searchResultsTop = '';
                                 var searchResultsBot = '';
 
@@ -350,8 +350,7 @@
             $('body').on('click', 'li.search-item', function(e){
                 e.preventDefault();
 
-                var searchInput = $('input#search');
-                searchInput.value = $(this).html();
+                $('input#search').val($(this).html());
 
                 $("#search-results").hide();
 
