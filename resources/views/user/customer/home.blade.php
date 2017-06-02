@@ -314,7 +314,7 @@
                                     }
                                 }
                             }).then(function(response){
-                                var options = response.suggest.productSuggest[0].options;
+                                var options = (response.suggest) ? response.suggest.productSuggest[0].options : '';
                                 var searchResultsTop = '';
                                 var searchResultsBot = '';
 
