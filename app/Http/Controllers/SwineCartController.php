@@ -3,12 +3,14 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Illuminate\Support\Collection;
 use Ramsey\Uuid\Uuid;
 use Carbon\Carbon;
 
-use App\Jobs\AddToTransactionLog;
+// Should this job be used, just uncomment
+// use App\Jobs\AddToTransactionLog;
+use App\Jobs\NotifyUser;
 use App\Jobs\SendSMS;
+use App\Jobs\SendToPubSubServer;
 use App\Http\Requests;
 use App\Models\Customer;
 use App\Models\Breeder;
@@ -20,8 +22,6 @@ use App\Models\Product;
 use App\Models\Review;
 use App\Models\TransactionLog;
 use App\Models\ProductReservation;
-use App\Notifications\BreederRated;
-use App\Notifications\ProductRequested;
 use App\Repositories\CustomHelpers;
 
 use Auth;
@@ -139,43 +139,43 @@ class SwineCartController extends Controller
                 'recipient' => $breeder->office_mobile
             ];
 
-            // Add new Transaction Log. Queue AddToTransactionLog job
-            dispatch(new AddToTransactionLog($transactionDetails));
-            // Queue SendSMS job
-            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
-
-            // Notify Breeder of the request
-            $breederUser = $breeder->users()->first();
-            $breederUser->notify(new ProductRequested($notificationDetails));
-            $this->sendToPubSubServer('notification', $breederUser->email);
-            $this->sendToPubSubServer('db-productRequest', $breederUser->email,
-                [
-                    'body' => [
-                        'uuid' => (string) Uuid::uuid4(),
-                        'id' => $product->id,
-                        'reservation_id' => 0,
-                        'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                        'breeder_id' => $product->breeder_id,
-                        'farm_province' => FarmAddress::find($product->farm_from_id)->province,
-                        'name' => $product->name,
-                        'type' => $product->type,
-                        'age' => $this->computeAge($product->birthdate),
-                        'breed' => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
-                        'quantity' => $product->quantity,
-                        'adg' => $product->adg,
-                        'fcr' => $product->fcr,
-                        'bft' => $product->backfat_thickness,
-                        'status' => $product->status,
-                        'status_time' => '',
-                        'customer_id' => 0,
-                        'customer_name' => '',
-                        'date_needed' => '',
-                        'special_request' => '',
-                        'expiration_date' => ''
-                    ]
+            $pubsubData = [
+                'body' => [
+                    'uuid' => (string) Uuid::uuid4(),
+                    'id' => $product->id,
+                    'reservation_id' => 0,
+                    'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
+                    'breeder_id' => $product->breeder_id,
+                    'farm_province' => FarmAddress::find($product->farm_from_id)->province,
+                    'name' => $product->name,
+                    'type' => $product->type,
+                    'age' => $this->computeAge($product->birthdate),
+                    'breed' => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
+                    'quantity' => $product->quantity,
+                    'adg' => $product->adg,
+                    'fcr' => $product->fcr,
+                    'bft' => $product->backfat_thickness,
+                    'status' => $product->status,
+                    'status_time' => '',
+                    'customer_id' => 0,
+                    'customer_name' => '',
+                    'date_needed' => '',
+                    'special_request' => '',
+                    'expiration_date' => ''
                 ]
-            );
-            if(!$alreadyRequestedFlag) $this->sendToPubSubServer('db-requested', $breederUser->email, ['product_type' => $product->type]);
+            ];
+
+            $breederUser = $breeder->users()->first();
+
+            // Add new Transaction Log
+            $this->addToTransactionLog($transactionDetails);
+
+            // Queue notifications (SMS, database, notification, pubsub server)
+            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+            dispatch(new NotifyUser('product-requested', $breederUser->id, $notificationDetails));
+            dispatch(new SendToPubSubServer('notification', $breederUser->email));
+            dispatch(new SendToPubSubServer('db-productRequest', $breederUser->email, $pubsubData));
+            if(!$alreadyRequestedFlag) dispatch(new SendToPubSubServer('db-requested', $breederUser->email, ['product_type' => $product->type]));
 
             return [$customer->swineCartItems()->where('if_requested',0)->count(), $transactionDetails['created_at']];
         }
@@ -405,24 +405,24 @@ class SwineCartController extends Controller
                 'recipient' => $breeder->office_mobile
             ];
 
-            // Add new Transaction Log. Queue AddToTransactionLog job
-            dispatch(new AddToTransactionLog($transactionDetails));
-            // Queue SendSMS job
-            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+            $pubsubData = [
+                'rating_delivery' => $review->rating_delivery,
+                'rating_transaction' => $review->rating_transaction,
+                'rating_productQuality' => $review->productQuality,
+                'review_comment' => $review->comment,
+                'review_customerName' => $this->user->name
+            ];
 
-            // Notify Breeder of the rating
             $breederUser = $breeder->users()->first();
-            $breederUser->notify(new BreederRated($notificationDetails));
-            $this->sendToPubSubServer('notification', $breederUser->email);
-            $this->sendToPubSubServer('db-rated', $breederUser->email,
-                [
-                    'rating_delivery' => $review->rating_delivery,
-                    'rating_transaction' => $review->rating_transaction,
-                    'rating_productQuality' => $review->productQuality,
-                    'review_comment' => $review->comment,
-                    'review_customerName' => $this->user->name
-                ]
-            );
+
+            // Add new Transaction Log
+            $this->addToTransactionLog($transactionDetails);
+
+            // Queue notifications (SMS, database, notification, pubsub server)
+            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+            dispatch(new NotifyUser('breeder-rated', $breederUser->id, $notificationDetails));
+            dispatch(new SendToPubSubServer('notification', $breederUser->email));
+            dispatch(new SendToPubSubServer('db-rated', $breederUser->email, $pubsubData));
 
             return "OK";
         }
