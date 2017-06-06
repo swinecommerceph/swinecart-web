@@ -683,7 +683,7 @@ class DashboardRepository
 
                 // Queue notifications (SMS, database, notification, pubsub server)
                 dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
-                dispatch(new ProductReservationUpdate('product-reservation-update', $reservedCustomerUser->id, $notificationDetails));
+                dispatch(new NotifyUser('product-reservation-update', $reservedCustomerUser->id, $notificationDetails));
                 dispatch(new SendToPubSubServer('notification', $reservedCustomerUser->email));
                 dispatch(new SendToPubSubServer('sc-onDelivery', $reservedCustomerUser->email, $pubsubData));
                 dispatch(new SendToPubSubServer('db-onDelivery', Auth::user()->email, ['product_type' => $product->type]));

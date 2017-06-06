@@ -117,7 +117,7 @@
                         </td>
                         <td>
                             {{--  If product's status is requested --}}
-                            <a class="tooltipped"
+                            <a class="btn tooltipped"
                                 href="#"
                                 data-position="top"
                                 data-delay="50"
@@ -125,32 +125,13 @@
                                 @click.prevent="getProductRequests(product.uuid, $event)"
                                 v-if="product.status == 'requested'"
                             >
-                                <i class="material-icons teal-text">face</i>
+                                See Requests
                             </a>
 
                             {{-- If product's status is reserved --}}
-                            <div class="row"
-                                v-if="product.status == 'reserved'"
-                            >
-                                <a class="col s2 tooltipped"
-                                    href="#"
-                                    data-position="top"
-                                    data-delay="50"
-                                    data-tooltip="Confirm Delivery"
-                                    @click.prevent="setUpConfirmation(product.uuid,'delivery')"
-                                >
-                                    <i class="material-icons teal-text">local_shipping</i>
-                                </a>
-                                <a class="col s2 tooltipped"
-                                    href="#"
-                                    data-position="top"
-                                    data-delay="50"
-                                    data-tooltip="Confirm Payment"
-                                    @click.prevent="setUpConfirmation(product.uuid,'paid')"
-                                >
-                                    <i class="material-icons teal-text">credit_card</i>
-                                </a>
-                                <a class="col s2 tooltipped"
+                            <template v-if="product.status == 'reserved'">
+                                <a class="btn tooltipped"
+                                    style="margin-bottom:1rem;"
                                     :href="'{{ route('breeder.messages') }}/' + product.userid"
                                     :data-breeder-id="product.breeder_id"
                                     :data-customer-id="product.customer_id"
@@ -158,46 +139,63 @@
                                     data-delay="50"
                                     :data-tooltip="'Message ' + product.customer_name"
                                 >
-                                    <i class="material-icons teal-text">message</i>
+                                    Message
+                                </a> <br>
+                                <a class="btn tooltipped"
+                                    style="margin-bottom:1rem;"
+                                    href="#"
+                                    data-position="top"
+                                    data-delay="50"
+                                    data-tooltip="Confirm Delivery"
+                                    @click.prevent="setUpConfirmation(product.uuid,'delivery')"
+                                >
+                                    Confirm Delivery
+                                </a> <br>
+                                <a class="btn tooltipped"
+                                    href="#"
+                                    data-position="top"
+                                    data-delay="50"
+                                    data-tooltip="Confirm Payment"
+                                    @click.prevent="setUpConfirmation(product.uuid,'paid')"
+                                >
+                                    Confirm Payment
                                 </a>
-                            </div>
+                            </template>
 
                             {{-- If product's status is on_delivery --}}
-                            <div class="row"
-                                v-if="product.status == 'on_delivery'"
-                            >
-                                <a class="col s2 tooltipped left"
+                            <template v-if="product.status == 'on_delivery'">
+                                <a class="btn tooltipped"
+                                    style="margin-bottom:1rem;"
                                     href="#"
                                     data-position="top"
                                     data-delay="50"
                                     data-tooltip="Confirm Sold"
                                     @click.prevent="setUpConfirmation(product.uuid,'sold')"
                                 >
-                                    <i class="material-icons teal-text">thumb_up</i>
-                                </a>
+                                    Confirm Sold
+                                </a> <br>
                                 <span>(Awaiting Payment)</span>
-                            </div>
+                            </template>
 
                             {{-- If product's status is paid --}}
-                            <div class="row"
-                                v-if="product.status == 'paid'"
-                            >
-                                <a class="col s2 tooltipped left"
+                            <template v-if="product.status == 'paid'">
+                                <a class="btn tooltipped"
+                                    style="margin-bottom:1rem;"
                                     href="#"
                                     data-position="top"
                                     data-delay="50"
                                     data-tooltip="Confirm Sold"
                                     @click.prevent="setUpConfirmation(product.uuid,'sold')"
                                 >
-                                    <i class="material-icons teal-text">thumb_up</i>
-                                </a>
+                                    Confirm Sold
+                                </a> <br>
                                 <span>(Awaiting Delivery)</span>
-                            </div>
+                            </template>
 
                             {{-- If product's status is sold --}}
-                            <div v-if="product.status == 'sold'">
+                            <template v-if="product.status == 'sold'">
                                 (SOLD)
-                            </div>
+                            </template>
                         </td>
                     </tr>
                 </tbody>
@@ -234,24 +232,24 @@
                                 </td>
                                 <td class="right-align"> @{{ customer.requestQuantity }} </td>
                                 <td class="right-align" v-show="productRequest.type === 'semen'"> @{{ customer.dateNeeded }} </td>
-                                <td class="row center-align">
+                                <td class="center-align">
                                     <a href="#!"
-                                        class="tooltipped"
+                                        class="btn tooltipped"
+                                        style="margin-bottom:1rem;"
                                         data-position="top"
                                         data-delay="50"
                                         :data-tooltip="'Reserve product to ' + customer.customerName"
                                         @click.prevent="confirmReservation(index)"
                                     >
-                                        <i class="material-icons teal-text">add_to_photos</i>
-                                    </a>
+                                        Reserve
+                                    </a> <br>
                                     <a v-bind:href="'{{ route('breeder.messages') }}/' + customer.userId"
-                                        class="tooltipped"
-                                        style="margin-left:0.5rem;"
+                                        class="btn tooltipped"
                                         data-position="top"
                                         data-delay="50"
                                         :data-tooltip="'Send message to ' + customer.customerName"
                                     >
-                                        <i class="material-icons teal-text">message</i>
+                                        Message
                                     </a>
                                 </td>
                             </tr>
