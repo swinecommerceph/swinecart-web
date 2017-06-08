@@ -17,13 +17,13 @@
 				@include('common._errors')
 
 				{{-- Registration Form --}}
-				<form action="{{ url('register') }}" method="POST" class="col s12">
+				<form id="registration-form" action="{{ url('register') }}" method="POST" class="col s12">
 					{{ csrf_field() }}
 
 					{{-- Name --}}
 					<div class="row">
 						<div class="input-field col s12">
-							<input type="text" id="name" name="name" value="{{ old('name') }}" autofocus>
+							<input class="validate" type="text" id="name" name="name" value="{{ old('name') }}" autofocus>
 							<label for="name">Name</label>
 						</div>
 					</div>
@@ -31,7 +31,7 @@
 					{{-- E-Mail Address --}}
 					<div class="row">
 						<div class="input-field col s12">
-							<input type="email" id="email" name="email" value="{{ old('email') }}">
+							<input class="validate" type="email" id="email" name="email" value="{{ old('email') }}">
 							<label for="email">E-mail</label>
 						</div>
 					</div>
@@ -39,7 +39,7 @@
 					{{-- Password --}}
 					<div class="row">
 						<div class="input-field col s12">
-							<input type="password" id="password" name="password">
+							<input class="validate" type="password" id="password" name="password">
 							<label for="password">Password</label>
 						</div>
 					</div>
@@ -47,7 +47,7 @@
 					{{-- Confirm Password --}}
 					<div class="row">
 						<div class="input-field col s12">
-							<input type="password" id="password_confirmation" name="password_confirmation">
+							<input class="validate" type="password" id="password_confirmation" name="password_confirmation">
 							<label for="password_confirmation">Re-Type Password</label>
 						</div>
 					</div>
@@ -90,14 +90,124 @@
 @endsection
 
 @section('customScript')
-	<script src="/js/breeder/profile.js"> </script>
-	@if(Session::has('message'))
+    <script type="text/javascript">
+        $(document).ready(function(){
+            // Place error on specific HTML input
+            var placeError = function(inputElement, errorMsg){
+                $(inputElement)
+                    .parents("form")
+                    .find("label[for='" + inputElement.id + "']")
+                    .attr('data-error', errorMsg);
 
-		<script type="text/javascript">
-			$(document).ready(function(){
-				Materialize.toast('{{ Session::get('message') }}', 4000, 'deep-orange');
-			});
-		</script>
+                setTimeout(function(){
+                    $(inputElement).addClass('invalid');
+                },0);
+            };
 
-	@endif
+            // Place success from specific HTML input
+            var placeSuccess = function(inputElement){
+                // Check first if it is invalid
+                if($(inputElement).hasClass('invalid')){
+                    $(inputElement)
+                        .parents("form")
+                        .find("label[for='" + inputElement.id + "']")
+                        .attr('data-error', false);
+
+                    setTimeout(function(){
+                        $(inputElement).removeClass('invalid');
+                        $(inputElement).addClass('valid');
+                    },0);
+                }
+                else {
+                    $(inputElement).addClass('valid');
+                }
+            }
+
+            var validationMethods = {
+                // functions must return either true or the errorMsg only
+                required: function(inputElement){
+                    var errorMsg = 'This field is required';
+                    return inputElement.value ? true : errorMsg;
+                },
+                email: function(inputElement){
+                    var errorMsg = 'Please enter a valid email address';
+                    return /\S+@\S+\.\S+/.test(inputElement.value) ? true : errorMsg;
+                },
+                minLength: function(inputElement, min){
+                    var errorMsg = 'Please enter ' + min + ' or more characters';
+                    return (inputElement.value.length >= min) ? true : errorMsg;
+                },
+                equalTo: function(inputElement, compareInputElementId){
+                    var errorMsg = 'Please enter the same value';
+                    var compareInputElement = document.getElementById(compareInputElementId);
+                    return (inputElement.value === compareInputElement.value) ? true : errorMsg;
+                }
+            };
+
+            var validateInput = function(inputElement){
+                // Initialize needed validations
+                var validations = {
+                    name: ['required'],
+                    email: ['required', 'email'],
+                    password: ['required', 'minLength:8'],
+                    password_confirmation: ['required', 'equalTo:password']
+                };
+
+                // Check if validation rules exist
+                if(validations[inputElement.id]){
+                    var result = true;
+
+                    for (var i = 0; i < validations[inputElement.id].length; i++) {
+                        var element = validations[inputElement.id][i];
+                        var method = element.includes(':') ? element.split(':') : element;
+
+                        result = (typeof(method) === 'object')
+                            ? (validationMethods[method[0]](inputElement, method[1]))
+                            : (validationMethods[method](inputElement));
+
+                        // Result would return to a string errorMsg if validation fails
+                        if(result !== true){
+                            placeError(inputElement, result);
+                            return false;
+                        }
+                    }
+
+                    // If all validations succeed then
+                    if(result === true){
+                        placeSuccess(inputElement);
+                        return true;
+                    }
+                }
+            };
+
+            // Focusout events
+            $("input").focusout(function(e){
+                e.preventDefault();
+
+                validateInput(this);
+            });
+
+            // OnKeypressUp events
+            $("input").keyup(function(e){
+                e.preventDefault();
+
+                if($(this).hasClass('invalid')) validateInput(this);
+            })
+
+            $("button[type='submit']").click(function(e){
+                e.preventDefault();
+
+                var validName = validateInput(document.getElementById('name'));
+                var validEmail = validateInput(document.getElementById('email'));
+                var validPassword = validateInput(document.getElementById('password'));
+                var validPasswordConfirmation = validateInput(document.getElementById('password_confirmation'));
+
+                if(validName && validEmail && validPassword && validPasswordConfirmation){
+                    $(this).addClass('disabled');
+                    $(this).parents('form').submit();
+                }
+            })
+
+        });
+    </script>
 @endsection

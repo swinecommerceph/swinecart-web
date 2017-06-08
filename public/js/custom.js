@@ -1,4 +1,4 @@
-	$(document).ready(function(){
+$(document).ready(function(){
 
     // Hide certain elements
 	$('.modal-trigger, .modal').modal({
@@ -29,9 +29,9 @@
 
 	// Disable buttons after submitting to prevent multiple requests
 	$('button[type="submit"]').click(function(e){
-        e.preventDefault();
-        $(this).addClass('disabled');
-        $(this).parents('form').submit();
+        // e.preventDefault();
+        // $(this).addClass('disabled');
+        // $(this).parents('form').submit();
     });
 
     $('.social-button').click(function(e){
