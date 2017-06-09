@@ -47,5 +47,14 @@ var validationMethods = {
         var errorMsg = 'Please enter the same value';
         var compareInputElement = document.getElementById(compareInputElementId);
         return (inputElement.value === compareInputElement.value) ? true : errorMsg;
+    },
+    zipCodePh: function(inputElement){
+        var errorMsg = 'Please enter zipcode of 4 number characters';
+        return (/\d{4}/.test(inputElement.value) && inputElement.value.length === 4) ? true : errorMsg;
+    },
+    phoneNumber: function(inputElement){
+        var errorMsg = 'Please enter 11-digit phone number starting with 09';
+        return (/^09\d{9}/.test(inputElement.value) && inputElement.value.length === 11)  ? true : errorMsg;
     }
+
 };
