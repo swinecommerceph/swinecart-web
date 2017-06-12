@@ -43,7 +43,7 @@
 			<div class="row">
 			<!-- Address: Address Line 1 -->
 				<div class="input-field col s10 push-s1">
-					{!! Form::text('officeAddress_addressLine1', null, ['disabled' => 'disabled'])!!}
+					{!! Form::text('officeAddress_addressLine1', null, ['disabled' => 'disabled', 'id' => 'officeAddress_addressLine1'])!!}
 					{!! Form::label('officeAddress_addressLine1', 'Address Line 1* : Street, Road, Subdivision') !!}
 				</div>
 			</div>
@@ -52,7 +52,7 @@
 			<div class="row">
 			<!-- Address: Address Line 2 -->
 				<div class="input-field col s10 push-s1">
-					{!! Form::text('officeAddress_addressLine2', null, ['disabled' => 'disabled'])!!}
+					{!! Form::text('officeAddress_addressLine2', null, ['disabled' => 'disabled', 'id' => 'officeAddress_addressLine2'])!!}
 					{!! Form::label('officeAddress_addressLine2', 'Address Line 2* : Barangay, Town, City') !!}
 				</div>
 			</div>
@@ -62,12 +62,12 @@
 			<!-- Address: Province -->
 				<div class="input-field col s5 push-s1">
 					{!! Form::select('officeAddress_province', $provinces, null, ['disabled' => 'disabled']); !!}
-					{!! Form::label('officeAddress_province', 'Province*') !!}
+					<label>Province*</label>
 				</div>
 
 			<!-- Address: Zip Code -->
 			<div class="input-field col s5 push-s1">
-					{!! Form::text('officeAddress_zipCode', null, ['disabled' => 'disabled'])!!}
+					{!! Form::text('officeAddress_zipCode', null, ['disabled' => 'disabled', 'id' => 'officeAddress_zipCode'])!!}
 					{!! Form::label('officeAddress_zipCode', 'Postal/ZIP Code*') !!}
 				</div>
 			</div>
@@ -75,13 +75,13 @@
 			<div class="row">
 			<!-- Landline -->
 				<div class="input-field col s5 push-s1">
-					{!! Form::text('office_landline', null, ['disabled' => 'disabled'])!!}
+					{!! Form::text('office_landline', null, ['disabled' => 'disabled', 'id' => 'office_landline'])!!}
 					{!! Form::label('office_landline', 'Landline') !!}
 				</div>
 
 			<!-- Mobile -->
 			<div class="input-field col s5 push-s1">
-					{!! Form::text('office_mobile', null, ['disabled' => 'disabled'])!!}
+					{!! Form::text('office_mobile', null, ['disabled' => 'disabled', 'id' => 'office_mobile'])!!}
 					{!! Form::label('office_mobile', 'Mobile*') !!}
 				</div>
 			</div>
@@ -95,13 +95,13 @@
 			<div class="row">
 			<!-- Contact Person: Name -->
 				<div class="input-field col s5 push-s1">
-					{!! Form::text('contactPerson_name', null, ['disabled' => 'disabled'])!!}
+					{!! Form::text('contactPerson_name', null, ['disabled' => 'disabled', 'id' => 'contactPerson_name'])!!}
 					{!! Form::label('contactPerson_name', 'Name*') !!}
 				</div>
 
 			<!-- Contact Person: Mobile -->
 			<div class="input-field col s5 push-s1">
-					{!! Form::text('contactPerson_mobile', null, ['disabled' => 'disabled'])!!}
+					{!! Form::text('contactPerson_mobile', null, ['disabled' => 'disabled', 'id' => 'contactPerson_mobile'])!!}
 					{!! Form::label('contactPerson_mobile', 'Mobile*') !!}
 				</div>
 			</div>
@@ -115,13 +115,13 @@
 			<div class="row">
 			<!-- Contact Person: Name -->
 				<div class="input-field col s5 push-s1">
-					{!! Form::text('website', null, ['disabled' => 'disabled'])!!}
+					{!! Form::text('website', null, ['disabled' => 'disabled', 'id' => 'website'])!!}
 					{!! Form::label('website', 'Website') !!}
 				</div>
 
 			<!-- Contact Person: Mobile -->
 			<div class="input-field col s5 push-s1">
-					{!! Form::text('produce', null, ['disabled' => 'disabled'])!!}
+					{!! Form::text('produce', null, ['disabled' => 'disabled', 'id' => 'produce'])!!}
 					{!! Form::label('produce', 'Produce') !!}
 				</div>
 			</div>
@@ -149,12 +149,12 @@
 					<div class="row add-farm">
 						<div class="col s10 offset-s1">
 							<div id="{{ $farmAddress->name }}" class="card-panel hoverable">
-								{!! Form::open(['route' => 'breeder.updateFarm', 'method' => 'PUT', 'class' => 'edit-farm', 'data-farm-id' => $farmAddress->id]) !!}
+								{!! Form::open(['route' => 'breeder.updateFarm', 'method' => 'PUT', 'class' => 'edit-farm', 'data-farm-id' => $farmAddress->id, 'data-farm-order' => $loop->iteration]) !!}
 								<h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
 								<div class="row">
 								<!-- Farm Address: Name -->
 									<div class="input-field col s10 push-s1">
-										{!! Form::text('name', $farmAddress->name, ['disabled' => 'disabled'])!!}
+										{!! Form::text('name', $farmAddress->name, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-name'])!!}
 										{!! Form::label('name', 'Name*') !!}
 									</div>
 								</div>
@@ -162,7 +162,7 @@
 								<div class="row">
 								<!-- Farm Address: Address Line 1 -->
 									<div class="input-field col s10 push-s1">
-										{!! Form::text('addressLine1', $farmAddress->addressLine1, ['disabled' => 'disabled'])!!}
+										{!! Form::text('addressLine1', $farmAddress->addressLine1, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-addressLine1'])!!}
 										{!! Form::label('addressLine1', 'Address Line 1* : Street, Road, Subdivision') !!}
 									</div>
 								</div>
@@ -170,7 +170,7 @@
 								<div class="row">
 								<!-- Farm Address: Address Line 2 -->
 									<div class="input-field col s10 push-s1">
-										{!! Form::text('addressLine2', $farmAddress->addressLine2, ['disabled' => 'disabled'])!!}
+										{!! Form::text('addressLine2', $farmAddress->addressLine2, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-addressLine2'])!!}
 										{!! Form::label('addressLine2', 'Address Line 2* : Barangay, Town, City') !!}
 									</div>
 								</div>
@@ -179,12 +179,12 @@
 									<!-- Farm Address: Province -->
 									<div class="input-field col s5 push-s1">
 										{!! Form::select('province', $provinces, $farmAddress->province, ['disabled' => 'disabled']); !!}
-										{!! Form::label('province', 'Province*') !!}
+										<label>Province*</label>
 									</div>
 
 									<!-- Farm Address: Zip Code -->
 									<div class="input-field col s5 push-s1">
-										{!! Form::text('zipCode', $farmAddress->zipCode, ['disabled' => 'disabled'])!!}
+										{!! Form::text('zipCode', $farmAddress->zipCode, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-zipCode'])!!}
 										{!! Form::label('zipCode', 'Postal/ZIP Code*') !!}
 									</div>
 								</div>
@@ -192,7 +192,7 @@
 								<div class="row">
 									<!-- Farm Type -->
 									<div class="input-field col s5 push-s1">
-										{!! Form::text('farmType', $farmAddress->farmType, ['disabled' => 'disabled'])!!}
+										{!! Form::text('farmType', $farmAddress->farmType, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-farmType'])!!}
 										{!! Form::label('farmType', 'Farm Type*') !!}
 									</div>
 								</div>
@@ -200,13 +200,13 @@
 								<div class="row">
 									<!-- Farm Landline -->
 									<div class="input-field col s5 push-s1">
-										{!! Form::text('landline', $farmAddress->landline, ['disabled' => 'disabled'])!!}
+										{!! Form::text('landline', $farmAddress->landline, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-landline'])!!}
 										{!! Form::label('landline', 'Farm Landline') !!}
 									</div>
 
 									<!-- Farm Mobile -->
 									<div class="input-field col s5 push-s1">
-										{!! Form::text('mobile', $farmAddress->mobile, ['disabled' => 'disabled'])!!}
+										{!! Form::text('mobile', $farmAddress->mobile, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-mobile'])!!}
 										{!! Form::label('mobile', 'Farm Mobile*') !!}
 									</div>
 								</div>
@@ -269,11 +269,11 @@
 			{{-- Current Password --}}
 			<div class="row">
 				<div class="input-field col s4 offset-s4">
-					<input type="password" id="current-password" name="current_password" class="validate" required>
+					<input type="password" id="currentpassword" name="current_password" class="validate" required>
 					@if ($errors->has('current_password'))
-						<label for="current-password" data-error="{{ $errors->first('current_password') }}">Current Password</label>
+						<label for="currentpassword" data-error="{{ $errors->first('current_password') }}">Current Password</label>
 					@else
-						<label for="current-password">Current Password</label>
+						<label for="currentpassword">Current Password</label>
 					@endif
 				</div>
 			</div>
@@ -281,11 +281,11 @@
 			{{-- New Password --}}
 			<div class="row">
 				<div class="input-field col s4 offset-s4">
-					<input type="password" id="new-password" name="new_password" class="validate" required>
+					<input type="password" id="newpassword" name="new_password" class="validate" required>
 					@if ($errors->has('new_password'))
-						<label for="new-password" data-error="{{ $errors->first('new_password') }}">New Password</label>
+						<label for="newpassword" data-error="{{ $errors->first('new_password') }}">New Password</label>
 					@else
-						<label for="new-password">New Password</label>
+						<label for="newpassword">New Password</label>
 					@endif
 				</div>
 			</div>
@@ -293,11 +293,11 @@
 			{{-- Password Confirmation --}}
 			<div class="row">
 				<div class="input-field col s4 offset-s4">
-					<input type="password" id="new-password-confirm" name="new_password_confirmation" class="validate" required>
+					<input type="password" id="newpasswordconfirm" name="new_password_confirmation" class="validate" required>
 					@if ($errors->has('new_password_confirmation'))
-						<label for="new-password-confirm" data-error="{{ $errors->first('new_password_confirmation') }}">Confirm Password</label>
+						<label for="newpasswordconfirm" data-error="{{ $errors->first('new_password_confirmation') }}">Confirm Password</label>
 					@else
-						<label for="new-password-confirm">Confirm Password</label>
+						<label for="newpasswordconfirm">Confirm Password</label>
 					@endif
 				</div>
 			</div>

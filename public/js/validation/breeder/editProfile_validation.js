@@ -14,11 +14,13 @@ var validateFunction = function(){
 
             // Initialize needed validations
             var validations = {
-                address_addressLine1: ['required'],
-                address_addressLine2: ['required'],
-                address_zipCode: ['required', 'zipCodePh'],
+                officeAddress_addressLine1: ['required'],
+                officeAddress_addressLine2: ['required'],
+                officeAddress_zipCode: ['required', 'zipCodePh'],
                 // landline: ['landline'],
-                mobile: ['required', 'phoneNumber'],
+                office_mobile: ['required', 'phoneNumber'],
+                contactPerson_name: ['required'],
+                contactPerson_mobile: ['required', 'phoneNumber'],
                 ['farm-' + index + '-name']: ['required'],
                 ['farm-' + index + '-addressLine1']: ['required'],
                 ['farm-' + index + '-addressLine2']: ['required'],
@@ -99,13 +101,15 @@ var validateFunction = function(){
                 if (parent_form.attr('data-personal-id')) {
 
                     // Check if required fields are properly filled
-                    var address_addressLine1 = validateInput(document.getElementById('address_addressLine1'));
-                    var address_addressLine2 = validateInput(document.getElementById('address_addressLine2'));
-                    var address_zipCode = validateInput(document.getElementById('address_zipCode'));
-                    var mobile = validateInput(document.getElementById('mobile'));
+                    var officeAddress_addressLine1 = validateInput(document.getElementById('officeAddress_addressLine1'));
+                    var officeAddress_addressLine2 = validateInput(document.getElementById('officeAddress_addressLine2'));
+                    var officeAddress_zipCode = validateInput(document.getElementById('officeAddress_zipCode'));
+                    var office_mobile = validateInput(document.getElementById('office_mobile'));
+                    var contactPerson_name = validateInput(document.getElementById('contactPerson_name'));
+                    var contactPerson_mobile = validateInput(document.getElementById('contactPerson_mobile'));
 
                     // Submit if all validations are met
-                    if(address_addressLine1 && address_addressLine2 && address_zipCode){
+                    if(officeAddress_addressLine1 && officeAddress_addressLine2 && officeAddress_zipCode && contactPerson_name && contactPerson_mobile){
                         $('.edit-button').addClass('disabled');
                         $('.cancel-button').addClass('disabled');
                         profile.update(parent_form, edit_button, cancel_button);

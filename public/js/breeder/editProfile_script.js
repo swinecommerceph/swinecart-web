@@ -98,38 +98,38 @@ $(document).ready(function(){
                  '<div class="row">'+
                  //  Farm Address: Name
                      '<div class="input-field col s10 push-s1">'+
-                         '<input name="farmAddress[][name]" type="text">'+
-                         '<label for="farmAddress[][name]">Name</label>'+
+                         '<input name="farmAddress['+j+'][name]" id="farmAddress['+j+'][name]" type="text">'+
+                         '<label for="farmAddress['+j+'][name]">Name</label>'+
                      '</div>'+
                  '</div>'+
 
                  '<div class="row">'+
                  // Farm Address: Street Address
                      '<div class="input-field col s10 push-s1">'+
-                         '<input name="farmAddress[][addressLine1]" type="text">'+
-                         '<label for="farmAddress[][addressLine1]">Address Line 1* : Street, Road, Subdivision</label>'+
+                         '<input name="farmAddress['+j+'][addressLine1]" id="farmAddress['+j+'][addressLine1]" type="text">'+
+                         '<label for="farmAddress['+j+'][addressLine1]">Address Line 1* : Street, Road, Subdivision</label>'+
                      '</div>'+
                  '</div>'+
 
                  '<div class="row">'+
                  // Farm Address: Address Line 2
                      '<div class="input-field col s10 push-s1">'+
-                         '<input name="farmAddress[][addressLine2]" type="text">'+
-                         '<label for="farmAddress[][addressLine2]">Address Line 2* : Barangay, Town, City</label>'+
+                         '<input name="farmAddress['+j+'][addressLine2]" id="farmAddress['+j+'][addressLine2]" type="text">'+
+                         '<label for="farmAddress['+j+'][addressLine2]">Address Line 2* : Barangay, Town, City</label>'+
                      '</div>'+
                  '</div>'+
 
                  '<div class="row">'+
                      // Farm Address: Province
                      '<div class="input-field col s5 push-s1">'+
-                         profile.select_province() +
-                         '<label for="farmAddress[][province]">Province*</label>'+
+                         profile.select_province(j) +
+                         '<label>Province*</label>'+
                      '</div>'+
 
                      // Farm Address: Zip Code
                      '<div class="input-field col s5 push-s1">'+
-                         '<input name="farmAddress[][zipCode]" type="text">'+
-                         '<label for="farmAddress[][zipCode]">Postal/ZIP Code*</label>'+
+                         '<input name="farmAddress['+j+'][zipCode]" id="farmAddress['+j+'][zipCode]" type="text">'+
+                         '<label for="farmAddress['+j+'][zipCode]">Postal/ZIP Code*</label>'+
                      '</div>'+
                  '</div>'+
 
@@ -137,8 +137,8 @@ $(document).ready(function(){
                  '<div class="row">'+
                      // Farm Type
                      '<div class="input-field col s5 push-s1">'+
-                         '<input name="farmAddress[][farmType]" type="text">'+
-                         '<label for="farmAddress[][farmType]">Farm Type*</label>'+
+                         '<input name="farmAddress['+j+'][farmType]" id="farmAddress['+j+'][farmType]" type="text">'+
+                         '<label for="farmAddress['+j+'][farmType]">Farm Type*</label>'+
                      '</div>'+
                  '</div>'+
 
@@ -146,14 +146,14 @@ $(document).ready(function(){
                  '<div class="row">'+
                      // Farm Landline
                      '<div class="input-field col s5 push-s1">'+
-                         '<input name="farmAddress[][landline]" type="text">'+
-                         '<label for="farmAddress[][landline]">Landline</label>'+
+                         '<input name="farmAddress['+j+'][landline]" id="farmAddress['+j+'][landline]" type="text">'+
+                         '<label for="farmAddress['+j+'][landline]">Landline</label>'+
                      '</div>'+
 
                      // Farm Mobile
                      '<div class="input-field col s5 push-s1">'+
-                         '<input name="farmAddress[][mobile]" type="text">'+
-                         '<label for="farmAddress[][mobile]">Mobile*</label>'+
+                         '<input name="farmAddress['+j+'][mobile]" id="farmAddress['+j+'][mobile]" type="text">'+
+                         '<label for="farmAddress['+j+'][mobile]">Mobile*</label>'+
                      '</div>'+
                  '</div>'+
 
@@ -181,24 +181,6 @@ $(document).ready(function(){
         location.href = '#farm-'+i;
         $(".remove-farm, #submit-button").tooltip({delay:50});
         Materialize.toast('New Farm Information added', 2000);
-    });
-
-    // Edit on Personal/Farm Information
-    $('.edit-button').click(function(e){
-        e.preventDefault();
-        var edit_button = $(this);
-        var cancel_button = edit_button.parents('.content-section').find('.cancel-button');
-        var parent_form = edit_button.parents('form');
-
-        edit_button.prop('disabled', true);
-        edit_button.tooltip('remove');
-
-        // If button is for editing the fields
-        if(edit_button.attr('data-tooltip').includes('Edit'))profile.edit(parent_form, edit_button, cancel_button);
-
-        // If button is ready for submission
-        else profile.update(parent_form, edit_button, cancel_button);
-
     });
 
     // Cancel on Editing a Personal/Farm Information
@@ -256,18 +238,6 @@ $(document).ready(function(){
             location.href = '#'+prev_farm.find('.card-panel').attr('id');
             Materialize.toast(name+' Information removed', 2000);
         }
-    });
-
-    // Submit added farm information
-    $('body').on('click', '#submit-button' ,function(e){
-        e.preventDefault();
-        profile.add($('#create-profile'));
-    });
-
-    // Change password
-    $('#change-password-button').click(function(e){
-        e.preventDefault();
-        profile.change_password($('#change-password-form'));
     });
 
 });

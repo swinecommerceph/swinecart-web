@@ -273,5 +273,4 @@ var profile = {
 
         return selectElement;
     }
-
 };
