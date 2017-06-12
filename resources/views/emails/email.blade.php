@@ -8,7 +8,7 @@
     - Message
 @endsection
 
-@section('page-id')
+@section('pageId')
     id="page-message"
 @endsection
 

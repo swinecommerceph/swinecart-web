@@ -4,7 +4,7 @@
 
 @extends('layouts.twoColumn')
 
-@section('page-id')
+@section('pageId')
     id="page-register"
 @endsection
 

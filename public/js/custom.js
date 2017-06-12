@@ -28,10 +28,10 @@ $(document).ready(function(){
     $('select#other-breeds').material_select();
 
 	// Disable buttons after submitting to prevent multiple requests
-	$('button[type="submit"]').click(function(e){
-        // e.preventDefault();
-        // $(this).addClass('disabled');
-        // $(this).parents('form').submit();
+	$('#page-login button[type="submit"]').click(function(e){
+        e.preventDefault();
+        $(this).addClass('disabled');
+        $(this).parents('form').submit();
     });
 
     $('.social-button').click(function(e){
