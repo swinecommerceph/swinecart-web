@@ -475,8 +475,8 @@
 	  <p>Are you sure you want to remove the products chosen?</p>
 	</div>
 	<div class="modal-footer">
-	  <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
 	  <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
+	  <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
 	</div>
 </div>
 

@@ -48,8 +48,6 @@ var validateFunction = function(){
 
         // OnKeypressUp events
         $("input").keyup(function(e){
-            e.preventDefault();
-
             if($(this).hasClass('invalid') || $(this).hasClass('valid')) validateInput(this);
         })
 

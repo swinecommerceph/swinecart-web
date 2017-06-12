@@ -61,8 +61,6 @@ var validateFunction = function(){
 
         // onkeyup events
         $('body').on('keyup', 'input', function(e){
-            e.preventDefault();
-
             if($(this).hasClass('invalid') || $(this).hasClass('valid')) validateInput(this);
         });
 
@@ -90,11 +88,12 @@ var validateFunction = function(){
                 farmValid = farmValid && farm_name && farm_addressLine1 && farm_addressLine2 && farm_zipCode && farmType && farm_mobile;
             }
 
+            // Submit if all validations are met
             if(address_addressLine1 && address_addressLine2 && address_zipCode && mobile && farmValid){
                 $(this).addClass('disabled');
                 $(this).parents('form').submit();
             }
-            else Materialize.toast('Please fill all required fields.', 2500, 'orange accent-2');
+            else Materialize.toast('Please properly fill all required fields.', 2500, 'orange accent-2');
         });
 
     }

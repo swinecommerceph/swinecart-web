@@ -1,8 +1,17 @@
+'use strict';
+
 // Place error on specific HTML input
 var placeError = function(inputElement, errorMsg){
+    // Parse id of element if it contains '-' for the special
+    // case of finding the input's respective
+    // label on editProfile pages
+    var inputId = (inputElement.id.includes('-'))
+        ? (inputElement.id.split('-')[2])
+        : inputElement.id;
+
     $(inputElement)
         .parents("form")
-        .find("label[for='" + inputElement.id + "']")
+        .find("label[for='" + inputId + "']")
         .attr('data-error', errorMsg);
 
     setTimeout(function(){
