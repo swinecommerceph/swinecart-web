@@ -197,7 +197,7 @@ class ProductController extends Controller
             $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
             $product->price = $request->price;
-            $product->quantity = $request->quantity;
+            $product->quantity = ($request->type == 'semen') ? -1 : 1;
             $product->adg = $request->adg;
             $product->fcr = $request->fcr;
             $product->backfat_thickness = $request->backfat_thickness;

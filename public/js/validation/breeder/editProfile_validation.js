@@ -44,6 +44,8 @@ var validateFunction = function(){
 
                 for (var i = 0; i < validations[inputElement.id].length; i++) {
                     var element = validations[inputElement.id][i];
+
+                    // Split arguments if there are any
                     var method = element.includes(':') ? element.split(':') : element;
 
                     result = (typeof(method) === 'object')

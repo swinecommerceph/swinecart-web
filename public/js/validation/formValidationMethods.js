@@ -5,7 +5,7 @@ var placeError = function(inputElement, errorMsg){
     // Parse id of element if it contains '-' for the special
     // case of finding the input's respective
     // label on editProfile pages
-    var inputId = (inputElement.id.includes('-'))
+    var inputId = (inputElement.id.includes('-') && /\d/.test(inputElement.id))
         ? (inputElement.id.split('-')[2])
         : inputElement.id;
 
@@ -15,32 +15,56 @@ var placeError = function(inputElement, errorMsg){
         .attr('data-error', errorMsg);
 
     setTimeout(function(){
-        $(inputElement).addClass('invalid');
+        if(inputElement.id.includes('select')){
+            // For select input, find first its respective input text
+            // then add the 'invalid' class
+            $(inputElement)
+                .parents('.select-wrapper')
+                .find('input.select-dropdown')
+                .addClass('invalid');
+        }
+        else $(inputElement).addClass('invalid');
     },0);
 };
 
 // Place success from specific HTML input
 var placeSuccess = function(inputElement){
+
+    // For select input, find first its respective input text
+    // then add the needed classes
+    var inputTextFromSelect = (inputElement.id.includes('select')) ? $(inputElement).parents('.select-wrapper').find('input.select-dropdown') : '';
+
     // Check first if it is invalid
-    if($(inputElement).hasClass('invalid')){
+    if($(inputElement).hasClass('invalid') || $(inputTextFromSelect).hasClass('invalid')){
         $(inputElement)
             .parents("form")
             .find("label[for='" + inputElement.id + "']")
             .attr('data-error', false);
 
         setTimeout(function(){
-            $(inputElement).removeClass('invalid');
-            $(inputElement).addClass('valid');
+            if(inputElement.id.includes('select')) inputTextFromSelect.removeClass('invalid').addClass('valid');
+            else $(inputElement).removeClass('invalid').addClass('valid');
         },0);
     }
     else {
-        $(inputElement).addClass('valid');
+        if(inputElement.id.includes('select')) inputTextFromSelect.addClass('valid');
+        else $(inputElement).addClass('valid');
     }
 }
 
 var validationMethods = {
     // functions must return either true or the errorMsg only
     required: function(inputElement){
+        var errorMsg = 'This field is required';
+        return inputElement.value ? true : errorMsg;
+    },
+    requiredIfRadio: function(inputElement, radioId){
+        var errorMsg = 'This field is required';
+        var radioInputElement = document.getElementById(radioId);
+        if(radioInputElement.checked) return inputElement.value ? true : errorMsg;
+        else return true;
+    },
+    requiredDropdown: function(inputElement){
         var errorMsg = 'This field is required';
         return inputElement.value ? true : errorMsg;
     },
