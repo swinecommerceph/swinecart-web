@@ -25,7 +25,7 @@
 					<br>
 					{{-- Name --}}
 					<div class="input-field col s6">
-						{!! Form::text('name', null)!!}
+						{!! Form::text('name', null, ['id' => 'name', 'class' => 'validate'])!!}
 						{!! Form::label('name', 'Name*') !!}
 					</div>
 
@@ -58,14 +58,8 @@
 				<div class="row">
 					{{-- Price --}}
 					<div class="input-field col s6">
-						{!! Form::text('price', null)!!}
+						{!! Form::text('price', null, ['class' => 'validate'])!!}
 						{!! Form::label('price', 'Price') !!}
-					</div>
-
-					{{-- Quantity --}}
-					<div class="input-field col s6 input-quantity-container">
-						{!! Form::text('quantity', null)!!}
-						{!! Form::label('quantity', 'Quantity') !!}
 					</div>
 				</div>
 			</div>
@@ -90,18 +84,18 @@
 					<div class="input-purebreed-container">
 						{{-- If pure breed --}}
 						<div class="input-field col s6">
-							{!! Form::text('breed', null)!!}
+							{!! Form::text('breed', null, ['id' => 'breed'])!!}
 							{!! Form::label('breed', 'Breed*') !!}
 						</div>
 					</div>
 					<div class="input-crossbreed-container">
 						{{-- If crossbreed --}}
 						<div class="input-field col s6">
-							{!! Form::text('fbreed', null)!!}
+							{!! Form::text('fbreed', null, ['id' => 'fbreed'])!!}
 							{!! Form::label('fbreed', 'Father\'s Breed*') !!}
 						</div>
 						<div class="input-field col s6">
-							{!! Form::text('mbreed', null)!!}
+							{!! Form::text('mbreed', null, ['id' => 'mbreed'])!!}
 							{!! Form::label('mbreed', 'Mother\'s Breed*') !!}
 						</div>
 					</div>
@@ -110,13 +104,13 @@
 				<div class="row">
 					{{-- Birthdate --}}
 					<div class="input-field col s6">
-						<input type="date" id="birthdate" name="birthdate" class="datepicker"/>
+						<input type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
 						<label for="birthdate">Birth Date</label>
 					</div>
 
 					{{-- ADG --}}
 					<div class="input-field col s6">
-						{!! Form::text('adg', null)!!}
+						{!! Form::text('adg', null, ['class' => 'validate'])!!}
 						{!! Form::label('adg', 'Average Daily Gain (grams)') !!}
 					</div>
 				</div>
@@ -124,13 +118,13 @@
 				<div class="row">
 					{{-- FCR --}}
 					<div class="input-field col s6">
-						{!! Form::text('fcr', null)!!}
+						{!! Form::text('fcr', null, ['class' => 'validate'])!!}
 						{!! Form::label('fcr', 'Feed Conversion Ratio') !!}
 					</div>
 
 					{{-- Backfat thickness --}}
 					<div class="input-field col s6">
-						{!! Form::text('backfat_thickness', null)!!}
+						{!! Form::text('backfat_thickness', null, ['class' => 'validate'])!!}
 						{!! Form::label('backfat_thickness', 'Backfat thickness (mm)') !!}
 					</div>
 				</div>
@@ -149,11 +143,11 @@
 					<div class="other-details-container">
 						<div class="detail-container">
 							<div class="input-field col s6">
-								{!! Form::text('characteristic[]', null)!!}
+								{!! Form::text('characteristic[]', null, ['class' => 'validate'])!!}
 								{!! Form::label('characteristic[]', 'Characteristic') !!}
 							</div>
 							<div class="input-field col s5">
-								{!! Form::text('value[]', null)!!}
+								{!! Form::text('value[]', null, ['class' => 'validate'])!!}
 								{!! Form::label('value[]', 'Value') !!}
 							</div>
 							<div class="input-field col s1 remove-button-container">
@@ -273,8 +267,8 @@
 					<br>
 					{{-- Name --}}
 					<div class="input-field col s6">
-						{!! Form::text('name', null)!!}
-						{!! Form::label('name', 'Name*') !!}
+						{!! Form::text('edit-name', null, ['id' => 'edit-name'])!!}
+						{!! Form::label('edit-name', 'Name*') !!}
 					</div>
 
 					{{-- Type --}}
@@ -306,14 +300,8 @@
 				<div class="row">
 					{{-- Price --}}
 					<div class="input-field col s6">
-						{!! Form::text('price', null)!!}
-						{!! Form::label('price', 'Price') !!}
-					</div>
-
-					{{-- Quantity --}}
-					<div class="input-field col s6 input-quantity-container">
-						{!! Form::text('quantity', null)!!}
-						{!! Form::label('quantity', 'Quantity') !!}
+						{!! Form::text('edit-price', null, ['class' => 'validate'])!!}
+						{!! Form::label('edit-price', 'Price') !!}
 					</div>
 				</div>
 			</div>
@@ -338,19 +326,19 @@
 					<div class="input-purebreed-container">
 						{{-- If pure breed --}}
 						<div class="input-field col s6">
-							{!! Form::text('breed', null)!!}
-							{!! Form::label('breed', 'Breed*') !!}
+							{!! Form::text('edit-breed', null, ['id' => 'edit-breed'])!!}
+							{!! Form::label('edit-breed', 'Breed*') !!}
 						</div>
 					</div>
 					<div class="input-crossbreed-container">
 						{{-- If crossbreed --}}
 						<div class="input-field col s6">
-							{!! Form::text('fbreed', null)!!}
-							{!! Form::label('fbreed', 'Father\'s Breed*') !!}
+							{!! Form::text('edit-fbreed', null, ['id' => 'edit-fbreed'])!!}
+							{!! Form::label('edit-fbreed', 'Father\'s Breed*') !!}
 						</div>
 						<div class="input-field col s6">
-							{!! Form::text('mbreed', null)!!}
-							{!! Form::label('mbreed', 'Mother\'s Breed*') !!}
+							{!! Form::text('edit-mbreed', null, ['id' => 'edit-mbreed'])!!}
+							{!! Form::label('edit-mbreed', 'Mother\'s Breed*') !!}
 						</div>
 					</div>
 				</div>
@@ -358,28 +346,28 @@
 				<div class="row">
 					{{-- Birhtdate --}}
 					<div class="input-field col s6">
-						<input type="date" id="birthdate" name="birthdate" class="datepicker"/>
-						<label for="birthdate">Birth Date</label>
+						<input type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
+						<label for="edit-birthdate">Birth Date</label>
 					</div>
 
 					{{-- ADG --}}
 					<div class="input-field col s6">
-						{!! Form::text('adg', null)!!}
-						{!! Form::label('adg', 'Average Daily Gain (grams)') !!}
+						{!! Form::text('edit-adg', null, ['class' => 'validate'])!!}
+						{!! Form::label('edit-adg', 'Average Daily Gain (grams)') !!}
 					</div>
 				</div>
 
 				<div class="row">
 					{{-- FCR --}}
 					<div class="input-field col s6">
-						{!! Form::text('fcr', null)!!}
-						{!! Form::label('fcr', 'Feed Conversion Ratio') !!}
+						{!! Form::text('edit-fcr', null, ['class' => 'validate'])!!}
+						{!! Form::label('edit-fcr', 'Feed Conversion Ratio') !!}
 					</div>
 
 					{{-- Backfat thickness --}}
 					<div class="input-field col s6">
-						{!! Form::text('backfat_thickness', null)!!}
-						{!! Form::label('backfat_thickness', 'Backfat thickness (mm)') !!}
+						{!! Form::text('edit-backfat_thickness', null, ['class' => 'validate'])!!}
+						{!! Form::label('edit-backfat_thickness', 'Backfat thickness (mm)') !!}
 					</div>
 				</div>
 
@@ -397,11 +385,11 @@
 					<div class="other-details-container">
 						<div class="detail-container">
 							<div class="input-field col s6">
-								{!! Form::text('characteristic[]', null)!!}
+								{!! Form::text('characteristic[]', null, ['class' => 'validate'])!!}
 								{!! Form::label('characteristic[]', 'Characteristic') !!}
 							</div>
 							<div class="input-field col s5">
-								{!! Form::text('value[]', null)!!}
+								{!! Form::text('value[]', null, ['class' => 'validate'])!!}
 								{!! Form::label('value[]', 'Value') !!}
 							</div>
 							<div class="input-field col s1 remove-button-container">
@@ -475,8 +463,8 @@
 	  <p>Are you sure you want to remove the products chosen?</p>
 	</div>
 	<div class="modal-footer">
-	  <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
 	  <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
+	  <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
 	</div>
 </div>
 

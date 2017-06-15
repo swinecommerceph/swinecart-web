@@ -365,8 +365,7 @@ html{
 
 /* Blockquote styles */
 blockquote{
-	padding-top: 1rem;
-	padding-bottom: 1rem;
+	padding: 1rem 1rem 1rem;
 	border-left: 5px solid #388e3c;
 	background-color: #e8f5e9;
 }
@@ -1122,4 +1121,20 @@ input#search{
 	min-height: 400px;
 }
 
-/*Test Layout CSS*/
+/* Form Validation */
+label {
+   width: 100%;
+}
+
+.input-field label[for] {
+	font-size: 0.8rem;
+   -webkit-transform: translateY(-140%);
+   -moz-transform: translateY(-140%);
+   -ms-transform: translateY(-140%);
+   -o-transform: translateY(-140%);
+   transform: translateY(-140%);
+}
+
+.input-field label[for]::after {
+   padding-top: 0.4rem;
+}

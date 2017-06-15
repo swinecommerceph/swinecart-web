@@ -4,7 +4,7 @@
 
 @extends('layouts.twoColumn')
 
-@section('page-id')
+@section('pageId')
     id="page-register"
 @endsection
 
@@ -17,13 +17,13 @@
 				@include('common._errors')
 
 				{{-- Registration Form --}}
-				<form action="{{ url('register') }}" method="POST" class="col s12">
+				<form id="registration-form" action="{{ url('register') }}" method="POST" class="col s12">
 					{{ csrf_field() }}
 
 					{{-- Name --}}
 					<div class="row">
 						<div class="input-field col s12">
-							<input type="text" id="name" name="name" value="{{ old('name') }}" autofocus>
+							<input class="validate" type="text" id="name" name="name" value="{{ old('name') }}" autofocus>
 							<label for="name">Name</label>
 						</div>
 					</div>
@@ -31,7 +31,7 @@
 					{{-- E-Mail Address --}}
 					<div class="row">
 						<div class="input-field col s12">
-							<input type="email" id="email" name="email" value="{{ old('email') }}">
+							<input class="validate" type="email" id="email" name="email" value="{{ old('email') }}">
 							<label for="email">E-mail</label>
 						</div>
 					</div>
@@ -39,7 +39,7 @@
 					{{-- Password --}}
 					<div class="row">
 						<div class="input-field col s12">
-							<input type="password" id="password" name="password">
+							<input class="validate" type="password" id="password" name="password">
 							<label for="password">Password</label>
 						</div>
 					</div>
@@ -47,7 +47,7 @@
 					{{-- Confirm Password --}}
 					<div class="row">
 						<div class="input-field col s12">
-							<input type="password" id="password_confirmation" name="password_confirmation">
+							<input class="validate" type="password" id="password_confirmation" name="password_confirmation">
 							<label for="password_confirmation">Re-Type Password</label>
 						</div>
 					</div>
@@ -90,14 +90,6 @@
 @endsection
 
 @section('customScript')
-	<script src="/js/breeder/profile.js"> </script>
-	@if(Session::has('message'))
-
-		<script type="text/javascript">
-			$(document).ready(function(){
-				Materialize.toast('{{ Session::get('message') }}', 4000, 'deep-orange');
-			});
-		</script>
-
-	@endif
+    <script src="/js/validation/formValidationMethods.js"> </script>
+    <script src="/js/validation/registration_validation.js"> </script>
 @endsection

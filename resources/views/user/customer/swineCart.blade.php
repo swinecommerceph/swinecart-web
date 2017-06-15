@@ -492,8 +492,11 @@
                     <h4>Request Product Confirmation</h4>
                     <p>
                         Are you sure you want to request @{{ productRequest.name }}?
-                        <blockquote class="info" v-show="productRequest.type === 'semen'">
-                            Once requested, request quantity can never be changed.
+                        <blockquote class="info" v-if="productRequest.type === 'semen'">
+                            Once requested, request quantity can never be changed. Also, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
+                        </blockquote>
+                        <blockquote class="info" v-else>
+                            Once requested, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
                         </blockquote>
                     </p>
                     <div class="row">

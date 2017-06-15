@@ -11,16 +11,16 @@ var profile = {
         };
 
         farm_address.push({});
-        $(parent_form).find('.add-farm').map(function () {
+        $(parent_form).find('.add-farm').map(function (index) {
             var details = {
-                'name': $(this).find('input[name="farmAddress[][name]"]').val(),
-                'addressLine1': $(this).find('input[name="farmAddress[][addressLine1]"]').val(),
-                'addressLine2': $(this).find('input[name="farmAddress[][addressLine2]"]').val(),
-                'province': $(this).find('select[name="farmAddress[][province]"] option:checked').val(),
-                'zipCode': $(this).find('input[name="farmAddress[][zipCode]"]').val(),
-                'farmType': $(this).find('input[name="farmAddress[][farmType]"]').val(),
-                'landline': $(this).find('input[name="farmAddress[][landline]"]').val(),
-                'mobile': $(this).find('input[name="farmAddress[][mobile]"]').val()
+                'name': $(this).find('input[name="farmAddress[' + (index+1) + '][name]"]').val(),
+                'addressLine1': $(this).find('input[name="farmAddress[' + (index+1) + '][addressLine1]"]').val(),
+                'addressLine2': $(this).find('input[name="farmAddress[' + (index+1) + '][addressLine2]"]').val(),
+                'province': $(this).find('select[name="farmAddress[' + (index+1) + '][province]"] option:checked').val(),
+                'zipCode': $(this).find('input[name="farmAddress[' + (index+1) + '][zipCode]"]').val(),
+                'farmType': $(this).find('input[name="farmAddress[' + (index+1) + '][farmType]"]').val(),
+                'landline': $(this).find('input[name="farmAddress[' + (index+1) + '][landline]"]').val(),
+                'mobile': $(this).find('input[name="farmAddress[' + (index+1) + '][mobile]"]').val()
             };
             farm_address.push(details);
         });
@@ -113,6 +113,8 @@ var profile = {
             data: data_values,
             success: function(data){
                 var data = JSON.parse(data);
+
+                parent_form.find('input').removeClass('valid');
                 parent_form.find('input, select').prop('disabled',true);
                 parent_form.find('.caret').addClass('disabled');
 
@@ -145,6 +147,8 @@ var profile = {
                 edit_button.attr('data-position','left');
                 edit_button.html('<i class="material-icons">mode_edit</i>');
                 $(".tooltipped").tooltip({delay:50});
+                $('.edit-button').removeClass('disabled');
+                $('.cancel-button').removeClass('disabled');
                 edit_button.prop('disabled', false);
                 cancel_button.toggle();
                 config.preloader_progress.fadeOut();
@@ -161,6 +165,7 @@ var profile = {
         config.preloader_progress.fadeIn();
         cancel_button.tooltip('remove');
         $.when(
+            parent_form.find('input').removeClass('valid'),
             parent_form.find('input, select').prop('disabled',true),
             parent_form.find('.caret').addClass('disabled')
         ).done(function(){
@@ -229,11 +234,14 @@ var profile = {
                     config.preloader_progress.fadeOut();
                     Materialize.toast('Password change unsuccessful', 2500, 'red');
                 }
+
+                $('#password-error-container').hide();
+                $('#change-password-button').removeClass('disabled');
+
             },
             error: function(message){
                 var error_messages = JSON.parse(message['responseText']),
                     error_string = '';
-
 
                 parent_form.find('input[name=current_password], input[name=new_password], input[name=new_password_confirmation]').val('');
                 parent_form.find('label[for=current-password], label[for=new-password], label[for=new-password-confirm]').removeClass('active');
@@ -245,6 +253,7 @@ var profile = {
 
                 $('#password-error-container').html(error_string);
                 $('#password-error-container').show();
+                $('#change-password-button').removeClass('disabled');
 
                 config.preloader_progress.fadeOut();
             }
@@ -252,10 +261,9 @@ var profile = {
 
     },
 
-    select_province: function(){
+    select_province: function(farmOrder){
         // Dynamically produce select element with options based on provinces
-        var selectElement = '<select name="farmAddress[][province]">' +
-            '<option value="" disabled selected> Choose Province </option>';
+        var selectElement = '<select name="farmAddress[' + farmOrder + '][province]">';
 
         for(var key in provinces){
             selectElement += '<option value="' + key + '">' + key + '</option>';
@@ -265,5 +273,4 @@ var profile = {
 
         return selectElement;
     }
-
 };

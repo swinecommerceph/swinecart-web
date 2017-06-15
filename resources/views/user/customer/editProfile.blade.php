@@ -35,25 +35,25 @@
           <p>Are you sure you want to remove this farm?</p>
         </div>
         <div class="modal-footer">
-          <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons">done</i></a>
-          <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat"><i class="material-icons">clear</i></a>
+          <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
+          <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
         </div>
     </div>
 @endsection
 
 @section('customScript')
-    <script type="text/javascript">
-        var provinces = {!! $provinces !!};
-    </script>
-    <script src="/js/customer/profile.js"> </script>
-    <script src="/js/customer/editProfile_script.js"> </script>
     @if(Session::has('message'))
-
         <script type="text/javascript">
             $(document).ready(function(){
                 Materialize.toast('{{ Session::get('message') }}', 2000, 'green lighten-1');
             });
         </script>
-
     @endif
+    <script type="text/javascript">
+        var provinces = {!! $provinces !!};
+    </script>
+    <script src="/js/customer/profile.js"> </script>
+    <script src="/js/customer/editProfile_script.js"> </script>
+    <script src="/js/validation/formValidationMethods.js"> </script>
+    <script src="/js/validation/customer/editProfile_validation.js"> </script>
 @endsection

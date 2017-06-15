@@ -5,7 +5,7 @@ $(document).ready(function(){
     var all_checked = false;
 
     // Hide certain elements
-    $('.input-crossbreed-container, .input-quantity-container').hide();
+    $('.input-crossbreed-container').hide();
 
     // initialization of Materialize's Date Picker
     $('.datepicker').pickadate({
@@ -149,17 +149,6 @@ $(document).ready(function(){
     });
 
     /* ----------- Add Product Modal functionalities ----------- */
-    // Submit add product
-    $("#create-product").submit(function(e){
-        e.preventDefault();
-
-        // Disable submit/add product button
-        $('#submit-button').addClass('disabled');
-        $('#submit-button').html('Adding Product ...');
-
-        product.add($('#create-product'));
-    });
-
     $("#add-product-modal .tabs li").last().click(function(e){
         $('#submit-button').show();
     });
@@ -280,17 +269,6 @@ $(document).ready(function(){
     });
 
     /* ----------- Edit Product Modal functionalities ----------- */
-    // Update details of a product
-    $('.update-button').click(function(e){
-        e.preventDefault();
-
-        // Disable update-button
-        $(this).addClass('disabled');
-        $(this).html('Updating...');
-
-        product.edit($('#edit-product'), $(this));
-    });
-
     // Open Edit Media Modal
     $('#edit-media-button').click(function(e){
         e.preventDefault();

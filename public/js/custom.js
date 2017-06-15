@@ -1,4 +1,4 @@
-	$(document).ready(function(){
+$(document).ready(function(){
 
     // Hide certain elements
 	$('.modal-trigger, .modal').modal({
@@ -28,7 +28,7 @@
     $('select#other-breeds').material_select();
 
 	// Disable buttons after submitting to prevent multiple requests
-	$('button[type="submit"]').click(function(e){
+	$('#page-login button[type="submit"]').click(function(e){
         e.preventDefault();
         $(this).addClass('disabled');
         $(this).parents('form').submit();
