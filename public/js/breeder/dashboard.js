@@ -152,9 +152,9 @@ var vm = new Vue({
                     $('#date-to').prop('disabled', false);
 
                     // Make sure to get the correct month interval
-                    var plusFiveMonths = moment(minDate).add(5, 'months');
+                    var plusElevenMonths = moment(minDate).add(11, 'months');
 
-                    constrictedDate = (plusFiveMonths.isSameOrAfter(now)) ? now : plusFiveMonths;
+                    constrictedDate = (plusElevenMonths.isSameOrAfter(now)) ? now : plusElevenMonths;
                     maxDate = new Date(constrictedDate.format('YYYY-MM-D'));
 
                     break;
@@ -279,7 +279,15 @@ var vm = new Vue({
                         stacked: true
                     }],
                     yAxes: [{
-                        stacked: true
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true,
+                            userCallback: function(label, index, labels) {
+                                if (Math.floor(label) === label) {
+                                    return label;
+                                }
+                            }
+                        }
                     }]
                 }
             }
