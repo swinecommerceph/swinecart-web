@@ -299,7 +299,7 @@
                 <div class="modal-content">
                     <h4>@{{ productInfoModal.productName }} Delivery Confirmation</h4>
                     <p>
-                        Are you sure the product is on delivery to @{{ productInfoModal.customerName }}?
+                        Are you sure this product would be paid by @{{ productInfoModal.customerName }} upon delivery?
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -313,7 +313,7 @@
                 <div class="modal-content">
                     <h4>@{{ productInfoModal.productName }} Pay Confirmation</h4>
                     <p>
-                        Are you sure the product is already paid by @{{ productInfoModal.customerName }}?
+                        Are you sure this product has been paid by @{{ productInfoModal.customerName }} and is set for delivery?
                     </p>
                 </div>
                 <div class="modal-footer">
@@ -327,7 +327,7 @@
                 <div class="modal-content">
                     <h4>@{{ productInfoModal.productName }} Sold Confirmation</h4>
                     <p>
-                        Are you sure the product is already sold to @{{ productInfoModal.customerName }}?
+                        Are you sure this product has already been delivered and paid to @{{ productInfoModal.customerName }}?
                     </p>
                 </div>
                 <div class="modal-footer">
