@@ -7,6 +7,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 
 use App\Http\Requests;
+use App\Http\Requests\ProductRequest;
 use App\Jobs\ResizeUploadedImage;
 use App\Models\Breeder;
 use App\Models\FarmAddress;
@@ -176,7 +177,7 @@ class ProductController extends Controller
      * @param  Request $request
      * @return JSON
      */
-    public function storeProduct(Request $request)
+    public function storeProduct(ProductRequest $request)
     {
         $breeder = $this->user->userable;
 
@@ -220,7 +221,7 @@ class ProductController extends Controller
      * @param  Request $request
      * @return String
      */
-    public function updateProduct(Request $request)
+    public function updateProduct(ProductRequest $request)
     {
         if($request->ajax()){
             $product = Product::find($request->id);
@@ -230,7 +231,6 @@ class ProductController extends Controller
             $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
             $product->price = $request->price;
-            $product->quantity = $request->quantity;
             $product->adg = $request->adg;
             $product->fcr = $request->fcr;
             $product->backfat_thickness = $request->backfat_thickness;
