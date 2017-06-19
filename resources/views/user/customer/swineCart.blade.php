@@ -190,7 +190,7 @@
           <li class="tab col s6 teal-text"><a href="#transaction-history" @click="getTransactionHistory({{ $customerId }})">Transaction History</a></li>
         </ul>
 
-        <order-details :products="products"
+        <order-details :products="sortedProducts"
             :token="'{{ $token }}'"
             @subtract-quantity="subtractProductQuantity"
             @add-quantity="addProductQuantity"
@@ -305,7 +305,7 @@
                                 <a class="btn-floating btn-large halfway-fab waves-effect waves-light red tooltipped"
                                     data-position="top"
                                     data-delay="50"
-                                    data-tooltip="Message Breeder"
+                                    data-tooltip="Send meesage to Breeder"
                                     :href="'/customer/messages/' + product.user_id"
                                     v-if="product.status === 'reserved' | product.status === 'on_delivery' | product.status === 'paid'"
                                 >
@@ -421,24 +421,24 @@
                                     {{-- Requested --}}
                                     <template v-if="product.request_status && product.status === 'requested'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Reserved">save</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not On Delivery">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Paid">payment</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Reserved">save</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Paid">payment</i>
                                     </template>
 
                                     {{-- Reserved --}}
                                     <template v-if="product.status === 'reserved'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not On Delivery">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Paid">payment</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Paid">payment</i>
                                     </template>
 
                                     {{-- Paid --}}
                                     <template v-if="product.status === 'paid'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Awaiting Delivery">local_shipping</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Product is set for Delivery">local_shipping</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.paid | transformToDetailedDate('Paid')">payment</i>
                                     </template>
 
@@ -447,12 +447,12 @@
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.on_delivery | transformToDetailedDate('On Delivery')">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Awaiting Payment">payment</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Breeder awaits your Payment">payment</i>
                                     </template>
 
                                     {{-- Sold --}}
                                     <template v-if="product.status === 'sold'">
-                                        <i class="medium material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.sold | transformToDetailedDate('Sold')">attach_money</i>
+                                        <i class="medium material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.sold | transformToDetailedDate('Sold')">local_offer</i>
                                     </template>
 
                                 </span>
