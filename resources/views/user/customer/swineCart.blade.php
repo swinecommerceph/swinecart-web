@@ -190,7 +190,7 @@
           <li class="tab col s6 teal-text"><a href="#transaction-history" @click="getTransactionHistory({{ $customerId }})">Transaction History</a></li>
         </ul>
 
-        <order-details :products="products"
+        <order-details :products="sortedProducts"
             :token="'{{ $token }}'"
             @subtract-quantity="subtractProductQuantity"
             @add-quantity="addProductQuantity"

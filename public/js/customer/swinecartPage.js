@@ -651,6 +651,11 @@ var vm = new Vue({
                 return str[0].toUpperCase() + str.slice(1);
             }
             return '';
+        },
+
+        sortedProducts: function(){
+            // Sort Swine Cart items according to its request status
+            return _.sortBy(this.products, ['request_status']);
         }
     },
     methods: {
