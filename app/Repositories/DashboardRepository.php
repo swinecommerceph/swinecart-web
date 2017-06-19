@@ -661,13 +661,13 @@ class DashboardRepository
                 ];
 
                 $notificationDetails = [
-                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>on delivery</b>',
+                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>on delivery</b>. Breeder is awaiting your payment.',
                     'time' => $transactionDetails['created_at'],
                     'url' => route('cart.items')
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery.',
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery. Breeder is awaiting your payment.',
                     'recipient' => $customer->mobile
                 ];
 
@@ -711,13 +711,13 @@ class DashboardRepository
                 ];
 
                 $notificationDetails = [
-                    'description' => 'You already <b>paid</b> for Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b>.',
+                    'description' => 'You already <b>paid</b> for Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b>. Product is now set for delivery.',
                     'time' => $transactionDetails['created_at'],
                     'url' => route('cart.items')
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: You already paid for Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . '.',
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: You already paid for Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . '. Product is now set for delivery',
                     'recipient' => $customer->mobile
                 ];
 
