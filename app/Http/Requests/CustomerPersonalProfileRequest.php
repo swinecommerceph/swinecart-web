@@ -27,8 +27,8 @@ class CustomerPersonalProfileRequest extends Request
             'address_addressLine1' => 'required',
             'address_addressLine2' => 'required',
             'address_province' => 'required',
-            'address_zipCode' => 'required',
-            'mobile' => 'required',
+            'address_zipCode' => 'required|digits:4',
+            'mobile' => 'required|digits:11|regex:/^09/',
         ];
     }
 }

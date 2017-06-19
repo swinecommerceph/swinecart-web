@@ -27,9 +27,9 @@ class CustomerFarmProfileRequest extends Request
             'farmAddress.*.addressLine1' => 'required',
             'farmAddress.*.addressLine2' => 'required',
             'farmAddress.*.province' => 'required',
-            'farmAddress.*.zipCode' => 'required',
+            'farmAddress.*.zipCode' => 'required|digits:4',
             'farmAddress.*.farmType' => 'required',
-            'farmAddress.*.mobile' => 'required',
+            'farmAddress.*.mobile' => 'required|digits:11|regex:/^09/',
         ];
     }
 }
