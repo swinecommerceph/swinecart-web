@@ -27,15 +27,15 @@ class CustomerProfileRequest extends Request
             'address_addressLine1' => 'required',
             'address_addressLine2' => 'required',
             'address_province' => 'required',
-            'address_zipCode' => 'required',
-            'mobile' => 'required',
+            'address_zipCode' => 'required|digits:4',
+            'mobile' => 'required|digits:11|regex:/^09/',
             'farmAddress.*.name' => 'required',
             'farmAddress.*.addressLine1' => 'required',
             'farmAddress.*.addressLine2' => 'required',
             'farmAddress.*.province' => 'required',
-            'farmAddress.*.zipCode' => 'required',
+            'farmAddress.*.zipCode' => 'required|digits:4',
             'farmAddress.*.farmType' => 'required',
-            'farmAddress.*.mobile' => 'required',
+            'farmAddress.*.mobile' => 'required|digits:11|regex:/^09/',
         ];
     }
 }

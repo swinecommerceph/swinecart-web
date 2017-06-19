@@ -2,9 +2,9 @@
 
 namespace App\Http\Requests;
 
-use App\Http\Requests\Request;
+use Illuminate\Foundation\Http\FormRequest;
 
-class CustomerPersonalProfileRequest extends Request
+class ProductRequest extends FormRequest
 {
     /**
      * Determine if the user is authorized to make this request.
@@ -24,11 +24,10 @@ class CustomerPersonalProfileRequest extends Request
     public function rules()
     {
         return [
-            'address_addressLine1' => 'required',
-            'address_addressLine2' => 'required',
-            'address_province' => 'required',
-            'address_zipCode' => 'required|digits:4',
-            'mobile' => 'required|digits:11|regex:/^09/',
+            'name' => 'required',
+            'type' => 'required',
+            'farm_from_id' => 'required',
+            'breed' => 'required'
         ];
     }
 }
