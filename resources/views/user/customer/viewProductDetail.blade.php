@@ -101,7 +101,7 @@
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
                 <li id="stars-container" class="collection-item">
                     Breeder Ratings
-                    <a href="/customer/messages/{{ $product->userid }}" class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Message Breeder">
+                    <a href="/customer/messages/{{ $product->userid }}" class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Send message to Breeder">
                         <i class="material-icons red-text" style="font-size:35px;">message</i>
                     </a>
                     <br><br>
