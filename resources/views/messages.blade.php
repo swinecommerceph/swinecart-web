@@ -61,27 +61,27 @@
 	<div class="col m9 row">
 
 		<div>
-			
+
 			<div class="panel panel-default">
-				
+
 				<div id="threadname" class="panel-heading">{{ Auth::user()->name }}</div>
 
 				<div class="panel-body" id="chat">
-					
+
 					<ul id="chatMessages">
 
 						@foreach($messages as $message)
 							@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
 								<li class="message" :class="mine">
 									<span class="who">
-										Me: 
+										Me:
 									</span>
 									{{ $message->message }}
 								</li>
 							@else
 								<li class="message" :class="user">
 									<span class="who">
-							    		{{ $message->sender() }}: 
+							    		{{ $message->sender() }}:
 									</span>
 									{{ $message->message }}
 								</li>
@@ -95,10 +95,10 @@
 					</ul>
 
 					<div style="display:table; width: 100%;">
-						
+
 						<input placeholder="Enter your message here."
 						 		style="display:table-cell; width: 100%;"
-							   type="text" 
+							   type="text"
 							   v-model="newMessage"
 							   @keyup.enter="sendMessage"/>
 					</div>
@@ -113,7 +113,7 @@
 @endsection
 
 @section('customScript')
-<script> 
+<script>
 	var username = "{{ $userName }}";
 	var userid = "{{ $userId }}";
 	var usertype = "{{ $userType }}";
@@ -121,7 +121,7 @@
 	var chatport = "{{ $chatPort }}";
 	var url = "{{ explode(':', str_replace('http://', '', str_replace('https://', '', App::make('url')->to('/'))))[0] }}";
 	var threadid = "{{ $threadId }}";
-	
+
 </script>
 <script type="text/javascript" src="/js/chat.js"></script>
 @endsection
