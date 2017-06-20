@@ -190,7 +190,7 @@
           <li class="tab col s6 teal-text"><a href="#transaction-history" @click="getTransactionHistory({{ $customerId }})">Transaction History</a></li>
         </ul>
 
-        <order-details :products="sortedProducts"
+        <order-details :products="products"
             :token="'{{ $token }}'"
             @subtract-quantity="subtractProductQuantity"
             @add-quantity="addProductQuantity"
@@ -295,7 +295,7 @@
                 <div id="card-container" class="row">
 
                     {{-- Card --}}
-                    <div class="col m4" v-for="(product, index) in products">
+                    <div class="col m4" v-for="(product, index) in sortedProducts">
                         <div class="card sticky-action" :class="(product.request_status) ? 'teal' : ''">
                             {{-- Product Image --}}
                             <div class="card-image">
@@ -317,7 +317,7 @@
                                     data-delay="50"
                                     data-tooltip="Rate Breeder"
                                     v-if="product.status === 'sold'"
-                                    @click.prevent="showRateModal(index)"
+                                    @click.prevent="showRateModal(product.item_id)"
                                 >
                                     <i class="material-icons">grade</i>
                                 </a>
@@ -329,7 +329,7 @@
                                     <a href="#"
                                         class="anchor-title"
                                         :class="(product.request_status) ? 'white-text' : 'grey-text'"
-                                        @click.prevent="viewProductModalFromCart(index)"
+                                        @click.prevent="viewProductModalFromCart(product.item_id)"
                                     >
                                         @{{ product.product_name }}
                                     </a>
@@ -352,7 +352,7 @@
                                                 <a href="#"
                                                     class="btn col s12"
                                                     style="padding:0;"
-                                                    @click.prevent="subtractQuantity(index)"
+                                                    @click.prevent="subtractQuantity(product.item_id)"
                                                 >
                                                     <i class="material-icons">remove</i>
                                                 </a>
@@ -364,7 +364,7 @@
                                                 <a href="#"
                                                     class="btn col s12"
                                                     style="padding:0;"
-                                                    @click.prevent="addQuantity(index)"
+                                                    @click.prevent="addQuantity(product.item_id)"
                                                 >
                                                     <i class="material-icons">add</i>
                                                 </a>
@@ -382,7 +382,7 @@
                                     >
                                         <a href="#"
                                             class="anchor-title white-text"
-                                            @click.prevent="viewRequestDetails(index)"
+                                            @click.prevent="viewRequestDetails(product.item_id)"
                                         >
                                             REQUEST DETAILS
                                         </a>
@@ -406,13 +406,13 @@
                                     <template v-if="!product.request_status">
                                         <a class="btn teal"
                                             href="#!"
-                                            @click.prevent="confirmRequest(index)"
+                                            @click.prevent="confirmRequest(product.item_id)"
                                         >
                                             Request
                                         </a>
                                         <a class="btn grey"
                                             href="#!"
-                                            @click.prevent="confirmRemoval(index)"
+                                            @click.prevent="confirmRemoval(product.item_id)"
                                         >
                                             Remove
                                         </a>

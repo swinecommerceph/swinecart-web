@@ -267,22 +267,36 @@ Vue.component('order-details',{
             return '['+ prepend + '] ' + moment(value).format("MMM D YYYY, h:mmA");
         }
     },
+    computed: {
+        sortedProducts: function(){
+            // Sort Swine Cart items according to its request status
+            return _.sortBy(this.products, ['request_status']);
+        }
+    },
     methods: {
-        subtractQuantity: function(index){
-            // Update (subtract) product's quantity on root data
-            this.$emit('subtract-quantity', index);
+        searchProduct : function(itemId){
+            // Return index of Swine Cart itemId to find
+            for(var i = 0; i < this.products.length; i++) {
+                if(this.products[i].item_id === itemId) return i;
+            }
         },
 
-        addQuantity: function(index){
+        subtractQuantity: function(itemId){
+            // Update (subtract) product's quantity on root data
+            this.$emit('subtract-quantity', this.searchProduct(itemId));
+        },
+
+        addQuantity: function(itemId){
             // Update (add) product's quantity on root data
-            this.$emit('add-quantity', index);
+            this.$emit('add-quantity', this.searchProduct(itemId));
         },
 
         dateChange: function(value){
             this.productRequest.dateNeeded = value;
         },
 
-        viewProductModalFromCart: function(index){
+        viewProductModalFromCart: function(itemId){
+            var index = this.searchProduct(itemId);
             vm.productInfoModal.imgPath = this.products[index].img_path;
             vm.productInfoModal.name = this.products[index].product_name;
             vm.productInfoModal.breeder = this.products[index].breeder;
@@ -305,7 +319,8 @@ Vue.component('order-details',{
             $('#info-modal').modal('open');
         },
 
-        viewRequestDetails: function(index){
+        viewRequestDetails: function(itemId){
+            var index = this.searchProduct(itemId);
             this.requestDetails.name = this.products[index].product_name;
             this.requestDetails.type = this.products[index].product_type;
             this.requestDetails.dateNeeded = this.products[index].date_needed;
@@ -314,7 +329,8 @@ Vue.component('order-details',{
             $('#product-request-details-modal').modal('open');
         },
 
-        confirmRemoval: function(index){
+        confirmRemoval: function(itemId){
+            var index = this.searchProduct(itemId);
             this.productRemove.index = index;
             this.productRemove.name = this.products[index].product_name;
             this.productRemove.id = this.products[index].product_id;
@@ -371,7 +387,8 @@ Vue.component('order-details',{
 
         },
 
-        confirmRequest: function(index){
+        confirmRequest: function(itemId){
+            var index = this.searchProduct(itemId);
             this.productRequest.index = index;
             this.productRequest.name = this.products[index].product_name;
             this.productRequest.id = this.products[index].product_id;
@@ -447,9 +464,10 @@ Vue.component('order-details',{
 
         },
 
-        showRateModal: function(index){
+        showRateModal: function(itemId){
             $('#rate-modal').modal('open');
 
+            var index = this.searchProduct(itemId);
             this.breederRate.index = index;
             this.breederRate.breederName = this.products[index].breeder;
         },
@@ -651,16 +669,11 @@ var vm = new Vue({
                 return str[0].toUpperCase() + str.slice(1);
             }
             return '';
-        },
-
-        sortedProducts: function(){
-            // Sort Swine Cart items according to its request status
-            return _.sortBy(this.products, ['request_status']);
         }
     },
     methods: {
         searchProduct : function(swineCart_id){
-            // Return index of productId to find
+            // Return index of Swine Cart itemId to find
             for(var i = 0; i < this.products.length; i++) {
                 if(this.products[i].item_id === swineCart_id) return i;
             }
