@@ -103,14 +103,36 @@
                                     </template>
 
                                     <span v-if="product.expiration_date" class="grey-text">
-                                        Expires after: @{{ product.expiration_date | transformDate }}
+                                        Expires after: @{{ product.expiration_date | transformDate }} <br>
                                     </span>
+
+                                    <template v-if="product.customer_name">
+                                        <a class="btn tooltipped"
+                                            :href="'{{ route('breeder.messages') }}/' + product.userid"
+                                            :data-breeder-id="product.breeder_id"
+                                            :data-customer-id="product.customer_id"
+                                            data-position="top"
+                                            data-delay="50"
+                                            :data-tooltip="'Message ' + product.customer_name"
+                                        >
+                                            Message
+                                        </a>
+                                    </template>
 
                                 </div>
                             </div>
                         </td>
                         <td>
-                            @{{ product.status | transformToReadableStatus }} <br>
+                            <template v-if="product.status === 'on_delivery'">
+                                @{{ product.status | transformToReadableStatus }} / Awaiting Payment
+                            </template>
+                            <template v-else-if="product.status === 'paid'">
+                                @{{ product.status | transformToReadableStatus }} / Set for Delivery
+                            </template>
+                            <template v-else>
+                                @{{ product.status | transformToReadableStatus }}
+                            </template>
+                            <br>
                             <span class="grey-text" v-if="product.status_time">
                                 @{{ product.status_time | transformDate }}
                             </span>
@@ -130,17 +152,6 @@
 
                             {{-- If product's status is reserved --}}
                             <template v-if="product.status == 'reserved'">
-                                <a class="btn tooltipped"
-                                    style="margin-bottom:1rem;"
-                                    :href="'{{ route('breeder.messages') }}/' + product.userid"
-                                    :data-breeder-id="product.breeder_id"
-                                    :data-customer-id="product.customer_id"
-                                    data-position="top"
-                                    data-delay="50"
-                                    :data-tooltip="'Message ' + product.customer_name"
-                                >
-                                    Message
-                                </a> <br>
                                 <a class="btn tooltipped"
                                     style="margin-bottom:1rem;"
                                     href="#"
@@ -173,8 +184,7 @@
                                     @click.prevent="setUpConfirmation(product.uuid,'sold')"
                                 >
                                     Confirm Sold
-                                </a> <br>
-                                <span>(Awaiting Payment)</span>
+                                </a>
                             </template>
 
                             {{-- If product's status is paid --}}
@@ -188,13 +198,14 @@
                                     @click.prevent="setUpConfirmation(product.uuid,'sold')"
                                 >
                                     Confirm Sold
-                                </a> <br>
-                                <span>(Awaiting Delivery)</span>
+                                </a>
                             </template>
 
                             {{-- If product's status is sold --}}
                             <template v-if="product.status == 'sold'">
-                                (SOLD)
+                                <span class="teal-text">
+                                    (SOLD)
+                                </span>
                             </template>
                         </td>
                     </tr>
@@ -327,7 +338,7 @@
                 <div class="modal-content">
                     <h4>@{{ productInfoModal.productName }} Sold Confirmation</h4>
                     <p>
-                        Are you sure this product has already been delivered and paid to @{{ productInfoModal.customerName }}?
+                        Are you sure this product has been paid and delivered to @{{ productInfoModal.customerName }}?
                     </p>
                 </div>
                 <div class="modal-footer">
