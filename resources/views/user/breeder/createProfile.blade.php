@@ -31,6 +31,13 @@
     </div>
 @endsection
 
+@section('initScript')
+    <script type="text/javascript">
+        // Initialization for select tags
+        $('select').material_select();
+    </script>
+@endsection
+
 @section('customScript')
     <script type="text/javascript">
         var provinces = {!! $provinces !!};
