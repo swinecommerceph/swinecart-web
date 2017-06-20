@@ -55,7 +55,7 @@
     {{-- Template for the <status-table> component --}}
     <template id="status-table-template">
         <div class="">
-            <table id="product-status-table" class="bordered highlight">
+            <table id="product-status-table" class="striped bordered">
                 <thead>
                     <tr>
                         <th @click="sortBy('name')" :class="sortKey == 'name' ? 'red-text' : '' ">

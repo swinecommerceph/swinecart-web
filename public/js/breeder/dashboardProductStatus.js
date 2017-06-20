@@ -573,6 +573,7 @@ var vm = new Vue({
                     var index = updateDetails.index;
                     this.products[index].status = 'on_delivery';
                     this.products[index].status_time = updateDetails.statusTime;
+                    this.products[index].expiration_date = '';
 
                     break;
 
@@ -580,6 +581,7 @@ var vm = new Vue({
                     var index = updateDetails.index;
                     this.products[index].status = 'paid';
                     this.products[index].status_time = updateDetails.statusTime;
+                    this.products[index].expiration_date = '';
 
                     break;
 
