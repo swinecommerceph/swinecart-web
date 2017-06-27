@@ -15,14 +15,19 @@ Route::get('/',['as' => 'index_path', function () {
     return view('home');
 }])->middleware('guest');
 
-// Test for styling the email verification. It's so hard!
+// Test for styling the email verification.
 // Route::get('/sample', function(){
+//     $verCode = 'kasjSTG43';
+//     $email = 'customer_01@test.com';
 //     $data = [
-//         'email' => 'jonb@gmail.com',
-//         'verCode' => 'kasjSTG43',
-//         'type' => 'sent',
+//         'level' => 'success',
+//         'introLines' => ['Registration is almost complete.', "Click the 'Verify Code' button to verify your email."],
+//         'outroLines' => ['If you did not '],
+//         'actionText' => 'Verify Code',
+//         'actionUrl' => route('verCode.send', ['email' => $email, 'verCode' => $verCode])
 //     ];
-//     return view('emails.verification', $data);
+//
+//     return view('vendor.notifications.email', $data);
 // });
 
 Route::group(['middleware' => ['web']], function () {
