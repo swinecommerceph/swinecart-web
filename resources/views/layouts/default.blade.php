@@ -116,7 +116,7 @@
 	{{-- For static elements such as add product and back to top --}}
 	@yield('static')
 
-	{{-- Home view for unauthenticated users --}}
+	{{-- View for site's home layout users --}}
 	@yield('homeContent')
 
 	{{-- Common view for authenticated users --}}
