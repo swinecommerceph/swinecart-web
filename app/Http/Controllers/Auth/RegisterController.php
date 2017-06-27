@@ -99,7 +99,7 @@ class RegisterController extends Controller
         ];
 
         Mail::send('emails.verification', $data, function ($message) use($data){
-            $message->to($data['email'])->subject('Verification code for Swine E-Commerce PH');
+            $message->to($data['email'])->subject('Verification code for SwineCart');
         });
 
         return view('emails.message', $data);
