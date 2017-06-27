@@ -127,7 +127,7 @@ class ViewComposerServiceProvider extends ServiceProvider
      *
      */
     public function getHomeImages(){
-        view()->composer(['user.breeder.home','user.customer.home'],function($view){
+        view()->composer(['user.breeder.home','user.customer.home', 'home'],function($view){
             $homeContent = DB::table('home_images')->get();
             $view->with('homeContent', $homeContent);
 
