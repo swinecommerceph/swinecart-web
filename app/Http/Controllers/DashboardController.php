@@ -49,7 +49,6 @@ class DashboardController extends Controller
         $dashboardStats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
         $dashboardStats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
         $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
-        $dashboardStats['paid'] = $this->dashboard->getProductNumberStatus($breeder,'paid');
         $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
 
         $latestAccreditation = $this->user->userable->latest_accreditation;

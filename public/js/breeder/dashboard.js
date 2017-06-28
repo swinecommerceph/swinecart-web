@@ -11,6 +11,7 @@ Vue.component('custom-date-from-select', {
     mounted: function(){
         var self = this;
 
+        // Initialize datepicker
         $('#date-from').pickadate({
             min: new Date(self.dateAccreditation),
             max: true,
@@ -36,6 +37,9 @@ Vue.component('custom-date-to-select', {
     ',
     props:['value'],
     mounted: function(){
+        var self = this;
+
+        // Initialize datepicker
         $('#date-to').pickadate({
             selectMonths: true,
             selectYears: 2,
@@ -43,7 +47,6 @@ Vue.component('custom-date-to-select', {
             formatSubmit: 'yyyy-mm-dd'
         });
 
-        var self = this;
         $('#date-to').on('change', function(){
             self.$emit('date-to-select',self.$refs.selectTo.value);
         });
@@ -67,11 +70,6 @@ var vm = new Vue({
         pubsubTopic: window.pubsubTopic
     },
     computed: {
-        overallPaid: function(){
-            var sum = this.dashboardStats.paid.boar + this.dashboardStats.paid.gilt + this.dashboardStats.paid.semen + this.dashboardStats.paid.sow;
-            return sum;
-        },
-
         overallOnDelivery: function(){
             var sum = this.dashboardStats.on_delivery.boar + this.dashboardStats.on_delivery.gilt + this.dashboardStats.on_delivery.semen + this.dashboardStats.on_delivery.sow;
             return sum;
@@ -88,13 +86,20 @@ var vm = new Vue({
         },
 
         overallDisplayed: function(){
-            var sum = this.dashboardStats.displayed.boar + this.dashboardStats.displayed.gilt + this.dashboardStats.displayed.semen + this.dashboardStats.displayed.sow;
-            return sum;
+            var displayedSum = this.dashboardStats.displayed.boar + this.dashboardStats.displayed.gilt + this.dashboardStats.displayed.semen + this.dashboardStats.displayed.sow;
+            var requestedSum = this.dashboardStats.requested.boar + this.dashboardStats.requested.gilt + this.dashboardStats.requested.semen + this.dashboardStats.requested.sow;
+            return displayedSum + requestedSum;
         },
 
         overallRequested: function(){
             var sum = this.dashboardStats.requested.boar + this.dashboardStats.requested.gilt + this.dashboardStats.requested.semen + this.dashboardStats.requested.sow;
             return sum;
+        },
+
+        overallProductsAvailable: function(){
+            var displayedSum = this.dashboardStats.displayed.boar + this.dashboardStats.displayed.gilt + this.dashboardStats.displayed.semen + this.dashboardStats.displayed.sow;
+            var hiddenSum = this.dashboardStats.hidden.boar + this.dashboardStats.hidden.gilt + this.dashboardStats.hidden.semen + this.dashboardStats.hidden.sow;
+            return displayedSum + hiddenSum;
         },
 
         overallRatings: function(){
@@ -138,6 +143,7 @@ var vm = new Vue({
         },
 
         dateFromChange: function(value){
+            // Trigger if dateFrom component's value changes
 
             var minDate = new Date(this.dateFromObject.get('select','yyyy-mm-dd'));
             var now = moment(this.serverDateNow);
@@ -185,6 +191,7 @@ var vm = new Vue({
         },
 
         dateToChange: function(value){
+            // Trigger if dateTo component's value changes
 
             this.dateToInput = value;
         },
@@ -305,30 +312,25 @@ var vm = new Vue({
                 data = JSON.parse(data);
                 switch (data.type) {
                     case 'db-requested':
-                        self.dashboardStats.displayed[data.product_type]--;
                         self.dashboardStats.requested[data.product_type]++;
 
                         break;
                     case 'db-reserved':
+                        self.dashboardStats.displayed[data.product_type]--;
                         self.dashboardStats.requested[data.product_type]--;
                         self.dashboardStats.reserved[data.product_type]++;
                         self.dashboardStats.hidden[data.product_type]++;
 
                         break;
-                    case 'db-reservationExpiration':
-                        self.dashboardStats.reserved[data.product_type]--;
-                        self.dashboardStats.requested[data.product_type]++;
+                    case 'db-cancelTransaction':
+                        self.dashboardStats[data.previous_status][data.product_type]--;
+                        self.dashboardStats.displayed[data.product_type]++;
                         self.dashboardStats.hidden[data.product_type]--;
 
                         break;
                     case 'db-onDelivery':
                         self.dashboardStats.reserved[data.product_type]--;
                         self.dashboardStats.on_delivery[data.product_type]++;
-
-                        break;
-                    case 'db-paid':
-                        self.dashboardStats.reserved[data.product_type]--;
-                        self.dashboardStats.paid[data.product_type]++;
 
                         break;
                     case 'db-sold':
