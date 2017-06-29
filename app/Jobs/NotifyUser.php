@@ -13,7 +13,6 @@ use App\Notifications\ProductRequested;
 use App\Notifications\ProductReserved;
 use App\Notifications\ProductReservationUpdate;
 use App\Notifications\ProductReservedToOtherCustomer;
-use App\Notifications\ProductReservationExpired;
 
 class NotifyUser implements ShouldQueue
 {
@@ -54,12 +53,6 @@ class NotifyUser implements ShouldQueue
             case 'breeder-rated':
                 $breederUser = User::find($this->userId);
                 $breederUser->notify(new BreederRated($this->notificationDetails));
-
-                break;
-
-            case 'product-reservation-expired':
-                $customerUser = User::find($this->userId);
-                $customerUser->notify(new ProductReservationExpired($this->notificationDetails));
 
                 break;
 

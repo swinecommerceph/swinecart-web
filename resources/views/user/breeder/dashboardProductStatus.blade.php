@@ -102,10 +102,6 @@
                                         </a> <br>
                                     </template>
 
-                                    <span v-if="product.expiration_date" class="grey-text">
-                                        Expires after: @{{ product.expiration_date | transformDate }} <br>
-                                    </span>
-
                                     <template v-if="product.customer_name">
                                         <a class="btn tooltipped"
                                             :href="'{{ route('breeder.messages') }}/' + product.userid"
@@ -123,14 +119,10 @@
                             </div>
                         </td>
                         <td>
+                            @{{ product.status | transformToReadableStatus }}
                             <template v-if="product.status === 'on_delivery'">
-                                @{{ product.status | transformToReadableStatus }} / Awaiting Payment
-                            </template>
-                            <template v-else-if="product.status === 'paid'">
-                                @{{ product.status | transformToReadableStatus }} / Set for Delivery
-                            </template>
-                            <template v-else>
-                                @{{ product.status | transformToReadableStatus }}
+                                <br>
+                                Expected to arrive on @{{ product.delivery_date }}
                             </template>
                             <br>
                             <span class="grey-text" v-if="product.status_time">
@@ -160,35 +152,12 @@
                                     data-tooltip="Confirm Delivery"
                                     @click.prevent="setUpConfirmation(product.uuid,'delivery')"
                                 >
-                                    Confirm Delivery
-                                </a> <br>
-                                <a class="btn tooltipped"
-                                    href="#"
-                                    data-position="top"
-                                    data-delay="50"
-                                    data-tooltip="Confirm Payment"
-                                    @click.prevent="setUpConfirmation(product.uuid,'paid')"
-                                >
-                                    Confirm Payment
+                                    Send for Delivery
                                 </a>
                             </template>
 
                             {{-- If product's status is on_delivery --}}
                             <template v-if="product.status == 'on_delivery'">
-                                <a class="btn tooltipped"
-                                    style="margin-bottom:1rem;"
-                                    href="#"
-                                    data-position="top"
-                                    data-delay="50"
-                                    data-tooltip="Confirm Sold"
-                                    @click.prevent="setUpConfirmation(product.uuid,'sold')"
-                                >
-                                    Confirm Sold
-                                </a>
-                            </template>
-
-                            {{-- If product's status is paid --}}
-                            <template v-if="product.status == 'paid'">
                                 <a class="btn tooltipped"
                                     style="margin-bottom:1rem;"
                                     href="#"
@@ -280,23 +249,6 @@
                         <div class="">
                             Are you sure you want to reserve @{{ productRequest.productName }} to @{{ productReserve.customerName }}?
                         </div>
-                        <div class="row">
-                            <div class="col s6" style="display:inline-block;">
-                                <div class="left" style="display:inline;">
-                                    <br>
-                                    Reservation expires after
-                                </div>
-
-                                <div class="col s2">
-                                    <day-expiration-input v-model="productReserve.daysAfterExpiration"> </day-expiration-input>
-                                </div>
-
-                                <div class="col s2" style="padding:0px;">
-                                    <br>
-                                    day/s
-                                </div>
-                            </div>
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -309,27 +261,30 @@
             <div id="product-delivery-confirmation-modal" class="modal">
                 <div class="modal-content">
                     <h4>@{{ productInfoModal.productName }} Delivery Confirmation</h4>
-                    <p>
-                        Are you sure this product would be paid by @{{ productInfoModal.customerName }} upon delivery?
-                    </p>
+                    <div>
+                        <div class="">
+                            Are you sure this product is set for delivery to @{{ productInfoModal.customerName }}?
+                        </div>
+                        <div class="row">
+                           <div class="col s10" style="display:inline-block;">
+                               <div class="left" style="display:inline;">
+                                   <br>
+                                   Product will be delivered to customer on or before
+                               </div>
+
+                               <div class="col s3">
+                                   <custom-date-select v-model="productInfoModal.deliveryDate" @date-select="dateChange"> </custom-date-select>
+                               </div>
+                           </div>
+                       </div>
+                       <p>
+                           <br><br><br><br><br><br><br><br><br>
+                       </p>
+                    </div>
                 </div>
                 <div class="modal-footer">
                     <a class="modal-action modal-close waves-effect waves-green btn-flat delivery-product-buttons">Close</a>
                     <a class="modal-action waves-effect waves-green btn-flat delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes</a>
-                </div>
-            </div>
-
-            {{-- Paid Product Confirmation Modal --}}
-            <div id="paid-product-confirmation-modal" class="modal">
-                <div class="modal-content">
-                    <h4>@{{ productInfoModal.productName }} Pay Confirmation</h4>
-                    <p>
-                        Are you sure this product has been paid by @{{ productInfoModal.customerName }} and is set for delivery?
-                    </p>
-                </div>
-                <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat pay-product-buttons">Close</a>
-                    <a class="modal-action waves-effect waves-green btn-flat pay-product-buttons" @click.prevent="productPaid($event)">Yes</a>
                 </div>
             </div>
 
@@ -338,7 +293,7 @@
                 <div class="modal-content">
                     <h4>@{{ productInfoModal.productName }} Sold Confirmation</h4>
                     <p>
-                        Are you sure this product has been paid and delivered to @{{ productInfoModal.customerName }}?
+                        Are you sure this product is sold to @{{ productInfoModal.customerName }}?
                     </p>
                 </div>
                 <div class="modal-footer">

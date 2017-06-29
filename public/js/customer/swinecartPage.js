@@ -292,6 +292,7 @@ Vue.component('order-details',{
         },
 
         dateChange: function(value){
+            // Event listener to reflect data change in date select to vue's data
             this.productRequest.dateNeeded = value;
         },
 
