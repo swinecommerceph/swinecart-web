@@ -4,53 +4,6 @@
 // component to communicate between them.
 var eventHub = new Vue();
 
-// Custom components
-Vue.component('countdown-timer', {
-    template: '#countdown-timer-template',
-    props: ['expiration'],
-    data: function(){
-        return {
-            daysLeft: 0,
-            hoursLeft: 0,
-            minutesLeft: 0,
-            secondsLeft:0,
-            expired: false
-        }
-    },
-    methods:{
-        getTimeRemaining: function(expiration){
-            var timeDifference = moment(expiration).diff(moment());
-
-            return {
-                'total': timeDifference,
-                'seconds': Math.floor( (timeDifference/1000) % 60 ),
-                'minutes': Math.floor( (timeDifference/1000/60) % 60 ),
-                'hours': Math.floor( (timeDifference/(1000*60*60)) % 24 ),
-                'days': Math.floor( timeDifference/(1000*60*60*24) )
-            };
-        }
-    },
-    mounted: function(){
-        var countdownVM = this;
-
-        var timeInterval = setInterval(function(){
-            var timeDifference = countdownVM.getTimeRemaining(countdownVM.expiration);
-
-            countdownVM.secondsLeft = ('0' + timeDifference.seconds).slice(-2);
-            countdownVM.minutesLeft = timeDifference.minutes;
-            countdownVM.hoursLeft = timeDifference.hours;
-            countdownVM.daysLeft = timeDifference.days;
-
-            if(timeDifference.total <= 0) {
-                clearInterval(timeInterval);
-                countdownVM.expired = true;
-            }
-
-        }, 1000);
-    }
-
-});
-
 Vue.component('average-star-rating',{
     template: '#average-star-rating',
     props: ['rating'],
@@ -757,7 +710,6 @@ var vm = new Vue({
 
                         self.products[index].status = 'reserved';
                         self.products[index].status_transactions.reserved = data.reserved;
-                        self.products[index].expiration_date = data.expiration_date;
 
                         break;
                     case 'sc-onDelivery':
@@ -765,15 +717,7 @@ var vm = new Vue({
 
                         self.products[index].status = 'on_delivery';
                         self.products[index].status_transactions.on_delivery = data.on_delivery;
-                        self.products[index].expiration_date = '';
-
-                        break;
-                    case 'sc-paid':
-                        var index = self.searchProduct(data.item_id);
-
-                        self.products[index].status = 'paid';
-                        self.products[index].status_transactions.paid = data.paid;
-                        self.products[index].expiration_date = '';
+                        self.products[index].delivery_date = data.delivery_date;
 
                         break;
                     case 'sc-sold':
@@ -783,11 +727,11 @@ var vm = new Vue({
                         self.products[index].status_transactions.sold = data.sold;
 
                         break;
-                    case 'sc-reservationExpiration':
-                        var index = self.searchProduct(data.item_id);
-
-                        self.products.splice(index,1);
-                        Materialize.toast('Product is already expired', 4000);
+                    case 'sc-cancelReservation':
+                        // var index = self.searchProduct(data.item_id);
+                        //
+                        // self.products.splice(index,1);
+                        // Materialize.toast('Product is already expired', 4000);
 
                         break;
                     case 'sc-reservedToOthers':

@@ -161,7 +161,7 @@ class SwineCartController extends Controller
                     'customer_name' => '',
                     'date_needed' => '',
                     'special_request' => '',
-                    'expiration_date' => ''
+                    'delivery_date' => ''
                 ]
             ];
 
@@ -255,6 +255,7 @@ class SwineCartController extends Controller
                 $itemDetail = [];
                 $product = Product::find($item->product_id);
                 $reviews = Breeder::find($product->breeder_id)->reviews()->get();
+                $reservation = ProductReservation::find($item->reservation_id);
 
                 $itemDetail['request_status'] = $item->if_requested;
                 $itemDetail['request_quantity'] = $item->quantity;
@@ -282,12 +283,11 @@ class SwineCartController extends Controller
                 $itemDetail['date_needed'] = ($item->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($item->date_needed);
                 $itemDetail['special_request'] = $item->special_request;
                 $itemDetail['img_path'] = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
-                $itemDetail['expiration_date'] = (ProductReservation::find($item->reservation_id)->expiration_date) ?? '';
+                $itemDetail['delivery_date'] = ($reservation) ? $this->transformDateSyntax($reservation->delivery_date) : '';
                 $itemDetail['status_transactions'] = [
                     "requested" => ($item->transactionLogs()->where('status', 'requested')->latest()->first()->created_at) ?? '',
                     "reserved" => ($item->transactionLogs()->where('status', 'reserved')->latest()->first()->created_at) ?? '',
                     "on_delivery" => ($item->transactionLogs()->where('status', 'on_delivery')->first()->created_at) ?? '',
-                    "paid" => ($item->transactionLogs()->where('status', 'paid')->first()->created_at) ?? '',
                     "sold" => ($item->transactionLogs()->where('status', 'sold')->first()->created_at) ?? ''
                 ];
 
