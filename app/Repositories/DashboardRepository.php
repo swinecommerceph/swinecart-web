@@ -81,7 +81,7 @@ class DashboardRepository
             array_push($items, (object)$itemDetail);
         }
 
-        // Include "reserved" / "paid" / "on_delivery" products
+        // Include "reserved" / "on_delivery" products
         foreach ($reservations as $reservation) {
             $product = $reservation->product;
 
@@ -117,7 +117,7 @@ class DashboardRepository
     /**
      * Get the number statuses of the products of a Breeder
      * Include hidden, displayed, requested,
-     * reserved, paid, on_delivery,
+     * reserved, on_delivery,
      * and sold quantity
      *
      * @param  Breeder  $breeder
@@ -129,10 +129,10 @@ class DashboardRepository
         if($status == 'hidden' || $status == 'displayed' || $status == 'requested'){
             $products = $breeder->products;
 
-            $boarQuery = $products->where('status',$status)->where('type','boar');
-            $sowQuery = $products->where('status',$status)->where('type','sow');
-            $giltQuery = $products->where('status',$status)->where('type','gilt');
-            $semenQuery = $products->where('status',$status)->where('type','semen');
+            $boarQuery = $products->where('status',$status)->where('type','boar')->where('quantity', '<>', 0);
+            $sowQuery = $products->where('status',$status)->where('type','sow')->where('quantity', '<>', 0);
+            $giltQuery = $products->where('status',$status)->where('type','gilt')->where('quantity', '<>', 0);
+            $semenQuery = $products->where('status',$status)->where('type','semen')->where('quantity', '<>', 0);
 
             return [
                 'boar' => $boarQuery->count(),
@@ -477,13 +477,13 @@ class DashboardRepository
                     ];
 
                     $notificationDetailsReserved = [
-                        'description' => 'Product <b>' . $product->name . '</b> was <b>reserved</b> to you.',
+                        'description' => 'Product <b>' . $product->name . '</b> by <b>' . $breederUser->name . '</b> was <b>reserved</b> to you.',
                         'time' => $transactionDetails['created_at'],
                         'url' => route('cart.items')
                     ];
 
                     $smsDetails = [
-                        'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' was reserved to you.',
+                        'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' was reserved to you.',
                         'recipient' => $swineCartItem->customer->mobile
                     ];
 
@@ -600,19 +600,20 @@ class DashboardRepository
                 ];
 
                 $notificationDetails = [
-                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>on delivery</b>. Breeder is awaiting your payment.',
+                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>on delivery</b>. It is expected to arrive on ' . $request->delivery_date . '.',
                     'time' => $transactionDetails['created_at'],
                     'url' => route('cart.items')
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery. Breeder is awaiting your payment.',
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery. It is expected to arrive on ' . $request->delivery_date . '.',
                     'recipient' => $customer->mobile
                 ];
 
                 $pubsubData = [
                     'item_id' => $transactionDetails['swineCart_id'],
-                    'on_delivery' => $transactionDetails['created_at']->toDateTimeString()
+                    'on_delivery' => $transactionDetails['created_at']->toDateTimeString(),
+                    'delivery_date' => $request->delivery_date
                 ];
 
                 $reservedCustomerUser = $customer->users()->first();
@@ -634,8 +635,6 @@ class DashboardRepository
 
             case 'sold':
                 $reservation = ProductReservation::find($request->reservation_id);
-                // Store previous reservation status
-                $oldStatus = $reservation->order_status;
                 $reservation->order_status = 'sold';
                 $reservation->save();
 
@@ -651,7 +650,7 @@ class DashboardRepository
                 ];
 
                 $notificationDetails = [
-                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>sold</b>',
+                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>sold</b>.',
                     'time' => $transactionDetails['created_at'],
                     'url' => route('cart.items')
                 ];
@@ -666,11 +665,6 @@ class DashboardRepository
                     'sold' => $transactionDetails['created_at']->toDateTimeString()
                 ];
 
-                $pubsubData2 = [
-                    'product_type' => $product->type,
-                    'previous_status' => $oldStatus
-                ];
-
                 $reservedCustomerUser = $customer->users()->first();
 
                 // Add new Transaction Log.
@@ -681,7 +675,7 @@ class DashboardRepository
                 dispatch(new NotifyUser('product-reservation-update', $reservedCustomerUser->id, $notificationDetails));
                 dispatch(new SendToPubSubServer('notification', $reservedCustomerUser->email));
                 dispatch(new SendToPubSubServer('sc-sold', $reservedCustomerUser->email, $pubsubData));
-                dispatch(new SendToPubSubServer('db-sold', Auth::user()->email, $pubsubData2));
+                dispatch(new SendToPubSubServer('db-sold', Auth::user()->email, ['product_type' => $product->type]));
 
                 return [
                     "OK",

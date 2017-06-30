@@ -169,10 +169,10 @@
                         <h3>@{{ overallDisplayed }}</h3>
                     </div>
                     <div class="card-action teal">
-                        <a class="white-text">Boar: @{{ dashboardStats.displayed.boar }} </a>
-                        <a class="white-text">Sow: @{{ dashboardStats.displayed.sow }} </a>
-                        <a class="white-text">Gilt: @{{ dashboardStats.displayed.gilt }} </a>
-                        <a class="white-text">Semen: @{{ dashboardStats.displayed.semen }} </a>
+                        <a class="white-text">Boar: @{{ dashboardStats.displayed.boar + dashboardStats.requested.boar }} </a>
+                        <a class="white-text">Sow: @{{ dashboardStats.displayed.sow + dashboardStats.requested.sow }} </a>
+                        <a class="white-text">Gilt: @{{ dashboardStats.displayed.gilt + dashboardStats.requested.gilt }} </a>
+                        <a class="white-text">Semen: @{{ dashboardStats.displayed.semen + dashboardStats.requested.semen }} </a>
                     </div>
                 </div>
             </div>
@@ -182,21 +182,21 @@
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'requested'])}}" class="black-text">Total Products Available</a>
+                            <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}" class="black-text">Total Products Available</a>
                         </span>
                         <h3>@{{ overallProductsAvailable }}</h3>
                     </div>
                     <div class="card-action grey">
-                        <a class="white-text">Boar: @{{ dashboardStats.displayed.boar + dashboardStats.hidden.boar }} </a>
-                        <a class="white-text">Sow: @{{ dashboardStats.displayed.sow + dashboardStats.hidden.sow }} </a>
-                        <a class="white-text">Gilt: @{{ dashboardStats.displayed.gilt + dashboardStats.hidden.gilt }} </a>
-                        <a class="white-text">Semen: @{{ dashboardStats.displayed.semen + dashboardStats.hidden.semen }} </a>
+                        <a class="white-text">Boar: @{{ dashboardStats.requested.boar + dashboardStats.displayed.boar + dashboardStats.hidden.boar }} </a>
+                        <a class="white-text">Sow: @{{ dashboardStats.requested.sow + dashboardStats.displayed.sow + dashboardStats.hidden.sow }} </a>
+                        <a class="white-text">Gilt: @{{ dashboardStats.requested.gilt + dashboardStats.displayed.gilt + dashboardStats.hidden.gilt }} </a>
+                        <a class="white-text">Semen: @{{ dashboardStats.requested.semen + dashboardStats.displayed.semen + dashboardStats.hidden.semen }} </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Rating --}}
+        {{-- Overall Average Rating --}}
         <div class="col s12 m6">
             <div class="card">
                 <div class="card-content grey white-text">
@@ -204,7 +204,7 @@
                         <a href="{{route('dashboard.reviews')}}" class="white-text">Overall Average Rating</a>
                     </span>
                     <h3>@{{ overallRatings }}/5</h3>
-                    <span>No. of users who rated: @{{ dashboardStats.ratings.reviewsSize }}</span>
+                    <span>No. of reviews: @{{ dashboardStats.ratings.reviewsSize }}</span>
                 </div>
                 <div class="card-action grey">
                     <a class="white-text">Delivery: @{{ dashboardStats.ratings.delivery }} </a>
@@ -214,7 +214,7 @@
             </div>
         </div>
 
-        {{-- Review --}}
+        {{-- Reviews --}}
         <div class="col s12 m6">
             <div class="card">
                 <div class="card-content teal white-text">

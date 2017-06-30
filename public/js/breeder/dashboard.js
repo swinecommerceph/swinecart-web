@@ -97,9 +97,9 @@ var vm = new Vue({
         },
 
         overallProductsAvailable: function(){
-            var displayedSum = this.dashboardStats.displayed.boar + this.dashboardStats.displayed.gilt + this.dashboardStats.displayed.semen + this.dashboardStats.displayed.sow;
-            var hiddenSum = this.dashboardStats.hidden.boar + this.dashboardStats.hidden.gilt + this.dashboardStats.hidden.semen + this.dashboardStats.hidden.sow;
-            return displayedSum + hiddenSum;
+            // var displayedSum = this.dashboardStats.displayed.boar + this.dashboardStats.displayed.gilt + this.dashboardStats.displayed.semen + this.dashboardStats.displayed.sow;
+            // var hiddenSum = this.dashboardStats.hidden.boar + this.dashboardStats.hidden.gilt + this.dashboardStats.hidden.semen + this.dashboardStats.hidden.sow;
+            return this.overallDisplayed + this.overallHidden;
         },
 
         overallRatings: function(){
@@ -312,14 +312,13 @@ var vm = new Vue({
                 data = JSON.parse(data);
                 switch (data.type) {
                     case 'db-requested':
+                        self.dashboardStats.displayed[data.product_type]--;
                         self.dashboardStats.requested[data.product_type]++;
 
                         break;
                     case 'db-reserved':
-                        self.dashboardStats.displayed[data.product_type]--;
                         self.dashboardStats.requested[data.product_type]--;
                         self.dashboardStats.reserved[data.product_type]++;
-                        self.dashboardStats.hidden[data.product_type]++;
 
                         break;
                     case 'db-cancelTransaction':
@@ -334,7 +333,7 @@ var vm = new Vue({
 
                         break;
                     case 'db-sold':
-                        self.dashboardStats[data.previous_status][data.product_type]--;
+                        self.dashboardStats.on_delivery[data.product_type]--;
 
                         break;
                     case 'db-rated':
@@ -348,7 +347,8 @@ var vm = new Vue({
                         self.dashboardStats.ratings.productQuality = self.computeAverageRating(currentProductQualityRating, data.rating_productQuality);
 
                         // Update reviews
-                        self.dashboardStats.ratings.reviews.pop();
+                        if(self.dashboardStats.ratings.reviews.length >= 3) self.dashboardStats.ratings.reviews.pop();
+                        self.dashboardStats.ratings.reviewsSize++;
                         self.dashboardStats.ratings.reviews.unshift(
                             {
                                 comment: data.review_comment,
