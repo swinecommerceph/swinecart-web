@@ -93,7 +93,13 @@
                                 </div>
                                 <div class="col s6">
                                     <template v-if="product.customer_name">
-                                        @{{ product.customer_name }} <br>
+                                        <span class="teal-text"
+                                            style="cursor:pointer;"
+                                            @click.prevent="showCustomerInfo(product.customer_id, product.customer_name)"
+                                        >
+                                            @{{ product.customer_name }}
+                                        </span>
+                                        <br>
                                         <a href="#"
                                             class="anchor-title teal-text"
                                             @click.prevent="showReservationDetails(product.uuid)"
@@ -207,7 +213,12 @@
                         <tbody>
                             <tr v-for="(customer, index) in productRequest.customers">
                                 <td>
-                                    @{{ customer.customerName }}
+                                    <span class="teal-text"
+                                        style="cursor:pointer;"
+                                        @click.prevent="showCustomerInfo(customer.customerId, customer.customerName)"
+                                    >
+                                        @{{ customer.customerName }}
+                                    </span>
                                 </td>
                                 <td> @{{ customer.customerProvince }} </td>
                                 <td>
@@ -301,9 +312,6 @@
                                </div>
                            </div>
                        </div>
-                       {{-- <p>
-                           <br><br><br><br><br><br><br><br><br>
-                       </p> --}}
                     </div>
                 </div>
                 <div class="modal-footer">
@@ -357,6 +365,40 @@
                     <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
                 </div>
             </div>
+
+            {{-- Customer info modal --}}
+            <div id="customer-info-modal" class="modal">
+                <div class="modal-content">
+                    <h4>Customer Details</h4>
+                    <table>
+                        <thead>
+                            <tr> </tr>
+                        </thead>
+                        <tbody>
+                            <tr>
+                                <th> Customer Name </th>
+                                <td> @{{ customerInfo.name }} </td>
+                            </tr>
+                            <tr>
+                                <th> Address </th>
+                                <td>
+                                    @{{ customerInfo.addressLine1 }} <br>
+                                    @{{ customerInfo.addressLine2 }} <br>
+                                    @{{ customerInfo.province }}
+                                </td>
+                            </tr>
+                            <tr>
+                                <th> Mobile </th>
+                                <td> @{{ customerInfo.mobile }} </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                </div>
+            </div>
+
         </div>
     </template>
 @endsection

@@ -145,4 +145,17 @@ class DashboardController extends Controller
             return $this->dashboard->updateStatus($request, $product);
         }
     }
+
+    /**
+     * Get customer's information
+     *
+     * @param  Request  $request
+     * @return JSON
+     */
+    public function getCustomerInfo(Request $request)
+    {
+        if($request->ajax()){
+            return Customer::find($request->customer_id);
+        }
+    }
 }

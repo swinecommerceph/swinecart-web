@@ -86,6 +86,13 @@ Vue.component('status-table',{
                 breed: '',
                 dateNeeded: '',
                 specialRequest: ''
+            },
+            customerInfo:{
+                name: '',
+                addressLine1: '',
+                addressLine2: '',
+                province: '',
+                mobile: ''
             }
         };
     },
@@ -442,6 +449,34 @@ Vue.component('status-table',{
             this.reservationDetails.specialRequest = this.products[index].special_request;
 
             $('#product-reservation-details-modal').modal('open');
+        },
+
+        showCustomerInfo: function(customerId, customerName){
+
+            // Do AJAX
+            this.$http.get(
+                config.dashboard_url+'/customer-info',
+                {
+                    params: { customer_id: customerId }
+                }
+            ).then(
+                function(response){
+
+                    // Store fetched data in local component data
+                    var data = response.body;
+                    this.customerInfo.name = customerName;
+                    this.customerInfo.addressLine1 = data.address_addressLine1;
+                    this.customerInfo.addressLine2 = data.address_addressLine2;
+                    this.customerInfo.province = data.address_province;
+                    this.customerInfo.mobile = data.mobile;
+
+                    $('#customer-info-modal').modal('open');
+
+                },
+                function(response){
+                    console.log(response.statusText);
+                }
+            );
         },
 
         disableButtons: function(buttons, actionBtnElement){
