@@ -466,12 +466,12 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
                     <a class="modal-action waves-effect waves-green btn-flat remove-product-button"
                         @click.prevent="removeProduct"
                     >
                         Yes
                     </a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
                 </div>
             </div>
 
@@ -503,12 +503,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons">Close</a>
                     <a class="modal-action waves-effect waves-green btn-flat request-product-buttons"
                         @click.prevent="requestProduct($event)"
                     >
                         Yes
                     </a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons">Close</a>
                 </div>
             </div>
 
