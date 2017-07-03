@@ -7,7 +7,7 @@ use Illuminate\Notifications\Notification;
 use Illuminate\Contracts\Queue\ShouldQueue;
 use Illuminate\Notifications\Messages\MailMessage;
 
-class ProductReservationExpired extends Notification implements ShouldQueue
+class ProductCancelTransaction extends Notification
 {
     use Queueable;
 

@@ -1,51 +1,5 @@
 'use strict';
 
-Vue.component('day-expiration-input',{
-    template: '\
-        <div class="col s12" style="padding:0;"> \
-            <input type="text" \
-                ref="input" \
-                class="center-align" \
-                :value="value" \
-                @input="updateValue($event.target.value)" \
-                @focus="selectAll" \
-                @blur="formatValue" \
-            > \
-        </div> \
-    ',
-    props: {
-        value: {
-            type: Number
-        }
-    },
-    methods: {
-        updateValue: function(value){
-            var resultValue = this.validateQuantity(value);
-            this.$refs.input.value = resultValue;
-            this.$emit('input', resultValue);
-        },
-
-        selectAll: function(event){
-            setTimeout(function () {
-                event.target.select()
-            }, 0);
-        },
-
-        formatValue: function(){
-            this.$refs.input.value = this.validateQuantity(this.value);
-        },
-
-        validateQuantity: function(value){
-            var parsedValue = _.toNumber(value);
-            if(_.isFinite(parsedValue) && parsedValue > 0){
-                return parsedValue;
-            }
-            else return 1;
-        }
-    }
-
-});
-
 Vue.component('custom-status-select', {
     template: '\
         <div> \
@@ -54,7 +8,6 @@ Vue.component('custom-status-select', {
                 <option value="requested">Requested</option> \
                 <option value="reserved">Reserved</option> \
                 <option value="on_delivery">On Delivery</option> \
-                <option value="paid">Paid</option> \
                 <option value="sold">Sold</option> \
             </select> \
             <label>Status</label> \
@@ -66,6 +19,29 @@ Vue.component('custom-status-select', {
         var self = this;
         $('select').on('change', function(){
             self.$emit('status-select',self.$refs.select.value);
+        });
+    }
+
+});
+
+Vue.component('custom-date-select', {
+    template: '\
+        <div class="col s12" style="padding:0;"> \
+            <input type="date" id="delivery-date" name="delivery-date" class="datepicker" ref="select" :value="value"/> \
+        </div> \
+    ',
+    props:['value'],
+    mounted: function(){
+        $('.datepicker').pickadate({
+            min: true,
+            selectMonths: true,
+            selectYears: 2,
+            format: 'mmmm d, yyyy'
+        });
+
+        var self = this;
+        $('#delivery-date').on('change', function(){
+            self.$emit('date-select',self.$refs.select.value);
         });
     }
 
@@ -93,15 +69,15 @@ Vue.component('status-table',{
                 customerId: 0,
                 customerName: '',
                 swineCartId: 0,
-                requestQuantity: 0,
-                daysAfterExpiration: 3
+                requestQuantity: 0
             },
             productInfoModal:{
                 productId: 0,
                 reservationId: 0,
                 productName: '',
                 productIndex: 0,
-                customerName: ''
+                customerName: '',
+                deliveryDate: ''
             },
             reservationDetails:{
                 productName: '',
@@ -110,6 +86,13 @@ Vue.component('status-table',{
                 breed: '',
                 dateNeeded: '',
                 specialRequest: ''
+            },
+            customerInfo:{
+                name: '',
+                addressLine1: '',
+                addressLine2: '',
+                province: '',
+                mobile: ''
             }
         };
     },
@@ -153,6 +136,7 @@ Vue.component('status-table',{
     methods:{
 
         sortBy: function(key){
+            // Sort table column according to what's chosen
             this.sortKey = key;
             this.sortOrders[key] = this.sortOrders[key] * -1;
         },
@@ -162,6 +146,11 @@ Vue.component('status-table',{
             for(var i = 0; i < this.products.length; i++) {
                 if(this.products[i].uuid === uuid) return i;
             }
+        },
+
+        dateChange: function(value){
+            // Event listener to reflect data change in date select to vue's data
+            this.productInfoModal.deliveryDate = value;
         },
 
         getProductRequests: function(uuid, event){
@@ -230,7 +219,6 @@ Vue.component('status-table',{
                     request_quantity: this.productReserve.requestQuantity,
                     date_needed: this.productReserve.dateNeeded,
                     special_request: this.productReserve.specialRequest,
-                    days_after_expiration: this.productReserve.daysAfterExpiration,
                     status: 'reserved'
                 }
             ).then(
@@ -247,13 +235,12 @@ Vue.component('status-table',{
                         if(this.products[index].type !== 'semen'){
                             var updateDetails = {
                                 'status': 'reserved',
-                                'statusTime': responseBody[6].date,
+                                'statusTime': responseBody[5].date,
                                 'index': index,
                                 'type': this.products[index].type,
                                 'reservationId': responseBody[2],
                                 'customerId': this.productReserve.customerId,
-                                'customerName': this.productReserve.customerName,
-                                'expirationDate': responseBody[5].date
+                                'customerName': this.productReserve.customerName
                             };
 
                             // Update product list on root data
@@ -262,7 +249,7 @@ Vue.component('status-table',{
                         else{
                             var updateDetails = {
                                 'status': 'reserved',
-                                'statusTime': responseBody[6].date,
+                                'statusTime': responseBody[5].date,
                                 'uuid': responseBody[3],
                                 'index': index,
                                 'type': this.products[index].type,
@@ -272,8 +259,7 @@ Vue.component('status-table',{
                                 'customerName': this.productReserve.customerName,
                                 'dateNeeded': this.productReserve.dateNeeded,
                                 'specialRequest': this.productReserve.specialRequest,
-                                'removeParentProductDisplay': responseBody[4],
-                                'expirationDate': responseBody[5].date
+                                'removeParentProductDisplay': responseBody[4]
                             };
 
                             // Update product list on root data
@@ -306,10 +292,56 @@ Vue.component('status-table',{
             this.productInfoModal.productName = this.products[index].name;
             this.productInfoModal.customerName = this.products[index].customer_name;
             this.productInfoModal.productIndex = index;
+            this.productInfoModal.deliveryDate = (status === 'delivery') ? moment().add(5,'days').format('MMMM DD, YYYY') : '';
 
             if(status === 'delivery') $('#product-delivery-confirmation-modal').modal('open');
-            else if(status === 'paid') $('#paid-product-confirmation-modal').modal('open');
+            else if(status === 'cancel_transaction') $('#cancel-transaction-confirmation-modal').modal('open');
             else $('#sold-product-confirmation-modal').modal('open');
+        },
+
+        productCancelTransaction: function(event){
+            var cancelTransactionButtons = $('.cancel-transaction-buttons');
+            this.disableButtons(cancelTransactionButtons, event.target);
+
+            // Do AJAX
+            this.$http.patch(
+                config.dashboard_url+'/product-status/update-status',
+                {
+                    _token: this.token,
+                    product_id: this.productInfoModal.productId,
+                    reservation_id: this.productInfoModal.reservationId,
+                    status: 'cancel_transaction'
+                }
+            ).then(
+                function(response){
+                    var responseBody = response.body,
+                        index = this.productInfoModal.productIndex,
+                        customerName = this.productInfoModal.customerName,
+                        productName = this.productInfoModal.productName;
+
+                    $('#cancel-transaction-confirmation-modal').modal('close');
+
+                    // Set status of the product (root data) to 'on_delivery'
+                    // after successful product status change
+                    this.$emit('update-product',
+                        {
+                            'status': 'cancel_transaction',
+                            'index': index
+                        }
+                    );
+
+                    // Initialize/Update some DOM elements
+                    this.$nextTick(function(){
+                        if(responseBody[0] === "OK") Materialize.toast('Cancelled transaction on ' + productName, 2500, 'green lighten-1');
+                        else Materialize.toast('Failed status change', 2500, 'orange accent-2');
+                        $('.tooltipped').tooltip({delay:50});
+                        this.enableButtons(cancelTransactionButtons, event.target);
+                    });
+                },
+                function(response){
+                    console.log(response.statusText);
+                }
+            );
         },
 
         productOnDelivery: function(event){
@@ -323,7 +355,8 @@ Vue.component('status-table',{
                     _token: this.token,
                     product_id: this.productInfoModal.productId,
                     reservation_id: this.productInfoModal.reservationId,
-                    status: 'on_delivery'
+                    status: 'on_delivery',
+                    delivery_date: this.productInfoModal.deliveryDate
                 }
             ).then(
                 function(response){
@@ -340,6 +373,7 @@ Vue.component('status-table',{
                         {
                             'status': 'on_delivery',
                             'statusTime': responseBody[1].date,
+                            'deliveryDate': this.productInfoModal.deliveryDate,
                             'index': index
                         }
                     );
@@ -350,52 +384,6 @@ Vue.component('status-table',{
                         else Materialize.toast('Failed status change', 2500, 'orange accent-2');
                         $('.tooltipped').tooltip({delay:50});
                         this.enableButtons(deliveryButtons, event.target);
-                    });
-                },
-                function(response){
-                    console.log(response.statusText);
-                }
-            );
-        },
-
-        productPaid: function(event){
-            var payButtons = $('.pay-product-buttons');
-            this.disableButtons(payButtons, event.target);
-
-            // Do AJAX
-            this.$http.patch(
-                config.dashboard_url+'/product-status/update-status',
-                {
-                    _token: this.token,
-                    product_id: this.productInfoModal.productId,
-                    reservation_id: this.productInfoModal.reservationId,
-                    status: 'paid'
-                }
-            ).then(
-                function(response){
-                    var responseBody = response.body,
-                        index = this.productInfoModal.productIndex,
-                        customerName = this.productInfoModal.customerName,
-                        productName = this.productInfoModal.productName;
-
-                    $('#paid-product-confirmation-modal').modal('close');
-
-                    // Set status of the product (root data) to 'paid' after
-                    // successful product status change
-                    this.$emit('update-product',
-                        {
-                            'status': 'paid',
-                            'statusTime': responseBody[1].date,
-                            'index': index
-                        }
-                    );
-
-                    // Initialize/Update some DOM elements
-                    this.$nextTick(function(){
-                        if(responseBody[0] === "OK") Materialize.toast(productName + ' already paid by ' + customerName , 2500, 'green lighten-1');
-                        else Materialize.toast('Failed status change', 2500, 'orange accent-2');
-                        $('.tooltipped').tooltip({delay:50});
-                        this.enableButtons(payButtons, event.target);
                     });
                 },
                 function(response){
@@ -463,6 +451,34 @@ Vue.component('status-table',{
             $('#product-reservation-details-modal').modal('open');
         },
 
+        showCustomerInfo: function(customerId, customerName){
+
+            // Do AJAX
+            this.$http.get(
+                config.dashboard_url+'/customer-info',
+                {
+                    params: { customer_id: customerId }
+                }
+            ).then(
+                function(response){
+
+                    // Store fetched data in local component data
+                    var data = response.body;
+                    this.customerInfo.name = customerName;
+                    this.customerInfo.addressLine1 = data.address_addressLine1;
+                    this.customerInfo.addressLine2 = data.address_addressLine2;
+                    this.customerInfo.province = data.address_province;
+                    this.customerInfo.mobile = data.mobile;
+
+                    $('#customer-info-modal').modal('open');
+
+                },
+                function(response){
+                    console.log(response.statusText);
+                }
+            );
+        },
+
         disableButtons: function(buttons, actionBtnElement){
             buttons.addClass('disabled');
 
@@ -528,7 +544,6 @@ var vm = new Vue({
                         this.products[index].reservation_id = updateDetails.reservationId;
                         this.products[index].customer_id = updateDetails.customerId;
                         this.products[index].customer_name = updateDetails.customerName;
-                        this.products[index].expiration_date = updateDetails.expirationDate;
                     }
 
                     // Add another entry to the product list if of type 'semen'
@@ -556,8 +571,7 @@ var vm = new Vue({
                                 'customer_id': updateDetails.customerId,
                                 'customer_name': updateDetails.customerName,
                                 'date_needed': updateDetails.dateNeeded,
-                                'special_request': updateDetails.specialRequest,
-                                'expiration_date': updateDetails.expirationDate
+                                'special_request': updateDetails.specialRequest
                             }
                         );
 
@@ -573,15 +587,7 @@ var vm = new Vue({
                     var index = updateDetails.index;
                     this.products[index].status = 'on_delivery';
                     this.products[index].status_time = updateDetails.statusTime;
-                    this.products[index].expiration_date = '';
-
-                    break;
-
-                case 'paid':
-                    var index = updateDetails.index;
-                    this.products[index].status = 'paid';
-                    this.products[index].status_time = updateDetails.statusTime;
-                    this.products[index].expiration_date = '';
+                    this.products[index].delivery_date = updateDetails.deliveryDate;
 
                     break;
 
@@ -589,6 +595,12 @@ var vm = new Vue({
                     var index = updateDetails.index;
                     this.products[index].status = 'sold';
                     this.products[index].status_time = updateDetails.statusTime;
+
+                    break;
+
+                case 'cancel_transaction':
+                    // Remove from products
+                    this.products.splice(updateDetails.index,1);
 
                     break;
 

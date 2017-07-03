@@ -77,69 +77,13 @@ class DashboardRepository
             $itemDetail['customer_name'] = '';
             $itemDetail['date_needed'] = '';
             $itemDetail['special_request'] = '';
-            $itemDetail['expiration_date'] = '';
+            $itemDetail['delivery_date'] = '';
             array_push($items, (object)$itemDetail);
         }
 
-        // Include "reserved" / "paid" / "on_delivery" products
+        // Include "reserved" / "on_delivery" products
         foreach ($reservations as $reservation) {
             $product = $reservation->product;
-
-            // Check if the reservation has expired already
-            $now = Carbon::now();
-            $expirationDate = ($reservation->expiration_date) ? Carbon::createFromFormat('Y-m-d H:i:s',$reservation->expiration_date) : null;
-            if($reservation->expiration_date && $now->gt($expirationDate)){
-                // Update Swine Cart item
-                $swineCartItem = SwineCartItem::where('reservation_id', $reservation->id)->first();
-                $swineCartItem->reservation_id = 0;
-                $swineCartItem->quantity = ($product->type == 'semen') ? 2 : 1;
-                $swineCartItem->if_requested = 0;
-                $swineCartItem->date_needed = null;
-                $swineCartItem->special_request = "";
-                $swineCartItem->save();
-
-                // Update product
-                $product->status = "displayed";
-                $product->quantity = ($product->type == 'semen') ? -1 : 1;
-                $product->save();
-
-                $transactionDetails = [
-                    'swineCart_id' => $swineCartItem->id,
-                    'customer_id' => $swineCartItem->customer_id,
-                    'breeder_id' => $product->breeder_id,
-                    'product_id' => $product->id,
-                    'status' => 'reservation_expired',
-                    'created_at' => Carbon::createFromFormat('Y-m-d H:i:s', $reservation->expiration_date)->addSecond()
-                ];
-
-                $notificationDetails = [
-                    'description' => 'Your <b>reservation</b> for Product <b>' . $product->name . '</b> is already <b>expired</b>.',
-                    'time' => $transactionDetails['created_at'],
-                    'url' => route('cart.items')
-                ];
-
-                $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Your reservation for Product ' . $product->name . ' is already expired.',
-                    'recipient' => $swineCartItem->customer->mobile
-                ];
-
-                $customerUser = $swineCartItem->customer->users()->first();
-
-                // Add new Transaction Log
-                $this->addToTransactionLog($transactionDetails);
-
-                // Queue notifications (SMS, database, notification, pubsub server)
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
-                dispatch(new NotifyUser('product-reservation-expired', $customerUser->id, $notificationDetails));
-                dispatch(new SendToPubSubServer('notification', $customerUser->email));
-                dispatch(new SendToPubSubServer('sc-reservationExpiration', $customerUser->email, ['item_id' => $transactionDetails['swineCart_id']]));
-                dispatch(new SendToPubSubServer('db-reservationExpiration', Auth::user()->email, ['product_type' => $product->type]));
-
-                // Delete reservation
-                $reservation->delete();
-
-                continue;
-            }
 
             $itemDetail = [];
             $itemDetail['uuid'] = (string) Uuid::uuid4();
@@ -163,7 +107,7 @@ class DashboardRepository
             $itemDetail['userid'] = Customer::find($reservation->customer_id)->users()->first()->id;
             $itemDetail['date_needed'] = $this->transformDateSyntax($reservation->date_needed);
             $itemDetail['special_request'] = $reservation->special_request;
-            $itemDetail['expiration_date'] = $reservation->expiration_date;
+            $itemDetail['delivery_date'] = $this->transformDateSyntax($reservation->delivery_date);
             array_push($items, (object)$itemDetail);
         }
 
@@ -173,7 +117,7 @@ class DashboardRepository
     /**
      * Get the number statuses of the products of a Breeder
      * Include hidden, displayed, requested,
-     * reserved, paid, on_delivery,
+     * reserved, on_delivery,
      * and sold quantity
      *
      * @param  Breeder  $breeder
@@ -185,10 +129,10 @@ class DashboardRepository
         if($status == 'hidden' || $status == 'displayed' || $status == 'requested'){
             $products = $breeder->products;
 
-            $boarQuery = $products->where('status',$status)->where('type','boar');
-            $sowQuery = $products->where('status',$status)->where('type','sow');
-            $giltQuery = $products->where('status',$status)->where('type','gilt');
-            $semenQuery = $products->where('status',$status)->where('type','semen');
+            $boarQuery = $products->where('status',$status)->where('type','boar')->where('quantity', '<>', 0);
+            $sowQuery = $products->where('status',$status)->where('type','sow')->where('quantity', '<>', 0);
+            $giltQuery = $products->where('status',$status)->where('type','gilt')->where('quantity', '<>', 0);
+            $semenQuery = $products->where('status',$status)->where('type','semen')->where('quantity', '<>', 0);
 
             return [
                 'boar' => $boarQuery->count(),
@@ -516,7 +460,6 @@ class DashboardRepository
                     $reservation->date_needed = date_format(date_create($request->date_needed), 'Y-n-j');
                     $reservation->special_request = $request->special_request;
                     $reservation->order_status = 'reserved';
-                    $reservation->expiration_date = Carbon::now()->addDays($request->days_after_expiration);
                     $product->reservations()->save($reservation);
 
                     // Update the Swine Cart item
@@ -534,20 +477,19 @@ class DashboardRepository
                     ];
 
                     $notificationDetailsReserved = [
-                        'description' => 'Product <b>' . $product->name . '</b> was <b>reserved</b> to you. Reservation will expire on ' . $this->transformDateSyntax($reservation->expiration_date, 2) . '.',
+                        'description' => 'Product <b>' . $product->name . '</b> by <b>' . $breederUser->name . '</b> was <b>reserved</b> to you.',
                         'time' => $transactionDetails['created_at'],
                         'url' => route('cart.items')
                     ];
 
                     $smsDetails = [
-                        'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' was reserved to you. Reservation will expire on ' . $this->transformDateSyntax($reservation->expiration_date, 2) . '.' ,
+                        'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' was reserved to you.',
                         'recipient' => $swineCartItem->customer->mobile
                     ];
 
                     $pubsubData = [
                         'item_id' => $transactionDetails['swineCart_id'],
-                        'reserved' => $transactionDetails['created_at']->toDateTimeString(),
-                        'expiration_date' => $reservation->expiration_date->toDateTimeString(),
+                        'reserved' => $transactionDetails['created_at']->toDateTimeString()
                     ];
 
                     $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
@@ -615,7 +557,6 @@ class DashboardRepository
                                 $reservation->id,
                                 (string) Uuid::uuid4(),
                                 true,
-                                $reservation->expiration_date,
                                 $transactionDetails['created_at']
                             ];
                         }
@@ -626,15 +567,13 @@ class DashboardRepository
                     // [2] - reservation_id
                     // [3] - generated UUID
                     // [4] - flag for removing the parent product display in the UI component
-                    // [5] - expiration date if there is addQuantity
-                    // [6] - timestamp of reservation
+                    // [5] - timestamp of reservation
                     return [
                         'success',
                         'Product ' . $product->name.' reserved to '.$customerName,
                         $reservation->id,
                         (string) Uuid::uuid4(),
                         false,
-                        $reservation->expiration_date,
                         $transactionDetails['created_at']
                     ];
 
@@ -644,12 +583,15 @@ class DashboardRepository
                 }
 
             case 'on_delivery':
+
+                // Update Reservation
                 $reservation = ProductReservation::find($request->reservation_id);
                 $reservation->order_status = 'on_delivery';
-                $reservation->expiration_date = null;
+                $reservation->delivery_date = date_format(date_create($request->delivery_date), 'Y-n-j');
                 $reservation->save();
 
                 $customer = Customer::find($reservation->customer_id);
+                $breederUser = $product->breeder->users()->first();
 
                 $transactionDetails = [
                     'swineCart_id' => $reservation->swineCartItem->id,
@@ -661,19 +603,20 @@ class DashboardRepository
                 ];
 
                 $notificationDetails = [
-                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>on delivery</b>. Breeder is awaiting your payment.',
+                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $breederUser->name . '</b> is <b>on delivery</b>. It is expected to arrive on <b>' . $request->delivery_date . '</b>.',
                     'time' => $transactionDetails['created_at'],
                     'url' => route('cart.items')
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is on delivery. Breeder is awaiting your payment.',
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' is on delivery. It is expected to arrive on ' . $request->delivery_date . '.',
                     'recipient' => $customer->mobile
                 ];
 
                 $pubsubData = [
                     'item_id' => $transactionDetails['swineCart_id'],
-                    'on_delivery' => $transactionDetails['created_at']->toDateTimeString()
+                    'on_delivery' => $transactionDetails['created_at']->toDateTimeString(),
+                    'delivery_date' => $request->delivery_date
                 ];
 
                 $reservedCustomerUser = $customer->users()->first();
@@ -693,64 +636,15 @@ class DashboardRepository
                     $transactionDetails['created_at']
                 ];
 
-            case 'paid':
-                $reservation = ProductReservation::find($request->reservation_id);
-                $reservation->order_status = 'paid';
-                $reservation->expiration_date = null;
-                $reservation->save();
-
-                $customer = Customer::find($reservation->customer_id);
-
-                $transactionDetails = [
-                    'swineCart_id' => $reservation->swineCartItem->id,
-                    'customer_id' => $reservation->customer_id,
-                    'breeder_id' => $product->breeder_id,
-                    'product_id' => $reservation->product_id,
-                    'status' => 'paid',
-                    'created_at' => Carbon::now()
-                ];
-
-                $notificationDetails = [
-                    'description' => 'You already <b>paid</b> for Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b>. Product is now set for delivery.',
-                    'time' => $transactionDetails['created_at'],
-                    'url' => route('cart.items')
-                ];
-
-                $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: You already paid for Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . '. Product is now set for delivery',
-                    'recipient' => $customer->mobile
-                ];
-
-                $pubsubData = [
-                    'item_id' => $transactionDetails['swineCart_id'],
-                    'paid' => $transactionDetails['created_at']->toDateTimeString()
-                ];
-
-                $reservedCustomerUser = $customer->users()->first();
-
-                // Add new Transaction Log.
-                $this->addToTransactionLog($transactionDetails);
-
-                // Queue notifications (SMS, database, notification, pubsub server)
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
-                dispatch(new NotifyUser('product-reservation-update', $reservedCustomerUser->id, $notificationDetails));
-                dispatch(new SendToPubSubServer('notification', $reservedCustomerUser->email));
-                dispatch(new SendToPubSubServer('sc-paid', $reservedCustomerUser->email, $pubsubData));
-                dispatch(new SendToPubSubServer('db-paid', Auth::user()->email, ['product_type' => $product->type]));
-
-                return [
-                    "OK",
-                    $transactionDetails['created_at']
-                ];
-
             case 'sold':
+
+                // Update Reservation
                 $reservation = ProductReservation::find($request->reservation_id);
-                // Store previous reservation status
-                $oldStatus = $reservation->order_status;
                 $reservation->order_status = 'sold';
                 $reservation->save();
 
                 $customer = Customer::find($reservation->customer_id);
+                $breederUser = $product->breeder->users()->first();
 
                 $transactionDetails = [
                     'swineCart_id' => $reservation->swineCartItem->id,
@@ -762,24 +656,19 @@ class DashboardRepository
                 ];
 
                 $notificationDetails = [
-                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $product->breeder->users()->first()->name . '</b> is <b>sold</b>',
+                    'description' => 'Product <b>' . $product->name . '</b> by <b>' . $breederUser->name . '</b> is <b>sold</b>.',
                     'time' => $transactionDetails['created_at'],
                     'url' => route('cart.items')
                 ];
 
                 $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $product->breeder->users()->first()->name . ' is sold.',
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' is sold.',
                     'recipient' => $customer->mobile
                 ];
 
                 $pubsubData = [
                     'item_id' => $transactionDetails['swineCart_id'],
                     'sold' => $transactionDetails['created_at']->toDateTimeString()
-                ];
-
-                $pubsubData2 = [
-                    'product_type' => $product->type,
-                    'previous_status' => $oldStatus
                 ];
 
                 $reservedCustomerUser = $customer->users()->first();
@@ -792,7 +681,68 @@ class DashboardRepository
                 dispatch(new NotifyUser('product-reservation-update', $reservedCustomerUser->id, $notificationDetails));
                 dispatch(new SendToPubSubServer('notification', $reservedCustomerUser->email));
                 dispatch(new SendToPubSubServer('sc-sold', $reservedCustomerUser->email, $pubsubData));
-                dispatch(new SendToPubSubServer('db-sold', Auth::user()->email, $pubsubData2));
+                dispatch(new SendToPubSubServer('db-sold', Auth::user()->email, ['product_type' => $product->type]));
+
+                return [
+                    "OK",
+                    $transactionDetails['created_at']
+                ];
+
+            case 'cancel_transaction':
+
+                $reservation = ProductReservation::find($request->reservation_id);
+                $breederUser = $product->breeder->users()->first();
+                // Store previous reservation status
+                $oldStatus = $reservation->order_status;
+
+                // Update Swine Cart item
+                $swineCartItem = SwineCartItem::where('reservation_id', $request->reservation_id)->first();
+                $swineCartItem->reservation_id = 0;
+                $swineCartItem->quantity = ($product->type == 'semen') ? 2 : 1;
+                $swineCartItem->if_requested = 0;
+                $swineCartItem->date_needed = null;
+                $swineCartItem->special_request = "";
+                $swineCartItem->save();
+
+                // Update product
+                $product->status = "displayed";
+                $product->quantity = ($product->type == 'semen') ? -1 : 1;
+                $product->save();
+
+                $transactionDetails = [
+                    'swineCart_id' => $swineCartItem->id,
+                    'customer_id' => $swineCartItem->customer_id,
+                    'breeder_id' => $product->breeder_id,
+                    'product_id' => $product->id,
+                    'status' => 'cancel_transaction',
+                    'created_at' => Carbon::now()
+                ];
+
+                $notificationDetails = [
+                    'description' => '<b>' . $breederUser->name . ' cancelled</b> your transaction for <b>' . $product->name . '</b> .',
+                    'time' => $transactionDetails['created_at'],
+                    'url' => route('cart.items')
+                ];
+
+                $smsDetails = [
+                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: ' . $breederUser->name . ' cancelled your transaction for ' . $product->name . '.',
+                    'recipient' => $swineCartItem->customer->mobile
+                ];
+
+                $customerUser = $swineCartItem->customer->users()->first();
+
+                // Add new Transaction Log
+                $this->addToTransactionLog($transactionDetails);
+
+                // Queue notifications (SMS, database, notification, pubsub server)
+                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+                dispatch(new NotifyUser('product-cancel-transaction', $customerUser->id, $notificationDetails));
+                dispatch(new SendToPubSubServer('notification', $customerUser->email));
+                dispatch(new SendToPubSubServer('sc-cancelTransaction', $customerUser->email, ['item_id' => $transactionDetails['swineCart_id']]));
+                dispatch(new SendToPubSubServer('db-cancelTransaction', Auth::user()->email, ['product_type' => $product->type, 'previous_status' => $oldStatus]));
+
+                // Delete reservation
+                $reservation->delete();
 
                 return [
                     "OK",

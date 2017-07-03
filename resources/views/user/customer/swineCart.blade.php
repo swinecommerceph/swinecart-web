@@ -388,11 +388,11 @@
                                         </a>
                                     </span>
 
-                                    {{-- Show Expiration timer if product is already reserved --}}
-                                    <span class="col s6"
-                                        v-if="product.expiration_date"
+                                    {{-- Show expected date to be delivered if product is already On Delivery --}}
+                                    <span class="col s12"
+                                        v-if="product.status === 'on_delivery'"
                                     >
-                                        <countdown-timer :expiration="product.expiration_date"> </countdown-timer>
+                                        <b>Expected to arrive on @{{ product.delivery_date }}</b>
                                     </span>
 
                                 </p>
@@ -423,7 +423,6 @@
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Reserved">save</i>
                                         <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Paid">payment</i>
                                     </template>
 
                                     {{-- Reserved --}}
@@ -431,15 +430,6 @@
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
                                         <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Paid">payment</i>
-                                    </template>
-
-                                    {{-- Paid --}}
-                                    <template v-if="product.status === 'paid'">
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Product is set for Delivery">local_shipping</i>
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.paid | transformToDetailedDate('Paid')">payment</i>
                                     </template>
 
                                     {{-- On Delivery --}}
@@ -447,7 +437,6 @@
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.on_delivery | transformToDetailedDate('On Delivery')">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Breeder awaits your Payment">payment</i>
                                     </template>
 
                                     {{-- Sold --}}
@@ -708,18 +697,6 @@
             >
                 <i class="material-icons" :class="star.class">@{{ star.icon }}</i>
             </a>
-        </div>
-    </template>
-
-    <template id="countdown-timer-template">
-        <div class="white-text right">
-            <span v-if="!expired">
-                Expires after: <br>
-                @{{ daysLeft }}d @{{ hoursLeft }}h @{{ minutesLeft }}m @{{ secondsLeft }}s
-            </span>
-            <span v-if="expired">
-                RESERVATION EXPIRED
-            </span>
         </div>
     </template>
 
