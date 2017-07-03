@@ -9,6 +9,7 @@ use Illuminate\Contracts\Queue\ShouldQueue;
 
 use App\Models\User;
 use App\Notifications\BreederRated;
+use App\Notifications\ProductCancelTransaction;
 use App\Notifications\ProductRequested;
 use App\Notifications\ProductReserved;
 use App\Notifications\ProductReservationUpdate;
@@ -71,6 +72,12 @@ class NotifyUser implements ShouldQueue
             case 'product-reservation-update':
                 $customerUser = User::find($this->userId);
                 $customerUser->notify(new ProductReservationUpdate($this->notificationDetails));
+
+                break;
+
+            case 'product-cancel-transaction':
+                $customerUser = User::find($this->userId);
+                $customerUser->notify(new ProductCancelTransaction($this->notificationDetails));
 
                 break;
 

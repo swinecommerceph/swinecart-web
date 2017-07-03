@@ -392,7 +392,7 @@
                                     <span class="col s12"
                                         v-if="product.status === 'on_delivery'"
                                     >
-                                        Expected to arrive on @{{ product.delivery_date }}
+                                        <b>Expected to arrive on @{{ product.delivery_date }}</b>
                                     </span>
 
                                 </p>

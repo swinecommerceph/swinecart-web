@@ -132,7 +132,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Get Customers who requested for a respective Product
+     * Update transaction status of Product
      * AJAX
      *
      * @param  Request  $request

@@ -288,7 +288,53 @@ Vue.component('status-table',{
             this.productInfoModal.deliveryDate = (status === 'delivery') ? moment().add(5,'days').format('MMMM DD, YYYY') : '';
 
             if(status === 'delivery') $('#product-delivery-confirmation-modal').modal('open');
+            else if(status === 'cancel_transaction') $('#cancel-transaction-confirmation-modal').modal('open');
             else $('#sold-product-confirmation-modal').modal('open');
+        },
+
+        productCancelTransaction: function(event){
+            var cancelTransactionButtons = $('.cancel-transaction-buttons');
+            this.disableButtons(cancelTransactionButtons, event.target);
+
+            // Do AJAX
+            this.$http.patch(
+                config.dashboard_url+'/product-status/update-status',
+                {
+                    _token: this.token,
+                    product_id: this.productInfoModal.productId,
+                    reservation_id: this.productInfoModal.reservationId,
+                    status: 'cancel_transaction'
+                }
+            ).then(
+                function(response){
+                    var responseBody = response.body,
+                        index = this.productInfoModal.productIndex,
+                        customerName = this.productInfoModal.customerName,
+                        productName = this.productInfoModal.productName;
+
+                    $('#cancel-transaction-confirmation-modal').modal('close');
+
+                    // Set status of the product (root data) to 'on_delivery'
+                    // after successful product status change
+                    this.$emit('update-product',
+                        {
+                            'status': 'cancel_transaction',
+                            'index': index
+                        }
+                    );
+
+                    // Initialize/Update some DOM elements
+                    this.$nextTick(function(){
+                        if(responseBody[0] === "OK") Materialize.toast('Cancelled transaction on ' + productName, 2500, 'green lighten-1');
+                        else Materialize.toast('Failed status change', 2500, 'orange accent-2');
+                        $('.tooltipped').tooltip({delay:50});
+                        this.enableButtons(cancelTransactionButtons, event.target);
+                    });
+                },
+                function(response){
+                    console.log(response.statusText);
+                }
+            );
         },
 
         productOnDelivery: function(event){
@@ -514,6 +560,12 @@ var vm = new Vue({
                     var index = updateDetails.index;
                     this.products[index].status = 'sold';
                     this.products[index].status_time = updateDetails.statusTime;
+
+                    break;
+
+                case 'cancel_transaction':
+                    // Remove from products
+                    this.products.splice(updateDetails.index,1);
 
                     break;
 

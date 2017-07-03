@@ -373,6 +373,11 @@ blockquote.error{
 	background-color: #fdf0f1;
 }
 
+blockquote.warning{
+	border-left: 5px solid #ef6c00;
+	background-color: #fff3e0;
+}
+
 blockquote.info{
 	border-left: 5px solid #009688;
 	background-color: #e7f5f4;

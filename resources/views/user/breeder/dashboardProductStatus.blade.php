@@ -120,22 +120,19 @@
                         </td>
                         <td>
                             @{{ product.status | transformToReadableStatus }}
-                            <template v-if="product.status === 'on_delivery'">
-                                <br>
-                                Expected to arrive on @{{ product.delivery_date }}
-                            </template>
                             <br>
                             <span class="grey-text" v-if="product.status_time">
                                 @{{ product.status_time | transformDate }}
                             </span>
+                            <template v-if="product.status === 'on_delivery'">
+                                <br>
+                                Expected to arrive on @{{ product.delivery_date }}
+                            </template>
                         </td>
                         <td>
                             {{--  If product's status is requested --}}
-                            <a class="btn tooltipped"
+                            <a class="btn"
                                 href="#"
-                                data-position="top"
-                                data-delay="50"
-                                data-tooltip="See product requests"
                                 @click.prevent="getProductRequests(product.uuid, $event)"
                                 v-if="product.status == 'requested'"
                             >
@@ -144,29 +141,37 @@
 
                             {{-- If product's status is reserved --}}
                             <template v-if="product.status == 'reserved'">
-                                <a class="btn tooltipped"
+                                <a class="btn"
                                     style="margin-bottom:1rem;"
                                     href="#"
-                                    data-position="top"
-                                    data-delay="50"
-                                    data-tooltip="Confirm Delivery"
                                     @click.prevent="setUpConfirmation(product.uuid,'delivery')"
                                 >
                                     Send for Delivery
+                                </a> <br>
+                                <a class="btn red accent-2"
+                                    style="margin-bottom:1rem;"
+                                    href="#"
+                                    @click.prevent="setUpConfirmation(product.uuid,'cancel_transaction')"
+                                >
+                                    Cancel Transaction
                                 </a>
                             </template>
 
                             {{-- If product's status is on_delivery --}}
                             <template v-if="product.status == 'on_delivery'">
-                                <a class="btn tooltipped"
+                                <a class="btn"
                                     style="margin-bottom:1rem;"
                                     href="#"
-                                    data-position="top"
-                                    data-delay="50"
-                                    data-tooltip="Confirm Sold"
                                     @click.prevent="setUpConfirmation(product.uuid,'sold')"
                                 >
                                     Confirm Sold
+                                </a> <br>
+                                <a class="btn red accent-2"
+                                    style="margin-bottom:1rem;"
+                                    href="#"
+                                    @click.prevent="setUpConfirmation(product.uuid,'cancel_transaction')"
+                                >
+                                    Cancel Transaction
                                 </a>
                             </template>
 
@@ -257,6 +262,25 @@
                 </div>
             </div>
 
+            {{-- Cancel Transaction Confirmation Modal --}}
+            <div id="cancel-transaction-confirmation-modal" class="modal">
+                <div class="modal-content">
+                    <h4>Cancel Transaction Confirmation</h4>
+                    <div>
+                        <blockquote class="warning">
+                            Once this action is done, it cannot be reverted.
+                        </blockquote>
+                        <div class="">
+                            Are you sure you want to cancel transaction on @{{ productInfoModal.productName }} to @{{ productInfoModal.customerName }}?
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat cancel-transaction">Close</a>
+                    <a class="modal-action waves-effect waves-green btn-flat cancel-transaction" @click.prevent="productCancelTransaction($event)">Yes</a>
+                </div>
+            </div>
+
             {{-- Product Delivery Confirmation Modal --}}
             <div id="product-delivery-confirmation-modal" class="modal">
                 <div class="modal-content">
@@ -277,9 +301,9 @@
                                </div>
                            </div>
                        </div>
-                       <p>
+                       {{-- <p>
                            <br><br><br><br><br><br><br><br><br>
-                       </p>
+                       </p> --}}
                     </div>
                 </div>
                 <div class="modal-footer">

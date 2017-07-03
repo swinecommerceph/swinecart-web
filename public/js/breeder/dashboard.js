@@ -324,7 +324,6 @@ var vm = new Vue({
                     case 'db-cancelTransaction':
                         self.dashboardStats[data.previous_status][data.product_type]--;
                         self.dashboardStats.displayed[data.product_type]++;
-                        self.dashboardStats.hidden[data.product_type]--;
 
                         break;
                     case 'db-onDelivery':

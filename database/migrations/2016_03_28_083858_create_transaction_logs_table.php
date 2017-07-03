@@ -20,7 +20,8 @@ class CreateTransactionLogsTable extends Migration
             $table->integer('product_id')->unsigned();
             $table->enum('status',[
                 'requested', 'reserved', 'on_delivery',
-                'sold', 'rated', 'reserved_to_another'
+                'sold', 'rated', 'reserved_to_another',
+                'cancel_transaction'
                 ]);
             $table->dateTime('created_at');
         });

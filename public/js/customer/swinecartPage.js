@@ -706,6 +706,7 @@ var vm = new Vue({
                 data = JSON.parse(data);
                 switch(data.type) {
                     case 'sc-reserved':
+                        // Update status
                         var index = self.searchProduct(data.item_id);
 
                         self.products[index].status = 'reserved';
@@ -713,6 +714,7 @@ var vm = new Vue({
 
                         break;
                     case 'sc-onDelivery':
+                        // Update status
                         var index = self.searchProduct(data.item_id);
 
                         self.products[index].status = 'on_delivery';
@@ -721,20 +723,31 @@ var vm = new Vue({
 
                         break;
                     case 'sc-sold':
+                        // Update status
                         var index = self.searchProduct(data.item_id);
 
                         self.products[index].status = 'sold';
                         self.products[index].status_transactions.sold = data.sold;
 
                         break;
-                    case 'sc-cancelReservation':
-                        // var index = self.searchProduct(data.item_id);
-                        //
-                        // self.products.splice(index,1);
-                        // Materialize.toast('Product is already expired', 4000);
+                    case 'sc-cancelTransaction':
+                        // Reset product as just once added to Swine Cart
+                        var index = self.searchProduct(data.item_id);
+
+                        self.products[index].reservation_id = 0;
+                        self.products[index].quantity = (self.products[index].type === 'semen') ? 2 : 1;
+                        self.products[index].request_status = 0;
+                        self.products[index].date_needed = "";
+                        self.products[index].special_request = "";
+                        self.products[index].status = "displayed";
+                        self.products[index].status_transactions.requested = "";
+                        self.products[index].status_transactions.reserved = "";
+                        self.products[index].status_transactions.on_delivery = "";
+                        self.products[index].status_transactions.sold = "";
 
                         break;
                     case 'sc-reservedToOthers':
+                        // Remove product from Swine Cart
                         var index = self.searchProduct(data.item_id);
 
                         self.products.splice(index,1);
