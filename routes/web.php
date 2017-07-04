@@ -273,6 +273,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('maintenance_mode', ['as' => 'maintenance_mode', 'uses'=> 'AdminController@activateMaintenanceMode']);
         Route::get('notify_profile_update', ['as' => 'notify_pending', 'uses'=> 'AdminController@notifyPendingBreeders']);
+        Route::get('sample_mail', ['as' => 'sample_mail', 'uses'=> 'AdminController@sampleMailNotif']);
     });
 
     Route::group(['prefix'=>'spectator'], function(){

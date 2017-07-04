@@ -29,6 +29,11 @@ class SwineCartNotifyPendingBreederAccounts extends Mailable
     public function build()
     {
         return $this->view('emails.pendingNotification')
-                    ->subject('SwineCart Breeder Account Credentials');
+                    ->subject('SwineCart Breeder Account Credentials')
+                    ->with([
+                        'level' => 'success',
+         				'introLines' => ["You haven't updated your profile for the past 30 days, please update your profile as soon as possible"],
+         				'outroLines' => [] ,
+                    ]);
     }
 }

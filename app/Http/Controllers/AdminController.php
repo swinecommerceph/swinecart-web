@@ -2444,6 +2444,13 @@ class AdminController extends Controller
 
     }
 
+    /*
+     * Notify pending breeders accounts with profiles not updated within 30 days
+     *
+     * @param none
+     * @return redirect
+     *
+     */
     public function notifyPendingBreeders(){
          $pending = DB::table('users')
                      ->join('role_user', 'users.id', '=' , 'role_user.user_id')
@@ -2459,5 +2466,33 @@ class AdminController extends Controller
             }
         }
         return Redirect::back()->with('message','Action complete');
+    }
+
+    public function sampleMailNotif(){
+        $verCode = 'kasjSTG43';
+        $email = 'customer_01@test.com';
+        $type = 2;
+        $introlines = [];
+        $outrolines = [];
+        if($this->type==0){
+            $introlines = ["The product ".$product." is needed by ". $user->name." on ". $information->date_needed".", "The customer's special request ".$this->information->special_request];
+            $outrolines = ["Please attend to the customer's request as soon as possible"];
+        }else if($this->type==1){
+            $introlines = ["The product ".$product." reservation to ". $user->name." will expire on ". $information->expiration_date"."];
+            $outrolines = ["Please attend to the transaction request as soon as possible"];
+        }else if($this->type==2){
+            $introlines = ['Your transaction was cancelled due to problems in the product or the other party'];
+            $outrolines = ['Sorry for the inconvenience'];
+        }
+
+        $data = [
+            'level' => 'success',
+            'type'=> $type,
+            'introLines' => $introlines,
+            'outroLines' => $outrolines ,
+
+        ];
+
+        return view('emails.mailError', $data);
     }
 }

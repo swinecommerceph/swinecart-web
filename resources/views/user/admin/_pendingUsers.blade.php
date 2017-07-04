@@ -26,6 +26,9 @@
         <div class="col s12 m12 l12 xl12">
             <a href="{{route('notify_pending')}}" class="waves-effect waves-light btn right"><i class="material-icons left">markunread_mailbox</i>Notify Users</a>
         </div>
+        <div class="col s12 m12 l12 xl12">
+            <a href="{{route('sample_mail')}}" class="waves-effect waves-light btn right"><i class="material-icons left">markunread_mailbox</i>Notify Users</a>
+        </div>
     </div>
 @endsection
 

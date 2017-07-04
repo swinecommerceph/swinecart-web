@@ -35,9 +35,11 @@ class SwineCartBreederAccreditationExpiration extends Mailable
      */
     public function build()
     {
+        
         return $this->view('emails.breederAccountExpiration')
                     ->subject('SwineCart Account Notification')
                     ->with([
+                        'level' => 'success',
                         'type'=>$this->type,
                         'username'=>$this->username,
                         'email' => $this->email,
