@@ -9,7 +9,7 @@
 * ZeroMQ / needs php-zmq extension
 * VueJS v2
 * jQuery v2.1
-* Materialize CSS v0.98
+* Materialize CSS v0.99
 * Elasticsearch v5.2
 * Chikka SMS API
 

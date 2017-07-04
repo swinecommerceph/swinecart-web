@@ -268,8 +268,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat reserve-product-buttons">Close</a>
                     <a class="modal-action waves-effect waves-green btn-flat reserve-product-buttons" @click.prevent="reserveToCustomer($event)">Yes</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat reserve-product-buttons">Close</a>
                 </div>
             </div>
 
@@ -287,8 +287,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat cancel-transaction">Close</a>
                     <a class="modal-action waves-effect waves-green btn-flat cancel-transaction" @click.prevent="productCancelTransaction($event)">Yes</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat cancel-transaction">Close</a>
                 </div>
             </div>
 
@@ -315,8 +315,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat delivery-product-buttons">Close</a>
                     <a class="modal-action waves-effect waves-green btn-flat delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat delivery-product-buttons">Close</a>
                 </div>
             </div>
 
@@ -329,8 +329,8 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat sold-product-buttons">Close</a>
                     <a class="modal-action waves-effect waves-green btn-flat sold-product-buttons" @click.prevent="productOnSold($event)">Yes</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat sold-product-buttons">Close</a>
                 </div>
             </div>
 

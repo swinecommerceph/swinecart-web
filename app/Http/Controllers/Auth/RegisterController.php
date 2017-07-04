@@ -92,13 +92,20 @@ class RegisterController extends Controller
         $verCode = str_random('10');
         $user = $this->create($request->all(), $verCode);
         $user->assignRole('customer');
+        $email = $request->input('email');
+
         $data = [
-            'email' => $request->input('email'),
+            'email' => $email,
             'verCode' => $verCode,
+            'level' => 'success',
+            'introLines' => ['Registration is almost complete.', "Click the 'Verify Code' button to verify your email."],
+            'outroLines' => ['If you did not plan to register on this site, no further action is required.'],
+            'actionText' => 'Verify Code',
+            'actionUrl' => route('verCode.send', ['email' => $email, 'verCode' => $verCode]),
             'type' => 'sent'
         ];
 
-        Mail::send('emails.verification', $data, function ($message) use($data){
+        Mail::send('vendor.notifications.email', $data, function ($message) use($data){
             $message->to($data['email'])->subject('Verification code for SwineCart');
         });
 
