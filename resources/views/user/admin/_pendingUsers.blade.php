@@ -22,6 +22,11 @@
             {!!Form::close()!!}
         </div>
     </div>
+    <div class="row">
+        <div class="col s12 m12 l12 xl12">
+            <a href="{{route('notify_pending')}}" class="waves-effect waves-light btn right"><i class="material-icons left">markunread_mailbox</i>Notify Users</a>
+        </div>
+    </div>
 @endsection
 
 {{-- @section('header')
@@ -89,7 +94,7 @@
                 <th data-field="name">Name</th>
                  <th data-field="name">Email</th>
                 <th data-field="type">Account Type</th>
-                <th data-field="action">Action</th>
+                <th data-field="action">Date Created</th>
             </tr>
           </thead>
 
@@ -100,7 +105,7 @@
               <td>{{$user->email}}</td>
               <td>{{ucfirst($user->title)}}</td>
               <td>
-                  <div class="col s12 m12 l6 xl6">
+                  {{-- <div class="col s12 m12 l6 xl6">
                       <a class="waves-effect waves-light btn green lighten-1 accept-button"  data-id ="{{$user->user_id}}">
                           <i class="material-icons left">check</i><span class="hide-on-med-and-down">Accept</span>
                       </a>
@@ -109,7 +114,8 @@
                       <a class="waves-effect waves-light btn red lighten-1 reject-button" data-id ="{{$user->user_id}}">
                           <i class="material-icons left">close</i><span class="hide-on-med-and-down">Reject</span>
                       </a>
-                  </div>
+                  </div> --}}
+                  {{$user->created_at}}
               </td>
             </tr>
             @empty

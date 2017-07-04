@@ -266,6 +266,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/messenger/recipients', ['as' => 'admin.messenger.recipients', 'uses'=> 'AdminController@recipients']);
 
         Route::get('maintenance_mode', ['as' => 'maintenance_mode', 'uses'=> 'AdminController@activateMaintenanceMode']);
+        Route::get('notify_profile_update', ['as' => 'notify_pending', 'uses'=> 'AdminController@notifyPendingBreeders']);
     });
 
     Route::group(['prefix'=>'spectator'], function(){
