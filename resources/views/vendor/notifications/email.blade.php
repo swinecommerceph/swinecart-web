@@ -21,12 +21,12 @@ $style = [
     /* Layout ------------------------------ */
 
     'body' => 'margin: 0; padding: 0; width: 100%; background-color: #F2F4F6;',
-    'email-wrapper' => 'width: 100%; margin: 0; padding: 0; background-color: #F2F4F6;',
+    'email-wrapper' => 'width: 100%; margin: 0; padding: 0; background-color: #00695c;',
 
     /* Masthead ----------------------- */
 
     'email-masthead' => 'padding: 25px 0; text-align: center;',
-    'email-masthead_name' => 'font-size: 16px; font-weight: bold; color: #2F3133; text-decoration: none; text-shadow: 0 1px 0 white;',
+    'email-masthead_name' => 'font-size: 16px; font-weight: bold; color: #fff; text-decoration: none;',
 
     'email-body' => 'width: 100%; margin: 0; padding: 0; border-top: 1px solid #EDEFF2; border-bottom: 1px solid #EDEFF2; background-color: #FFF;',
     'email-body_inner' => 'width: auto; max-width: 570px; margin: 0 auto; padding: 0;',
@@ -43,9 +43,11 @@ $style = [
     /* Type ------------------------------ */
 
     'anchor' => 'color: #3869D4;',
+    'anchor-white' => 'color: #fff;',
     'header-1' => 'margin-top: 0; color: #2F3133; font-size: 19px; font-weight: bold; text-align: left;',
     'paragraph' => 'margin-top: 0; color: #74787E; font-size: 16px; line-height: 1.5em;',
     'paragraph-sub' => 'margin-top: 0; color: #74787E; font-size: 12px; line-height: 1.5em;',
+    'paragraph-sub-white' => 'margin-top: 0; color: #fff; font-size: 12px; line-height: 1.5em;',
     'paragraph-center' => 'text-align: center;',
 
     /* Buttons ------------------------------ */
@@ -174,9 +176,13 @@ $style = [
                             <table style="{{ $style['email-footer'] }}" align="center" width="570" cellpadding="0" cellspacing="0">
                                 <tr>
                                     <td style="{{ $fontFamily }} {{ $style['email-footer_cell'] }}">
-                                        <p style="{{ $style['paragraph-sub'] }}">
+                                        <p style="{{ $style['paragraph-sub-white'] }}">
+                                            Email: <a style="{{ $style['anchor-white'] }}" href="mailto:swinecommerceph@gmail.com" target="_blank">swinecommerceph@gmail.com</a> <br>
+                                            Contact: (049)536-2302 | (049)536-2313
+                                        </p>
+                                        <p style="{{ $style['paragraph-sub-white'] }}">
                                             &copy; {{ date('Y') }}
-                                            <a style="{{ $style['anchor'] }}" href="{{ url('/') }}" target="_blank">{{ config('app.name') }}</a>.
+                                            <a style="{{ $style['anchor-white'] }}" href="{{ url('/') }}" target="_blank">{{ config('app.name') }}</a>.
                                             All rights reserved.
                                         </p>
                                     </td>

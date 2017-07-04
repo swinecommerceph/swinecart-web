@@ -15,14 +15,14 @@ Route::get('/',['as' => 'index_path', function () {
     return view('home');
 }])->middleware('guest');
 
-// Test for styling the email verification.
+// Sample Email template
 // Route::get('/sample', function(){
 //     $verCode = 'kasjSTG43';
 //     $email = 'customer_01@test.com';
 //     $data = [
 //         'level' => 'success',
 //         'introLines' => ['Registration is almost complete.', "Click the 'Verify Code' button to verify your email."],
-//         'outroLines' => ['If you did not '],
+//         'outroLines' => ['If you did not plan to register on this site, no further action is required.'],
 //         'actionText' => 'Verify Code',
 //         'actionUrl' => route('verCode.send', ['email' => $email, 'verCode' => $verCode])
 //     ];
