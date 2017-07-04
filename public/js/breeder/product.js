@@ -8,11 +8,11 @@ var product = {
     other_details_default :
         '<div class="detail-container">'+
             '<div class="input-field col s6">'+
-                '<input name="characteristic[]" type="text">'+
+                '<input class="validate" name="characteristic[]" type="text">'+
                 '<label for="characteristic[]">Characteristic</label>'+
             '</div>'+
             '<div class="input-field col s5">'+
-                '<input name="value[]" type="text">'+
+                '<input class="validate" name="value[]" type="text">'+
                 '<label for="value[]">Value</label>'+
             '</div>'+
             '<div class="input-field col s1 remove-button-container">'+
@@ -66,10 +66,6 @@ var product = {
             "_token" : parent_form.find('input[name=_token]').val(),
         };
 
-        // Only get quantity field from semen product type
-        if($('#select-type').val() === 'semen') data_values["quantity"] = parent_form.find('input[name=quantity]').val();
-        else data_values["quantity"] = 1;
-
         // Transform breed syntax if crossbreed
         if($("#create-product input:checked").val() === 'crossbreed'){
             var fbreed = parent_form.find('input[name=fbreed]').val();
@@ -112,6 +108,9 @@ var product = {
                 $('#add-product-modal').modal('close');
                 parent_form.find('#submit-button').removeClass('disabled');
 
+                $('#submit-button').removeClass('disabled');
+                $('#submit-button').html('Add');
+
                 // Open Add Media Modal
                 $('#add-media-modal').modal({
                     dismissible: false,
@@ -138,33 +137,28 @@ var product = {
         });
     },
 
-    edit: function(parent_form){
+    edit: function(parent_form, update_button){
         var data_values = {
             "id": parent_form.find('input[name=productId]').val(),
-            "name": parent_form.find('input[name=name]').val(),
+            "name": parent_form.find("input[name='edit-name']").val(),
             "type": parent_form.find('#edit-select-type').val(),
             "farm_from_id": parent_form.find('#edit-select-farm').val(),
-            "birthdate": parent_form.find('input[name=birthdate]').val(),
-            "price": parent_form.find('input[name=price]').val(),
-            "adg": parent_form.find('input[name=adg]').val(),
-            "fcr": parent_form.find('input[name=fcr]').val(),
-            "backfat_thickness": parent_form.find('input[name=backfat_thickness]').val(),
+            "birthdate": parent_form.find("input[name='edit-birthdate']").val(),
+            "price": parent_form.find("input[name='edit-price']").val(),
+            "adg": parent_form.find("input[name='edit-adg']").val(),
+            "fcr": parent_form.find("input[name='edit-fcr']").val(),
+            "backfat_thickness": parent_form.find("input[name='edit-backfat_thickness']").val(),
             "_token" : parent_form.find('input[name=_token]').val(),
         };
 
-        // Only get quantity field from semen product type
-        if($('#edit-select-type').val() === 'semen') data_values["quantity"] = parent_form.find('input[name=quantity]').val();
-        else data_values["quantity"] = 1;
-
-
         // Transform breed syntax if crossbreed
         if($("#edit-product input:checked").val() === 'crossbreed'){
-            var fbreed = parent_form.find('input[name=fbreed]').val();
-            var mbreed = parent_form.find('input[name=mbreed]').val();
+            var fbreed = parent_form.find("input[name='edit-fbreed']").val();
+            var mbreed = parent_form.find("input[name='edit-mbreed']").val();
 
             data_values["breed"] = fbreed.toLowerCase().trim()+'+'+mbreed.toLowerCase().trim();
         }
-        else data_values["breed"] = parent_form.find('input[name=breed]').val().toLowerCase().trim();
+        else data_values["breed"] = parent_form.find("input[name='edit-breed']").val().toLowerCase().trim();
 
         // Transform syntax of Other details category values
         var other_details = '';
@@ -193,6 +187,10 @@ var product = {
                 }
             })
         ).done(function(){
+            // Enable update-button
+            update_button.removeClass('disabled');
+            update_button.html('Update Product');
+
             // Then get the product summary
             product.get_summary($('#edit-product').find('input[name="productId"]').val());
         });
@@ -260,23 +258,18 @@ var product = {
                 $('#edit-media-modal h4').html('Edit Media of '+data.name);
 
                 // General input initialization
-                parent_form.find('input[name=name]').val(data.name);
-                parent_form.find('label[for=name]').addClass('active')
-                parent_form.find('input[name=price]').val(data.price);
-                parent_form.find('label[for=price]').addClass('active');
-                if(data.type === 'Semen'){
-                    parent_form.find('input[name=quantity]').val(data.quantity);
-                    parent_form.find('label[for=quantity]').addClass('active');
-                    parent_form.find('.input-quantity-container').fadeIn(300);
-                }
-                parent_form.find('input[name=birthdate]').val(data.birthdate);
-                parent_form.find('label[for=birthdate]').addClass('active');
-                parent_form.find('input[name=adg]').val(data.adg);
-                parent_form.find('label[for=adg]').addClass('active');
-                parent_form.find('input[name=fcr]').val(data.fcr);
-                parent_form.find('label[for=fcr]').addClass('active');
-                parent_form.find('input[name=backfat_thickness]').val(data.backfat_thickness);
-                parent_form.find('label[for=backfat_thickness]').addClass('active');
+                parent_form.find("input[name='edit-name']").val(data.name);
+                parent_form.find("label[for='edit-name']").addClass('active')
+                parent_form.find("input[name='edit-price']").val(data.price);
+                parent_form.find("label[for='edit-price']").addClass('active');
+                parent_form.find("input[name='edit-birthdate']").val(data.birthdate);
+                parent_form.find("label[for='edit-birthdate']").addClass('active');
+                parent_form.find("input[name='edit-adg']").val(data.adg);
+                parent_form.find("label[for='edit-adg']").addClass('active');
+                parent_form.find("input[name='edit-fcr']").val(data.fcr);
+                parent_form.find("label[for='edit-fcr']").addClass('active');
+                parent_form.find("input[name='edit-backfat_thickness']").val(data.backfat_thickness);
+                parent_form.find("label[for='edit-backfat_thickness']").addClass('active');
 
                 // For select initializations
                 $('#edit-select-type').val(data.type.toLowerCase());
@@ -290,10 +283,10 @@ var product = {
                     // Check the crossbreed radio
                     $('#edit-crossbreed').prop('checked',true);
 
-                    parent_form.find('input[name=fbreed]').val(crossbreed[0].toString().trim());
-                    parent_form.find('label[for=fbreed]').addClass('active');
-                    parent_form.find('input[name=mbreed]').val(crossbreed[1].toString().trim());
-                    parent_form.find('label[for=mbreed]').addClass('active');
+                    parent_form.find("input[name='edit-fbreed']").val(crossbreed[0].toString().trim());
+                    parent_form.find("label[for='edit-fbreed']").addClass('active');
+                    parent_form.find("input[name='edit-mbreed']").val(crossbreed[1].toString().trim());
+                    parent_form.find("label[for='edit-mbreed']").addClass('active');
                     parent_form.find('.input-purebreed-container').hide();
                     parent_form.find('.input-crossbreed-container').fadeIn(300);
                 }
@@ -301,8 +294,8 @@ var product = {
                     // Check the crossbreed radio
                     $('#edit-purebreed').prop('checked',true);
 
-                    parent_form.find('input[name=breed]').val(data.breed);
-                    parent_form.find('label[for=breed]').addClass('active');
+                    parent_form.find("input[name='edit-breed']").val(data.breed);
+                    parent_form.find("label[for='edit-breed']").addClass('active');
                     parent_form.find('.input-crossbreed-container').hide();
                     parent_form.find('.input-purebreed-container').fadeIn(300);
                 }
@@ -316,11 +309,11 @@ var product = {
                         if(information != ''){
                             details += '<div class="detail-container">'+
                                     '<div class="input-field col s6">'+
-                                        '<input name="characteristic[]" type="text" value="'+ information[0].toString().trim() +'">'+
+                                        '<input class="validate" name="characteristic[]" type="text" value="'+ information[0].toString().trim() +'">'+
                                         '<label for="characteristic[]" class="active">Characteristic</label>'+
                                     '</div>'+
                                     '<div class="input-field col s5">'+
-                                        '<input name="value[]" type="text" value="'+ information[1].toString().trim() +'">'+
+                                        '<input class="validate" name="value[]" type="text" value="'+ information[1].toString().trim() +'">'+
                                         '<label for="value[]" class="active">Value</label>'+
                                     '</div>'+
                                     '<div class="input-field col s1 remove-button-container">'+
@@ -366,8 +359,8 @@ var product = {
                                         '<span class="card-title"></span>'+
                                     '</div>'+
                                     '<div class="card-action">'+
-                                        '<a href="#!" class="set-display-photo" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
-                                        '<a href="#!" class="delete-image right" data-media-id="'+element.id+'">Delete</a>'+
+                                        '<a href="#!" class="set-display-photo btn-flat" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
+                                        '<a href="#!" class="delete-image btn-flat" data-media-id="'+element.id+'">Delete</a>'+
                                     '</div>'+
                                 '</div>'+
                             '</div>';
@@ -491,7 +484,7 @@ var product = {
                                     '<span class="card-title"></span>'+
                                 '</div>'+
                                 '<div class="card-action">'+
-                                    '<a href="#!" class="set-display-photo" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
+                                    '<a href="#!" class="set-display-photo btn-flat" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
@@ -523,6 +516,9 @@ var product = {
     },
 
     set_display_photo: function(anchor_tag, parent_form, product_id, img_id){
+        // Disable the Display photo anchor tag
+        anchor_tag.addClass('disabled');
+        anchor_tag.html('Setting ...');
 
         // Do AJAX
         $.ajax({
@@ -540,6 +536,7 @@ var product = {
 
                 // New Display Photo id
                 product.current_display_photo = img_id;
+                anchor_tag.removeClass('disabled');
                 anchor_tag.html('<i class="material-icons left teal-text">photo</i> Display Photo');
             },
             error: function(message){
@@ -626,26 +623,24 @@ var product = {
     },
 
     manage_necessary_fields: function(parent_form, type){
-        // Fade in quantity field for semen
+
         if(type === 'semen'){
-            parent_form.find('.input-quantity-container').fadeIn(300);
-            if(product.before_select_value === 'sow'){
+            if(product.before_select_value === 'sow' || product.before_select_value === 'gilt'){
                 parent_form.find('.other-details-container').html('');
                 $(product.other_details_default).prependTo(parent_form.find(".other-details-container")).fadeIn(300);
             }
             product.before_select_value = 'semen';
         }
-
         // Provide default values in other_details category for sow
-        else if(type === 'sow'){
+        else if(type === 'sow' || type === 'gilt'){
             parent_form.find('.other-details-container').html('');
             $('<div class="detail-container">'+
                     '<div class="input-field col s6">'+
-                        '<input name="characteristic[]" type="text" value="Litter Size">'+
+                        '<input class="validate valid" name="characteristic[]" type="text" value="Litter Size">'+
                         '<label for="characteristic[]" class="active">Characteristic</label>'+
                     '</div>'+
                     '<div class="input-field col s5">'+
-                        '<input name="value[]" type="text" value="">'+
+                        '<input class="validate" name="value[]" type="text" value="">'+
                         '<label for="value[]" class="active">Value</label>'+
                     '</div>'+
                     '<div class="input-field col s1 remove-button-container">'+
@@ -656,11 +651,11 @@ var product = {
                 '</div>'+
             '<div class="detail-container">'+
                     '<div class="input-field col s6">'+
-                        '<input name="characteristic[]" type="text" value="Number of teats">'+
+                        '<input class="validate valid" name="characteristic[]" type="text" value="Number of teats">'+
                         '<label for="characteristic[]" class="active">Characteristic</label>'+
                     '</div>'+
                     '<div class="input-field col s5">'+
-                        '<input name="value[]" type="text" value="">'+
+                        '<input class="validate" name="value[]" type="text" value="">'+
                         '<label for="value[]" class="active">Value</label>'+
                     '</div>'+
                     '<div class="input-field col s1 remove-button-container">'+
@@ -670,15 +665,13 @@ var product = {
                     '</div>'+
                 '</div>').hide().prependTo(parent_form.find(".other-details-container")).fadeIn(300);
 
-            parent_form.find('.input-quantity-container').fadeOut(300);
             parent_form.find('.remove-detail').tooltip({delay:50});
-            product.before_select_value = 'sow';
+            product.before_select_value = type;
         }
 
         // Boar
         else{
-            parent_form.find('.input-quantity-container').fadeOut(300);
-            if(product.before_select_value === 'sow'){
+            if(product.before_select_value === 'sow' || product.before_select_value === 'gilt'){
                 parent_form.find('.other-details-container').html('');
                 $(product.other_details_default).prependTo(parent_form.find(".other-details-container")).fadeIn(300);
             }

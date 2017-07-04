@@ -11,6 +11,7 @@ Vue.component('custom-date-from-select', {
     mounted: function(){
         var self = this;
 
+        // Initialize datepicker
         $('#date-from').pickadate({
             min: new Date(self.dateAccreditation),
             max: true,
@@ -36,6 +37,9 @@ Vue.component('custom-date-to-select', {
     ',
     props:['value'],
     mounted: function(){
+        var self = this;
+
+        // Initialize datepicker
         $('#date-to').pickadate({
             selectMonths: true,
             selectYears: 2,
@@ -43,7 +47,6 @@ Vue.component('custom-date-to-select', {
             formatSubmit: 'yyyy-mm-dd'
         });
 
-        var self = this;
         $('#date-to').on('change', function(){
             self.$emit('date-to-select',self.$refs.selectTo.value);
         });
@@ -52,7 +55,7 @@ Vue.component('custom-date-to-select', {
 });
 
 var vm = new Vue({
-    el: '#charts-container',
+    el: '#card-status',
     data: {
         barChartData: '',
         barChart: '',
@@ -61,8 +64,48 @@ var vm = new Vue({
         dateToInput: '',
         dateFromObject: {},
         dateToObject: {},
+        dashboardStats: {},
         latestAccreditation: '',
-        serverDateNow: ''
+        serverDateNow: '',
+        pubsubTopic: window.pubsubTopic
+    },
+    computed: {
+        overallOnDelivery: function(){
+            var sum = this.dashboardStats.on_delivery.boar + this.dashboardStats.on_delivery.gilt + this.dashboardStats.on_delivery.semen + this.dashboardStats.on_delivery.sow;
+            return sum;
+        },
+
+        overallReserved: function(){
+            var sum = this.dashboardStats.reserved.boar + this.dashboardStats.reserved.gilt + this.dashboardStats.reserved.semen + this.dashboardStats.reserved.sow;
+            return sum;
+        },
+
+        overallHidden: function(){
+            var sum = this.dashboardStats.hidden.boar + this.dashboardStats.hidden.gilt + this.dashboardStats.hidden.semen + this.dashboardStats.hidden.sow;
+            return sum;
+        },
+
+        overallDisplayed: function(){
+            var displayedSum = this.dashboardStats.displayed.boar + this.dashboardStats.displayed.gilt + this.dashboardStats.displayed.semen + this.dashboardStats.displayed.sow;
+            var requestedSum = this.dashboardStats.requested.boar + this.dashboardStats.requested.gilt + this.dashboardStats.requested.semen + this.dashboardStats.requested.sow;
+            return displayedSum + requestedSum;
+        },
+
+        overallRequested: function(){
+            var sum = this.dashboardStats.requested.boar + this.dashboardStats.requested.gilt + this.dashboardStats.requested.semen + this.dashboardStats.requested.sow;
+            return sum;
+        },
+
+        overallProductsAvailable: function(){
+            // var displayedSum = this.dashboardStats.displayed.boar + this.dashboardStats.displayed.gilt + this.dashboardStats.displayed.semen + this.dashboardStats.displayed.sow;
+            // var hiddenSum = this.dashboardStats.hidden.boar + this.dashboardStats.hidden.gilt + this.dashboardStats.hidden.semen + this.dashboardStats.hidden.sow;
+            return this.overallDisplayed + this.overallHidden;
+        },
+
+        overallRatings: function(){
+            var overallAvgRating = (this.dashboardStats.ratings.delivery + this.dashboardStats.ratings.transaction + this.dashboardStats.ratings.productQuality)/3;
+            return this.round(overallAvgRating, 2);
+        }
     },
     methods: {
         valueChange: function(){
@@ -100,6 +143,7 @@ var vm = new Vue({
         },
 
         dateFromChange: function(value){
+            // Trigger if dateFrom component's value changes
 
             var minDate = new Date(this.dateFromObject.get('select','yyyy-mm-dd'));
             var now = moment(this.serverDateNow);
@@ -114,9 +158,9 @@ var vm = new Vue({
                     $('#date-to').prop('disabled', false);
 
                     // Make sure to get the correct month interval
-                    var plusFiveMonths = moment(minDate).add(5, 'months');
+                    var plusElevenMonths = moment(minDate).add(11, 'months');
 
-                    constrictedDate = (plusFiveMonths.isSameOrAfter(now)) ? now : plusFiveMonths;
+                    constrictedDate = (plusElevenMonths.isSameOrAfter(now)) ? now : plusElevenMonths;
                     maxDate = new Date(constrictedDate.format('YYYY-MM-D'));
 
                     break;
@@ -147,6 +191,7 @@ var vm = new Vue({
         },
 
         dateToChange: function(value){
+            // Trigger if dateTo component's value changes
 
             this.dateToInput = value;
         },
@@ -186,7 +231,21 @@ var vm = new Vue({
                 );
             }
             else console.log('Nope!');
-        }
+        },
+
+        computeAverageRating: function(currentAverage, newValue){
+            var size = this.dashboardStats.ratings.reviewsSize;
+            var continuousAverage = ((size * currentAverage) + newValue) / (size+1);
+            return this.round(continuousAverage, 1);
+        },
+
+        round: function(number, precision){
+            // Round number according to precision
+            var factor = Math.pow(10, precision);
+            var tempNumber = number * factor;
+            var roundedTempNumber = Math.round(tempNumber);
+            return roundedTempNumber / factor;
+        },
     },
     created: function(){
 
@@ -194,8 +253,10 @@ var vm = new Vue({
         this.barChartData = rawBarChartData;
         this.latestAccreditation = rawLatestAccreditation;
         this.serverDateNow = rawServerDateNow;
+        this.dashboardStats = rawDashboardStats;
     },
     mounted: function(){
+        var self = this;
 
         // Declaring global defaults
         Chart.defaults.global.defaultFontFamily = 'Poppins';
@@ -225,7 +286,15 @@ var vm = new Vue({
                         stacked: true
                     }],
                     yAxes: [{
-                        stacked: true
+                        stacked: true,
+                        ticks: {
+                            beginAtZero: true,
+                            userCallback: function(label, index, labels) {
+                                if (Math.floor(label) === label) {
+                                    return label;
+                                }
+                            }
+                        }
                     }]
                 }
             }
@@ -234,5 +303,80 @@ var vm = new Vue({
         // Store Date Picker object to root component
         this.dateFromObject = $('#date-from').pickadate('picker');
         this.dateToObject = $('#date-to').pickadate('picker');
+
+        // Set-up configuration and subscribe to a topic in the pubsub server
+        var onConnectCallback = function(session){
+
+            session.subscribe(self.pubsubTopic, function(topic, data) {
+                // Update product status numbers
+                data = JSON.parse(data);
+                switch (data.type) {
+                    case 'db-requested':
+                        self.dashboardStats.displayed[data.product_type]--;
+                        self.dashboardStats.requested[data.product_type]++;
+
+                        break;
+                    case 'db-reserved':
+                        self.dashboardStats.requested[data.product_type]--;
+                        self.dashboardStats.reserved[data.product_type]++;
+
+                        break;
+                    case 'db-cancelTransaction':
+                        self.dashboardStats[data.previous_status][data.product_type]--;
+                        self.dashboardStats.displayed[data.product_type]++;
+
+                        break;
+                    case 'db-onDelivery':
+                        self.dashboardStats.reserved[data.product_type]--;
+                        self.dashboardStats.on_delivery[data.product_type]++;
+
+                        break;
+                    case 'db-sold':
+                        self.dashboardStats.on_delivery[data.product_type]--;
+
+                        break;
+                    case 'db-rated':
+                        var currentDeliveryRating = self.dashboardStats.ratings.delivery,
+                            currentTransactionRating = self.dashboardStats.ratings.transaction,
+                            currentProductQualityRating = self.dashboardStats.ratings.productQuality;
+
+                        // Compute new averages
+                        self.dashboardStats.ratings.delivery = self.computeAverageRating(currentDeliveryRating, data.rating_delivery);
+                        self.dashboardStats.ratings.transaction = self.computeAverageRating(currentTransactionRating, data.rating_transaction);
+                        self.dashboardStats.ratings.productQuality = self.computeAverageRating(currentProductQualityRating, data.rating_productQuality);
+
+                        // Update reviews
+                        if(self.dashboardStats.ratings.reviews.length >= 3) self.dashboardStats.ratings.reviews.pop();
+                        self.dashboardStats.ratings.reviewsSize++;
+                        self.dashboardStats.ratings.reviews.unshift(
+                            {
+                                comment: data.review_comment,
+                                customerName: data.review_customerName
+                            }
+                        );
+
+                        break;
+                    default:
+                        break;
+                }
+
+            });
+        };
+
+        var onHangupCallback = function(code, reason, detail){
+            console.warn('WebSocket connection closed');
+            console.warn(code+': '+reason);
+        };
+
+        var conn = new ab.connect(
+            config.pubsubWSServer,
+            onConnectCallback,
+            onHangupCallback,
+            {
+                'maxRetries': 30,
+                'retryDelay': 2000,
+                'skipSubprotocolCheck': true
+            }
+        );
     }
 });

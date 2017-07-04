@@ -4,10 +4,10 @@ $(document).ready(function(){
 
     // Setup Elasticsearch
     var client = new $.es.Client({
-        hosts: 'http://localhost:9200'
+        hosts: window.elasticsearchHost
     });
 
-    document.querySelector('#search-results').style.width = document.querySelector('#search-field').offsetWidth+'px';
+    $('#search-results').width($('#search-field').width());
 
     // Find all ticked checkboxes for producing chips
     if($('input:checked').length > 0) chips += 'Filtered by: ';
@@ -48,7 +48,7 @@ $(document).ready(function(){
         }
         else{
             setTimeout(function(){
-                searchPhrase = document.querySelector('input#search').value;
+                searchPhrase = $('input#search').val();
 
                 // Execute of searchPhrase is not empty
                 if(searchPhrase){
@@ -72,7 +72,7 @@ $(document).ready(function(){
                             }
                         }
                     }).then(function(response){
-                        var options = response.suggest.productSuggest[0].options;
+                        var options = (response.suggest) ? response.suggest.productSuggest[0].options : '';
                         var searchResultsTop = '';
                         var searchResultsBot = '';
 
@@ -88,7 +88,7 @@ $(document).ready(function(){
                                     '</li>';
                             }
 
-                            document.querySelector("#search-results ul").innerHTML = searchResultsTop + searchResultsBot;
+                            $("#search-results ul").html(searchResultsTop + searchResultsBot);
 
                             $("#search-results").show();
                         }
@@ -120,8 +120,7 @@ $(document).ready(function(){
     $('body').on('click', 'li.search-item', function(e){
         e.preventDefault();
 
-        var searchInput = document.querySelector('input#search');
-        searchInput.value = $(this).html();
+        $('input#search').val($(this).html());
 
         $("#search-results").hide();
         filter.apply();

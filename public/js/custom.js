@@ -1,10 +1,18 @@
-	$(document).ready(function(){
+$(document).ready(function(){
 
     // Hide certain elements
-	$('.modal-trigger, .modal').modal();
+	$('.modal-trigger, .modal').modal({
+		dismissible: false
+	});
 
     // Initialization for Sliders
-    $('.home-slider').slider({fullWidth: true});
+	$('.home-slider').slider({fullWidth: true});
+    $('#homepage-slider').slider(
+		{
+			fullWidth: true,
+			height: 500
+		}
+	);
 
     // Initialization for Carousels
     $('.carousel').carousel();
@@ -20,7 +28,7 @@
     $('select#other-breeds').material_select();
 
 	// Disable buttons after submitting to prevent multiple requests
-	$('button[type="submit"]').click(function(e){
+	$('#page-login button[type="submit"]').click(function(e){
         e.preventDefault();
         $(this).addClass('disabled');
         $(this).parents('form').submit();
@@ -39,12 +47,25 @@
     });
 
 	$(".button-collapse").sideNav();
-	
+
     $('#back-to-top').click(function(){
         $('body,html').animate({
             scrollTop : 0
         }, 500);
     });
+
+	// Scroll animation on learn more
+	$('#learn-more-breeder').click(function(){
+		$('html,body').animate({
+        	scrollTop: $("#breeder-features").offset().top - $('nav').height()
+		}, 'slow');
+	});
+
+	$('#learn-more-customer').click(function(){
+		$('html,body').animate({
+        	scrollTop: $("#customer-features").offset().top - $('nav').height()
+		}, 'slow');
+	});
 
 	// Change left and right icons in Pagination
     if($('.pagination li:first-child a').length == 1)
@@ -59,106 +80,5 @@
     $('.pagination li').each(function(){
         if(!$(this).hasClass('disabled') && !$(this).hasClass('active')) $(this).addClass('waves-effect');
     });
-
-    var provinces = [
-        // Negros Island Rregion
-        'Negros Occidental',
-        'Negros Oriental',
-        // Cordillera Administrative Region
-        'Mountain Province',
-        'Ifugao',
-        'Benguet',
-        'Abra',
-        'Apayao',
-        'Kalinga',
-        // Region I
-        'La Union',
-        'Ilocos Norte',
-        'Ilocos Sur',
-        'Pangasinan',
-        // Region II
-        'Nueva Vizcaya',
-        'Cagayan',
-        'Isabela',
-        'Quirino',
-        'Batanes',
-        // Region III
-        'Bataan',
-        'Zambales',
-        'Tarlac',
-        'Pampanga',
-        'Bulacan',
-        'Nueva Ecija',
-        'Aurora',
-        // Region IV-A
-        'Rizal',
-        'Cavite',
-        'Laguna',
-        'Batangas',
-        'Quezon',
-        // Region IV-B
-        'Occidental Mindoro',
-        'Oriental Mindoro',
-        'Romblon',
-        'Palawan',
-        'Marinduque',
-        // Region V
-        'Catanduanes',
-        'Camarines Norte',
-        'Sorsogon',
-        'Albay',
-        'Masbate',
-        'Camarines Sur',
-        // Region VI
-        'Capiz',
-        'Aklan',
-        'Antique',
-        'Iloilo',
-        'Guimaras',
-        // Region VII
-        'Cebu',
-        'Bohol',
-        'Siquijor',
-        // Region VIII
-        'Southern Leyte',
-        'Eastern Samar',
-        'Northern Samar',
-        'Western Samar',
-        'Leyte',
-        'Biliran',
-        // Region IX
-        'Zamboanga Sibugay',
-        'Zamboanga del Norte',
-        'Zamboanga del Sur',
-        // Region X
-        'Misamis Occidental',
-        'Bukidnon',
-        'Lanao del Norte',
-        'Misamis Oriental',
-        'Camiguin',
-        // Region XI
-        'Davao Oriental',
-        'Compostela Valley',
-        'Davao del Sur',
-        'Davao Occidental',
-        'Davao del Norte',
-        // Region XII
-        'South Cotabato',
-        'Sultan Kudarat',
-        'North Cotabato',
-        'Sarangani',
-        // Region XIII
-        'Agusan del Norte',
-        'Agusan del Sur',
-        'Surigao del Sur',
-        'Surigao del Norte',
-        'Dinagat Islands',
-        // ARMM
-        'Tawi-tawi',
-        'Basilan',
-        'Sulu',
-        'Maguindanao',
-        'Lanao del Sur'
-    ];
 
 });

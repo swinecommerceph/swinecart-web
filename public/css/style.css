@@ -6,7 +6,7 @@ html{
 /* Navigation dropdown styles */
 #nav-dropdown{
 	/*display:block;*/
-	width: 185px !important;
+	width: 220px !important;
 }
 
 #inquiries-dropdown{
@@ -121,7 +121,6 @@ html{
 
 #page-customer-view-products .card .card-image img{
 	margin: 0 auto;
-	height: 270px;
 	width: auto;
 	padding: 0.5rem;
 }
@@ -129,7 +128,6 @@ html{
 #page-customer-swine-cart #card-container .card .card-image img,
 #page-breeder-manage-products .card .card-image img{
 	margin: 0 auto;
-	height: 14rem;
 	width: auto;
 	padding: 0.5rem;
 }
@@ -160,7 +158,7 @@ html{
 
 /* Swine Cart page styles */
 #swine-cart #card-container .status-icons-container i{
-	cursor: pointer;
+	cursor: default;
 	font-size: 1.85rem;
 	margin-right: .5rem;
 }
@@ -206,6 +204,7 @@ html{
 
 #rate-modal {
 	width: 450px;
+	overflow-x: hidden;
 }
 
 #confirmation {
@@ -365,8 +364,7 @@ html{
 
 /* Blockquote styles */
 blockquote{
-	padding-top: 1rem;
-	padding-bottom: 1rem;
+	padding: 1rem 1rem 1rem;
 	border-left: 5px solid #388e3c;
 	background-color: #e8f5e9;
 }
@@ -374,6 +372,11 @@ blockquote{
 blockquote.error{
 	border-left: 5px solid #ee6e73;
 	background-color: #fdf0f1;
+}
+
+blockquote.warning{
+	border-left: 5px solid #ef6c00;
+	background-color: #fff3e0;
 }
 
 blockquote.info{
@@ -412,6 +415,10 @@ blockquote.info{
 /* Search components style */
 input#search{
 	color: black;
+	/* The following three lines are a temporary fix to Mataerialize css v0.99 search UI bug */
+	margin-bottom: 0px;
+    border-bottom-style: none;
+    height: inherit;
 }
 
 #search-results ul{
@@ -439,6 +446,16 @@ input#search{
 		width:18.8%;
 	}
 
+	/* Image resize */
+	#page-customer-view-products .card .card-image img{
+		height: 160px;
+	}
+
+	#page-customer-swine-cart #card-container .card .card-image img,
+	#page-breeder-manage-products .card .card-image img{
+		height: 7rem;
+	}
+
 }
 
 /* Large Screen */
@@ -449,6 +466,53 @@ input#search{
 
 	#search-container .pinned{
 		width:100%;
+	}
+
+	/* Image resize */
+	#page-customer-view-products .card .card-image img{
+		height: 168px;
+	}
+
+	#page-customer-swine-cart #card-container .card .card-image img,
+	#page-breeder-manage-products .card .card-image img{
+		height: 8rem;
+	}
+
+}
+
+@media only screen and (min-width: 1100px){
+	/* Image resize */
+	#page-customer-view-products .card .card-image img{
+		height: 180px;
+	}
+
+	#page-customer-swine-cart #card-container .card .card-image img,
+	#page-breeder-manage-products .card .card-image img{
+		height: 9rem;
+	}
+}
+
+@media only screen and (min-width: 1225px){
+	/* Image resize */
+	#page-customer-view-products .card .card-image img{
+		height: 210px;
+	}
+
+	#page-customer-swine-cart #card-container .card .card-image img,
+	#page-breeder-manage-products .card .card-image img{
+		height: 10.5rem;
+	}
+}
+
+@media only screen and (min-width: 1560px){
+	/* Image resize */
+	#page-customer-view-products .card .card-image img{
+		height: 270px;
+	}
+
+	#page-customer-swine-cart #card-container .card .card-image img,
+	#page-breeder-manage-products .card .card-image img{
+		height: 14rem;
 	}
 }
 
@@ -1122,4 +1186,30 @@ input#search{
 	min-height: 400px;
 }
 
-/*Test Layout CSS*/
+/* Form Validation */
+label {
+   width: 100%;
+}
+
+.input-field label[for] {
+	font-size: 0.8rem;
+   -webkit-transform: translateY(-140%);
+   -moz-transform: translateY(-140%);
+   -ms-transform: translateY(-140%);
+   -o-transform: translateY(-140%);
+   transform: translateY(-140%);
+}
+
+.input-field label[for]::after {
+   padding-top: 0.4rem;
+}
+
+/* Override search icon label */
+.input-field label[for='search']{
+	font-size: inherit;
+	-webkit-transform: none;
+    -moz-transform: none;
+    -ms-transform: none;
+    -o-transform: none;
+    transform: none;
+}

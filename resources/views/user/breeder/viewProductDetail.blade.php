@@ -43,7 +43,7 @@
                 </div>
                 {{-- Image Carousel --}}
                 <div id="images-carousel" class="col s12">
-                    <div class="carousel" style="height:220px;">
+                    <div class="carousel" style="height:14rem;">
                         <a class="carousel-item" href="#!"><img src="{{$product->img_path}}"></a>
                         @foreach($product->imageCollection as $image)
                             <a class="carousel-item" href="#!"><img src="/images/product/{{$image->name}}"></a>
@@ -52,15 +52,17 @@
                 </div>
                 {{--  Video Carousel --}}
                 <div id="videos-carousel" class="col s12">
-                    <div class="carousel" style="height:220px;">
-                        @foreach($product->videoCollection as $video)
-                            <a class="carousel-item" href="#!">
-                                <video class="responsive-video" controls>
-                                    <source src="/videos/product/{{$video->name}}" type="{{$video->type}}">
-                                </video>
-                            </a>
-                        @endforeach
-                    </div>
+                    @if(count($product->videoCollection) > 0)
+                        <div class="carousel" style="height:14rem;">
+                            @foreach($product->videoCollection as $video)
+                                <a class="carousel-item" href="#!">
+                                    <video class="responsive-video" controls>
+                                        <source src="/videos/product/{{$video->name}}" type="{{$video->type}}">
+                                    </video>
+                                </a>
+                            @endforeach
+                        </div>
+                    @endif
                 </div>
             </div>
 
@@ -95,7 +97,7 @@
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
                 <li id="stars-container" class="collection-item">
                     Breeder Ratings
-                    <a href="#!" class="right tooltipped"  data-position="left" data-delay="50" data-tooltip="Message Breeder">
+                    <a href="#!" class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Send message to Breeder">
                         <i class="material-icons red-text" style="font-size:35px;">message</i>
                     </a>
                     <br><br>
@@ -154,6 +156,7 @@
 @endsection
 
 @section('customScript')
+    <script src="/js/vendor/VideoJS/video.min.js"></script>
     <script src="/js/vendor/imagezoom.js"> </script>
     <script src="/js/breeder/viewProductDetail_script.js"> </script>
 @endsection

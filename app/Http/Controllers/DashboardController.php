@@ -49,7 +49,6 @@ class DashboardController extends Controller
         $dashboardStats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
         $dashboardStats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
         $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
-        $dashboardStats['paid'] = $this->dashboard->getProductNumberStatus($breeder,'paid');
         $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
 
         $latestAccreditation = $this->user->userable->latest_accreditation;
@@ -61,9 +60,7 @@ class DashboardController extends Controller
                 'frequency' => 'monthly'
             ], $breeder);
 
-        $topic = str_slug($this->user->name);
-
-        return view('user.breeder.dashboard', compact('dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData', 'topic'));
+        return view('user.breeder.dashboard', compact('dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
     }
 
     /**
@@ -135,7 +132,7 @@ class DashboardController extends Controller
     }
 
     /**
-     * Get Customers who requested for a respective Product
+     * Update transaction status of Product
      * AJAX
      *
      * @param  Request  $request
@@ -146,6 +143,19 @@ class DashboardController extends Controller
         if($request->ajax()){
             $product = Product::find($request->product_id);
             return $this->dashboard->updateStatus($request, $product);
+        }
+    }
+
+    /**
+     * Get customer's information
+     *
+     * @param  Request  $request
+     * @return JSON
+     */
+    public function getCustomerInfo(Request $request)
+    {
+        if($request->ajax()){
+            return Customer::find($request->customer_id);
         }
     }
 }

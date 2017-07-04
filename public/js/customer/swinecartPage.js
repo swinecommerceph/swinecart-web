@@ -4,53 +4,6 @@
 // component to communicate between them.
 var eventHub = new Vue();
 
-// Custom components
-Vue.component('countdown-timer', {
-    template: '#countdown-timer-template',
-    props: ['expiration'],
-    data: function(){
-        return {
-            daysLeft: 0,
-            hoursLeft: 0,
-            minutesLeft: 0,
-            secondsLeft:0,
-            expired: false
-        }
-    },
-    methods:{
-        getTimeRemaining: function(expiration){
-            var timeDifference = moment(expiration).diff(moment());
-
-            return {
-                'total': timeDifference,
-                'seconds': Math.floor( (timeDifference/1000) % 60 ),
-                'minutes': Math.floor( (timeDifference/1000/60) % 60 ),
-                'hours': Math.floor( (timeDifference/(1000*60*60)) % 24 ),
-                'days': Math.floor( timeDifference/(1000*60*60*24) )
-            };
-        }
-    },
-    mounted: function(){
-        var countdownVM = this;
-
-        var timeInterval = setInterval(function(){
-            var timeDifference = countdownVM.getTimeRemaining(countdownVM.expiration);
-
-            countdownVM.secondsLeft = ('0' + timeDifference.seconds).slice(-2);
-            countdownVM.minutesLeft = timeDifference.minutes;
-            countdownVM.hoursLeft = timeDifference.hours;
-            countdownVM.daysLeft = timeDifference.days;
-
-            if(timeDifference.total <= 0) {
-                clearInterval(timeInterval);
-                countdownVM.expired = true;
-            }
-
-        }, 1000);
-    }
-
-});
-
 Vue.component('average-star-rating',{
     template: '#average-star-rating',
     props: ['rating'],
@@ -267,22 +220,37 @@ Vue.component('order-details',{
             return '['+ prepend + '] ' + moment(value).format("MMM D YYYY, h:mmA");
         }
     },
+    computed: {
+        sortedProducts: function(){
+            // Sort Swine Cart items according to its request status
+            return _.sortBy(this.products, ['request_status']);
+        }
+    },
     methods: {
-        subtractQuantity: function(index){
-            // Update (subtract) product's quantity on root data
-            this.$emit('subtract-quantity', index);
+        searchProduct : function(itemId){
+            // Return index of Swine Cart itemId to find
+            for(var i = 0; i < this.products.length; i++) {
+                if(this.products[i].item_id === itemId) return i;
+            }
         },
 
-        addQuantity: function(index){
+        subtractQuantity: function(itemId){
+            // Update (subtract) product's quantity on root data
+            this.$emit('subtract-quantity', this.searchProduct(itemId));
+        },
+
+        addQuantity: function(itemId){
             // Update (add) product's quantity on root data
-            this.$emit('add-quantity', index);
+            this.$emit('add-quantity', this.searchProduct(itemId));
         },
 
         dateChange: function(value){
+            // Event listener to reflect data change in date select to vue's data
             this.productRequest.dateNeeded = value;
         },
 
-        viewProductModalFromCart: function(index){
+        viewProductModalFromCart: function(itemId){
+            var index = this.searchProduct(itemId);
             vm.productInfoModal.imgPath = this.products[index].img_path;
             vm.productInfoModal.name = this.products[index].product_name;
             vm.productInfoModal.breeder = this.products[index].breeder;
@@ -305,7 +273,8 @@ Vue.component('order-details',{
             $('#info-modal').modal('open');
         },
 
-        viewRequestDetails: function(index){
+        viewRequestDetails: function(itemId){
+            var index = this.searchProduct(itemId);
             this.requestDetails.name = this.products[index].product_name;
             this.requestDetails.type = this.products[index].product_type;
             this.requestDetails.dateNeeded = this.products[index].date_needed;
@@ -314,7 +283,8 @@ Vue.component('order-details',{
             $('#product-request-details-modal').modal('open');
         },
 
-        confirmRemoval: function(index){
+        confirmRemoval: function(itemId){
+            var index = this.searchProduct(itemId);
             this.productRemove.index = index;
             this.productRemove.name = this.products[index].product_name;
             this.productRemove.id = this.products[index].product_id;
@@ -359,9 +329,9 @@ Vue.component('order-details',{
                         // Update (remove product) list of products on root data
                         this.$emit('remove-product', index);
 
-                        Materialize.toast(data[1] + ' removed from Swine Cart', 1800, 'green lighten-1');
+                        Materialize.toast(data[1] + ' removed from Swine Cart', 2000, 'green lighten-1');
 
-                    } else Materialize.toast(data[1] + ' is ' + data[0], 1500, 'orange accent-2');
+                    } else Materialize.toast(data[1] + ' is ' + data[0], 2000, 'orange accent-2');
 
                 },
                 function(response){
@@ -371,7 +341,8 @@ Vue.component('order-details',{
 
         },
 
-        confirmRequest: function(index){
+        confirmRequest: function(itemId){
+            var index = this.searchProduct(itemId);
             this.productRequest.index = index;
             this.productRequest.name = this.products[index].product_name;
             this.productRequest.id = this.products[index].product_id;
@@ -381,10 +352,11 @@ Vue.component('order-details',{
             $('#request-product-confirmation-modal').modal('open');
         },
 
-        requestProduct: function(){
+        requestProduct: function(event){
             var index = this.productRequest.index;
+            var requestButtons = $('.request-product-buttons');
 
-            $('#request-product-confirmation-modal').modal('close');
+            this.disableButtons('request', requestButtons, event.target);
 
             // Do AJAX
             this.$http.patch(
@@ -412,6 +384,7 @@ Vue.component('order-details',{
                         statusTransaction: data[1].date
                     };
 
+                    $('#request-product-confirmation-modal').modal('close');
                     this.$emit('product-requested', updateDetails);
 
                     // Put quantity of Swine Cart to sessionStorage
@@ -427,13 +400,14 @@ Vue.component('order-details',{
                     }
                     else span.html(sessionStorage.getItem('swine_cart_quantity'));
 
-                    Materialize.toast(this.products[index].product_name + ' requested', 1800, 'green lighten-1')
+                    Materialize.toast(this.products[index].product_name + ' requested', 2000, 'green lighten-1')
 
                     // Update some DOM elements
                     this.$nextTick(function(){
                         $('.tooltipped').tooltip({delay:50});
                         $('label[for="special-request"]').removeClass('active');
                         $('label[for="date-needed"]').removeClass('active');
+                        this.enableButtons('request', requestButtons, event.target);
                     });
 
                 },
@@ -444,17 +418,19 @@ Vue.component('order-details',{
 
         },
 
-        showRateModal: function(index){
+        showRateModal: function(itemId){
             $('#rate-modal').modal('open');
 
+            var index = this.searchProduct(itemId);
             this.breederRate.index = index;
             this.breederRate.breederName = this.products[index].breeder;
         },
 
-        rateAndRecord: function(){
+        rateAndRecord: function(event){
             var index = this.breederRate.index;
+            var rateButtons = $('.rate-breeder-buttons');
 
-            $('#rate-modal').modal('close');
+            this.disableButtons('rate', rateButtons, event.target);
 
             // Do AJAX
             this.$http.post(
@@ -471,9 +447,10 @@ Vue.component('order-details',{
                 }
             ).then(
                 function(response){
-                    Materialize.toast(this.products[index].breeder + ' rated', 1800, 'green lighten-1');
+                    $('#rate-modal').modal('close');
+                    Materialize.toast(this.products[index].breeder + ' rated', 2000, 'green lighten-1');
 
-                    // Update local storage of the products
+                    // Update local storage of the ratings modal
                     this.breederRate.commentField = '';
                     this.breederRate.deliveryValue = 0;
                     this.breederRate.transactionValue = 0;
@@ -483,6 +460,8 @@ Vue.component('order-details',{
                     this.$emit('update-history',
                         { 'index': index }
                     );
+
+                    this.enableButtons('rate', rateButtons, event.target);
                 },
                 function(response){
                     console.log(response.statusText);
@@ -493,6 +472,38 @@ Vue.component('order-details',{
             this.$refs.delivery.normalizeClasses(-1);
             this.$refs.transaction.normalizeClasses(-1);
             this.$refs.productQuality.normalizeClasses(-1);
+        },
+
+        disableButtons: function(operation, buttons, actionBtnElement){
+            buttons.addClass('disabled');
+
+            switch (operation) {
+                case 'request':
+                    actionBtnElement.innerHTML = 'Requesting ...';
+
+                    break;
+                case 'rate':
+                    actionBtnElement.innerHTML = 'Rating ...';
+
+                    break;
+                default: break
+            }
+        },
+
+        enableButtons: function(operation, buttons, actionBtnElement){
+            buttons.removeClass('disabled');
+
+            switch (operation){
+                case 'request':
+                    actionBtnElement.innerHTML = 'Yes';
+
+                    break;
+                case 'rate':
+                    actionBtnElement.innerHTML = 'Rate';
+
+                    break;
+                default: break
+            }
         },
 
         setDeliveryRating: function(value){
@@ -616,7 +627,7 @@ var vm = new Vue({
     },
     methods: {
         searchProduct : function(swineCart_id){
-            // Return index of productId to find
+            // Return index of Swine Cart itemId to find
             for(var i = 0; i < this.products.length; i++) {
                 if(this.products[i].item_id === swineCart_id) return i;
             }
@@ -687,51 +698,56 @@ var vm = new Vue({
 
         var self = this;
 
+        // Set-up configuration and subscribe to a topic in the pubsub server
         var onConnectCallback = function(session){
-            
+
             session.subscribe(self.topic, function(topic, data) {
                 // Update products
                 data = JSON.parse(data);
                 switch(data.type) {
                     case 'sc-reserved':
+                        // Update status
                         var index = self.searchProduct(data.item_id);
 
                         self.products[index].status = 'reserved';
                         self.products[index].status_transactions.reserved = data.reserved;
-                        self.products[index].expiration_date = data.expiration_date;
 
                         break;
                     case 'sc-onDelivery':
+                        // Update status
                         var index = self.searchProduct(data.item_id);
 
                         self.products[index].status = 'on_delivery';
                         self.products[index].status_transactions.on_delivery = data.on_delivery;
-                        self.products[index].expiration_date = '';
-
-                        break;
-                    case 'sc-paid':
-                        var index = self.searchProduct(data.item_id);
-
-                        self.products[index].status = 'paid';
-                        self.products[index].status_transactions.paid = data.paid;
-                        self.products[index].expiration_date = '';
+                        self.products[index].delivery_date = data.delivery_date;
 
                         break;
                     case 'sc-sold':
+                        // Update status
                         var index = self.searchProduct(data.item_id);
 
                         self.products[index].status = 'sold';
                         self.products[index].status_transactions.sold = data.sold;
 
                         break;
-                    case 'sc-reservationExpiration':
+                    case 'sc-cancelTransaction':
+                        // Reset product as just once added to Swine Cart
                         var index = self.searchProduct(data.item_id);
 
-                        self.products.splice(index,1);
-                        Materialize.toast('Product is already expired', 4000);
+                        self.products[index].reservation_id = 0;
+                        self.products[index].quantity = (self.products[index].type === 'semen') ? 2 : 1;
+                        self.products[index].request_status = 0;
+                        self.products[index].date_needed = "";
+                        self.products[index].special_request = "";
+                        self.products[index].status = "displayed";
+                        self.products[index].status_transactions.requested = "";
+                        self.products[index].status_transactions.reserved = "";
+                        self.products[index].status_transactions.on_delivery = "";
+                        self.products[index].status_transactions.sold = "";
 
                         break;
                     case 'sc-reservedToOthers':
+                        // Remove product from Swine Cart
                         var index = self.searchProduct(data.item_id);
 
                         self.products.splice(index,1);

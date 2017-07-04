@@ -6,6 +6,20 @@ $(document).ready(function(){
     /*
      * Create Profile specific
      */
+
+    var select_province = function(i){
+        // Dynamically produce select element with options based on provinces
+        var selectElement = '<select name="farmAddress['+i+'][province]">';
+
+        for(var key in provinces){
+            selectElement += '<option value="' + key + '">' + key + '</option>';
+        }
+
+        selectElement += '</select>';
+
+        return selectElement;
+    };
+
     $('#create-profile #farm-tab').addClass('disabled');
 
     // Next and previous buttons
@@ -64,7 +78,7 @@ $(document).ready(function(){
                 '<div class="row">'+
                 //  Farm Address: Name
                     '<div class="input-field col s10 push-s1">'+
-                        '<input name="farmAddress['+i+'][name]" type="text">'+
+                        '<input name="farmAddress['+i+'][name]" id="farmAddress['+i+'][name]" type="text">'+
                         '<label for="farmAddress['+i+'][name]">Name</label>'+
                     '</div>'+
                 '</div>'+
@@ -72,7 +86,7 @@ $(document).ready(function(){
                 '<div class="row">'+
                 // Farm Address: Street Address
                     '<div class="input-field col s10 push-s1">'+
-                        '<input name="farmAddress['+i+'][addressLine1]" type="text">'+
+                        '<input name="farmAddress['+i+'][addressLine1]" id="farmAddress['+i+'][addressLine1]" type="text">'+
                         '<label for="farmAddress['+i+'][addressLine1]">Address Line 1* : Street, Road, Subdivision</label>'+
                     '</div>'+
                 '</div>'+
@@ -80,7 +94,7 @@ $(document).ready(function(){
                 '<div class="row">'+
                 // Farm Address: Address Line 2
                     '<div class="input-field col s10 push-s1">'+
-                        '<input name="farmAddress['+i+'][addressLine2]" type="text">'+
+                        '<input name="farmAddress['+i+'][addressLine2]" id="farmAddress['+i+'][addressLine2]" type="text">'+
                         '<label for="farmAddress['+i+'][addressLine2]">Address Line 2* : Barangay, Town, City</label>'+
                     '</div>'+
                 '</div>'+
@@ -88,13 +102,13 @@ $(document).ready(function(){
                 '<div class="row">'+
                     // Farm Address: Province
                     '<div class="input-field col s5 push-s1">'+
-                        '<input name="farmAddress['+i+'][province]" type="text">'+
-                        '<label for="farmAddress['+i+'][province]">Province*</label>'+
+                        select_province(i) +
+                        '<label>Province*</label>'+
                     '</div>'+
 
                     // Farm Address: Zip Code
                     '<div class="input-field col s5 push-s1">'+
-                        '<input name="farmAddress['+i+'][zipCode]" type="text">'+
+                        '<input name="farmAddress['+i+'][zipCode]" id="farmAddress['+i+'][zipCode]" type="text">'+
                         '<label for="farmAddress['+i+'][zipCode]">Postal/ZIP Code*</label>'+
                     '</div>'+
                 '</div>'+
@@ -103,7 +117,7 @@ $(document).ready(function(){
                 '<div class="row">'+
                     // Farm Type
                     '<div class="input-field col s5 push-s1">'+
-                        '<input name="farmAddress['+i+'][farmType]" type="text">'+
+                        '<input name="farmAddress['+i+'][farmType]" id="farmAddress['+i+'][farmType]" type="text">'+
                         '<label for="farmAddress['+i+'][farmType]">Farm Type*</label>'+
                     '</div>'+
                 '</div>'+
@@ -112,13 +126,13 @@ $(document).ready(function(){
                 '<div class="row">'+
                     // Farm Landline
                     '<div class="input-field col s5 push-s1">'+
-                        '<input name="farmAddress['+i+'][landline]" type="text">'+
+                        '<input name="farmAddress['+i+'][landline]" id="farmAddress['+i+'][landline]" type="text">'+
                         '<label for="farmAddress['+i+'][landline]">Landline</label>'+
                     '</div>'+
 
                     // Farm Mobile
                     '<div class="input-field col s5 push-s1">'+
-                        '<input name="farmAddress['+i+'][mobile]" type="text">'+
+                        '<input name="farmAddress['+i+'][mobile]" id="farmAddress['+i+'][mobile]" type="text">'+
                         '<label for="farmAddress['+i+'][mobile]">Mobile*</label>'+
                     '</div>'+
                 '</div>'+
@@ -134,6 +148,7 @@ $(document).ready(function(){
         '</div>'+
         '</div>').appendTo('#farm-address-body').fadeIn('slow');
 
+        $('#farm-address-body select').material_select();
         // Redirect to specified section
         location.href = '#farm-'+i;
         $("#remove-farm").tooltip({delay:50});

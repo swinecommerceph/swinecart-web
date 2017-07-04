@@ -295,7 +295,7 @@
                 <div id="card-container" class="row">
 
                     {{-- Card --}}
-                    <div class="col m4" v-for="(product, index) in products">
+                    <div class="col m4" v-for="(product, index) in sortedProducts">
                         <div class="card sticky-action" :class="(product.request_status) ? 'teal' : ''">
                             {{-- Product Image --}}
                             <div class="card-image">
@@ -305,7 +305,7 @@
                                 <a class="btn-floating btn-large halfway-fab waves-effect waves-light red tooltipped"
                                     data-position="top"
                                     data-delay="50"
-                                    data-tooltip="Message Breeder"
+                                    data-tooltip="Send meesage to Breeder"
                                     :href="'/customer/messages/' + product.user_id"
                                     v-if="product.status === 'reserved' | product.status === 'on_delivery' | product.status === 'paid'"
                                 >
@@ -317,7 +317,7 @@
                                     data-delay="50"
                                     data-tooltip="Rate Breeder"
                                     v-if="product.status === 'sold'"
-                                    @click.prevent="showRateModal(index)"
+                                    @click.prevent="showRateModal(product.item_id)"
                                 >
                                     <i class="material-icons">grade</i>
                                 </a>
@@ -329,7 +329,7 @@
                                     <a href="#"
                                         class="anchor-title"
                                         :class="(product.request_status) ? 'white-text' : 'grey-text'"
-                                        @click.prevent="viewProductModalFromCart(index)"
+                                        @click.prevent="viewProductModalFromCart(product.item_id)"
                                     >
                                         @{{ product.product_name }}
                                     </a>
@@ -352,7 +352,7 @@
                                                 <a href="#"
                                                     class="btn col s12"
                                                     style="padding:0;"
-                                                    @click.prevent="subtractQuantity(index)"
+                                                    @click.prevent="subtractQuantity(product.item_id)"
                                                 >
                                                     <i class="material-icons">remove</i>
                                                 </a>
@@ -364,7 +364,7 @@
                                                 <a href="#"
                                                     class="btn col s12"
                                                     style="padding:0;"
-                                                    @click.prevent="addQuantity(index)"
+                                                    @click.prevent="addQuantity(product.item_id)"
                                                 >
                                                     <i class="material-icons">add</i>
                                                 </a>
@@ -382,17 +382,17 @@
                                     >
                                         <a href="#"
                                             class="anchor-title white-text"
-                                            @click.prevent="viewRequestDetails(index)"
+                                            @click.prevent="viewRequestDetails(product.item_id)"
                                         >
                                             REQUEST DETAILS
                                         </a>
                                     </span>
 
-                                    {{-- Show Expiration timer if product is already reserved --}}
-                                    <span class="col s6"
-                                        v-if="product.expiration_date"
+                                    {{-- Show expected date to be delivered if product is already On Delivery --}}
+                                    <span class="col s12"
+                                        v-if="product.status === 'on_delivery'"
                                     >
-                                        <countdown-timer :expiration="product.expiration_date"> </countdown-timer>
+                                        <b>Expected to arrive on @{{ product.delivery_date }}</b>
                                     </span>
 
                                 </p>
@@ -406,13 +406,13 @@
                                     <template v-if="!product.request_status">
                                         <a class="btn teal"
                                             href="#!"
-                                            @click.prevent="confirmRequest(index)"
+                                            @click.prevent="confirmRequest(product.item_id)"
                                         >
                                             Request
                                         </a>
                                         <a class="btn grey"
                                             href="#!"
-                                            @click.prevent="confirmRemoval(index)"
+                                            @click.prevent="confirmRemoval(product.item_id)"
                                         >
                                             Remove
                                         </a>
@@ -421,25 +421,15 @@
                                     {{-- Requested --}}
                                     <template v-if="product.request_status && product.status === 'requested'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Reserved">save</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not On Delivery">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Paid">payment</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Reserved">save</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
                                     </template>
 
                                     {{-- Reserved --}}
                                     <template v-if="product.status === 'reserved'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not On Delivery">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not Paid">payment</i>
-                                    </template>
-
-                                    {{-- Paid --}}
-                                    <template v-if="product.status === 'paid'">
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Awaiting Delivery">local_shipping</i>
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.paid | transformToDetailedDate('Paid')">payment</i>
+                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
                                     </template>
 
                                     {{-- On Delivery --}}
@@ -447,12 +437,11 @@
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.on_delivery | transformToDetailedDate('On Delivery')">local_shipping</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Awaiting Payment">payment</i>
                                     </template>
 
                                     {{-- Sold --}}
                                     <template v-if="product.status === 'sold'">
-                                        <i class="medium material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.sold | transformToDetailedDate('Sold')">attach_money</i>
+                                        <i class="medium material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.sold | transformToDetailedDate('Sold')">local_offer</i>
                                     </template>
 
                                 </span>
@@ -477,12 +466,12 @@
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
                     <a class="modal-action waves-effect waves-green btn-flat remove-product-button"
                         @click.prevent="removeProduct"
                     >
                         Yes
                     </a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
                 </div>
             </div>
 
@@ -492,8 +481,11 @@
                     <h4>Request Product Confirmation</h4>
                     <p>
                         Are you sure you want to request @{{ productRequest.name }}?
-                        <blockquote class="info" v-show="productRequest.type === 'semen'">
-                            Once requested, request quantity can never be changed.
+                        <blockquote class="info" v-if="productRequest.type === 'semen'">
+                            Once requested, request quantity can never be changed. Also, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
+                        </blockquote>
+                        <blockquote class="info" v-else>
+                            Once requested, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
                         </blockquote>
                     </p>
                     <div class="row">
@@ -511,12 +503,12 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
-                    <a class="modal-action waves-effect waves-green btn-flat request-product-button"
-                        @click.prevent="requestProduct"
+                    <a class="modal-action waves-effect waves-green btn-flat request-product-buttons"
+                        @click.prevent="requestProduct($event)"
                     >
                         Yes
                     </a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons">Close</a>
                 </div>
             </div>
 
@@ -590,10 +582,10 @@
                 </div>
               </div>
               <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn-flat"
-                        @click.prevent="rateAndRecord"
+                    <a class="modal-action waves-effect waves-green btn-flat rate-breeder-buttons"
+                        @click.prevent="rateAndRecord($event)"
                     >
-                        Submit
+                        Rate
                     </a>
               </div>
             </div>
@@ -705,18 +697,6 @@
             >
                 <i class="material-icons" :class="star.class">@{{ star.icon }}</i>
             </a>
-        </div>
-    </template>
-
-    <template id="countdown-timer-template">
-        <div class="white-text right">
-            <span v-if="!expired">
-                Expires after: <br>
-                @{{ daysLeft }}d @{{ hoursLeft }}h @{{ minutesLeft }}m @{{ secondsLeft }}s
-            </span>
-            <span v-if="expired">
-                RESERVATION EXPIRED
-            </span>
         </div>
     </template>
 

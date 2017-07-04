@@ -21,6 +21,10 @@
     <a href="#!" class="breadcrumb">Complete Profile</a>
 @endsection
 
+@section('homeContent')
+
+@endsection
+
 @section('content')
     <div class="row">
         <div class="col s12 m10 offset-m1">
@@ -37,6 +41,18 @@
 
 @endsection
 
+@section('initScript')
+    <script type="text/javascript">
+        // Initialization for select tags
+        $('select').material_select();
+    </script>
+@endsection
+
 @section('customScript')
+    <script type="text/javascript">
+        var provinces = {!! $provinces !!};
+    </script>
     <script src="/js/customer/createProfile_script.js"> </script>
+    <script src="/js/validation/formValidationMethods.js"> </script>
+    <script src="/js/validation/customer/createProfile_validation.js"> </script>
 @endsection

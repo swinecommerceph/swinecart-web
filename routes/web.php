@@ -15,14 +15,19 @@ Route::get('/',['as' => 'index_path', function () {
     return view('home');
 }])->middleware('guest');
 
-// Test for styling the email verification. It's so hard!
+// Sample Email template
 // Route::get('/sample', function(){
+//     $verCode = 'kasjSTG43';
+//     $email = 'customer_01@test.com';
 //     $data = [
-//         'email' => 'jonb@gmail.com',
-//         'verCode' => 'kasjSTG43',
-//         'type' => 'sent',
+//         'level' => 'success',
+//         'introLines' => ['Registration is almost complete.', "Click the 'Verify Code' button to verify your email."],
+//         'outroLines' => ['If you did not plan to register on this site, no further action is required.'],
+//         'actionText' => 'Verify Code',
+//         'actionUrl' => route('verCode.send', ['email' => $email, 'verCode' => $verCode])
 //     ];
-//     return view('emails.verification', $data);
+//
+//     return view('vendor.notifications.email', $data);
 // });
 
 Route::group(['middleware' => ['web']], function () {
@@ -85,6 +90,7 @@ Route::group(['middleware' => ['web']], function () {
 
         // dashboard-related
         Route::get('dashboard',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
+        Route::get('dashboard/customer-info',['as' => 'dashboard.customerInfo', 'uses' => 'DashboardController@getCustomerInfo']);
         Route::get('dashboard/product-status',['as' => 'dashboard.productStatus', 'uses' => 'DashboardController@showProductStatus']);
         Route::get('dashboard/product-status/retrieve-product-requests',['as' => 'dashboard.productRequests', 'uses' => 'DashboardController@retrieveProductRequests']);
         Route::get('dashboard/sold-products',['as' => 'dashboard.soldProducts', 'uses' => 'DashboardController@retrieveSoldProducts']);
@@ -102,8 +108,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
         Route::get('messages/{customer}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
 
-        Route::get('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomers']);
-        Route::post('customers', ['as' => 'customers', 'uses'=> 'BreederController@viewCustomersChange']);
+        Route::get('customers', ['as' => 'map.customers', 'uses'=> 'BreederController@viewCustomers']);
+        Route::post('customers', ['as' => 'map.customersChange', 'uses'=> 'BreederController@viewCustomersChange']);
 
         Route::get('test', ['as' => 'test', 'uses'=> 'BreederController@test']);
     });
@@ -148,8 +154,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
         Route::get('messages/{breeder}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
 
-        Route::get('breeders', ['as' => 'breeders', 'uses'=> 'CustomerController@viewBreeders']);
-        Route::post('breeders', ['as' => 'breedersChange', 'uses'=> 'CustomerController@viewBreedersChange']);
+        Route::get('breeders', ['as' => 'map.breeders', 'uses'=> 'CustomerController@viewBreeders']);
+        Route::post('breeders', ['as' => 'map.breedersChange', 'uses'=> 'CustomerController@viewBreedersChange']);
 
         // breeder-related
         Route::get('view-breeder/{breeder}',['as' => 'viewBProfile', 'uses' => 'ProductController@viewBreederProfile']);

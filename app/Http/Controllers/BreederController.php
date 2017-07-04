@@ -49,7 +49,10 @@ class BreederController extends Controller
 	 */
     public function index(Request $request)
     {
-        if($request->user()->updateProfileNeeded()) return view('user.breeder.createProfile');
+        if($request->user()->updateProfileNeeded()){
+            $provinces = $this->getProvinces();
+            return view('user.breeder.createProfile', compact('provinces'));
+        }
         if(\App::isDownForMaintenance()) return view('errors.503_home');
         if($request->user()->blocked_at != NULL) return view('errors.user_blocked');
         return view('user.breeder.home');
@@ -79,7 +82,9 @@ class BreederController extends Controller
      */
     public function createProfile()
     {
-        return view('user.breeder.createProfile');
+        $provinces = $this->getProvinces();
+
+        return view('user.breeder.createProfile', compact('provinces'));
     }
 
     /**
@@ -138,7 +143,8 @@ class BreederController extends Controller
         $breeder = $this->user->userable;
         $breeder->logoImage = ($breeder->logo_img_id) ? '/images/breeder/'.Image::find($breeder->logo_img_id)->name : '/images/default_logo.png' ;
         $farmAddresses = $breeder->farmAddresses;
-        return view('user.breeder.editProfile', compact('breeder', 'farmAddresses'));
+        $provinces = $this->getProvinces();
+        return view('user.breeder.editProfile', compact('breeder', 'farmAddresses', 'provinces'));
     }
 
     /**
@@ -213,6 +219,7 @@ class BreederController extends Controller
         $farmAddress->name = $request->input('farmAddress.1.name');
         $farmAddress->addressLine1 = $request->input('farmAddress.1.addressLine1');
         $farmAddress->addressLine2 = $request->input('farmAddress.1.addressLine2');
+        $farmAddress->province = $request->input('farmAddress.1.province');
         $farmAddress->zipCode = $request->input('farmAddress.1.zipCode');
         $farmAddress->farmType = $request->input('farmAddress.1.farmType');
         $farmAddress->landline = $request->input('farmAddress.1.landline');
@@ -438,4 +445,114 @@ class BreederController extends Controller
     {
         return ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') ? true : false;
     }
+
+    /**
+     * Get the sorted provinces all over the Philippines
+     *
+     * @return  Array
+     */
+    private function getProvinces()
+    {
+        return collect([
+            // Negros Island Rregion
+            'Negros Occidental' => 'Negros Occidental',
+            'Negros Oriental' => 'Negros Oriental',
+            // Cordillera Administrative Region
+            'Mountain Province' => 'Mountain Province',
+            'Ifugao' => 'Ifugao',
+            'Benguet' => 'Benguet',
+            'Abra' => 'Abra',
+            'Apayao' => 'Apayao',
+            'Kalinga' => 'Kalinga',
+            // Region I
+            'La Union' => 'La Union',
+            'Ilocos Norte' => 'Ilocos Norte',
+            'Ilocos Sur' => 'Ilocos Sur',
+            'Pangasinan' => 'Pangasinan',
+            // Region II
+            'Nueva Vizcaya' => 'Nueva Vizcaya',
+            'Cagayan' => 'Cagayan',
+            'Isabela' => 'Isabela',
+            'Quirino' => 'Quirino',
+            'Batanes' => 'Batanes',
+            // Region III
+            'Bataan' => 'Bataan',
+            'Zambales' => 'Zambales',
+            'Tarlac' => 'Tarlac',
+            'Pampanga' => 'Pampanga',
+            'Bulacan' => 'Bulacan',
+            'Nueva Ecija' => 'Nueva Ecija',
+            'Aurora' => 'Aurora',
+            // Region IV-A
+            'Rizal' => 'Rizal',
+            'Cavite' => 'Cavite',
+            'Laguna' => 'Laguna',
+            'Batangas' => 'Batangas',
+            'Quezon' => 'Quezon',
+            // Region IV-B
+            'Occidental Mindoro' => 'Occidental Mindoro',
+            'Oriental Mindoro' => 'Oriental Mindoro',
+            'Romblon' => 'Romblon',
+            'Palawan' => 'Palawan',
+            'Marinduque' => 'Marinduque',
+            // Region V
+            'Catanduanes' => 'Catanduanes',
+            'Camarines Norte' => 'Camarines Norte',
+            'Sorsogon' => 'Sorsogon',
+            'Albay' => 'Albay',
+            'Masbate' => 'Masbate',
+            'Camarines Sur' => 'Camarines Sur',
+            // Region VI
+            'Capiz' => 'Capiz',
+            'Aklan' => 'Aklan',
+            'Antique' => 'Antique',
+            'Iloilo' => 'Iloilo',
+            'Guimaras' => 'Guimaras',
+            // Region VII
+            'Cebu' => 'Cebu',
+            'Bohol' => 'Bohol',
+            'Siquijor' => 'Siquijor',
+            // Region VIII
+            'Southern Leyte' => 'Southern Leyte',
+            'Eastern Samar' => 'Eastern Samar',
+            'Northern Samar' => 'Northern Samar',
+            'Western Samar' => 'Western Samar',
+            'Leyte' => 'Leyte',
+            'Biliran' => 'Biliran',
+            // Region IX
+            'Zamboanga Sibugay' => 'Zamboanga Sibugay',
+            'Zamboanga del Norte' => 'Zamboanga del Norte',
+            'Zamboanga del Sur' => 'Zamboanga del Sur',
+            // Region X
+            'Misamis Occidental' => 'Misamis Occidental',
+            'Bukidnon' => 'Bukidnon',
+            'Lanao del Norte' => 'Lanao del Norte',
+            'Misamis Oriental' => 'Misamis Oriental',
+            'Camiguin' => 'Camiguin',
+            // Region XI
+            'Davao Oriental' => 'Davao Oriental',
+            'Compostela Valley' => 'Compostela Valley',
+            'Davao del Sur' => 'Davao del Sur',
+            'Davao Occidental' => 'Davao Occidental',
+            'Davao del Norte' => 'Davao del Norte',
+            // Region XII
+            'South Cotabato' => 'South Cotabato',
+            'Sultan Kudarat' => 'Sultan Kudarat',
+            'North Cotabato' => 'North Cotabato',
+            'Sarangani' => 'Sarangani',
+            // Region XIII
+            'Agusan del Norte' => 'Agusan del Norte',
+            'Agusan del Sur' => 'Agusan del Sur',
+            'Surigao del Sur' => 'Surigao del Sur',
+            'Surigao del Norte' => 'Surigao del Norte',
+            'Dinagat Islands' => 'Dinagat Islands',
+            // ARMM
+            'Tawi-tawi' => 'Tawi-tawi',
+            'Basilan' => 'Basilan',
+            'Sulu' => 'Sulu',
+            'Maguindanao' => 'Maguindanao',
+            'Lanao del Sur' => 'Lanao del Sur'
+        ])->sort();
+    }
+
 }

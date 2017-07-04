@@ -7,6 +7,7 @@ use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 
 use App\Http\Requests;
+use App\Http\Requests\ProductRequest;
 use App\Jobs\ResizeUploadedImage;
 use App\Models\Breeder;
 use App\Models\FarmAddress;
@@ -98,7 +99,7 @@ class ProductController extends Controller
     public function showProducts(Request $request)
     {
         $breeder = $this->user->userable;
-        $products = $breeder->products()->whereIn('status',['hidden','displayed','requested'])->where('quantity','>',0);
+        $products = $breeder->products()->whereIn('status',['hidden','displayed','requested'])->where('quantity','<>',0);
 
         // Check filters
         if($request->type && $request->type != 'all-type') $products = $products->where('type',$request->type);
@@ -176,7 +177,7 @@ class ProductController extends Controller
      * @param  Request $request
      * @return JSON
      */
-    public function storeProduct(Request $request)
+    public function storeProduct(ProductRequest $request)
     {
         $breeder = $this->user->userable;
 
@@ -197,7 +198,7 @@ class ProductController extends Controller
             $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
             $product->price = $request->price;
-            $product->quantity = $request->quantity;
+            $product->quantity = ($request->type == 'semen') ? -1 : 1;
             $product->adg = $request->adg;
             $product->fcr = $request->fcr;
             $product->backfat_thickness = $request->backfat_thickness;
@@ -220,7 +221,7 @@ class ProductController extends Controller
      * @param  Request $request
      * @return String
      */
-    public function updateProduct(Request $request)
+    public function updateProduct(ProductRequest $request)
     {
         if($request->ajax()){
             $product = Product::find($request->id);
@@ -230,7 +231,6 @@ class ProductController extends Controller
             $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
             $product->price = $request->price;
-            $product->quantity = $request->quantity;
             $product->adg = $request->adg;
             $product->fcr = $request->fcr;
             $product->backfat_thickness = $request->backfat_thickness;
@@ -342,10 +342,11 @@ class ProductController extends Controller
                 // Check if file has no problems in uploading
                 if($file->isValid()){
                     $fileExtension = $file->getClientOriginalExtension();
+                    $fileName = $file->getClientOriginalName();
 
                     // Get media (Image/Video) info according to extension
-                    if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed);
-                    else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileExtension, $request->productId, $request->type, $request->breed);
+                    if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileName, $fileExtension, $request->productId, $request->type, $request->breed);
+                    else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileName, $fileExtension, $request->productId, $request->type, $request->breed);
                     else return response()->json('Invalid file extension', 500);
 
                     Storage::disk('public')->put($mediaInfo['directoryPath'].$mediaInfo['filename'], file_get_contents($file));
@@ -609,20 +610,21 @@ class ProductController extends Controller
     /**
      * Get appropriate media (Image/Video) info depending on extension
      *
+     * @param  String           $filename
      * @param  String           $extension
      * @param  Integer          $productId
      * @param  String           $type
      * @param  String           $breed
      * @return AssociativeArray $mediaInfo
      */
-    private function createMediaInfo($extension, $productId, $type, $breed)
+    private function createMediaInfo($filename, $extension, $productId, $type, $breed)
     {
         $mediaInfo = [];
         if(str_contains($breed,'+')){
             $part = explode("+", $breed);
-            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . md5(Carbon::now()) . '.' . $extension;
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
         }
-        else $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . md5(Carbon::now()) . '.' . $extension;
+        else $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
 
         if($this->isImage($extension)){
             $mediaInfo['directoryPath'] = self::PRODUCT_IMG_PATH;

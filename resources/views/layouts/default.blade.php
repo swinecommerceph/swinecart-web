@@ -29,7 +29,7 @@
   	{{-- <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> --}}
 
 	{{-- <script src="/js/vendor/VideoJS/ie8/videojs-ie8.min.js"></script> --}}
-	@yield('pubsubTopic')
+	@yield('globalVariables')
 </head>
 
 <body @yield('pageId')>
@@ -38,18 +38,21 @@
 		<nav class="teal darken-3">
 		    <div class="nav-wrapper container">
 		      	@if (Auth::guest())
-					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0;"/>
-					&nbsp&nbsp<a class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
+					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;"/>
+					<a class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
 			  	@else
-					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0;"/>
-					&nbsp&nbsp<a class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
+					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;" />
+					<a class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
 			  	@endif
 
 		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 		        @if(Auth::guest())
 					<li><a href="{{ route('home_path') }}"> Products </a></li>
 					<li><a href="{{ route('home_path') }}"> ASBAP </a></li>
-					@if(!Request::is('/'))
+					@if(Request::is('/'))
+						<li><a href="{{ route('login') }}"> Login </a></li>
+						<li><a href="{{ route('register') }}"> Register </a></li>
+					@else
 						@if(!Request::is('login'))
 							<li><a href="{{ route('login') }}" class="waves-effect waves-light btn">Login</a></li>
 						@elseif(!Request::is('register'))
@@ -113,7 +116,7 @@
 	{{-- For static elements such as add product and back to top --}}
 	@yield('static')
 
-	{{-- Home view for unauthenticated users --}}
+	{{-- View for site's home layout users --}}
 	@yield('homeContent')
 
 	{{-- Common view for authenticated users --}}
@@ -123,7 +126,6 @@
 		</div>
 	@endif
 
-	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script> --}}
 	{{-- <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> --}}
 	{{-- Compiled and minified JavaScript --}}
 	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script> --}}
@@ -131,8 +133,8 @@
 
 	<script src="/js/vendor/jquery.min.js"></script>
 	<script src="/js/vendor/materialize.min.js"></script>
-	<script src="/js/vendor/dropzone.js"></script>
-	<script src="/js/vendor/VideoJS/video.min.js"></script>
+	<script src="/js/vendor/VueJS/vue.js"></script>
+    <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
 	<script src="/js/config.js"></script>
 	<script src="/js/custom.js"></script>
 	{{-- For user-specific initialization scripts --}}

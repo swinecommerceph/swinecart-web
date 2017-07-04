@@ -86,39 +86,20 @@
                 </h5>
             </div>
 
-            {{-- Paid Products --}}
+            {{-- Requested Products --}}
             <div class="col s12 m4">
                 <div class="card">
                     <div class="card-content teal white-text">
                         <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'paid'])}}" class="white-text">Paid</a>
+                            <a href="{{route('dashboard.productStatus',['status' => 'requested'])}}" class="white-text">Requested</a>
                         </span>
-                        <h3>{{ $dashboardStats['paid']['overall'] }}</h3>
+                        <h3>@{{ overallRequested }}</h3>
                     </div>
                     <div class="card-action teal">
-                        <a class="white-text">Boar: {{ $dashboardStats['paid']['boar'] }} </a>
-                        <a class="white-text">Sow: {{ $dashboardStats['paid']['sow'] }} </a>
-                        <a class="white-text">Gilt: {{ $dashboardStats['paid']['gilt'] }} </a>
-                        <a class="white-text">Semen: {{ $dashboardStats['paid']['semen'] }} </a>
-                    </div>
-                </div>
-            </div>
-
-
-            {{-- On Delivery Products --}}
-            <div class="col s12 m4">
-                <div class="card">
-                    <div class="card-content grey white-text">
-                        <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'on_delivery'])}}" class="white-text">On Delivery</a>
-                        </span>
-                        <h3>{{ $dashboardStats['on_delivery']['overall'] }}</h3>
-                    </div>
-                    <div class="card-action grey">
-                        <a class="white-text">Boar: {{ $dashboardStats['on_delivery']['boar'] }} </a>
-                        <a class="white-text">Sow: {{ $dashboardStats['on_delivery']['sow'] }} </a>
-                        <a class="white-text">Gilt: {{ $dashboardStats['on_delivery']['gilt'] }} </a>
-                        <a class="white-text">Semen: {{ $dashboardStats['on_delivery']['semen'] }} </a>
+                        <a class="white-text">Boar: @{{ dashboardStats.requested.boar }} </a>
+                        <a class="white-text">Sow: @{{ dashboardStats.requested.sow }} </a>
+                        <a class="white-text">Gilt: @{{ dashboardStats.requested.gilt }} </a>
+                        <a class="white-text">Semen: @{{ dashboardStats.requested.semen }} </a>
                     </div>
                 </div>
             </div>
@@ -126,20 +107,39 @@
             {{-- Reserved Products --}}
             <div class="col s12 m4">
                 <div class="card">
-                    <div class="card-content pink white-text">
+                    <div class="card-content grey white-text">
                         <span class="card-title">
                             <a href="{{route('dashboard.productStatus',['status' => 'reserved'])}}" class="white-text">Reserved</a>
                         </span>
-                        <h3>{{ $dashboardStats['reserved']['overall'] }}</h3>
+                        <h3>@{{ overallReserved }}</h3>
                     </div>
-                    <div class="card-action pink">
-                        <a class="white-text">Boar: {{ $dashboardStats['reserved']['boar'] }} </a>
-                        <a class="white-text">Sow: {{ $dashboardStats['reserved']['sow'] }} </a>
-                        <a class="white-text">Gilt: {{ $dashboardStats['reserved']['gilt'] }} </a>
-                        <a class="white-text">Semen: {{ $dashboardStats['reserved']['semen'] }} </a>
+                    <div class="card-action grey">
+                        <a class="white-text">Boar: @{{ dashboardStats.reserved.boar }} </a>
+                        <a class="white-text">Sow: @{{ dashboardStats.reserved.sow }} </a>
+                        <a class="white-text">Gilt: @{{ dashboardStats.reserved.gilt }} </a>
+                        <a class="white-text">Semen: @{{ dashboardStats.reserved.semen }} </a>
                     </div>
                 </div>
             </div>
+
+            {{-- On Delivery Products --}}
+            <div class="col s12 m4">
+                <div class="card">
+                    <div class="card-content pink white-text">
+                        <span class="card-title">
+                            <a href="{{route('dashboard.productStatus',['status' => 'on_delivery'])}}" class="white-text">On Delivery</a>
+                        </span>
+                        <h3>@{{ overallOnDelivery }}</h3>
+                    </div>
+                    <div class="card-action pink">
+                        <a class="white-text">Boar: @{{ dashboardStats.on_delivery.boar }} </a>
+                        <a class="white-text">Sow: @{{ dashboardStats.on_delivery.sow }} </a>
+                        <a class="white-text">Gilt: @{{ dashboardStats.on_delivery.gilt }} </a>
+                        <a class="white-text">Semen: @{{ dashboardStats.on_delivery.semen }} </a>
+                    </div>
+                </div>
+            </div>
+
 
             {{-- Hidden Products --}}
             <div class="col s12 m4">
@@ -148,13 +148,13 @@
                         <span class="card-title">
                             <a href="{{route('products',['type' => 'all-type', 'status' => 'hidden', 'sort' => 'none'])}}" class="black-text">Hidden</a>
                         </span>
-                        <h3>{{ $dashboardStats['hidden']['overall'] }}</h3>
+                        <h3>@{{ overallHidden }}</h3>
                     </div>
                     <div class="card-action pink">
-                        <a class="white-text">Boar: {{ $dashboardStats['hidden']['boar'] }} </a>
-                        <a class="white-text">Sow: {{ $dashboardStats['hidden']['sow'] }} </a>
-                        <a class="white-text">Gilt: {{ $dashboardStats['hidden']['gilt'] }} </a>
-                        <a class="white-text">Semen: {{ $dashboardStats['hidden']['semen'] }} </a>
+                        <a class="white-text">Boar: @{{ dashboardStats.hidden.boar }} </a>
+                        <a class="white-text">Sow: @{{ dashboardStats.hidden.sow }} </a>
+                        <a class="white-text">Gilt: @{{ dashboardStats.hidden.gilt }} </a>
+                        <a class="white-text">Semen: @{{ dashboardStats.hidden.semen }} </a>
                     </div>
                 </div>
             </div>
@@ -166,54 +166,55 @@
                         <span class="card-title">
                             <a href="{{route('products',['type' => 'all-type', 'status' => 'displayed', 'sort' => 'none'])}}" class="black-text">Displayed</a>
                         </span>
-                        <h3>{{ $dashboardStats['displayed']['overall'] }}</h3>
+                        <h3>@{{ overallDisplayed }}</h3>
                     </div>
                     <div class="card-action teal">
-                        <a class="white-text">Boar: {{ $dashboardStats['displayed']['boar'] }} </a>
-                        <a class="white-text">Sow: {{ $dashboardStats['displayed']['sow'] }} </a>
-                        <a class="white-text">Gilt: {{ $dashboardStats['displayed']['gilt'] }} </a>
-                        <a class="white-text">Semen: {{ $dashboardStats['displayed']['semen'] }} </a>
+                        <a class="white-text">Boar: @{{ dashboardStats.displayed.boar + dashboardStats.requested.boar }} </a>
+                        <a class="white-text">Sow: @{{ dashboardStats.displayed.sow + dashboardStats.requested.sow }} </a>
+                        <a class="white-text">Gilt: @{{ dashboardStats.displayed.gilt + dashboardStats.requested.gilt }} </a>
+                        <a class="white-text">Semen: @{{ dashboardStats.displayed.semen + dashboardStats.requested.semen }} </a>
                     </div>
                 </div>
             </div>
 
-            {{-- Requested Products --}}
+            {{-- Total Products Available --}}
             <div class="col s12 m4">
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'requested'])}}" class="black-text">Requested</a>
+                            <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}" class="black-text">Total Products Available</a>
                         </span>
-                        <h3>{{ $dashboardStats['requested']['overall'] }}</h3>
+                        <h3>@{{ overallProductsAvailable }}</h3>
                     </div>
                     <div class="card-action grey">
-                        <a class="white-text">Boar: {{ $dashboardStats['requested']['boar'] }} </a>
-                        <a class="white-text">Sow: {{ $dashboardStats['requested']['sow'] }} </a>
-                        <a class="white-text">Gilt: {{ $dashboardStats['requested']['gilt'] }} </a>
-                        <a class="white-text">Semen: {{ $dashboardStats['requested']['semen'] }} </a>
+                        <a class="white-text">Boar: @{{ dashboardStats.requested.boar + dashboardStats.displayed.boar + dashboardStats.hidden.boar }} </a>
+                        <a class="white-text">Sow: @{{ dashboardStats.requested.sow + dashboardStats.displayed.sow + dashboardStats.hidden.sow }} </a>
+                        <a class="white-text">Gilt: @{{ dashboardStats.requested.gilt + dashboardStats.displayed.gilt + dashboardStats.hidden.gilt }} </a>
+                        <a class="white-text">Semen: @{{ dashboardStats.requested.semen + dashboardStats.displayed.semen + dashboardStats.hidden.semen }} </a>
                     </div>
                 </div>
             </div>
         </div>
 
-        {{-- Rating --}}
+        {{-- Overall Average Rating --}}
         <div class="col s12 m6">
             <div class="card">
                 <div class="card-content grey white-text">
                     <span class="card-title">
-                        <a href="{{route('dashboard.reviews')}}" class="white-text">Rating</a>
+                        <a href="{{route('dashboard.reviews')}}" class="white-text">Overall Average Rating</a>
                     </span>
-                    <h3>{{ $dashboardStats['ratings']['overall'] }}/5</h3>
+                    <h3>@{{ overallRatings }}/5</h3>
+                    <span>No. of reviews: @{{ dashboardStats.ratings.reviewsSize }}</span>
                 </div>
                 <div class="card-action grey">
-                    <a class="white-text">Delivery: {{ $dashboardStats['ratings']['delivery'] }} </a>
-                    <a class="white-text">Transaction: {{ $dashboardStats['ratings']['transaction'] }} </a>
-                    <a class="white-text">Product Quality: {{ $dashboardStats['ratings']['productQuality'] }} </a>
+                    <a class="white-text">Delivery: @{{ dashboardStats.ratings.delivery }} </a>
+                    <a class="white-text">Transaction: @{{ dashboardStats.ratings.transaction }} </a>
+                    <a class="white-text">Product Quality: @{{ dashboardStats.ratings.productQuality }} </a>
                 </div>
             </div>
         </div>
 
-        {{-- Review --}}
+        {{-- Reviews --}}
         <div class="col s12 m6">
             <div class="card">
                 <div class="card-content teal white-text">
@@ -222,15 +223,13 @@
                     </span>
                     <div id="review-slider" class="slider">
                         <ul class="slides teal">
-                            @foreach($dashboardStats['ratings']['reviews'] as $review)
-                                <li>
-                                    <img src="">
-                                    <div class="caption center-align">
-                                        <h5 style="margin:0;">"{{ $review['comment'] }}"</h5>
-                                        <h6 class="light grey-text text-lighten-3">- {{ $review['customerName'] }}</h6>
-                                    </div>
-                                </li>
-                            @endforeach
+                            <li v-for="review in dashboardStats.ratings.reviews">
+                                <img src="">
+                                <div class="caption center-align">
+                                    <h5 style="margin:0;">"@{{ review.comment }}"</h5>
+                                    <h6 class="light grey-text text-lighten-3">- @{{ review.customerName }}</h6>
+                                </div>
+                            </li>
                         </ul>
                     </div>
                 </div>
@@ -239,49 +238,22 @@
 
     </div>
 
-    {{-- <div class="row"> --}}
+    <div class="row">
         {{-- Location --}}
-        {{-- <div class="col s12">
+        <div class="col s12">
             <div class="card">
                 <div class="card-content teal darken-4 white-text">
-                    <span class="card-title">Sales by Region</span>
-                    <p>I am a very simple card. I am good at containing small bits of information.
-                    I am convenient because I require little markup to use effectively.</p>
+                    <span class="card-title">
+                        <a href="{{route('map.customers')}}" class="white-text">Customer Mapping</a>
+                    </span>
                 </div>
             </div>
         </div>
-    </div> --}}
+    </div>
 @endsection
 
 @section('customScript')
     <script src="/js/vendor/autobahn.min.js"></script>
-    <script type="text/javascript">
-
-        var onConnectCallback = function(session){
-            console.log('Session is open!');
-            session.subscribe('{{ $topic }}', function(topic, data) {
-                // This is where you would add the new article to the DOM (beyond the scope of this tutorial)
-                console.log('New task name added "' + topic + '"');
-                console.log(data);
-            });
-        };
-
-        var onHangupCallback = function(code, reason, detail){
-            console.warn('WebSocket connection closed');
-            console.warn(code+': '+reason);
-        };
-
-        var conn = new ab.connect(
-            config.pubsubWSServer,
-            onConnectCallback,
-            onHangupCallback,
-            {
-                'maxRetries': 30,
-                'retryDelay': 2000,
-                'skipSubprotocolCheck': true
-            }
-        );
-    </script>
     <script src="/js/vendor/chart.min.js"></script>
     <script type="text/javascript">
         var rawLatestAccreditation = "{{ $latestAccreditation }}";
@@ -308,6 +280,7 @@
             }]
 
         };
+        var rawDashboardStats = {!! json_encode($dashboardStats) !!};
     </script>
     <script src="/js/breeder/dashboard.js"></script>
 @endsection

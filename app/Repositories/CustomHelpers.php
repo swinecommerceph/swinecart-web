@@ -2,6 +2,9 @@
 
 namespace App\Repositories;
 
+use App\Models\SwineCartItem;
+use App\Models\TransactionLog;
+
 trait CustomHelpers
 {
     /**
@@ -75,28 +78,22 @@ trait CustomHelpers
     }
 
     /**
-     * Send details to ZMQ server to prompt sending of
-     * data from the Publish-Subscribe server
-     * to its subscribers
+     * Add the passed transactionDetails data to the user's Transaction Log
      *
-     * @param   String  $type
-     * @param   String  $topic
-     * @param   Array   $data
+     * @param   Array   $transactionDetails
      * @return  void
      */
-    public function sendToPubSubServer($type, $email, $data = [])
+    public function addToTransactionLog($transactionDetails)
     {
-        $zmqHost = env('ZMQ_HOST', 'localhost');
-        $zmqPort = env('ZMQ_PORT', '5555');
-        $data = $data;
-        $data['type'] = $type;
-        $data['topic'] = crypt($email,md5($email));
+        $swineCartItem = SwineCartItem::findOrFail($transactionDetails['swineCart_id']);
 
-        // This is our new stuff
-        $context = new \ZMQContext();
-        $socket = $context->getSocket(\ZMQ::SOCKET_PUSH, 'Product Status Pusher');
-        $socket->connect("tcp://" . $zmqHost . ":" . $zmqPort);
+        $transactionLog = new TransactionLog;
+        $transactionLog->customer_id = $transactionDetails['customer_id'];
+        $transactionLog->breeder_id = $transactionDetails['breeder_id'];
+        $transactionLog->product_id = $transactionDetails['product_id'];
+        $transactionLog->status = $transactionDetails['status'];
+        $transactionLog->created_at = $transactionDetails['created_at'];
 
-        $socket->send(json_encode($data));
+        $swineCartItem->transactionLogs()->save($transactionLog);
     }
 }

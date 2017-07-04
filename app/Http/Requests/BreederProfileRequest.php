@@ -27,17 +27,17 @@ class BreederProfileRequest extends Request
             'officeAddress_addressLine1' => 'required',
             'officeAddress_addressLine2' => 'required',
             'officeAddress_province' => 'required',
-            'officeAddress_zipCode' => 'required',
-            'office_mobile' => 'required',
+            'officeAddress_zipCode' => 'required|digits:4',
+            'office_mobile' => 'required|digits:11|regex:/^09/',
             'contactPerson_name' => 'required',
-            'contactPerson_mobile' => 'required',
+            'contactPerson_mobile' => 'required|digits:11|regex:/^09/',
             'farmAddress.*.name' => 'required',
             'farmAddress.*.addressLine1' => 'required',
             'farmAddress.*.addressLine2' => 'required',
             'farmAddress.*.province' => 'required',
-            'farmAddress.*.zipCode' => 'required',
+            'farmAddress.*.zipCode' => 'required|digits:4',
             'farmAddress.*.farmType' => 'required',
-            'farmAddress.*.mobile' => 'required',
+            'farmAddress.*.mobile' => 'required|digits:11|regex:/^09/',
         ];
     }
 }
