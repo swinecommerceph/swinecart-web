@@ -33,11 +33,14 @@ class SwineCartBreederCredentials extends Mailable
      */
     public function build()
     {
+        $introlines = ['Use these credentials to login to SwineCart', 'Email: '.$this->email, 'Password: '.$this->password.''];
+        $outrolines = [];
         return $this->view('emails.credentials')
                     ->subject('SwineCart Breeder Account Credentials')
                     ->with([
-                        'email'=>$this->email,
-                        'password'=>$this->password,
+                        'level' => 'success',
+         				'introLines' => $introlines,
+         				'outroLines' => $outrolines ,
                         'type' => $this->type
                     ]);
     }

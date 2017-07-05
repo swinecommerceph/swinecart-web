@@ -31,6 +31,10 @@ class SwineCartErrorMail extends Mailable
         return $this->view('emails.mailError')
                     ->subject('SwineCart Error Mail')
                     ->with([
+                        'level' => 'success',
+                        'introLines' => ['Transaction was cancelled due to problems in the availability of the product or the other party that you are trying to transact to.',
+                        'We are sorry for the inconvenience. Thank you for your understanding and continued support to our services.'],
+                        'outroLines' => [],
                         'type'=> $this->type,
                     ]);
     }

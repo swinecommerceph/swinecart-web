@@ -35,6 +35,7 @@ use App\Mail\SwineCartAccountNotification;
 use App\Mail\SwineCartBreederCredentials;
 use App\Mail\SwineCartSpectatorCredentials;
 use App\Mail\SwineCartAnnouncement;
+use App\Mail\SwineCartNotifyPendingBreederAccounts;
 
 use DB;
 use Auth;
@@ -136,7 +137,7 @@ class AdminController extends Controller
                         ->join('role_user', 'users.id', '=' , 'role_user.user_id')
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',2)
-                        ->where('users.approved_at','=', NULL)
+                        ->where('users.update_profile','=', 1)
                         ->where('users.deleted_at','=', NULL)
                         ->count();
         return $count;
@@ -347,7 +348,7 @@ class AdminController extends Controller
     public function displayPendingUsers(){
         $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
                     ->where('role_id','=',2)
-                    ->whereNull('approved_at')
+                    ->where('update_profile','=',1)
                     ->whereNull('deleted_at')
                     ->paginate(10);
         return view('user.admin._pendingUsers',compact('users'));
@@ -464,7 +465,7 @@ class AdminController extends Controller
                       ->where('users.name','LIKE', "%$request->search%")
                     //   ->where('users.email_verified','=', 0)
                       ->where('users.deleted_at','=', NULL )
-                      ->whereNull('approved_at')
+                      ->where('update_profile','=',1)
                       ->paginate(10);
 
         return view('user.admin._pendingUsers',compact('users'));
@@ -2279,19 +2280,6 @@ class AdminController extends Controller
         return view('user.admin.viewMaps', compact('breeders', 'customers'));
     }
 
-    public function viewUsersChange(Request $request){
-        if($request->ajax()){
-
-
-            $breeders = ($request->breeders == 'true')? Breeder::all(): [];
-            $customers = ($request->customers == 'true')? Customer::all(): [];
-
-
-            return array('breeders'=>$breeders, 'customers'=>$customers);
-        }
-
-    }
-
     /*
      * View broadcast announcement page
      *
@@ -2370,7 +2358,7 @@ class AdminController extends Controller
 
 
     public function messenger(){
-        $users = User::whereIn('userable_type', array('App\Models\Customer', 'App\Models\Breeder'))->orderBy('name')->get();
+        $users = User::all();
         return view('user.admin.messenger', compact('users'));
     }
 
@@ -2404,16 +2392,6 @@ class AdminController extends Controller
                $message->to($rcpt['email'])->subject('Announcement from Swine E-Commerce PH');
             });
         }
-    }
-
-    public function recipients(Request $request){
-        $searchTerm = $request->term;
-        $rcpts = User::whereIn('userable_type', array('App\Models\Customer', 'App\Models\Breeder'))->where('name', 'LIKE', '%'.$searchTerm.'%')->limit(7)->get();
-        $arr = [];
-        foreach ($rcpts as $rcpt) {
-            $arr[] = $rcpt['name'];
-        }
-        echo json_encode($arr);
     }
 
     public function str_replace_first($from, $to, $subject){
@@ -2464,5 +2442,29 @@ class AdminController extends Controller
             return Redirect::back()->with('message','Application in Maintenence Mode');
         }
 
+    }
+
+    /*
+     * Notify pending breeders accounts with profiles not updated within 30 days
+     *
+     * @param none
+     * @return redirect
+     *
+     */
+    public function notifyPendingBreeders(){
+         $pending = DB::table('users')
+                     ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                     ->join('roles', 'role_user.role_id','=','roles.id')
+                     ->where('role_user.role_id','=',2)
+                     ->where('users.update_profile','=', 1)
+                     ->where('users.deleted_at','=', NULL)
+                     ->get();
+        foreach ($pending as $user) {
+            if(30 - ((new \Carbon\Carbon($user->created_at, 'UTC'))->diffInDays()) < 0){
+                Mail::to($user->email)
+                    ->queue(new SwineCartNotifyPendingBreederAccounts());
+            }
+        }
+        return Redirect::back()->with('message','Action complete');
     }
 }
