@@ -35,12 +35,29 @@ class SwineCartBreederAccreditationExpiration extends Mailable
      */
     public function build()
     {
-        
+        $introlines = [];
+        $outrolines = [];
+        if($this->type == 0){
+            $title = "Breeder Accreditation Expiration";
+            $introlines = ["Dear ".$this->$username.",", "Your account ". $this->email ." accreditation will expire on ". $expiration];
+            $outrolines = ["Please consider renewing your accreditation as soon as possible"];
+        }else if($this->type == 1){
+            $title = "Breeder Accreditation Expiration";
+            $introlines = ["Dear ".$this->$username.",", "Your account ". $this->email ." accreditation will expire on ". $expiration];
+            $outrolines = ["Please consider renewing your accreditation as soon as possible"];
+        }else if($this->type == 2){
+            $title = "Breeder Accreditation Expiration";
+            $introlines = ["Your account ".$this->email." has been temporarily blocked due to expired breeder accreditation."];
+            $outrolines = ["Please consider renewing your accreditation to continue using our services. Thank you"];
+        }
         return $this->view('emails.breederAccountExpiration')
                     ->subject('SwineCart Account Notification')
                     ->with([
                         'level' => 'success',
                         'type'=>$this->type,
+                        'title'=>$title,
+                        'introLines' => $introlines,
+         				'outroLines' => $outrolines ,
                         'username'=>$this->username,
                         'email' => $this->email,
                         'expiration' => $this->expiration
