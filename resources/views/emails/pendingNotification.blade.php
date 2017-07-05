@@ -92,13 +92,7 @@ $style = [
                                                 @if ($level == 'error')
                                                     Whoops!
                                                 @else
-                                                    @if ($type == 0)
-                                                        Account Blocked
-                                                    @elseif ($type == 1)
-                                                        Account Unblocked
-                                                    @elseif ($type == 2)
-                                                        Account Deleted
-                                                    @endif
+                                                    Profile Update Notification
                                                 @endif
                                             @endif
                                         </h1>

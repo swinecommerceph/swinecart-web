@@ -30,14 +30,23 @@ class SwineCartAnnouncement extends Mailable implements ShouldQueue
      */
     public function build()
     {
+
         if($this->attachment==NULL){
             return $this->view('emails.announcement')
                         ->subject('SwineCart Announcement')
                         ->with([
+                            'level' => 'success',
+                            'introLines' => [],
+             				'outroLines' => [],
                             'announcement'=>$this->announcement
                         ]);
         }else{
-            $email =   $this->view('emails.announcement')->with(['announcement'=>$this->announcement])->subject('SwineCart Announcement');
+            $email =   $this->view('emails.announcement')->with([
+                        'level' => 'success',
+                        'introLines' => [],
+                        'outroLines' => [],
+                        'announcement'=>$this->announcement])
+                        ->subject('SwineCart Announcement');
             foreach ($attachment as $file) {
                 $email->attach(public_path().$file->path);
             }
