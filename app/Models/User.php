@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\Customer;
 use App\Models\Admin;
 use App\Models\Spectator;
+use App\Models\UserLog;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -65,6 +66,14 @@ class User extends Model implements AuthenticatableContract,
     public function userable()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Get the account access logs of the User
+     */
+    public function userLogs()
+    {
+        return $this->hasMany(UserLog::class);
     }
 
     /**

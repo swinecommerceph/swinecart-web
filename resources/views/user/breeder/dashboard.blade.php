@@ -182,7 +182,7 @@
                 <div class="card">
                     <div class="card-content">
                         <span class="card-title">
-                            <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}" class="black-text">Total Products Available</a>
+                            <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}" class="black-text">Available Products</a>
                         </span>
                         <h3>@{{ overallProductsAvailable }}</h3>
                     </div>
