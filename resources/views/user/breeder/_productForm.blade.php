@@ -13,9 +13,9 @@
 		<div class="row">
 			<div id="tabs-container" class="col s12">
 				<ul class="tabs tabs-fixed-width grey lighten-5">
-					<li class="tab col s4"><a href="#swine-information">Swine Information</a></li>
-					<li class="tab col s4"><a href="#breed-information">Breed Information</a></li>
-					<li class="tab col s4"><a href="#other-details">Other Details</a></li>
+					<li id="swine-info-tab" class="tab col s4"><a href="#swine-information">Swine Information</a></li>
+					<li id="breed-info-tab" class="tab col s4"><a href="#breed-information">Breed Information</a></li>
+					<li id="other-details-tab" class="tab col s4"><a href="#other-details">Other Details</a></li>
 				</ul>
 			</div>
 

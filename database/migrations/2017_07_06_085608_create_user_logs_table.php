@@ -16,6 +16,7 @@ class CreateUserLogsTable extends Migration
         Schema::create('user_logs', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('user_id')->unsigned();
+            $table->string('user_type', 15);
             $table->ipAddress('ip_address');
             $table->enum('activity', ['login', 'logout'])->default('login');
             $table->dateTime('created_at');

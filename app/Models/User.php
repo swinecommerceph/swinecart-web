@@ -110,7 +110,7 @@ class User extends Model implements AuthenticatableContract,
     /**
      * Check if User still needs to update profile
      *
-     * @return Boolean
+     * @return  Boolean
      */
     public function updateProfileNeeded()
     {
@@ -118,6 +118,11 @@ class User extends Model implements AuthenticatableContract,
         return false;
     }
 
+    /**
+     * Check if User is online
+     *
+     * @return  Boolean
+     */
     public function isOnline(){
         return Cache::has('user-online-'.$this->id);
     }
