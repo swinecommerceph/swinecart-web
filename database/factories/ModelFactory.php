@@ -257,10 +257,7 @@ $factory->define(App\Models\Breeder::class, function (Faker\Generator $faker) {
         'website' => $faker->word.'.com',
         'produce' => $faker->word,
         'contactPerson_name' => $faker->name,
-        'contactPerson_mobile' => $faker->regexify('09[0-9]{9}'),
-        'registration_number'  => random_int(1,1000),
-        'latest_accreditation' => \Carbon\Carbon::now()->subYear(),
-        'notification_date' => \Carbon\Carbon::now()->addYear()
+        'contactPerson_mobile' => $faker->regexify('09[0-9]{9}')
     ];
 });
 
@@ -379,6 +376,10 @@ $factory->define(App\Models\FarmAddress::class, function (Faker\Generator $faker
         'farmType' => $faker->word,
         'landline' => $faker->regexify('(0[1-8][1-8])[1-9]{3}\-[0-9]{4}'),
         'mobile' => $faker->regexify('09[0-9]{9}'),
+        'accreditation_no' => null,
+        'accreditation_status' => 'not_applicable',
+        'accreditation_date' => null,
+        'accreditation_expiry' => null
     ];
 });
 
