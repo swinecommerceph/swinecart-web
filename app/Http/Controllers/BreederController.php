@@ -216,7 +216,6 @@ class BreederController extends Controller
     {
         $farmAddress = FarmAddress::find($request->id);
 
-        $farmAddress->name = $request->input('farmAddress.1.name');
         $farmAddress->addressLine1 = $request->input('farmAddress.1.addressLine1');
         $farmAddress->addressLine2 = $request->input('farmAddress.1.addressLine2');
         $farmAddress->province = $request->input('farmAddress.1.province');

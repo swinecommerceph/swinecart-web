@@ -3,51 +3,6 @@
 var profile = {
     edit_farm_name: '',
 
-    add: function(parent_form){
-        config.preloader_progress.fadeIn();
-        var farm_address = [];
-        var data_values = {
-            "_token" : parent_form.find('input[name=_token]').val()
-        };
-
-        farm_address.push({});
-        $(parent_form).find('.add-farm').map(function (index) {
-            var details = {
-                'name': $(this).find('input[name="farmAddress[' + (index+1) + '][name]"]').val(),
-                'addressLine1': $(this).find('input[name="farmAddress[' + (index+1) + '][addressLine1]"]').val(),
-                'addressLine2': $(this).find('input[name="farmAddress[' + (index+1) + '][addressLine2]"]').val(),
-                'province': $(this).find('select[name="farmAddress[' + (index+1) + '][province]"] option:checked').val(),
-                'zipCode': $(this).find('input[name="farmAddress[' + (index+1) + '][zipCode]"]').val(),
-                'farmType': $(this).find('input[name="farmAddress[' + (index+1) + '][farmType]"]').val(),
-                'landline': $(this).find('input[name="farmAddress[' + (index+1) + '][landline]"]').val(),
-                'mobile': $(this).find('input[name="farmAddress[' + (index+1) + '][mobile]"]').val()
-            };
-            farm_address.push(details);
-        });
-
-        data_values["farmAddress"] = farm_address;
-
-        // Do AJAX
-        $.ajax({
-            url: parent_form.attr('action'),
-            type: "POST",
-            cache: false,
-            data: data_values,
-            success: function(data){
-                var data = JSON.parse(data);
-                Materialize.toast('Profile updated Success!', 1500, 'green lighten-1');
-                window.setTimeout(function(){
-                    config.preloader_progress.fadeOut();
-                    location.reload(true);
-                }, 1500);
-            },
-            error: function(message){
-                console.log(message['responseText']);
-                config.preloader_progress.fadeOut();
-            }
-        });
-    },
-
     edit: function(parent_form, edit_button, cancel_button){
 
         config.preloader_progress.fadeIn();
@@ -92,7 +47,6 @@ var profile = {
         else if (parent_form.attr('data-farm-id')) {
             var farm_address = [];
             var details = {
-                "name": parent_form.find('input[name=name]').val(),
                 "addressLine1": parent_form.find('input[name=addressLine1]').val(),
                 "addressLine2": parent_form.find('input[name=addressLine2]').val(),
                 "province": parent_form.find('select[name=province] option:checked').val(),
@@ -139,8 +93,6 @@ var profile = {
 
                 }
                 else if(parent_form.attr('data-farm-id')){
-                    parent_form.find('input[name=name]').val(data.name);
-                    parent_form.find('.farm-title').html(data.name);
                     parent_form.find('input[name=addressLine1]').val(data.addressLine1);
                     parent_form.find('input[name=addressLine2]').val(data.addressLine2);
                     parent_form.find('select[name=province]').val(data.province);
@@ -250,7 +202,7 @@ var profile = {
 
                 $('#password-error-container').hide();
                 $('#change-password-button').removeClass('disabled');
-                
+
             },
             error: function(message){
                 var error_messages = JSON.parse(message['responseText']),
