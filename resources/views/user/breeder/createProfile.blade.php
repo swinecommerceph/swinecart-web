@@ -28,7 +28,7 @@
             </p>
 
             @include('common._errors')
-            {!! Form::open(['route' => 'breeder.store', 'class' => 's12', 'id' => 'create-profile']) !!}
+            {!! Form::open(['route' => 'breeder.store', 'method' => 'PATCH', 'class' => 's12', 'id' => 'create-profile']) !!}
                 @include('user.breeder._createProfileForm')
             {!! Form::close() !!}
         </div>

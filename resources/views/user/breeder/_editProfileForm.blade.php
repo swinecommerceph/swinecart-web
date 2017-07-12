@@ -162,11 +162,11 @@
 												</tr>
 												<tr>
 													<td class="" style="padding:0;"> Date Evaluated </td>
-													<td class="right-align" style="padding:0;"> {{ date_format(date_create($farmAddress->accreditation_date), 'F j, Y') }} </td>
+													<td class="right-align" style="padding:0;"> {{ date_format(date_create($farmAddress->accreditation_date), 'F Y') }} </td>
 												</tr>
 												<tr>
 													<td class="" style="padding:0;"> Expiry Date </td>
-													<td class="right-align" style="padding:0;"> {{ date_format(date_create($farmAddress->accreditation_expiry), 'F j, Y') }} </td>
+													<td class="right-align" style="padding:0;"> {{ date_format(date_create($farmAddress->accreditation_expiry), 'F Y') }} </td>
 												</tr>
 											</tbody>
 										</table>
