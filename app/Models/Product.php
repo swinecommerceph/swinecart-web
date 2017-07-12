@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Breeder;
+use App\Models\FarmAddress;
 use App\Models\Image;
 use App\Models\Video;
 use App\Models\TransactionLog;
@@ -63,6 +64,14 @@ class Product extends Model
     public function breeder()
     {
         return $this->belongsTo(Breeder::class);
+    }
+
+    /**
+     * Get the farm to where this product belongs
+     */
+    public function farmFrom()
+    {
+        return $this->belongsTo(FarmAddress::class, 'farm_from_id');
     }
 
     /**

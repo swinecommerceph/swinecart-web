@@ -2,6 +2,7 @@
 
 namespace App\Models;
 
+use App\Models\Product;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
 
@@ -51,5 +52,13 @@ class FarmAddress extends Model
     public function addressable()
     {
         return $this->morphTo();
+    }
+
+    /**
+     * Get all products of the farm
+     */
+    public function products()
+    {
+        return $this->hasMany(Product::class, 'farm_from_id');
     }
 }

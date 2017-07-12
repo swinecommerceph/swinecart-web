@@ -65,9 +65,8 @@ Route::group(['middleware' => ['web']], function () {
 
         // profile-related
     	Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
-    	Route::post('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
+    	Route::patch('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
         Route::put('edit-profile/personal/edit',['as' => 'breeder.updatePersonal', 'uses' => 'BreederController@updatePersonal']);
-        Route::post('edit-profile/farm/add',['as' => 'breeder.addFarm', 'uses' => 'BreederController@addFarm']);
         Route::put('edit-profile/farm/edit',['as' => 'breeder.updateFarm', 'uses' => 'BreederController@updateFarm']);
         Route::delete('edit-profile/farm/delete',['as' => 'breeder.deleteFarm', 'uses' => 'BreederController@deleteFarm']);
         Route::patch('edit-profile/change-password',['as' => 'breeder.changePassword', 'uses' => 'BreederController@changePassword']);

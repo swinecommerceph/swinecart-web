@@ -152,10 +152,24 @@
 								{!! Form::open(['route' => 'breeder.updateFarm', 'method' => 'PUT', 'class' => 'edit-farm', 'data-farm-id' => $farmAddress->id, 'data-farm-order' => $loop->iteration]) !!}
 								<h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
 								<div class="row">
-								<!-- Farm Address: Name -->
-									<div class="input-field col s10 push-s1">
-										{!! Form::text('name', $farmAddress->name, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-name'])!!}
-										{!! Form::label('name', 'Name*') !!}
+									<div class="col s6 offset-s3">
+										<table>
+											<thead></thead>
+											<tbody>
+												<tr>
+													<td class="" style="padding:0;"> Accreditation No. </td>
+													<td class="right-align" style="padding:0;"> {{ $farmAddress->accreditation_no }} </td>
+												</tr>
+												<tr>
+													<td class="" style="padding:0;"> Date Evaluated </td>
+													<td class="right-align" style="padding:0;"> {{ date_format(date_create($farmAddress->accreditation_date), 'F Y') }} </td>
+												</tr>
+												<tr>
+													<td class="" style="padding:0;"> Expiry Date </td>
+													<td class="right-align" style="padding:0;"> {{ date_format(date_create($farmAddress->accreditation_expiry), 'F Y') }} </td>
+												</tr>
+											</tbody>
+										</table>
 									</div>
 								</div>
 
@@ -243,19 +257,6 @@
 						</div>
 					</div>
 				@endforeach
-					{!! Form::open(['route' => 'breeder.addFarm', 'class' => 's12', 'id' => 'create-profile']) !!}
-
-					{!! Form::close() !!}
-			</div>
-
-			<div class="row">
-				<div class="col s10 offset-s1">
-					<div class="col right">
-						<a href="#" id="add-farm" class="btn-floating btn-medium waves-effect waves-light blue tooltipped" data-position="left" data-delay="50" data-tooltip="Add another Farm">
-							<i class="material-icons">add</i>
-						</a>
-					</div>
-				</div>
 			</div>
 
 		</div>

@@ -14,16 +14,20 @@ class CreateFarmAddressesTable extends Migration
     {
         Schema::create('farm_addresses', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
-            $table->string('addressLine1');
-            $table->string('addressLine2');
-            $table->string('province');
-            $table->string('zipCode');
-            $table->string('farmType');
+            $table->string('name')->nullable();
+            $table->string('addressLine1')->nullable();
+            $table->string('addressLine2')->nullable();
+            $table->string('province')->nullable();
+            $table->string('zipCode')->nullable();
+            $table->string('farmType')->nullable();
             $table->string('landline')->nullable();
-            $table->string('mobile');
-            $table->integer('addressable_id')->unsigned();
-            $table->string('addressable_type');
+            $table->string('mobile')->nullable();
+            $table->integer('addressable_id')->unsigned()->nullable();
+            $table->string('addressable_type')->nullable();
+            $table->string('accreditation_no')->nullable();
+            $table->enum('accreditation_status', ['active', 'inactive', 'not_applicable'])->default('not_applicable');
+            $table->date('accreditation_date')->nullable();
+            $table->date('accreditation_expiry')->nullable();
             $table->softDeletes();
         });
     }

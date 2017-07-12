@@ -499,7 +499,14 @@ class ProductController extends Controller
         if($parsedBreedIds) $products = $products->whereIn('breed_id', $parsedBreedIds);
         $products = ($request->q) ? $products->get() : $products->orderBy($parsedSort[0], $parsedSort[1])->get();
 
-        foreach ($products as $product) {
+        foreach ($products as $key => $product) {
+            // Check if the farm where the product is is still accredited
+            // Exclude it from the showcase of products if farm's
+            // accreditation status is not active
+            if($product->farmFrom->accreditation_status != 'active'){
+                unset($products[$key]);
+                continue;
+            }
             $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
             $product->type = ucfirst($product->type);
             $product->birthdate = $this->transformDateSyntax($product->birthdate);
