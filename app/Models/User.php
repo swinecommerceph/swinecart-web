@@ -119,6 +119,17 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * Check if user is authenticated through third-party oAuth
+     * by checking if password exists
+     *
+     * @return  Boolean
+     */
+    public function oAuthUser()
+    {
+        return ($this->password) ? false : true;
+    }
+
+    /**
      * Check if User is online
      *
      * @return  Boolean

@@ -21,15 +21,24 @@
 <div class="row">
 	<div class="col s12">
 		<ul class="tabs z-depth-1">
-			<li id="personal-tab" class="tab col s4">
-				<a class="active" href="#personal-information">Personal Information</a>
-			</li>
-			<li id="farm-tab" class="tab col s4">
-				<a href="#farm-information">Farm Information</a>
-			</li>
-			<li id="password-tab" class="tab col s4">
-				<a href="#password-information">Change Password</a>
-			</li>
+			@if (Auth::user()->oAuthUser())
+				<li id="personal-tab" class="tab col s6">
+					<a class="active" href="#personal-information">Personal Information</a>
+				</li>
+				<li id="farm-tab" class="tab col s6">
+					<a href="#farm-information">Farm Information</a>
+				</li>
+			@else
+				<li id="personal-tab" class="tab col s4">
+					<a class="active" href="#personal-information">Personal Information</a>
+				</li>
+				<li id="farm-tab" class="tab col s4">
+					<a href="#farm-information">Farm Information</a>
+				</li>
+				<li id="password-tab" class="tab col s4">
+					<a href="#password-information">Change Password</a>
+				</li>
+			@endif
 		</ul>
 	</div>
 	<div class="col s12">
@@ -216,56 +225,59 @@
 
 		</div>
 
-		<div id="password-information" class="card-panel">
+		@if (!Auth::user()->oAuthUser())
 
-			<blockquote id="password-error-container" class="error" style="display:none;"> </blockquote>
+			<div id="password-information" class="card-panel">
 
-			{!! Form::open(['route' => 'customer.changePassword', 'method' => 'PATCH', 'id' => 'change-password-form']) !!}
+				<blockquote id="password-error-container" class="error" style="display:none;"> </blockquote>
 
-			{{-- Current Password --}}
-			<div class="row">
-				<div class="input-field col s4 offset-s4">
-					<input type="password" id="currentpassword" name="current_password" class="validate" required>
-					@if ($errors->has('current_password'))
-						<label for="currentpassword" data-error="{{ $errors->first('current_password') }}">Current Password</label>
-					@else
-						<label for="currentpassword">Current Password*</label>
-					@endif
+				{!! Form::open(['route' => 'customer.changePassword', 'method' => 'PATCH', 'id' => 'change-password-form']) !!}
+
+				{{-- Current Password --}}
+				<div class="row">
+					<div class="input-field col s4 offset-s4">
+						<input type="password" id="currentpassword" name="current_password" class="validate" required>
+						@if ($errors->has('current_password'))
+							<label for="currentpassword" data-error="{{ $errors->first('current_password') }}">Current Password</label>
+						@else
+							<label for="currentpassword">Current Password*</label>
+						@endif
+					</div>
 				</div>
-			</div>
 
-			{{-- New Password --}}
-			<div class="row">
-				<div class="input-field col s4 offset-s4">
-					<input type="password" id="newpassword" name="new_password" class="validate" required>
-					@if ($errors->has('new_password'))
-						<label for="newpassword" data-error="{{ $errors->first('new_password') }}">New Password</label>
-					@else
-						<label for="newpassword">New Password*</label>
-					@endif
+				{{-- New Password --}}
+				<div class="row">
+					<div class="input-field col s4 offset-s4">
+						<input type="password" id="newpassword" name="new_password" class="validate" required>
+						@if ($errors->has('new_password'))
+							<label for="newpassword" data-error="{{ $errors->first('new_password') }}">New Password</label>
+						@else
+							<label for="newpassword">New Password*</label>
+						@endif
+					</div>
 				</div>
-			</div>
 
-			{{-- Password Confirmation --}}
-			<div class="row">
-				<div class="input-field col s4 offset-s4">
-					<input type="password" id="newpasswordconfirm" name="new_password_confirmation" class="validate" required>
-					@if ($errors->has('new_password_confirmation'))
-						<label for="newpasswordconfirm" data-error="{{ $errors->first('new_password_confirmation') }}">Confirm Password</label>
-					@else
-						<label for="newpasswordconfirm">Confirm Password*</label>
-					@endif
+				{{-- Password Confirmation --}}
+				<div class="row">
+					<div class="input-field col s4 offset-s4">
+						<input type="password" id="newpasswordconfirm" name="new_password_confirmation" class="validate" required>
+						@if ($errors->has('new_password_confirmation'))
+							<label for="newpasswordconfirm" data-error="{{ $errors->first('new_password_confirmation') }}">Confirm Password</label>
+						@else
+							<label for="newpasswordconfirm">Confirm Password*</label>
+						@endif
+					</div>
 				</div>
-			</div>
 
-			<div class="row">
-				<div class="col s4 offset-s4">
-					<a href="#" id="change-password-button" class="btn btn-medium waves-effect waves-light right">
-						Change Password
-					</a>
+				<div class="row">
+					<div class="col s4 offset-s4">
+						<a href="#" id="change-password-button" class="btn btn-medium waves-effect waves-light right">
+							Change Password
+						</a>
+					</div>
 				</div>
+				{!! Form::close() !!}
 			</div>
-			{!! Form::close() !!}
-		</div>
+		@endif
 	</div>
 </div>
