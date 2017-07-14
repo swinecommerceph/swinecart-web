@@ -1,0 +1,35 @@
+'use strict';
+
+var config = {
+    host_url: window.hostUrl,
+    authUser_url: '/home',
+    customer_url: '/customer/home',
+    breeder_url: '/breeder/home',
+    customerNotifications_url: '/customer/notifications',
+    breederNotifications_url: '/breeder/notifications',
+    viewProducts_url: '/customer/view-products',
+    manageProducts_url: '/breeder/products',
+    swineCart_url: '/customer/swine-cart',
+    breederLogo_url: '/breeder/edit-profile/logo-upload',
+    productMedia_url: '/breeder/products/media',
+    productSummary_url: '/breeder/products/product-summary',
+    manageSelected_url: '/breeder/products/manage-selected',
+    dashboard_url: '/breeder/dashboard',
+    images_path: '/images',
+    videos_path: '/videos',
+    delete_user: '/admin/home/delete',
+    block_user: '/admin/home/block',
+    approve_user: 'home/approve',
+    reject_user: 'home/reject',
+    search_user: 'home/search',
+    all_user: 'home/userlist',
+    form: 'registration',
+    spectator_url: '/spectator',
+    admin_url: '/admin',
+    productImages_path: '/images/product',
+    productVideos_path: '/videos/product',
+    pubsubWSServer: 'ws://' + window.hostUrl + '/pusher',
+    preloader_progress: $('#preloader-progress'),
+    preloader_circular: $('#preloader-circular')
+
+};

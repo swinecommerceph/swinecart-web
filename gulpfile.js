@@ -12,5 +12,10 @@ var elixir = require('laravel-elixir');
  */
 
 elixir(function(mix) {
-    mix.sass('app.scss');
+    // mix.scripts(['config.js', 'custom.js'], 'public/js/sample.js');
+    // Home page
+    //  -app:
+    //  -vendor: jquery, materialize, vue, vue-resource
+    //      > Customer: moment, autobahn, elasticsearch.jquery
+    //      > Breeder:
 });
