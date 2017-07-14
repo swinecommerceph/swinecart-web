@@ -35,8 +35,7 @@
                     {{ $breeder->officeAddress_addressLine1 }},
                     {{ $breeder->officeAddress_addressLine2 }},
                     {{ $breeder->officeAddress_province }},
-                    {{ $breeder->officeAddress_zipCode }} <br>
-                    Accredited {{ date_format(date_create($breeder->latest_accreditation), 'F j, Y') }}
+                    {{ $breeder->officeAddress_zipCode }}
                 </span>
             </li>
             <li class="collection-item row">
@@ -69,7 +68,8 @@
                                 {{ $farm->addressLine1 }},
                                 {{ $farm->addressLine2 }},
                                 {{ $farm->province }},
-                                {{ $farm->zipCode }} <br><br>
+                                {{ $farm->zipCode }} <br>
+                                Accredited {{ date_format(date_create($farm->accreditation_date), 'F Y') }} <br> <br>
                             </span>
                         </span>
                         <span class="col s3">Farm Type</span>
