@@ -80,9 +80,6 @@
 
                         <span class="col s3">Farm Mobile</span>
                         <span class="col s9">{{ $farm->mobile }}</span>
-
-                        {{-- Farm Landline: {{ $farm->landline }} <br>
-                        Farm Mobile: {{ $farm->mobile }} --}}
                     </span>
                 @endforeach
             </li>

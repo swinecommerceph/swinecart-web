@@ -1,0 +1,11 @@
+{
+  "js/customer/createProfile.js": "js/customer/createProfile-831abba99c.js",
+  "js/customer/custom.js": "js/customer/custom-66045d693f.js",
+  "js/customer/editProfile.js": "js/customer/editProfile-68b8373c54.js",
+  "js/customer/notifications.js": "js/customer/notifications-bf93e0f765.js",
+  "js/customer/swinecartPage.js": "js/customer/swinecartPage-f9fa8e8853.js",
+  "js/customer/viewProductDetail.js": "js/customer/viewProductDetail-a1fb4cc8de.js",
+  "js/customer/viewProducts.js": "js/customer/viewProducts-e29718ba3c.js",
+  "js/siteCustom.js": "js/siteCustom-4f19a75c79.js",
+  "js/vendor.js": "js/vendor-66cbe56687.js"
+}

@@ -253,7 +253,6 @@
 @endsection
 
 @section('customScript')
-    <script src="/js/vendor/autobahn.min.js"></script>
     <script src="/js/vendor/chart.min.js"></script>
     <script type="text/javascript">
         var rawLatestAccreditation = "{{ $latestAccreditation }}";
