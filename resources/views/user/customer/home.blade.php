@@ -498,14 +498,10 @@
 @endsection
 
 @section('initScript')
-    <script src="/js/vendor/moment.min.js"></script>
-    <script src="/js/vendor/autobahn.min.js"></script>
-    <script src="/js/customer/swinecart.js"> </script>
-    <script src="/js/customer/customer_custom.js"> </script>
+    <script src="{{ elixir('/js/customer/custom.js') }}"></script>
 @endsection
 
 @section('customScript')
-    <script src="/js/vendor/elasticsearch.jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
 

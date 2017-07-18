@@ -104,9 +104,5 @@
     <script type="text/javascript">
         var provinces = {!! $provinces !!};
     </script>
-    <script src="/js/vendor/dropzone.js"></script>
-    <script src="/js/breeder/profile.js"> </script>
-    <script src="/js/breeder/editProfile_script.js"> </script>
-    <script src="/js/validation/formValidationMethods.js"> </script>
-    <script src="/js/validation/breeder/editProfile_validation.js"> </script>
+    <script src="{{ elixir('/js/breeder/editProfile.js') }}"></script>
 @endsection
