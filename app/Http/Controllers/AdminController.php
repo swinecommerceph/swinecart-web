@@ -102,10 +102,10 @@ class AdminController extends Controller
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',2)
                         ->where('users.email_verified','=', 1)
-                        ->where('users.blocked_at','=', NULL)
-                        ->where('users.deleted_at','=', NULL)
-                        ->count();
-        return $count;
+                        ->whereNull('users.blocked_at')
+                        ->whereNull('users.deleted_at')
+                        ->get();
+        return count($count);
     }
 
     /**
@@ -120,10 +120,11 @@ class AdminController extends Controller
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',3)
                         ->where('users.email_verified','=', 1)
-                        ->where('users.blocked_at','=', NULL)
-                        ->where('users.deleted_at','=', NULL)
-                        ->count();
-        return $count;
+                        ->whereNull('users.blocked_at')
+                        ->whereNull('users.deleted_at')
+                        ->get();
+
+        return count($count);
     }
 
     /**
@@ -161,6 +162,32 @@ class AdminController extends Controller
         return $count;
     }
 
+    public function blockedCustomerCount(){
+        $count = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->join('roles', 'role_user.role_id','=','roles.id')
+                        ->where('role_user.role_id','=',3)
+                        ->where('users.email_verified','=', 1)
+                        ->whereNotNull('users.blocked_at')
+                        ->whereNull('users.deleted_at')
+                        ->get();
+
+        return count($count);
+    }
+
+    public function blockedBreederCount(){
+        $count = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->join('roles', 'role_user.role_id','=','roles.id')
+                        ->where('role_user.role_id','=',2)
+                        ->where('users.email_verified','=', 1)
+                        ->whereNotNull('users.blocked_at')
+                        ->whereNull('users.deleted_at')
+                        ->get();
+
+        return count($count);
+    }
+
     public function topBreeders(){
         $now = Carbon::now();
         $reviews = DB::table('reviews')->groupBy('breeder_id')->whereMonth('created_at',$now->month)->whereYear('created_at', $now->year)->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->orderBy('count','desc')->take(5)->get();
@@ -184,9 +211,11 @@ class AdminController extends Controller
         $customers = $this->customerCount();
         $pending = $this->pendingUserCount();
         $blocked = $this->blockedUserCount();
+        $blocked_breeder = $this->blockedBreederCount();
+        $blocked_customer = $this->blockedCustomerCount();
         $messages = DB::table('messages')->where('admin_id','=', $this->user->id)->whereNull('read_at')->count();
         $reviews = $this->topBreeders();
-        $summary = array($all, $blocked, $pending, $messages, $reviews);
+        $summary = array($all,$blocked, $pending, $messages, $reviews, $breeders, $customers, $blocked_breeder, $blocked_customer);
 
         // $customers = DB::table('swine_cart_items')->join('transaction_logs', 'transaction_logs.product_id','=','swine_cart_items.product_id')
         //             ->whereMonth('date_needed', Carbon::now()->month)

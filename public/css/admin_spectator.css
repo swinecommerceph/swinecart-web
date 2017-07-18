@@ -110,22 +110,27 @@ ul .side-nav-user-image{
 
 #admin-dashboard-total-card{
    background-color: #0a7e7b;
+   height: 350px;
 }
 
 #admin-dashboard-blocked-card{
    background-color: #ed5272;
+   height: 350px;
 }
 
 #admin-dashboard-pending-card{
    background-color: #636564;
+    height: 350px;
 }
 
 #admin-dashboard-messages-card{
    background-color: #67052c;
+   height: 350px;
 }
 
 #admin-dashboard-statistics-card{
    background-color: #EB984E;
+   height: 350px;
 }
 
 #admin-dashboard-topbreeder-card{

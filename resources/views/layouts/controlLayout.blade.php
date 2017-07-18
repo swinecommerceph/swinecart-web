@@ -149,11 +149,42 @@
                 </div>
             </div>
             <div class="modal-footer">
-                <button id = "add-user-submit" class="btn waves-effect waves-light" type="submit" name="action">Add
-                    <i class="material-icons right">send</i>
+                <button id = "add-user-submit" class="btn-flat waves-effect waves-light" type="submit" name="action">Add
+                    <i class="material-icons right">add</i>
                 </button>
+                <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat">Close</a>
             </div>
             {!!Form::close()!!}
+        </div>
+
+        {{-- New Add User Modal --}}
+        <div id="newadduser" class="modal">
+            <div class="modal-content">
+                <h4>Add User</h4>
+                <div class="divider"></div>
+                <div class="row">
+                    <div class="col s12 m12 l12 xl12">
+                        <div class="input-field">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input required id="icon_prefix" type="text" class="validate" name="name">
+                            <label for="icon_prefix">Username</label>
+                        </div>
+
+                        <div class="input-field">
+                            <i class="material-icons prefix">account_circle</i>
+                            <input required id="icon_prefix" type="text" class="validate" name="name">
+                            <label for="icon_prefix">Username</label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button id = "add-user-submit" class="btn-flat waves-effect waves-light" type="submit" name="action">Add
+                    <i class="material-icons right">add</i>
+                </button>
+                <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat">Close</a>
+            </div>
+
         </div>
 
         {{-- User Information Modal --}}
