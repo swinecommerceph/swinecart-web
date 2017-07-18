@@ -48,7 +48,7 @@ $(document).ready(function(){
         }
         else{
             setTimeout(function(){
-                searchPhrase = $('input#search').val();
+                var searchPhrase = $('input#search').val();
 
                 // Execute of searchPhrase is not empty
                 if(searchPhrase){

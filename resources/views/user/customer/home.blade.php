@@ -12,7 +12,7 @@
     <script type="text/javascript">
         window.hostUrl = '{{ env('APP_URL') }}';
         window.pubsubTopic = '{{ crypt(Auth::user()->email, md5(Auth::user()->email)) }}';
-        window.elasticsearchHost = '{{ env('APP_URL') }}' + ':9200';
+        window.elasticsearchHost = '{{ env('APP_URL') }}' + '/search/';
     </script>
 @endsection
 
@@ -534,7 +534,7 @@
                 }
                 else{
                     setTimeout(function(){
-                        searchPhrase = $('input#search').val();
+                        var searchPhrase = $('input#search').val();
 
                         // Execute of searchPhrase is not empty
                         if(searchPhrase){
