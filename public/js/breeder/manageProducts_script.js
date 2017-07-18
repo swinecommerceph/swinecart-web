@@ -149,7 +149,7 @@ $(document).ready(function(){
     });
 
     /* ----------- Add Product Modal functionalities ----------- */
-    $("#add-product-modal .tabs li").last().click(function(e){
+    $("#add-product-modal #other-details-tab").click(function(e){
         $('#submit-button').show();
     });
 

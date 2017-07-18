@@ -14,3 +14,16 @@
 		</ul>
 	</div>
 @endif
+
+@if (Session::has('customErrors'))
+	{{-- Custom Error List --}}
+	<div class="card-panel">
+		<strong> <span class="red-text text-darken-1"> Whoops! Something went wrong! </span> </strong>
+		<br>
+		<ul>
+			@foreach (Session::get('customErrors') as $error)
+				<li class="red-text">{{ $error }}</li>
+			@endforeach
+		</ul>
+	</div>
+@endif

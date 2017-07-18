@@ -13,7 +13,7 @@ return [
     |
     */
 
-    'failed' => 'These credentials do not match our records.',
+    'failed' => 'These credentials do not match our records. Also, if you registered with Google or Facebook you should login via Google or Facebook by clicking the respective button below.',
     'throttle' => 'Too many login attempts. Please try again in :seconds seconds.',
 
 ];

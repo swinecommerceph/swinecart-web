@@ -2393,7 +2393,7 @@ class AdminController extends Controller
 
     public function send(Request $request){
         if($request->ajax()){
-            $rcpts = User::whereIn('id', json_decode($_POST['receipients']))->get();
+            $rcpts = User::whereIn('id', json_decode($_POST['recipients']))->get();
             if($request->type == 'mail'){
                 $this->sendMail($request->message, $rcpts);
             }

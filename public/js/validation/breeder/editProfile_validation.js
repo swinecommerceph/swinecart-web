@@ -21,18 +21,11 @@ var validateFunction = function(){
                 office_mobile: ['required', 'phoneNumber'],
                 contactPerson_name: ['required'],
                 contactPerson_mobile: ['required', 'phoneNumber'],
-                ['farm-' + index + '-name']: ['required'],
                 ['farm-' + index + '-addressLine1']: ['required'],
                 ['farm-' + index + '-addressLine2']: ['required'],
                 ['farm-' + index + '-zipCode']: ['required', 'zipCodePh'],
                 ['farm-' + index + '-farmType']: ['required'],
                 ['farm-' + index + '-mobile']: ['required', 'phoneNumber'],
-                ['farmAddress[' + index + '][name]']: ['required'],
-                ['farmAddress[' + index + '][addressLine1]']: ['required'],
-                ['farmAddress[' + index + '][addressLine2]']: ['required'],
-                ['farmAddress[' + index + '][zipCode]']: ['required', 'zipCodePh'],
-                ['farmAddress[' + index + '][farmType]']: ['required'],
-                ['farmAddress[' + index + '][mobile]']: ['required', 'phoneNumber'],
                 'currentpassword': ['required'],
                 'newpassword': ['required', 'minLength:8'],
                 'newpasswordconfirm': ['required', 'equalTo:newpassword']
@@ -125,14 +118,13 @@ var validateFunction = function(){
                     var farmNumber = parent_form.attr('data-farm-order');
                     var farmValid = true;
 
-                    var farm_name = validateInput(document.getElementById('farm-' + farmNumber + '-name'));
                     var farm_addressLine1 = validateInput(document.getElementById('farm-' + farmNumber + '-addressLine1'));
                     var farm_addressLine2 = validateInput(document.getElementById('farm-' + farmNumber + '-addressLine2'));
                     var farm_zipCode = validateInput(document.getElementById('farm-' + farmNumber + '-zipCode'));
                     var farmType = validateInput(document.getElementById('farm-' + farmNumber + '-farmType'));
                     var farm_mobile = validateInput(document.getElementById('farm-' + farmNumber + '-mobile'));
 
-                    farmValid = farmValid && farm_name && farm_addressLine1 && farm_addressLine2 && farm_zipCode && farmType && farm_mobile;
+                    farmValid = farmValid && farm_addressLine1 && farm_addressLine2 && farm_zipCode && farmType && farm_mobile;
 
                     // Submit if all validations are met
                     if(farmValid){
@@ -143,35 +135,6 @@ var validateFunction = function(){
                     else Materialize.toast('Please properly fill all required fields.', 2500, 'orange accent-2');
                 }
             }
-
-        });
-
-        // Submit added farm information
-        $('body').on('click', '#submit-button' ,function(e){
-            e.preventDefault();
-
-            // Count how many current Farm Addresses are available
-            var farmNumber = $('#create-profile .add-farm').length+1;
-            var farmValid = true;
-
-            for (var i = 1; i < farmNumber; i++) {
-
-                var farm_name = validateInput(document.getElementById('farmAddress[' + i + '][name]'));
-                var farm_addressLine1 = validateInput(document.getElementById('farmAddress[' + i + '][addressLine1]'));
-                var farm_addressLine2 = validateInput(document.getElementById('farmAddress[' + i + '][addressLine2]'));
-                var farm_zipCode = validateInput(document.getElementById('farmAddress[' + i + '][zipCode]'));
-                var farmType = validateInput(document.getElementById('farmAddress[' + i + '][farmType]'));
-                var farm_mobile = validateInput(document.getElementById('farmAddress[' + i + '][mobile]'));
-
-                farmValid = farmValid && farm_name && farm_addressLine1 && farm_addressLine2 && farm_zipCode && farmType && farm_mobile;
-            }
-
-            // Submit if all validations are met
-            if(farmValid){
-                $(this).addClass('disabled');
-                profile.add($('#create-profile'));
-            }
-            else Materialize.toast('Please properly fill all required fields.', 2500, 'orange accent-2');
 
         });
 

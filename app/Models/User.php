@@ -6,6 +6,7 @@ use App\Models\Role;
 use App\Models\Customer;
 use App\Models\Admin;
 use App\Models\Spectator;
+use App\Models\UserLog;
 use Illuminate\Auth\Authenticatable;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
@@ -68,6 +69,14 @@ class User extends Model implements AuthenticatableContract,
     }
 
     /**
+     * Get the account access logs of the User
+     */
+    public function userLogs()
+    {
+        return $this->hasMany(UserLog::class);
+    }
+
+    /**
      * Assign Role to a User
      *
      * @param  String   $role
@@ -101,7 +110,7 @@ class User extends Model implements AuthenticatableContract,
     /**
      * Check if User still needs to update profile
      *
-     * @return Boolean
+     * @return  Boolean
      */
     public function updateProfileNeeded()
     {
@@ -109,6 +118,22 @@ class User extends Model implements AuthenticatableContract,
         return false;
     }
 
+    /**
+     * Check if user is authenticated through third-party oAuth
+     * by checking if password exists
+     *
+     * @return  Boolean
+     */
+    public function oAuthUser()
+    {
+        return ($this->password) ? false : true;
+    }
+
+    /**
+     * Check if User is online
+     *
+     * @return  Boolean
+     */
     public function isOnline(){
         return Cache::has('user-online-'.$this->id);
     }

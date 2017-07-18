@@ -19,7 +19,6 @@ var validateFunction = function(){
                 office_mobile: ['required', 'phoneNumber'],
                 contactPerson_name: ['required'],
                 contactPerson_mobile: ['required', 'phoneNumber'],
-                ['farmAddress[' + index + '][name]']: ['required'],
                 ['farmAddress[' + index + '][addressLine1]']: ['required'],
                 ['farmAddress[' + index + '][addressLine2]']: ['required'],
                 ['farmAddress[' + index + '][zipCode]']: ['required', 'zipCodePh'],
@@ -84,14 +83,13 @@ var validateFunction = function(){
 
             for (var i = 1; i < farmNumber; i++) {
 
-                var farm_name = validateInput(document.getElementById('farmAddress[' + i + '][name]'));
                 var farm_addressLine1 = validateInput(document.getElementById('farmAddress[' + i + '][addressLine1]'));
                 var farm_addressLine2 = validateInput(document.getElementById('farmAddress[' + i + '][addressLine2]'));
                 var farm_zipCode = validateInput(document.getElementById('farmAddress[' + i + '][zipCode]'));
                 var farmType = validateInput(document.getElementById('farmAddress[' + i + '][farmType]'));
                 var farm_mobile = validateInput(document.getElementById('farmAddress[' + i + '][mobile]'));
 
-                farmValid = farmValid && farm_name && farm_addressLine1 && farm_addressLine2 && farm_zipCode && farmType && farm_mobile;
+                farmValid = farmValid && farm_addressLine1 && farm_addressLine2 && farm_zipCode && farmType && farm_mobile;
             }
 
             // Submit if all validations are met
