@@ -55,5 +55,5 @@
 @endsection
 
 @section('customScript')
-    <script src="/js/breeder/notifications.js"> </script>
+    <script src="{{ elixir('/js/breeder/notifications.js') }}"></script>
 @endsection

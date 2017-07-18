@@ -52,8 +52,38 @@ elixir(function(mix) {
         .scripts([
             'customer/filter.js',
             'customer/viewProducts_script.js'
-        ], 'public/js/customer/viewProducts.js');
-
+        ], 'public/js/customer/viewProducts.js')
+        .scripts([
+            'vendor/dropzone.min.js',
+            'vendor/VideoJS/video.min.js',
+            'breeder/breeder_custom.js'
+        ], 'public/js/breeder/custom.js')
+        .scripts([
+            'breeder/createProfile_script.js',
+            'validation/formValidationMethods.js',
+            'validation/breeder/createProfile_validation.js'
+        ], 'public/js/breeder/createProfile.js')
+        .scripts([
+            'breeder/profile.js',
+            'breeder/editProfile_script.js',
+            'validation/formValidationMethods.js',
+            'validation/breeder/editProfile_validation.js'
+        ], 'public/js/breeder/editProfile.js')
+        .scripts([
+            'vendor/chart.min.js',
+            'breeder/dashboardPage.js'
+        ], 'public/js/breeder/dashboard.js')
+        .scripts([
+            'breeder/product.js',
+            'breeder/filter.js',
+            'breeder/manageProducts_script.js',
+            'validation/formValidationMethods.js',
+            'validation/breeder/manageProducts_validation.js'
+        ], 'public/js/breeder/showProducts.js')
+        .scripts([
+            'vendor/imagezoom.min.js',
+            'breeder/viewProductDetail_script.js'
+        ], 'public/js/breeder/viewProductDetail.js');
 
     // Version the following files to promote browser cache busting
     // Forces browser to download latest asset files
@@ -66,7 +96,16 @@ elixir(function(mix) {
         'js/customer/notifications.js',
         'js/customer/swinecartPage.js',
         'js/customer/viewProductDetail.js',
-        'js/customer/viewProducts.js'
+        'js/customer/viewProducts.js',
+        'js/breeder/custom.js',
+        'js/breeder/createProfile.js',
+        'js/breeder/editProfile.js',
+        'js/breeder/notifications.js',
+        'js/breeder/reviews.js',
+        'js/breeder/dashboard.js',
+        'js/breeder/dashboardProductStatus.js',
+        'js/breeder/showProducts.js',
+        'js/breeder/viewProductDetail.js'
     ]);
 
     //  -app:
@@ -79,16 +118,17 @@ elixir(function(mix) {
     //              _ viewProductDetail
     //              _ viewProducts
     //      > Breeder:
-    //          +pages:
+    //          + pages:
     //              _ createProfile
     //              _ editProfile
     //              _ reviews
+    //              _ notifications
     //              _ dashboard
     //              _ dashboardProductStatus
     //              _ showProducts
     //              _ viewCustomers (maps)
     //              _ viewProductDetail
-    //  -vendor: jquery, materialize, vue, vue-resource
-    //      > Customer: moment, autobahn, elasticsearch.jquery (home, products), lodash (swineCart page), videojs (viewProductDetail), imagezoom (viewProductDetail)
-    //      > Breeder: moment, autobahn, videojs (showProducts, viewProductDetail), imagezoom, dropzone (editProfile, showProducts, viewProductDetail), lodash (dashboardProductStatus)
+    //  -vendor: jquery, materialize, vue, vue-resource, moment, autobahn, lodash
+    //      > Customer: elasticsearch.jquery (home, products), lodash (swineCart page), videojs (viewProductDetail), imagezoom (viewProductDetail)
+    //      > Breeder: videojs (showProducts, viewProductDetail), imagezoom, dropzone (editProfile, showProducts), lodash (dashboardProductStatus)
 });

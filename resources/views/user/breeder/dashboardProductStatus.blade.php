@@ -408,5 +408,5 @@
         // Variables
         var rawProducts = {!! $products !!};
     </script>
-    <script src="/js/breeder/dashboardProductStatus.js"></script>
+    <script src="{{ elixir('/js/breeder/dashboardProductStatus.js') }}"></script>
 @endsection

@@ -426,5 +426,5 @@
 @endsection
 
 @section('initScript')
-    <script src="/js/breeder/breeder_custom.js"> </script>
+    <script src="{{ elixir('/js/breeder/custom.js') }}"></script>
 @endsection
