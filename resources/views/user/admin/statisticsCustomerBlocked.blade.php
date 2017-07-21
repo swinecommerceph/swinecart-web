@@ -56,9 +56,10 @@
                 <div class="input-field col s12 m12 l6 xl6 valign">
                         <select onChange="window.location.href=this.value">
                             <option disabled selected>Choose option</option>
-                            <option value="{{route('admin.statistics.customer.active')}}">Active Customers</option>
+                            <option value="{{route('admin.statistics.customer.active')}}">Registered Customers</option>
                             <option value="{{route('admin.statistics.customer.deleted')}}">Deleted Customers</option>
                             <option selected value="{{route('admin.statistics.customer.blocked')}}">Blocked Customers</option>
+                            <option value="{{route('admin.statistics.customer.logincount')}}">Active Customers</option>
                         </select>
                     <label>Customer Chart</label>
                 </div>

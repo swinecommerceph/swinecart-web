@@ -648,7 +648,20 @@ class AdminController extends Controller
         $user = $this->create($request->all(), $verCode, $password); // create a user instance
         if($request->type == 0){
             $user->assignRole('breeder');       // assign a breeder role to it
-            $breeder = Breeder::create([])->users()->save($user);   // create a breeder instance for that user
+            $breeder = Breeder::create([
+                'logo_img_id' => 0,
+                'status_instance' => 'active',
+            ]);
+            $breeder->users()->save($user);   // create a breeder instance for that user
+            $farm = new FarmAddress;
+            $farm->name = $request->farm_name;
+            $farm->accreditation_no = $request->accredit_num;
+            $now = Carbon::now();
+            $expiration = $now->copy()->addYear();
+            $farm->accreditation_date = $now->toDateString();
+            $farm->accreditation_expiry = $expiration->toDateString();
+            $farm->accreditation_status = 'active';
+            $breeder->farmAddresses()->save($farm);
         }else{
             $user->assignRole('spectator');       // assign a breeder role to it
             $breeder = Spectator::create([])->users()->save($user);   // create a spectator instance for that user
@@ -1254,8 +1267,6 @@ class AdminController extends Controller
                 $requested++;
             }else if($transaction->order_status == 'reserved'){
                 $reserved++;
-            }else if($transaction->order_status == 'paid'){
-                $paid++;
             }else if($transaction->order_status == 'on_delivery'){
                 $onDelivery++;
             }else if($transaction->order_status == 'sold'){
@@ -2488,12 +2499,96 @@ class AdminController extends Controller
                      ->where('users.update_profile','=', 1)
                      ->where('users.deleted_at','=', NULL)
                      ->get();
-        foreach ($pending as $user) {
-            if(30 - ((new \Carbon\Carbon($user->created_at, 'UTC'))->diffInDays()) < 0){
-                Mail::to($user->email)
-                    ->queue(new SwineCartNotifyPendingBreederAccounts());
-            }
-        }
+         foreach ($pending as $user) {
+             if(30 - ((new \Carbon\Carbon($user->created_at, 'UTC'))->diffInDays()) < 0){
+                 Mail::to($user->email)
+                     ->queue(new SwineCartNotifyPendingBreederAccounts());
+             }
+         }
         return Redirect::back()->with('message','Action complete');
     }
+
+
+    /*
+     * Helper function that gets the count of blocked users and returns the array of count
+     *
+     * @param Integer user type or role, Carbon->year
+     * @return count array
+     */
+    public function getLoginCount($role, $year){
+        $counts = DB::table('user_logs')
+                    ->where('activity', '=', 'login')
+                    ->where('user_type', '=', $role)
+                    // ->groupBy('user_id')
+                    ->whereYear('created_at', $year)
+                    ->select(DB::raw('YEAR(created_at) AS year, MONTH(created_at) AS month, MONTHNAME(created_at) AS month_name, COUNT(*) AS user_count', 'GROUP BY (user_id)'))
+                    ->groupBy('month')
+                    ->groupBy('year')
+                    ->get();
+
+       return $counts;
+    }
+
+
+    public function showBreederLoginStatistics(){
+        $now = Carbon::now();
+        $year = $now->year;
+        $counts = $this->getLoginCount("breeder",$year);
+        $month = $this->getMonthlyCount($counts);
+        return view('user.admin.breederLoginStatistics', compact('month', 'year'));
+    }
+
+    public function showBreederLoginStatisticsYear(Request $request){
+        $year = $request->year;
+        $counts = $this->getLoginCount("breeder",$year);
+        $month = $this->getMonthlyCount($counts);
+        return view('user.admin.breederLoginStatistics', compact('month', 'year'));
+    }
+
+    public function showCustomerLoginStatistics(){
+        $now = Carbon::now();
+        $year = $now->year;
+        $counts = $this->getLoginCount("customer",$year);
+        $month = $this->getMonthlyCount($counts);
+        return view('user.admin.customerLoginStatistics', compact('month', 'year'));
+    }
+
+    public function showCustomerLoginStatisticsYear(Request $request){
+        $year = $request->year;
+        $counts = $this->getLoginCount("customer",$year);
+        $month = $this->getMonthlyCount($counts);
+        return view('user.admin.customerLoginStatistics', compact('month', 'year'));
+    }
+
+    public function addFarmPage($id){
+        $breeder = User::find($id);
+        return view('user.admin.addFarmToBreeder', compact('breeder'));
+    }
+
+    public function addFarmInformation(Request $request){
+        $farm = new FarmAddress;
+        $farm->name = $request->farm_name;
+        $farm->accreditation_no = $request->accreditation_num;
+        $now = Carbon::now();
+        $expiration = $now->copy()->addYear();
+        $farm->accreditation_date = $now->toDateString();
+        $farm->accreditation_expiry = $expiration->toDateString();
+        $farm->accreditation_status = 'active';
+        $user = User::find($request->id);
+        $breeder = Breeder::find($user->userable_id);
+        $breeder->farmAddresses()->save($farm);
+        $request->session()->flash('alert-farm-add', 'Farm successfully added');
+        return Redirect::back()->with('message','Action complete');
+    }
+
+    public function getFarmInformation(Request $request){
+        $user = User::find($request->userId);
+        $farms = DB::table('farm_addresses')
+                ->where('addressable_id', '=', $user->userable_id)
+                ->select('name as farmname', 'addressLine1', 'addressLine2', 'accreditation_no', 'accreditation_status', 'accreditation_date')
+                ->get();
+
+        return $farms;
+    }
+
 }

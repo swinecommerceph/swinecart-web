@@ -452,7 +452,8 @@ var users = {
             success: function(data){
                 data.forEach(function(data){
                     if(role == 2){
-                        $('#user-modal-chatbutton').html('<a href="'+config.admin_url+'/messages/customer/'+id+'" class="btn-flat"><i class="material-icons left">chat</i>Message</a>');
+                        $('#user-modal-chatbutton').html('<a href="'+config.admin_url+'/messages/breeder/'+id+'" class="btn-flat"><i class="material-icons left">chat</i>Message</a>');
+                        $('#user-modal-addfarm').html('<a href="'+config.admin_url+'/addfarm/'+id+'" class="btn-flat"><i class="material-icons left">add</i>Add Farm</a>');
                         $('#admin-user-details-content').empty();
                         $('#admin-user-details-content').html('\
                         <div class="row"> \
@@ -503,6 +504,7 @@ var users = {
                         ');
 
                     }else{
+                        $('#breeder_farm_data').empty();
                         $('#user-modal-chatbutton').html('<a href="'+config.admin_url+'/messages/customer/'+id+'" class="btn-flat"><i class="material-icons left">chat</i>Message</a>');
                         // $('#user-modal-chatbutton').html('<a href="messages/customer/{+'id'+}" class="waves-effect waves-teal btn-flat"><i class="material-icons left">chat</i>Message</a>');
                         $('#admin-user-details-content').empty();
@@ -595,6 +597,64 @@ var users = {
                 console.log(message['responseText']);
             }
         });
+    },
+
+    fetch_breeder_farm_information: function(id, role, userable){
+        $.ajax({
+            url: config.admin_url+'/getfarms',
+            type: 'GET',
+            cache: false,
+            data: {
+                'userId': id,
+                'userRole': role,
+                'userUserableId': userable
+            },
+            success: function(data){
+                // $('#farm_detail_title').html('<div class="col s12 m12 l12 xl12"><h4>Breeder Farms</h4></div>');
+                $('#breeder_farm_information').empty();
+                if(data.length != 0){
+                    data.forEach(function(data){
+                    $('#breeder_farm_information').append('\
+                            <tr>\
+                              <td>'+data.farmname+'</td>\
+                              <td>'+data.addressLine1+' '+data.addressLine2+'</td>\
+                              <td>'+data.accreditation_no+'</td>\
+                              <td>'+data.accreditation_status+'</td>\
+                              <td>'+data.accreditation_date+'</td>\
+                            </tr>\
+                        ');
+                    });
+                    // $('#admin-view-more-transactions').html('\
+                    // <form name="admin-transaction-history" action="'+config.admin_url+'/home/userlist/transaction-user" method="GET">\
+                    //     <div class="hide">\
+                    //         <input type="hidden" name="name" value="'+name+'"><br>\
+                    //         <input type="hidden" name="id" value="'+id+'"><br>\
+                    //         <input type="hidden" name="role" value="'+role+'"><br>\
+                    //         <input type="hidden" name="userable" value="'+userable+'"><br>\
+                    //     </div>\
+                    //     <button class="btn waves-effect waves-light" type="submit">View More Transactions\
+                    //     </button>\
+                    // </form>\
+                    // ');
+                }else{
+                    $('#breeder_farm_information').append('\
+                        <tr>\
+                          <td></td>\
+                          <td></td>\
+                          <td class="right">No Farm</td>\
+                          <td></td>\
+                          <td></td>\
+                        </tr>\
+                    ');
+
+                }
+
+            },
+            error: function(message){
+                console.log(message['responseText']);
+            }
+        });
+
     }
 
 };

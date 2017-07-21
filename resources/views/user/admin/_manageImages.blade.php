@@ -130,12 +130,16 @@
                         <div class="add-content">
                             {{-- <a class="waves-effect waves-light btn" href="#add-content-modal">Add Content</a> --}}
                             <a class="btn waves-effect waves-light modal-trigger" href="#getInputModal">Add +</a>
+
                         </div>
                     </div>
                 </div>
             </div>
 
         </div>
+    </div>
+    <div class="modal-footer">
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
     </div>
 </div>
 
@@ -196,9 +200,15 @@
               <label for="input_text">Content text</label>
             </div>
         </div>
-        <button id = "add-image-submit" class="btn waves-effect waves-light right" type="submit">Add
-          <i class="material-icons right">send</i>
-        </button>
+        <div class="row">
+            <div class="right">
+              <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+            </div>
+            <button id = "add-image-submit" class="btn-flat waves-effect waves-light right" type="submit">Add
+              <i class="material-icons right">send</i>
+            </button>
+        </div>
+
      {!!Form::close()!!}
    </div>
  </div>

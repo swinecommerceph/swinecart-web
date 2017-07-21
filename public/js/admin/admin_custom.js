@@ -54,4 +54,16 @@ $(document).ready(function(){
         admin_layout.show_admin_information();
     });
 
+
+    $('#breeder_radio').click(function() {
+        $('#farm_name').removeAttr("disabled");
+        $('#accredit_num').removeAttr("disabled");
+    });
+
+    $('#spectator_radio').click(function() {
+        $('#farm_name').attr("disabled", "disabled");
+        $('#accredit_num').attr("disabled", "disabled");
+    });
+
+
 });

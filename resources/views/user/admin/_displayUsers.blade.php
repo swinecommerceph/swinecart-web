@@ -178,10 +178,13 @@
         <div id="admin-user-details-modal" class="modal modal-fixed-footer">
             <div class="modal-content">
                 <div class="row">
-                    <div class="admin-usermodal-title col s9 m9 l9 xl9">
+                    <div class="admin-usermodal-title col s6 m6 l6 xl6">
                         <h4>User Details</h4>
                     </div>
                     <div id="user-modal-chatbutton" class="col s3 m3 l3 xl3 right">
+
+                    </div>
+                    <div id="user-modal-addfarm" class="col s3 m3 l3 xl3 right">
 
                     </div>
                 </div>
@@ -226,6 +229,26 @@
                 </div>
                 <div id="admin-view-more-transactions" class="col s12 m12 l12 center">
 
+                </div>
+
+                <div id="breeder_farm_data" class="col s12 m12 l12 xl12">
+                    <h4>Breeder Farms</h4>
+                    <div class="divider"></div>
+                    <table class="responsive-table highlight">
+                        <thead>
+                            <tr>
+                                <th>Farm Name</th>
+                                <th>Address</th>
+                                <th>Accreditation Number</th>
+                                <th>Accreditation Status</th>
+                                <th>Accreditation Date</th>
+                            </tr>
+                        </thead>
+
+                        <tbody id="breeder_farm_information">
+
+                        </tbody>
+                    </table>
                 </div>
             </div>
             <div class="modal-footer">

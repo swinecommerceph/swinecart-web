@@ -116,11 +116,11 @@
 
                         <div class="row">
                             <div class = "addusercontainer" class="row">
-                            <div class="input-field col s11">
-                                <i class="material-icons prefix">account_circle</i>
-                                <input required id="icon_prefix" type="text" class="validate" name="name">
-                                <label for="icon_prefix">Username</label>
-                            </div>
+                                <div class="input-field col s11">
+                                    <i class="material-icons prefix">account_circle</i>
+                                    <input required id="username" type="text" class="validate" name="name">
+                                    <label for="username">Username</label>
+                                </div>
                             </div>
                         </div>
 
@@ -128,20 +128,36 @@
                             <div class = "addusercontainer" class="row">
                                 <div class="input-field col s11">
                                     <i class="material-icons prefix">email</i>
-                                    <input required id="icon_prefix" type="email" class="validate" name="email">
-                                    <label for="icon_prefix">Email Address</label>
+                                    <input required id="email" type="email" class="validate" name="email">
+                                    <label for="email">Email Address</label>
                                 </div>
                             </div>
                         </div>
 
                         <div class="row">
+                            <div class="input-field col s11 m11 l11 xl11">
+                                <i class="material-icons prefix">add_location</i>
+                                <input disabled required id="farm_name" type="text" class="validate" name="farm_name">
+                                <label for="farm_name">Farm Name</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
+                            <div class="input-field col s11 m11 l11 xl11">
+                                <i class="material-icons prefix">info</i>
+                                <input disabled required id="accredit_num" type="text" class="validate" name="accredit_num">
+                                <label for="accredit_num">Accreditation Number</label>
+                            </div>
+                        </div>
+
+                        <div class="row">
                             <div class="col s12 m12 l3 xl3">
-                                <input name="type" value=0 type="radio" id="breeder" />
-                                <label for="breeder">Breeder</label>
+                                <input name="type" value=0 type="radio" id="breeder_radio" />
+                                <label for="breeder_radio">Breeder</label>
                             </div>
                             <div class="col s12 m12 l3 xl3">
-                                <input name="type" value=1 type="radio" id="spectator" />
-                                <label for="spectator">Spectator</label>
+                                <input name="type" value=1 type="radio" id="spectator_radio" />
+                                <label for="spectator_radio">Spectator</label>
                             </div>
                         </div>
 
