@@ -152,5 +152,5 @@ $(document).ready(function(){
 	var otherparty;
 
 </script>
-<script type="text/javascript" src="/js/chat.js"></script>
+<script src="{{ elixir('/js/chat.js') }}"></script>
 @endsection

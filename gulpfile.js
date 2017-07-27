@@ -90,6 +90,7 @@ elixir(function(mix) {
     mix.version([
         'js/siteCustom.js',
         'js/vendor.js',
+        'js/chat.js',
         'js/customer/custom.js',
         'js/customer/createProfile.js',
         'js/customer/editProfile.js',

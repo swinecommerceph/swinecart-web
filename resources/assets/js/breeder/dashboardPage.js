@@ -258,6 +258,10 @@ var vm = new Vue({
     mounted: function(){
         var self = this;
 
+        // Determine if connection to websocket server must
+        // be secure depending on the protocol
+        var pubsubServer = (location.protocol === 'https:') ? config.pubsubWSSServer : config.pubsubWSServer;
+
         // Declaring global defaults
         Chart.defaults.global.defaultFontFamily = 'Poppins';
         Chart.defaults.global.defaultFontSize = 14;
@@ -369,7 +373,7 @@ var vm = new Vue({
         };
 
         var conn = new ab.connect(
-            config.pubsubWSServer,
+            pubsubServer,
             onConnectCallback,
             onHangupCallback,
             {
