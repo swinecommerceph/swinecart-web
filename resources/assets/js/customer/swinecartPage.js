@@ -698,6 +698,10 @@ var vm = new Vue({
 
         var self = this;
 
+        // Determine if connection to websocket server must
+        // be secure depending on the protocol
+        var pubsubServer = (location.protocol === 'https:') ? config.pubsubWSSServer : config.pubsubWSServer;
+
         // Set-up configuration and subscribe to a topic in the pubsub server
         var onConnectCallback = function(session){
 
@@ -772,7 +776,7 @@ var vm = new Vue({
         };
 
         var conn = new ab.connect(
-            config.pubsubWSServer,
+            pubsubServer,
             onConnectCallback,
             onHangupCallback,
             {

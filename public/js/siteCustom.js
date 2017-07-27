@@ -29,6 +29,7 @@ var config = {
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',
     pubsubWSServer: 'ws://' + window.hostUrl + '/pusher',
+    pubsubWSSServer: 'wss://' + window.hostUrl + '/pusher',
     preloader_progress: $('#preloader-progress'),
     preloader_circular: $('#preloader-circular')
 
