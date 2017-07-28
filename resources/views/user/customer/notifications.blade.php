@@ -55,5 +55,5 @@
 @endsection
 
 @section('customScript')
-    <script src="/js/customer/notifications.js"> </script>
+    <script src="{{ elixir('/js/customer/notifications.js') }}"></script>
 @endsection

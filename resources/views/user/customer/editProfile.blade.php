@@ -35,8 +35,8 @@
           <p>Are you sure you want to remove this farm?</p>
         </div>
         <div class="modal-footer">
-          <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
           <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
+          <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
         </div>
     </div>
 @endsection
@@ -52,8 +52,5 @@
     <script type="text/javascript">
         var provinces = {!! $provinces !!};
     </script>
-    <script src="/js/customer/profile.js"> </script>
-    <script src="/js/customer/editProfile_script.js"> </script>
-    <script src="/js/validation/formValidationMethods.js"> </script>
-    <script src="/js/validation/customer/editProfile_validation.js"> </script>
+    <script src="{{ elixir('/js/customer/editProfile.js') }}"></script>
 @endsection

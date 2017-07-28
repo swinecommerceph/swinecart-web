@@ -1,12 +1,12 @@
 {
   "private": true,
-  "devDependencies": {
-    "gulp": "^3.8.8",
-    "video.js": "~5.9.2"
+  "scripts": {
+    "prod": "gulp --production",
+    "dev": "gulp watch"
   },
-  "dependencies": {
-    "laravel-elixir": "^3.0.0",
-    "bootstrap-sass": "^3.0.0",
-    "video.js": "~5.9.2"
+  "devDependencies": {
+    "gulp": "^3.9.1",
+    "laravel-elixir": "^6.0.0-14",
+    "laravel-elixir-webpack-official": "^1.0.2"
   }
 }

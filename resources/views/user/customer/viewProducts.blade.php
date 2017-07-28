@@ -251,7 +251,5 @@
 @endsection
 
 @section('customScript')
-    <script src="/js/vendor/elasticsearch.jquery.min.js"></script>
-    <script src="/js/customer/filter.js"> </script>
-    <script src="/js/customer/viewProducts_script.js"> </script>
+    <script src="{{ elixir('/js/customer/viewProducts.js') }}"></script>
 @endsection

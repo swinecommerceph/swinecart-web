@@ -12,7 +12,7 @@
     <script type="text/javascript">
         window.hostUrl = '{{ env('APP_URL') }}';
         window.pubsubTopic = '{{ crypt(Auth::user()->email, md5(Auth::user()->email)) }}';
-        window.elasticsearchHost = '{{ env('APP_URL') }}' + ':9200';
+        window.elasticsearchHost = '{{ env('APP_URL') }}' + '/search/';
     </script>
 @endsection
 
@@ -498,14 +498,10 @@
 @endsection
 
 @section('initScript')
-    <script src="/js/vendor/moment.min.js"></script>
-    <script src="/js/vendor/autobahn.min.js"></script>
-    <script src="/js/customer/swinecart.js"> </script>
-    <script src="/js/customer/customer_custom.js"> </script>
+    <script src="{{ elixir('/js/customer/custom.js') }}"></script>
 @endsection
 
 @section('customScript')
-    <script src="/js/vendor/elasticsearch.jquery.min.js"></script>
     <script type="text/javascript">
         $(document).ready(function(){
 
@@ -538,7 +534,7 @@
                 }
                 else{
                     setTimeout(function(){
-                        searchPhrase = $('input#search').val();
+                        var searchPhrase = $('input#search').val();
 
                         // Execute of searchPhrase is not empty
                         if(searchPhrase){

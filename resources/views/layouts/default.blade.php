@@ -126,17 +126,8 @@
 		</div>
 	@endif
 
-	{{-- <script type="text/javascript" src="https://code.jquery.com/jquery-2.1.1.min.js"></script> --}}
-	{{-- Compiled and minified JavaScript --}}
-	{{-- <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/0.97.7/js/materialize.min.js"></script> --}}
-	{{-- <script src="http://vjs.zencdn.net/5.9.2/video.js"></script> --}}
-
-	<script src="/js/vendor/jquery.min.js"></script>
-	<script src="/js/vendor/materialize.min.js"></script>
-	<script src="/js/vendor/VueJS/vue.js"></script>
-    <script src="/js/vendor/VueJS/vue-resource.min.js"></script>
-	<script src="/js/config.js"></script>
-	<script src="/js/custom.js"></script>
+	<script src="{{ elixir('/js/vendor.js') }}"></script>
+	<script src="{{ elixir('/js/siteCustom.js') }}"></script>
 	{{-- For user-specific initialization scripts --}}
 	@yield('initScript')
 	{{-- Custom scripts for certain pages/functionalities --}}

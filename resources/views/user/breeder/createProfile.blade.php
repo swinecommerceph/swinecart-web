@@ -46,7 +46,5 @@
     <script type="text/javascript">
         var provinces = {!! $provinces !!};
     </script>
-    <script src="/js/breeder/createProfile_script.js"> </script>
-    <script src="/js/validation/formValidationMethods.js"> </script>
-    <script src="/js/validation/breeder/createProfile_validation.js"> </script>
+    <script src="{{ elixir('/js/breeder/createProfile.js') }}"></script>
 @endsection

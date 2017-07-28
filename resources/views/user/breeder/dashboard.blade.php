@@ -253,8 +253,6 @@
 @endsection
 
 @section('customScript')
-    <script src="/js/vendor/autobahn.min.js"></script>
-    <script src="/js/vendor/chart.min.js"></script>
     <script type="text/javascript">
         var rawLatestAccreditation = "{{ $latestAccreditation }}";
         var rawServerDateNow = "{{ $serverDateNow }}";
@@ -282,5 +280,5 @@
         };
         var rawDashboardStats = {!! json_encode($dashboardStats) !!};
     </script>
-    <script src="/js/breeder/dashboard.js"></script>
+    <script src="{{ elixir('/js/breeder/dashboard.js') }}"></script>
 @endsection

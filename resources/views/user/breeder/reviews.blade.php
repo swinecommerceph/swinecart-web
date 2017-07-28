@@ -166,5 +166,5 @@
     <script type="text/javascript">
         var rawReviewsAndRatings = {!! $reviews !!};
     </script>
-    <script src="/js/breeder/reviews.js" charset="utf-8"></script>
+    <script src="{{ elixir('/js/breeder/reviews.js') }}"></script>
 @endsection

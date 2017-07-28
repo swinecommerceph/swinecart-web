@@ -721,10 +721,9 @@
 @endsection
 
 @section('customScript')
-    <script src="/js/vendor/lodash.min.js"></script>
     <script type="text/javascript">
         // Variables
         var rawProducts = {!! $products !!};
     </script>
-    <script src="/js/customer/swinecartPage.js"> </script>
+    <script src="{{ elixir('/js/customer/swinecartPage.js') }}"></script>
 @endsection
