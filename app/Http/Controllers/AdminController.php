@@ -234,24 +234,45 @@ class AdminController extends Controller
      * @return View
      */
     public function getBreederStatus(){
-        $breeders = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->whereNull('deleted_at')->orderBy('breeder_user.latest_accreditation', 'asc')->paginate(8);
+
+        // $breeders = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->whereNull('deleted_at')->orderBy('breeder_user.latest_accreditation', 'asc')->paginate(8);
+        $breeders = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->whereNull('users.deleted_at')->select('*','users.name as username')->paginate(8);
+        // ->leftjoin('farm_addresses', 'farm_addresses.addressable_type', '=', 'breeder_user.id')
+
         $reviews = DB::table('reviews')->groupBy('breeder_id')->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->get();
+        $farms = DB::table('farm_addresses')->groupBy('addressable_id')->orderBy('accreditation_date', 'asc')->get();
+
+        // dd($farms->where('addressable_id','=',1)->first());
         foreach ($breeders as $breeder) {
             $breeder->delivery = 0;
             $breeder->transaction = 0;
             $breeder->quality = 0;
             $breeder->overall = 0;
             $breeder->review_count = 0;
+            $breeder->accreditation_date;
+            $breeder->accreditation_expiry;
+            // $temp = FarmAddress::where('addressable_id','=',$breeder->userable_id)->first();
+            //
+            // $breeder->accreditation_date = $temp->accreditation_date;
+            // $breeder->accreditation_expiry = $temp->accreditation_expiry;
+            // $breeder->farms = $temp->accreditation_date;
+
             foreach ($reviews as $review) {
                 if($breeder->userable_id == $review->breeder_id){
                     $breeder->delivery = $review->delivery;
                     $breeder->transaction = $review->transaction;
                     $breeder->quality = $review->quality;
                     $breeder->overall = round(($review->delivery + $review->transaction + $review->quality)/3, 2);
-                    $breeder->review_count = $review->count;;
+                    $breeder->review_count = $review->count;
                 }
             }
 
+            foreach ($farms as $farm) {
+                if($breeder->userable_id == $farm->addressable_id){
+                    $breeder->accreditation_date = $farm->accreditation_date;
+                    $breeder->accreditation_expiry = $farm->accreditation_expiry;
+                }
+            }
         }
 
         return view('user.admin.breederStatus', compact('breeders'));
@@ -294,7 +315,9 @@ class AdminController extends Controller
      */
     public function editAccreditation($breederid=null){
         $breeder = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->where('userable_id','=', $breederid)->select('name','userable_id', 'users.id')->first();
-        return view('user.admin.editAccreditation', compact('breeder'));
+        $farms = FarmAddress::where('addressable_id', '=', $breeder->userable_id)->get();
+
+        return view('user.admin.editAccreditation', compact('breeder', 'farms'));
     }
 
     /**
@@ -304,14 +327,16 @@ class AdminController extends Controller
      * @return redirect
      */
     public function editAccreditationAction(Request $request){
+        $farm = FarmAddress::find($request->farmid)->first();
+
         $accreditationDate = Carbon::parse($request->accreditdate)->toDateString();
         $notificationDate = Carbon::parse($request->notifdate)->toDateString();
-        $breeder = Breeder::find($request->breeder_id);
-        $breeder->registration_number = $request->accreditnumber;
-        $breeder->latest_accreditation = $accreditationDate;
-        $breeder->notification_date = $notificationDate;
-        $breeder->save();
-        $breeder->name = $request->name;
+        // $breeder = Breeder::find($request->breeder_id);
+        $farm->accreditation_no = $request->accreditnumber;
+        $farm->accreditation_date = $accreditationDate;
+        $farm->accreditation_expiry = $notificationDate;
+        $farm->save();
+        // $breeder->name = $request->name;
         return Redirect::back()->with('message','Edit Successful');
     }
 
@@ -1715,6 +1740,7 @@ class AdminController extends Controller
         $date = Carbon::now();
         $year = $date->year;
         $transactions = $this->getTransactionCountPerMonth($year);
+
         return view('user.admin.statisticsTransaction', compact('transactions', 'year'));
      }
 
@@ -1727,6 +1753,7 @@ class AdminController extends Controller
       */
      public function showStatisticsTransactionsYear(Request $request){
         $year = $request->year;
+
         $transactions = $this->getTransactionCountPerMonth($year);
 
         return view('user.admin.statisticsTransaction', compact('transactions', 'year'));
@@ -1791,11 +1818,19 @@ class AdminController extends Controller
                         ->orderBy('year', 'desc')
                         ->get();
 
-        $lastTransactions = $transactions->first()->year; //most recent transaction year in the database
-        $firstTransactions = $transactions->take(5)->last()->year; //oldest transaction year in the last 5 transaction years
-        $showTransactions = $transactions->take(5); // get the last 5 transaction years
-        $selectedMin = $firstTransactions;
-        $selectedMax = $lastTransactions;
+
+        if(count($transactions) == 0){
+            $selectedMin = $request->minyear;
+            $selectedMax = $request->maxyear;
+            $showTransactions = $transactions->take(5);
+        }else{
+            $lastTransactions = $transactions->first()->year; //most recent transaction year in the database
+            $firstTransactions = $transactions->take(5)->last()->year; //oldest transaction year in the last 5 transaction years
+            $showTransactions = $transactions->take(5); // get the last 5 transaction years
+            $selectedMin = $firstTransactions;
+            $selectedMax = $lastTransactions;
+        }
+
         return view('user.admin.statisticsTotalTransaction',compact('showTransactions', 'selectedMin', 'selectedMax'));
     }
 
