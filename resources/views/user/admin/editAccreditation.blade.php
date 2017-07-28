@@ -24,6 +24,18 @@
                 <input type="hidden" name="breeder_id" value="{{$breeder->userable_id}}">
                 <div class="row">
                     <div class="input-field col s12 m12 l12 xl12">
+                        <select name="farmid">
+                            <option value="" disabled selected>Choose farm</option>
+                            @foreach ($farms as $farm)
+                                <option value="{{$farm->id}}">{{$farm->name}}</option>
+                            @endforeach
+                        </select>
+                        <label>Farm</label>
+                    </div>
+
+                </div>
+                <div class="row">
+                    <div class="input-field col s12 m12 l12 xl12">
                         <input id="accreditation-number" type="text" class="validate" required="required" name="accreditnumber">
                         <label for="accreditation">Accreditation Number</label>
                     </div>

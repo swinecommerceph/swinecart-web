@@ -56,9 +56,10 @@
                 <div class="input-field col s12 m12 l6 xl6 valign">
                         <select onChange="window.location.href=this.value">
                             <option disabled selected>Choose option</option>
-                            <option selected value="{{route('admin.statistics.breeder.active')}}">Active Breeders</option>
+                            <option selected value="{{route('admin.statistics.breeder.active')}}">Registered Breeders</option>
                             <option value="{{route('admin.statistics.breeder.deleted')}}">Deleted Breeders</option>
                             <option value="{{route('admin.statistics.breeder.blocked')}}">Blocked Breeders</option>
+                            <option value="{{route('admin.statistics.breeder.logincount')}}">Active Breeders</option>
                         </select>
                     <label>Breeder Chart</label>
                 </div>

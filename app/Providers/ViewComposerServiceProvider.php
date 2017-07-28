@@ -46,7 +46,7 @@ class ViewComposerServiceProvider extends ServiceProvider
             'user.admin.statisticsCustomerActive', 'user.admin.statisticsCustomerBlocked', 'user.admin.statisticsCustomerDeleted',
             'user.admin.averageStatistics','user.spectator.activeBreederStatistics', 'user.spectator.blockedBreederStatistics',
             'user.spectator.deletedBreederStatistics','user.spectator.activeCustomerStatistics', 'user.spectator.blockedCustomerStatistics',
-            'user.spectator.deletedCustomerStatistics',
+            'user.spectator.deletedCustomerStatistics','user.admin.breederLoginStatistics', 'user.admin.customerLoginStatistics',
             ], function($view){
             $first =  DB::table('users')->orderBy('created_at', 'asc')->first();
             $last =  DB::table('users')->orderBy('created_at', 'desc')->first();

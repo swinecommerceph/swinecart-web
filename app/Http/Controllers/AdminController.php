@@ -102,10 +102,10 @@ class AdminController extends Controller
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',2)
                         ->where('users.email_verified','=', 1)
-                        ->where('users.blocked_at','=', NULL)
-                        ->where('users.deleted_at','=', NULL)
-                        ->count();
-        return $count;
+                        ->whereNull('users.blocked_at')
+                        ->whereNull('users.deleted_at')
+                        ->get();
+        return count($count);
     }
 
     /**
@@ -120,10 +120,11 @@ class AdminController extends Controller
                         ->join('roles', 'role_user.role_id','=','roles.id')
                         ->where('role_user.role_id','=',3)
                         ->where('users.email_verified','=', 1)
-                        ->where('users.blocked_at','=', NULL)
-                        ->where('users.deleted_at','=', NULL)
-                        ->count();
-        return $count;
+                        ->whereNull('users.blocked_at')
+                        ->whereNull('users.deleted_at')
+                        ->get();
+
+        return count($count);
     }
 
     /**
@@ -161,6 +162,32 @@ class AdminController extends Controller
         return $count;
     }
 
+    public function blockedCustomerCount(){
+        $count = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->join('roles', 'role_user.role_id','=','roles.id')
+                        ->where('role_user.role_id','=',3)
+                        ->where('users.email_verified','=', 1)
+                        ->whereNotNull('users.blocked_at')
+                        ->whereNull('users.deleted_at')
+                        ->get();
+
+        return count($count);
+    }
+
+    public function blockedBreederCount(){
+        $count = DB::table('users')
+                        ->join('role_user', 'users.id', '=' , 'role_user.user_id')
+                        ->join('roles', 'role_user.role_id','=','roles.id')
+                        ->where('role_user.role_id','=',2)
+                        ->where('users.email_verified','=', 1)
+                        ->whereNotNull('users.blocked_at')
+                        ->whereNull('users.deleted_at')
+                        ->get();
+
+        return count($count);
+    }
+
     public function topBreeders(){
         $now = Carbon::now();
         $reviews = DB::table('reviews')->groupBy('breeder_id')->whereMonth('created_at',$now->month)->whereYear('created_at', $now->year)->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->orderBy('count','desc')->take(5)->get();
@@ -184,9 +211,11 @@ class AdminController extends Controller
         $customers = $this->customerCount();
         $pending = $this->pendingUserCount();
         $blocked = $this->blockedUserCount();
+        $blocked_breeder = $this->blockedBreederCount();
+        $blocked_customer = $this->blockedCustomerCount();
         $messages = DB::table('messages')->where('admin_id','=', $this->user->id)->whereNull('read_at')->count();
         $reviews = $this->topBreeders();
-        $summary = array($all, $blocked, $pending, $messages, $reviews);
+        $summary = array($all,$blocked, $pending, $messages, $reviews, $breeders, $customers, $blocked_breeder, $blocked_customer);
 
         // $customers = DB::table('swine_cart_items')->join('transaction_logs', 'transaction_logs.product_id','=','swine_cart_items.product_id')
         //             ->whereMonth('date_needed', Carbon::now()->month)
@@ -205,24 +234,45 @@ class AdminController extends Controller
      * @return View
      */
     public function getBreederStatus(){
-        $breeders = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->whereNull('deleted_at')->orderBy('breeder_user.latest_accreditation', 'asc')->paginate(8);
+
+        // $breeders = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->whereNull('deleted_at')->orderBy('breeder_user.latest_accreditation', 'asc')->paginate(8);
+        $breeders = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->whereNull('users.deleted_at')->select('*','users.name as username')->paginate(8);
+        // ->leftjoin('farm_addresses', 'farm_addresses.addressable_type', '=', 'breeder_user.id')
+
         $reviews = DB::table('reviews')->groupBy('breeder_id')->select('breeder_id',DB::raw('AVG(rating_delivery) delivery, AVG(rating_transaction) transaction, AVG(rating_productQuality) quality, COUNT(*) count'))->get();
+        $farms = DB::table('farm_addresses')->groupBy('addressable_id')->orderBy('accreditation_date', 'asc')->get();
+
+        // dd($farms->where('addressable_id','=',1)->first());
         foreach ($breeders as $breeder) {
             $breeder->delivery = 0;
             $breeder->transaction = 0;
             $breeder->quality = 0;
             $breeder->overall = 0;
             $breeder->review_count = 0;
+            $breeder->accreditation_date;
+            $breeder->accreditation_expiry;
+            // $temp = FarmAddress::where('addressable_id','=',$breeder->userable_id)->first();
+            //
+            // $breeder->accreditation_date = $temp->accreditation_date;
+            // $breeder->accreditation_expiry = $temp->accreditation_expiry;
+            // $breeder->farms = $temp->accreditation_date;
+
             foreach ($reviews as $review) {
                 if($breeder->userable_id == $review->breeder_id){
                     $breeder->delivery = $review->delivery;
                     $breeder->transaction = $review->transaction;
                     $breeder->quality = $review->quality;
                     $breeder->overall = round(($review->delivery + $review->transaction + $review->quality)/3, 2);
-                    $breeder->review_count = $review->count;;
+                    $breeder->review_count = $review->count;
                 }
             }
 
+            foreach ($farms as $farm) {
+                if($breeder->userable_id == $farm->addressable_id){
+                    $breeder->accreditation_date = $farm->accreditation_date;
+                    $breeder->accreditation_expiry = $farm->accreditation_expiry;
+                }
+            }
         }
 
         return view('user.admin.breederStatus', compact('breeders'));
@@ -265,7 +315,9 @@ class AdminController extends Controller
      */
     public function editAccreditation($breederid=null){
         $breeder = User::where('userable_type', 'App\Models\Breeder')->join('breeder_user', 'users.userable_id', '=', 'breeder_user.id')->where('userable_id','=', $breederid)->select('name','userable_id', 'users.id')->first();
-        return view('user.admin.editAccreditation', compact('breeder'));
+        $farms = FarmAddress::where('addressable_id', '=', $breeder->userable_id)->get();
+
+        return view('user.admin.editAccreditation', compact('breeder', 'farms'));
     }
 
     /**
@@ -275,14 +327,16 @@ class AdminController extends Controller
      * @return redirect
      */
     public function editAccreditationAction(Request $request){
+        $farm = FarmAddress::find($request->farmid)->first();
+
         $accreditationDate = Carbon::parse($request->accreditdate)->toDateString();
         $notificationDate = Carbon::parse($request->notifdate)->toDateString();
-        $breeder = Breeder::find($request->breeder_id);
-        $breeder->registration_number = $request->accreditnumber;
-        $breeder->latest_accreditation = $accreditationDate;
-        $breeder->notification_date = $notificationDate;
-        $breeder->save();
-        $breeder->name = $request->name;
+        // $breeder = Breeder::find($request->breeder_id);
+        $farm->accreditation_no = $request->accreditnumber;
+        $farm->accreditation_date = $accreditationDate;
+        $farm->accreditation_expiry = $notificationDate;
+        $farm->save();
+        // $breeder->name = $request->name;
         return Redirect::back()->with('message','Edit Successful');
     }
 
@@ -619,7 +673,20 @@ class AdminController extends Controller
         $user = $this->create($request->all(), $verCode, $password); // create a user instance
         if($request->type == 0){
             $user->assignRole('breeder');       // assign a breeder role to it
-            $breeder = Breeder::create([])->users()->save($user);   // create a breeder instance for that user
+            $breeder = Breeder::create([
+                'logo_img_id' => 0,
+                'status_instance' => 'active',
+            ]);
+            $breeder->users()->save($user);   // create a breeder instance for that user
+            $farm = new FarmAddress;
+            $farm->name = $request->farm_name;
+            $farm->accreditation_no = $request->accredit_num;
+            $now = Carbon::now();
+            $expiration = $now->copy()->addYear();
+            $farm->accreditation_date = $now->toDateString();
+            $farm->accreditation_expiry = $expiration->toDateString();
+            $farm->accreditation_status = 'active';
+            $breeder->farmAddresses()->save($farm);
         }else{
             $user->assignRole('spectator');       // assign a breeder role to it
             $breeder = Spectator::create([])->users()->save($user);   // create a spectator instance for that user
@@ -1225,8 +1292,6 @@ class AdminController extends Controller
                 $requested++;
             }else if($transaction->order_status == 'reserved'){
                 $reserved++;
-            }else if($transaction->order_status == 'paid'){
-                $paid++;
             }else if($transaction->order_status == 'on_delivery'){
                 $onDelivery++;
             }else if($transaction->order_status == 'sold'){
@@ -1675,6 +1740,7 @@ class AdminController extends Controller
         $date = Carbon::now();
         $year = $date->year;
         $transactions = $this->getTransactionCountPerMonth($year);
+
         return view('user.admin.statisticsTransaction', compact('transactions', 'year'));
      }
 
@@ -1687,6 +1753,7 @@ class AdminController extends Controller
       */
      public function showStatisticsTransactionsYear(Request $request){
         $year = $request->year;
+
         $transactions = $this->getTransactionCountPerMonth($year);
 
         return view('user.admin.statisticsTransaction', compact('transactions', 'year'));
@@ -1751,11 +1818,19 @@ class AdminController extends Controller
                         ->orderBy('year', 'desc')
                         ->get();
 
-        $lastTransactions = $transactions->first()->year; //most recent transaction year in the database
-        $firstTransactions = $transactions->take(5)->last()->year; //oldest transaction year in the last 5 transaction years
-        $showTransactions = $transactions->take(5); // get the last 5 transaction years
-        $selectedMin = $firstTransactions;
-        $selectedMax = $lastTransactions;
+
+        if(count($transactions) == 0){
+            $selectedMin = $request->minyear;
+            $selectedMax = $request->maxyear;
+            $showTransactions = $transactions->take(5);
+        }else{
+            $lastTransactions = $transactions->first()->year; //most recent transaction year in the database
+            $firstTransactions = $transactions->take(5)->last()->year; //oldest transaction year in the last 5 transaction years
+            $showTransactions = $transactions->take(5); // get the last 5 transaction years
+            $selectedMin = $firstTransactions;
+            $selectedMax = $lastTransactions;
+        }
+
         return view('user.admin.statisticsTotalTransaction',compact('showTransactions', 'selectedMin', 'selectedMax'));
     }
 
@@ -2459,12 +2534,96 @@ class AdminController extends Controller
                      ->where('users.update_profile','=', 1)
                      ->where('users.deleted_at','=', NULL)
                      ->get();
-        foreach ($pending as $user) {
-            if(30 - ((new \Carbon\Carbon($user->created_at, 'UTC'))->diffInDays()) < 0){
-                Mail::to($user->email)
-                    ->queue(new SwineCartNotifyPendingBreederAccounts());
-            }
-        }
+         foreach ($pending as $user) {
+             if(30 - ((new \Carbon\Carbon($user->created_at, 'UTC'))->diffInDays()) < 0){
+                 Mail::to($user->email)
+                     ->queue(new SwineCartNotifyPendingBreederAccounts());
+             }
+         }
         return Redirect::back()->with('message','Action complete');
     }
+
+
+    /*
+     * Helper function that gets the count of blocked users and returns the array of count
+     *
+     * @param Integer user type or role, Carbon->year
+     * @return count array
+     */
+    public function getLoginCount($role, $year){
+        $counts = DB::table('user_logs')
+                    ->where('activity', '=', 'login')
+                    ->where('user_type', '=', $role)
+                    // ->groupBy('user_id')
+                    ->whereYear('created_at', $year)
+                    ->select(DB::raw('YEAR(created_at) AS year, MONTH(created_at) AS month, MONTHNAME(created_at) AS month_name, COUNT(*) AS user_count', 'GROUP BY (user_id)'))
+                    ->groupBy('month')
+                    ->groupBy('year')
+                    ->get();
+
+       return $counts;
+    }
+
+
+    public function showBreederLoginStatistics(){
+        $now = Carbon::now();
+        $year = $now->year;
+        $counts = $this->getLoginCount("breeder",$year);
+        $month = $this->getMonthlyCount($counts);
+        return view('user.admin.breederLoginStatistics', compact('month', 'year'));
+    }
+
+    public function showBreederLoginStatisticsYear(Request $request){
+        $year = $request->year;
+        $counts = $this->getLoginCount("breeder",$year);
+        $month = $this->getMonthlyCount($counts);
+        return view('user.admin.breederLoginStatistics', compact('month', 'year'));
+    }
+
+    public function showCustomerLoginStatistics(){
+        $now = Carbon::now();
+        $year = $now->year;
+        $counts = $this->getLoginCount("customer",$year);
+        $month = $this->getMonthlyCount($counts);
+        return view('user.admin.customerLoginStatistics', compact('month', 'year'));
+    }
+
+    public function showCustomerLoginStatisticsYear(Request $request){
+        $year = $request->year;
+        $counts = $this->getLoginCount("customer",$year);
+        $month = $this->getMonthlyCount($counts);
+        return view('user.admin.customerLoginStatistics', compact('month', 'year'));
+    }
+
+    public function addFarmPage($id){
+        $breeder = User::find($id);
+        return view('user.admin.addFarmToBreeder', compact('breeder'));
+    }
+
+    public function addFarmInformation(Request $request){
+        $farm = new FarmAddress;
+        $farm->name = $request->farm_name;
+        $farm->accreditation_no = $request->accreditation_num;
+        $now = Carbon::now();
+        $expiration = $now->copy()->addYear();
+        $farm->accreditation_date = $now->toDateString();
+        $farm->accreditation_expiry = $expiration->toDateString();
+        $farm->accreditation_status = 'active';
+        $user = User::find($request->id);
+        $breeder = Breeder::find($user->userable_id);
+        $breeder->farmAddresses()->save($farm);
+        $request->session()->flash('alert-farm-add', 'Farm successfully added');
+        return Redirect::back()->with('message','Action complete');
+    }
+
+    public function getFarmInformation(Request $request){
+        $user = User::find($request->userId);
+        $farms = DB::table('farm_addresses')
+                ->where('addressable_id', '=', $user->userable_id)
+                ->select('name as farmname', 'addressLine1', 'addressLine2', 'accreditation_no', 'accreditation_status', 'accreditation_date')
+                ->get();
+
+        return $farms;
+    }
+
 }

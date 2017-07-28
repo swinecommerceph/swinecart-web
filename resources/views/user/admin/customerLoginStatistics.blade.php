@@ -1,11 +1,11 @@
 @extends('layouts.controlLayout')
 
 @section('title')
-    | Site Statistics: Breeder Statistics
+    | Site Statistics: Customer Statistics
 @endsection
 
 @section('pageId')
-    id="admin-site-statistics-blocked-statistics-breeder"
+    id="admin-site-statistics-login-statistics-customer"
 @endsection
 
 @section('nav-title')
@@ -16,7 +16,7 @@
 @section('pageControl')
     <div class="valign-wrapper row">
         <div class="valign center-block col s5 m5 l5 xl5">
-            <h4 id='admin-content-panel-header'>Breeder Statistics</h4>
+            <h4 id='admin-content-panel-header'>Customer Statistics</h4>
         </div>
         <div class="valign center-block col s7 m7 l7 xl7">
             <div class="input-field col s12 m12 l12 xl12">
@@ -57,15 +57,15 @@
                 <div class="input-field col s12 m12 l6 xl6 valign">
                         <select onChange="window.location.href=this.value">
                             <option disabled selected>Choose option</option>
-                            <option value="{{route('admin.statistics.breeder.active')}}">Registered Breeders</option>
-                            <option value="{{route('admin.statistics.breeder.deleted')}}">Deleted Breeders</option>
-                            <option selected value="{{route('admin.statistics.breeder.blocked')}}">Blocked Breeders</option>
-                            <option value="{{route('admin.statistics.breeder.logincount')}}">Active Breeders</option>
+                            <option value="{{route('admin.statistics.customer.active')}}">Registered Customers</option>
+                            <option value="{{route('admin.statistics.customer.deleted')}}">Deleted Customers</option>
+                            <option value="{{route('admin.statistics.customer.blocked')}}">Blocked Customers</option>
+                            <option selected value="{{route('admin.statistics.customer.logincount')}}">Active Customers</option>
                         </select>
                     <label>Breeder Chart</label>
                 </div>
                 <div class="col s12 m12 l6 xl6 valign">
-                    {!!Form::open(['route'=>'admin.statistics.breeder.blocked-year', 'method'=>'GET', 'class'=>'valign-wrapper'])!!}
+                    {!!Form::open(['route'=>'admin.statistics.customer.logincount-year', 'method'=>'GET', 'class'=>'valign-wrapper'])!!}
                         <div class="col s12 m8 l8 xl8">
                             <label for="stats-year">Year</label>
                             <input id="stats-year" type="number" name="year" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[1] }}" value="{{ $year }}">

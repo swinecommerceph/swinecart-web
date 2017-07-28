@@ -68,8 +68,8 @@
                     <td>{{$breeder->transaction}}</td>
                     <td>{{$breeder->quality}}</td>
                     <td>{{$breeder->overall}}</td>
-                    <td>{{$breeder->latest_accreditation}}</td>
-                    <td>{{$breeder->notification_date}}</td>
+                    <td>{{$breeder->accreditation_date}}</td>
+                    <td>{{$breeder->accreditation_expiry}}</td>
 
                     <td><a class="waves-effect waves-light btn" href="{{ URL::to('admin/home/edit_accreditation/'.$breeder->userable_id ) }}"><i class="material-icons center">settings</i></a></td>
                 </tr>

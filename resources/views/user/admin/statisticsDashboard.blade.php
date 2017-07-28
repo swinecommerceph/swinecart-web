@@ -219,7 +219,7 @@
                                 </div>
                                 <div class="row center-align">
                                     <div class="col s12 m12 l12">
-                                        <div class="col s4 m4 l4">
+                                        <div class="col s3 m3 l3">
                                             <div class="row">
                                                 <div class="col s12 m12 l12 statsdash-description">
                                                      Requested
@@ -229,7 +229,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col s4 m4 l4">
+                                        <div class="col s3 m3 l3">
                                             <div class="row">
                                                 <div class="col s12 m12 l12 statsdash-description">
                                                      Reserved
@@ -239,18 +239,28 @@
                                                 </div>
                                             </div>
                                         </div>
-                                        <div class="col s4 m4 l4">
+                                        <div class="col s3 m3 l3">
                                             <div class="row">
                                                 <div class="col s12 m12 l12 statsdash-description">
-                                                     Paid
+                                                    On Delivery
                                                 </div>
-                                                <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[12]}}">
-                                                    {{$stats[12]}}
+                                                <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[13]}}">
+                                                    {{$stats[13]}}
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="col s3 m3 l3">
+                                            <div class="row">
+                                                <div class="col s12 m12 l12 statsdash-description">
+                                                    Sold
+                                                </div>
+                                                <div class="statsdash-data truncate tooltipped col s12 m12 l12" data-position="bottom" data-delay="50" data-tooltip="{{$stats[14]}}">
+                                                    {{$stats[14]}}
                                                 </div>
                                             </div>
                                         </div>
                                     </div>
-                                    <div class="col s12 m12 l12">
+                                    {{-- <div class="col s12 m12 l12">
                                         <div class="col s6 m6 l6">
                                             <div class="row">
                                                 <div class="col s12 m12 l12 statsdash-description">
@@ -271,7 +281,7 @@
                                                 </div>
                                             </div>
                                         </div>
-                                    </div>
+                                    </div> --}}
                                 </div>
                             </div>
                         </div>

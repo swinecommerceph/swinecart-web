@@ -33,8 +33,16 @@
                        <div class="col s8 m8 l8 xl8 valign center-align white-text admin-dashboard-summary-data truncate tooltipped" data-position="bottom" data-delay="50" data-tooltip="{{$summary[0]}}">
                            {{$summary[0]}}
                        </div>
-                   </div>
 
+                   </div>
+                   <div class="row right-align">
+                       <div class="col s6 m6 l6 xl6 white-text">
+                           Breeders: {{$summary[5]}}
+                       </div>
+                       <div class="col s6 m6 l6 xl6 white-text">
+                           Customers: {{$summary[6]}}
+                       </div>
+                   </div>
                 </div>
               </div>
             </a>
@@ -55,7 +63,14 @@
                            {{$summary[1]}}
                        </div>
                    </div>
-
+                   <div class="row right-align">
+                       <div class="col s6 m6 l6 xl6 white-text">
+                           Breeders: {{$summary[7]}}
+                       </div>
+                       <div class="col s6 m6 l6 xl6 white-text">
+                           Customers: {{$summary[8]}}
+                       </div>
+                   </div>
                 </div>
               </div>
             </a>

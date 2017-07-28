@@ -10,6 +10,9 @@ var usersPage = new Vue({
         clicked: function(name, id, role, userable){
             users.fetch_user_info(id, role, userable);
             users.fetch_user_transaction(name, id, role, userable);
+            users.fetch_breeder_farm_information(id, role, userable);
+
+
         }
     }
 

@@ -194,6 +194,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/statistics/breeder/deleted-year', ['as' => 'admin.statistics.breeder.deleted-year', 'uses'=> 'AdminController@showStatisticsDeletedBreederYear']);
         Route::get('home/statistics/breeder/blocked', ['as' => 'admin.statistics.breeder.blocked', 'uses'=> 'AdminController@showStatisticsBlockedBreeder']);
         Route::get('home/statistics/breeder/blocked-year', ['as' => 'admin.statistics.breeder.blocked-year', 'uses'=> 'AdminController@showStatisticsBlockedBreederYear']);
+        Route::get('home/statistics/breeder/login', ['as' => 'admin.statistics.breeder.logincount', 'uses'=> 'AdminController@showBreederLoginStatistics']);
+        Route::get('home/statistics/breeder/login-year', ['as' => 'admin.statistics.breeder.logincount-year', 'uses'=> 'AdminController@showBreederLoginStatisticsYear']);
+
         // Customer statistics
         Route::get('home/statistics/customer/active', ['as' => 'admin.statistics.customer.active', 'uses'=> 'AdminController@showStatisticsActiveCustomer']);
         Route::get('home/statistics/customer/active-year', ['as' => 'admin.statistics.customer.active-year', 'uses'=> 'AdminController@showStatisticsActiveCustomerYear']);
@@ -201,6 +204,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/statistics/customer/deleted-year', ['as' => 'admin.statistics.customer.deleted-year', 'uses'=> 'AdminController@showStatisticsDeletedCustomerYear']);
         Route::get('home/statistics/customer/blocked', ['as' => 'admin.statistics.customer.blocked', 'uses'=> 'AdminController@showStatisticsBlockedCustomer']);
         Route::get('home/statistics/customer/blocked-year', ['as' => 'admin.statistics.customer.blocked-year', 'uses'=> 'AdminController@showStatisticsBlockedCustomerYear']);
+        Route::get('home/statistics/customer/login', ['as' => 'admin.statistics.customer.logincount', 'uses'=> 'AdminController@showCustomerLoginStatistics']);
+        Route::get('home/statistics/customer/login-year', ['as' => 'admin.statistics.customer.logincount-year', 'uses'=> 'AdminController@showCustomerLoginStatisticsYear']);
+
 
         Route::get('home/statistics/timeline', ['as' => 'admin.statistics.timeline', 'uses'=> 'AdminController@showStatisticsTimeline']);
         Route::get('home/statistics/timeline-date', ['as' => 'admin.statistics.timeline-date', 'uses'=> 'AdminController@showStatisticsTimelineDate']);
@@ -230,6 +236,7 @@ Route::group(['middleware' => ['web']], function () {
 
         Route::get('home/userlist', ['as'=>'admin.userlist', 'uses'=>'AdminController@displayAllUsers']);
         Route::get('home/userlist/details', ['as'=>'admin.userlist.details', 'uses'=>'AdminController@fetchUserInformation']);
+
         Route::get('home/userlist/transaction', ['as'=>'admin.userlist.transaction', 'uses'=>'AdminController@fetchUserTransaction']);
         Route::get('home/userlist/transaction-user',['as'=>'admin.userlist.transactionHistory', 'uses'=>'AdminController@fetchUserTransactionHistory']);
         Route::post('home/userlist/transaction-user/search',['as'=>'admin.userlist.transactionHistory.search', 'uses'=>'AdminController@searchUserTransactionHistory']);
@@ -273,6 +280,14 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('maintenance_mode', ['as' => 'maintenance_mode', 'uses'=> 'AdminController@activateMaintenanceMode']);
         Route::get('notify_profile_update', ['as' => 'notify_pending', 'uses'=> 'AdminController@notifyPendingBreeders']);
         Route::get('sample_mail', ['as' => 'sample_mail', 'uses'=> 'AdminController@sampleMailNotif']);
+
+        //sample routes
+        Route::get('add_farm', ['as' => 'add_farm', 'uses' => 'AdminController@addFarmToBreeder']);
+        Route::get('getfarms', ['as' => 'get_farm', 'uses' => 'AdminController@getFarmInformation']);
+
+        Route::get('addfarm/{breeder}', ['as' => 'breeder.farm', 'uses'=> 'AdminController@addFarmPage']);
+        Route::post('addfarm/save', ['as' => 'breeder.save_farm', 'uses'=> 'AdminController@addFarmInformation']);
+        Route::get('fetch_farm_data', ['as' => 'fetch_farm_data', 'uses' => 'AdminController@fetchFarmData']);
     });
 
     Route::group(['prefix'=>'spectator'], function(){

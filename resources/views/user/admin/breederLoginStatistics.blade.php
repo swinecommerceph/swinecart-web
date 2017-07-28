@@ -5,7 +5,7 @@
 @endsection
 
 @section('pageId')
-    id="admin-site-statistics-blocked-statistics-breeder"
+    id="admin-site-statistics-login-statistics-breeder"
 @endsection
 
 @section('nav-title')
@@ -59,13 +59,13 @@
                             <option disabled selected>Choose option</option>
                             <option value="{{route('admin.statistics.breeder.active')}}">Registered Breeders</option>
                             <option value="{{route('admin.statistics.breeder.deleted')}}">Deleted Breeders</option>
-                            <option selected value="{{route('admin.statistics.breeder.blocked')}}">Blocked Breeders</option>
-                            <option value="{{route('admin.statistics.breeder.logincount')}}">Active Breeders</option>
+                            <option value="{{route('admin.statistics.breeder.blocked')}}">Blocked Breeders</option>
+                            <option selected value="{{route('admin.statistics.breeder.logincount')}}">Active Breeders</option>
                         </select>
                     <label>Breeder Chart</label>
                 </div>
                 <div class="col s12 m12 l6 xl6 valign">
-                    {!!Form::open(['route'=>'admin.statistics.breeder.blocked-year', 'method'=>'GET', 'class'=>'valign-wrapper'])!!}
+                    {!!Form::open(['route'=>'admin.statistics.breeder.logincount-year', 'method'=>'GET', 'class'=>'valign-wrapper'])!!}
                         <div class="col s12 m8 l8 xl8">
                             <label for="stats-year">Year</label>
                             <input id="stats-year" type="number" name="year" min="{{ $yearMinMax[0] }}" max="{{ $yearMinMax[1] }}" value="{{ $year }}">
