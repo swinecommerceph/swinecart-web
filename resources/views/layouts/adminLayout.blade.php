@@ -13,7 +13,6 @@
     <link href="/css/dropzone.css" rel="stylesheet" type="text/css">
     <link href="/css/icon.css" rel="stylesheet" type="text/css">
     <link href="/css/style.css" rel="stylesheet" type="text/css">
-    <link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
     <link rel="stylesheet" href="//code.jquery.com/ui/1.11.4/themes/smoothness/jquery-ui.css">
     <script type="text/javascript" src="/js/vendor/chart.min.js"></script>
 
@@ -251,14 +250,9 @@
 
 
 
-    <script src="/js/vendor/jquery.min.js"></script>
-    <script src="/js/vendor/VueJS/vue.js"></script>
-  	<script src="/js/vendor/materialize.min.js"></script>
-  	<script src="/js/vendor/dropzone.js"></script>
-  	<script src="/js/vendor/VideoJS/video.min.js"></script>
-  	<script src="/js/config.js"></script>
+    <script src="{{ elixir('/js/vendor.js') }}"></script>
+	<script src="{{ elixir('/js/siteCustom.js') }}"></script>
     <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
-    <script src="/js/custom.js"></script>
    {{-- <script type="text/javascript" src="/js/vendor/datatables.min.js"></script> --}}
    {{-- <script src="/js/vendor/DataTables/datatables.js"></script> --}}
    {{-- For user-specific initialization scripts --}}

@@ -233,13 +233,10 @@
             </div>
         </div>
 
-        <script src="/js/vendor/jquery.min.js"></script>
-        <script src="/js/vendor/VueJS/vue.js"></script>
-        <script src="/js/vendor/materialize.min.js"></script>
-        <script src="/js/config.js"></script>
+        <script src="{{ elixir('/js/vendor.js') }}"></script>
+    	<script src="{{ elixir('/js/siteCustom.js') }}"></script>
         <script type="text/javascript" src="/js/admin/admin_custom.js"></script>
         <script type="text/javascript" src="/js/admin/adminInformation.js"></script>
-        <script src="/js/custom.js"></script>
         @yield('initScript')
             {{-- Custom scripts for certain pages/functionalities --}}
         @yield('customScript')
