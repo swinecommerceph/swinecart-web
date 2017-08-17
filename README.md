@@ -15,4 +15,4 @@ SwineCart is an E-Commerce System for Breeder Swine and Boar Semen in the Philip
 
 ### Configured Laradock environment can be found at:
 
-* https://github.com/evantolorio/laradock.git
+* https://github.com/swinecommerceph/laradock.git
