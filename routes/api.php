@@ -13,6 +13,17 @@ use Illuminate\Http\Request;
 |
 */
 
-Route::get('/user', function (Request $request) {
-    return $request->user();
-})->middleware('auth:api');
+/* Setup CORS */
+// header('Access-Control-Allow-Origin: *');
+// header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+// header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+
+Route::group(['namespace' => 'Api'], function() {
+    Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function() {
+        Route::post('/register', 'RegisterController@register');
+        Route::post('/login', 'LoginController@normalLogin');
+    });
+
+    Route::group(['namespace' => 'User', 'prefix' => 'user'], function() {
+    });
+});
