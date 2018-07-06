@@ -22,6 +22,6 @@ class RoleMiddleware
             }
         }
 
-        return $request->ajax ? response('Unauthorized.', 401) : redirect('/home');
+        return ($request->ajax() || $request->wantsJson()) ? response('Unauthorized.', 401) : redirect('/home');
     }
 }
