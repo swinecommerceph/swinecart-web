@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Response;
 use \Illuminate\Http\Response as Res;
@@ -14,31 +14,42 @@ use Carbon\Carbon;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 
-class LoginController extends ApiController
-{
+class LoginController extends Controller
+{   
+
     public function __construct() 
     {
-        $this->middleware('guest:api');
+        $this->middleware('jwt:auth', ['except' => 'normalLogin']);
     }
 
     public function normalLogin(Request $request) {
-        $email = $request->email;
-        $password = $request->password;
-        $credentials = ['email' => $email, 'password' => $password];
+
+        $credentials = $request->only(['email', 'password']);
         
         if(! $token = JWTAuth::attempt($credentials)) {
-            return $this->respondWithError("User does not exist!");
+            return response()->json(['error' => 'Unauthorized!'], 401);
         }
 
-        $user = JWTAuth::toUser($token);
-        $user->api_token = $token;
-        $user->save();
+        $user = JWTAuth::user();
+        $userLog = new UserLog;
+        $userLog->user_id = $user->id;
+        $userLog->user_type = $user->roles()->first()->title;
+        $userLog->ip_address = $request->ip();
+        $userLog->activity = 'login';
+        $userLog->created_at = Carbon::now();
+        $userLog->save();
 
-        return $this->respond([
-            'status' => 'success',
-            'status_code' => Res::HTTP_OK,
-            'message' => 'Login',
-            'data' => $user
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => JWTAuth::factory()->getTTL() * 60
+        ]);
+    }
+
+    public function me(Request $request) {
+        $user = JWTAuth::parseToken()->authenticate();
+        return response()->json([
+            'user' => $user,
         ]);
     }
 }

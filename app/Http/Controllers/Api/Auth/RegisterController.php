@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Response;
 use \Illuminate\Http\Response as Res;
@@ -14,7 +14,7 @@ use Carbon\Carbon;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Mail;
 
-class RegisterController extends ApiController
+class RegisterController extends Controller
 {
     /**
      * Create a new controller instance.

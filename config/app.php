@@ -161,7 +161,7 @@ return [
 
         Collective\Html\HtmlServiceProvider::class,
         AdamWathan\EloquentOAuthL5\EloquentOAuthServiceProvider::class,
-         Tymon\JWTAuth\Providers\JWTAuthServiceProvider::class
+        Tymon\JWTAuth\Providers\LaravelServiceProvider::class,
     ],
 
     /*

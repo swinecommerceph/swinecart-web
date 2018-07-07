@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Api\Auth;
 
-use App\Http\Controllers\Api\ApiController;
+use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Response;
 use \Illuminate\Http\Response as Res;
@@ -14,38 +14,29 @@ use Carbon\Carbon;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 
-class LogoutController extends ApiController
-{
+class LogoutController extends Controller
+{   
+
     public function __construct() 
     {
-        $this->middleware('guest:api');
+        $this->middleware('jwt:auth');
     }
 
-    public function logout($api_token)
-    {
-        try{
-            $user = JWTAuth::toUser($api_token);
-            $user->api_token = NULL;
-            $user->save();
-            JWTAuth::setToken($api_token)->invalidate();
-            $this->setStatusCode(Res::HTTP_OK);
+    public function logout(Request $request)
+    {   
 
-            $userLog = new UserLog;
-            $userLog->user_id = $this->guard()->id();
-            $userLog->user_type = $this->guard()->user()->roles()->first()->title;
-            $userLog->ip_address = $request->ip();
-            $userLog->activity = 'logout';
-            $userLog->created_at = Carbon::now();
-            $userLog->save();
+        $user = JWTAuth::user();
+        $userLog = new UserLog;
+        $userLog->user_id = $user->id;
+        $userLog->user_type = $user->roles()->first()->title;
+        $userLog->ip_address = $request->ip();
+        $userLog->activity = 'logout';
+        $userLog->created_at = Carbon::now();
+        $userLog->save();
 
-            return $this->respond([
-                'status' => 'success',
-                'status_code' => $this->getStatusCode(),
-                'message' => 'Logout successful!',
-                'data' => $userLog
-            ]);
-
-        }catch(JWTException $e){
-            return $this->respondInternalError("An error occurred while performing an action!");
-        }
+        auth('api')->logout();
+        return response()->json([
+            'message' => 'Logout successful!'
+        ]);
+    }
 }
