@@ -51,16 +51,16 @@ class Handler extends ExceptionHandler
             $e = new NotFoundHttpException($e->getMessage(), $e);
         }
         else if ($e instanceof TokenInvalidException) {
-            return response()->json(['error' => 'Token is invalid!'], 401);
+            return response()->json(['error' => 'Unauthenticated!'], 401);
         }
         else if ($e instanceof TokenBlacklistedException) {
-            return response()->json(['error' => 'Token is blacklisted!'], 401);
+            return response()->json(['error' => 'Unauthenticated!'], 401);
         }
         else if ($e instanceof TokenExpiredException) {
-            return response()->json(['error' => 'Token is expired!'], 401);
+            return response()->json(['error' => 'Unauthenticated!'], 401);
         }
         else if ($e instanceof JWTException) {
-            return response()->json(['error' => 'There is a problem with your token!'], 401);
+            return response()->json(['error' => 'Unauthenticated!'], 401);
         }
 
         return parent::render($request, $e);
