@@ -23,7 +23,7 @@ class RegisterController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('guest:api');
+        $this->middleware('jwt:guest');
     }
 
     /**
@@ -80,28 +80,34 @@ class RegisterController extends Controller
             $user->assignRole('customer');
             $email = $request->email;
 
-            $data = [
-                'email' => $email,
-                'verCode' => $verCode,
-                'level' => 'success',
-                'introLines' => ['Registration is almost complete.', "Click the 'Verify Code' button to verify your email."],
-                'outroLines' => ['If you did not plan to register on this site, no further action is required.'],
-                'actionText' => 'Verify Code',
-                'actionUrl' => route('verCode.send', ['email' => $email, 'verCode' => $verCode]),
-                'type' => 'sent'
-            ];
+            // $data = [
+            //     'email' => $email,
+            //     'verCode' => $verCode,
+            //     'level' => 'success',
+            //     'introLines' => [
+            //         'Registration is almost complete.',
+            //         "Click the 'Verify Code' button to verify your email."
+            //     ],
+            //     'outroLines' => [
+            //         'If you did not plan to register on this site, 
+            //         no further action is required.'
+            //     ],
+            //     'actionText' => 'Verify Code',
+            //     'actionUrl' => route('verCode.send', [
+            //         'email' => $email, 'verCode' => $verCode]),
+            //     'type' => 'sent'
+            // ];
 
             // Mail::send('vendor.notifications.email', $data, function ($message) use($data){
             //     $message->to($data['email'])->subject('Verification code for SwineCart');
             // });
 
-            return $this->respond([
+            return response()->json([
                 'status' => 'success',
                 'status_code' => Res::HTTP_OK,
                 'message' => 'Register successful!',
-                'data' => $data
+                // 'data' => $data
             ]);
-
         }
     }
 }

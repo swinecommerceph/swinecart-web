@@ -24,7 +24,6 @@ class LogoutController extends Controller
 
     public function logout(Request $request)
     {   
-
         $user = JWTAuth::user();
         $userLog = new UserLog;
         $userLog->user_id = $user->id;
@@ -34,7 +33,9 @@ class LogoutController extends Controller
         $userLog->created_at = Carbon::now();
         $userLog->save();
 
-        auth('api')->logout();
+        $token = JWTAuth::fromUser($user);
+        JWTAuth::invalidate($token);
+
         return response()->json([
             'message' => 'Logout successful!'
         ]);

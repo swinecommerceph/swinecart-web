@@ -22,12 +22,14 @@ class LoginController extends Controller
         $this->middleware('jwt:auth', ['except' => 'normalLogin']);
     }
 
-    public function normalLogin(Request $request) {
-
+    public function normalLogin(Request $request) 
+    {
         $credentials = $request->only(['email', 'password']);
         
         if(! $token = JWTAuth::attempt($credentials)) {
-            return response()->json(['error' => 'Unauthorized!'], 401);
+            return response()->json([
+                'error' => 'Invalid Email or Password!'
+            ], 401);
         }
 
         $user = JWTAuth::user();
@@ -46,7 +48,8 @@ class LoginController extends Controller
         ]);
     }
 
-    public function me(Request $request) {
+    public function me(Request $request) 
+    {
         $user = JWTAuth::parseToken()->authenticate();
         return response()->json([
             'user' => $user,

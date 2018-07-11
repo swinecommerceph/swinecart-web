@@ -26,6 +26,36 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::post('/logout', 'LogoutController@logout');
     });
 
-    Route::group(['namespace' => 'User', 'prefix' => 'user'], function() {
+    Route::group(['namespace' => 'Breeder', 'prefix' => 'breeder'], function() {
+        Route::group(['prefix' => 'edit-profile'], function() {
+            Route::get('/get', 'EditProfileController@getProfile');
+
+            Route::post('/change-password', 'EditProfileController@changePassword');
+            Route::post('/update-personal', 'EditProfileController@updatePersonal');
+            
+            Route::post('/update-farm/{id}', 'EditProfileController@updateFarm');
+            Route::delete('/delete-farm/{id}', 'EditProfileController@deleteFarm');
+
+            // Route::post('/upload-logo', 'EditProfileController@uploadLogo');
+            // Route::delete('/delete-logo', 'EditProfileController@deleteLogo');
+            // Route::post('/set-logo', 'EditProfileController@setLogo');
+        });
+
+        Route::group(['prefix' => 'products'], function() {
+            Route::get('/get', 'ProductController@getProducts');
+            Route::post('/get', 'ProductController@filterProducts');
+
+            Route::post('/display-product/{id}', 'ProductController@displayProduct');
+            Route::post('/update-product/{id}', 'ProductController@updateProduct');
+            Route::post('/store-product', 'ProductController@storeProduct');
+
+            Route::post('/get-product-summary/{id}', 'ProductController@getProductSummary');
+            Route::post('/get-product-detail/{id}', 'ProductController@getProductDetail');
+        });
+
+        Route::group(['prefix' => 'dashboard'], function() {
+            
+        });
+
     });
 });
