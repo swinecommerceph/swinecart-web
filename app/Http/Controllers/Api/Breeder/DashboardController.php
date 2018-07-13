@@ -91,4 +91,15 @@ class DashboardController extends Controller
             'data' => $soldData
         ], 200);
     }
+
+    public function getProductStatus(Request $request)
+    {
+        $breeder = $this->user->userable;
+        $products = $this->dashboard->forBreeder($breeder);
+        
+        return response()->json([
+            'message' => 'Get Product Status successful!',
+            'data' => $products
+        ]);
+    }
 }

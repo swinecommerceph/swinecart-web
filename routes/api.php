@@ -63,6 +63,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/get-latest-accre', 'DashboardController@getLatestAccre');
             Route::get('/get-server-date', 'DashboardController@getServerDate');
             Route::get('/get-sold-data', 'DashboardController@getSoldData');
+
+            Route::get('/get-product-status', 'DashboardController@getProductStatus');
         });
 
     });
