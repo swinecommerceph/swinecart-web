@@ -44,17 +44,25 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::group(['prefix' => 'products'], function() {
             Route::get('/get', 'ProductController@getProducts');
             Route::post('/get', 'ProductController@filterProducts');
+            Route::get('/get-farms', 'ProductController@getFarms');
 
-            Route::post('/display-product/{id}', 'ProductController@displayProduct');
-            Route::post('/update-product/{id}', 'ProductController@updateProduct');
-            Route::post('/store-product', 'ProductController@storeProduct');
+            Route::post('/product/display/{id}', 'ProductController@displayProduct');
+            Route::post('/product/update/{id}', 'ProductController@updateProduct');
+            Route::post('/product/store', 'ProductController@storeProduct');
 
+            Route::post('/set-primary-picture', 'ProductController@setPrimaryPicture');
             Route::post('/get-product-summary/{id}', 'ProductController@getProductSummary');
             Route::post('/get-product-detail/{id}', 'ProductController@getProductDetail');
+            
+            // Route::delete('/media/delete', 'ProductController@deleteMedium');
+
         });
 
         Route::group(['prefix' => 'dashboard'], function() {
-            
+            Route::get('/get-stats', 'DashboardController@getDashBoardStats');
+            Route::get('/get-latest-accre', 'DashboardController@getLatestAccre');
+            Route::get('/get-server-date', 'DashboardController@getServerDate');
+            Route::get('/get-sold-data', 'DashboardController@getSoldData');
         });
 
     });

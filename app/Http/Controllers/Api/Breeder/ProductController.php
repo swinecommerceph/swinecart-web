@@ -70,6 +70,29 @@ class ProductController extends Controller
             return $next($request);
         });
     }
+    /**
+     * ---------------------------------------
+     *  PRIVATE METHODS
+     * ---------------------------------------
+     */
+
+    
+     /**
+     * Find breed_id through breed name ($breed)
+     * or create another breed if not found
+     *
+     * @param  String   $breed
+     * @return Integer
+     */
+    private function findOrCreateBreed($breed)
+    {
+        $breedInstance = Breed::where('name','like',$breed)->get()->first();
+        if($breedInstance) return $breedInstance->id;
+        else{
+            $newBreed = Breed::create(['name' => $breed]);
+            return $newBreed->id;
+        }
+    }
 
     private function getBreederProducts($breeder) 
     {
@@ -79,7 +102,7 @@ class ProductController extends Controller
             'requested'
         ])->where('quantity','<>', 0);
     }
-
+    
     private function transformProduct($product) 
     {   
         $product->img_path = route('serveImage', [
@@ -102,7 +125,13 @@ class ProductController extends Controller
             ['id', '=', $product_id]
         ])->first();
     }
-
+    
+    /**
+     * ---------------------------------------
+     *  PUBLIC METHODS
+     * ---------------------------------------
+     */
+    
     public function getProducts(Request $request) 
     {
         $breeder = $this->user->userable;
@@ -116,6 +145,17 @@ class ProductController extends Controller
         return response()->json([
             'message' => 'Get Products successful',
             'data' => $products
+        ], 200);
+    }
+
+    public function getFarms(Request $request)
+    {
+        $breeder = $this->user->userable;
+        $farms = $breeder->farmAddresses;
+
+        return response()->json([
+            'message' => 'Get Farm Addresses successful',
+            'data' => $farms
         ], 200);
     }
 
@@ -239,9 +279,9 @@ class ProductController extends Controller
             $reviews = Breeder::find($product->breeder_id)->reviews;
         
             $breederRatings = [
-                'deliveryRating' => ($reviews->avg('rating_delivery')) ? $reviews->avg('rating_delivery') : 0,
-                'transactionRating' => ($reviews->avg('rating_transaction')) ? $reviews->avg('rating_transaction') : 0,
-                'productQualityRating' => ($reviews->avg('rating_productQuality')) ? $reviews->avg('rating_productQuality') : 0
+                'deliveryRating' => $reviews->avg('rating_delivery') ?? 0,
+                'transactionRating' => $reviews->avg('rating_transaction') ?? 0,
+                'productQualityRating' => $reviews->avg('rating_productQuality') ?? 0
             ];
 
             return response()->json([
@@ -256,9 +296,6 @@ class ProductController extends Controller
         else return response()->json([
             'error' => 'Product does not exist!'
         ], 404);
-
-
-
     }
 
     public function storeProduct(ProductRequest $request) 
@@ -285,7 +322,7 @@ class ProductController extends Controller
         $product->fcr = $request->fcr;
         $product->backfat_thickness = $request->backfat_thickness;
         $product->other_details = $request->other_details;
-        // $breeder->products()->save($product);
+        $breeder->products()->save($product);
 
         $productDetail['product_id'] = $product->id;
         $productDetail['name'] = $product->name;
@@ -294,11 +331,62 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Store Product succesful!',
-            // 'data' => [
-            //     'product' => $productDetail,
-            // ]
-        ]);
+            'data' => [
+                'product' => $product,
+                'productDetail' => $productDetail
+            ]
+        ], 200);
+    }
 
+    public function setPrimaryPicture(Request $request) 
+    {
+        $breeder = $this->user->userable;
+        $product = $this->getBreederProduct($breeder, $product_id);
+
+        if($product) {
+            $product->primary_img_id = $request->img_id;
+            $product->save();
+
+            return response()->json([
+                'message' => 'Set Primary Picture succesful!',
+            ]);
+        }
+        else return response()->json([
+            'error' => 'Product does not exist!'
+        ], 404);
+        
+    }
+
+    public function deleteMedium(Request $request)
+    {
+        if($request->mediaType == 'image'){
+            $image = Image::find($request->mediaId);
+            $fullFilePath = self::PRODUCT_IMG_PATH.$image->name;
+            $sFullFilePath = self::PRODUCT_SIMG_PATH.$image->name;
+            $mFullFilePath = self::PRODUCT_MIMG_PATH.$image->name;
+            $lFullFilePath = self::PRODUCT_LIMG_PATH.$image->name;
+
+            // Check if file exists in the storage
+            if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+            if(Storage::disk('public')->exists($sFullFilePath)) Storage::disk('public')->delete($sFullFilePath);
+            if(Storage::disk('public')->exists($mFullFilePath)) Storage::disk('public')->delete($mFullFilePath);
+            if(Storage::disk('public')->exists($lFullFilePath)) Storage::disk('public')->delete($lFullFilePath);
+
+            $image->delete();
+        }
+        else if($request->mediaType = 'video'){
+            $video = Video::find($request->mediaId);
+            $fullFilePath = self::PRODUCT_VID_PATH.$video->name;
+
+            // Check if file exists in the storage
+            if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+
+            $video->delete();
+        }
+
+        return response()->json([
+            'message' => 'Delete Medium succesful!',
+        ], 200);
     }
 
 }
