@@ -99,7 +99,44 @@ class DashboardController extends Controller
         
         return response()->json([
             'message' => 'Get Product Status successful!',
-            'data' => $products
+            'data' => json_decode($products)
+        ]);
+    }
+
+    public function getReviewAndRatings(Request $request)
+    {
+        $breeder = $this->user->userable;
+        $reviews = $breeder->reviews()->orderBy('created_at', 'desc')->get();
+
+        foreach ($reviews as $review) {
+            $review->date = Carbon::createFromFormat('Y-m-d H:i:s', $review->created_at)->toFormattedDateString();
+            $customer = Customer::find($review->customer_id);
+            $review->customerName = $customer->users()->first()->name;
+            $review->customerProvince = $customer->address_province;
+            $review->showDetailedRatings = false;
+        }
+
+        $deliveryRating = $reviews->avg('rating_delivery');
+        $transactionRating = $reviews->avg('rating_transaction');
+        $productQualityRating = $reviews->avg('rating_productQuality');
+        $overallRating = round(($deliveryRating + $transactionRating + $productQualityRating)/3, 2);
+
+        return response()->json([
+            'message' => 'Get Product Status successful!',
+            'data' => [
+                'reviews' => $reviews,
+                'ratings' => $overallRating
+            ]
+        ]);
+    }
+
+    public function getProductRequests(Request $request, $product_id)
+    {
+        $productRequests = $this->dashboard->getProductRequests($product_id);
+
+        return response()->json([
+            'message' => 'Get Product Requests',
+            'data' => $productRequests
         ]);
     }
 }
