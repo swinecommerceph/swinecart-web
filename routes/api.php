@@ -68,6 +68,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/review-ratings', 'DashboardController@getReviewAndRatings');
             
             Route::get('/product-requests/{id}', 'DashboardController@getProductRequests');
+            Route::post('/sold-products', 'DashboardController@getSoldProducts');
         });
 
     }); 
