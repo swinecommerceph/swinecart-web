@@ -135,8 +135,20 @@ class DashboardController extends Controller
         $productRequests = $this->dashboard->getProductRequests($product_id);
 
         return response()->json([
-            'message' => 'Get Product Requests',
+            'message' => 'Get Product Requests successful!',
             'data' => $productRequests
+        ]);
+    }
+
+    public function getSoldProducts(Request $request)
+    {
+        $breeder = $this->user->userable;
+        
+        $soldProducts = $this->dashboard->getSoldProducts($request, $breeder);
+
+        return response()->json([
+            'message' => 'Get Sold Products successful!',
+            'data' => $soldProducts
         ]);
     }
 }
