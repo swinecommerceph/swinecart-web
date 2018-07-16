@@ -35,6 +35,15 @@ class DashboardController extends Controller
         $this->dashboard = $dashboard;
     }
 
+    private function getBreederProduct($breeder, $product_id)
+    {
+        $breeder_id = $breeder->id;
+        return Product::where([
+            ['breeder_id', '=', $breeder_id],
+            ['id', '=', $product_id]
+        ])->first();
+    }
+
     public function getDashboardStats(Request $request) 
     {
         $breeder = $this->user->userable;
@@ -150,5 +159,19 @@ class DashboardController extends Controller
             'message' => 'Get Sold Products successful!',
             'data' => $soldProducts
         ]);
+    }
+
+    public function updateProductStatus(Request $request, $product_id)
+    {
+        $breeder = $this->user->userable;
+        $product = $this->getBreederProduct($breeder, $product_id);
+
+        if($product) {
+            $result = $this->dashboard->updateStatus($request, $product);
+        }
+        
+        else return response()->json([
+            'error' => 'Product does not exist!'
+        ], 200);
     }
 }
