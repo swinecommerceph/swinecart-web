@@ -174,4 +174,20 @@ class DashboardController extends Controller
             'error' => 'Product does not exist!'
         ], 200);
     }
+
+    public function getCustomerInfo(Request $request, $customer_id)
+    {
+        $customer = Customer::find($customer_id);
+
+        if($customer) {
+            return response()->json([
+                'message' => 'Get Customer Info successful!',
+                'data' => $customer
+            ]);
+        }
+
+        else return response()->json([
+            'error' => 'Customer does not exist!'
+        ], 200); 
+    }
 }

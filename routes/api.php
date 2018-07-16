@@ -71,6 +71,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/sold-products', 'DashboardController@getSoldProducts');
 
             Route::post('/product-status/{id}', 'DashboardController@updateProductStatus');
+
+            Route::get('/customer-info/{id}', 'DashboardController@getCustomerInfo');
         });
 
     }); 
