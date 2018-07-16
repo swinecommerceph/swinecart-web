@@ -51,8 +51,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/product/store', 'ProductController@storeProduct');
 
             Route::post('/set-primary-picture', 'ProductController@setPrimaryPicture');
-            Route::post('/get-product-summary/{id}', 'ProductController@getProductSummary');
-            Route::post('/get-product-detail/{id}', 'ProductController@getProductDetail');
+            Route::get('/product-summary/{id}', 'ProductController@getProductSummary');
+            Route::get('/product-detail/{id}', 'ProductController@getProductDetail');
             
             // Route::delete('/media/delete', 'ProductController@deleteMedium');
 
