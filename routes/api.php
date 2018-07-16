@@ -75,5 +75,9 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/customer-info/{id}', 'DashboardController@getCustomerInfo');
         });
 
+        Route::group(['prefix' => 'notifications'], function() {
+
+        });
+
     }); 
 });
