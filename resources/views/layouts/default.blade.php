@@ -118,13 +118,16 @@
 
 	{{-- View for site's home layout users --}}
 	@yield('homeContent')
-
+   
 	{{-- Common view for authenticated users --}}
 	@if(!Request::is('/'))
 		<div class="container">
 			@yield('content')
 		</div>
 	@endif
+
+    {{-- View for site's footer --}}
+    @yield('footer')
 
 	<script src="{{ elixir('/js/vendor.js') }}"></script>
 	<script src="{{ elixir('/js/siteCustom.js') }}"></script>
