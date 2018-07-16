@@ -122,8 +122,8 @@
 	{{-- Common view for authenticated users --}}
 	@if(!Request::is('/'))
 		<div class="container">
-			@yield('content')
-		</div>
+            @yield('content')
+        </div>
 	@endif
 
     {{-- View for site's footer --}}

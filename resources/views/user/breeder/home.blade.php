@@ -425,6 +425,73 @@
     @endif
 @endsection
 
+@section('footer')
+    <div class="container">
+        {{-- SwineCart simple description --}}
+        <div class="row">
+            <div class="col 16 s12">
+                <p
+                 style="
+                    text-align: justify;
+                    text-justify: inter-word;
+                 ">
+                    SwineCart is a project of the UPLB Institute of Computer Science. It is funded by  Department of Science and Technology - Philippine Council for Agriculture, Forestry and Natural Resources Research and Development (DOST-PCAARRD) and in cooperation with Accredited Swine Breeders Association of the Philippines (ASBAP).
+                </p>
+            </div>
+        </div>
+
+        {{-- Contact Information and Logos --}}
+        <div class="row">
+            <div class="col s4"></div>
+            {{-- Contact Information for SwineCart--}}
+            <div class="col s5 teal-text darken-3">
+                <p>swinecommerceph@gmail.com</p>
+                <p>(049) 536 2302 | (049) 536 2313</p>
+            </div>
+            {{-- Logos of ICS, PCAARRD, and UP --}}
+            <div class="col s1">
+                {{-- ICS logo --}}
+                <img 
+                    style="
+                        margin-top: 20%;
+                        height: auto;
+                        width: 100%
+                    "
+                    src="/images/ics-logo.jpg">
+            </div>
+            <div class="col s1">
+                {{-- UP logo --}}
+                <img 
+                    style="
+                        margin-top: 20%;
+                        height: auto;
+                        width: 100%
+                    "
+                    src="/images/up-logo.png">
+            </div>
+            <div class="col s1">
+                {{-- PCAARRD logo --}}
+                <img 
+                    style="
+                        margin-top: 20%;
+                        height: auto;
+                        width: 100%
+                    "
+                    src="/images/pcaarrd-logo.png">
+            </div>
+        </div>
+        
+        {{-- Copyrights --}}
+        <div class="row">
+            <div class="col s12">
+                <p>
+                    Copyright All Rights Resevered © 2018
+                </p>
+            </div>
+        </div>
+    </div>
+@endsection
+
 @section('initScript')
     <script src="{{ elixir('/js/breeder/custom.js') }}"></script>
 @endsection
