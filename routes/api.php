@@ -73,6 +73,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/product-status/{id}', 'DashboardController@updateProductStatus');
 
             Route::get('/customer-info/{id}', 'DashboardController@getCustomerInfo');
+
+            Route::get('/customers', 'DashboardController@getCustomers');
         });
 
         Route::group(['prefix' => 'notifications'], function() {

@@ -30,5 +30,12 @@ class MessageController extends Controller
 	    		->get();
     }
 
-    public function 
+    public function getMessages()
+    {
+        $threads = Message::where('breeder_id', '=', $userId)
+	    		->orderBy('created_at', 'DESC')
+	    		->get()
+                ->unique('customer_id');
+            
+    }
 }

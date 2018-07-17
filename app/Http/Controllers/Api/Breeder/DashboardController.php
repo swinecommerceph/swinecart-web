@@ -190,4 +190,18 @@ class DashboardController extends Controller
             'error' => 'Customer does not exist!'
         ], 200); 
     }
+
+    public function getCustomers(Request $request)
+    {
+        $breeder = $this->user->userable;
+
+        $temp = $breeder->transactionLogs()->get()->unique('customer_id');
+
+        // $customers = ($temp==NULL)? []: $temp->customer()->get();
+
+        return response()->json([
+            'message' => 'Get Customers successful!',
+            'data' => $temp
+        ]);
+    }
 }
