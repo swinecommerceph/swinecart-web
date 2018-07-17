@@ -109,7 +109,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'swine-cart'], function() {
             Route::get('/items', 'SwineCartController@getSwineCartItems');
-            Route::post('/add/{id}', 'SwineCartController@addToCart');
+            Route::get('/items/count', 'SwineCartController@getSwineCartQuantity');
+            Route::post('/items/add/{id}', 'SwineCartController@addToCart');
         });
     });
     

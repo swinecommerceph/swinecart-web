@@ -130,4 +130,15 @@ class SwineCartController extends Controller
             'data' => $items
         ]);
     }
+
+    public function getSwineCartQuantity(Request $request)
+    {
+        $customer = $this->user->userable;
+        $count = $customer->swineCartItems()->where('if_requested',0)->count();
+
+        return response()->json([
+            'message' => 'Get SwineCart items successful!',
+            'data' => $count
+        ]);
+    }
 }
