@@ -55,7 +55,7 @@ class EditProfileController extends Controller
         ], 200);
     }
 
-    public function updateFarm(BreederFarmProfileRequest $request, $id) 
+    public function updateFarm(BreederFarmProfileRequest $request, $farm_id) 
     {
         $farmAddress = FarmAddress::find($id);
 
