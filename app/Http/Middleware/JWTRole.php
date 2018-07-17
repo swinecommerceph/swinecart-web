@@ -15,15 +15,17 @@ class JWTRole
      * @return mixed
      */
     public function handle($request, Closure $next, $role)
-    {
-        if($user = JWTAuth::parseToken()->authenticate()) {
+    {   
+        $user = JWTAuth::parseToken()->toUser();
+
+        if($user) {
             if($user->hasRole($role)) {
                 return $next($request);
             }
             else {
-                response()->json(['error' => 'Unauthorized!'], 401); 
+                return response()->json(['error' => 'Unauthorized!'], 401); 
             }
         }
-        return response()->json(['error' => 'Unauthenticated!'], 401);
+        else return response()->json(['error' => 'Unauthenticated!'], 401);
     }
 }
