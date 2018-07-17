@@ -102,6 +102,10 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
 
         });
+
+        Route::group(['prefix' => 'products'], function() {
+            
+        });
     });
     
 });
