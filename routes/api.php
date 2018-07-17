@@ -93,13 +93,14 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/farm-addresses', 'EditProfileController@getFarmAddresses');
             Route::get('/provinces', 'EditProfileController@getProvinces');
 
+            Route::post('/change-password', 'EditProfileController@changePassword');
             Route::post('/update-personal', 'EditProfileController@updatePersonal');
 
             Route::post('/farm/add', 'EditProfileController@addFarm');
             Route::post('/farm/update/{id}', 'EditProfileController@updateFarm');
             Route::delete('/farm/delete/{id}', 'EditProfileController@deleteFarm');
 
-            
+
         });
     });
     

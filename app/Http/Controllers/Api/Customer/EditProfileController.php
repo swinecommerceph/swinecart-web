@@ -155,6 +155,18 @@ class EditProfileController extends Controller
         ], 404);
     }
 
+
+    public function changePassword(ChangePasswordRequest $request) 
+    {
+        $this->user->password = bcrypt($request->new_password);
+        $this->user->save();
+
+        return response()->json([
+            'message' => 'Change Password successful!',
+        ], 200);
+
+    }
+
     private function getProvinces()
     {
         return collect([
