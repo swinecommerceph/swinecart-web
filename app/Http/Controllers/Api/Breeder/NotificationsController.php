@@ -27,7 +27,7 @@ class NotificationsController extends Controller
     public function __construct()
     {
         $this->middleware('jwt:auth');
-        $this->middleware('jwt:role:breeder');
+        $this->middleware('jwt.role:breeder');
         $this->middleware(function($request, $next) {
             $this->user = JWTAuth::user();
             return $next($request);
