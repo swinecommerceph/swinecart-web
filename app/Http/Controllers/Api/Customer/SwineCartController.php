@@ -101,4 +101,33 @@ class SwineCartController extends Controller
 
         
     }
+
+    public function getSwineCartItems(Request $request)
+    {
+        $customer = $this->user->userable;
+        $swineCartItems = $customer->swineCartItems()->where('if_requested', 0)->get();
+        $items = [];
+
+        foreach ($swineCartItems as $item) {
+            $itemDetail = [];
+            $product = Product::find($item->product_id);
+            $breeder = Breeder::find($product->breeder_id)->users()->first();
+
+            $itemDetail['item_id'] = $item->id;
+            $itemDetail['product_id'] = $item->product_id;
+            $itemDetail['product_name'] = $product->name;
+            $itemDetail['product_type'] = $product->type;
+            $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
+            $itemDetail['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]);
+            $itemDetail['breeder'] = $breeder->name;
+            $itemDetail['user_id'] = $breeder->id;
+            
+            array_push($items, $itemDetail);
+        }
+
+        return response()->json([
+            'message' => 'Get SwineCart items successful!',
+            'data' => $items
+        ]);
+    }
 }
