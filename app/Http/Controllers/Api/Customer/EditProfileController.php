@@ -48,6 +48,26 @@ class EditProfileController extends Controller
 
     }
 
+
+    public function updatePersonal(CustomerPersonalProfileRequest $request)
+    {
+        $customer = $this->user->userable;
+
+        $customer->fill($request->only([
+            'address_addressLine1',
+            'address_addressLine2',
+            'address_province',
+            'address_zipCode',
+            'landline',
+            'mobile'
+        ]))->save();
+
+        return response()->json([
+            'message' => 'Update Personal successful!',
+            'data' => $customer
+        ], 200);
+    }
+
     private function getProvinces()
     {
         return collect([

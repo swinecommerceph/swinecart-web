@@ -124,7 +124,7 @@ class EditProfileController extends Controller
         ]))->save();
 
         return response()->json([
-            'message' => 'Update Personal succesful!',
+            'message' => 'Update Personal successful!',
             'data' => $breeder
         ], 200);
     }
