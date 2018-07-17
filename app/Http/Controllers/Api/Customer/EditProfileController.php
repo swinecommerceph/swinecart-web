@@ -3,14 +3,31 @@
 namespace App\Http\Controllers\Api\Customer;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Collection;
+use Illuminate\Notifications\Notification;
+use App\Http\Requests\ChangePasswordRequest;
+use App\Http\Requests\CustomerProfileRequest;
+use App\Http\Requests\CustomerPersonalProfileRequest;
+use App\Http\Requests\CustomerFarmProfileRequest;
+
 use App\Http\Controllers\Controller;
+use App\Models\Customer;
+use App\Models\Breeder;
+use App\Models\FarmAddress;
+use App\Models\Product;
+use App\Models\Image;
+use App\Models\Breed;
+use App\Models\TransactionLog;
+use Auth;
+use DB;
+use JWTAuth;
 
 class EditProfileController extends Controller
 {
     public function __construct() 
     {
         $this->middleware('jwt:auth');
-        $this->middleware('jwt:role:customer');
+        $this->middleware('jwt.role:customer');
         $this->middleware(function($request, $next) {
             $this->user = JWTAuth::user();
             return $next($request);
@@ -48,7 +65,6 @@ class EditProfileController extends Controller
 
     }
 
-
     public function updatePersonal(CustomerPersonalProfileRequest $request)
     {
         $customer = $this->user->userable;
@@ -66,6 +82,61 @@ class EditProfileController extends Controller
             'message' => 'Update Personal successful!',
             'data' => $customer
         ], 200);
+    }
+
+    public function addFarm(CustomerFarmProfileRequest $request)
+    {
+        $customer = $this->user->userable;
+        
+        $farmAddressArray = [];
+
+        for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/8; $i++) {
+            $farmAddress = new FarmAddress;
+            $farmAddress->name = $request->input('farmAddress.'.$i.'.name');
+            $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
+            $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
+            $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
+            $farmAddress->zipCode = $request->input('farmAddress.'.$i.'.zipCode');
+            $farmAddress->farmType = $request->input('farmAddress.'.$i.'.farmType');
+            $farmAddress->landline = $request->input('farmAddress.'.$i.'.landline');
+            $farmAddress->mobile = $request->input('farmAddress.'.$i.'.mobile');
+            array_push($farmAddressArray, $farmAddress);
+        }
+
+        $customer->farmAddresses()->saveMany($farmAddressArray);
+
+        return response()->json([
+            'message' => 'Update Personal successful!',
+            'data' => $farmAddressArray
+        ], 200);
+
+
+    }
+
+    public function updateFarm(CustomerFarmProfileRequest $request, $farm_id)
+    {
+        $customer = $this->user->userable;
+        $farmAddress = $customer->farmAddresses()->find($farm_id);
+
+        if($farmAddress) {
+            $farmAddress->name = $request['name'];
+            $farmAddress->addressLine1 = $request['addressLine1'];
+            $farmAddress->addressLine2 = $request['addressLine2'];
+            $farmAddress->province = $request['province'];
+            $farmAddress->zipCode = $request['zipCode'];
+            $farmAddress->farmType = $request['farmType'];
+            $farmAddress->landline = $request['landline'];
+            $farmAddress->mobile = $request['mobile'];
+            $farmAddress->save();
+
+            return response()->json([
+                'message' => 'Update Farm Info successful!',
+                'data' => $farmAddress
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Farm Address does not exist!',
+        ], 404);
     }
 
     private function getProvinces()

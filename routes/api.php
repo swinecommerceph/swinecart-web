@@ -33,8 +33,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/change-password', 'EditProfileController@changePassword');
             Route::post('/update-personal', 'EditProfileController@updatePersonal');
             
-            Route::post('/update-farm/{id}', 'EditProfileController@updateFarm');
-            Route::delete('/delete-farm/{id}', 'EditProfileController@deleteFarm');
+            Route::post('/farm/update/{id}', 'EditProfileController@updateFarm');
+            Route::delete('/farm/delete/{id}', 'EditProfileController@deleteFarm');
 
             // Route::post('/upload-logo', 'EditProfileController@uploadLogo');
             // Route::delete('/delete-logo', 'EditProfileController@deleteLogo');
@@ -94,6 +94,9 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/provinces', 'EditProfileController@getProvinces');
 
             Route::post('/update-personal', 'EditProfileController@updatePersonal');
+
+            Route::post('/farm/add', 'EditProfileController@addFarm');
+            Route::post('/farm/update/{id}', 'EditProfileController@updateFarm');
         });
     });
     
