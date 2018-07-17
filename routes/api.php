@@ -88,7 +88,11 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     
     
     Route::group(['namespace' => 'Customer', 'prefix' => 'customer'], function() {
-
+        Route::group(['prefix' => 'edit-profile'], function() {
+            Route::get('/me', 'EditProfileController@me');
+            Route::get('/farm-addresses', 'EditProfileController@getFarmAddresses');
+            Route::get('/provinces', 'EditProfileController@getProvinces');
+        });
     });
     
 });
