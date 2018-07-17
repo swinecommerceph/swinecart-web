@@ -83,5 +83,12 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/see/{id}', 'NotificationsController@SeeNotification');
         });
 
-    }); 
+    });
+    
+    
+    
+    Route::group(['namespace' => 'Customer', 'prefix' => 'customer'], function() {
+
+    });
+    
 });
