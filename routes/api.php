@@ -106,6 +106,10 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::group(['prefix' => 'products'], function() {
             
         });
+
+        Route::group(['prefix' => 'swine-cart'], function() {
+            
+        });
     });
     
 });
