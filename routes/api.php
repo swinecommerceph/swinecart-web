@@ -97,6 +97,9 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
             Route::post('/farm/add', 'EditProfileController@addFarm');
             Route::post('/farm/update/{id}', 'EditProfileController@updateFarm');
+            Route::delete('/farm/delete/{id}', 'EditProfileController@deleteFarm');
+
+            
         });
     });
     

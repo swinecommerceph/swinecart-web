@@ -139,6 +139,22 @@ class EditProfileController extends Controller
         ], 404);
     }
 
+    public function deleteFarm(Request $request, $farm_id)
+    {
+        $customer = $this->user->userable;
+        $farmAddress = $customer->farmAddresses()->find($farm_id);
+
+        if($farmAddress) {
+            $farmAddress->delete();
+            return response()->json([
+                'message' => 'Delete Farm successful!'
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Farm Address does not exist!',
+        ], 404);
+    }
+
     private function getProvinces()
     {
         return collect([
