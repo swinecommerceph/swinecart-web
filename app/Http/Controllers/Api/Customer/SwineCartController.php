@@ -51,7 +51,7 @@ class SwineCartController extends Controller
     }
 
 
-    public function addToCart(Request $request, $product_id)
+    public function addItem(Request $request, $product_id)
     {
         $customer = $this->user->userable;
         $items = $customer->swineCartItems();
@@ -102,7 +102,7 @@ class SwineCartController extends Controller
         
     }
 
-    public function getSwineCartItems(Request $request)
+    public function getItems(Request $request)
     {
         $customer = $this->user->userable;
         $swineCartItems = $customer->swineCartItems()->where('if_requested', 0)->get();
@@ -125,20 +125,44 @@ class SwineCartController extends Controller
             array_push($items, $itemDetail);
         }
 
+        
+        
         return response()->json([
             'message' => 'Get SwineCart items successful!',
             'data' => $items
         ]);
     }
 
-    public function getSwineCartQuantity(Request $request)
+    public function getItemCount(Request $request)
     {
         $customer = $this->user->userable;
-        $count = $customer->swineCartItems()->where('if_requested',0)->count();
+        $count = $customer->swineCartItems()->where('if_requested', 0)->count();
 
         return response()->json([
             'message' => 'Get SwineCart items successful!',
             'data' => $count
         ]);
+    }
+
+    public function deleteItem(Request $request, $item_id)
+    {
+        $customer = $this->user->userable;
+        $item = $customer->swineCartItems()->where('id', $item_id)->first();
+
+        if($item) {
+            $product = Product::find($item->product_id);
+            $item->delete();
+
+            return response()->json([
+                'message' => 'Get SwineCart items successful!',
+                'data' => [
+                    'count' => $customer->swineCartItems()->where('if_requested',0)->count(),
+                    'product' => $product
+                ]
+            ]);
+        }
+        else return response()->json([
+            'error' => 'SwineCart Item does not exist!' 
+        ], 404);
     }
 }
