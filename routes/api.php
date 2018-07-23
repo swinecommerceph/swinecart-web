@@ -83,6 +83,9 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/see/{id}', 'NotificationsController@SeeNotification');
         });
 
+        Route::group(['prefix' => 'messages'], function() {
+
+        });
     });
     
     
@@ -121,6 +124,10 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/get', 'NotificationsController@getNotifications');
             Route::get('/count', 'NotificationsController@getNotificationsCount');
             Route::post('/see/{id}', 'NotificationsController@SeeNotification');
+        });
+
+        Route::group(['prefix' => 'messages'], function() {
+
         });
     });
     
