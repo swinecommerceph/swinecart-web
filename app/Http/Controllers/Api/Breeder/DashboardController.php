@@ -195,13 +195,18 @@ class DashboardController extends Controller
     {
         $breeder = $this->user->userable;
 
-        $temp = $breeder->transactionLogs()->get()->unique('customer_id');
+        // $customers = $breeder->transactionLogs()->get();
+        $customers = $breeder->transactionLogs()->where('status', '!=', 'cancel_transaction')->get();
 
-        // $customers = ($temp==NULL)? []: $temp->customer()->get();
+        $customers = $customers->map(function ($log) {
+            $log->customer = $log->customer()->first();
+            return $log;
+        });
+
 
         return response()->json([
             'message' => 'Get Customers successful!',
-            'data' => $temp
+            'data' => $customers
         ]);
     }
 }
