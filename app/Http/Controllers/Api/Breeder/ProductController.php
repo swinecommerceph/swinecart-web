@@ -389,4 +389,19 @@ class ProductController extends Controller
         ], 200);
     }
 
+    public function updateSelected(Request $request)
+    {
+        foreach ($request->product_ids as $id) {
+            $product = Product::find($id);
+            $product->status = $request->updateTo_status == 'hide' 
+                ? 'hidden'
+                : 'displayed';
+            $product->save();
+        }
+
+        return response()->json([
+            'message' => 'Update Selected succesful!',
+        ], 200);
+    }
+
 }

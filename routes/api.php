@@ -49,7 +49,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/product/display/{id}', 'ProductController@displayProduct');
             Route::post('/product/update/{id}', 'ProductController@updateProduct');
             Route::post('/product/store', 'ProductController@storeProduct');
-
+            Route::post('/product/update-selected', 'ProductController@updateSelected');
             Route::post('/set-primary-picture', 'ProductController@setPrimaryPicture');
             Route::get('/product/summary/{id}', 'ProductController@getProductSummary');
             Route::get('/product/detail/{id}', 'ProductController@getProductDetail');
