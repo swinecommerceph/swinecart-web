@@ -270,4 +270,43 @@ class SwineCartController extends Controller
         ], 404);
         
     }
+
+    public function getTransactionHistory(Request $request, $customer_id)
+    {
+        $history = Customer::find($customer_id)->transactionLogs;
+
+        $restructuredHistory = $history->groupBy('product_id')->map(function($item, $key){
+            $restructuredItem = [];
+            $product = Product::find($key);
+            $reviews = $product->breeder->reviews;
+
+            $restructuredItem['showFullLogs'] = false;
+            $restructuredItem['logs'] = $item->toArray();
+            $restructuredItem['product_details'] = [
+                "quantity" => (SwineCartItem::find($restructuredItem['logs'][0]['swineCart_id'])->quantity) ?? '',
+                "name" => $product->name,
+                "type" => $product->type,
+                "s_img_path" => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
+                "l_img_path" => route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]),
+                "breed" => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
+                "breeder_name" => Breeder::find($product->breeder_id)->users()->first()->name,
+                "farm_from" => FarmAddress::find($product->farm_from_id)->province,
+                "birthdate" => $product->birthdate,
+                "adg" => $product->adg,
+                "fcr" => $product->fcr,
+                "bft" => $product->backfat_thickness,
+                "other_details" => $product->other_details,
+                "avg_delivery" => ($reviews->avg('rating_delivery')) ? $reviews->avg('rating_delivery') : 0,
+                "avg_transaction" => ($reviews->avg('rating_transaction')) ? $reviews->avg('rating_transaction') : 0,
+                "avg_productQuality" => ($reviews->avg('rating_productQuality')) ? $reviews->avg('rating_productQuality') : 0
+            ];
+            return $restructuredItem;
+        });
+
+        return response()->json([
+            'message' => 'Get Transaction History successful',
+            'data' => $restructuredHistory
+        ]);
+        
+    }
 }

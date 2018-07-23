@@ -113,7 +113,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/items/add/{id}', 'SwineCartController@addItem');
             Route::delete('/items/delete/{id}', 'SwineCartController@deleteItem');
             Route::post('/items/request/{id}', 'SwineCartController@requestItem');
-
+            Route::get('/transactions/{id}', 'SwineCartController@getTransactionHistory');
         });
     });
     
