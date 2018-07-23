@@ -112,6 +112,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/items/count', 'SwineCartController@getItemCount');
             Route::post('/items/add/{id}', 'SwineCartController@addItem');
             Route::delete('/items/delete/{id}', 'SwineCartController@deleteItem');
+            Route::post('/items/request/{id}', 'SwineCartController@requestItem');
+            
         });
     });
     
