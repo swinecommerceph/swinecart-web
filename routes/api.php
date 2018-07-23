@@ -51,8 +51,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/product/store', 'ProductController@storeProduct');
 
             Route::post('/set-primary-picture', 'ProductController@setPrimaryPicture');
-            Route::get('/product-summary/{id}', 'ProductController@getProductSummary');
-            Route::get('/product-detail/{id}', 'ProductController@getProductDetail');
+            Route::get('/product/summary/{id}', 'ProductController@getProductSummary');
+            Route::get('/product/detail/{id}', 'ProductController@getProductDetail');
             
             // Route::delete('/media/delete', 'ProductController@deleteMedium');
 
@@ -104,7 +104,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         });
 
         Route::group(['prefix' => 'products'], function() {
-            
+            Route::get('/product/detail/{id}', 'ProductController@getProductDetail');
         });
 
         Route::group(['prefix' => 'swine-cart'], function() {
@@ -113,7 +113,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/items/add/{id}', 'SwineCartController@addItem');
             Route::delete('/items/delete/{id}', 'SwineCartController@deleteItem');
             Route::post('/items/request/{id}', 'SwineCartController@requestItem');
-            
+
         });
     });
     

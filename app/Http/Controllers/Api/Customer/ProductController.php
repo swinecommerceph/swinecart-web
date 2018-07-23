@@ -52,4 +52,45 @@ class ProductController extends Controller
     }
 
 
+    public function getProductDetail(Request $request, $product_id)
+    {
+        $product = Product::find($product_id);
+
+        if($product) {
+            $product->img_path = route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]);
+            $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => Image::find($product->primary_img_id)->name]);
+            $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
+            $product->birthdate = $this->transformDateSyntax($product->birthdate);
+            $product->age = $this->computeAge($product->birthdate);
+            $product->type = ucfirst($product->type);
+            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+            $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+            $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
+            $product->videoCollection = $product->videos;
+            $product->userid = Breeder::find($product->breeder_id)->users->first()->id;
+
+            $reviews = Breeder::find($product->breeder_id)->reviews;
+        
+            $breederRatings = [
+                'deliveryRating' => $reviews->avg('rating_delivery') ?? 0,
+                'transactionRating' => $reviews->avg('rating_transaction') ?? 0,
+                'productQualityRating' => $reviews->avg('rating_productQuality') ?? 0
+            ];
+
+            return response()->json([
+                'message' => 'Get Product Detail succesful!',
+                'data' => [
+                    'product' => $product,
+                    'breederRatings' => $breederRatings  
+                ]
+            ]);
+
+        } 
+        else return response()->json([
+            'error' => 'Product does not exist!' 
+        ], 404);
+    }
+
+
 }
