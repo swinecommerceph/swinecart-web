@@ -41,10 +41,12 @@ class ProductController extends Controller
         computeAge as private;
     }
 
+    const IMG_PATH = '/images/';
+
     public function __construct() 
     {
         $this->middleware('jwt:auth');
-        $this->middleware('jwt.role:breeder');
+        $this->middleware('jwt.role:customer');
         $this->middleware(function($request, $next) {
             $this->user = JWTAuth::user();
             return $next($request);
@@ -92,5 +94,15 @@ class ProductController extends Controller
         ], 404);
     }
 
+    public function getBreederProfile(Request $request, $breeder_id)
+    {
+        $breeder = Breeder::find($breeder_id);
+        $breeder->farms = $breeder->farmAddresses()->get();
+        $breeder->logoImage = ($breeder->logo_img_id) ? self::BREEDER_IMG_PATH.Image::find($breeder->logo_img_id)->name : self::IMG_PATH.'default_logo.png' ;
 
+        return response()->json([
+            'message' => 'Get Breeder Profile successful',
+            'data' => $breeder
+        ], 200);
+    }
 }

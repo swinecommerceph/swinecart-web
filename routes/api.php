@@ -103,11 +103,12 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/farm/update/{id}', 'EditProfileController@updateFarm');
             Route::delete('/farm/delete/{id}', 'EditProfileController@deleteFarm');
 
-
+            Route::get('/breeders', 'EditProfileController@getBreeders');
         });
 
         Route::group(['prefix' => 'products'], function() {
             Route::get('/product/detail/{id}', 'ProductController@getProductDetail');
+            Route::get('/breeder/{id}', 'ProductController@getBreederProfile');
         });
 
         Route::group(['prefix' => 'swine-cart'], function() {
