@@ -309,4 +309,69 @@ class SwineCartController extends Controller
         ]);
         
     }
+
+    public function rateBreeder(Request $request, $breeder_id)
+    {
+        $customer = $this->user->userable;
+        $reviews = Breeder::find($breeder_id)->reviews();
+
+        $review = new Review;
+        $review->customer_id = $customer->id;
+        $review->comment = $request->comment;
+        $review->rating_delivery = $request->delivery;
+        $review->rating_transaction = $request->transaction;
+        $review->rating_productQuality = $request->productQuality;
+
+        $swineCartItems = $customer->swineCartItems();
+        $reviewed = $swineCartItems->where('product_id', $request->productId)->first();
+        $reviewed->if_rated = 1;
+        $reviewed->save();
+        $reviews->save($review);
+
+        $breeder = Breeder::find($breeder_id);
+
+        $transactionDetails = [
+            'swineCart_id' => $reviewed->id,
+            'customer_id' => $customer->id,
+            'breeder_id' => $breeder_id,
+            'product_id' => $request->productId,
+            'status' => 'rated',
+            'created_at' => Carbon::now()
+        ];
+
+        $notificationDetails = [
+            'description' => 'Customer <b>' . $this->user->name . ' rated</b> you with ' . round(($review->rating_delivery + $review->rating_transaction + $review->rating_productQuality)/3, 2) . ' (overall average).',
+            'time' => $transactionDetails['created_at'],
+            'url' => route('dashboard')
+        ];
+
+        $smsDetails = [
+            'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Customer ' . $this->user->name . ' rated you with ' . round(($review->rating_delivery + $review->rating_transaction + $review->rating_productQuality)/3, 2) . ' (overall average).',
+            'recipient' => $breeder->office_mobile
+        ];
+
+        $pubsubData = [
+            'rating_delivery' => $review->rating_delivery,
+            'rating_transaction' => $review->rating_transaction,
+            'rating_productQuality' => $review->productQuality,
+            'review_comment' => $review->comment,
+            'review_customerName' => $this->user->name
+        ];
+
+        $breederUser = $breeder->users()->first();
+
+        // Add new Transaction Log
+        $this->addToTransactionLog($transactionDetails);
+
+        // Queue notifications (SMS, database, notification, pubsub server)
+        dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+        dispatch(new NotifyUser('breeder-rated', $breederUser->id, $notificationDetails));
+        dispatch(new SendToPubSubServer('notification', $breederUser->email));
+        dispatch(new SendToPubSubServer('db-rated', $breederUser->email, $pubsubData));
+
+        return response()->json([
+            'message' => 'Rate Breeder successful',
+            'data' => $review
+        ], 200);
+    }
 }
