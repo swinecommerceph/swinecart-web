@@ -403,5 +403,46 @@ class ProductController extends Controller
             'message' => 'Update Selected succesful!',
         ], 200);
     }
+    
+    public function deleteSelected(Request $request)
+    {
+        foreach ($request->product_ids as $id) {
+            $product = Product::find($id);
 
+            foreach ($product->images as $image) {
+                $fullFilePath = self::PRODUCT_IMG_PATH.$image->name;
+                $sFullFilePath = self::PRODUCT_SIMG_PATH.$image->name;
+                $mFullFilePath = self::PRODUCT_MIMG_PATH.$image->name;
+                $lFullFilePath = self::PRODUCT_LIMG_PATH.$image->name;
+
+                if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+                if(Storage::disk('public')->exists($sFullFilePath)) Storage::disk('public')->delete($sFullFilePath);
+                if(Storage::disk('public')->exists($mFullFilePath)) Storage::disk('public')->delete($mFullFilePath);
+                if(Storage::disk('public')->exists($lFullFilePath)) Storage::disk('public')->delete($lFullFilePath);
+
+                $image->delete();
+            }
+
+            foreach ($product->videos as $video) {
+                $fullFilePath = self::PRODUCT_VID_PATH.$video->name;
+
+                if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+
+                $video->delete();
+            }
+
+            $breedId = $product->breed_id;
+            $product->delete();
+
+            $breedInstance = Product::where('breed_id', $breedId)->get()->first();
+            if(!$breedInstance){
+                $breed = Breed::find($breedId);
+                $breed->delete();
+            }
+        }
+
+        return response()->json([
+            'message' => 'Delete Selected succesful!',
+        ], 200);
+    }
 }
