@@ -130,7 +130,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         });
 
         Route::group(['prefix' => 'messages'], function() {
-
+            Route::get('/threads', 'MessageController@getThreads');
+            Route::get('/{id}', 'MessageController@getMessages');
         });
     });
     
