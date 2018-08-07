@@ -25,16 +25,21 @@ class MessageController extends Controller
     }
 
 
-    public function countUnread()
+    public function unreadCount(Request $request)
     {   
         $user_id = $this->user->id;
 
         $count = Message::where('customer_id', '=', $user_id)
 				->where('read_at', NULL)
-				->where('direction', 0) //from customer to breeder
+				->where('direction', 1) //from customer to breeder
 	    		->orderBy('created_at', 'ASC')
 	    		->groupBy('breeder_id')
-	    		->get();
+                ->get();
+                
+        return response()->json([
+            'message' => 'Unread Count successful!',
+            'data' => sizeof($count)
+        ], 200);
     }
 
     public function getMessages(Request $request, $breeder_id)
@@ -52,7 +57,7 @@ class MessageController extends Controller
         ], 200);
     }
 
-    public function getThreads()
+    public function getThreads(Request $request)
     {   
         $user_id = $this->user->id;
 
