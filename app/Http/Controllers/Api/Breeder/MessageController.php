@@ -25,7 +25,7 @@ class MessageController extends Controller
     }
 
 
-    public function countUnread()
+    public function unreadCount(Request $request)
     {   
         $user_id = $this->user->id;
 
@@ -34,7 +34,12 @@ class MessageController extends Controller
 				->where('direction', 0) //from customer to breeder
 	    		->orderBy('created_at', 'ASC')
 	    		->groupBy('customer_id')
-	    		->get();
+                ->get();
+                
+        return response()->json([
+            'message' => 'Unread Count successful!',
+            'data' => sizeof($count)
+        ], 200);
     }
 
     public function getMessages(Request $request, $customer_id)
@@ -52,7 +57,7 @@ class MessageController extends Controller
         ], 200);
     }
 
-    public function getThreads()
+    public function getThreads(Request $request)
     {   
         $user_id = $this->user->id;
 
