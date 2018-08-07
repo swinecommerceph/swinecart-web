@@ -43,7 +43,7 @@ class MessageController extends Controller
 
         $messages = Message::where('customer_id', '=', $user_id)
                 ->where('breeder_id', $breeder_id)
-	    		->orderBy('created_at', 'ASC')
+	    		->orderBy('created_at', 'DESC')
                 ->get();
         
         return response()->json([
