@@ -5,6 +5,13 @@ namespace App\Http\Controllers\Api\Breeder;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 
+use App\Http\Requests;
+use App\Models\Message;
+use App\Models\User;
+
+use JWTAuth;
+use Auth;
+
 class MessageController extends Controller
 {
     public function __construct() 
@@ -30,12 +37,34 @@ class MessageController extends Controller
 	    		->get();
     }
 
-    public function getMessages()
-    {
-        $threads = Message::where('breeder_id', '=', $userId)
+    public function getMessages(Request $request, $customer_id)
+    {   
+        $user_id = $this->user->id;
+
+        $messages = Message::where('breeder_id', '=', $user_id)
+                ->where('customer_id', $customer_id)
+	    		->orderBy('created_at', 'ASC')
+                ->get();
+        
+        return response()->json([
+            'message' => 'Get Messages successful!',
+            'data' => $messages
+        ], 200);
+    }
+
+    public function getThreads()
+    {   
+        $user_id = $this->user->id;
+
+        $threads = Message::where('breeder_id', '=', $user_id)
 	    		->orderBy('created_at', 'DESC')
-	    		->get()
+                ->get()
                 ->unique('customer_id');
-            
+
+        return response()->json([
+            'message' => 'Get Threads successful!',
+            'data' => $threads
+        ], 200);
+        
     }
 }
