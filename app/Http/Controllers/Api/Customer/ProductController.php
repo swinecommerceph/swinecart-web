@@ -105,4 +105,35 @@ class ProductController extends Controller
             'data' => $breeder
         ], 200);
     }
+
+    public function getProducts(Request $request)
+    {
+        $products = Product::whereIn('status', ['displayed', 'requested'])
+            ->where('quantity', '!=', 0)
+            ->orderBy('id', 'DESC')
+            ->paginate(10);
+
+        $products = $products->reduce(function($array, $product) {
+
+            if($product->farmFrom->accreditation_status == 'active') {
+                $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
+                $product->type = ucfirst($product->type);
+                $product->birthdate = $this->transformDateSyntax($product->birthdate);
+                $product->age = $this->computeAge($product->birthdate);
+                $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+                $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
+                $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+                $product->score = 0;
+
+                array_push($array, $product);
+            }
+
+            return $array;
+        }, []);
+
+        return response()->json([
+            'message' => 'Get Products successful',
+            'data' => $products
+        ], 200);
+    }
 }
