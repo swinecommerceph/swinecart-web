@@ -136,4 +136,17 @@ class ProductController extends Controller
             'data' => $products
         ], 200);
     }
+
+    public function getBreeds(Request $request)
+    {
+        $breed = Breed::where('name','not like', '%+%')
+            ->where('name','not like', '')
+            ->orderBy('name','asc')
+            ->get();
+
+        return response()->json([
+            'message' => 'Get Breeds successful',
+            'data' => $breed
+        ], 200);
+    }
 }
