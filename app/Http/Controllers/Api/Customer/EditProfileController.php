@@ -21,6 +21,7 @@ use App\Models\TransactionLog;
 use Auth;
 use DB;
 use JWTAuth;
+use Validator;
 
 class EditProfileController extends Controller
 {
@@ -84,32 +85,51 @@ class EditProfileController extends Controller
         ], 200);
     }
 
-    public function addFarm(CustomerFarmProfileRequest $request)
+    public function addFarm(Request $request)
     {
         $customer = $this->user->userable;
-        
-        $farmAddressArray = [];
+        $farms = $request->farms;
 
-        for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/8; $i++) {
-            $farmAddress = new FarmAddress;
-            $farmAddress->name = $request->input('farmAddress.'.$i.'.name');
-            $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
-            $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
-            $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
-            $farmAddress->zipCode = $request->input('farmAddress.'.$i.'.zipCode');
-            $farmAddress->farmType = $request->input('farmAddress.'.$i.'.farmType');
-            $farmAddress->landline = $request->input('farmAddress.'.$i.'.landline');
-            $farmAddress->mobile = $request->input('farmAddress.'.$i.'.mobile');
-            array_push($farmAddressArray, $farmAddress);
+        $validator = Validator::make($farms, [
+            '*.name' => 'required',
+            '*.addressLine1' => 'required',
+            '*.addressLine2' => 'required',
+            '*.province' => 'required',
+            '*.zipCode' => 'required|digits:4',
+            '*.farmType' => 'required',
+            '*.mobile' => 'required|digits:11|regex:/^09/',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'message' => 'Error in Add Farm!',
+                'data' => $validator->errors()
+            ], 500);
         }
 
-        $customer->farmAddresses()->saveMany($farmAddressArray);
+        else {
 
-        return response()->json([
-            'message' => 'Update Personal successful!',
-            'data' => $farmAddressArray
-        ], 200);
+            $farms = array_map(function($farm) {
+                $farmAddress = new FarmAddress;
+                $farmAddress->name = $farm['name'];
+                $farmAddress->addressLine1 = $farm['addressLine1'];
+                $farmAddress->addressLine2 = $farm['addressLine2'];
+                $farmAddress->province = $farm['province'];
+                $farmAddress->zipCode = $farm['zipCode'];
+                $farmAddress->farmType = $farm['farmType'];
+                $farmAddress->landline = $farm['landline'];
+                $farmAddress->mobile = $farm['mobile'];
+                return $farmAddress;
+            }, $farms);
 
+            $customer->farmAddresses()->saveMany($farms);
+
+            return response()->json([
+                'message' => 'Add Farm successful!',
+                'data' => $farms
+            ], 200);
+            
+        }
 
     }
 
