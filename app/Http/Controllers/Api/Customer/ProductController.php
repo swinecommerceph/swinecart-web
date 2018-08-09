@@ -107,11 +107,13 @@ class ProductController extends Controller
     }
 
     public function getProducts(Request $request)
-    {
+    {   
+        $results = $request->results;
+
         $products = Product::whereIn('status', ['displayed', 'requested'])
             ->where('quantity', '!=', 0)
             ->orderBy('id', 'DESC')
-            ->paginate(10);
+            ->paginate($results);
 
         $products = $products->reduce(function($array, $product) {
 
