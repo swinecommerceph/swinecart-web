@@ -514,7 +514,7 @@ class ProductController extends Controller
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
             $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-            // $product->score = ($request->q) ? $scores[$product->id] : 0;
+            $product->score = ($request->q) ? $scores[$product->id] : 0;
         }
 
         // Sort according to score if from a search query
