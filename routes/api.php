@@ -111,6 +111,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'products'], function() {
             Route::post('/', 'ProductController@getProducts');
+            Route::post('/filter', 'ProductController@filterProducts');
             Route::get('/product/detail/{id}', 'ProductController@getProductDetail');
             Route::get('/breeder/{id}', 'ProductController@getBreederProfile');
             Route::get('/breeds', 'ProductController@getBreeds');

@@ -151,4 +151,21 @@ class ProductController extends Controller
             'data' => $breeds
         ], 200);
     }
+    
+    public function filterProducts(Request $request, ProductRepository $repository)
+    {
+        $data = $request->query();
+
+        // if($request->has('type')) {
+        //         return response()->json([
+        //         'message' => 'Filter Products successful',
+        //         'data' => $query
+        //     ], 200);
+        // }
+
+        return response()->json([
+            'message' => 'Get Breeds successful',
+            'data' => $repository->search('2126')->get()
+        ], 200);
+    }
 }
