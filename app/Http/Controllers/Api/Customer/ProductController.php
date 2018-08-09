@@ -139,14 +139,14 @@ class ProductController extends Controller
 
     public function getBreeds(Request $request)
     {
-        $breed = Breed::where('name','not like', '%+%')
+        $breeds = Breed::where('name','not like', '%+%')
             ->where('name','not like', '')
             ->orderBy('name','asc')
             ->get();
 
         return response()->json([
             'message' => 'Get Breeds successful',
-            'data' => $breed
+            'data' => $breeds
         ], 200);
     }
 }
