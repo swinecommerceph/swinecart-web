@@ -305,7 +305,7 @@
                                 <a class="btn-floating btn-large halfway-fab waves-effect waves-light red tooltipped"
                                     data-position="top"
                                     data-delay="50"
-                                    data-tooltip="Send meesage to Breeder"
+                                    data-tooltip="Send message to Breeder"
                                     :href="'/customer/messages/' + product.user_id"
                                     v-if="product.status === 'reserved' | product.status === 'on_delivery' | product.status === 'paid'"
                                 >
