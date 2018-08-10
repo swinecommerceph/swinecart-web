@@ -10,6 +10,8 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+  {{-- google analytics here --}}
+
 	<title>SwineCart @yield('title') </title>
 
 	{{-- <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet" type="text/css"> --}}
@@ -122,7 +124,8 @@
 	{{-- Common view for authenticated users --}}
 	@if(!Request::is('/'))
 		<div class="container">
-			@yield('content')
+      @yield('content')
+      {{-- can footer here --}}
 		</div>
 	@endif
 

@@ -282,9 +282,15 @@ class BreederController extends Controller
     public function viewCustomers(){
         $breeder = $this->user->userable;
 
-        $temp = $breeder->transactionLogs()->first();
+        $uniqueCustomerTransactions = $breeder->transactionLogs->unique('customer_id')->values()->all();
 
-        $customers = ($temp==NULL)? []: $temp->customer()->get();
+        $customers = [];
+        if ($uniqueCustomerTransactions != NULL) {
+          foreach ($uniqueCustomerTransactions as $transaction) {
+            $uniqueCustomerTransaction = $transaction->customer;
+            $customers[] = $uniqueCustomerTransaction;
+          }
+        }
 
         return view('user.breeder.viewCustomers', compact('customers'));
     }
