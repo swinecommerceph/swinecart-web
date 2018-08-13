@@ -124,10 +124,12 @@
 	{{-- Common view for authenticated users --}}
 	@if(!Request::is('/'))
 		<div class="container">
-      @yield('content')
-      {{-- can footer here --}}
+      		@yield('content')
 		</div>
 	@endif
+
+	{{-- can footer here --}}
+	@yield('footer')
 
 	<script src="{{ elixir('/js/vendor.js') }}"></script>
 	<script src="{{ elixir('/js/siteCustom.js') }}"></script>
