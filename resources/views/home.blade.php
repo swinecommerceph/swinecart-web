@@ -28,22 +28,22 @@
                         <li>
                             <img src="/images/demo/home1.jpg"> <!-- random image -->
                             <div class="caption center-align">
-                                <h3>Welcome to SwineCart!</h3>
-                                <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                                {{-- <h3>Welcome to SwineCart!</h3> --}}
+                                <h5 class="light grey-text text-lighten-3"></h5>
                             </div>
                         </li>
                         <li>
                             <img src="/images/demo/home2.jpg"> <!-- random image -->
                             <div class="caption left-align">
-                                <h3>Left Aligned Caption</h3>
-                                <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                                {{-- <h3>Left Aligned Caption</h3> --}}
+                                <h5 class="light grey-text text-lighten-3"></h5>
                             </div>
                         </li>
                         <li>
                             <img src="/images/demo/home3.jpg"> <!-- random image -->
                             <div class="caption right-align">
-                                <h3>Right Aligned Caption</h3>
-                                <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                                {{-- <h3>Right Aligned Caption</h3> --}}
+                                <h5 class="light grey-text text-lighten-3"></h5>
                             </div>
                         </li>
                     @endforelse
@@ -285,6 +285,73 @@
                         </div>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+@endsection
+
+@section('footer')
+    <div class="container">
+        {{-- SwineCart simple description --}}
+        <div class="row">
+            <div class="col 16 s12">
+                <p
+                 style="
+                    text-align: justify;
+                    text-justify: inter-word;
+                 ">
+                    SwineCart is a project of the UPLB Institute of Computer Science. It is funded by  Department of Science and Technology - Philippine Council for Agriculture, Forestry and Natural Resources Research and Development (DOST-PCAARRD) and in cooperation with Accredited Swine Breeders Association of the Philippines (ASBAP).
+                </p>
+            </div>
+        </div>
+
+        {{-- Contact Information and Logos --}}
+        <div class="row">
+            <div class="col s4"></div>
+            {{-- Contact Information for SwineCart--}}
+            <div class="col s5 teal-text darken-3">
+                <p>swinecommerceph@gmail.com</p>
+                <p>(049) 536 2302 | (049) 536 2313</p>
+            </div>
+            {{-- Logos of ICS, PCAARRD, and UP --}}
+            <div class="col s1">
+                {{-- ICS logo --}}
+                <img 
+                    style="
+                        margin-top: 20%;
+                        height: auto;
+                        width: 100%
+                    "
+                    src="/images/ics-logo.jpg">
+            </div>
+            <div class="col s1">
+                {{-- UP logo --}}
+                <img 
+                    style="
+                        margin-top: 20%;
+                        height: auto;
+                        width: 100%
+                    "
+                    src="/images/up-logo.png">
+            </div>
+            <div class="col s1">
+                {{-- PCAARRD logo --}}
+                <img 
+                    style="
+                        margin-top: 20%;
+                        height: auto;
+                        width: 100%
+                    "
+                    src="/images/pcaarrd-logo.png">
+            </div>
+        </div>
+        
+        {{-- Copyrights --}}
+        <div class="row">
+            <div class="col s12">
+                <p>
+                    Copyright All Rights Resevered © 2018
+                </p>
             </div>
         </div>
     </div>
