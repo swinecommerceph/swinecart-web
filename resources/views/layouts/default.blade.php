@@ -10,7 +10,17 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
-  {{-- google analytics here --}}
+  	{{-- Google Analytics here --}}
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-123737555-1"></script>
+	<script>
+		window.dataLayer = window.dataLayer || [];
+		function gtag(){dataLayer.push(arguments);}
+		gtag('js', new Date());
+
+		gtag('config', 'UA-123737555-1');
+	</script>
+
 
 	<title>SwineCart @yield('title') </title>
 
@@ -127,9 +137,6 @@
       		@yield('content')
 		</div>
 	@endif
-
-	{{-- can footer here --}}
-	@yield('footer')
 
 	<script src="{{ elixir('/js/vendor.js') }}"></script>
 	<script src="{{ elixir('/js/siteCustom.js') }}"></script>

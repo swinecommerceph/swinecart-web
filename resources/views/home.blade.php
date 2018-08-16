@@ -288,18 +288,17 @@
             </div>
         </div>
     </div>
-@endsection
 
-@section('footer')
+    {{-- Fifth Row --}}
     <div class="container">
         {{-- SwineCart simple description --}}
         <div class="row">
             <div class="col 16 s12">
                 <p
-                 style="
+                    style="
                     text-align: justify;
                     text-justify: inter-word;
-                 ">
+                    ">
                     SwineCart is a project of the UPLB Institute of Computer Science. It is funded by  Department of Science and Technology - Philippine Council for Agriculture, Forestry and Natural Resources Research and Development (DOST-PCAARRD) and in cooperation with Accredited Swine Breeders Association of the Philippines (ASBAP).
                 </p>
             </div>
