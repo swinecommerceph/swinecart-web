@@ -26,7 +26,7 @@
 @section('navbarHead')
     @if(!Auth::user()->update_profile)
         <li id="message-main-container">
-            <a href="{{ route('breeder.messages') }}" id="message-icon"
+            <a v-cloak href="{{ route('breeder.messages') }}" id="message-icon"
                 data-alignment="right"
             >
                 <i class="material-icons left">message</i>
@@ -44,7 +44,7 @@
         </li>
         <li><a href="{{ route('dashboard') }}"> <i class="material-icons">assessment</i></a></li>
         <li id="notification-main-container">
-            <a href="#!" id="notification-icon"
+            <a v-cloak href="#!" id="notification-icon"
                 class="dropdown-button"
                 data-beloworigin="true"
                 data-hover="false"
