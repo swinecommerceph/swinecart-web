@@ -83,7 +83,11 @@ elixir(function(mix) {
         .scripts([
             'vendor/imagezoom.min.js',
             'breeder/viewProductDetail_script.js'
-        ], 'public/js/breeder/viewProductDetail.js');
+        ], 'public/js/breeder/viewProductDetail.js')
+        .scripts([
+            'validation/formValidationMethods.js',
+            'validation/registration_validation.js'
+        ], 'public/js/register.js');
 
     // Version the following files to promote browser cache busting
     // Forces browser to download latest asset files

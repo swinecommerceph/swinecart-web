@@ -85,6 +85,5 @@
 @endsection
 
 @section('customScript')
-    <script src="/js/validation/formValidationMethods.js"> </script>
-    <script src="/js/validation/registration_validation.js"> </script>
+    <script src="{{ elixir('/js/register.js') }}"></script>
 @endsection

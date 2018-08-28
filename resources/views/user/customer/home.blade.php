@@ -27,6 +27,8 @@
 @section('navbarHead')
     @if(!Auth::user()->update_profile)
         <li><a href="{{ route('products.view') }}"> Products </a></li>
+
+        {{-- Messaging --}}
         <li id="message-main-container">
             <a v-cloak href="{{ route('customer.messages') }}" id="message-icon"
                 data-alignment="right"
@@ -34,6 +36,7 @@
                 <i class="material-icons left">message</i>
                 <span class="badge"
                     v-if="unreadCount > 0  && unreadCount <= 99"
+                    v-cloak 
                 >
                     @{{ unreadCount }}
                 </span>
@@ -44,6 +47,7 @@
                 </span>
             </a>
         </li>
+        
         {{-- Swine Cart --}}
         <li><a href="{{ route('view.cart') }}" id="cart-icon" class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="cart-dropdown">
                 <i class="material-icons">shopping_cart</i>
@@ -107,6 +111,8 @@
                 </li>
             </ul>
         </li>
+        
+        {{-- Notification --}}
         <li id="notification-main-container">
             <a v-cloak href="#!" id="notification-icon"
                 class="dropdown-button"
