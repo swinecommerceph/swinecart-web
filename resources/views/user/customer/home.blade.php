@@ -310,7 +310,7 @@
                                 </p>
                             </div>
                             <div class="col s12" style="">
-                                <a id="learn-more-breeder" href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
+                                <a id="learn-more-breeder" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
                             </div>
                         </div>
                     </div>
@@ -328,7 +328,7 @@
                                 </p>
                             </div>
                             <div class="col s12" style="">
-                                <a id="learn-more-customer" href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
+                                <a id="learn-more-customer" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
                             </div>
                         </div>
                     </div>
@@ -495,7 +495,7 @@
             </div>
         </div>
 
-        {{-- Fifth Row --}}
+        {{-- Footer / Fifth Row --}}
         <div class="container">
             <div class="row">
                 {{-- SwineCart simple description --}}

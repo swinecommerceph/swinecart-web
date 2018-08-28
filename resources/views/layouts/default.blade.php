@@ -49,14 +49,15 @@
 	<div class="navbar-fixed">
 		<nav class="teal darken-3">
 		    <div class="nav-wrapper container">
-		      	@if (Auth::guest())
+		     	
+		     	{{-- If user is a guest--}}
+		     	@if (Auth::guest())
 					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;"/>
 					<a class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
 			  	@else
 					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;" />
 					<a class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
 			  	@endif
-
 		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 		        @if(Auth::guest())
 					<li><a href="{{ route('home_path') }}"> Products </a></li>
@@ -72,6 +73,7 @@
 						@endif
 					@endif
 				@else
+					{{-- If user is authenticated--}}
 					<li> <a>{{ Auth::user()->name }}</a> </li>
 					@yield('navbarHead')
 					<li>
