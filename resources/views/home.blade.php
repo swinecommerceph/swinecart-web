@@ -99,7 +99,7 @@
                             {{-- <p class="left-align"> --}}
                                 <a href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Get accredited </a> <br>
                                 <a href="{{ url('login') }}" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
-                                <a id="learn-more-breeder" href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
+                                <a id="learn-more-breeder" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
                             {{-- </p> --}}
                         </div>
                     </div>
@@ -121,7 +121,7 @@
                             {{-- <p class="left-align"> --}}
                                 <a href="{{ url('register') }}" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Register </a> <br>
                                 <a href="{{ url('login') }}" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Log-in </a> <br>
-                                <a id="learn-more-customer" href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
+                                <a id="learn-more-customer" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
                             {{-- </p> --}}
                         </div>
                     </div>
@@ -289,7 +289,7 @@
         </div>
     </div>
 
-    {{-- Fifth Row --}}
+    {{-- Footer / Fifth Row --}}
     <div class="container">
         <div class="row">
             {{-- SwineCart simple description --}}
