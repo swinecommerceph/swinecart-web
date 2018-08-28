@@ -29,9 +29,15 @@
         <li><a href="{{ route('products.view') }}"> Products </a></li>
 
         {{-- Messaging --}}
-        <li id="message-main-container">
+        <li id="message-main-container"
+            class="tooltipped"
+            data-position="bottom"
+            data-tooltip="Messages"
+        >
             <a v-cloak href="{{ route('customer.messages') }}" id="message-icon"
                 data-alignment="right"
+                class="waves-effect waves-light"
+                
             >
                 <i class="material-icons left">message</i>
                 <span class="badge"
@@ -49,7 +55,15 @@
         </li>
         
         {{-- Swine Cart --}}
-        <li><a href="{{ route('view.cart') }}" id="cart-icon" class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="cart-dropdown">
+        <li><a href="{{ route('view.cart') }}"
+            id="cart-icon"
+            class="dropdown-button tooltipped"
+            data-beloworigin="true"
+            data-alignment="right"
+            data-activates="cart-dropdown"
+            data-position="bottom"
+            data-tooltip="Shopping Cart"
+            >
                 <i class="material-icons">shopping_cart</i>
                 <span></span>
             </a>
@@ -115,10 +129,11 @@
         {{-- Notification --}}
         <li id="notification-main-container">
             <a v-cloak href="#!" id="notification-icon"
-                class="dropdown-button"
+                class="dropdown-button tooltipped"
                 data-beloworigin="true"
-                data-hover="false"
                 data-alignment="right"
+                data-position="bottom"
+                data-tooltip="Notifications"
                 data-activates="notification-dropdown"
                 @click.prevent="getNotificationInstances"
             >
