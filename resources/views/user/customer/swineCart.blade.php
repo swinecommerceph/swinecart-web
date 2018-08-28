@@ -24,7 +24,7 @@
 @section('navbarHead')
     <li><a href="{{ route('products.view') }}"> Products </a></li>
     <li id="message-main-container">
-        <a href="{{ route('customer.messages') }}" id="message-icon"
+        <a v-cloak href="{{ route('customer.messages') }}" id="message-icon"
             data-alignment="right"
         >
             <i class="material-icons left">message</i>
@@ -105,7 +105,7 @@
             </ul>
         </li>
         <li id="notification-main-container">
-            <a href="#!" id="notification-icon"
+            <a v-cloak href="#!" id="notification-icon"
                 class="dropdown-button"
                 data-beloworigin="true"
                 data-hover="false"
