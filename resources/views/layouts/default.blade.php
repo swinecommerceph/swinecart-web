@@ -74,7 +74,7 @@
 					@endif
 				@else
 					{{-- If user is authenticated--}}
-					<li> <a>{{ Auth::user()->name }}</a> </li>
+					<li style="margin-right: 10px;">{{ Auth::user()->name }}</li>
 					@yield('navbarHead')
 					<li>
 						<a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">

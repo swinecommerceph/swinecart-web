@@ -25,7 +25,12 @@
 
 @section('navbarHead')
     @if(!Auth::user()->update_profile)
-        <li id="message-main-container">
+        <li 
+            id="message-main-container"
+            class="tooltipped"
+            data-position="bottom"
+            data-tooltip="Messages"
+        >
             <a v-cloak href="{{ route('breeder.messages') }}" id="message-icon"
                 data-alignment="right"
             >
@@ -42,14 +47,27 @@
                 </span>
             </a>
         </li>
-        <li><a href="{{ route('dashboard') }}"> <i class="material-icons">assessment</i></a></li>
+
+        {{-- Dashboard--}}
+        <li>
+            <a  
+                href="{{ route('dashboard') }}"
+                class="tooltipped"
+                data-position="bottom"
+                data-tooltip="Dashboard"
+            >
+                <i class="material-icons">assessment</i>
+            </a>
+        </li>
+        
         <li id="notification-main-container">
             <a v-cloak href="#!" id="notification-icon"
-                class="dropdown-button"
+                class="dropdown-button tooltipped"
                 data-beloworigin="true"
                 data-hover="false"
                 data-alignment="right"
-                data-activates="notification-dropdown"
+                data-position="bottom"
+                data-tooltip="Notifications"
                 @click.prevent="getNotificationInstances"
             >
                 <i class="material-icons"
@@ -68,6 +86,7 @@
                     99+
                 </span>
             </a>
+            {{-- Notification --}}
             <ul id="notification-dropdown" class="dropdown-content collection">
                 <div id="notification-preloader-circular" class="row">
                     <div class="center-align">
