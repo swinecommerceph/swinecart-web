@@ -60,6 +60,7 @@
             </a>
         </li>
         
+        {{-- Notifications --}}
         <li id="notification-main-container">
             <a v-cloak href="#!" id="notification-icon"
                 class="dropdown-button tooltipped"
@@ -68,6 +69,7 @@
                 data-alignment="right"
                 data-position="bottom"
                 data-tooltip="Notifications"
+                data-activates="notification-dropdown"
                 @click.prevent="getNotificationInstances"
             >
                 <i class="material-icons"
