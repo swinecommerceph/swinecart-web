@@ -223,10 +223,10 @@
                         <h2 class="right teal-text text-darken-4" style="margin:0; font-family:Electrolize;">SwineCart</h2>
                     </div>
                     <div class="col s12">
-                        <h5 class="right-align grey-text" style="margin:0">
+                        <h5 class="right-align" style="margin:0; color: hsl(0, 0%, 29%);">
                             Your next premium breed is just a click away
                         </h5>
-                        <p class="grey-text">
+                        <p style=" color: hsl(0, 0%, 45%);">
                             SwineCart is an e-commerce system that facilitates secure business transactions
                             between buyers and sellers of breeder swine and semen
                         </p>
