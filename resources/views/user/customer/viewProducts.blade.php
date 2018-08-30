@@ -157,7 +157,7 @@
                             <img src="{{ $product->img_path }}">
                         </a>
                     </div>
-                    <div class="card-content">
+                    <div class="card-content" style="background: hsl(0, 0%, 97%);">
                       <span class="card-title activator" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}<i class="material-icons right">more_vert</i></span>
                       <div class="row">
                           <div class="col s9">
@@ -176,7 +176,7 @@
                       </div>
                     </div>
                     <div class="card-reveal">
-                        <span class="card-title grey-text text-darken-4">{{$product['name']}}<i class="material-icons right">close</i></span>
+                        <span class="card-title" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}<i class="material-icons right">close</i></span>
                         <br>
                         <table class="col s9">
                             <thead> </thead>
@@ -216,7 +216,19 @@
                         <div class="row">
                             <br>
                             <div class="col">
-                                <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
+                                <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}"
+                                    style="
+                                        border: 2px solid #bbdefb;
+                                        background-color: white;
+                                        padding: 8px 18px;
+                                        font-size: 16px;
+                                        cursor: pointer;
+                                        color: #2196f3;
+                                        font-weight: 700;
+                                        border-radius: 5px;
+                                    "
+                                    class="waves-effect waves-light"
+                                >View All Info</a>
                             </div>
                             <div class="col right">
                                 {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
