@@ -233,7 +233,7 @@
                             <div class="col right">
                                 {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
                                     <a href="#" class="tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart">
-                                        <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
+                                        <i class="material-icons blue-text text-darken-2" style="font-size:35px;">add_shopping_cart</i>
                                     </a>
                                 {!! Form::close() !!}
                             </div>
