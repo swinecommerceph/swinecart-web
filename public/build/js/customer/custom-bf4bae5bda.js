@@ -209,6 +209,7 @@ $(document).ready(function(){
     // Add product to Swine Cart
     $(".add-to-cart").click(function(e){
         e.preventDefault();
+        $('#shopping-cart').prop('disabled', true).addClass('disabled').off( "click" );
         swinecart.add($(this));
     })
 
