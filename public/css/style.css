@@ -3,6 +3,10 @@ html{
 	font-size:1rem;
 }
 
+body {
+  background: #fafafa;
+}
+
 /* Navigation dropdown styles */
 #nav-dropdown{
 	/*display:block;*/

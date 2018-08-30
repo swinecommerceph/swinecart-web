@@ -175,10 +175,12 @@
                           </div>
                       </div>
                     </div>
+
+                    {{-- View All Info--}}
                     <div class="card-reveal">
                         <span class="card-title" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}<i class="material-icons right">close</i></span>
                         <br>
-                        <table class="col s9">
+                        <table class="col s10">
                             <thead> </thead>
                             <tbody>
                                 <tr>
