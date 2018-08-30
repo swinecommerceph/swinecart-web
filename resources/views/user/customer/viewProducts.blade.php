@@ -158,12 +158,12 @@
                         </a>
                     </div>
                     <div class="card-content">
-                      <span class="card-title activator grey-text text-darken-4">{{$product->name}}<i class="material-icons right">more_vert</i></span>
+                      <span class="card-title activator" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}<i class="material-icons right">more_vert</i></span>
                       <div class="row">
                           <div class="col s9">
-                              {{$product->type}} - {{$product->breed}} <br>
-                              Birthdate: {{$product->birthdate}} <br>
-                              Age: {{$product->age}} days old
+                              <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} - {{$product->breed}}</span> <br>
+                              <span style="color: hsl(0, 0%, 45%);">Birthdate: {{$product->birthdate}}</span> <br>
+                              <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span> 
                           </div>
                           <div class="col right">
                             {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
