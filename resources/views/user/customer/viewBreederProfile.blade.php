@@ -25,14 +25,14 @@
 @section('content')
     <div class="row">
         <div class="collection with-header">
-            <div class="collection-header">
+            <div class="teal darken-2 white-text collection-header">
                 {{-- First Row --}}
                 <h4 style="font-weight: 700;">
                     {{ $breeder->name }}
                     <img class="secondary-content" src="{{ $breeder->logoImage }}" style="width: 8vw; height:13vh;" alt="" />
                 </h4>
 
-                <span class="grey-text">
+                <span class="grey-text text-lighten-4">
                     {{ $breeder->officeAddress_addressLine1 }},
                     {{ $breeder->officeAddress_addressLine2 }},
                     {{ $breeder->officeAddress_province }},
@@ -107,7 +107,7 @@
                 <span class="col s9">{{ $breeder->contactPerson_mobile }}</span>
             </li>
             --}} 
-
+            
             <div class="collection-item row">
                 @foreach ($breeder->farms as $farm)
                     <span class="col s6">
