@@ -184,16 +184,16 @@
                             <thead> </thead>
                             <tbody>
                                 <tr>
-                                    <td class="grey-text text-darken-2"> Average Daily Gain (g) </td>
-                                    <td class="right-align"> {{ $product->adg }} </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
                                 </tr>
                                 <tr>
-                                    <td class="grey-text text-darken-2"> Feed Conversion Ratio </td>
-                                    <td class="right-align"> {{ $product->fcr }} </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio: </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->fcr }} </td>
                                 </tr>
                                 <tr>
-                                    <td class="grey-text text-darken-2"> Backfat Thickness (mm) </td>
-                                    <td class="right-align"> {{ $product->backfat_thickness }} </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm): </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->backfat_thickness }} </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -204,12 +204,12 @@
                             <thead> </thead>
                             <tbody>
                                 <tr>
-                                    <td class="grey-text text-darken-2"> Breeder Name </td>
-                                    <td> {{ $product->breeder }} </td>
+                                    <td style="color: hsl(0, 0%, 45%);"> Breeder Name: </td>
+                                    <td style="color: hsl(0, 0%, 45%);"> {{ $product->breeder }} </td>
                                 </tr>
                                 <tr>
-                                    <td class="grey-text text-darken-2"> Farm Location </td>
-                                    <td> {{ $product->farm_province }} </td>
+                                    <td style="color: hsl(0, 0%, 45%);"> Farm Location: </td>
+                                    <td style="color: hsl(0, 0%, 45%);"> {{ $product->farm_province }} </td>
                                 </tr>
                             </tbody>
                         </table>

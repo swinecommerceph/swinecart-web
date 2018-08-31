@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    {{$product->name}}
+    <span style="color: hsl(0, 0%, 13%);">{{$product->name}}</span>
 @endsection
 
 @section('breadcrumb')
@@ -29,17 +29,18 @@
             <div class="row">
                 <div class="card">
                     <div class="card-image">
-                        <img src="{{$product->img_path}}" data-imagezoom="{{ $product->def_img_path }}">
+                        <img style="width: 40vw; height: 50vh;" src="{{$product->img_path}}" data-imagezoom="{{ $product->def_img_path }}">
                     </div>
                 </div>
             </div>
 
+            {{-- Images and Videos Headers--}}
             <div class="row">
                 <div class="col s12">
-                <ul class="tabs tabs-fixed-width">
-                    <li id="image-carousel-tab" class="tab col s3"><a class="active" href="#images-carousel">Images</a></li>
-                    <li id="video-carousel-tab" class="tab col s3"><a href="#videos-carousel">Videos</a></li>
-                </ul>
+                    <ul class="tabs tabs-fixed-width">
+                        <li id="image-carousel-tab" class="tab col s3"><a class="active" href="#images-carousel">Images</a></li>
+                        <li id="video-carousel-tab" class="tab col s3"><a href="#videos-carousel">Videos</a></li>
+                    </ul>
                 </div>
                 {{-- Image Carousel --}}
                 <div id="images-carousel" class="col s12">
@@ -72,37 +73,65 @@
             <ul class="collection with-header">
                 <li class="collection-header">
                     <h4 class="row">
-                        <div class="col">
+                        <div class="col" style="color: hsl(0, 0%, 13%); font-weight: 700">
                             {{ $product->name }}
                         </div>
+
+                        {{-- Shopping Cart Icon--}}
                         <div class="col right">
                             @if ($product->quantity)
                                 {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
                                     <a href="#" class="right tooltipped add-to-cart"  data-position="left" data-delay="50" data-tooltip="Add to Swine Cart">
-                                        <i class="material-icons blue-text text-darken-2" style="font-size:35px;">add_shopping_cart</i>
+                                        <i class="material-icons blue-text" style="font-size:35px;">add_shopping_cart</i>
                                     </a>
                                 {!! Form::close() !!}
                             @endif
                         </div>
                     </h4>
+
+                    {{-- Breeder and Farm Province--}}
                     <div class="row">
                         <div class="col">
-                            <a href="{{ route('viewBProfile', ['breeder' => $product->breeder_id]) }}">
+                            <a class="blue-text" style="font-weight: 700;" href="{{ route('viewBProfile', ['breeder' => $product->breeder_id]) }}">
                                 {{ $product->breeder }}
                             </a><br>
-                            {{ $product->farm_province }}
+                            <span style="color: hsl(0, 0%, 45%);">{{ $product->farm_province }}</span>
                         </div>
                     </div>
                 </li>
-                <li class="collection-item">{{$product->type}} - {{$product->breed}}</li>
-                <li class="collection-item">Born on {{$product->birthdate}} ({{$product->age}} days old)</li>
-                <li class="collection-item">Average Daily Gain: {{$product->adg}} g</li>
-                <li class="collection-item">Feed Conversion Ratio: {{$product->fcr}}</li>
-                <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
-                <li id="stars-container" class="collection-item">
+
+                {{-- Details--}}
+                <table class="white highlight responsive-table">
+                    <tr>
+                        <th style="color: hsl(0, 0%, 13%); font-weight: 600;">
+                            {{$product->type}} - {{$product->breed}}
+                        </th>
+                    </tr>
+                    <tr>
+                        <td>
+                            Born on {{$product->birthdate}} ({{$product->age}} days old)
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Average Daily Gain: {{$product->adg}} g
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Feed Conversion Ratio: {{$product->fcr}}
+                        </td>
+                    </tr>
+                    <tr>
+                        <td>
+                            Backfat Thickness: {{$product->backfat_thickness}} mm
+                        </td>
+                    </tr>
+                </table>
+                <li id="stars-container" class="collection-item grey lighten-4">
                     Breeder Ratings
                     <a href="/customer/messages/{{ $product->userid }}" class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Send message to Breeder">
-                        <i class="material-icons red-text" style="font-size:35px;">message</i>
+                        <i class="material-icons blue-text" style="font-size:35px;">message</i>
                     </a>
                     <br><br>
                     <span class="row">
@@ -131,7 +160,7 @@
     <div class="row">
         <div class="col s12">
             <div class="card">
-                <div class="card-content black-text">
+                <div class="card-content">
                     <span class="card-title">Other Details</span>
                     <p>{!! $product->other_details !!}</p>
                 </div>
