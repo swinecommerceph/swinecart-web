@@ -130,6 +130,7 @@
                 </table>
                 <li id="stars-container" class="collection-item grey lighten-4">
                     Breeder Ratings
+                    {{-- Tool tip will not work because of the overriding of JQuery UI in the stars-container id --}}
                     <a  href="/customer/messages/{{ $product->userid }}" 
                         class="right tooltipped"
                         data-position="left"

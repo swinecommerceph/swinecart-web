@@ -63,14 +63,16 @@
 
     <div id="general-container" class="row">
         {{-- For the Filters (left column) --}}
-        <div id="filter-container" class="col m3 l3">
+        <div id="filter-container" class="col m3 l3" style="font-size: 0.96em;">
             <div style="height: 1px;">
             </div>
             <div id="collapsible-container">
                 <ul class="collapsible" data-collapsible="accordion">
 
                         <li id="filter-type">
-                          <div class="collapsible-header active"><i class="material-icons">more</i>Type</div>
+                          <div class="collapsible-header active">
+                            <i class="material-icons">more</i>Type
+                          </div>
                           <div class="collapsible-body">
                                 {{-- Type --}}
                                 <p>
