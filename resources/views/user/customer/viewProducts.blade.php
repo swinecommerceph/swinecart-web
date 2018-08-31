@@ -71,7 +71,7 @@
 
                         <li id="filter-type">
                           <div class="collapsible-header active">
-                            <i class="material-icons">more</i>Type
+                            <i class="material-icons teal-text">more</i>Type
                           </div>
                           <div class="collapsible-body">
                                 {{-- Type --}}
@@ -107,7 +107,7 @@
                           </div>
                         </li>
                         <li id="filter-details">
-                          <div class="collapsible-header"><i class="material-icons">details</i>Breed</div>
+                          <div class="collapsible-header"><i class="material-icons teal-text">details</i>Breed</div>
                           <div class="collapsible-body">
                             <p class="range-field">
 
@@ -134,7 +134,7 @@
                           </div>
                         </li>
                         <li id="filter-location">
-                            <div class="collapsible-header"><i class="material-icons">place</i>Breeder Locations</div>
+                            <div class="collapsible-header"><i class="material-icons teal-text">place</i>Breeder Locations</div>
                             <div class="collapsible-body">
                                 <p>
                                     <a href="{{ route('map.breeders') }}">Check locations</a>
