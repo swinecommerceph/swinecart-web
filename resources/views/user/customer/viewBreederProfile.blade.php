@@ -26,9 +26,9 @@
     <div class="row">
         <ul class="collection with-header">
             <li class="collection-header">
-                <h4>
+                <h4 style="font-weight: 700;">
                     {{ $breeder->name }}
-                    <img class="secondary-content" src="{{ $breeder->logoImage }}" style="height: 100px; width: auto" alt="" />
+                    <img class="secondary-content" src="{{ $breeder->logoImage }}" style="width: 8vw; height:13vh;" alt="" />
                 </h4>
 
                 <span class="grey-text">
