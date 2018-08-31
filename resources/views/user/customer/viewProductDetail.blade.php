@@ -92,10 +92,11 @@
                     {{-- Breeder and Farm Province--}}
                     <div class="row">
                         <div class="col">
+                            Breeder: 
                             <a class="blue-text" style="font-weight: 700;" href="{{ route('viewBProfile', ['breeder' => $product->breeder_id]) }}">
                                 {{ $product->breeder }}
                             </a><br>
-                            <span style="color: hsl(0, 0%, 45%);">{{ $product->farm_province }}</span>
+                            <span>Farm Province: {{ $product->farm_province }}</span>
                         </div>
                     </div>
                 </li>
@@ -108,28 +109,28 @@
                         </th>
                     </tr>
                     <tr>
-                        <td>
+                        <td style="color: hsl(0, 0%, 45%);">
                             Born on {{$product->birthdate}} ({{$product->age}} days old)
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td style="color: hsl(0, 0%, 45%);">
                             Average Daily Gain: {{$product->adg}} g
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td style="color: hsl(0, 0%, 45%);">
                             Feed Conversion Ratio: {{$product->fcr}}
                         </td>
                     </tr>
                     <tr>
-                        <td>
+                        <td style="color: hsl(0, 0%, 45%);">
                             Backfat Thickness: {{$product->backfat_thickness}} mm
                         </td>
                     </tr>
                 </table>
-                <li id="stars-container" class="collection-item grey lighten-4">
-                    Breeder Ratings
+                <li id="stars-container" class="collection-item grey lighten-4" >
+                    <span style="color: hsl(0, 0%, 13%); font-weight: 600;">Breeder Ratings</span>
                     {{-- Tool tip will not work because of the overriding of JQuery UI in the stars-container id --}}
                     <a  href="/customer/messages/{{ $product->userid }}" 
                         class="right tooltipped"
@@ -141,19 +142,19 @@
                     </a>
                     <br><br>
                     <span class="row">
-                        <i class="col s6">Delivery</i>
+                        <i class="col s6" style="color: hsl(0, 0%, 45%);">Delivery</i>
                         <span class="col s6">
                             <average-star-rating :rating="{{ $breederRatings['deliveryRating'] }}"> </average-star-rating>
                         </span>
                     </span>
                     <span class="row">
-                        <i class="col s6">Transaction</i>
+                        <i class="col s6" style="color: hsl(0, 0%, 45%);">Transaction</i>
                         <span class="col s6">
                             <average-star-rating :rating="{{ $breederRatings['transactionRating'] }}"> </average-star-rating>
                         </span>
                     </span>
                     <span class="row">
-                        <i class="col s6">Product Quality</i>
+                        <i class="col s6" style="color: hsl(0, 0%, 45%);">Product Quality</i>
                         <span class="col s6">
                             <average-star-rating :rating="{{ $breederRatings['productQualityRating'] }}"> </average-star-rating>
                         </span>
