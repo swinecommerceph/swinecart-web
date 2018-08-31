@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    {{ $breeder->name }}
+    Breeder's Profile
 @endsection
 
 @section('breadcrumb')
