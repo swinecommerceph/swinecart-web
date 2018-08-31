@@ -130,7 +130,12 @@
                 </table>
                 <li id="stars-container" class="collection-item grey lighten-4">
                     Breeder Ratings
-                    <a href="/customer/messages/{{ $product->userid }}" class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Send message to Breeder">
+                    <a  href="/customer/messages/{{ $product->userid }}" 
+                        class="right tooltipped"
+                        data-position="left"
+                        data-delay="50"
+                        data-tooltip="Send Message to Breeder"
+                    >
                         <i class="material-icons blue-text" style="font-size:35px;">message</i>
                     </a>
                     <br><br>

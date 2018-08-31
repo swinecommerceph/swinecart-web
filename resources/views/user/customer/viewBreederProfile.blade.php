@@ -18,7 +18,7 @@
 
 @section('breadcrumb')
     <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="{{ route('products') }}" class="breadcrumb">Products</a>
+    <a href="{{ route('products.view') }}" class="breadcrumb">Products</a>
     <a href="#!" class="breadcrumb">{{ $breeder->name }}</a>
 @endsection
 
