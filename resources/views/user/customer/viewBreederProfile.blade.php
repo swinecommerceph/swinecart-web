@@ -48,38 +48,58 @@
                 <div class="col s6">
                     <div class="row s12"></div>
                     <div class="row s12">
-                        <table>
-                            <tr>
-                                <td style="color: hsl(0, 0%, 13%); padding: 5px; width: 100%;">
-                                     Website: {{ $breeder->website }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="color: hsl(0, 0%, 13%); padding: 5px;">
-                                    Produce: {{ $breeder->produce }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="color: hsl(0, 0%, 13%); padding: 5px;">
-                                    Office Landline: {{ $breeder->office_landline }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="color: hsl(0, 0%, 13%); padding: 5px;">
-                                    Mobile Landline: {{ $breeder->office_mobile }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="color: hsl(0, 0%, 13%); padding: 5px;">
-                                    Contact Person: {{ $breeder->contactPerson_name }}
-                                </td>
-                            </tr>
-                            <tr>
-                                <td style="color: hsl(0, 0%, 13%); padding: 5px;">
-                                    Contact Person's Mobile: {{ $breeder->contactPerson_mobile }}
-                                </td>
-                            </tr>
-                        </table>        
+                        <table class="highlight" style="width: 100%;">
+                            <tbody>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                         Website:
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                          {{ $breeder->website }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Produce:
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ $breeder->produce }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Office Landline:
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ $breeder->office_landline }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Mobile Landline:
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ $breeder->office_mobile }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Contact Person:
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ $breeder->contactPerson_name }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Contact Person's Mobile:
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ $breeder->contactPerson_mobile }}
+                                    </td>
+                                </tr>
+                            </tbody>
+                        </table>
                     </div>
                 </div>
                 <div class="col s5"></div>
@@ -108,29 +128,74 @@
             </li>
             --}} 
             
+            <div class="teal darken-2 white-text collection-header">
+                <h4 style="font-weight: 700;">Farms</h4>
+            </div>
+
             <div class="collection-item row">
-                @foreach ($breeder->farms as $farm)
-                    <span class="col s6">
-                        <span class="col s12">
-                            <h5>Farm {{ $loop->index + 1 }}</h5>
-                            <span class="grey-text">
-                                {{ $farm->name }} <br>
-                                {{ $farm->addressLine1 }},
-                                {{ $farm->addressLine2 }},
-                                {{ $farm->province }},
-                                {{ $farm->zipCode }} <br>
-                                Accredited {{ date_format(date_create($farm->accreditation_date), 'F Y') }} <br> <br>
-                            </span>
+                @foreach ($breeder->farms as $farm)    
+                        <span class="s8">
+                            <h5 style="font-weight: 600;">Farm {{ $loop->index + 1 }}</h5>
+                            <table class="highlight" style="width:100%;">
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Farm Name: 
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ $farm->name }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Address: 
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ $farm->addressLine1 }}, {{ $farm->addressLine2 }}, {{ $farm->province }}, {{ $farm->zipCode }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Accreditation Date:
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ date_format(date_create($farm->accreditation_date), 'F Y') }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Farm Type:
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ $farm->farmType }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Farm Landline:
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ $farm->landline }}
+                                    </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        Farm Mobile:
+                                    </td>
+                                    <td style="color: hsl(0, 0%, 13%); padding: 5px;">
+                                        {{ $farm->mobile }}
+                                    </td>
+                                </tr>
+                            </table>
+                            
+                            {{--
+                            <span>Farm Name: {{ $farm->name }}</span> <br>
+                            <span>Address: {{ $farm->addressLine1 }}, {{ $farm->addressLine2 }}, {{ $farm->province }}, {{ $farm->zipCode }}</span>
+                            <span>Accreditation Date: {{ date_format(date_create($farm->accreditation_date), 'F Y') }}</span> <br>
+                            <span>Farm Type: {{ $farm->farmType }}</span> <br>
+                            <span>Farm Landline: {{ $farm->landline }}</span> <br>
+                            <span>Farm Mobile: {{ $farm->mobile }}</span> <br>
+                            --}}
                         </span>
-                        <span class="col s3">Farm Type</span>
-                        <span class="col s9">{{ $farm->farmType }}</span>
-
-                        <span class="col s3">Farm Landline</span>
-                        <span class="col s9">{{ $farm->landline }}</span>
-
-                        <span class="col s3">Farm Mobile</span>
-                        <span class="col s9">{{ $farm->mobile }}</span>
-                    </span>
                 @endforeach
             </div>
         </div>
