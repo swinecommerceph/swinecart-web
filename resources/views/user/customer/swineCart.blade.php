@@ -488,18 +488,26 @@
             {{--  Remove Product Confirmation Modal --}}
             <div id="remove-product-confirmation-modal" class="modal">
                 <div class="modal-content">
-                    <h4>Remove Product Confirmation</h4>
-                    <p>
-                        Are you sure you want to remove @{{ productRemove.name }} from your Swine Cart?
+                    <h4 class="grey-text text-darken-2">Remove Product?</h4>
+                    <p class="grey-text text-darken-2">
+                        Removing @{{ productRemove.name}} will be removed from your Swine Cart.
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn-flat remove-product-button"
+                    <a class="modal-action waves-effect
+                        waves-green btn-flat remove-product-button
+                        grey-text"
+                        style="text-transform: none;  font-weight: 700;"
                         @click.prevent="removeProduct"
                     >
-                        Yes
+                        Yes, Remove the product
                     </a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                    <a class="modal-action modal-close
+                        waves-effect waves-green btn-flat blue-text"
+                        style="text-transform: none; font-weight: 700;"
+                    >
+                        No, Keep the product
+                    </a>
                 </div>
             </div>
 
