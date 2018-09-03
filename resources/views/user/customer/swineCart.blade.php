@@ -536,15 +536,15 @@
                     >
                         Yes
                     </a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons">Close</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons">Ok</a>
                 </div>
             </div>
 
             {{--  Product Request Details modal --}}
             <div id="product-request-details-modal" class="modal">
                 <div class="modal-content">
-                    <h4>@{{ requestDetails.name }} Request Details</h4>
-                    <table>
+                    <h4 class="grey-text text-darken-2">@{{ requestDetails.name }} Request Details</h4>
+                    <table class="grey-text">
                         <thead>
                             <tr> </tr>
                         </thead>
@@ -561,7 +561,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Ok</a>
                 </div>
             </div>
 
