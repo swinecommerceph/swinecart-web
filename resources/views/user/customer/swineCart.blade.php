@@ -104,6 +104,8 @@
                 </li>
             </ul>
         </li>
+
+        {{-- Notifications --}}
         <li id="notification-main-container">
             <a v-cloak href="#!" id="notification-icon"
                 class="dropdown-button"
@@ -129,6 +131,8 @@
                     99+
                 </span>
             </a>
+
+            {{-- Notification Dropdown --}}
             <ul id="notification-dropdown" class="dropdown-content collection">
                 <div id="notification-preloader-circular" class="row">
                     <div class="center-align">
@@ -148,6 +152,7 @@
                     </div>
                 </div>
                 <li>
+                    {{-- Notification List --}}
                     <ul id="notification-container" class="collection">
                         <li v-for="(notification,index) in notifications"
                             style="overflow:auto;"
@@ -157,15 +162,20 @@
                                 :href="notification.url"
                                 @click.prevent="goToNotification(index)"
                             >
+                                {{-- Radio Button Icon --}}
                                 <span class="left" v-if="!notification.read_at">
                                     <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_checked</i>
                                 </span>
                                 <span class="left" v-else >
                                     <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
                                 </span>
+
+                                {{-- Notification Description--}}
                                 <p style="margin-left:1.5rem;" :class=" (notification.read_at) ? 'grey-text' : '' ">
                                     <span v-html="notification.data.description"></span>
                                 </p>
+
+                                {{-- Timestamp --}}
                                 <p class="right-align grey-text text-darken-1" style="font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
                             </a>
                         </li>
@@ -181,7 +191,8 @@
 @endsection
 
 @section('content')
-
+    
+    {{-- Swinecart Container --}}
     <div class="" id="swine-cart-container">
 
         {{-- Tabs --}}
@@ -296,7 +307,7 @@
 
                     {{-- Card --}}
                     <div class="col m4" v-for="(product, index) in sortedProducts">
-                        <div class="card sticky-action" :class="(product.request_status) ? 'teal' : ''">
+                        <div class="card sticky-action" :class="(product.request_status) ? 'teal darken-2' : 'blue-grey lighten-5'">
                             {{-- Product Image --}}
                             <div class="card-image">
                                 <img class="activator" :src="product.img_path">
@@ -323,13 +334,15 @@
                                 </a>
 
                             </div>
-                            <div class="card-content" :class="(product.request_status) ? 'white-text' : 'grey-text'">
+                            {{-- Product Card --}}
+                            <div class="card-content" :class="(product.request_status) ? 'white-text' : 'blue-grey-text text-darken-4'">
                                 {{-- Title --}}
                                 <span class="card-title">
                                     <a href="#"
                                         class="anchor-title"
-                                        :class="(product.request_status) ? 'white-text' : 'grey-text'"
+                                        :class="(product.request_status) ? 'white-text' : 'blue-grey-text text-darken-4'"
                                         @click.prevent="viewProductModalFromCart(product.item_id)"
+                                        style="font-weight: 700;"
                                     >
                                         @{{ product.product_name }}
                                     </a>
@@ -338,10 +351,12 @@
                                 {{-- Product Info --}}
                                 <p class="row" style="min-height:100px;">
                                     <span class="col s12">
-                                        @{{ product.product_type | capitalize }} - @{{ product.product_breed }} <br>
-                                        @{{ product.breeder }}
+                                        <span style="font-weight: 600;">@{{ product.product_type | capitalize }} - @{{ product.product_breed }}</span>
+                                        <br>
+                                        Breeder: @{{ product.breeder }}
                                     </span>
 
+                                    {{-- product not yet requested--}}
                                     <span class="col s12 input-quantity-container" v-if="product.product_type === 'semen' && !product.request_status">
                                         {{-- Request Quantity for semen --}}
                                         <span class="col s6">
@@ -372,10 +387,11 @@
                                         </span>
                                     </span>
 
+                                    {{-- product was requested --}}
                                     <span class="col s6" v-else>
                                         Quantity: @{{ product.request_quantity }}
                                     </span>
-
+                                    
                                     {{-- Show Request Details if product is already requested --}}
                                     <span class="col s12"
                                         v-if="product.request_status && product.status === 'requested'"
@@ -383,8 +399,9 @@
                                         <a href="#"
                                             class="anchor-title white-text"
                                             @click.prevent="viewRequestDetails(product.item_id)"
+                                            style="font-weight: 600; text-decoration: underline;" 
                                         >
-                                            REQUEST DETAILS
+                                            Request Details
                                         </a>
                                     </span>
 
@@ -403,47 +420,58 @@
                                     {{-- Product Status icons --}}
 
                                     {{-- Not yet Requested --}}
-                                    <template v-if="!product.request_status">
-                                        <a class="btn teal"
-                                            href="#!"
-                                            @click.prevent="confirmRequest(product.item_id)"
-                                        >
-                                            Request
-                                        </a>
-                                        <a class="btn grey"
-                                            href="#!"
-                                            @click.prevent="confirmRemoval(product.item_id)"
-                                        >
-                                            Remove
-                                        </a>
-                                    </template>
+                                    <div class="row">
+                                        <template v-if="!product.request_status">
+                                            <a class="btn blue"
+                                                href="#!"
+                                                style="font-weight: 700;" 
+                                                @click.prevent="confirmRequest(product.item_id)"
+                                            >
+                                                Request
+                                            </a>
+                                            <a href="#!"
+                                                @click.prevent="confirmRemoval(product.item_id)"
+                                                class="blue-grey lighten-5"
+                                                style="color: #37474f; font-weight: 700; padding-left: 2vw;"
+                                            >
+                                                Remove
+                                            </a>
+                                        </template>
+                                    </div>
 
                                     {{-- Requested --}}
+                                    <div class="row">
                                     <template v-if="product.request_status && product.status === 'requested'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Reserved">save</i>
                                         <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
-                                    </template>
+                                    </template>                                        
+                                    </div>
 
                                     {{-- Reserved --}}
+                                    <div class="row">
                                     <template v-if="product.status === 'reserved'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
                                         <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
                                     </template>
+                                    </div>
 
                                     {{-- On Delivery --}}
+                                    <div class="row">
                                     <template v-if="product.status === 'on_delivery'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.on_delivery | transformToDetailedDate('On Delivery')">local_shipping</i>
                                     </template>
+                                    </div>
 
                                     {{-- Sold --}}
+                                    <div class="row">
                                     <template v-if="product.status === 'sold'">
                                         <i class="medium material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.sold | transformToDetailedDate('Sold')">local_offer</i>
                                     </template>
-
+                                    </div>
                                 </span>
                             </div>
                         </div>
