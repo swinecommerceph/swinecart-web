@@ -408,10 +408,10 @@
                                     {{-- Show expected date to be delivered if product is already On Delivery --}}
                                     <span class="col s12"
                                         v-if="product.status === 'on_delivery'"
+                                        style="font-weight: 700; font-size: 2vh;"
                                     >
-                                        <b>Expected to arrive on @{{ product.delivery_date }}</b>
+                                        Expected to arrive on @{{ product.delivery_date }}
                                     </span>
-
                                 </p>
 
                             </div>
@@ -503,7 +503,7 @@
                         Yes, Remove the product
                     </a>
                     <a class="modal-action modal-close
-                        waves-effect waves-green btn-flat blue-text"
+                        waves-effect waves-green btn-flat blue white-text"
                         style="text-transform: none; font-weight: 700;"
                     >
                         No, Keep the product
