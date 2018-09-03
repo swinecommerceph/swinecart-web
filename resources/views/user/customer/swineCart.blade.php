@@ -512,15 +512,17 @@
             </div>
 
             {{--  Request Product Confirmation Modal--}}
-            <div id="request-product-confirmation-modal" class="modal">
+            <div id="request-product-confirmation-modal" class="modal"
+                style="width: 60% !important;
+                max-height: 100% !important;">
                 <div class="modal-content">
-                    <h4>Request Product Confirmation</h4>
-                    <p>
-                        Are you sure you want to request @{{ productRequest.name }}?
-                        <blockquote class="info" v-if="productRequest.type === 'semen'">
+                    <h4 class="grey-text text-darken-2">Request Product?</h4>
+                    <p class="grey-text text-darken-2">    
+                        Requesting @{{ productRequest.name }} sends a request to the breeder for buying the product.
+                        <blockquote style="background-color:#ffcdd2; border-left: 3px solid red;" class="info" v-if="productRequest.type === 'semen'">
                             Once requested, request quantity can never be changed. Also, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
                         </blockquote>
-                        <blockquote class="info" v-else>
+                        <blockquote style="background-color:#ffcdd2; border-left: 3px solid red;" class="info" v-else>
                             Once requested, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
                         </blockquote>
                     </p>
@@ -539,12 +541,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn-flat request-product-buttons"
+                    <a class="modal-action waves-effect waves-green btn blue request-product-buttons"
                         @click.prevent="requestProduct($event)"
+                        style="text-transform: none;  font-weight: 700;"
                     >
-                        Yes
+                        Yes, Confirm Request Product
                     </a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons">Ok</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat grey-text request-product-buttons"
+                        style="text-transform: none; font-weight: 700;"
+                    >Cancel</a>
                 </div>
             </div>
 
