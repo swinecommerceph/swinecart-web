@@ -99,7 +99,7 @@
 					  </button>
 				  </div>
 				  <div class="col right">
-					  <a href="#!" id="" class="btn-floating btn-medium waves-effect waves-light red lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
+					  <a href="#!" id="" class="btn-floating btn-medium waves-effect waves-light grey lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
 						  <i class="material-icons">clear</i>
 					  </a>
 				  </div>
@@ -184,7 +184,7 @@
 										  </button>
 									  </div>
 									  <div class="col right">
-										  <a href="#!" class="btn-floating btn-medium waves-effect waves-light red lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
+										  <a href="#!" class="btn-floating btn-medium waves-effect waves-light grey lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
 											  <i class="material-icons">clear</i>
 										  </a>
 									  </div>
