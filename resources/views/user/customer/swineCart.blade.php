@@ -638,18 +638,18 @@
     {{-- Template for <transaction-history> component --}}
     <template id="transaction-history-template">
 
-        <div class="">
+        <div class="row">
             {{-- Transaction History --}}
             <div id="transaction-history">
                 <div class="row">
-                    <div class="col s5">
+                    <div class="col s5 center-align" style="font-weight: 700;">
                         ITEM(S)
                     </div>
-                    <div class="col s3">
+                    <div class="col s3" style="font-weight: 700;">
                         BREEDER
                     </div>
-                    <div class="col s4">
-                        LOG
+                    <div class="col s4" style="font-weight: 700;">
+                        LOGS
                     </div>
                 </div>
                 <ul id="transaction-cart" class="collection cart">
@@ -658,13 +658,14 @@
                     >
                         <div class="row swine-cart-item valign-wrapper">
                             <div class="col s2 center-align">
-                                <a href="#"><img :src="item.product_details.s_img_path" width="75" height="75" class="circle"></a>
+                                <a><img :src="item.product_details.s_img_path" width="75" height="75" class="circle"></a>
                             </div>
                             <div class="col s3 verticalLine valign-wrapper">
                                 <div class="valign">
                                     {{-- Name --}}
-                                    <a href="#" class="anchor-title teal-text"
+                                    <a href="#" class="anchor-title blue-text"
                                         @click.prevent="viewProductModalFromHistory(key)"
+                                        style="font-weight: 700;"
                                     >
                                         <span class="col s12">@{{ item.product_details.name }}</span>
                                     </a>
@@ -682,21 +683,23 @@
                                     </span>
                                 </div>
                             </div>
+
+                            {{-- Breeder and Farm --}}
                             <div class="col s3 verticalLine valign-wrapper">
                                 <div class="valign">
-                                    @{{ item.product_details.breeder_name }} <br>
-                                    @{{ item.product_details.farm_from }}
+                                    <span style="color:hsl(0, 0%, 10%);">@{{ item.product_details.breeder_name }}</span><br>
+                                    <span style="color:hsl(0, 0%, 45%);">@{{ item.product_details.farm_from }}</span>
                                 </div>
                             </div>
                             <div class="col s4">
                                 {{-- Just show three of the recent logs --}}
-                                <div v-for="log in reverseArray(item.logs)">
+                                <div style="color:hsl(0, 0%, 45%);" v-for="log in reverseArray(item.logs)">
                                     <span class="col s6"> @{{ log.status | transformToReadableStatus }} </span>
                                     <span class="col s6 left-align grey-text"> @{{ log.created_at | transformToDetailedDate }} </span>
                                 </div>
 
                                 {{-- Extra logs if there are any --}}
-                                <div class=""
+                                <div style="color:hsl(0, 0%, 30%);"
                                     v-show="item.showFullLogs"
                                     v-for="log in trimmedArray(item.logs)"
                                 >
@@ -710,7 +713,7 @@
                                         <a href="#"
                                             @click.prevent="toggleShowFullLogs(key)"
                                         >
-                                            @{{ (!item.showFullLogs) ? 'Show More...' : 'Show Less...' }}
+                                            @{{ (!item.showFullLogs) ? 'Show More' : 'Show Less' }}
                                         </a>
                                     </span>
                                 </div>
