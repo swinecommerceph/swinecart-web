@@ -24,7 +24,7 @@
 @section('content')
 
     <div class="row">
-        <form class="col s1" id="map-params" action="breeders" method="post">
+        <form class="col s2" id="map-params" action="breeders" method="post">
             <p>
               <input type="checkbox" class="filled-in cb-type" id="cb-gilt" name="gilt" {{ (isset($_POST['gilt']) || !isset($_POST['_token']))?'checked="checked"':''}}/>
               <label for="cb-gilt">Gilt</label>
@@ -42,12 +42,13 @@
             <br/>
         </form>
 
-        <div class="col s11">
+        {{-- World Map --}}
+        <div class="col s10">
             <div class="progress geocoding" style="display:none;">
               <div class="indeterminate"></div>
             </div>
             <div id="map-container">
-                <div id="map-canvas" style="height:70vh;"></div>
+                <div id="map-canvas" style="height:60vh; max-width: auto;"></div>
             </div>
         </div>
     </div>
