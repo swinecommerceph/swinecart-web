@@ -402,22 +402,28 @@
                                             Quantity:
                                         </span>
                                         <span class="col s6">
+
+                                            {{-- minus button--}}
                                             <span class="col s4 center-align">
                                                 <a href="#"
-                                                    class="btn col s12"
-                                                    style="padding:0;"
+                                                    class="btn col s12" 
+                                                    style="padding:0; width: 2vw;"
                                                     @click.prevent="subtractQuantity(product.item_id)"
                                                 >
                                                     <i class="material-icons">remove</i>
                                                 </a>
                                             </span>
+
+                                            {{-- product quantity --}}
                                             <span class="col s4 center-align" style="padding:0;">
                                                 <quantity-input v-model="product.request_quantity"> </quantity-input>
                                             </span>
+                                            
+                                            {{-- plus button--}}
                                             <span class="col s4 center-align">
                                                 <a href="#"
                                                     class="btn col s12"
-                                                    style="padding:0;"
+                                                    style="padding:0; width: 2vw;"
                                                     @click.prevent="addQuantity(product.item_id)"
                                                 >
                                                     <i class="material-icons">add</i>
