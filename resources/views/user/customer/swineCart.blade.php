@@ -212,8 +212,9 @@
         </order-details>
         <transaction-history :history="history"></transaction-history>
 
-        {{-- Product Info Modal --}}
-        <div id="info-modal" class="modal">
+        {{-- Product Info Modal in Transaction History Tab--}}
+        <div id="info-modal" class="modal" style="width: 70% !important;
+                max-height: 80% !important;">
           <div class="modal-content">
             <h4 style="overflow:auto"><a href="#"><i class="material-icons black-text right modal-close">close</i></a></h4>
             <div class="row">
@@ -223,7 +224,7 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-image">
-                                <img id="modal-img" :src="productInfoModal.imgPath">
+                                <img id="modal-img" :src="productInfoModal.imgPath" style="width: 38vw; height: 50vh;">
                             </div>
                         </div>
                     </div>
@@ -245,7 +246,7 @@
                 <ul class="collection with-header">
                     <li class="collection-header">
                         <h4 class="row">
-                            <div class="col product-name">
+                            <div class="col product-name"  style="color: hsl(0, 0%, 13%); font-weight: 700">
                                 {{-- productName --}}
                                 @{{ productInfoModal.name }}
                             </div>
@@ -253,11 +254,46 @@
                         <div class="row">
                             <div class="col breeder product-farm">
                               {{-- Breeder and farm_province --}}
-                              @{{ productInfoModal.breeder }} <br>
-                              @{{ productInfoModal.province }}
+                              Breeder:
+                              <span class="blue-text" style="font-weight: 700;">
+                                @{{ productInfoModal.breeder }}
+                              </span><br>
+                              Farm Province: 
+                              <span>@{{ productInfoModal.province }}</span>
                             </div>
                         </div>
                     </li>
+
+                    {{-- Details --}}
+                    <table class="white highlight responsive-table">
+                        <tr>
+                            <td style="color: hsl(0, 0%, 13%); font-weight: 600;">
+                                @{{ capitalizedProductType }} - @{{ productInfoModal.breed }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: hsl(0, 0%, 45%);">
+                                Born on @{{ productInfoModal.birthdate }} (@{{ productInfoModal.age }} days old)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: hsl(0, 0%, 45%);">
+                                Average Daily Gain: @{{ productInfoModal.adg }} g
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: hsl(0, 0%, 45%);">
+                                Feed Conversion Ratio: @{{ productInfoModal.fcr }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: hsl(0, 0%, 45%);">
+                                Backfat Thickness: @{{ productInfoModal.bft }} mm
+                            </td>
+                        </tr>
+                    </table>                            
+                    
+                    <!-- 
                     <li class="collection-item product-type">{{--{{$product->type}} - {{$product->breed}} --}}
                         <span class="type"> @{{ capitalizedProductType }} </span> -
                         <span class="breed"> @{{ productInfoModal.breed }} </span>
@@ -274,7 +310,11 @@
                     <li class="collection-item product-backfat_thickness">{{--Backfat Thickness: {{$product->backfat_thickness}} --}}
                         Backfat Thickness: <span> @{{ productInfoModal.bft }} </span> mm
                     </li>
-                    <li class="row collection-item rating">
+                    -->
+                    
+                    {{-- Breeder Ratings --}}
+                    <li class="row collection-item rating  grey lighten-4">
+                        <span style="color: hsl(0, 0%, 13%); font-weight: 700;">Breeder Ratings</span>
                         <div class="delivery-rating">
                             <span class="col s6"> Delivery: </span>
                             <span class="col s6"> <average-star-rating :rating="productInfoModal.avgDelivery | round"></average-star-rating> </span>
@@ -293,7 +333,6 @@
             </div>
           </div>
         </div>
-
     </div>
 
     {{-- Template for <order-details> component --}}
@@ -662,6 +701,7 @@
                             </div>
                             <div class="col s3 verticalLine valign-wrapper">
                                 <div class="valign">
+
                                     {{-- Name --}}
                                     <a href="#" class="anchor-title blue-text"
                                         @click.prevent="viewProductModalFromHistory(key)"
