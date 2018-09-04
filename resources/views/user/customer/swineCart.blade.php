@@ -581,11 +581,11 @@
             {{-- Rating Modal --}}
             <div id="rate-modal" class="modal">
               <div class="modal-content">
-                <h4 class="flow-text">@{{ breederRate.breederName }} <i class="material-icons right modal-close">close</i></h4>
+                <h4 class="flow-text grey-text text-darken-2">Breeder: @{{ breederRate.breederName }} <i class="material-icons right modal-close">close</i></h4>
                 <div class="divider"></div>
                 <div>
                     <br>
-                    <span class="row">
+                    <span class="row grey-text text-darken-2">
                         <span class="col s6">Delivery</span>
                         <span id="delivery" class="col s6 right-align">
                             <star-rating ref="delivery"
@@ -595,7 +595,7 @@
                             </star-rating>
                         </span>
                     </span>
-                    <span class="row">
+                    <span class="row grey-text text-darken-2">
                         <span class="col s6">Transaction</span>
                         <span id="transaction" class="col s6 right-align">
                             <star-rating ref="transaction"
@@ -605,7 +605,7 @@
                             </star-rating>
                         </span>
                     </span>
-                    <span class="row">
+                    <span class="row grey-text text-darken-2">
                         <span class="col s6">Product Quality</span>
                         <span id="productQuality" class="col s6 right-align">
                             <star-rating ref="productQuality"
@@ -623,8 +623,9 @@
                 </div>
               </div>
               <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn-flat rate-breeder-buttons"
+                    <a class="modal-action waves-effect waves-green btn blue rate-breeder-buttons"
                         @click.prevent="rateAndRecord($event)"
+                        style="font-weight: 700;"
                     >
                         Rate
                     </a>
