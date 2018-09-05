@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Breeders
+    Breeders and their Products
 @endsection
 
 @section('breadcrumb')
@@ -22,7 +22,6 @@
 @endsection
 
 @section('content')
-
     <div class="row">
         <form class="col s2" id="map-params" action="breeders" method="post">
             <p>
@@ -44,10 +43,13 @@
 
         {{-- World Map --}}
         <div class="col s10">
-            <div class="progress geocoding" style="display:none;">
+            {{-- Preloader --}}
+            <div class="row s12 progress geocoding" style="display:none;">
               <div class="indeterminate"></div>
             </div>
-            <div id="map-container">
+
+            {{-- Actual Map --}}
+            <div class="row" id="map-container">
                 <div id="map-canvas" style="height:60vh; max-width: auto;"></div>
             </div>
         </div>
