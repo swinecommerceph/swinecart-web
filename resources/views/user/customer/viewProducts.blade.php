@@ -164,7 +164,6 @@
                       <div class="row">
                           <div class="col s9">
                               <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} - {{$product->breed}}</span> <br>
-                              <span style="color: hsl(0, 0%, 45%);">Birthdate: {{$product->birthdate}}</span> <br>
                               <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span> 
                           </div>
                           <div class="col right">
