@@ -142,11 +142,11 @@ var swinecart = {
                             '<img src="' + element.img_path + '" alt="" class="circle">' +
                             '</a>' +
                             '<a href="' + config.viewProducts_url + '/' + element.product_id + '" class="anchor-title">' +
-                            '<span class="title">' + element.product_name + '</span>' +
+                            '<span class="title blue-text" style="font-weight:700;">' + element.product_name + '</span>' +
                             '</a>' +
                             '<p>' + swinecart.capitalizeFirstLetter(element.product_type) + ' - ' + product_breed + '<br>' +
-                            element.breeder +
                             '</p>' +
+                            '<p style="color:hsl(0, 0%, 45%);">' + element.breeder + '</p>' +
                             '<form method="POST" action="' + config.host_url + config.swineCart_url + '/delete" accept-charset="UTF-8" data-item-id="' + element.item_id + '">' +
                             '<input name="_method" type="hidden" value="DELETE">' +
                             '<input name="_token" type="hidden" value="' + element.token + '">' +
