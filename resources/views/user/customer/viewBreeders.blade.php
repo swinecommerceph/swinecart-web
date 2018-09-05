@@ -24,6 +24,9 @@
 @section('content')
     <div class="row">
         <form class="col s2" id="map-params" action="breeders" method="post">
+            <div class="row">
+                <p style="color:hsl(0, 0%, 40%);">Select which product(s) to find: </p>
+            </div>
             <p>
               <input type="checkbox" class="filled-in cb-type" id="cb-gilt" name="gilt" {{ (isset($_POST['gilt']) || !isset($_POST['_token']))?'checked="checked"':''}}/>
               <label for="cb-gilt">Gilt</label>
