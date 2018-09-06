@@ -31,10 +31,10 @@
     </div>
     <div id="card-status" class="row">
 
+        <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select a frequency to graph:</p>
+        
         {{-- Charts --}}
         <div id="charts-container" class="">
-            <p><br></p>
-
             <div class="col s2">
                 <div class="">
                     <input class="with-gap" name="frequency" type="radio" id="frequency-monthly" value="monthly" v-model="chosenFrequency" @change="valueChange" />
