@@ -24,7 +24,7 @@
 @section('content')
     <div class="row">
         <div class="col s12">
-            <p class="caption">
+            <p class="caption" style="font-weight: 700;">
                 Your Dashboard. <br>
             </p>
         </div>
@@ -82,7 +82,7 @@
             <p></p>
             <div class="col s12">
                 <h5 class="center-align">
-                    <a href="{{ route('dashboard.productStatus') }}" class="black-text">Product Status</a>
+                    <a href="{{ route('dashboard.productStatus') }}" style="color:hsl(0, 0%, 29%); font-weight: 700;">Product Status</a>
                 </h5>
             </div>
 
@@ -195,9 +195,10 @@
                 </div>
             </div>
         </div>
-
+        
         {{-- Overall Average Rating --}}
         <div class="col s12 m6">
+            <br>
             <div class="card">
                 <div class="card-content grey white-text">
                     <span class="card-title">
@@ -216,6 +217,7 @@
 
         {{-- Reviews --}}
         <div class="col s12 m6">
+            <br>
             <div class="card">
                 <div class="card-content teal white-text">
                     <span class="card-title">
