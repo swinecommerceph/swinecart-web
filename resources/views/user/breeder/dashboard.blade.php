@@ -24,7 +24,7 @@
 @section('content')
     <br>
     <div class="row">
-        <h4 class="center-align" style="font-weight: 700;">
+        <h4 class="left-align" style="font-weight: 700; margin-left: 1vw;">
             Overall Performance
         </h4>
     </div>
@@ -82,7 +82,7 @@
         {{-- Product Status --}}
         <div id="card-product-status" class="col grey lighten-4">
             <div class="col s12">
-                <h4 class="center-align">
+                <h4 class="left-align">
                     <a href="{{ route('dashboard.productStatus') }}"
                         style="font-weight: 700; color:hsl(0, 0%, 13%);"
                     >
@@ -162,7 +162,7 @@
 
             <div class="row"></div>
             <div class="row">
-                <h4 class="center-align" style="font-weight: 700;">Product Management</h4>
+                <h4 class="left-align" style="font-weight: 700; margin-left: 1vw;">Product Management</h4>
             </div>
             
 
