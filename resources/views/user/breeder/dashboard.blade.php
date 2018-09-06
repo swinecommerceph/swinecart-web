@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Dashboard
+    Your Dashboard.
 @endsection
 
 @section('breadcrumb')
@@ -29,6 +29,7 @@
             </p>
         </div>
     </div>
+
     <div id="card-status" class="row">
 
         <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select a frequency to graph:</p>
@@ -82,20 +83,28 @@
             <p></p>
             <div class="col s12">
                 <h5 class="center-align">
-                    <a href="{{ route('dashboard.productStatus') }}" style="color:hsl(0, 0%, 29%); font-weight: 700;">Product Status</a>
+                    <a href="{{ route('dashboard.productStatus') }}"
+                        style="font-weight: 700; color:hsl(0, 0%, 13%);"
+                    >
+                        Product Status
+                    </a>
                 </h5>
             </div>
 
             {{-- Requested Products --}}
             <div class="col s12 m4">
                 <div class="card">
-                    <div class="card-content teal white-text">
+                    <div class="card-content white-text blue accent-1">
                         <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'requested'])}}" class="white-text">Requested</a>
+                            <a href="{{route('dashboard.productStatus',['status' => 'requested'])}}"
+                                class="white-text"
+                            >
+                                Requested
+                            </a>
                         </span>
                         <h3>@{{ overallRequested }}</h3>
                     </div>
-                    <div class="card-action teal">
+                    <div class="card-action blue accent-2">
                         <a class="white-text">Boar: @{{ dashboardStats.requested.boar }} </a>
                         <a class="white-text">Sow: @{{ dashboardStats.requested.sow }} </a>
                         <a class="white-text">Gilt: @{{ dashboardStats.requested.gilt }} </a>
