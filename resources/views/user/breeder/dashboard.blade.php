@@ -29,7 +29,7 @@
         </h4>
     </div>
 
-    <div id="card-status" class="row">
+    <div id="card-status" class="row" v-cloak>
 
         <div class="row">
             {{-- Guide text --}}
