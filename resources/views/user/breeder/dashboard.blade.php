@@ -35,7 +35,7 @@
         <div id="charts-container" class="">
             <p><br></p>
 
-            <div class="col s1">
+            <div class="col s2">
                 <div class="">
                     <input class="with-gap" name="frequency" type="radio" id="frequency-monthly" value="monthly" v-model="chosenFrequency" @change="valueChange" />
                     <label for="frequency-monthly">Monthly</label>
