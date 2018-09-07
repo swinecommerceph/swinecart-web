@@ -238,21 +238,26 @@
             </div>
         </div>
         
-        {{-- Overall Average Rating --}}
+        {{-- Overall Average Rating Container --}}    
         <div class="col s12 m6">
             <br>
-            <div class="card">
-                <div class="card-content grey white-text">
+            <div class="card hoverable">
+                <div class="card-content white">
                     <span class="card-title">
-                        <a href="{{route('dashboard.reviews')}}" class="white-text">Overall Average Rating</a>
+                        <a href="{{route('dashboard.reviews')}}"
+                            style="font-weight: 700; color:hsl(0, 0%, 13%);"
+                        >
+                            Overall Average Rating
+                        </a>
                     </span>
-                    <h3>@{{ overallRatings }}/5</h3>
-                    <span>No. of reviews: @{{ dashboardStats.ratings.reviewsSize }}</span>
+                    <h2 class="blue-text">@{{ overallRatings }}/5</h2>
+                    <br><br>
+                    <span style="color:hsl(0, 0%, 45%);">No. of reviews: @{{ dashboardStats.ratings.reviewsSize }}</span>
                 </div>
-                <div class="card-action grey">
-                    <a class="white-text">Delivery: @{{ dashboardStats.ratings.delivery }} </a>
-                    <a class="white-text">Transaction: @{{ dashboardStats.ratings.transaction }} </a>
-                    <a class="white-text">Product Quality: @{{ dashboardStats.ratings.productQuality }} </a>
+                <div class="left-align" style="background: hsl(0, 0%, 97%); padding-top: 3vh; padding-bottom: 2vh;">
+                    <a style="color:hsl(0, 0%, 29%); padding-left: 2vw;">Delivery: @{{ dashboardStats.ratings.delivery }} </a><br>
+                    <a style="color:hsl(0, 0%, 29%); padding-left: 2vw;">Transaction: @{{ dashboardStats.ratings.transaction }} </a><br>
+                    <a style="color:hsl(0, 0%, 29%); padding-left: 2vw;">Product Quality: @{{ dashboardStats.ratings.productQuality }} </a>
                 </div>
             </div>
         </div>
@@ -279,7 +284,6 @@
                 </div>
             </div>
         </div>
-
     </div>
 
     <div class="row">
