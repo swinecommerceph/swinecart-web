@@ -80,7 +80,7 @@
                         <td>
                             <div class="row">
                                 <div class="col s2 center-align">
-                                    <a href="#!">
+                                    <a>
                                         <img v-bind:src="product.img_path" width="75" height="75" class="circle"/>
                                     </a>
                                 </div>
