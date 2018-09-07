@@ -294,13 +294,14 @@
         </div>
     </div>
 
+    {{-- Customer Mapping Container--}}
     <div class="row">
         {{-- Location --}}
         <div class="col s12">
-            <div class="card">
-                <div class="card-content teal darken-4 white-text">
-                    <span class="card-title">
-                        <a href="{{route('map.customers')}}" class="white-text">Customer Mapping</a>
+            <div class="card hoverable blue lighten-4">
+                <div class="card-content center-align">
+                    <span class="card-title ">
+                        <a href="{{route('map.customers')}}" style="font-weight: 600;">Customer Mapping</a>
                     </span>
                 </div>
             </div>
