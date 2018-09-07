@@ -160,6 +160,7 @@
                 </div>
             </div>
 
+            {{-- Product Management --}}
             <div class="row"></div>
             <div class="row">
                 <h4 class="left-align" style="font-weight: 500; margin-left: 1vw; margin-top: 5vh;">
@@ -167,7 +168,6 @@
                 </h4>
             </div>
             
-
             {{-- Hidden Products --}}
             <div class="col s12 m4">
                 <div class="card hoverable">
