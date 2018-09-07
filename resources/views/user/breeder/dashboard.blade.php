@@ -265,18 +265,22 @@
         {{-- Reviews --}}
         <div class="col s12 m6">
             <br>
-            <div class="card">
-                <div class="card-content teal white-text">
+            <div class="card hoverable">
+                <div class="card-content">
                     <span class="card-title">
-                        <a href="{{route('dashboard.reviews')}}" class="white-text">Reviews</a>
+                        <a href="{{route('dashboard.reviews')}}"
+                            style="font-weight: 700;  color:hsl(0, 0%, 13%);"
+                        >
+                            Reviews
+                        </a>
                     </span>
                     <div id="review-slider" class="slider">
-                        <ul class="slides teal">
+                        <ul class="slides" style="background:hsl(0, 0%, 97%);">
                             <li v-for="review in dashboardStats.ratings.reviews">
                                 <img src="">
                                 <div class="caption center-align">
-                                    <h5 style="margin:0;">"@{{ review.comment }}"</h5>
-                                    <h6 class="light grey-text text-lighten-3">- @{{ review.customerName }}</h6>
+                                    <h5 style="margin:0; color:hsl(0, 0%, 29%);">"@{{ review.comment }}"</h5>
+                                    <h6 style="color:hsl(0, 0%, 45%);">- @{{ review.customerName }}</h6>
                                 </div>
                             </li>
                         </ul>
