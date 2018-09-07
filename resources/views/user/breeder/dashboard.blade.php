@@ -163,8 +163,12 @@
             {{-- Product Management --}}
             <div class="row"></div>
             <div class="row">
-                <h4 class="left-align" style="font-weight: 500; margin-left: 1vw; margin-top: 5vh;">
-                    Product Management
+                <h4 class="left-align" style="font-weight: 500; margin-left: 2vw; margin-top: 5vh;">
+                    <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}"
+                        style="color:hsl(0, 0%, 13%);"
+                    >
+                        Product Management
+                    </a>
                 </h4>
             </div>
             
