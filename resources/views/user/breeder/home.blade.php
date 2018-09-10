@@ -150,6 +150,7 @@
 @endsection
 
 @section('static')
+    {{-- Floating Action Button --}}
     <div class="fixed-action-btn click-to-toggle" style="bottom: 30px; right: 24px;">
       <a id="action-button" class="btn-floating btn-large waves-effect waves-light red" style="display:none;" data-position="left" data-delay="50" data-tooltip="More Actions">
         <i class="material-icons">more_vert</i>
