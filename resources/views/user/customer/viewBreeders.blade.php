@@ -143,11 +143,11 @@
                 });
             }
            
-            @foreach($breeders as $breeder)
+            @foreach($results as $result)
                 geocode({
-                    address : '{{ $breeder->officeAddress_province }}, Philippines',
-                    content : '{{ $breeder->users()->first()->name }}',
-                    id : '{{ $breeder->id }}'
+                    address : '{{ $result->province }}, Philippines',
+                    content : '{{ $result->name }}, {{ $result->province }}',
+                    id : '{{ $result->id }}'
                 });
             @endforeach
             
