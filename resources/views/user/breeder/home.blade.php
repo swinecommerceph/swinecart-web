@@ -154,7 +154,7 @@
       <a id="action-button" class="btn-floating btn-large waves-effect waves-light red" style="display:none;" data-position="left" data-delay="50" data-tooltip="More Actions">
         <i class="material-icons">more_vert</i>
         <ul>
-            <li><a class="btn-floating waves-effect waves-light grey tooltipped delete-selected-button" data-position="left" data-delay="50" data-tooltip="Delete all chosen"><i class="material-icons">delete</i></a></li>
+            <li><a class="btn-floating waves-effect waves-light red darken-4 tooltipped delete-selected-button" data-position="left" data-delay="50" data-tooltip="Delete all chosen"><i class="material-icons">delete</i></a></li>
             @if(!empty($filters['hidden']))
                 {{-- Only show when products are unshowcased --}}
                 <li><a class="btn-floating waves-effect waves-light teal ligthen-2 tooltipped display-selected-button" data-position="left" data-delay="50" data-tooltip="Display all chosen"><i class="material-icons">visibility</i></a></li>
@@ -162,8 +162,8 @@
                 {{-- Only show when products are showcased --}}
                 <li><a class="btn-floating waves-effect waves-light teal ligthen-2 tooltipped hide-selected-button" data-position="left" data-delay="50" data-tooltip="Hide all chosen"><i class="material-icons">visibility_off</i></a></li>
             @endif
-            <li><a href="#" class="btn-floating modal-trigger waves-effect waves-light teal tooltipped select-all-button" data-position="left" data-delay="50" data-tooltip="Select All Products"><i class="material-icons">event_available</i></a></li>
-            <li><a href="#" class="btn-floating modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="left" data-delay="50" data-tooltip="Add product"><i class="material-icons">add</i></a></li>
+            <li><a href="#" class="btn-floating modal-trigger waves-effect waves-light green tooltipped select-all-button" data-position="left" data-delay="50" data-tooltip="Select All Products"><i class="material-icons">event_available</i></a></li>
+            <li><a href="#" class="btn-floating modal-trigger waves-effect waves-light blue tooltipped add-product-button" data-position="left" data-delay="50" data-tooltip="Add product"><i class="material-icons">add</i></a></li>
         </ul>
       </a>
     </div>
