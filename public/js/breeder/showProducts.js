@@ -740,13 +740,15 @@ $(document).ready(function(){
 
     /* ----------- Manage Products page general functionalities ----------- */
     // Back to top button functionality
-    $(window).scroll(function(){
+    $('#action-button').show();
+
+    /*$(window).scroll(function(){
         if ($(this).scrollTop() >= 250) $('#action-button').fadeIn(200);
         else{
             $('.fixed-action-btn').closeFAB();
             $('#action-button').fadeOut(200);
         }
-    });
+    });*/
 
     // Select All Products
     $('.select-all-button').click(function(e){
