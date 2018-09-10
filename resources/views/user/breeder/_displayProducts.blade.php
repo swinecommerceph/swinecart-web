@@ -6,38 +6,42 @@
 
 {{-- General Actions container --}}
 <div class="row">
+    {{--
     <div class="col s4 left">
+        <p></p>
+        
         {!! Form::open(['route' => 'products.updateSelected', 'id' => 'manage-selected-form']) !!}
-            {{-- Add Button --}}
+            <!-- Add Button -->
             <a href="#!" class="btn-floating btn-large waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
                 <i class="material-icons">add</i>
             </a>
-            {{-- Select All Button --}}
+            <!-- Select All Button -->
             <a href="#!" class="btn-floating btn-large waves-effect waves-light teal tooltipped select-all-button" data-position="top" data-delay="50" data-tooltip="Select All Products">
                 <i class="material-icons">event_available</i>
             </a>
-            {{-- Display selected Button. Only show when products are hidden --}}
+            <!-- Display selected Button. Only show when products are hidden -->
             @if(!empty($filters['hidden']))
                 <a href="#!" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped display-selected-button" data-position="top" data-delay="50" data-tooltip="Display all chosen">
                     <i class="material-icons">visibility</i>
                 </a>
-            {{-- Hide selected Button. Only show when products are displayed --}}
+            <!-- Hide selected Button. Only show when products are displayed -->
             @elseif(!empty($filters['displayed']))
                 <a href="#!" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped hide-selected-button" data-position="top" data-delay="50" data-tooltip="Hide all chosen">
                     <i class="material-icons">visibility_off</i>
                 </a>
             @endif
-            {{-- Delete selected Button --}}
+            <!-- Delete selected Button -->
             <a href="#!" class="btn-floating btn-large waves-effect waves-light grey tooltipped delete-selected-button" data-position="top" data-delay="50" data-tooltip="Delete all chosen">
                 <i class="material-icons">delete</i>
             </a>
         {!! Form::close() !!}
-    </div>
+        </div>
+    --}}
 
     {{-- Dropdown container --}}
-    <div id="dropdown-container" class="col s8 right">
+    <div id="dropdown-container" class="col s8 left">
         <div class="row">
-            <div id="sort-select" class="input-field col right">
+            <div id="sort-select" class="input-field col left">
                 <select>
                     <option value="none">Relevance</option>
                     <option value="birthdate-asc" @if(!empty($filters['birthdate-asc'])) {{ $filters['birthdate-asc'] }} @endif>Age: High to Low</option>
@@ -48,7 +52,7 @@
                 </select>
                 <label>Sort By</label>
             </div>
-            <div id="status-select" class="input-field col s3 right">
+            <div id="status-select" class="input-field col s3 left">
                 <select>
                     <option value="all-status" selected>All</option>
                     <option value="displayed" @if(!empty($filters['displayed'])) {{ $filters['displayed'] }} @endif>Displayed</option>
@@ -57,7 +61,7 @@
                 </select>
                 <label>Status</label>
             </div>
-            <div id="type-select" class="input-field col s3 right">
+            <div id="type-select" class="input-field col s3 left">
                 <select>
                     <option value="all-type" selected>All</option>
                     <option value="boar" @if(!empty($filters['boar'])) {{ $filters['boar'] }} @endif>Boar</option>
@@ -67,14 +71,16 @@
                 </select>
                 <label>Show</label>
             </div>
-
         </div>
+    </div>
 
+    <div class="col s4 right">
+        <p></p>
     </div>
 </div>
 
 {{-- Products in card elements container --}}
-<div id="view-products-container" class="row">
+<div id="view-products-container" class="row grey lighten-4">
     <?php $productNumber = 1; ?>
     @foreach($products as $product)
         <div class="col s12 m6 l4" id="product-{{$product->id}}">
