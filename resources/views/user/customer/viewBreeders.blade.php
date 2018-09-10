@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Breeders and their Products
+    Breeder Farms and their Products
 @endsection
 
 @section('breadcrumb')
