@@ -338,14 +338,14 @@
             <div id="product-reservation-details-modal" class="modal">
                 <div class="modal-content">
                     <h4>@{{ reservationDetails.productName }} Reservation Details</h4>
-                    <p>
+                    <p style="color:hsl(0, 0%, 40%);">
                         @{{ reservationDetails.type | capitalize }} - @{{ reservationDetails.breed }}
                     </p>
                     <table>
                         <thead>
                             <tr> </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="color:hsl(0, 0%, 29%);">
                             <tr>
                                 <th> Customer Name </th>
                                 <td> @{{ reservationDetails.customerName }} </td>
@@ -374,7 +374,7 @@
                         <thead>
                             <tr> </tr>
                         </thead>
-                        <tbody>
+                        <tbody style="color: hsl(0, 0%, 29%);">
                             <tr>
                                 <th> Customer Name </th>
                                 <td> @{{ customerInfo.name }} </td>
