@@ -294,8 +294,19 @@ class CustomerController extends Controller
 
     public function viewBreeders(){
 
-        $breeders = Breeder::all();
-        return view('user.customer.viewBreeders', compact('breeders'));
+        // getting the breeders having the attribute 'farm addresses'
+        $breeders = Breeder::with(['farmAddresses'])->get();
+        $results = [];
+
+        // inserting the farm address per breeder and returning it
+        foreach ($breeders as $breeder) {
+            foreach ($breeder->farmAddresses as $fas) {
+                $results[] = $fas;
+            }
+        }
+        
+        //dd($results);
+        return view('user.customer.viewBreeders', compact('results'));
     }
 
     public function viewBreedersChange(Request $request){
