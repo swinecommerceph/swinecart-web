@@ -358,12 +358,20 @@ body {
 }
 
 /* Tab Styles */
+.tabs {
+  overflow-x: hidden;
+}
+
 .tabs .active{
-	color: #b71c1c !important;
+  color: #b71c1c;
 }
 
 .tabs .tab a{
 	font-size: 1rem;
+}
+
+.indicator {
+  background-color: green !important;
 }
 
 /* Blockquote styles */
@@ -421,8 +429,14 @@ input#search{
 	color: black;
 	/* The following three lines are a temporary fix to Mataerialize css v0.99 search UI bug */
 	margin-bottom: 0px;
-    border-bottom-style: none;
-    height: inherit;
+  border-bottom-style: none;
+  height: inherit;
+  font-size: 1.5rem;
+  background-color: hsl(0, 0%, 97%);
+}
+
+#search-label {
+  padding-left: 0.5rem;
 }
 
 #search-results ul{
@@ -439,6 +453,12 @@ input#search{
 #search-results li:hover{
 	background-color: rgba(0,0,0,0.1);
 }
+
+/* #mini-search-bar {
+  border: solid 1px;
+  color: hsl(0, 0%, 45%);
+  padding: 2px;
+} */
 
 /*
  * Device-specific styles

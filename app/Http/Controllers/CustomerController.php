@@ -304,6 +304,8 @@ class CustomerController extends Controller
                 $results[] = $fas;
             }
         }
+
+        //$results = Breeder::all();
         
         //dd($results);
         return view('user.customer.viewBreeders', compact('results'));

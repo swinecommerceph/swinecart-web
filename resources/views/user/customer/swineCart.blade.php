@@ -197,7 +197,7 @@
 
         {{-- Tabs --}}
         <ul class="tabs tabs-fixed-width">
-          <li class="tab col s6"><a href="#swine-cart">Orders</a></li>
+          <li class="tab col s6"><a href="#swine-cart" class=" blue-text">Orders</a></li>
           <li class="tab col s6 teal-text"><a href="#transaction-history" @click="getTransactionHistory({{ $customerId }})">Transaction History</a></li>
         </ul>
 

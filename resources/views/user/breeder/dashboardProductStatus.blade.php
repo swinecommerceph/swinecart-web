@@ -37,9 +37,9 @@
                 <custom-status-select v-model="statusFilter" @status-select="statusChange"> </custom-status-select>
             </div>
             <form class="col s3 right">
-                <div class="input-field col s12">
+                <div class="input-field inline col s12">
+                    <label id="search-label"  for="search">Search</label>
                     <input type="text" id="search" name="search" v-model="searchQuery">
-                    <label for="search">Search</label>
                 </div>
             </form>
         </div>
@@ -84,24 +84,24 @@
                                         <img v-bind:src="product.img_path" width="75" height="75" class="circle"/>
                                     </a>
                                 </div>
-                                <div class="col s4 valign-wrapper">
-                                    @{{ product.name }}<br>
-                                    @{{ product.type | capitalize }} - @{{ product.breed }} <br>
+                                <div class="col s4">
+                                    <span style="font-weight: 700; color:hsl(0, 0%, 13%);">@{{ product.name }}</span><br>
+                                    <span style="color:hsl(0, 0%, 29%);">@{{ product.type | capitalize }} - @{{ product.breed }}</span>
                                     <template v-if="product.reservation_id && product.type === 'semen'">
-                                        Quantity: @{{ product.quantity }}
+                                        <p style="color:hsl(0, 0%, 29%);">Quantity: @{{ product.quantity }}</p>
                                     </template>
                                 </div>
                                 <div class="col s6">
                                     <template v-if="product.customer_name">
-                                        <span class="teal-text"
-                                            style="cursor:pointer;"
+                                        <span style="cursor:pointer; font-weight: 700; color:hsl(0, 0%, 13%);"
                                             @click.prevent="showCustomerInfo(product.customer_id, product.customer_name)"
                                         >
                                             @{{ product.customer_name }}
                                         </span>
                                         <br>
                                         <a href="#"
-                                            class="anchor-title teal-text"
+                                            class="anchor-title blue-text"
+                                            style="font-weight: 700;" 
                                             @click.prevent="showReservationDetails(product.uuid)"
                                         >
                                             RESERVATION DETAILS
