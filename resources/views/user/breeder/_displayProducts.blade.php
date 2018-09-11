@@ -133,22 +133,22 @@
                     </div>
                 </div>
                 <div class="card-reveal">
-                    <span class="card-title grey-text text-darken-4">{{$product['name']}}<i class="material-icons right">close</i></span>
+                    <span class="card-title" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}<i class="material-icons right">close</i></span>
                     <br>
                     <table class="col s10">
                         <thead> </thead>
                         <tbody>
                             <tr>
-                                <td class="grey-text text-darken-2"> Average Daily Gain (g) </td>
-                                <td class="right-align"> {{ $product->adg }} </td>
+                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g) </td>
+                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"class="right-align"> {{ $product->adg }} </td>
                             </tr>
                             <tr>
-                                <td class="grey-text text-darken-2"> Feed Conversion Ratio </td>
-                                <td class="right-align"> {{ $product->fcr }} </td>
+                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio </td>
+                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"class="right-align"> {{ $product->fcr }} </td>
                             </tr>
                             <tr>
-                                <td class="grey-text text-darken-2"> Backfat Thickness (mm) </td>
-                                <td class="right-align"> {{ $product->backfat_thickness }} </td>
+                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm) </td>
+                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"class="right-align"> {{ $product->backfat_thickness }} </td>
                             </tr>
                         </tbody>
                     </table>
