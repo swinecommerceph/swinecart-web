@@ -133,25 +133,29 @@
                     </div>
                 </div>
                 <div class="card-reveal">
-                    <span class="card-title" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}<i class="material-icons right">close</i></span>
+                    <div class="row">
+                        <span class="card-title" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}<i class="material-icons right">close</i></span>
+                    </div>
                     <br>
-                    <table class="col s10">
-                        <thead> </thead>
-                        <tbody>
-                            <tr>
-                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
-                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"class="right-align"> {{ $product->adg }} </td>
-                            </tr>
-                            <tr>
-                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio: </td>
-                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"class="right-align"> {{ $product->fcr }} </td>
-                            </tr>
-                            <tr>
-                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm): </td>
-                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"class="right-align"> {{ $product->backfat_thickness }} </td>
-                            </tr>
-                        </tbody>
-                    </table>
+                    <div class="row">
+                        <table class="col s12">
+                            <thead> </thead>
+                            <tbody>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio: </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->fcr }} </td>
+                                </tr>
+                                <tr>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm): </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->backfat_thickness }} </td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
                     <div class="col s10"> <br> </div>
 
                     <div class="row">
