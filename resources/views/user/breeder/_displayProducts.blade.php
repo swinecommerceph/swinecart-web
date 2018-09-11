@@ -97,10 +97,10 @@
                     @endif
                 </div>
                 <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4 truncate">{{$product->name}}<i class="material-icons right">more_vert</i></span>
+                    <span class="card-title activator grey-text text-darken-4 truncate"  style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}<i class="material-icons right">more_vert</i></span>
                     <p>
-                        {{$product->type}} - {{$product->breed}} <br>
-                        Age: {{$product->age}} days old
+                        <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} - {{$product->breed}}</span> <br>
+                        <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span>
                     </p>
                 </div>
                 <div class="card-action">
