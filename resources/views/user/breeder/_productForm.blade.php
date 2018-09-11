@@ -460,11 +460,25 @@
 {{-- Confirmation Modal --}}
 <div id="confirmation-modal" class="modal">
 	<div class="modal-content">
-	  <p>Are you sure you want to remove the products chosen?</p>
+	  <h5>Remove product/s from your database?</h5>
 	</div>
 	<div class="modal-footer">
-	  <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
-	  <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
+	  <a
+	  	href="#!"
+	  	id="confirm-remove"
+	  	class=" modal-action modal-close waves-effect waves-green btn-flat red white-text"
+	  	style="text-transform: none;  font-weight: 700;"
+	  >
+			Remove
+		</a>
+	  
+	  <a
+	  	href="#!"
+	  	class="modal-action modal-close waves-effect waves-green btn-flat grey-text"
+	  	style="text-transform: none; font-weight: 700;"
+	  >
+			No
+		</a>
 	</div>
 </div>
 
