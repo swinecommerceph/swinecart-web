@@ -220,6 +220,7 @@
                             <br>
                             <div class="col">
                                 <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}"
+                                    class="waves-effect waves-light"
                                     style="
                                         border: 2px solid #bbdefb;
                                         background-color: white;
@@ -230,7 +231,6 @@
                                         font-weight: 700;
                                         border-radius: 5px;
                                     "
-                                    class="waves-effect waves-light"
                                 >View All Info</a>
                             </div>
                             <div class="col right">

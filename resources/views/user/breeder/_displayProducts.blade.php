@@ -100,7 +100,6 @@
                     <span class="card-title activator grey-text text-darken-4 truncate">{{$product->name}}<i class="material-icons right">more_vert</i></span>
                     <p>
                         {{$product->type}} - {{$product->breed}} <br>
-                        Birthdate: {{$product->birthdate}} <br>
                         Age: {{$product->age}} days old
                     </p>
                 </div>
