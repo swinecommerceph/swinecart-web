@@ -552,7 +552,7 @@ var product = {
             type: "POST",
             cache: false,
             data: {
-                "_token": parent_form.find('input[name=_token]').val(),
+                "_token": document.querySelector('meta[name="csrf-token"]').content,
                 "product_id": parent_form.find('input[name=productId]').val()
             },
             success: function(data){

@@ -6,38 +6,6 @@
 
 {{-- General Actions container --}}
 <div class="row">
-    {{--
-    <div class="col s4 left">
-        <p></p>
-        
-        {!! Form::open(['route' => 'products.updateSelected', 'id' => 'manage-selected-form']) !!}
-            <!-- Add Button -->
-            <a href="#!" class="btn-floating btn-large waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
-                <i class="material-icons">add</i>
-            </a>
-            <!-- Select All Button -->
-            <a href="#!" class="btn-floating btn-large waves-effect waves-light teal tooltipped select-all-button" data-position="top" data-delay="50" data-tooltip="Select All Products">
-                <i class="material-icons">event_available</i>
-            </a>
-            <!-- Display selected Button. Only show when products are hidden -->
-            @if(!empty($filters['hidden']))
-                <a href="#!" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped display-selected-button" data-position="top" data-delay="50" data-tooltip="Display all chosen">
-                    <i class="material-icons">visibility</i>
-                </a>
-            <!-- Hide selected Button. Only show when products are displayed -->
-            @elseif(!empty($filters['displayed']))
-                <a href="#!" class="btn-floating btn-large waves-effect waves-light teal lighten-2 tooltipped hide-selected-button" data-position="top" data-delay="50" data-tooltip="Hide all chosen">
-                    <i class="material-icons">visibility_off</i>
-                </a>
-            @endif
-            <!-- Delete selected Button -->
-            <a href="#!" class="btn-floating btn-large waves-effect waves-light grey tooltipped delete-selected-button" data-position="top" data-delay="50" data-tooltip="Delete all chosen">
-                <i class="material-icons">delete</i>
-            </a>
-        {!! Form::close() !!}
-        </div>
-    --}}
-
     {{-- Dropdown container --}}
     <div id="dropdown-container" class="col s8 left">
         <div class="row">
@@ -76,7 +44,12 @@
 
     <div class="col s4 right">
         <p></p>
+        {!! Form::open(['route' => 'products.updateSelected', 'id' => 'manage-selected-form']) !!}{!! Form::close() !!}
     </div>
+
+    <!-- <div class="col s4 right">
+        <p></p>
+    </div> -->
 </div>
 
 {{-- Products in card elements container --}}
