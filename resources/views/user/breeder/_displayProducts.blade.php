@@ -112,17 +112,17 @@
                         <div class="col right">
                             {{-- Edit Button --}}
                             <a href="#!" class="tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit {{$product->name}}" data-product-id="{{$product->id}}">
-                                <i class="material-icons teal-text text-darken-2" style="font-size:30px">edit</i>
+                                <i class="material-icons blue-text text-accent-2" style="font-size:30px">edit</i>
                             </a>
                             @if(!empty($filters['hidden']) || $product->status == 'hidden')
                                 {{-- Display Button --}}
                                 <a href="#!" class="tooltipped display-product-button" data-position="top" data-delay="50" data-tooltip="Display {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
-                                    <i class="material-icons teal-text" style="font-size:30px">visibility</i>
+                                    <i class="material-icons blue-text text-accent-2" style="font-size:30px">visibility</i>
                                 </a>
                             @elseif(!empty($filters['displayed']) || $product->status == 'displayed')
                                 {{-- Hide Button --}}
                                 <a href="#!" class="tooltipped hide-product-button" data-position="top" data-delay="50" data-tooltip="Hide {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
-                                    <i class="material-icons teal-text" style="font-size:30px">visibility_off</i>
+                                    <i class="material-icons blue-text text-accent-2" style="font-size:30px">visibility_off</i>
                                 </a>
                             @endif
                             {{-- Delete Button --}}
