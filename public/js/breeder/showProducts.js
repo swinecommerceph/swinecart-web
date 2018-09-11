@@ -739,9 +739,9 @@ $(document).ready(function(){
     });
 
     /* ----------- Manage Products page general functionalities ----------- */
-    // Back to top button functionality
-    $('#action-button').show();
+    $('#action-button').show(); // always show the fab
 
+    // Back to top button functionality
     /*$(window).scroll(function(){
         if ($(this).scrollTop() >= 250) $('#action-button').fadeIn(200);
         else{
