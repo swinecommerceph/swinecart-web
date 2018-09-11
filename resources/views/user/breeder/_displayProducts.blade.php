@@ -139,15 +139,15 @@
                         <thead> </thead>
                         <tbody>
                             <tr>
-                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g) </td>
+                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
                                 <td style="color: hsl(0, 0%, 13%); font-weight: 550;"class="right-align"> {{ $product->adg }} </td>
                             </tr>
                             <tr>
-                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio </td>
+                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio: </td>
                                 <td style="color: hsl(0, 0%, 13%); font-weight: 550;"class="right-align"> {{ $product->fcr }} </td>
                             </tr>
                             <tr>
-                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm) </td>
+                                <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm): </td>
                                 <td style="color: hsl(0, 0%, 13%); font-weight: 550;"class="right-align"> {{ $product->backfat_thickness }} </td>
                             </tr>
                         </tbody>
