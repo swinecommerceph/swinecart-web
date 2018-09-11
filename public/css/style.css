@@ -1237,3 +1237,15 @@ label {
     -o-transform: none;
     transform: none;
 }
+
+/* Outline Button */
+.outline-button-blue {
+  border: 2px solid #bbdefb;
+  background-color: white;
+  padding: 8px 18px;
+  font-size: 16px;
+  cursor: pointer;
+  color: #2196f3;
+  font-weight: 700;
+  border-radius: 5px;
+}
