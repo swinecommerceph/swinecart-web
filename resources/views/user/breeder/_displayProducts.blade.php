@@ -165,7 +165,21 @@
                         Backfat Thickness: {{$product['backfat_thickness']}} mm <br>
                         <br> --}}
                         <div class="col">
-                            <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
+                            <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}"
+                                class="waves-effect waves-light"
+                                style="
+                                    border: 2px solid #bbdefb;
+                                    background-color: white;
+                                    padding: 8px 18px;
+                                    font-size: 16px;
+                                    cursor: pointer;
+                                    color: #2196f3;
+                                    font-weight: 700;
+                                    border-radius: 5px;
+                                "
+                            >
+                                View All Info
+                            </a>
                         </div>
                     </div>
                 </div>
