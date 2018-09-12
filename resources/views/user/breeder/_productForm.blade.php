@@ -466,7 +466,7 @@
 	  <a
 	  	href="#!"
 	  	id="confirm-remove"
-	  	class=" modal-action modal-close waves-effect waves-green btn-flat red white-text"
+	  	class=" modal-action modal-close waves-effect waves-green btn-flat red darken-4 white-text"
 	  	style="text-transform: none;  font-weight: 700;"
 	  >
 			Remove

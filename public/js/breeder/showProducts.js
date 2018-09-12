@@ -552,7 +552,7 @@ var product = {
             type: "POST",
             cache: false,
             data: {
-                "_token": parent_form.find('input[name=_token]').val(),
+                "_token": document.querySelector('meta[name="csrf-token"]').content,
                 "product_id": parent_form.find('input[name=productId]').val()
             },
             success: function(data){
@@ -739,9 +739,9 @@ $(document).ready(function(){
     });
 
     /* ----------- Manage Products page general functionalities ----------- */
-    $('#action-button').show(); // always show the fab
-
     // Back to top button functionality
+    $('#action-button').show()
+
     /*$(window).scroll(function(){
         if ($(this).scrollTop() >= 250) $('#action-button').fadeIn(200);
         else{
@@ -766,6 +766,8 @@ $(document).ready(function(){
             $('.select-all-button').attr('data-tooltip', 'Select all Products');
             all_checked = false;
         }
+
+        $('.tooltipped').tooltip();
     });
 
     // Display Selected Button
