@@ -25,6 +25,12 @@ $(document).ready(function(){
         }
     });
 
+    /*$('.check-box').on("change", function(e) {
+        e.preventDefault();
+
+        console.log('here');
+    });*/
+
     // Select All Products
     $('.select-all-button').click(function(e){
         e.preventDefault();
@@ -41,6 +47,8 @@ $(document).ready(function(){
             $('.select-all-button').attr('data-tooltip', 'Select all Products');
             all_checked = false;
         }
+
+        $('.tooltipped').tooltip();
     });
 
     // Display Selected Button

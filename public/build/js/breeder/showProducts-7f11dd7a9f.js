@@ -740,14 +740,18 @@ $(document).ready(function(){
 
     /* ----------- Manage Products page general functionalities ----------- */
     // Back to top button functionality
-    $('#action-button').show()
-
-    /*$(window).scroll(function(){
+    $(window).scroll(function(){
         if ($(this).scrollTop() >= 250) $('#action-button').fadeIn(200);
         else{
             $('.fixed-action-btn').closeFAB();
             $('#action-button').fadeOut(200);
         }
+    });
+
+    /*$('.check-box').on("change", function(e) {
+        e.preventDefault();
+
+        console.log('here');
     });*/
 
     // Select All Products
