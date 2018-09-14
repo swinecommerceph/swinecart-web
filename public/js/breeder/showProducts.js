@@ -748,11 +748,38 @@ $(document).ready(function(){
         }
     });
 
-    /*$('.check-box').on("change", function(e) {
+    // Giving a border when checkbo is clicked
+    $('.single-checkbox').on("change", function(e) {
         e.preventDefault();
 
-        console.log('here');
-    });*/
+        $('#view-products-container input[type=checkbox]:checked').each(function(){
+            
+            // Given an id of the checked card/s, locate the actual card element
+            // before adding the border
+            var string = "#product-";
+            var product_id = $(this).attr('data-product-id');
+            var div_id = string + product_id;
+            var card_element = div_id + ">div"
+            console.log(card_element);
+
+            // Adding the border
+            $(card_element).css({
+                "border": "solid 4px #42a5f5"
+            });
+            
+        });
+
+        
+
+
+            // adding the border
+            //$('.card.hoverable').addClass("single-border");
+            //$('.single-border').css({"border": "solid 5px blue"});
+        
+        
+
+        // console.log(checked_products.length);
+    });
 
     // Select All Products
     $('.select-all-button').click(function(e){
