@@ -57,7 +57,9 @@
     <?php $productNumber = 1; ?>
     @foreach($products as $product)
         <div class="col s12 m6 l4" id="product-{{$product->id}}">
-            <div class="card hoverable">
+            <div
+                class="card hoverable"
+            >
                 <div class="card-image">
                     @if($product->status == 'hidden')
                         <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">

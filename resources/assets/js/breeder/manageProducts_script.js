@@ -26,36 +26,55 @@ $(document).ready(function(){
     });
 
     // Giving a border when checkbo is clicked
-    $('.single-checkbox').on("change", function(e) {
+    $('.single-checkbox').change(function(e) {
         e.preventDefault();
+        
+        
+        /*
+        var div_id = string + product_id;
+        var card_element = div_id + ">div";
+        */
 
-        $('#view-products-container input[type=checkbox]:checked').each(function(){
+        $('#view-products-container input[type=checkbox]').each(function() {
             
+            var string = "#product-";
+            var product_id = $(this).attr('data-product-id');
+            var div_id = string + product_id;
+            var card_element = div_id + ">div";
+
+            if ($(this).is(':checked')) {
+                console.log('add' + product_id);
+                $(card_element).css({
+                    "border": "solid 4px #42a5f5"
+                });
+            }   
+            else {
+                console.log('remove' + product_id);
+                $(card_element).css({
+                    "border": ""
+                });
+            }
+        });
+
+        /*$('#view-products-container input[type=checkbox]:checked').each(function(){
+            singly_checked.push($(this).attr('data-product-id'))
+            
+            console.log($(this).val().trim());
+
             // Given an id of the checked card/s, locate the actual card element
             // before adding the border
             var string = "#product-";
             var product_id = $(this).attr('data-product-id');
             var div_id = string + product_id;
-            var card_element = div_id + ">div"
-            console.log(card_element);
+            var card_element = div_id + ">div";
+            
+            console.log(product_id);
 
             // Adding the border
-            $(card_element).css({
+            $(this).css({
                 "border": "solid 4px #42a5f5"
-            });
-            
-        });
-
-        
-
-
-            // adding the border
-            //$('.card.hoverable').addClass("single-border");
-            //$('.single-border').css({"border": "solid 5px blue"});
-        
-        
-
-        // console.log(checked_products.length);
+            });}
+        });*/
     });
 
     // Select All Products
