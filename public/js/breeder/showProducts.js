@@ -763,7 +763,7 @@ $(document).ready(function(){
             // Apply the border on the element with class of 'card hoverable'
             var card_element = div_id + ">div";
 
-            // Apply the border/s if checked, else remove it
+            // Apply the border/s if checked, else remove the blue border
             if ($(this).is(':checked')) {
                 $(card_element).css({
                     "border": "solid 4px #42a5f5"
@@ -771,7 +771,7 @@ $(document).ready(function(){
             }   
             else {
                 $(card_element).css({
-                    "border": ""
+                    "border": "solid 4px transparent"
                 });
             }
         });

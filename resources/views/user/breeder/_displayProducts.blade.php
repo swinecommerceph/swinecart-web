@@ -59,6 +59,7 @@
         <div class="col s12 m6 l4" id="product-{{$product->id}}">
             <div
                 class="card hoverable"
+                style="border: solid 4px transparent;"
             >
                 <div class="card-image">
                     @if($product->status == 'hidden')
