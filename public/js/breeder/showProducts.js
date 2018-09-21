@@ -748,24 +748,28 @@ $(document).ready(function(){
         }
     });
 
-    // Giving a border when checkbo is clicked
+    // Giving a border on product card/s when checkbox is clicked
     $('.single-checkbox').change(function(e) {
         e.preventDefault();
+
+        // Iterates all the product cards
         $('#view-products-container input[type=checkbox]').each(function() {
             
+            // Locates the checked card/s and retrieves the id/s for jQuery
             var string = "#product-";
             var product_id = $(this).attr('data-product-id');
             var div_id = string + product_id;
+
+            // Apply the border on the element with class of 'card hoverable'
             var card_element = div_id + ">div";
 
+            // Apply the border/s if checked, else remove it
             if ($(this).is(':checked')) {
-                console.log('add' + product_id);
                 $(card_element).css({
                     "border": "solid 4px #42a5f5"
                 });
             }   
             else {
-                console.log('remove' + product_id);
                 $(card_element).css({
                     "border": ""
                 });
