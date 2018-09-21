@@ -28,13 +28,6 @@ $(document).ready(function(){
     // Giving a border when checkbo is clicked
     $('.single-checkbox').change(function(e) {
         e.preventDefault();
-        
-        
-        /*
-        var div_id = string + product_id;
-        var card_element = div_id + ">div";
-        */
-
         $('#view-products-container input[type=checkbox]').each(function() {
             
             var string = "#product-";
@@ -55,26 +48,6 @@ $(document).ready(function(){
                 });
             }
         });
-
-        /*$('#view-products-container input[type=checkbox]:checked').each(function(){
-            singly_checked.push($(this).attr('data-product-id'))
-            
-            console.log($(this).val().trim());
-
-            // Given an id of the checked card/s, locate the actual card element
-            // before adding the border
-            var string = "#product-";
-            var product_id = $(this).attr('data-product-id');
-            var div_id = string + product_id;
-            var card_element = div_id + ">div";
-            
-            console.log(product_id);
-
-            // Adding the border
-            $(this).css({
-                "border": "solid 4px #42a5f5"
-            });}
-        });*/
     });
 
     // Select All Products
