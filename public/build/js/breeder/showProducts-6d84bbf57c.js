@@ -739,14 +739,17 @@ $(document).ready(function(){
     });
 
     /* ----------- Manage Products page general functionalities ----------- */
+    // Always showing FAB
+    $('#action-button').show();
+
     // Back to top button functionality
-    $(window).scroll(function(){
+    /*$(window).scroll(function(){
         if ($(this).scrollTop() >= 250) $('#action-button').fadeIn(200);
         else{
             $('.fixed-action-btn').closeFAB();
             $('#action-button').fadeOut(200);
         }
-    });
+    });*/
 
     // Giving a border on product card/s when checkbox is clicked
     $('.single-checkbox').change(function(e) {
