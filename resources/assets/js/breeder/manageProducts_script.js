@@ -63,12 +63,22 @@ $(document).ready(function(){
 
         if(!all_checked){
             $('#view-products-container input[type=checkbox]').prop('checked', true);
+            $('.card.hoverable').each(function() {
+                $(this).css({
+                    "border": "solid 4px #42a5f5"
+                });
+            });
             $('.select-all-button i').html('event_busy');
             $('.select-all-button').attr('data-tooltip', 'Unselect all Products');
             all_checked = true;
         }
         else{
             $('#view-products-container input[type=checkbox]').prop('checked', false);
+            $('.card.hoverable').each(function() {
+                $(this).css({
+                    "border": "solid 4px transparent"
+                });
+            });
             $('.select-all-button i').html('event_available');
             $('.select-all-button').attr('data-tooltip', 'Select all Products');
             all_checked = false;
