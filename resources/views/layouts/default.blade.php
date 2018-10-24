@@ -50,45 +50,47 @@
 	<div class="navbar-fixed">
 		<nav class="teal darken-3">
 		    <div class="nav-wrapper container">
-		     	
 		     	{{-- If user is a guest--}}
 		     	@if (Auth::guest())
-					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;"/>
-					<a class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
+						<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;"/>
+						<a class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
 			  	@else
-					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;" />
-					<a class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
+						<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;" />
+						<a class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
 			  	@endif
-		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
+
+	      	<ul id="nav-mobile" class="right hide-on-med-and-down">
+	      		{{-- If user is a guest --}}
 		        @if(Auth::guest())
-					<li><a href="{{ route('home_path') }}"> Products </a></li>
-					<li><a href="{{ route('home_path') }}"> ASBAP </a></li>
-					@if(Request::is('/'))
-						<li><a href="{{ route('login') }}"> Login </a></li>
-						<li><a href="{{ route('register') }}"> Register </a></li>
-					@else
-						@if(!Request::is('login'))
-							<li><a href="{{ route('login') }}" class="waves-effect waves-light btn">Login</a></li>
-						@elseif(!Request::is('register'))
-							<li><a href="{{ url('register') }}" class="waves-effect waves-light btn">Register</a></li>
-						@endif
-					@endif
-				@else
-					{{-- If user is authenticated--}}
-					<li style="margin-right: 10px;">{{ Auth::user()->name }}</li>
-					@yield('navbarHead')
-					<li>
-						<a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
-							<i class="material-icons">arrow_drop_down</i>
-						</a>
-						<ul id="nav-dropdown" class="dropdown-content">
+							<li><a href="{{ route('home_path') }}"> Products </a></li>
+							<li><a href="{{ route('home_path') }}"> ASBAP </a></li>
+							@if(Request::is('/'))
+								<li><a href="{{ route('login') }}"> Login </a></li>
+								<li><a href="{{ route('register') }}"> Register </a></li>
+							@else
+								@if(!Request::is('login'))
+									<li><a href="{{ route('login') }}" class="waves-effect waves-light btn">Login</a></li>
+								@elseif(!Request::is('register'))
+									<li><a href="{{ url('register') }}" class="waves-effect waves-light btn">Register</a></li>
+								@endif
+							@endif
+						
+						{{-- If user is authenticated --}}
+						@else
+							<li style="margin-right: 10px;">{{ Auth::user()->name }}</li>
+							@yield('navbarHead')
+							<li>
+								<a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
+									<i class="material-icons">arrow_drop_down</i>
+								</a>
+								<ul id="nav-dropdown" class="dropdown-content">
 					        @yield('navbarDropdown')
 					        <li class="divider"></li>
 					        <li><a href="{{ url('logout') }}">Logout</a></li>
-					    </ul>
-					</li>
-				@endif
-		      	</ul>
+						    </ul>
+							</li>
+						@endif
+		      </ul>
 		    </div>
 
 			{{-- Preloader Progress --}}

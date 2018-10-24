@@ -489,7 +489,7 @@ class ProductController extends Controller
     {
         // Check if from a search query
         $products = ($request->q) ? $repository->search($request->q): Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0);
-        $scores = ($request->q) ? $products->scores : [];
+        $scores = ($request->q && isset($products->scores)) ? $products->scores : [];
 
         $parsedTypes = ($request->type) ? explode(' ',$request->type) : '';
         $parsedBreedIds = ($request->breed) ? $this->getBreedIds($request->breed) : '';
@@ -514,7 +514,7 @@ class ProductController extends Controller
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
             $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-            $product->score = ($request->q) ? $scores[$product->id] : 0;
+            $product->score = ($request->q && count($scores) > 0) ? $scores[$product->id] : 0;
         }
 
         // Sort according to score if from a search query

@@ -785,7 +785,10 @@ $(document).ready(function(){
         e.preventDefault();
 
         if(!all_checked){
+            // Check all checkboxes
             $('#view-products-container input[type=checkbox]').prop('checked', true);
+
+            // Add border to all cards
             $('.card.hoverable').each(function() {
                 $(this).css({
                     "border": "solid 4px #42a5f5"
@@ -796,7 +799,10 @@ $(document).ready(function(){
             all_checked = true;
         }
         else{
+            // Uncheck all checkboxes
             $('#view-products-container input[type=checkbox]').prop('checked', false);
+
+            // Remove the added border to all cards
             $('.card.hoverable').each(function() {
                 $(this).css({
                     "border": "solid 4px transparent"
