@@ -11,15 +11,17 @@
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
 	<meta name="csrf-token" content="{{ csrf_token() }}">
-  	{{-- Google Analytics here --}}
+  
+  {{-- Google Analytics here --}}
+	
 	<!-- Global site tag (gtag.js) - Google Analytics -->
-	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-123737555-1"></script>
+	<script async src="https://www.googletagmanager.com/gtag/js?id=UA-128602581-1"></script>
 	<script>
-		window.dataLayer = window.dataLayer || [];
-		function gtag(){dataLayer.push(arguments);}
-		gtag('js', new Date());
+	  window.dataLayer = window.dataLayer || [];
+	  function gtag(){dataLayer.push(arguments);}
+	  gtag('js', new Date());
 
-		gtag('config', 'UA-123737555-1');
+	  gtag('config', 'UA-128602581-1');
 	</script>
 
 
