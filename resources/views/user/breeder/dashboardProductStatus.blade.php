@@ -221,7 +221,7 @@
                             <tr v-for="(customer, index) in productRequest.customers">
                                 <td>
                                     <span class="blue-text"
-                                        style="cursor:pointer;"
+                                        style="cursor:pointer; font-weight: 600;"
                                         @click.prevent="showCustomerInfo(customer.customerId, customer.customerName)"
                                     >
                                         @{{ customer.customerName }}
