@@ -193,27 +193,34 @@
             </table>
 
             {{-- Product Requests Modal --}}
-            <div id="product-requests-modal" class="modal modal-fixed-footer">
+            <div id="product-requests-modal"
+                 class="modal modal-fixed-footer"
+                 style="width: 75% !important;"
+            >
                 <div class="modal-content">
-                    <h4>@{{ productRequest.productName }} Product Requests</h4>
-                    <p>
-                        @{{ productRequest.type | capitalize }} - @{{ productRequest.breed }}
-                    </p>
+                    <p style="color: hsl(0, 0%, 29%);">Product Request for:</p>
+                    <span 
+                        style=" font-weight: 700;
+                                font-size: 7vh;"
+                    >
+                        @{{ productRequest.productName }}
+                    </span>
+                    <span>(@{{ productRequest.type | capitalize }} - @{{ productRequest.breed }})</span>
                     <table class="responsive-table bordered highlight">
                         <thead>
                             <tr>
-                                <th> Name </th>
-                                <th> Province </th>
-                                <th> Special Request </th>
-                                <th class="right-align"> Quantity </th>
-                                <th class="right-align" v-show="productRequest.type === 'semen'"> Date Needed </th>
-                                <th class="center-align"> Actions </th>
+                                <td style="color: hsl(0, 0%, 60%);"> Name </td>
+                                <td style="color: hsl(0, 0%, 60%);"> Province </td>
+                                <td style="color: hsl(0, 0%, 60%);"> Special Request </td>
+                                <td style="color: hsl(0, 0%, 60%);" class="right-align"> Quantity </td>
+                                <td style="color: hsl(0, 0%, 60%);" class="right-align" v-show="productRequest.type === 'semen'"> Date Needed </td>
+                                <td style="color: hsl(0, 0%, 60%);" class="center-align"> Actions </td>
                             </tr>
                         </thead>
                         <tbody>
                             <tr v-for="(customer, index) in productRequest.customers">
                                 <td>
-                                    <span class="teal-text"
+                                    <span class="blue-text"
                                         style="cursor:pointer;"
                                         @click.prevent="showCustomerInfo(customer.customerId, customer.customerName)"
                                     >
@@ -226,12 +233,12 @@
                                         @{{ customer.specialRequest }}
                                     </p>
                                 </td>
-                                <td class="right-align"> @{{ customer.requestQuantity }} </td>
-                                <td class="right-align" v-show="productRequest.type === 'semen'"> @{{ customer.dateNeeded }} </td>
+                                <td class="center-align"> @{{ customer.requestQuantity }} </td>
+                                <td class="center-align" v-show="productRequest.type === 'semen'"> @{{ customer.dateNeeded }} </td>
                                 <td class="center-align">
                                     <a href="#!"
-                                        class="btn tooltipped"
-                                        style="margin-bottom:1rem;"
+                                        class="btn tooltipped teal darken-3"
+                                        style="margin-bottom:1rem; width: 10vw;"
                                         data-position="top"
                                         data-delay="50"
                                         :data-tooltip="'Reserve product to ' + customer.customerName"
@@ -240,7 +247,8 @@
                                         Reserve
                                     </a> <br>
                                     <a v-bind:href="'{{ route('breeder.messages') }}/' + customer.userId"
-                                        class="btn tooltipped"
+                                        class="btn tooltipped teal darken-3"
+                                        style="width: 10vw;"
                                         data-position="top"
                                         data-delay="50"
                                         :data-tooltip="'Send message to ' + customer.customerName"
@@ -252,7 +260,10 @@
                         </tbody>
                     </table>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer"
+                     style="background: hsl(0, 0%, 97%);
+                            border: none !important;"
+                >
                     <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
                 </div>
             </div>
