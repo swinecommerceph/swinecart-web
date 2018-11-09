@@ -109,7 +109,7 @@
                                     </template>
 
                                     <template v-if="product.customer_name">
-                                        <a class="btn tooltipped"
+                                        <a class="btn tooltipped teal darken-3"
                                             :href="'{{ route('breeder.messages') }}/' + product.userid"
                                             :data-breeder-id="product.breeder_id"
                                             :data-customer-id="product.customer_id"
@@ -137,7 +137,7 @@
                         </td>
                         <td>
                             {{--  If product's status is requested --}}
-                            <a class="btn"
+                            <a class="btn teal darken-3"
                                 href="#"
                                 @click.prevent="getProductRequests(product.uuid, $event)"
                                 v-if="product.status == 'requested'"
@@ -147,7 +147,7 @@
 
                             {{-- If product's status is reserved --}}
                             <template v-if="product.status == 'reserved'">
-                                <a class="btn"
+                                <a class="btn teal darken-3"
                                     style="margin-bottom:1rem;"
                                     href="#"
                                     @click.prevent="setUpConfirmation(product.uuid,'delivery')"
@@ -165,7 +165,7 @@
 
                             {{-- If product's status is on_delivery --}}
                             <template v-if="product.status == 'on_delivery'">
-                                <a class="btn"
+                                <a class="btn teal darken-3"
                                     style="margin-bottom:1rem;"
                                     href="#"
                                     @click.prevent="setUpConfirmation(product.uuid,'sold')"
