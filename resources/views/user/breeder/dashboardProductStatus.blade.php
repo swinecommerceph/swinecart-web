@@ -138,6 +138,7 @@
                         <td>
                             {{--  If product's status is requested --}}
                             <a class="btn teal darken-3"
+                                style="width: 13vw;"
                                 href="#"
                                 @click.prevent="getProductRequests(product.uuid, $event)"
                                 v-if="product.status == 'requested'"
@@ -147,37 +148,45 @@
 
                             {{-- If product's status is reserved --}}
                             <template v-if="product.status == 'reserved'">
-                                <a class="btn teal darken-3"
-                                    style="margin-bottom:1rem;"
+                                <a class="btn teal darken-3 tooltipped"
+                                    data-position="right"
+                                    data-tooltip="Send for delivery"
+                                    style="margin-bottom:1rem; width: 13vw;"
                                     href="#"
                                     @click.prevent="setUpConfirmation(product.uuid,'delivery')"
                                 >
-                                    Send for Delivery
+                                    Send
                                 </a> <br>
-                                <a class="btn red accent-2"
-                                    style="margin-bottom:1rem;"
+                                <a class="btn red accent-2 tooltipped"
+                                    data-position="right"
+                                    data-tooltip="Cancel transaction"
+                                    style="margin-bottom:1rem; width: 13vw;"
                                     href="#"
                                     @click.prevent="setUpConfirmation(product.uuid,'cancel_transaction')"
                                 >
-                                    Cancel Transaction
+                                    Cancel
                                 </a>
                             </template>
 
                             {{-- If product's status is on_delivery --}}
                             <template v-if="product.status == 'on_delivery'">
-                                <a class="btn teal darken-3"
-                                    style="margin-bottom:1rem;"
+                                <a class="btn teal darken-3 tooltipped"
+                                    style="margin-bottom:1rem; width: 13vw;"
+                                    data-position="right"
+                                    data-tooltip="Confirm sold"
                                     href="#"
                                     @click.prevent="setUpConfirmation(product.uuid,'sold')"
                                 >
-                                    Confirm Sold
+                                    Confirm
                                 </a> <br>
-                                <a class="btn red accent-2"
-                                    style="margin-bottom:1rem;"
+                                <a class="btn red accent-2 tooltipped"
+                                    style="margin-bottom:1rem; width: 13vw;"
+                                    data-position="right"
+                                    data-tooltip="Cancel transaction"
                                     href="#"
                                     @click.prevent="setUpConfirmation(product.uuid,'cancel_transaction')"
                                 >
-                                    Cancel Transaction
+                                    Cancel
                                 </a>
                             </template>
 
