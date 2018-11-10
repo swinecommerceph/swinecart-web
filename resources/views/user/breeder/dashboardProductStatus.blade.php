@@ -280,14 +280,11 @@
             {{-- Reserve Product Confirmation Modal --}}
             <div id="reserve-product-confirmation-modal" class="modal">
                 <div class="modal-content">
-                    <h4>Reserve Product Confirmation</h4>
-                    <div>
-                        <div class="">
-                            Are you sure you want to reserve @{{ productRequest.productName }} to @{{ productReserve.customerName }}?
-                        </div>
-                    </div>
+                    <h5>Reserve <b>@{{ productRequest.productName }}</b> to @{{ productReserve.customerName }}?</h5>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer"
+                    style="background: hsl(0, 0%, 97%);"
+                >
                     <a class="modal-action waves-effect waves-green btn-flat reserve-product-buttons" @click.prevent="reserveToCustomer($event)">Yes</a>
                     <a class="modal-action modal-close waves-effect waves-green btn-flat reserve-product-buttons">Close</a>
                 </div>
