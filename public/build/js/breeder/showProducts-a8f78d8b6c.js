@@ -794,6 +794,7 @@ $(document).ready(function(){
                     "border": "solid 4px #42a5f5"
                 });
             });
+
             $('.select-all-button i').html('event_busy');
             $('.select-all-button').attr('data-tooltip', 'Unselect all Products');
             all_checked = true;

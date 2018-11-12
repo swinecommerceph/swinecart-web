@@ -310,28 +310,25 @@
             </div>
 
             {{-- Product Delivery Confirmation Modal --}}
-            <div id="product-delivery-confirmation-modal" class="modal">
+            <div id="product-delivery-confirmation-modal" class="modal"
+                 style="height: 80vh !important; overflow-y: hidden; max-height: 90%;">
                 <div class="modal-content">
-                    <h4>@{{ productInfoModal.productName }} Delivery Confirmation</h4>
+                    <h4>Deliver <b>@{{ productInfoModal.productName }}</b> to @{{ productInfoModal.customerName }}?</h4>
                     <div>
-                        <div class="">
-                            Are you sure this product is set for delivery to @{{ productInfoModal.customerName }}?
-                        </div>
                         <div class="row">
-                           <div class="col s10" style="display:inline-block;">
-                               <div class="left" style="display:inline;">
-                                   <br>
-                                   Product will be delivered to customer on or before
-                               </div>
+                            <div class="col s6" style="color: hsl(0, 0%, 29%);">
+                                <br>
+                                Product will be delivered on or before
+                            </div>
 
-                               <div class="col s3">
-                                   <custom-date-select v-model="productInfoModal.deliveryDate" @date-select="dateChange"> </custom-date-select>
-                               </div>
+                           <div class="col s3" style="color: #00705E;">
+                               <custom-date-select v-model="productInfoModal.deliveryDate" @date-select="dateChange"> </custom-date-select>
                            </div>
-                       </div>
+                        </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <br><br><br><br><br><br><br><br><br><br>
+                <div class="modal-footer" style="background: hsl(0, 0%, 97%);">
                     <a class="modal-action waves-effect waves-green btn-flat delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes</a>
                     <a class="modal-action modal-close waves-effect waves-green btn-flat delivery-product-buttons">Close</a>
                 </div>

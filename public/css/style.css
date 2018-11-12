@@ -1249,3 +1249,28 @@ label {
   font-weight: 700;
   border-radius: 5px;
 }
+
+/* Date Picker */
+.picker__date-display {
+  background-color: #00705E;
+}
+
+.picker__today {
+  color: blue;
+}
+
+.picker__close {
+  color: #00705E; 
+}
+
+.picker__day.picker__day--today {
+  color: blue;
+}
+
+.picker__day--selected, .picker__day--selected:hover, .picker--focused .picker__day--selected {
+  background-color: #00705E;
+}
+
+.picker__clear {
+  color: grey;
+}
