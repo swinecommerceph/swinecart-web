@@ -82,28 +82,6 @@
                 <li class="collection-item">Average Daily Gain: {{$product->adg}} g</li>
                 <li class="collection-item">Feed Conversion Ratio: {{$product->fcr}}</li>
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
-                <li id="stars-container" class="collection-item">
-                    Breeder Ratings
-                    <br><br>
-                    <span class="row">
-                        <i class="col s6">Delivery</i>
-                        <span class="col s6">
-                            <average-star-rating :rating="{{ $breederRatings['deliveryRating'] }}"> </average-star-rating>
-                        </span>
-                    </span>
-                    <span class="row">
-                        <i class="col s6">Transaction</i>
-                        <span class="col s6">
-                            <average-star-rating :rating="{{ $breederRatings['transactionRating'] }}"> </average-star-rating>
-                        </span>
-                    </span>
-                    <span class="row">
-                        <i class="col s6">Product Quality</i>
-                        <span class="col s6">
-                            <average-star-rating :rating="{{ $breederRatings['productQualityRating'] }}"> </average-star-rating>
-                        </span>
-                    </span>
-                </li>
             </ul>
         </div>
     </div>
