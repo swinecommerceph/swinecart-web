@@ -75,13 +75,6 @@
                         <div class="col">
                             {{ $product->name }}
                         </div>
-                        <div class="col right">
-                            {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
-                                <a href="#" class="right tooltipped add-to-cart"  data-position="left" data-delay="50" data-tooltip="Add to Swine Cart">
-                                    <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
-                                </a>
-                            {!! Form::close() !!}
-                        </div>
                     </h4>
                     <div class="row">
                         <div class="col">
