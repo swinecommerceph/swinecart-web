@@ -72,12 +72,12 @@
             <ul class="collection with-header">
                 <li class="collection-header">
                     <h4 class="row">
-                        <div class="col">
+                        <div class="col" style="color: hsl(0, 0%, 13%); font-weight: 700">
                             {{ $product->name }}
                         </div>
                     </h4>
                 </li>
-                <li class="collection-item">{{$product->type}} - {{$product->breed}}</li>
+                <li class="collection-item" style="font-weight: 700;">{{$product->type}} - {{$product->breed}}</li>
                 <li class="collection-item">Born on {{$product->birthdate}} ({{$product->age}} days old)</li>
                 <li class="collection-item">Average Daily Gain: {{$product->adg}} g</li>
                 <li class="collection-item">Feed Conversion Ratio: {{$product->fcr}}</li>
