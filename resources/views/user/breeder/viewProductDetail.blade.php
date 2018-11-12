@@ -76,12 +76,6 @@
                             {{ $product->name }}
                         </div>
                     </h4>
-                    <div class="row">
-                        <div class="col">
-                            {{ $product->breeder }} <br>
-                            {{ $product->farm_province }}
-                        </div>
-                    </div>
                 </li>
                 <li class="collection-item">{{$product->type}} - {{$product->breed}}</li>
                 <li class="collection-item">Born on {{$product->birthdate}} ({{$product->age}} days old)</li>
