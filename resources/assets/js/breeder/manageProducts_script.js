@@ -46,7 +46,7 @@ $(document).ready(function(){
             // Apply the border/s if checked, else remove the blue border
             if ($(this).is(':checked')) {
                 $(card_element).css({
-                    "border": "solid 4px #42a5f5"
+                    "border": "solid 4px #00705E"
                 });
             }   
             else {
@@ -68,7 +68,7 @@ $(document).ready(function(){
             // Add border to all cards
             $('.card.hoverable').each(function() {
                 $(this).css({
-                    "border": "solid 4px #42a5f5"
+                    "border": "solid 4px #00705E"
                 });
             });
 
