@@ -1274,3 +1274,9 @@ label {
 .picker__clear {
   color: grey;
 }
+
+/* Checkbox */
+[type="checkbox"].filled-in:checked+label:after {
+  border: 2px solid #00705E;
+  background-color: #00705E;
+}
