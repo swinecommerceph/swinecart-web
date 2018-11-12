@@ -291,16 +291,13 @@
             </div>
 
             {{-- Cancel Transaction Confirmation Modal --}}
-            <div id="cancel-transaction-confirmation-modal" class="modal">
+            <div id="cancel-transaction-confirmation-modal" class="modal" style="width: 60% !important;">
                 <div class="modal-content">
-                    <h4>Cancel Transaction Confirmation</h4>
+                    <h5>Are you sure you want to cancel transaction on product: <b>@{{ productInfoModal.productName }}</b> to @{{ productInfoModal.customerName }}?</h5>
                     <div>
                         <blockquote class="warning">
                             Once this action is done, it cannot be reverted.
                         </blockquote>
-                        <div class="">
-                            Are you sure you want to cancel transaction on @{{ productInfoModal.productName }} to @{{ productInfoModal.customerName }}?
-                        </div>
                     </div>
                 </div>
                 <div class="modal-footer">
