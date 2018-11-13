@@ -28,8 +28,8 @@ var config = {
     admin_url: '/admin',
     productImages_path: '/images/product',
     productVideos_path: '/videos/product',
-    pubsubWSServer: 'ws://' + window.hostUrl + '/pusher',
-    pubsubWSSServer: 'wss://' + window.hostUrl + '/pusher',
+    pubsubWSServer: 'ws://' + 'swinecart.cf' + '/pusher',
+    pubsubWSSServer: 'wss://' + 'swinecart.cf' + '/pusher',
     preloader_progress: $('#preloader-progress'),
     preloader_circular: $('#preloader-circular')
 
