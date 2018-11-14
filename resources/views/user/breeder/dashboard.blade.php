@@ -298,10 +298,10 @@
     <div class="row">
         {{-- Location --}}
         <div class="col s12">
-            <div class="card hoverable blue lighten-4">
+            <div class="card hoverable teal darken-3">
                 <div class="card-content center-align">
-                    <span class="card-title ">
-                        <a href="{{route('map.customers')}}" style="font-weight: 600;">Customer Mapping</a>
+                    <span class="card-title">
+                        <a href="{{route('map.customers')}}" style="font-weight: 600; color: #fafafa;">Customer Mapping</a>
                     </span>
                 </div>
             </div>
