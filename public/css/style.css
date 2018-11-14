@@ -1280,3 +1280,8 @@ label {
   border: 2px solid #00705E;
   background-color: #00705E;
 }
+
+/* Dropdown related */
+.dropdown-content li>span {
+  color: #00705E;
+}
