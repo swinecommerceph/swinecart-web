@@ -147,7 +147,6 @@ class ProductController extends Controller
      */
     public function breederViewProductDetail(Product $product)
     {
-        if($product->status == 'hidden') return back();
         $product->img_path = route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]);
         $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => Image::find($product->primary_img_id)->name]);
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
