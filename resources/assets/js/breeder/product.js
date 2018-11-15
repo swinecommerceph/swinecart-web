@@ -484,7 +484,7 @@ var product = {
                                     '<span class="card-title"></span>'+
                                 '</div>'+
                                 '<div class="card-action">'+
-                                    '<a href="#!" class="set-display-photo btn-flat" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
+                                    '<a href="#!" style="padding: 1px !important; text-align: center;" class="set-display-photo btn-flat" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
                                 '</div>'+
                             '</div>'+
                         '</div>';
