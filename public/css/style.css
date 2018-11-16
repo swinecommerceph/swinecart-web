@@ -362,16 +362,29 @@ body {
   overflow-x: hidden;
 }
 
-.tabs .active{
+/*.tabs .active{
   color: #b71c1c;
+}*/
+
+
+
+.tabs .tab a.active {
+  color: #00705E;
+  font-weight: 700;
 }
 
-.tabs .tab a{
+.tabs .tab a:hover {
+  color: hsl(0, 0%, 13%);
+  font-weight: 700;
+}
+
+.tabs .tab a {
 	font-size: 1rem;
+  color: hsl(0, 0%, 13%);
 }
 
 .indicator {
-  background-color: green !important;
+  background-color: #00705E !important;
 }
 
 /* Blockquote styles */
