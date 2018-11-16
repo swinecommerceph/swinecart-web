@@ -1285,3 +1285,9 @@ label {
 .dropdown-content li>span {
   color: #00705E;
 }
+
+/* Radio Button */
+[type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:before, [type="radio"].with-gap:checked+label:after {
+    border: 2px solid #00705E;
+    background-color: #00705E;
+}
