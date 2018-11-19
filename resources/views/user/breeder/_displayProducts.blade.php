@@ -102,7 +102,7 @@
                                 </a>
                             @endif
                             {{-- Delete Button --}}
-                            <a href="#!" class="tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete {{$product->name}}" data-product-id="{{$product->id}}">
+                            <a href="#!" class="tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete '{{$product->name}}'" data-product-id="{{$product->id}}">
                                 <i class="material-icons grey-text text-darken-1" style="font-size:30px">delete</i>
                             </a>
                         </div>
