@@ -163,7 +163,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action" style="display:none;"> Add </button>
+		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action teal darken-3" style="display:none;"> Add </button>
 	</div>
 	{!! Form::close() !!}
 </div>
