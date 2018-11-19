@@ -162,7 +162,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal-footer">
+	<div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
 		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action teal darken-3" style="display:none;"> Add </button>
 	</div>
 	{!! Form::close() !!}
