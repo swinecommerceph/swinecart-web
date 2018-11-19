@@ -591,7 +591,7 @@ var product = {
                         if(status == 'display'){
                             update_button.removeClass('display-product-button');
                             update_button.addClass('hide-product-button');
-                            update_button.attr('data-tooltip','Hide '+product_name);
+                            update_button.attr('data-tooltip','Hide '+ "'" + product_name + "'");
                             update_button.tooltip({delay:50});
                             update_button.find('.material-icons').html('visibility_off');
                             update_button.parents('.card').find('.card-image img').removeClass('hidden');
@@ -599,7 +599,7 @@ var product = {
                         else{
                             update_button.removeClass('hide-product-button');
                             update_button.addClass('display-product-button');
-                            update_button.attr('data-tooltip','Display '+product_name);
+                            update_button.attr('data-tooltip','Display '+ "'" + product_name + "'");
                             update_button.tooltip({delay:50});
                             update_button.find('.material-icons').html('visibility');
                             update_button.parents('.card').find('.card-image img').addClass('hidden');
