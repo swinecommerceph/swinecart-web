@@ -87,7 +87,7 @@
                         </div>
                         <div class="col right">
                             {{-- Edit Button --}}
-                            <a href="#!" class="tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit {{$product->name}}" data-product-id="{{$product->id}}">
+                            <a href="#!" class="tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit '{{$product->name}}'" data-product-id="{{$product->id}}">
                                 <i class="material-icons teal-text text-darken-3" style="font-size:30px">edit</i>
                             </a>
                             @if(!empty($filters['hidden']) || $product->status == 'hidden')
