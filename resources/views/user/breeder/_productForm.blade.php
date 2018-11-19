@@ -233,7 +233,7 @@
 	    </div>
 	</div>
 
-	<div class="modal-footer">
+	<div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
 		<div class="from-add-process">
 			{!! Form::open(['route' => 'products.display', 'class' => 's12', 'id' => 'display-product-form']) !!}
 				<button id="display-button" class="btn waves-effect waves-light modal-action teal darken-3"> Display </button>
@@ -404,7 +404,7 @@
 			</div>
 		</div>
 	</div>
-	<div class="modal-footer">
+	<div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
 		<div class="from-add-process" style="display:none;">
 			<button id="add-media-button" class="btn waves-effect waves-light modal-action"> Add Media </button>
 		</div>
@@ -451,8 +451,8 @@
 	    </div>
 	</div>
 
-	<div class="modal-footer">
-		<button class="btn waves-effect waves-light modal-action update-button"> Update Product </button>
+	<div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
+		<button class="btn waves-effect waves-light modal-action update-button teal darken-3"> Update Product </button>
 		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
