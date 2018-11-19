@@ -417,7 +417,7 @@
 </div>
 
 {{-- Edit Media Modal --}}
-<div id="edit-media-modal" class="modal modal-fixed-footer">
+<div id="edit-media-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 80vh !important; width: 60vw !important;">
 	<div class="modal-content">
 		<h4>Edit Media </h4>
 		<div class="row">
