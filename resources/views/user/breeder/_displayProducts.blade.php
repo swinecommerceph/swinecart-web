@@ -92,7 +92,7 @@
                             </a>
                             @if(!empty($filters['hidden']) || $product->status == 'hidden')
                                 {{-- Display Button --}}
-                                <a href="#!" class="tooltipped display-product-button" data-position="top" data-delay="50" data-tooltip="Display {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
+                                <a href="#!" class="tooltipped display-product-button" data-position="top" data-delay="50" data-tooltip="Display '{{$product->name}}'" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
                                     <i class="material-icons teal-text text-darken-3" style="font-size:30px">visibility</i>
                                 </a>
                             @elseif(!empty($filters['displayed']) || $product->status == 'displayed')
