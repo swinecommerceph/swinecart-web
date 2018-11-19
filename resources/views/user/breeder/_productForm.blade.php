@@ -137,7 +137,7 @@
 					<br>
 					{{-- Other Details --}}
 					<div class="col s12">
-						<a href="#" id="add-other-details" class="left tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-lighten-2">add_circle</i></a>
+						<a href="#" id="add-other-details" class="left tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-darken-3">add_circle</i></a>
 					</div>
 
 					<div class="other-details-container">
