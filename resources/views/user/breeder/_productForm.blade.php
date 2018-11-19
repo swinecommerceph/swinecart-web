@@ -181,7 +181,7 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button id="next-button" type="submit" class="btn waves-effect waves-light modal-action"> Product Summary </button>
+		<button id="next-button" type="submit" class="btn waves-effect waves-light modal-action teal darken-3"> Product Summary </button>
 		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
@@ -236,12 +236,12 @@
 	<div class="modal-footer">
 		<div class="from-add-process">
 			{!! Form::open(['route' => 'products.display', 'class' => 's12', 'id' => 'display-product-form']) !!}
-				<button id="display-button" class="btn waves-effect waves-light modal-action"> Display </button>
+				<button id="display-button" class="btn waves-effect waves-light modal-action teal darken-3"> Display </button>
 			{!! Form::close() !!}
-			<button id="save-draft-button" class="btn waves-effect waves-light modal-action"> Save as Draft </button>
+			<button id="save-draft-button" class="btn waves-effect waves-light modal-action teal darken-3"> Save as Draft </button>
 		</div>
 		<div class="from-edit-process">
-			<button id="save-button" class="btn waves-effect waves-light modal-action"> Save </button>
+			<button id="save-button" class="btn waves-effect waves-light modal-action teal darken-3"> Save </button>
 		</div>
 		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
@@ -409,8 +409,8 @@
 			<button id="add-media-button" class="btn waves-effect waves-light modal-action"> Add Media </button>
 		</div>
 		<div class="from-edit-process">
-			<button class="btn waves-effect waves-light modal-action update-button"> Update Product </button>
-			<button id="edit-media-button" class="btn waves-effect waves-light modal-action"> Edit Media </button>
+			<button class="btn waves-effect waves-light modal-action update-button teal darken-3"> Update Product </button>
+			<button id="edit-media-button" class="btn waves-effect waves-light modal-action teal darken-3"> Edit Media </button>
 		</div>
 	</div>
 	{!! Form::close() !!}
