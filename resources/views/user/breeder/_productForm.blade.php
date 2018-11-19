@@ -187,7 +187,7 @@
 </div>
 
 {{-- Product Summary Modal --}}
-<div id="product-summary-modal" class="modal modal-fixed-footer">
+<div id="product-summary-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 80vh !important; width: 60vw !important;">
 	<div class="modal-content">
 		<h4>Product Summary</h4>
 		<div class="row">
