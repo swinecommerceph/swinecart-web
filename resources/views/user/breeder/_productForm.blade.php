@@ -242,8 +242,8 @@
 		</div>
 		<div class="from-edit-process">
 			<button id="save-button" class="btn waves-effect waves-light modal-action teal darken-3"> Save </button>
+			<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 		</div>
-		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
 
