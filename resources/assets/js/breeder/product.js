@@ -453,7 +453,7 @@ var product = {
                 var videos = data.videoCollection;
 
                 // General Info
-                var items = '<li class="collection-item">'+data.type+' - '+data.breed+'</li>'+
+                var items = '<li class="collection-item" style="font-weight: 700;">'+data.type+' - '+data.breed+'</li>'+
     				'<li class="collection-item">Born on: '+data.birthdate+'</li>'+
     				'<li class="collection-item">Average Daily Gain: '+data.adg+' g</li>'+
     				'<li class="collection-item">Feed Conversion Ratio: '+data.fcr+'</li>' +
