@@ -193,8 +193,8 @@
 		<div class="row">
 			<ul id="product-summary-collection" class="collection with-header">
 				<li class="collection-header">
-					<h5 style="font-weight: 700;">Product Name</h5>
-					<h6>Province</h6>
+					<h5 style="font-weight: 700;"></h5>
+					<h6></h6>
 				</li>
 				<div></div>
 			</ul>

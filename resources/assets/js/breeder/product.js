@@ -454,7 +454,7 @@ var product = {
 
                 // General Info
                 var items = '<li class="collection-item">'+data.type+' - '+data.breed+'</li>'+
-    				'<li class="collection-item">Born on '+data.birthdate+'</li>'+
+    				'<li class="collection-item">Born on: '+data.birthdate+'</li>'+
     				'<li class="collection-item">Average Daily Gain: '+data.adg+' g</li>'+
     				'<li class="collection-item">Feed Conversion Ratio: '+data.fcr+'</li>' +
                     '<li class="collection-item">Backfat Thickness: '+data.backfat_thickness+' mm</li>';
@@ -500,7 +500,7 @@ var product = {
                 });
 
                 $('#product-summary-collection h5').html(data.name);
-                $('#product-summary-collection h6').html(data.farm_province);
+                $('#product-summary-collection h6').html("Farm Address: " + data.farm_province);
                 $('#product-summary-collection div').html(items);
                 $('#other-details-summary .card-content div').html(other_details_list);
                 $('#images-summary .card-content .row').html(image_list);
