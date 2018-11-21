@@ -193,15 +193,15 @@
 		<div class="row">
 			<ul id="product-summary-collection" class="collection with-header">
 				<li class="collection-header">
-					<h5 style="font-weight: 700;"></h5>
-					<h6></h6>
+					<h5 style="font-weight: 700;">Product Name</h5>
+					<h6>Province</h6>
 				</li>
 				<div></div>
 			</ul>
 		</div>
 		<div class="row">
 	        <div class="col s12">
-	            <div id="other-details-summary" class="card">
+	            <div id="other-details-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
 	                <div class="card-content black-text">
 	                    <span class="card-title">Other Details</span>
 						<div></div>
@@ -211,7 +211,7 @@
 	    </div>
 		<div class="row">
 	        <div class="col s12">
-	            <div id="images-summary" class="card">
+	            <div id="images-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
 	                <div class="card-content black-text">
 	                    <span class="card-title">Images</span>
 						{!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
@@ -223,7 +223,7 @@
 	    </div>
 		<div class="row">
 	        <div class="col s12">
-	            <div id="videos-summary" class="card">
+	            <div id="videos-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
 	                <div class="card-content black-text">
 	                    <span class="card-title">Videos</span>
 						<div class="row"></div>
