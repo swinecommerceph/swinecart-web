@@ -236,7 +236,7 @@
 	<div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
 		<div class="from-add-process">
 			{!! Form::open(['route' => 'products.display', 'class' => 's12', 'id' => 'display-product-form']) !!}
-				<button id="display-button" class="btn waves-effect waves-light modal-action teal darken-3"> Display</button>
+				<button id="display-button" class="btn waves-effect waves-light modal-action teal darken-3"> Display Product</button>
 				<button id="save-draft-button" class="btn waves-effect waves-light modal-action teal darken-3"> Save as Draft </button>
 			{!! Form::close() !!}
 		</div>
