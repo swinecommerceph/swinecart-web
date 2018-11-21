@@ -474,7 +474,7 @@ var product = {
                     // Change html value of set-display-photo anchor tag if image is the display photo
                     if(element.id == data.primary_img_id){
                         product.current_display_photo = element.id;
-                        anchor_tag_html = '<i class="material-icons left teal-text">photo</i> Display Photo';
+                        anchor_tag_html = '<i class="material-icons teal-text">photo</i> Display Photo';
                     }
 
                     image_list += '<div class="col s12 m6">'+
