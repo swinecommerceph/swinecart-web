@@ -431,7 +431,7 @@
 	        <div class="col s12">
 	            <div id="edit-images-summary" class="card">
 	                <div class="card-content black-text">
-	                    <span class="card-title">Images</span>
+	                    <span class="card-title">List of Images</span>
 						{!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
 						<div class="row"></div>
 						{!! Form::close() !!}
@@ -443,7 +443,7 @@
 	        <div class="col s12">
 	            <div id="edit-videos-summary" class="card">
 	                <div class="card-content black-text">
-	                    <span class="card-title">Videos</span>
+	                    <span class="card-title">List of Videos</span>
 						<div class="row"></div>
 	                </div>
 	            </div>
