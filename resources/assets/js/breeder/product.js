@@ -344,23 +344,31 @@ var product = {
 
                     // Set-up Images in Edit Media Modal
                     images.forEach(function(element){
-                        var anchor_tag_html = 'Set-gp';
+                        var anchor_tag_html = 'Set';
+                        var delete_anchor_tag_html = 'Delete';
 
                         // Change html value of set-display-photo anchor tag if image is the display photo
                         if(element.id == data.primary_img_id){
                             product.current_display_photo = element.id;
-                            anchor_tag_html = 'Displayed Photo-gp';
+                            anchor_tag_html = 'Displayed';
                         }
 
-                        image_list += '<div class="col s12 m6">'+
-                                '<div class="card">'+
+                        image_list +=
+                            '<div class="col s12 m6">' +
+                                '<div class="card">' +
                                     '<div class="card-image">'+
                                         '<img src="'+config.productImages_path+'/'+element.name+'">'+
-                                        '<span class="card-title"></span>'+
                                     '</div>'+
                                     '<div class="card-action">'+
-                                        '<a href="#!" class="set-display-photo btn-flat" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>'+
-                                        '<a href="#!" class="delete-image btn-flat" data-media-id="'+element.id+'">Delete-gp</a>'+
+                                        '<div class=row>' +
+                                            '<div class="col s4 m6 l3">' +
+                                                '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important;" class="set-display-photo btn blue lighten-1" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>' +
+                                            '</div>'+
+                                            '<div class="col s3"></div>' +
+                                            '<div class="col s4 m6 l3">' +
+                                                '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-4" data-media-id="'+element.id+'">' + delete_anchor_tag_html +'</a>'+
+                                            '</div>'+
+                                        '</div>' +
                                     '</div>'+
                                 '</div>'+
                             '</div>';
