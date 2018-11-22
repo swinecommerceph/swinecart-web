@@ -1304,3 +1304,8 @@ label {
     border: 2px solid #00705E;
     background-color: #00705E;
 }
+
+/* Buttons */
+/*.btn {
+    text-transform: none !important;
+}*/
