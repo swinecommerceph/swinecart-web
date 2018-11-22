@@ -255,7 +255,7 @@ var product = {
 
                 $(parent_form).append('<input name="productId" type="hidden" value="'+data.id+'">');
                 $('#edit-media-dropzone').append(hidden_inputs);
-                $('#edit-media-modal h4').html('Edit Media of '+data.name);
+                $('#edit-media-modal h4').html('Edit Media of '+ "'" + data.name + "'");
 
                 // General input initialization
                 parent_form.find("input[name='edit-name']").val(data.name);
