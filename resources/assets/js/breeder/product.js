@@ -356,18 +356,18 @@ var product = {
 
                         image_list +=
                             '<div class="col s12 m6">' +
-                                '<div class="card" style="box-shadow: 0px 0px; border: 1px solid #DFDFDF; !important">' +
-                                    '<div class="card-image grey lighten-5">'+
+                                '<div class="card hoverable">' +
+                                    '<div class="card-image white">'+
                                         '<img src="'+config.productImages_path+'/'+element.name+'">'+
                                     '</div>'+
-                                    '<div class="card-action grey lighten-4" style="border-top: none !important;">'+
+                                    '<div class="card-action grey lighten-5" style="border-top: none !important;">'+
                                         '<div class=row>' +
                                             '<div class="col s4 m6 l3">' +
                                                 '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important;" class="set-display-photo btn blue lighten-1" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>' +
                                             '</div>'+
                                             '<div class="col s3"></div>' +
                                             '<div class="col s4 m6 l3">' +
-                                                '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-4" data-media-id="'+element.id+'">' + delete_anchor_tag_html +'</a>'+
+                                                '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-5" data-media-id="'+element.id+'">' + delete_anchor_tag_html +'</a>'+
                                             '</div>'+
                                         '</div>' +
                                     '</div>'+
