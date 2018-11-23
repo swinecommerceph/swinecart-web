@@ -378,7 +378,6 @@ var product = {
                     // Set-up Videos in Edit Media Modal
                     var videos_length = videos.length;
                     if (videos_length == 0) {
-                        console.log("VIDEOS EMPTY NIGGA");
                         $('#edit-videos-summary .card-content .row').html(empty_video_prompt);
                     }
                     else {
