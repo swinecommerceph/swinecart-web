@@ -247,6 +247,7 @@ var product = {
                 var videos = data.videoCollection;
                 var image_list = '';
                 var video_list = '';
+                var empty_video_prompt = '<p class="grey-text">(No uploaded videos)</p>';
                 var hidden_inputs =
                     '<input name="productId" type="hidden" value="'+data.id+'">'+
                     '<input name="name" type="hidden" value="'+data.name+'">'+
@@ -375,24 +376,32 @@ var product = {
                     });
 
                     // Set-up Videos in Edit Media Modal
-                    videos.forEach(function(element){
-                        video_list += '<div class="col s12 m6">'+
-                                '<div class="card">'+
-                                    '<div class="card-image">'+
-                                        '<video class="responsive-video" controls>'+
-                                            '<source src="'+config.productVideos_path+'/'+element.name+'" type="video/mp4">'+
-                                        '</video>'+
+                    var videos_length = videos.length;
+                    if (videos_length == 0) {
+                        console.log("VIDEOS EMPTY NIGGA");
+                        $('#edit-videos-summary .card-content .row').html(empty_video_prompt);
+                    }
+                    else {
+                        videos.forEach(function(element){
+                            video_list += '<div class="col s12 m6">'+
+                                    '<div class="card">'+
+                                        '<div class="card-image">'+
+                                            '<video class="responsive-video" controls>'+
+                                                '<source src="'+config.productVideos_path+'/'+element.name+'" type="video/mp4">'+
+                                            '</video>'+
+                                        '</div>'+
+                                        '<div class="card-action">'+
+                                            '<a></a>'+
+                                            '<a href="#!" class="delete-video right" data-media-id="'+element.id+'">Delete</a>'+
+                                        '</div>'+
                                     '</div>'+
-                                    '<div class="card-action">'+
-                                        '<a></a>'+
-                                        '<a href="#!" class="delete-video right" data-media-id="'+element.id+'">Delete</a>'+
-                                    '</div>'+
-                                '</div>'+
-                            '</div>';
-                    });
+                                '</div>';
+                        });
 
-                    $('#edit-images-summary .card-content .row').html(image_list);
-                    $('#edit-videos-summary .card-content .row').html(video_list);
+                        $('#edit-images-summary .card-content .row').html(image_list);
+                        $('#edit-videos-summary .card-content .row').html(video_list);
+                    }
+                    
                 }
 
             },
