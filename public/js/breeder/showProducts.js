@@ -375,6 +375,8 @@ var product = {
                             '</div>';
                     });
 
+                    $('#edit-images-summary .card-content .row').html(image_list);
+
                     // Set-up Videos in Edit Media Modal
                     var videos_length = videos.length;
                     if (videos_length == 0) {
@@ -397,12 +399,9 @@ var product = {
                                 '</div>';
                         });
 
-                        $('#edit-images-summary .card-content .row').html(image_list);
                         $('#edit-videos-summary .card-content .row').html(video_list);
-                    }
-                    
+                    }   
                 }
-
             },
             error: function(message){
                 console.log(message['responseText']);
