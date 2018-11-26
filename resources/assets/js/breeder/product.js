@@ -488,11 +488,13 @@ var product = {
                 images.forEach(function(element){
                     var anchor_tag_html = 'Set';
                     var delete_anchor_tag_html = 'Delete';
+                    var cursor_none_prop = '"';
 
                     // Change html value of set-display-photo anchor tag if image is the display photo
                     if(element.id == data.primary_img_id){
                         product.current_display_photo = element.id;
                         anchor_tag_html = 'Displayed';
+                        cursor_none_prop = 'cursor: none;"';
                     }
 
                     image_list += 
@@ -504,7 +506,7 @@ var product = {
                                 '<div class="card-action">'+
                                     '<div class=row>' +
                                         '<div class="col s4 m6 l3">' +
-                                            '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important;" class="set-display-photo btn blue lighten-1" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>' +
+                                            '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important; ' + cursor_none_prop + 'class="set-display-photo btn blue lighten-1" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>' +
                                         '</div>'+
                                         '<div class="col s3"></div>' +
                                         '<div class="col s4 m6 l3">' +
