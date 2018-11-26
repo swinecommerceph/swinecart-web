@@ -211,7 +211,7 @@
 	    </div>
 		<div class="row">
 	        <div class="col s12">
-	            <div id="images-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
+	            <div id="images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
 	                <div class="card-content black-text">
 	                    <span class="card-title">Images</span>
 						{!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
