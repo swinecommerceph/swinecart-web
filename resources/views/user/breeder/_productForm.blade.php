@@ -221,6 +221,7 @@
 	            </div>
 	        </div>
 	    </div>
+	  <hr style="border-top: #ccc;">  
 		<div class="row">
 	        <div class="col s12">
 	            <div id="videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
