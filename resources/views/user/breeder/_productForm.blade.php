@@ -225,7 +225,7 @@
 	        <div class="col s12">
 	            <div id="videos-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
 	                <div class="card-content black-text">
-	                    <span class="card-title">Videos</span>
+	                    <span class="card-title">List of Videos</span>
 						<div class="row"></div>
 	                </div>
 	            </div>
