@@ -393,9 +393,9 @@ var product = {
                                                 '<source src="'+config.productVideos_path+'/'+element.name+'" type="video/mp4">'+
                                             '</video>'+
                                         '</div>'+
-                                        '<div class="card-action">'+
+                                        '<div class="card-action grey lighten-5" style="border-top: none !important;">'+
                                             '<a></a>'+
-                                            '<a href="#!" class="delete-video right" data-media-id="'+element.id+'">Delete</a>'+
+                                            '<a href="#!" style="font-weight: 700; float: right !important;" class="delete-video grey-text text-darken-2 grey lighten-5" data-media-id="'+element.id+'">Delete</a>'+
                                         '</div>'+
                                     '</div>'+
                                 '</div>';
