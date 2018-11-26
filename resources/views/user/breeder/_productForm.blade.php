@@ -213,7 +213,7 @@
 	        <div class="col s12">
 	            <div id="images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
 	                <div class="card-content black-text">
-	                    <span class="card-title">Images</span>
+	                    <span class="card-title">List of Images</span>
 						{!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
 						<div class="row"></div>
 						{!! Form::close() !!}
