@@ -503,14 +503,14 @@ var product = {
                                 '<div class="card-image">'+
                                     '<img src="'+config.productImages_path+'/'+element.name+'">'+
                                 '</div>'+
-                                '<div class="card-action">'+
+                                '<div class="card-action grey lighten-5" style="border-top: none !important;">'+
                                     '<div class=row>' +
                                         '<div class="col s4 m6 l3">' +
                                             '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important; ' + cursor_none_prop + 'class="set-display-photo btn blue lighten-1" data-product-id="'+data.id+'" data-img-id="'+element.id+'">'+ anchor_tag_html +'</a>' +
                                         '</div>'+
                                         '<div class="col s3"></div>' +
                                         '<div class="col s4 m6 l3">' +
-                                            '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-4" data-media-id="'+element.id+'">' + delete_anchor_tag_html +'</a>'+
+                                            '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-5" data-media-id="'+element.id+'">' + delete_anchor_tag_html +'</a>'+
                                         '</div>'+
                                     '</div>' +
                                 '</div>'+
