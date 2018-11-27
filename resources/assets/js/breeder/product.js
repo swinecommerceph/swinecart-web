@@ -387,7 +387,7 @@ var product = {
                     else {
                         videos.forEach(function(element){
                             video_list += '<div class="col s12 m6">'+
-                                    '<div class="card">'+
+                                    '<div class="card hoverable">'+
                                         '<div class="card-image">'+
                                             '<video class="responsive-video" controls>'+
                                                 '<source src="'+config.productVideos_path+'/'+element.name+'" type="video/mp4">'+
@@ -499,7 +499,7 @@ var product = {
 
                     image_list += 
                         '<div class="col s12 m6">' +
-                            '<div class="card">' +
+                            '<div class="card hoverable">' +
                                 '<div class="card-image">'+
                                     '<img src="'+config.productImages_path+'/'+element.name+'">'+
                                 '</div>'+
@@ -521,7 +521,7 @@ var product = {
                 // Videos
                 videos.forEach(function(element){
                     video_list += '<div class="col s12 m6">'+
-                            '<video class="responsive-video" controls>'+
+                            '<video class="responsive-video hoverable" controls>'+
                                 '<source src="'+config.productVideos_path+'/'+element.name+'" type="video/mp4">'+
                             '</video>'+
                         '</div>';
