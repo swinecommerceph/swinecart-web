@@ -110,7 +110,12 @@
                 </div>
                 <div class="card-reveal">
                     <div class="row">
-                        <span class="card-title ellipses" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}<i class="material-icons right">close</i></span>
+                        <div class="col s10">
+                            <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}</span>
+                        </div>
+                        <div class="col s1">
+                            <span><i class="card-title material-icons right">close</i></span>
+                        </div>
                     </div>
                     <br>
                     <div class="row">
