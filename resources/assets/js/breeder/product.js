@@ -102,7 +102,7 @@ var product = {
                 Materialize.toast('Product added!', 2500, 'green lighten-1');
 
                 $('#media-dropzone').append(hidden_inputs);
-                $('#add-media-modal h4').append(' to '+data.name);
+                $('#add-media-modal h4').append(' to '+ "'" + data.name + "'");
                 $('.add-product-button').attr('href','#add-media-modal');
                 $('#overlay-preloader-circular').remove();
                 $('#add-product-modal').modal('close');
