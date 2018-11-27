@@ -79,7 +79,7 @@
                         <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span>
                     </p>
                 </div>
-                <div class="card-action" style="background: hsl(0, 0%, 95%);">
+                <div class="card-action" style="background: hsl(0, 0%, 95%); border-top: none !important;">
                     <div class="row">
                         <div class="col left">
                             <input type="checkbox" id="check-{{$productNumber}}" data-product-id="{{$product->id}}" class="filled-in single-checkbox"/>
