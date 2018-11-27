@@ -1188,7 +1188,14 @@ $(document).ready(function(){
                 cache: false,
                 data: data_values,
                 success: function(data){
-                    card_container.remove();
+                    
+                    card_container.remove(); // remove the deleted card
+                    
+                    // added an AJAX prompt when video list is empty
+                    if ($('.delete-video').length == 0) {
+                        var empty_video_prompt = '<p class="grey-text">(No uploaded videos)</p>';
+                        $('#edit-videos-summary .card-content .row').html(empty_video_prompt);
+                    }
                 },
                 error: function(message){
                     console.log(message['responseText']);
