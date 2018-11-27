@@ -73,8 +73,17 @@
                     @endif
                 </div>
                 <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4 truncate "  style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}<i class="material-icons right">more_vert</i></span>
+                    <div class="row">
+                        <div class="col s10">
+                             <span class="card-title activator grey-text text-darken-4 truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}</span>
+                        </div>
+                        <div class="col s1">
+                            <span><i class="card-title material-icons right" style="cursor: pointer;">more_vert</i></span>
+                        </div>
+                    </div>
+                   
                     <p>
+
                         <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} - {{$product->breed}}</span> <br>
                         <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span>
                     </p>
