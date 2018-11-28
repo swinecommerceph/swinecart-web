@@ -189,7 +189,14 @@
 
                     {{-- View All Info--}}
                     <div class="card-reveal">
-                        <span class="card-title" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}<i class="material-icons right">close</i></span>
+                        <div class="row">
+                            <div class="col s10">
+                                <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}</span>        
+                            </div>
+                            <div class="col s1">
+                              <span><i class="material-icons right" style="cursor: pointer;">close</i></span>  
+                            </div>
+                        </div>
                         <br>
                         <table class="col s10">
                             <thead> </thead>
