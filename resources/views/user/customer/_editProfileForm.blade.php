@@ -271,7 +271,7 @@
 
 				<div class="row">
 					<div class="col s4 offset-s4">
-						<a href="#" id="change-password-button" class="btn btn-medium waves-effect waves-light right">
+						<a href="#" style="width: 17vw;" id="change-password-button" class="btn btn-medium waves-effect waves-light right">
 							Change Password
 						</a>
 					</div>
