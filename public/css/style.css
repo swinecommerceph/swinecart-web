@@ -248,9 +248,13 @@ body {
 
  /* Pagination styles */
 .pagination .active span{
-	color: #009688;
+	color: white;
 	font-size:1.2rem;
 	padding: 0 10px;
+}
+
+.pagination li.active {
+    background-color: #3782D6;
 }
 
 /* Fixed Action Button (Back to top) Style */
