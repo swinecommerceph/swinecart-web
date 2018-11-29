@@ -156,7 +156,7 @@
                   <div class="card hoverable">
                     <div class="card-image">
                         <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}">
-                            <img style="width: 25vw;" src="{{ $product->img_path }}">
+                            <img style="width: 23vw;" src="{{ $product->img_path }}">
                         </a>
                     </div>
                     <div class="card-content" style="background: hsl(0, 0%, 97%);">
