@@ -698,6 +698,10 @@ var vm = new Vue({
 
         var self = this;
 
+        // Determine if connection to websocket server must
+        // be secure depending on the protocol
+        var pubsubServer = (location.protocol === 'https:') ? config.pubsubWSSServer : config.pubsubWSServer;
+
         // Set-up configuration and subscribe to a topic in the pubsub server
         var onConnectCallback = function(session){
 
@@ -715,10 +719,11 @@ var vm = new Vue({
                         break;
                     case 'sc-onDelivery':
                         // Update status
-                        var index = self.searchProduct(data.item_id);
+                        //var index = self.searchProduct(data.item_id);
 
                         self.products[index].status = 'on_delivery';
                         self.products[index].status_transactions.on_delivery = data.on_delivery;
+                        console.log('here');
                         self.products[index].delivery_date = data.delivery_date;
 
                         break;
@@ -772,7 +777,7 @@ var vm = new Vue({
         };
 
         var conn = new ab.connect(
-            config.pubsubWSServer,
+            pubsubServer,
             onConnectCallback,
             onHangupCallback,
             {
@@ -783,3 +788,5 @@ var vm = new Vue({
         );
     }
 });
+
+//# sourceMappingURL=all.js.map

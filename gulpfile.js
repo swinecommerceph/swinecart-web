@@ -34,6 +34,9 @@ elixir(function(mix) {
             'customer/customer_custom.js'
         ], 'public/js/customer/custom.js')
         .scripts([
+            'customer/swinecartPage.js'
+        ], 'public/js/customer/swinecartPage.js')
+        .scripts([
             'customer/createProfile_script.js',
             'validation/formValidationMethods.js',
             'validation/customer/createProfile_validation.js'
