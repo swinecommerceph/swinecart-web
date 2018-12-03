@@ -720,7 +720,7 @@ var vm = new Vue({
                     case 'sc-onDelivery':
                         // Update status
                         var index = self.searchProduct(data.item_id);
-    
+
                         self.products[index].status = 'on_delivery';
                         self.products[index].status_transactions.on_delivery = data.on_delivery;
                         self.products[index].delivery_date = data.delivery_date;
