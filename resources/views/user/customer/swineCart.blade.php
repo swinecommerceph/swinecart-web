@@ -452,7 +452,7 @@
 
                                     {{-- Show expected date to be delivered if product is already On Delivery --}}
                                     <span class="col s12 truncate"
-                                        v-if="product.status === 'on_delivery'"
+                                        v-1if="product.status === 'on_delivery'"
                                         style="font-weight: 700; font-size: 2vh;"
                                     >
                                         Expected to arrive on @{{ product.delivery_date }}
@@ -815,6 +815,7 @@
     <script type="text/javascript">
         // Variables
         var rawProducts = {!! $products !!};
+        console.log(rawProducts);
     </script>
     <script src="{{ elixir('/js/customer/swinecartPage.js') }}"></script>
 @endsection

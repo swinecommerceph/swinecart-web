@@ -723,7 +723,13 @@ var vm = new Vue({
 
                         self.products[index].status = 'on_delivery';
                         self.products[index].status_transactions.on_delivery = data.on_delivery;
-                        self.products[index].delivery_date = data.delivery_date;
+
+                        /* 
+                            format the date to an abbreviated month so
+                            the product cards will not overflow when the
+                            size increase
+                        */
+                        self.products[index].delivery_date = moment(data.delivery_date).format("MMM D, YYYY");
 
                         break;
                     case 'sc-sold':
