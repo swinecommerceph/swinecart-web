@@ -451,7 +451,7 @@
                                     </span>
 
                                     {{-- Show expected date to be delivered if product is already On Delivery --}}
-                                    <span class="col s12 truncate"
+                                    <span class="col s12"
                                         v-1if="product.status === 'on_delivery'"
                                         style="font-weight: 700; font-size: 2vh;"
                                     >
