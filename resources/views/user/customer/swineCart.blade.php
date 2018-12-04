@@ -455,7 +455,7 @@
                                         v-1if="product.status === 'on_delivery'"
                                         style="font-weight: 700; font-size: 2vh;"
                                     >
-                                        Expected to arrive on @{{ product.delivery_date }}
+                                        Expected to arrive on: @{{ product.delivery_date }}
                                     </span>
                                 </p>
 
