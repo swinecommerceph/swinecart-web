@@ -32,7 +32,7 @@ body {
 }
 
 .navbar-fixed{
-  font-family: Electrolize;
+  font-family: Source Sans Pro;
 }
 
 /* Override collapsible components */
@@ -743,7 +743,7 @@ input#search{
 }
 
 .brand-logo{
-   font-family : Electrolize;
+   font-family: Source Sans Pro;
 }
 
 /*Admin Statistics Dashboard*/
@@ -1310,6 +1310,6 @@ label {
 }
 
 /* Buttons */
-/*.btn {
-    text-transform: none !important;
-}*/
+.btn .btn-large {
+    text-transform: none;
+}
