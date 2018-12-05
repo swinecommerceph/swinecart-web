@@ -13,7 +13,7 @@
 		<div class="col s12 m6 offset-m3">
 			<div class="card-panel">
 				<div class="row s12">
-					<h4 class="center-align"> Login </h4>
+					<h4 class="center-align"> Login to your account</h4>
 					{{-- Display Validation Errors --}}
 					@include('common._errors')
 
