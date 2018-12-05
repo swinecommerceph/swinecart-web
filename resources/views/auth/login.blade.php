@@ -10,10 +10,10 @@
 
 @section('content')
 	<div class="row">
-		<div class="col s12 m6 offset-m3">
+		<div class="col s12 m4 offset-m4">
 			<div class="card-panel">
 				<div class="row s12">
-					<h4 class="center-align"> Login to your account</h4>
+					<p class="left-align" style="font-size: 1.125rem; line-height: 1.2; margin-left: 0.75rem;"> Login to your account</p>
 					{{-- Display Validation Errors --}}
 					@include('common._errors')
 
