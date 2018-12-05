@@ -33,7 +33,7 @@
 						{{-- Password --}}
 						<div class="row">
 							<div class="input-field col s12">
-								<input type="password" id="password" name="password" required>
+								<input type="password" id="password" name="password" placeholder="Password" required>
 								<label for="password">Password</label>
 							</div>
 						</div>
