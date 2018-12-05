@@ -9,6 +9,7 @@
 @endsection
 
 @section('content')
+	<br>
 	<div class="row">
 		<div class="col s12 m4 offset-m4">
 			<div class="card-panel">
