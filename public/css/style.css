@@ -1231,6 +1231,19 @@ label {
    width: 100%;
 }
 
+.input-field label[for='email'] {
+  font-size: 0.8rem;
+   -webkit-transform: none;
+   -moz-transform: none;
+   -ms-transform: none;
+   -o-transform: none;
+   transform: none;
+}
+
+.input-field label[for='password']::after {
+   padding-top: 0.4rem;
+}
+
 .input-field label[for] {
 	font-size: 0.8rem;
    -webkit-transform: translateY(-140%);
@@ -1312,3 +1325,4 @@ label {
 .btn .btn-large {
     text-transform: none;
 }
+
