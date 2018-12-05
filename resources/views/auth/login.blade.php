@@ -25,7 +25,7 @@
 						{{-- E-Mail Address --}}
 						<div class="row">
 							<div class="input-field col s12">
-								<label for="email" style="font-weight: 700; color: hsl(0, 0%, 45%);">E-mail address</label>
+								<label for="email" style="font-weight: 700; color: hsl(0, 0%, 45%); font-size: 0.9rem;">E-mail address</label>
 								<input type="email" id="email" name="email" value="{{ old('email') }}" autofocus placeholder="Enter email" required>
 							</div>
 						</div>
@@ -33,7 +33,7 @@
 						{{-- Password --}}
 						<div class="row">
 							<div class="input-field col s12">
-								<label for="password" style="font-weight: 700; color: hsl(0, 0%, 45%);">Password</label>
+								<label for="password" style="font-weight: 700; color: hsl(0, 0%, 45%); font-size: 0.9rem;">Password</label>
 								<input type="password" id="password" name="password" placeholder="Password" required>
 							</div>
 						</div>
