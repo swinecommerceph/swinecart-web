@@ -12,9 +12,10 @@
 	<br>
 	<div class="row">
 		<div class="col s12 m4 offset-m4">
-			<div class="card-panel">
+			<div class="card-panel" style="border: solid 1px #E1E4EC !important; box-shadow: 0px 0px !important; border-radius: 3px !important;">
 				<div class="row s12">
-					<p class="left-align" style="font-size: 1.125rem; line-height: 1.2; margin-left: 0.75rem;"> Login to your account</p>
+					<p class="left-align" style="font-size: 1.125rem; line-height: 1.2; color: hsl(0, 0%, 45%);"> Login to your account</p>
+
 					{{-- Display Validation Errors --}}
 					@include('common._errors')
 
@@ -23,53 +24,36 @@
 						{!! csrf_field() !!}
 
 						{{-- E-Mail Address --}}
-						<div class="row">
-							<div class="input-field col s12">
-								<label for="email" style="font-weight: 700; color: hsl(0, 0%, 45%); font-size: 0.9rem;">E-mail address</label>
-								<input type="email" id="email" name="email" value="{{ old('email') }}" autofocus placeholder="Enter email" required>
-							</div>
+						<div class="row input-field">
+							<label for="email" style="font-weight: 700; color: hsl(0, 0%, 45%); font-size: 0.9rem;">E-mail address</label>
+							<input class="login" type="email" id="email" name="email" value="{{ old('email') }}" autofocus placeholder="  Enter email" required>
 						</div>
 
 						{{-- Password --}}
-						<div class="row">
-							<div class="input-field col s12">
-								<label for="password" style="font-weight: 700; color: hsl(0, 0%, 45%); font-size: 0.9rem;">Password</label>
-								<input type="password" id="password" name="password" placeholder="Password" required>
-							</div>
+						<div class="row input-field">
+							<span for="password" style="font-weight: 700; color: hsl(0, 0%, 45%); font-size: 0.9rem;">Password</span>
+							<span style="display: inline-block; width: 4rem;"></span>
+							<span><a style="font-size: 0.9rem;" href="/password/reset"> I forgot my password </a></span>	
+							<input class="login" type="password" id="password" name="password" placeholder="  Password" required>
 						</div>
 
 						{{-- Login Button --}}
 						<div class="row">
-							<div class="">
-								<button type="submit" class="btn waves-effect waves-light col s4 push-s8"> Login
-									<i class="material-icons right">send</i>
-								</button>
-							</div>
+								<a type="submit" class="btn waves-effect waves-light col s12 teal darken-3">Login</a>
 						</div>
-
 					</form>
 
-					<div class="row">
-						<h5 class="center-align"> OR </h5>
-						{{-- Facebook Button --}}
-						<div class="col s12">
-							<a href="/login/facebook" class="btn-large waves-effect waves-light indigo darken-2 col s12 social-button"> Login with Facebook </a>
-						</div>
-					</div>
+					{{-- Social Login --}}
+					<p class="center-align"> OR </p>
 
-					<div class="row">
-						{{-- Google Button --}}
-						<div class="col s12">
-							<a href="/login/google" class="btn-large waves-effect waves-light red col s12 social-button"> Login with Google </a>
-						</div>
-					</div>
+					{{-- Facebook Button --}}
+					<a href="/login/facebook" class="waves-effect waves-light col s12 btn facebook"><i class="fa fa-facebook"></i> Login with Facebook</a>
 
-                    <div class="row">
-						{{-- Forgot Password --}}
-						<div class="col s12 center-align">
-							<a href="/password/reset"> Forgot Password </a>
-						</div>
-					</div>
+					<br><br>
+
+					{{-- Google Button --}}
+					<a href="/login/google" class="waves-effect waves-light red col s12 btn google"><i class="fa fa-google"></i> Login with Google </a>
+					
 				</div>
 			</div>
 		</div>

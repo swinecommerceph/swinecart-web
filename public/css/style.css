@@ -1240,6 +1240,19 @@ label {
    transform: none;
 }
 
+.login {
+  border: solid 1px #E1E4EC !important;
+  border-radius: 3px !important;
+  height: 2.5rem !important;
+  margin: 0 0 0 0 !important;
+  margin-top: 10px !important;
+}
+
+.login:focused {
+  border-bottom: none !important;
+}
+
+
 .input-field label[for='password']::after {
    padding-top: 0.4rem;
 }
@@ -1317,12 +1330,21 @@ label {
 
 /* Radio Button */
 [type="radio"]:checked+label:after, [type="radio"].with-gap:checked+label:before, [type="radio"].with-gap:checked+label:after {
-    border: 2px solid #00705E;
-    background-color: #00705E;
+  border: 2px solid #00705E;
+  background-color: #00705E;
 }
 
 /* Buttons */
-.btn .btn-large {
-    text-transform: none;
+.btn, .btn-large {
+  text-transform: none !important;
 }
+
+a.facebook {
+ background-color: #4175CE !important; 
+}
+
+a.google {
+ background-color: #DD0000 !important;  
+}
+
 
