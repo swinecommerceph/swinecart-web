@@ -39,7 +39,7 @@
 
 						{{-- Login Button --}}
 						<div class="row">
-								<a type="submit" class="btn waves-effect waves-light col s12 teal darken-3">Login</a>
+								<a type="submit" class="btn waves-effect waves-light col s12 teal darken-3">Login with Email</a>
 						</div>
 					</form>
 
@@ -47,12 +47,18 @@
 					<p class="center-align"> OR </p>
 
 					{{-- Facebook Button --}}
-					<a href="/login/facebook" class="waves-effect waves-light col s12 btn facebook"><i class="fa fa-facebook"></i> Login with Facebook</a>
+					<a href="/login/facebook" class="waves-effect waves-light col s12 btn facebook">
+						<i style="border-right: solid 1px rgba(0, 0, 0, 0.2); margin-right: 1rem; padding: 0 1.3rem;" class="fa fa-facebook"></i>
+					  Login with Facebook
+					</a>
 
 					<br><br>
 
 					{{-- Google Button --}}
-					<a href="/login/google" class="waves-effect waves-light red col s12 btn google"><i class="fa fa-google"></i> Login with Google </a>
+					<a href="/login/google" class="waves-effect waves-light red col s12 btn google">
+						<i style="border-right: solid 1px rgba(0, 0, 0, 0.2); margin-right: 1rem; padding-right: 1rem; padding-left: 0.1rem;" class="fa fa-google"></i>
+					  Login with Google
+					</a>
 					
 				</div>
 			</div>
