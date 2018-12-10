@@ -11,6 +11,11 @@
 |
 */
 
+// ASBAP temporary route
+Route::get('/asbap', function () {
+    return view('user.asbap');
+});
+
 Route::get('/',['as' => 'index_path', function () {
     return view('home');
 }])->middleware('guest');
