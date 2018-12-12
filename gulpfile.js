@@ -29,6 +29,9 @@ elixir(function(mix) {
             'custom.js'
         ], 'public/js/siteCustom.js')
         .scripts([
+            'login.js'
+        ], 'public/js/login.js')
+        .scripts([
             'vendor/elasticsearch.jquery.min.js',
             'customer/swinecart.js',
             'customer/customer_custom.js'

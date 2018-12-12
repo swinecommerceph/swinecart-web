@@ -1252,6 +1252,32 @@ label {
   border-bottom: none !important;
 }
 
+.login-password {
+  border: solid 1px #E1E4EC !important;
+  border-right: 0;
+  border-radius: 3px !important;
+  border-top-right-radius: 0 !important;
+  border-bottom-right-radius: 0 !important;
+  height: 2.5rem !important;
+  margin: 0 0 0 0 !important;
+  margin-top: 10px !important;
+}
+
+.login-password:focused {
+  border-bottom: none !important;
+}
+
+.show-hide-password {
+  border: solid 1px #E1E4EC !important;
+  border-left: 0;
+  border-radius: 3px !important;
+  border-top-left-radius: 0 !important;
+  border-bottom-left-radius: 0 !important;
+  height: 2.6rem !important;
+  margin: 0 0 0 0 !important;
+  padding-top: 0.4rem !important;
+  margin-top: 10px !important; 
+}
 
 .input-field label[for='password']::after {
    padding-top: 0.4rem;

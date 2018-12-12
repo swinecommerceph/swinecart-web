@@ -10,6 +10,7 @@
     "laravel-elixir-webpack-official": "^1.0.2"
   },
   "dependencies": {
+    "bootstrap-show-password": "^1.1.2",
     "materialize-social": "^1.0.3"
   }
 }

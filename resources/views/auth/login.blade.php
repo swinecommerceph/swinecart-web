@@ -29,11 +29,19 @@
             </div>
 
 						{{-- Password --}}
-            <div class="row input-field">
+            <div id="password-container" class="row input-field">
               <span for="password" style="font-weight: 700; color: hsl(0, 0%, 45%); font-size: 0.9rem;">Password</span>
               <span style="display: inline-block; width: 4rem;"></span>
               <span><a style="font-size: 0.9rem;" href="/password/reset"> I forgot my password </a></span>  
-              <input class="login" type="password" id="password" name="password" placeholder="  Password" required>
+              
+              {{-- Input field for password --}}
+              <input style="width: 82.5% !important;" class="login-password col s9" type="password" id="password" name="password" placeholder="  Password" required>
+
+              {{-- Show/Hide Password Button --}}
+              <div class="col s2 show-hide-password"
+                  style="background-color: #EDEDEE; cursor: pointer;">
+                <i id="show-hide-password-icon" class="grey-text text-lighten-1 material-icons center-align">visibility</i>
+              </div>
             </div>
 
 						{{-- Login Button --}}
@@ -64,4 +72,8 @@
 			</div>
 		</div>
 	</div>
+@endsection
+
+@section('customScript')
+  <script src="{{ elixir('/js/login.js') }}"></script>
 @endsection
