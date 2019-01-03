@@ -6,7 +6,7 @@
 @extends('user.breeder.home')
 
 @section('title')
-    | Customer - Messages
+    | Breeder - Messages
 @endsection
 
 @section('pageId')
