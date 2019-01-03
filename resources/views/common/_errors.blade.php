@@ -5,7 +5,7 @@
 @if (count($errors) > 0)
 	{{-- Form Error List --}}
 	<div class="card-panel">
-		<strong> <span class="red-text text-darken-1"> Whoops! Something went wrong! </span> </strong>
+		<strong> <span class="red-text text-darken-1">Sorry, that didn't work. Please try again.</span> </strong>
 		<br>
 		<ul>
 			@foreach ($errors->all() as $error)

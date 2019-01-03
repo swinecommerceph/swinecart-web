@@ -16,7 +16,7 @@
 				<div class="row s12">
 					<p class="left-align" style="font-size: 1.125rem; line-height: 1.2; color: hsl(0, 0%, 45%);"> Login to your account</p>
 					{{-- Display Validation Errors --}}
-					@include('common._errors')
+					
 
 					{{-- Login Form --}}
 					<form action="{{ url('login') }}" method="POST" class="col s12">
@@ -24,22 +24,22 @@
 
 						{{-- E-Mail Address --}}
             <div class="row input-field">
-              <label for="email" style="font-weight: 700; color: hsl(0, 0%, 45%); font-size: 0.9rem;">E-mail address</label>
-              <input class="login" type="email" id="email" name="email" value="{{ old('email') }}" autofocus placeholder="  Enter email" required>
+              <input class="validate" type="email" id="email" name="email" value="{{ old('email') }}" autofocus placeholder="  Enter Email">
+              <label for="email">E-mail Address</label>
             </div>
 
 						{{-- Password --}}
             <div id="password-container" class="row input-field">
-              <span for="password" style="font-weight: 700; color: hsl(0, 0%, 45%); font-size: 0.9rem;">Password</span>
-              <span style="display: inline-block; width: 4rem;"></span>
-              <span><a style="font-size: 0.9rem;" href="/password/reset"> I forgot my password </a></span>  
+              <!-- <span style="display: inline-block; width: 4rem;"></span>
+              <span><a style="font-size: 0.9rem;" href="/password/reset"> I forgot my password </a></span> -->
               
               {{-- Input field for password --}}
-              <input style="width: 82.5% !important;" class="login-password col s9" type="password" id="password" name="password" placeholder="  Password" required>
+              <input class="validate col s11 login-password" type="password" id="password" name="password" placeholder="  Enter Password">
+              <label for="password">Password</label>
 
               {{-- Show/Hide Password Button --}}
-              <div class="col s2 show-hide-password"
-                  style="background-color: #EDEDEE; cursor: pointer;">
+              <div class="col s1 show-hide-password"
+                  style="cursor: pointer;">
                 <i id="show-hide-password-icon" class="grey-text text-lighten-1 material-icons center-align">visibility</i>
               </div>
             </div>

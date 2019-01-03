@@ -29,6 +29,8 @@ elixir(function(mix) {
             'custom.js'
         ], 'public/js/siteCustom.js')
         .scripts([
+            'validation/formValidationMethods.js',
+            'validation/login_validation.js',
             'login.js'
         ], 'public/js/login.js')
         .scripts([
