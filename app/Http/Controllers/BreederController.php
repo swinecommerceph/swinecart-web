@@ -57,7 +57,7 @@ class BreederController extends Controller
         }
         if(\App::isDownForMaintenance()) return view('errors.503_home');
         if($request->user()->blocked_at != NULL) return view('errors.user_blocked');
-        return view('user.breeder.dashboard');
+        return view('user.breeder.home');
     }
 
     /**
