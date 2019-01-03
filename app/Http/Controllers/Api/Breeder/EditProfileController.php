@@ -57,7 +57,7 @@ class EditProfileController extends Controller
 
     public function updateFarm(BreederFarmProfileRequest $request, $farm_id) 
     {
-        $farmAddress = FarmAddress::find($id);
+        $farmAddress = FarmAddress::find($farm_id);
 
         if($farmAddress) {
             $farmAddress->addressLine1 = $request['addressLine1'];

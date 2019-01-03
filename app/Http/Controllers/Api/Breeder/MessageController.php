@@ -8,6 +8,7 @@ use App\Http\Controllers\Controller;
 use App\Http\Requests;
 use App\Models\Message;
 use App\Models\User;
+use App\Models\Customer;
 
 use JWTAuth;
 use Auth;
@@ -50,7 +51,7 @@ class MessageController extends Controller
                 ->where('customer_id', $customer_id)
 	    		->orderBy('created_at', 'DESC')
                 ->get();
-        
+
         return response()->json([
             'message' => 'Get Messages successful!',
             'data' => $messages
@@ -64,7 +65,13 @@ class MessageController extends Controller
         $threads = Message::where('breeder_id', '=', $user_id)
 	    		->orderBy('created_at', 'DESC')
                 ->get()
-                ->unique('customer_id');
+                ->unique('customer_id')
+                ->values();
+
+        $threads = $threads->map(function ($thread) {
+            $thread->user = User::where('id', '=', $thread->customer_id)->first();
+            return $thread;
+        });
 
         return response()->json([
             'message' => 'Get Threads successful!',

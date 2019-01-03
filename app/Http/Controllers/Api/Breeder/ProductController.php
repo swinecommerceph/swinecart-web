@@ -201,11 +201,14 @@ class ProductController extends Controller
         $product = $this->getBreederProduct($breeder, $product_id);
 
         if($product) {
-            $product->status = 'displayed';
+            $product->status = $product->status == 'displayed' ? 'hidden' : 'displayed' ;
             $product->save();
 
             return response()->json([
-                'message' => 'Display Product successful!'
+                'message' => 'Display Product successful!',
+                'data' => [
+                    'status' => $product->status
+                ]
             ], 200);
         }
         else return response()->json([
@@ -328,6 +331,9 @@ class ProductController extends Controller
         $productDetail['name'] = $product->name;
         $productDetail['type'] = ucfirst($request->type);
         $productDetail['breed'] = $request->breed;
+
+        $product = $this->getBreederProduct($breeder, $product->id);
+        $product = $this->transformProduct($product);
 
         return response()->json([
             'message' => 'Store Product succesful!',

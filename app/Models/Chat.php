@@ -51,20 +51,18 @@ class Chat implements MessageComponentInterface {
             }
             
             if(array_key_exists($msg->to, $this->maps)){
+                $msg->from_id = $msg->from;
                 $msg->from = User::where('id', $msg->from)->first()->name;
                 $this->maps[$msg->to]->send(json_encode($msg));
             }
             
 
+            // foreach ($this->clients as $client) {
+            //     if($client != $from){
+            //         $client->send(json_encode($msg));
+            //     }
 
-            /*
-            foreach ($this->clients as $client) {
-                if($client != $from){
-                    $client->send(json_encode($msg));
-                }
-
-            }
-            */
+            // }
 
         }
 

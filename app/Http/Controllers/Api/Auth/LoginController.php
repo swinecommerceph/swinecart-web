@@ -29,7 +29,7 @@ class LoginController extends Controller
         if(! $token = JWTAuth::attempt($credentials)) {
             return response()->json([
                 'error' => 'Invalid Email or Password!'
-            ], 401);
+            ], 400);
         }
 
         $user = JWTAuth::user();
@@ -40,12 +40,15 @@ class LoginController extends Controller
         $userLog->activity = 'login';
         $userLog->created_at = Carbon::now();
         $userLog->save();
-
         return response()->json([
-            'access_token' => $token,
-            'token_type' => 'bearer',
-            'expires_in' => JWTAuth::factory()->getTTL() * 60
-        ]);
+            'message' => 'Normal Login successful!',
+            'data' => [
+                'access_token' => $token,
+                'token_type' => 'bearer',
+                'expires_in' => JWTAuth::factory()->getTTL() * 60
+             ]
+        ], 200);
+
     }
 
     public function me(Request $request) 

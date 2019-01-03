@@ -14,15 +14,15 @@ use Illuminate\Http\Request;
 */
 
 /* Setup CORS */
-// header('Access-Control-Allow-Origin: *');
-// header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
-// header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
 
 Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function() {
         Route::post('/register', 'RegisterController@register');
         Route::post('/login', 'LoginController@normalLogin');
-        Route::post('/me', 'LoginController@me');
+        Route::get('/me', 'LoginController@me');
         Route::post('/logout', 'LogoutController@logout');
     });
 
@@ -79,7 +79,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         });
 
         Route::group(['prefix' => 'notifications'], function() {
-            Route::get('/get', 'NotificationsController@getNotifications');
+            Route::get('/', 'NotificationsController@getNotifications');
             Route::get('/count', 'NotificationsController@getNotificationsCount');
             Route::post('/see/{id}', 'NotificationsController@SeeNotification');
         });
