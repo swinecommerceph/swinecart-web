@@ -47,18 +47,6 @@
                 </span>
             </a>
         </li>
-
-        {{-- Dashboard--}}
-        <li>
-            <a  
-                href="{{ route('dashboard') }}"
-                class="tooltipped"
-                data-position="bottom"
-                data-tooltip="Dashboard"
-            >
-                <i class="material-icons">assessment</i>
-            </a>
-        </li>
         
         {{-- Notifications --}}
         <li id="notification-main-container">
