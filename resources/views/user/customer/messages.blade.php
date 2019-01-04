@@ -89,9 +89,6 @@
 							@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
 								<li class="message" :class="mine" style="clear:both">
 									<div class="chat-bubble out">
-										<span class="who">
-											Me:
-										</span>
 										{{ $message->message }}
 									</div>
 								</li>

@@ -84,9 +84,6 @@
 							@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
 								<li class="message" :class="mine" style="clear:both">
 									<div class="chat-bubble out">
-										<span class="who">
-											Me:
-										</span>
 										{{ $message->message }}
 									</div>
 								</li>
@@ -105,7 +102,7 @@
 						<li v-for="message in messages" class="message" :class="message.class" style="display:none;clear:both;">
 							<div class="chat-bubble" v-bind:class="message.dir">
 								<span class="who">
-					    			@{{ message.who }}:
+					    			@{{ message.who }}
 								</span>
 								@{{ message.msg }}
 							</div>

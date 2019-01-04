@@ -110,7 +110,7 @@ $(document).ready(function(){
 				this.addMessage({
 					"msg" 	: message.message,
 					"class"	: "mine",
-					"who"	: "Me",
+					"who"	: "",
 					"dir"	: "out",
 				});
 			},
@@ -164,3 +164,5 @@ $(document).ready(function(){
 
 
 });
+
+//# sourceMappingURL=chat.js.map

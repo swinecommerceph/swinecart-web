@@ -95,14 +95,16 @@ elixir(function(mix) {
         .scripts([
             'validation/formValidationMethods.js',
             'validation/registration_validation.js'
-        ], 'public/js/register.js');
+        ], 'public/js/register.js')
+        .scripts([
+            'chat.js'
+        ], 'public/js/chat.js');
 
     // Version the following files to promote browser cache busting
     // Forces browser to download latest asset files
     mix.version([
         'js/siteCustom.js',
         'js/vendor.js',
-        'js/chat.js',
         'js/customer/custom.js',
         'js/customer/createProfile.js',
         'js/customer/editProfile.js',
