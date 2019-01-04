@@ -90,9 +90,6 @@
 							@else
 								<li class="message" :class="user" style="clear:both">
 									<div class="chat-bubble in">
-										<span class="who">
-							    			{{ $message->sender() }}:
-										</span>
 										{{ $message->message }}
 									</div>
 								</li>
@@ -101,9 +98,6 @@
 
 						<li v-for="message in messages" class="message" :class="message.class" style="display:none;clear:both;">
 							<div class="chat-bubble" v-bind:class="message.dir">
-								<span class="who">
-					    			@{{ message.who }}
-								</span>
 								@{{ message.msg }}
 							</div>
 						</li>
