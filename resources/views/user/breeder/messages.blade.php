@@ -30,17 +30,18 @@
 
 <div class="row" style="padding-left: 0.5vw;">
 	<div id="threadname">
-			@if($threadId != '' && sizeof($threads) == 0)
-				<p>{{ $otherName }}</p>
-			@elseif(sizeof($threads) == 0)
-				<p>You have no messages.</p>
-			@else
-				<p>{{ $threads[0]->otherparty() }}</p>
-			@endif
-		</div>
+		@if($threadId != '' && sizeof($threads) == 0)
+			<p>{{ $otherName }}</p>
+		@elseif(sizeof($threads) == 0)
+			<p>You have no messages.</p>
+		@else
+			<p>{{ $threads[0]->otherparty() }}</p>
+		@endif
+	</div>
 </div>
 
 <div class="row">
+	
 	<!-- Left Column for list of 'chatted' names -->
 	<div class="col m3 row">
 	  <ul class="collection" id="thread-collection">
@@ -69,15 +70,13 @@
 	    @endforeach
 	  </ul>
 	</div>
-
+	
 	<!-- Right column for actual chat box -->
 	<div class="col m9 row">
 		<div>
 			<div class="panel panel-default">
 				<div class="panel-body" id="chat">
-
 					<ul id="chatMessages">
-
 						@foreach($messages as $message)
 							@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
 								<li class="message" :class="mine" style="clear:both">
@@ -99,21 +98,19 @@
 								@{{ message.msg }}
 							</div>
 						</li>
-
 					</ul>
-
 					<div style="display:table; width: 100%;">
-
 						<input placeholder="Enter your message here."
-						 		style="display:table-cell; width: 100%;"
-							   type="text"
-							   v-model="newMessage"
-							   @keyup.enter="sendMessage"/>
+					 		style="display:table-cell; width: 100%;"
+						   type="text"
+						   v-model="newMessage"
+						   @keyup.enter="sendMessage"/>
 					</div>
 				</div>
 			</div>
 		</div>
 	</div>
+
 </div>
 
 
