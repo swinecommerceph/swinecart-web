@@ -28,8 +28,19 @@
  	.chat-bubble.out { float:right; background-color: #0071FF; color: white;}
 </style>
 
-<div class="row">
+<div class="row" style="padding-left: 0.5vw;">
+	<div id="threadname">
+			@if($threadId != '' && sizeof($threads) == 0)
+				<p>{{ $otherName }}</p>
+			@elseif(sizeof($threads) == 0)
+				<p>You have no messages.</p>
+			@else
+				<p>{{ $threads[0]->otherparty() }}</p>
+			@endif
+		</div>
+</div>
 
+<div class="row">
 	<!-- Left Column for list of 'chatted' names -->
 	<div class="col m3 row">
 	  <ul class="collection" id="thread-collection">
@@ -46,38 +57,23 @@
 		    	<li class="collection-item avatar">
 	  		@endif
 
-		      <i class="material-icons circle small left">chat</i>
-		      <span class="title">
-		         @if($thread->read_at == NULL)
-		           *
-		         @endif
-		      	{{ $thread->otherparty() }}
-
-		      </span>
-
-		    </li>
-		    </a>
+	      <i class="material-icons circle small left">chat</i>
+	      <span class="title">
+	         @if($thread->read_at == NULL)
+	           *
+	         @endif
+	      	{{ $thread->otherparty() }}
+	      </span>
+		    	</li>
+		    	</a>
 	    @endforeach
 	  </ul>
 	</div>
 
 	<!-- Right column for actual chat box -->
 	<div class="col m9 row">
-
 		<div>
-
 			<div class="panel panel-default">
-
-				<div id="threadname" class="panel-heading center-align">
-					@if($threadId != '' && sizeof($threads) == 0)
-						{{ $otherName }}
-					@elseif(sizeof($threads) == 0)
-						You have no messages.
-					@else
-						{{ $threads[0]->otherparty() }}
-					@endif
-				</div>
-
 				<div class="panel-body" id="chat">
 
 					<ul id="chatMessages">
@@ -118,7 +114,6 @@
 			</div>
 		</div>
 	</div>
-
 </div>
 
 
