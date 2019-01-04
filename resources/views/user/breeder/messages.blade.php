@@ -19,9 +19,9 @@
 
 @section('content')
 <style>
- 	#chatMessages{ width: 100%; border: 1px solid #ddd; min-height: 100px; list-style: none; padding-left: 0px; height: 400px; overflow-y: auto;}
+ 	#chatMessages{ width: 100%; min-height: 100px; height: 50vh; overflow-y: auto;}
  	#chatMessages li { width: 100%; padding: 10px;}
- 	#thread-collection{ height: 500px; overflow-y: auto; }
+ 	#thread-collection{ height: 60vh; overflow-y: auto; }
 
  	.chat-bubble { border-radius: 10px; min-width: 200px; padding:10px; }
  	.chat-bubble.in { float:left; background-color: #e0e0e0; color: #424242;}
@@ -43,8 +43,8 @@
 <div class="row">
 	
 	<!-- Left Column for list of 'chatted' names -->
-	<div class="col m3 row">
-	  <ul class="collection" id="thread-collection">
+	<div class="col m3">
+	  <ul class="collection" id="thread-collection" style="border: 1px solid #ddd !important; margin: 0 !important;">
 	  	@foreach($threads as $thread)
 	  		@if($userType == 'Customer')
 	  			<a id="thread-{{ $thread->breeder_id }}" href="/customer/messages/{{ $thread->breeder_id }}">
@@ -72,42 +72,36 @@
 	</div>
 	
 	<!-- Right column for actual chat box -->
-	<div class="col m9 row">
-		<div>
-			<div class="panel panel-default">
-				<div class="panel-body" id="chat">
-					<ul id="chatMessages">
-						@foreach($messages as $message)
-							@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
-								<li class="message" :class="mine" style="clear:both">
-									<div class="chat-bubble out">
-										{{ $message->message }}
-									</div>
-								</li>
-							@else
-								<li class="message" :class="user" style="clear:both">
-									<div class="chat-bubble in">
-										{{ $message->message }}
-									</div>
-								</li>
-							@endif
-						@endforeach
+	<div class="col m9" id="chat" style="border: 1px solid #ddd;">
+		<ul id="chatMessages">
+			@foreach($messages as $message)
+				@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
+					<li class="message" :class="mine" style="clear:both">
+						<div class="chat-bubble out">
+							{{ $message->message }}
+						</div>
+					</li>
+				@else
+					<li class="message" :class="user" style="clear:both">
+						<div class="chat-bubble in">
+							{{ $message->message }}
+						</div>
+					</li>
+				@endif
+			@endforeach
 
-						<li v-for="message in messages" class="message" :class="message.class" style="display:none;clear:both;">
-							<div class="chat-bubble" v-bind:class="message.dir">
-								@{{ message.msg }}
-							</div>
-						</li>
-					</ul>
-					<div style="display:table; width: 100%;">
-						<input placeholder="Enter your message here."
-					 		style="display:table-cell; width: 100%;"
-						   type="text"
-						   v-model="newMessage"
-						   @keyup.enter="sendMessage"/>
-					</div>
+			<li v-for="message in messages" class="message" :class="message.class" style="display:none;clear:both;">
+				<div class="chat-bubble" v-bind:class="message.dir">
+					@{{ message.msg }}
 				</div>
-			</div>
+			</li>
+		</ul>
+		<div style="display:table; width: 100%;">
+			<input placeholder="Enter your message here."
+		 		style="display:table-cell; width: 100%;"
+			   type="text"
+			   v-model="newMessage"
+			   @keyup.enter="sendMessage"/>
 		</div>
 	</div>
 
