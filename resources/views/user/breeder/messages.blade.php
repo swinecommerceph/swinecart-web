@@ -30,6 +30,7 @@
 
 <div class="row">
 
+	<!-- Left Column for list of 'chatted' names -->
 	<div class="col m3 row">
 	  <ul class="collection" id="thread-collection">
 	  	@foreach($threads as $thread)
@@ -60,6 +61,7 @@
 	  </ul>
 	</div>
 
+	<!-- Right column for actual chat box -->
 	<div class="col m9 row">
 
 		<div>
