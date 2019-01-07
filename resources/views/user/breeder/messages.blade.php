@@ -23,7 +23,7 @@
  	#chatMessages li { width: 100%; padding: 10px;}
  	#thread-collection{ height: 60vh; overflow-y: auto; }
 
- 	.chat-bubble { border-radius: 10px; padding:10px; }
+ 	.chat-bubble { border-radius: 10px; padding:10px; max-width: 30vw;}
  	.chat-bubble.in { float:left; background-color: #e0e0e0; color: #424242;}
  	.chat-bubble.out { float:right; background-color: #0071FF; color: white;}
 </style>
