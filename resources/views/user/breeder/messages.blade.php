@@ -23,7 +23,7 @@
  	#chatMessages li { width: 100%; padding: 10px;}
  	#thread-collection{ height: 60vh; overflow-y: auto; }
 
- 	.chat-bubble { border-radius: 10px; min-width: 200px; padding:10px; }
+ 	.chat-bubble { border-radius: 10px; padding:10px; }
  	.chat-bubble.in { float:left; background-color: #e0e0e0; color: #424242;}
  	.chat-bubble.out { float:right; background-color: #0071FF; color: white;}
 </style>
@@ -72,8 +72,8 @@
 	</div>
 	
 	<!-- Right column for actual chat box -->
-	<div class="col m9" id="chat" style="border: 1px solid #ddd;">
-		<ul id="chatMessages">
+	<div class="col m9" id="chat">
+		<ul id="chatMessages" style="border: 1px solid #ddd;">
 			@foreach($messages as $message)
 				@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
 					<li class="message" :class="mine" style="clear:both">
