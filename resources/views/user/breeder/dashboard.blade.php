@@ -286,13 +286,15 @@
     <div class="row">
         {{-- Location --}}
         <div class="col s12">
-            <div class="card hoverable teal darken-3">
-                <div class="card-content center-align">
-                    <span class="card-title">
-                        <a href="{{route('map.customers')}}" style="font-weight: 600; color: #fafafa;">Customer Mapping</a>
-                    </span>
+            <a href="{{route('map.customers')}}" >
+                <div class="card hoverable teal darken-3">
+                    <div class="card-content center-align">
+                        <span class="card-title" style="font-weight: 600; color: #fafafa;">
+                            Customer Mapping
+                        </span>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 @endsection
