@@ -23,64 +23,12 @@
 
 @section('content')
     <br>
-    <div class="row">
-        <h4 class="left-align" style="font-weight: 500; margin-left: 1vw;">
-            Overall Performance
-        </h4>
-    </div>
 
     <div id="card-status" class="row" v-cloak>
 
-        <div class="row">
-            {{-- Guide text --}}
-            <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select a frequency to graph:</p>
-            
-            {{-- Charts --}}
-            <div id="charts-container" class="">  
-                {{-- Frequencies --}}
-                <div class="col s2">
-                    <div class="">
-                        <input class="with-gap" name="frequency" type="radio" id="frequency-monthly" value="monthly" v-model="chosenFrequency" @change="valueChange" />
-                        <label for="frequency-monthly">Monthly</label>
-                    </div>
-                    <div class="">
-                        <input class="with-gap" name="frequency" type="radio" id="frequency-weekly" value="weekly" v-model="chosenFrequency" @change="valueChange" />
-                        <label for="frequency-weekly">Weekly</label>
-                    </div>
-                    <div class="">
-                        <input class="with-gap" name="frequency" type="radio" id="frequency-daily" value="daily" v-model="chosenFrequency" @change="valueChange" />
-                        <label for="frequency-daily">Daily</label>
-                    </div>
-                </div>
-
-                {{-- Dates --}}
-                <div class="col s5">
-                    <div class="input-field col s5">
-                        <custom-date-from-select v-model="dateFromInput"
-                            :date-accreditation="latestAccreditation"
-                            @date-from-select="dateFromChange"
-                        >
-                        </custom-date-from-select>
-                    </div>
-                    <div class="input-field col s5">
-                        <custom-date-to-select v-model="dateToInput"
-                            @date-to-select="dateToChange"
-                            v-show="chosenFrequency !== 'weekly'"> </custom-date-to-select>
-                    </div>
-                    <div class="" style="margin-top:1rem;">
-                        <a class="btn-floating" @click.prevent="retrieveSoldProducts"><i class="material-icons">send</i></a>
-                    </div>
-                </div>
-            
-                {{-- Bar Chart--}}
-                <div class="col s12">
-                    <canvas id="barChart"></canvas>
-                </div>
-            </div>
-        </div>
-
         {{-- Product Status --}}
         <div id="card-product-status" class="col grey lighten-4">
+            {{-- Product Status label --}}
             <div class="col s12">
                 <h4 class="left-align">
                     <a href="{{ route('dashboard.productStatus') }}"
@@ -238,6 +186,62 @@
                         <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.requested.gilt + dashboardStats.displayed.gilt + dashboardStats.hidden.gilt }} </a>
                         <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.requested.semen + dashboardStats.displayed.semen + dashboardStats.hidden.semen }} </a>
                     </div>
+                </div>
+            </div>
+
+        </div>
+
+        <div class="row"></div>
+        <div class="row"></div>
+        {{-- Overall Performance --}}
+        <div class="row">
+            <h4 class="left-align" style="font-weight: 500; margin-left: 1vw;">
+                Overall Performance
+            </h4>
+
+            {{-- Guide text --}}
+            <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select a frequency to graph:</p>
+            
+            {{-- Charts --}}
+            <div id="charts-container" class="">  
+                {{-- Frequencies --}}
+                <div class="col s2">
+                    <div class="">
+                        <input class="with-gap" name="frequency" type="radio" id="frequency-monthly" value="monthly" v-model="chosenFrequency" @change="valueChange" />
+                        <label for="frequency-monthly">Monthly</label>
+                    </div>
+                    <div class="">
+                        <input class="with-gap" name="frequency" type="radio" id="frequency-weekly" value="weekly" v-model="chosenFrequency" @change="valueChange" />
+                        <label for="frequency-weekly">Weekly</label>
+                    </div>
+                    <div class="">
+                        <input class="with-gap" name="frequency" type="radio" id="frequency-daily" value="daily" v-model="chosenFrequency" @change="valueChange" />
+                        <label for="frequency-daily">Daily</label>
+                    </div>
+                </div>
+
+                {{-- Dates --}}
+                <div class="col s5">
+                    <div class="input-field col s5">
+                        <custom-date-from-select v-model="dateFromInput"
+                            :date-accreditation="latestAccreditation"
+                            @date-from-select="dateFromChange"
+                        >
+                        </custom-date-from-select>
+                    </div>
+                    <div class="input-field col s5">
+                        <custom-date-to-select v-model="dateToInput"
+                            @date-to-select="dateToChange"
+                            v-show="chosenFrequency !== 'weekly'"> </custom-date-to-select>
+                    </div>
+                    <div class="" style="margin-top:1rem;">
+                        <a class="btn-floating" @click.prevent="retrieveSoldProducts"><i class="material-icons">send</i></a>
+                    </div>
+                </div>
+            
+                {{-- Bar Chart--}}
+                <div class="col s12">
+                    <canvas id="barChart"></canvas>
                 </div>
             </div>
         </div>
