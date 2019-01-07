@@ -41,71 +41,63 @@
 
             {{-- Requested Products --}}
             <div class="col s12 m4">
-                <div class="card hoverable">
-                    <div class="card-content  grey lighten-5">
-                        <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'requested'])}}"
-                                class="blue-text"
-                                style="font-weight: 700;"
-                            >
-                                Requested
-                            </a>
-                        </span>
-                        <h3>@{{ overallRequested }}</h3>
-                    </div>
-                    <div class="card-action teal darken-3 ">
-                        <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.requested.boar }} </a>
-                        <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.requested.sow }} </a>
-                        <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.requested.gilt }} </a>
-                        <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.requested.semen }} </a>
-                    </div>
-                </div>
+                <a href="{{route('dashboard.productStatus',['status' => 'requested'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content  grey lighten-5">
+                            <span class="card-title">
+                                <b>Requested</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallRequested }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.requested.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.requested.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.requested.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.requested.semen }} </a>
+                        </div>
+                    </div>      
+                </a>
             </div>
 
             {{-- Reserved Products --}}
             <div class="col s12 m4">
-                <div class="card hoverable">
-                    <div class="card-content  grey lighten-5">
-                        <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'reserved'])}}"
-                                class="blue-text"
-                                style="font-weight: 700;"
-                            >
-                                Reserved
-                            </a>
-                        </span>
-                        <h3>@{{ overallReserved }}</h3>
+                <a href="{{route('dashboard.productStatus',['status' => 'reserved'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content  grey lighten-5">
+                            <span class="card-title">
+                                <b>Reserved</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallReserved }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.reserved.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.reserved.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.reserved.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.reserved.semen }} </a>
+                        </div>
                     </div>
-                    <div class="card-action teal darken-3 ">
-                        <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.reserved.boar }} </a>
-                        <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.reserved.sow }} </a>
-                        <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.reserved.gilt }} </a>
-                        <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.reserved.semen }} </a>
-                    </div>
-                </div>
+                </a>
             </div>
 
             {{-- On Delivery Products --}}
             <div class="col s12 m4">
-                <div class="card hoverable">
-                    <div class="card-content  grey lighten-5">
-                        <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'on_delivery'])}}"
-                                class="blue-text"
-                                style="font-weight: 700;"
-                            >
-                                On Delivery
-                            </a>
-                        </span>
-                        <h3>@{{ overallOnDelivery }}</h3>
+                <a href="{{route('dashboard.productStatus',['status' => 'on_delivery'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content  grey lighten-5">
+                            <span class="card-title">
+                                <b>On Delivery</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallOnDelivery }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.on_delivery.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.on_delivery.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.on_delivery.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.on_delivery.semen }} </a>
+                        </div>
                     </div>
-                    <div class="card-action teal darken-3 ">
-                        <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.on_delivery.boar }} </a>
-                        <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.on_delivery.sow }} </a>
-                        <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.on_delivery.gilt }} </a>
-                        <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.on_delivery.semen }} </a>
-                    </div>
-                </div>
+                    
+                </a>
             </div>
 
             {{-- Product Management --}}
@@ -122,71 +114,63 @@
             
             {{-- Hidden Products --}}
             <div class="col s12 m4">
-                <div class="card hoverable">
-                    <div class="card-content   grey lighten-5">
-                        <span class="card-title">
-                            <a href="{{route('products',['type' => 'all-type', 'status' => 'hidden', 'sort' => 'none'])}}"
-                                class="blue-text"
-                                style="font-weight: 700;"
-                            >
-                                Hidden
-                            </a>
-                        </span>
-                        <h3>@{{ overallHidden }}</h3>
+                <a href="{{route('products',['type' => 'all-type', 'status' => 'hidden', 'sort' => 'none'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content   grey lighten-5">
+                            <span class="card-title">
+                                <b>Hidden</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallHidden }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.hidden.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.hidden.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.hidden.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.hidden.semen }} </a>
+                        </div>
                     </div>
-                    <div class="card-action teal darken-3 ">
-                        <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.hidden.boar }} </a>
-                        <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.hidden.sow }} </a>
-                        <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.hidden.gilt }} </a>
-                        <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.hidden.semen }} </a>
-                    </div>
-                </div>
+                    
+                </a>
             </div>
 
             {{-- Displayed Products --}}
             <div class="col s12 m4">
-                <div class="card hoverable">
-                    <div class="card-content  grey lighten-5">
-                        <span class="card-title">
-                            <a href="{{route('products',['type' => 'all-type', 'status' => 'displayed', 'sort' => 'none'])}}"
-                                class="blue-text"
-                                style="font-weight: 700;"
-                            >
-                                Displayed
-                            </a>
-                        </span>
-                        <h3>@{{ overallDisplayed }}</h3>
+                <a href="{{route('products',['type' => 'all-type', 'status' => 'displayed', 'sort' => 'none'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content  grey lighten-5">
+                            <span class="card-title">
+                                <b>Displayed</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallDisplayed }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.displayed.boar + dashboardStats.requested.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.displayed.sow + dashboardStats.requested.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.displayed.gilt + dashboardStats.requested.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.displayed.semen + dashboardStats.requested.semen }} </a>
+                        </div>
                     </div>
-                    <div class="card-action teal darken-3 ">
-                        <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.displayed.boar + dashboardStats.requested.boar }} </a>
-                        <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.displayed.sow + dashboardStats.requested.sow }} </a>
-                        <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.displayed.gilt + dashboardStats.requested.gilt }} </a>
-                        <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.displayed.semen + dashboardStats.requested.semen }} </a>
-                    </div>
-                </div>
+                </a>
             </div>
 
             {{-- Total Products Available --}}
             <div class="col s12 m4">
-                <div class="card hoverable">
-                    <div class="card-content  grey lighten-5">
-                        <span class="card-title">
-                            <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}"
-                                    class="blue-text"
-                                    style="font-weight: 700;"
-                                >
-                                    Available Products
-                                </a>
-                        </span>
-                        <h3>@{{ overallProductsAvailable }}</h3>
+                <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content  grey lighten-5">
+                            <span class="card-title">
+                                <b>Available Products</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallProductsAvailable }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.requested.boar + dashboardStats.displayed.boar + dashboardStats.hidden.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.requested.sow + dashboardStats.displayed.sow + dashboardStats.hidden.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.requested.gilt + dashboardStats.displayed.gilt + dashboardStats.hidden.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.requested.semen + dashboardStats.displayed.semen + dashboardStats.hidden.semen }} </a>
+                        </div>
                     </div>
-                    <div class="card-action teal darken-3 ">
-                        <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.requested.boar + dashboardStats.displayed.boar + dashboardStats.hidden.boar }} </a>
-                        <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.requested.sow + dashboardStats.displayed.sow + dashboardStats.hidden.sow }} </a>
-                        <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.requested.gilt + dashboardStats.displayed.gilt + dashboardStats.hidden.gilt }} </a>
-                        <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.requested.semen + dashboardStats.displayed.semen + dashboardStats.hidden.semen }} </a>
-                    </div>
-                </div>
+                </a>
             </div>
 
         </div>
