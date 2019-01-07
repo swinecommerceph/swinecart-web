@@ -98,6 +98,7 @@ $(document).ready(function(){
 			},
 			addServerMessage : function(message){
 				message = JSON.parse(message);
+				
 				this.addMessage({
 					"msg" 	: message.message,
 					"class"	: "user",
@@ -107,6 +108,7 @@ $(document).ready(function(){
 			},
 			addMeAmessage : function(message){
 				message = JSON.parse(message);
+
 				this.addMessage({
 					"msg" 	: message.message,
 					"class"	: "mine",
@@ -115,7 +117,6 @@ $(document).ready(function(){
 				});
 			},
 			addMessage : function(message) {
-
 				this.messages.push(message);
 
 				if($('#thread-'+threadid).length)
