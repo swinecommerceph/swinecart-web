@@ -67,7 +67,7 @@
 	      		{{-- If user is a guest --}}
 		        @if(Auth::guest())
 							<li><a href="{{ route('home_path') }}"> Products </a></li>
-							<li><a href="/asbap"> ASBAP </a></li>
+							<li><a target="_blank" href="http://www.bai.da.gov.ph/index.php/regulatory/item/356-accreditation-of-swine-breeder-farm"> ASBAP </a></li>
 							@if(Request::is('/'))
 								<li><a href="{{ route('login') }}"> Login </a></li>
 								<li><a href="{{ route('register') }}"> Register </a></li>
