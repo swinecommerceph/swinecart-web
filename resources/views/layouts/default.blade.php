@@ -66,7 +66,7 @@
 	      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 	      		{{-- If user is a guest --}}
 		        @if(Auth::guest())
-							<li><a href="{{ route('home_path') }}"> Products </a></li>
+							<li><a href="/view-products"> Products </a></li>
 							<li><a target="_blank" href="http://www.bai.da.gov.ph/index.php/regulatory/item/356-accreditation-of-swine-breeder-farm"> SBFAP </a></li>
 							@if(Request::is('/'))
 								<li><a href="{{ route('login') }}"> Login </a></li>

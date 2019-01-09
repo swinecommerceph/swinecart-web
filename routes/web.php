@@ -15,6 +15,9 @@ Route::get('/',['as' => 'index_path', function () {
     return view('home');
 }])->middleware('guest');
 
+// View All Products Publicly
+Route::get('view-products',['as' => 'products.view', 'uses' => 'ProductController@viewProductsInPublic']);
+
 // Sample Email template
 // Route::get('/sample', function(){
 //     $verCode = 'kasjSTG43';
