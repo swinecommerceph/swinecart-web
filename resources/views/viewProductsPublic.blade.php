@@ -20,3 +20,7 @@
 @section('content')
   <h1>All Products</h1>
 @endsection
+
+@section('customScript')
+    <script src="{{ elixir('/js/customer/viewProducts.js') }}"></script>
+@endsection
