@@ -29,6 +29,18 @@
  	.chat-bubble.out { float:right; background-color: #0071FF; color: white;}
 </style>
 
+<div class="row" style="padding-left: 0.5vw;">
+	<div id="threadname">
+		@if($threadId != '' && sizeof($threads) == 0)
+			{{ $otherName }}
+		@elseif(sizeof($threads) == 0)
+			You have no messages.
+		@else
+			{{ $threads[0]->otherparty() }}
+		@endif
+	</div>
+</div>
+
 <div class="row">
 
 	<div class="col m3 row">
@@ -66,15 +78,7 @@
 
 			<div class="panel panel-default">
 
-				<div id="threadname" class="panel-heading center-align">
-					@if($threadId != '' && sizeof($threads) == 0)
-						{{ $otherName }}
-					@elseif(sizeof($threads) == 0)
-						You have no messages.
-					@else
-						{{ $threads[0]->otherparty() }}
-					@endif
-				</div>
+				
 
 				<div class="panel-body" id="chat">
 
