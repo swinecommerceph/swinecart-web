@@ -267,7 +267,7 @@
                     </span>
                     <div id="review-slider" class="slider">
                         <ul class="slides" style="background:hsl(0, 0%, 97%);">
-                            <li v-for="review in dashboardStats.ratings.reviews">
+                            <li v-for="review in (dashboardStats.ratings.reviews).slice(0,3)">
                                 <img src="">
                                 <div class="caption right-align">
                                     <h5 style="margin:0; color:hsl(0, 0%, 29%);">"@{{ review.comment }}"</h5>

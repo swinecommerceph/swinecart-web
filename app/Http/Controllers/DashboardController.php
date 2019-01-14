@@ -84,7 +84,7 @@ class DashboardController extends Controller
     public function showReviewsAndRatings()
     {
         $breeder = $this->user->userable;
-        $reviews = $breeder->reviews()->orderBy('created_at', 'desc')->get();
+        $reviews = $breeder->reviews()->orderBy('created_at', 'desc')->limit(2)->get();
 
         foreach ($reviews as $review) {
             $review->date = Carbon::createFromFormat('Y-m-d H:i:s', $review->created_at)->toFormattedDateString();
