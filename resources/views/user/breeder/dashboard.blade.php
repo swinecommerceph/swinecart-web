@@ -269,7 +269,7 @@
                         <ul class="slides" style="background:hsl(0, 0%, 97%);">
                             <li v-for="review in dashboardStats.ratings.reviews">
                                 <img src="">
-                                <div class="caption center-align">
+                                <div class="caption right-align">
                                     <h5 style="margin:0; color:hsl(0, 0%, 29%);">"@{{ review.comment }}"</h5>
                                     <h6 style="color:hsl(0, 0%, 45%);">- @{{ review.customerName }}</h6>
                                 </div>
