@@ -107,13 +107,22 @@
 
 					</ul>
 
-					<div style="display:table; width: 100%;">
-
-						<input placeholder="Enter your message here."
+					<div class="row">
+						<div class="col s11">
+							<input placeholder="Enter your message here."
 						 		style="display:table-cell; width: 100%;"
 							   type="text"
 							   v-model="newMessage"
-							   @keyup.enter="sendMessage"/>
+							   @keyup.enter="sendMessage">
+						</div>
+						<div 
+					    @click="sendMessage" 
+							class="col s1"
+							style="margin-top: 1vh; cursor: pointer;">
+							<i class="material-icons teal-text">
+								send
+							</i>
+						</div>
 					</div>
 				</div>
 			</div>
