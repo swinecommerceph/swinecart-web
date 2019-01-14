@@ -25,8 +25,8 @@
 
 
  	.chat-bubble { border-radius: 10px; min-width: 200px; padding:10px; }
- 	.chat-bubble.in { float:left; background-color: #4fc3f7; }
- 	.chat-bubble.out { float:right; background-color: #e0e0e0; }
+ 	.chat-bubble.in { float:left; background-color: #e0e0e0; color: #424242;}
+ 	.chat-bubble.out { float:right; background-color: #0071FF; color: white;}
 </style>
 
 <div class="row">
