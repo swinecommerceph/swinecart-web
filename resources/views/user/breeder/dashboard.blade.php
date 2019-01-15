@@ -16,10 +16,6 @@
     Your Dashboard.
 @endsection
 
-@section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-@endsection
-
 @section('content')
     <br>
 
