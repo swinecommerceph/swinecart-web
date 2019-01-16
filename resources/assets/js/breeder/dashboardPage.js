@@ -14,7 +14,7 @@ Vue.component('custom-date-from-select', {
         // Initialize datepicker
         $('#date-from').pickadate({      
             min: new Date(self.dateAccreditation),
-            max: true,
+            max: moment().format(),
             selectMonths: true,
             selectYears: true,
             format: 'mmmm yyyy',
