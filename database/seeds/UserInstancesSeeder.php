@@ -75,15 +75,22 @@ class UserInstancesSeeder extends Seeder
 
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
-            // Create Farm Address. Override accreditation default values
-            $farm = factory(App\Models\FarmAddress::class)->create([
-                'accreditation_no' => random_int(500,1000),
-                'accreditation_status' => 'active',
-                'accreditation_date' => \Carbon\Carbon::now()->subYear(),
-                'accreditation_expiry' => \Carbon\Carbon::now()->addYear()
-            ]);
+            
+
+            for ($i = 0; $i < 3; $i++) {
+                // Create Farm Address. Override accreditation default values
+                $farm = factory(App\Models\FarmAddress::class)->create([
+                    'accreditation_no' => random_int(500,1000),
+                    'accreditation_status' => 'active',
+                    'accreditation_date' => \Carbon\Carbon::now()->subYear(),
+                    'accreditation_expiry' => \Carbon\Carbon::now()->addYear()
+                ]);
+                $breeder->farmAddresses()->save($farm);
+            }
+            
             $breeder->users()->save($user);
-            $breeder->farmAddresses()->save($farm);
+            
+
             // Change name if Breeder
             $user->name = $companyNames[$breeder->id-1];
             $user->save();

@@ -26,13 +26,14 @@ Vue.component('custom-date-from-select', {
         var self = this;
 
         // Initialize datepicker
-        $('#date-from').pickadate({
+        $('#date-from').pickadate({      
             min: new Date(self.dateAccreditation),
             max: true,
             selectMonths: true,
             selectYears: true,
             format: 'mmmm yyyy',
-            formatSubmit: 'yyyy-mm-dd'
+            formatSubmit: 'yyyy-mm-dd',
+            today: ''
         });
 
         $('#date-from').on('change', function(){
@@ -159,6 +160,8 @@ var vm = new Vue({
         dateFromChange: function(value){
             // Trigger if dateFrom component's value changes
 
+            // value = Month Year picked
+            
             var minDate = new Date(this.dateFromObject.get('select','yyyy-mm-dd'));
             var now = moment(this.serverDateNow);
             var constrictedDate, maxDate;
