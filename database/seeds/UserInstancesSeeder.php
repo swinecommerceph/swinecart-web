@@ -76,7 +76,7 @@ class UserInstancesSeeder extends Seeder
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             
-
+            // Make farm count per breeder up to 3 
             for ($i = 0; $i < 3; $i++) {
                 // Create Farm Address. Override accreditation default values
                 $farm = factory(App\Models\FarmAddress::class)->create([
