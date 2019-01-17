@@ -179,7 +179,7 @@
             </h4>
 
             {{-- Guide text --}}
-            <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select a frequency to graph:</p>
+            <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select a frequency to graph to see your performance:</p>
             
             {{-- Charts --}}
             <div id="charts-container" class="">  
