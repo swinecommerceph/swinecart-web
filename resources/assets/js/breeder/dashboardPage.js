@@ -58,7 +58,6 @@ Vue.component('custom-date-to-select', {
 var vm = new Vue({
     el: '#card-status',
     data: {
-        barChartData: '',
         barChart: '',
         barChartConfig: {},
         chosenFrequency: 'monthly',
@@ -261,8 +260,6 @@ var vm = new Vue({
     },
     created: function(){
 
-       
-
         // Initialize local data
         this.barChartConfig = {
             labels: rawLabels,
@@ -289,7 +286,6 @@ var vm = new Vue({
             }]
         };
 
-        //this.barChartData = rawBarChartData;
         this.latestAccreditation = rawLatestAccreditation;
         this.serverDateNow = rawServerDateNow;
         this.dashboardStats = rawDashboardStats;
@@ -305,11 +301,6 @@ var vm = new Vue({
         Chart.defaults.global.defaultFontFamily = 'Poppins';
         Chart.defaults.global.defaultFontSize = 14;
         Chart.defaults.global.title.fontSize = 18;
-
-        
-
-        //console.log('here');
-        //console.log(this.barChartConfig.dataBoar);
 
         // Instantiating the Bar Chart
         var barChartCanvas = document.getElementById("barChart");
