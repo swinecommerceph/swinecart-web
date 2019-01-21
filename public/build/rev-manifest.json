@@ -1,7 +1,7 @@
 {
   "js/breeder/createProfile.js": "js/breeder/createProfile-72c2251467.js",
   "js/breeder/custom.js": "js/breeder/custom-2135184212.js",
-  "js/breeder/dashboard.js": "js/breeder/dashboard-0d847d1535.js",
+  "js/breeder/dashboard.js": "js/breeder/dashboard-44fa03be27.js",
   "js/breeder/dashboardProductStatus.js": "js/breeder/dashboardProductStatus-36943d7aca.js",
   "js/breeder/editProfile.js": "js/breeder/editProfile-31b45a5049.js",
   "js/breeder/notifications.js": "js/breeder/notifications-6ca6679407.js",
@@ -16,5 +16,5 @@
   "js/customer/viewProductDetail.js": "js/customer/viewProductDetail-6156ed9478.js",
   "js/customer/viewProducts.js": "js/customer/viewProducts-7409be26ec.js",
   "js/siteCustom.js": "js/siteCustom-a6b0b22ec0.js",
-  "js/vendor.js": "js/vendor-66cbe56687.js"
+  "js/vendor.js": "js/vendor-f604486d5b.js"
 }

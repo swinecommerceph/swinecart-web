@@ -20,7 +20,8 @@ elixir(function(mix) {
         'resources/assets/js/vendor/VueJS/vue-resource.min.js',
         'resources/assets/js/vendor/moment.min.js',
         'resources/assets/js/vendor/autobahn.min.js',
-        'resources/assets/js/vendor/lodash.min.js'
+        'resources/assets/js/vendor/lodash.min.js',
+        'resources/assets/js/vendor/patternomaly.js'
     ], 'public/js/vendor.js');
 
     // Concatenate js files for specific pages

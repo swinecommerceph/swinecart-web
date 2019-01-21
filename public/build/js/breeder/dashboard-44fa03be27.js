@@ -267,6 +267,8 @@ var vm = new Vue({
     created: function(){
 
         // Initialize local data
+
+
         this.barChartData = rawBarChartData;
         this.latestAccreditation = rawLatestAccreditation;
         this.serverDateNow = rawServerDateNow;
@@ -283,6 +285,8 @@ var vm = new Vue({
         Chart.defaults.global.defaultFontFamily = 'Poppins';
         Chart.defaults.global.defaultFontSize = 14;
         Chart.defaults.global.title.fontSize = 18;
+
+        //console.log('vue ' + nameName);
 
         // Instantiating the Bar Chart
         var barChartCanvas = document.getElementById("barChart");

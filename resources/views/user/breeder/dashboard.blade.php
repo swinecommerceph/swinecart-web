@@ -200,21 +200,23 @@
                 </div>
 
                 {{-- Dates --}}
-                <div class="col s5">
-                    <div class="input-field col s5">
+                <div class="col s8">
+                    <div class="input-field col s4">
                         <custom-date-from-select v-model="dateFromInput"
                             :date-accreditation="latestAccreditation"
                             @date-from-select="dateFromChange"
                         >
                         </custom-date-from-select>
                     </div>
-                    <div class="input-field col s5">
+                    <div class="input-field col s4">
                         <custom-date-to-select v-model="dateToInput"
                             @date-to-select="dateToChange"
                             v-show="chosenFrequency !== 'weekly'"> </custom-date-to-select>
                     </div>
                     <div class="" style="margin-top:1rem;">
-                        <a class="btn-floating" @click.prevent="retrieveSoldProducts"><i class="material-icons">send</i></a>
+                        <a class="btn teal darken-3" @click.prevent="retrieveSoldProducts">
+                            <b>Graph</b>
+                        </a>
                     </div>
                 </div>
             
@@ -298,23 +300,28 @@
         var rawLatestAccreditation = "{{ $latestAccreditation }}";
         var rawServerDateNow = "{{ $serverDateNow }}";
         var rawChartTitle = "{!! $soldData['title'] !!}";
+
         var rawBarChartData = {
             labels: {!! json_encode($soldData['labels']) !!},
             datasets: [{
                 label: 'Boar',
-                backgroundColor: 'rgb(255, 99, 132)',
+                //backgroundColor: pattern.draw('zigzag-vertical', '#ff6384'),
+                backgroundColor: 'green',
                 data: {{ json_encode($soldData['dataSets'][0]) }}
             }, {
                 label: 'Sow',
+                //backgroundColor: pattern.draw('diagonal', '#36a2eb'),
                 backgroundColor: 'rgb(54, 162, 235)',
                 data: {{ json_encode($soldData['dataSets'][1]) }}
             }, {
                 label: 'Gilt',
                 backgroundColor: 'rgb(75, 192, 192)',
+                //backgroundColor: pattern.draw('line-vertical', '#cc65fe'),
                 data: {{ json_encode($soldData['dataSets'][2]) }}
             }, {
                 label: 'Semen',
                 backgroundColor: 'rgb(153, 102, 255)',
+                //backgroundColor: pattern.draw('cross', '#ffce56'),
                 data: {{ json_encode($soldData['dataSets'][3]) }}
             }]
 
