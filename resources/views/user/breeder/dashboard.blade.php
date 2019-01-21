@@ -301,6 +301,12 @@
         var rawServerDateNow = "{{ $serverDateNow }}";
         var rawChartTitle = "{!! $soldData['title'] !!}";
 
+        var rawLabels = {!! json_encode($soldData['labels'])!!};
+        var rawDataBoar = {{ json_encode($soldData['dataSets'][0]) }};
+        var rawDataSow = {{ json_encode($soldData['dataSets'][1]) }};
+        var rawDataGilt = {{ json_encode($soldData['dataSets'][2]) }};
+        var rawDataSemen = {{ json_encode($soldData['dataSets'][3]) }};
+
         var rawBarChartData = {
             labels: {!! json_encode($soldData['labels']) !!},
             datasets: [{

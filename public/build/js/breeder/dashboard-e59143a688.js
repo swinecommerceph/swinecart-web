@@ -74,6 +74,7 @@ var vm = new Vue({
     data: {
         barChartData: '',
         barChart: '',
+        barChartConfig: {},
         chosenFrequency: 'monthly',
         dateFromInput: '',
         dateToInput: '',
@@ -267,9 +268,32 @@ var vm = new Vue({
     created: function(){
 
         // Initialize local data
+        this.barChartConfig = {
+            labels: rawLabels,
+            datasets: [{
+                label: 'Boar',
+                //backgroundColor: pattern.draw('zigzag-vertical', '#ff6384'),
+                backgroundColor: 'green',
+                data: rawDataBoar
+            }, {
+                label: 'Sow',
+                //backgroundColor: pattern.draw('diagonal', '#36a2eb'),
+                backgroundColor: 'rgb(54, 162, 235)',
+                data: rawDataSow
+            }, {
+                label: 'Gilt',
+                backgroundColor: 'rgb(75, 192, 192)',
+                //backgroundColor: pattern.draw('line-vertical', '#cc65fe'),
+                data: rawDataGilt
+            }, {
+                label: 'Semen',
+                backgroundColor: 'rgb(153, 102, 255)',
+                //backgroundColor: pattern.draw('cross', '#ffce56'),
+                data: rawDataSemen
+            }]
+        };
 
-
-        this.barChartData = rawBarChartData;
+        //this.barChartData = rawBarChartData;
         this.latestAccreditation = rawLatestAccreditation;
         this.serverDateNow = rawServerDateNow;
         this.dashboardStats = rawDashboardStats;
@@ -286,14 +310,15 @@ var vm = new Vue({
         Chart.defaults.global.defaultFontSize = 14;
         Chart.defaults.global.title.fontSize = 18;
 
-        //console.log('vue ' + nameName);
+        //console.log('here');
+        //console.log(this.barChartConfig.dataBoar);
 
         // Instantiating the Bar Chart
         var barChartCanvas = document.getElementById("barChart");
 
         this.barChart = new Chart(barChartCanvas, {
             type: 'bar',
-            data: this.barChartData,
+            data: this.barChartConfig,
             options: {
                 defaultFontFamily: 'Poppins',
                 title:{
