@@ -201,7 +201,8 @@ var vm = new Vue({
         },
 
         getPattern: function (shape, color) {
-        
+          
+
           let rgb = Chart.helpers.color(color)
           let bgPattern = pattern.draw(shape, color)
           return Chart.helpers.extend(bgPattern, {r: rgb.red(), g: rgb.green(), b: rgb.blue(), alpha: rgb.alpha()})
@@ -227,8 +228,8 @@ var vm = new Vue({
 
                         // Store fetched data in local component data
                         var soldData = response.body;
-                        this.barChartData.labels = soldData.labels;
-                        this.barChartData.datasets.forEach(function(dataset, i){
+                        this.barChartConfig.labels = soldData.labels;
+                        this.barChartConfig.datasets.forEach(function(dataset, i){
                             dataset.data = soldData.dataSets[i];
                         });
                         this.barChart.options.title.text = soldData.title;
@@ -268,17 +269,21 @@ var vm = new Vue({
             datasets: [{
                 label: 'Boar',
                 backgroundColor: this.getPattern('zigzag-vertical', '#ff6384'),
+                //backgroundColor: 'green',
                 data: rawDataBoar
             }, {
                 label: 'Sow',
                 backgroundColor: this.getPattern('diagonal', '#36a2eb'),
+                //backgroundColor: 'rgb(54, 162, 235)',
                 data: rawDataSow
             }, {
                 label: 'Gilt',
-                backgroundColor: this.getPattern('line-vertical', 'green'),
+                //backgroundColor: 'rgb(75, 192, 192)',
+                backgroundColor: this.getPattern('line-vertical', '#cc65fe'),
                 data: rawDataGilt
             }, {
                 label: 'Semen',
+                //backgroundColor: 'rgb(153, 102, 255)',
                 backgroundColor: this.getPattern('cross', '#ffce56'),
                 data: rawDataSemen
             }]
