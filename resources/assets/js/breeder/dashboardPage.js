@@ -200,6 +200,13 @@ var vm = new Vue({
             this.dateToInput = value;
         },
 
+        getPattern: function (shape, color) {
+        
+          let rgb = Chart.helpers.color(color)
+          let bgPattern = pattern.draw(shape, color)
+          return Chart.helpers.extend(bgPattern, {r: rgb.red(), g: rgb.green(), b: rgb.blue(), alpha: rgb.alpha()})
+        },
+
         retrieveSoldProducts: function(){
 
             // Get Sold Products data from server according to chosen frequency
@@ -253,28 +260,26 @@ var vm = new Vue({
     },
     created: function(){
 
+       
+
         // Initialize local data
         this.barChartConfig = {
             labels: rawLabels,
             datasets: [{
                 label: 'Boar',
-                //backgroundColor: pattern.draw('zigzag-vertical', '#ff6384'),
-                backgroundColor: 'green',
+                backgroundColor: this.getPattern('zigzag-vertical', '#ff6384'),
                 data: rawDataBoar
             }, {
                 label: 'Sow',
-                //backgroundColor: pattern.draw('diagonal', '#36a2eb'),
-                backgroundColor: 'rgb(54, 162, 235)',
+                backgroundColor: this.getPattern('diagonal', '#36a2eb'),
                 data: rawDataSow
             }, {
                 label: 'Gilt',
-                backgroundColor: 'rgb(75, 192, 192)',
-                //backgroundColor: pattern.draw('line-vertical', '#cc65fe'),
+                backgroundColor: this.getPattern('line-vertical', 'green'),
                 data: rawDataGilt
             }, {
                 label: 'Semen',
-                backgroundColor: 'rgb(153, 102, 255)',
-                //backgroundColor: pattern.draw('cross', '#ffce56'),
+                backgroundColor: this.getPattern('cross', '#ffce56'),
                 data: rawDataSemen
             }]
         };
@@ -295,6 +300,8 @@ var vm = new Vue({
         Chart.defaults.global.defaultFontFamily = 'Poppins';
         Chart.defaults.global.defaultFontSize = 14;
         Chart.defaults.global.title.fontSize = 18;
+
+        
 
         //console.log('here');
         //console.log(this.barChartConfig.dataBoar);

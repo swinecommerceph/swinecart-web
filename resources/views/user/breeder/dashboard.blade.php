@@ -307,31 +307,7 @@
         var rawDataGilt = {{ json_encode($soldData['dataSets'][2]) }};
         var rawDataSemen = {{ json_encode($soldData['dataSets'][3]) }};
 
-        var rawBarChartData = {
-            labels: {!! json_encode($soldData['labels']) !!},
-            datasets: [{
-                label: 'Boar',
-                //backgroundColor: pattern.draw('zigzag-vertical', '#ff6384'),
-                backgroundColor: 'green',
-                data: {{ json_encode($soldData['dataSets'][0]) }}
-            }, {
-                label: 'Sow',
-                //backgroundColor: pattern.draw('diagonal', '#36a2eb'),
-                backgroundColor: 'rgb(54, 162, 235)',
-                data: {{ json_encode($soldData['dataSets'][1]) }}
-            }, {
-                label: 'Gilt',
-                backgroundColor: 'rgb(75, 192, 192)',
-                //backgroundColor: pattern.draw('line-vertical', '#cc65fe'),
-                data: {{ json_encode($soldData['dataSets'][2]) }}
-            }, {
-                label: 'Semen',
-                backgroundColor: 'rgb(153, 102, 255)',
-                //backgroundColor: pattern.draw('cross', '#ffce56'),
-                data: {{ json_encode($soldData['dataSets'][3]) }}
-            }]
-
-        };
+        
         var rawDashboardStats = {!! json_encode($dashboardStats) !!};
     </script>
     <script src="{{ elixir('/js/breeder/dashboard.js') }}"></script>
