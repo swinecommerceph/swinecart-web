@@ -58,21 +58,21 @@
             <table id="product-status-table" class="striped bordered">
                 <thead>
                     <tr>
-                        <th @click="sortBy('name')" :class="sortKey == 'name' ? 'red-text' : '' ">
+                        <td @click="sortBy('name')" :class="sortKey == 'name' ? 'red-text' : '' ">
                             <span class="">
-                                Product Information
+                                PRODUCT INFORMATION
                                 <i class="material-icons right" v-if="sortOrders['name'] > 0">keyboard_arrow_up</i>
                                 <i class="material-icons right" v-else>keyboard_arrow_down</i>
                             </span>
-                        </th>
-                        <th @click="sortBy('status')" :class="sortKey == 'status' ? 'red-text' : '' ">
+                        </td>
+                        <td @click="sortBy('status')" :class="sortKey == 'status' ? 'red-text' : '' ">
                             <span class="">
-                                Status
+                                STATUS
                                 <i class="material-icons right" v-if="sortOrders['status'] > 0">keyboard_arrow_up</i>
                                 <i class="material-icons right" v-else>keyboard_arrow_down</i>
                             </span>
-                        </th>
-                        <th> Actions </th>
+                        </td>
+                        <td> ACTIONS </td>
                     </tr>
                 </thead>
                 <tbody>
