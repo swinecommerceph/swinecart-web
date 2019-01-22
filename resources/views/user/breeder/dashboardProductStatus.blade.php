@@ -35,11 +35,12 @@
             <div id="status-select" class="input-field col left">
                 <custom-status-select v-model="statusFilter" @status-select="statusChange"> </custom-status-select>
             </div>
-            <form class="col s3 right">
-                <div class="input-field inline col s12">
-                    <label id="search-label"  for="search">Search</label>
-                    <input type="text" id="search" name="search" v-model="searchQuery">
+            <form class="col s4 right">
+                <div class="input-field col s12">
+                    <i class="material-icons prefix">search</i>
+                    <input type="text" name="search" v-model="searchQuery" placeholder="Search for a product" autocomplete="off">
                 </div>
+
             </form>
         </div>
         <status-table :token="'{{ $token }}'"
