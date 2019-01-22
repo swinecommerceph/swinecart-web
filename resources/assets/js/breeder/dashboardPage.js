@@ -200,7 +200,8 @@ var vm = new Vue({
         },
 
         getPattern: function (shape, color) {
-          
+          // Function from https://github.com/chartjs/Chart.js/issues/4279
+          // Used to resolve the bug for using patterns from patternomaly.js
 
           let rgb = Chart.helpers.color(color)
           let bgPattern = pattern.draw(shape, color)
@@ -261,6 +262,8 @@ var vm = new Vue({
     created: function(){
 
         // Initialize local data
+
+        // object used for bar chart
         this.barChartConfig = {
             labels: rawLabels,
             datasets: [{

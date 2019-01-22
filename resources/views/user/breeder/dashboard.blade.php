@@ -297,6 +297,8 @@
 
 @section('customScript')
     <script type="text/javascript">
+        // Get the data from the Dashboard Controller and transfer it to Vue
+        
         var rawLatestAccreditation = "{{ $latestAccreditation }}";
         var rawServerDateNow = "{{ $serverDateNow }}";
         var rawChartTitle = "{!! $soldData['title'] !!}";
