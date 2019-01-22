@@ -22,13 +22,13 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <!-- <div class="row">
         <div class="col s12">
             <p class="caption">
                 See what's happening with your products. <br>
             </p>
         </div>
-    </div>
+    </div> -->
 
     <div id="product-status-container" class="row">
         <div class="row">
