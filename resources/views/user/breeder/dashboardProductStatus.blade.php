@@ -61,15 +61,21 @@
                         <td style="cursor: pointer;" @click="sortBy('name')" :class="sortKey == 'name' ? 'table-header-bold' : '' ">
                             <span class="">
                                 PRODUCT INFORMATION
-                                <i style="cursor: pointer;" class="material-icons right" v-if="sortOrders['name'] > 0">keyboard_arrow_up</i>
-                                <i class="material-icons right" v-else>keyboard_arrow_down</i>
+                                <!-- <i style="cursor: pointer;" class="material-icons right" v-if="sortOrders['name'] > 0">keyboard_arrow_up</i>
+                                <i class="material-icons right" v-else>keyboard_arrow_down</i> -->
+
+                                <i style="margin-left: 0 !important;" class="material-icons right">keyboard_arrow_up</i>
+                                <i class="material-icons right" >keyboard_arrow_down</i>
                             </span>
                         </td>
                         <td style="cursor: pointer;" @click="sortBy('status')" :class="sortKey == 'status' ? 'table-header-bold' : '' ">
                             <span class="">
                                 STATUS
-                                <i class="material-icons right" v-if="sortOrders['status'] > 0">keyboard_arrow_up</i>
-                                <i class="material-icons right" v-else>keyboard_arrow_down</i>
+                                <!-- <i class="material-icons right" v-if="sortOrders['status'] > 0">keyboard_arrow_up</i>
+                                <i class="material-icons right" v-else>keyboard_arrow_down</i> -->
+
+                                <i style="margin-left: 0 !important;" class="material-icons right">keyboard_arrow_up</i>
+                                <i class="material-icons right">keyboard_arrow_down</i>
                             </span>
                         </td>
                         <td> ACTIONS </td>
