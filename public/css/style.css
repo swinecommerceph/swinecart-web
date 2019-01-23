@@ -360,6 +360,10 @@ body {
 	padding:0px;
 }
 
+.table-header-bold {
+  font-weight: 700 !important;
+}
+
 /* Tab Styles */
 .tabs {
   overflow-x: hidden;
