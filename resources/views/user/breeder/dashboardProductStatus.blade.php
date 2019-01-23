@@ -66,8 +66,11 @@
 
                                 <i style="margin-left: 0 !important;"
                                     class="material-icons right"
+                                    :class="isProductInformationUpActive === true ? 'blue-text' : 'black-text'"
                                 >keyboard_arrow_up</i>
-                                <i class="material-icons right" :class="sortKey !== 'name' ? '' : 'blue-text' ">keyboard_arrow_down</i>
+                                <i class="material-icons right"
+                                    :class="isProductInformationUpActive === false ? 'blue-text' : 'black-text'"
+                                >keyboard_arrow_down</i>
                             </span>
                         </td>
                         <td style="cursor: pointer;" @click="sortBy('status')" :class="sortKey == 'status' ? 'table-header-bold' : '' ">

@@ -53,7 +53,8 @@ Vue.component('status-table',{
     data: function(){
         return {
             sortKey: '',
-            isProducInformationActiveUp: false,
+            isProductInformationUpActive: '',
+            isProductInformationUpActiveFlag: true,
             sortOrders:{
                 name: 1,
                 status: 1
@@ -137,7 +138,14 @@ Vue.component('status-table',{
     methods:{
 
         sortBy: function(key){
+            if (this.isProductInformationUpActiveFlag) {
+                this.isProductInformationUpActiveFlag = false;
+                this.isProductInformationUpActive = false;
+            }
+            
             // Sort table column according to what's chosen
+            this.isProductInformationUpActive = !this.isProductInformationUpActive
+ 
             this.sortKey = key;
             this.sortOrders[key] = this.sortOrders[key] * -1;
         },
