@@ -53,6 +53,7 @@ Vue.component('status-table',{
     data: function(){
         return {
             sortKey: '',
+            isProducInformationActiveUp: false,
             sortOrders:{
                 name: 1,
                 status: 1

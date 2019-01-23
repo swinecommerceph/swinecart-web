@@ -64,8 +64,10 @@
                                 <!-- <i style="cursor: pointer;" class="material-icons right" v-if="sortOrders['name'] > 0">keyboard_arrow_up</i>
                                 <i class="material-icons right" v-else>keyboard_arrow_down</i> -->
 
-                                <i style="margin-left: 0 !important;" class="material-icons right">keyboard_arrow_up</i>
-                                <i class="material-icons right" >keyboard_arrow_down</i>
+                                <i style="margin-left: 0 !important;"
+                                    class="material-icons right"
+                                >keyboard_arrow_up</i>
+                                <i class="material-icons right" :class="sortKey !== 'name' ? '' : 'blue-text' ">keyboard_arrow_down</i>
                             </span>
                         </td>
                         <td style="cursor: pointer;" @click="sortBy('status')" :class="sortKey == 'status' ? 'table-header-bold' : '' ">

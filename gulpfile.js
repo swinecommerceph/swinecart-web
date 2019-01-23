@@ -83,6 +83,9 @@ elixir(function(mix) {
             'breeder/dashboardPage.js'
         ], 'public/js/breeder/dashboard.js')
         .scripts([
+            'breeder/dashboardProductStatus.js'
+        ], 'public/js/breeder/dashboardProductStatus.js')
+        .scripts([
             'breeder/product.js',
             'breeder/filter.js',
             'breeder/manageProducts_script.js',
@@ -119,7 +122,6 @@ elixir(function(mix) {
         'js/breeder/notifications.js',
         'js/breeder/reviews.js',
         'js/breeder/dashboard.js',
-        'js/breeder/dashboardProductStatus.js',
         'js/breeder/showProducts.js',
         'js/breeder/viewProductDetail.js'
     ]);
