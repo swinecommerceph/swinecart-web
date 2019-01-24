@@ -155,11 +155,17 @@ Vue.component('status-table',{
                 // for the switching color of arrow up and down
                 this.isProductInformationUpActive = !this.isProductInformationUpActive
             }
+            // sort alphabetically according to 'status' of product
             else if (key === 'status') {
+                /* this if condition is for the first visit of user 
+                 * in which the table rows are not yet sorted, and
+                 * the color of the arrows are still black
+                 */
                 if (this.isStatusUpActiveFlag) {
                     this.isStatusUpActiveFlag = false;
                     this.isStatusUpActive = false;
                 }
+                // for the switching color of arrow up and down
                 this.isStatusUpActive = !this.isStatusUpActive
             }
 
