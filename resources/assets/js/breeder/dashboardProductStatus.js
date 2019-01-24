@@ -143,6 +143,9 @@ Vue.component('status-table',{
 
             // sort alphabetically according to 'name' of product
             if (key === 'name') {
+                // reset the color of arrows in Status header if Product Info is clicked
+                this.isStatusUpActive = '';
+                
                 /* this if condition is for the first visit of user 
                  * in which the table rows are not yet sorted, and
                  * the color of the arrows are still black
