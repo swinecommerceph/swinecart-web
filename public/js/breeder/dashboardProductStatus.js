@@ -138,11 +138,19 @@ Vue.component('status-table',{
     methods:{
 
         sortBy: function(key){
+
+            // sort alphabetically according to 'name' of product
             if (key === 'name') {
+                /* this if condition is for the first visit of user 
+                 * in which the table rows are not yet sorted, and
+                 * the color of the arrows are still black
+                 */
                 if (this.isProductInformationUpActiveFlag) {
                     this.isProductInformationUpActiveFlag = false;
                     this.isProductInformationUpActive = false;
                 }
+
+                // for the switching color of arrow up and down
                 this.isProductInformationUpActive = !this.isProductInformationUpActive
             }
 
