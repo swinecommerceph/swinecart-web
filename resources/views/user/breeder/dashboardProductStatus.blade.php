@@ -73,9 +73,6 @@
                         <td style="cursor: pointer;" @click="sortBy('status')" :class="sortKey == 'status' ? 'table-header-bold' : '' ">
                             <span class="">
                                 STATUS
-                                <!-- <i class="material-icons right" v-if="sortOrders['status'] > 0">keyboard_arrow_up</i>
-                                <i class="material-icons right" v-else>keyboard_arrow_down</i> -->
-
                                 <i style="margin-left: 0 !important;"
                                     class="material-icons right"
                                     :class="isStatusUpActive === true ? 'blue-text' : 'black-text'"
