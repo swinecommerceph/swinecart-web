@@ -1364,6 +1364,18 @@ label {
   text-transform: none !important;
 }
 
+.btn.teal.darken-3:hover {
+  background-color: #009688 !important;
+}
+
+.btn.blue:hover {
+  background-color: #64b5f6 !important;
+}
+
+.btn.red.darken-2:hover {
+  background-color: #f44336 !important;
+}
+
 a.facebook {
  background-color: #4175CE !important; 
 }

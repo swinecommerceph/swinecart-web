@@ -122,7 +122,7 @@
                                     </template>
 
                                     <template v-if="product.customer_name">
-                                        <a class="btn tooltipped teal darken-3"
+                                        <a class="btn teal darken-3 tooltipped"
                                             :href="'{{ route('breeder.messages') }}/' + product.userid"
                                             :data-breeder-id="product.breeder_id"
                                             :data-customer-id="product.customer_id"
@@ -161,7 +161,7 @@
 
                             {{-- If product's status is reserved --}}
                             <template v-if="product.status == 'reserved'">
-                                <a class="btn teal darken-3 tooltipped"
+                                <a class="waves-effect waves-light btn blue tooltipped"
                                     data-position="right"
                                     data-tooltip="Send for delivery"
                                     style="margin-bottom:1rem; width: 13vw;"
@@ -170,7 +170,7 @@
                                 >
                                     Send
                                 </a> <br>
-                                <a class="btn red accent-2 tooltipped"
+                                <a class="btn red darken-2 tooltipped"
                                     data-position="right"
                                     data-tooltip="Cancel transaction"
                                     style="margin-bottom:1rem; width: 13vw;"
