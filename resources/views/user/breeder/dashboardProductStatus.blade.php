@@ -76,8 +76,13 @@
                                 <!-- <i class="material-icons right" v-if="sortOrders['status'] > 0">keyboard_arrow_up</i>
                                 <i class="material-icons right" v-else>keyboard_arrow_down</i> -->
 
-                                <i style="margin-left: 0 !important;" class="material-icons right">keyboard_arrow_up</i>
-                                <i class="material-icons right">keyboard_arrow_down</i>
+                                <i style="margin-left: 0 !important;"
+                                    class="material-icons right"
+                                    :class="isStatusUpActive === true ? 'blue-text' : 'black-text'"
+                                >keyboard_arrow_up</i>
+                                <i class="material-icons right"
+                                    :class="isStatusUpActive === false ? 'blue-text' : 'black-text'"
+                                >keyboard_arrow_down</i>
                             </span>
                         </td>
                         <td> ACTIONS </td>

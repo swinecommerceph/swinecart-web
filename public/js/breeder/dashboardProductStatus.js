@@ -55,6 +55,8 @@ Vue.component('status-table',{
             sortKey: '',
             isProductInformationUpActive: '',
             isProductInformationUpActiveFlag: true,
+            isStatusUpActive: '',
+            isStatusUpActiveFlag: true,
             sortOrders:{
                 name: 1,
                 status: 1
@@ -152,6 +154,13 @@ Vue.component('status-table',{
 
                 // for the switching color of arrow up and down
                 this.isProductInformationUpActive = !this.isProductInformationUpActive
+            }
+            else if (key === 'status') {
+                if (this.isStatusUpActiveFlag) {
+                    this.isStatusUpActiveFlag = false;
+                    this.isStatusUpActive = false;
+                }
+                this.isStatusUpActive = !this.isStatusUpActive
             }
 
             // Sort table column according to what's chosen
