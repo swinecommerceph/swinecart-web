@@ -58,31 +58,34 @@
             <table id="product-status-table" class="striped bordered">
                 <thead>
                     <tr>
-                        <td style="cursor: pointer;" @click="sortBy('name')" :class="sortKey == 'name' ? 'table-header-bold' : '' ">
+                        <td style="cursor: pointer; font-size: 3vh;" @click="sortBy('name')" :class="sortKey == 'name' ? 'table-header-bold' : '' ">
                             <span class="">
                                 PRODUCT INFORMATION
                                 <i style="margin-left: 0 !important;"
-                                    class="material-icons right"
+                                    class="material-icons prefix"
                                     :class="isProductInformationUpActive === true ? 'blue-text' : 'black-text'"
                                 >keyboard_arrow_up</i>
-                                <i class="material-icons right"
+                                <i class="material-icons prefix"
                                     :class="isProductInformationUpActive === false ? 'blue-text' : 'black-text'"
                                 >keyboard_arrow_down</i>
                             </span>
                         </td>
-                        <td style="cursor: pointer;" @click="sortBy('status')" :class="sortKey == 'status' ? 'table-header-bold' : '' ">
+                        <td style="cursor: pointer; font-size: 3vh;" @click="sortBy('status')" :class="sortKey == 'status' ? 'table-header-bold' : '' ">
                             <span class="">
                                 STATUS
+                                <!-- <i class="material-icons prefix" v-if="sortOrders['status'] > 0">keyboard_arrow_up</i>
+                                <i class="material-icons prefix" v-else>keyboard_arrow_down</i> -->
+
                                 <i style="margin-left: 0 !important;"
-                                    class="material-icons right"
+                                    class="material-icons prefix"
                                     :class="isStatusUpActive === true ? 'blue-text' : 'black-text'"
                                 >keyboard_arrow_up</i>
-                                <i class="material-icons right"
+                                <i class="material-icons prefix"
                                     :class="isStatusUpActive === false ? 'blue-text' : 'black-text'"
                                 >keyboard_arrow_down</i>
                             </span>
                         </td>
-                        <td> ACTIONS </td>
+                        <td style="font-size: 3vh;"> ACTIONS </td>
                     </tr>
                 </thead>
                 <tbody>
