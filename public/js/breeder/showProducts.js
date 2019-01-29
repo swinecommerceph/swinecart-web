@@ -196,7 +196,7 @@ var product = {
         });
     },
 
-    delete_selected: function(parent_form, products){
+    delete_selected: function(parent_form, products, products_container){
         // Check if there are checked products
         if(products.length > 0){
             // Acknowledge first confirmation to remove
@@ -221,6 +221,20 @@ var product = {
                         config.preloader_progress.fadeOut();
                         Materialize.toast('Selected Products deleted!', 2000, 'green lighten-1');
 
+                        console.log('BEFORE HERE');
+                        console.log((products_container).children().length);
+                        if ( (products_container).children().length == 0 ) {
+                            console.log('HERE!!!');
+                            (products_container).append(`
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h5 class="center">There are no products</h5>
+                                        </td>
+                                    </tr>
+                                </table>
+                            `);
+                        }
                     },
                     error: function(message){
                         console.log(message['responseText']);
@@ -876,7 +890,7 @@ $(document).ready(function(){
         $('#view-products-container input[type=checkbox]:checked').each(function(){
             checked_products.push($(this).attr('data-product-id'));
         });
-        product.delete_selected($('#manage-selected-form'), checked_products);
+        product.delete_selected($('#manage-selected-form'), checked_products, $('#view-products-container'));
     });
 
     // Display chosen product
@@ -920,7 +934,7 @@ $(document).ready(function(){
     // Delete chosen product
     $('.delete-product-button').click(function(e){
         e.preventDefault();
-        product.delete_selected($('#manage-selected-form'), [$(this).attr('data-product-id')]);
+        product.delete_selected($('#manage-selected-form'), [$(this).attr('data-product-id')], $('#view-products-container'));
     });
 
     // Redirect to designated link upon checkbox value change

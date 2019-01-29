@@ -196,7 +196,7 @@ var product = {
         });
     },
 
-    delete_selected: function(parent_form, products){
+    delete_selected: function(parent_form, products, products_container){
         // Check if there are checked products
         if(products.length > 0){
             // Acknowledge first confirmation to remove
@@ -221,6 +221,20 @@ var product = {
                         config.preloader_progress.fadeOut();
                         Materialize.toast('Selected Products deleted!', 2000, 'green lighten-1');
 
+                        console.log('BEFORE HERE');
+                        console.log((products_container).children().length);
+                        if ( (products_container).children().length == 0 ) {
+                            console.log('HERE!!!');
+                            (products_container).append(`
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <h5 class="center">There are no products</h5>
+                                        </td>
+                                    </tr>
+                                </table>
+                            `);
+                        }
                     },
                     error: function(message){
                         console.log(message['responseText']);

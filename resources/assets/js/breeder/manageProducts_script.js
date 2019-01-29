@@ -124,7 +124,7 @@ $(document).ready(function(){
         $('#view-products-container input[type=checkbox]:checked').each(function(){
             checked_products.push($(this).attr('data-product-id'));
         });
-        product.delete_selected($('#manage-selected-form'), checked_products);
+        product.delete_selected($('#manage-selected-form'), checked_products, $('#view-products-container'));
     });
 
     // Display chosen product
@@ -168,7 +168,7 @@ $(document).ready(function(){
     // Delete chosen product
     $('.delete-product-button').click(function(e){
         e.preventDefault();
-        product.delete_selected($('#manage-selected-form'), [$(this).attr('data-product-id')]);
+        product.delete_selected($('#manage-selected-form'), [$(this).attr('data-product-id')], $('#view-products-container'));
     });
 
     // Redirect to designated link upon checkbox value change
