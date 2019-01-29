@@ -88,7 +88,7 @@
                         <td style="font-size: 3vh;"> ACTIONS </td>
                     </tr>
                 </thead>
-                <tbody>
+                <tbody v-if="filteredProducts.length">
                     <tr v-for="product in filteredProducts">
                         <td>
                             <div class="row">
@@ -210,6 +210,11 @@
                                 </span>
                             </template>
                         </td>
+                    </tr>
+                </tbody>
+                <tbody v-else>
+                    <tr>
+                        <td colspan="3" class="center">No products found.</td>
                     </tr>
                 </tbody>
             </table>
