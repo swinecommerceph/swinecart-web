@@ -26,7 +26,7 @@
 					{{-- Name --}}
 					<div class="input-field col s6">
 						{!! Form::text('name', null, ['id' => 'name', 'class' => 'validate'])!!}
-						{!! Form::label('name', 'Name*') !!}
+						{!! Form::label('name', 'Name*', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 
 					{{-- Type --}}
@@ -38,7 +38,7 @@
 						  <option value="gilt">Gilt</option>
 					      <option value="semen">Semen</option>
 					    </select>
-					    <label>Type*</label>
+					    <label class="grey-text text-darken-3">Type*</label>
 					</div>
 				</div>
 
@@ -51,7 +51,7 @@
 								<option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
 							@endforeach
 					    </select>
-					    <label>Farm From*</label>
+					    <label class="grey-text text-darken-3">Farm From*</label>
 					</div>
 				</div>
 
@@ -59,7 +59,7 @@
 					{{-- Price --}}
 					<div class="input-field col s6">
 						{!! Form::text('price', null, ['class' => 'validate'])!!}
-						{!! Form::label('price', 'Price') !!}
+						{!! Form::label('price', 'Price', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 			</div>
@@ -71,11 +71,11 @@
 					<div class="input-field col s7">
 						<p>
 							<input name="radio-breed" type="radio" value="purebreed" id="purebreed" class="with-gap purebreed" checked/>
-		      				<label for="purebreed">Purebreed</label>
+		      				<label class="grey-text text-darken-3" for="purebreed">Purebreed</label>
 						</p>
 						<p>
 							<input name="radio-breed" type="radio" value="crossbreed" id="crossbreed" class="with-gap crossbreed"/>
-		      				<label for="crossbreed">Crossbreed</label>
+		      				<label class="grey-text text-darken-3" for="crossbreed">Crossbreed</label>
 						</p>
 					</div>
 				</div>
@@ -85,18 +85,18 @@
 						{{-- If pure breed --}}
 						<div class="input-field col s6">
 							{!! Form::text('breed', null, ['id' => 'breed'])!!}
-							{!! Form::label('breed', 'Breed*') !!}
+							{!! Form::label('breed', 'Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 					</div>
 					<div class="input-crossbreed-container">
 						{{-- If crossbreed --}}
 						<div class="input-field col s6">
 							{!! Form::text('fbreed', null, ['id' => 'fbreed'])!!}
-							{!! Form::label('fbreed', 'Father\'s Breed*') !!}
+							{!! Form::label('fbreed', 'Father\'s Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 						<div class="input-field col s6">
 							{!! Form::text('mbreed', null, ['id' => 'mbreed'])!!}
-							{!! Form::label('mbreed', 'Mother\'s Breed*') !!}
+							{!! Form::label('mbreed', 'Mother\'s Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 					</div>
 				</div>
@@ -105,13 +105,13 @@
 					{{-- Birthdate --}}
 					<div class="input-field col s6">
 						<input type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
-						<label for="birthdate">Birth Date</label>
+						<label class="grey-text text-darken-3" for="birthdate">Birth Date</label>
 					</div>
 
 					{{-- ADG --}}
 					<div class="input-field col s6">
 						{!! Form::text('adg', null, ['class' => 'validate'])!!}
-						{!! Form::label('adg', 'Average Daily Gain (grams)') !!}
+						{!! Form::label('adg', 'Average Daily Gain (grams)', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 
@@ -119,13 +119,13 @@
 					{{-- FCR --}}
 					<div class="input-field col s6">
 						{!! Form::text('fcr', null, ['class' => 'validate'])!!}
-						{!! Form::label('fcr', 'Feed Conversion Ratio') !!}
+						{!! Form::label('fcr', 'Feed Conversion Ratio', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 
 					{{-- Backfat thickness --}}
 					<div class="input-field col s6">
 						{!! Form::text('backfat_thickness', null, ['class' => 'validate'])!!}
-						{!! Form::label('backfat_thickness', 'Backfat thickness (mm)') !!}
+						{!! Form::label('backfat_thickness', 'Backfat thickness (mm)', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 
@@ -144,11 +144,11 @@
 						<div class="detail-container">
 							<div class="input-field col s6">
 								{!! Form::text('characteristic[]', null, ['class' => 'validate'])!!}
-								{!! Form::label('characteristic[]', 'Characteristic') !!}
+								{!! Form::label('characteristic[]', 'Characteristic', ['class' => 'grey-text text-darken-3']) !!}
 							</div>
 							<div class="input-field col s5">
 								{!! Form::text('value[]', null, ['class' => 'validate'])!!}
-								{!! Form::label('value[]', 'Value') !!}
+								{!! Form::label('value[]', 'Value', ['class' => 'grey-text text-darken-3']) !!}
 							</div>
 							<div class="input-field col s1 remove-button-container">
 								<a href="#" class="tooltipped remove-detail grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Remove detail">
