@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Products
+    Manage your products
 @endsection
 
 @section('breadcrumb')
@@ -24,9 +24,6 @@
 @section('content')
     <div class="row">
         <div class="col s12">
-            <p class="caption">
-                Manage your products. <br>
-            </p>
             @include('user.breeder._displayProducts')
         </div>
         <div class="col s12 m12 l8 offset-l2">
