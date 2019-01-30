@@ -269,7 +269,7 @@
 					{{-- Name --}}
 					<div class="input-field col s6">
 						{!! Form::text('edit-name', null, ['id' => 'edit-name'])!!}
-						{!! Form::label('edit-name', 'Name*') !!}
+						{!! Form::label('edit-name', 'Name*', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 
 					{{-- Type --}}
@@ -281,7 +281,7 @@
 						  <option value="gilt">Gilt</option>
 					      <option value="semen">Semen</option>
 					    </select>
-					    <label>Type*</label>
+					    <label class="grey-text text-darken-3">Type*</label>
 					</div>
 				</div>
 
@@ -294,7 +294,7 @@
 								<option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
 							@endforeach
 					    </select>
-					    <label>Farm From*</label>
+					    <label class="grey-text text-darken-3">Farm From*</label>
 					</div>
 				</div>
 
@@ -302,7 +302,7 @@
 					{{-- Price --}}
 					<div class="input-field col s6">
 						{!! Form::text('edit-price', null, ['class' => 'validate'])!!}
-						{!! Form::label('edit-price', 'Price') !!}
+						{!! Form::label('edit-price', 'Price', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 			</div>
@@ -314,11 +314,11 @@
 					<div class="input-field col s7">
 						<p>
 							<input name="radio-breed" type="radio" value="purebreed" id="edit-purebreed" class="with-gap purebreed" checked/>
-		      				<label for="edit-purebreed">Purebreed</label>
+		      				<label class="grey-text text-darken-3" for="edit-purebreed">Purebreed</label>
 						</p>
 						<p>
 							<input name="radio-breed" type="radio" value="crossbreed" id="edit-crossbreed" class="with-gap crossbreed"/>
-		      				<label for="edit-crossbreed">Crossbreed</label>
+		      				<label class="grey-text text-darken-3" for="edit-crossbreed">Crossbreed</label>
 						</p>
 					</div>
 				</div>
@@ -328,18 +328,18 @@
 						{{-- If pure breed --}}
 						<div class="input-field col s6">
 							{!! Form::text('edit-breed', null, ['id' => 'edit-breed'])!!}
-							{!! Form::label('edit-breed', 'Breed*') !!}
+							{!! Form::label('edit-breed', 'Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 					</div>
 					<div class="input-crossbreed-container">
 						{{-- If crossbreed --}}
 						<div class="input-field col s6">
 							{!! Form::text('edit-fbreed', null, ['id' => 'edit-fbreed'])!!}
-							{!! Form::label('edit-fbreed', 'Father\'s Breed*') !!}
+							{!! Form::label('edit-fbreed', 'Father\'s Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 						<div class="input-field col s6">
 							{!! Form::text('edit-mbreed', null, ['id' => 'edit-mbreed'])!!}
-							{!! Form::label('edit-mbreed', 'Mother\'s Breed*') !!}
+							{!! Form::label('edit-mbreed', 'Mother\'s Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 					</div>
 				</div>
@@ -348,13 +348,13 @@
 					{{-- Birhtdate --}}
 					<div class="input-field col s6">
 						<input type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
-						<label for="edit-birthdate">Birth Date</label>
+						<label class="grey-text text-darken-3" for="edit-birthdate">Birth Date</label>
 					</div>
 
 					{{-- ADG --}}
 					<div class="input-field col s6">
 						{!! Form::text('edit-adg', null, ['class' => 'validate'])!!}
-						{!! Form::label('edit-adg', 'Average Daily Gain (grams)') !!}
+						{!! Form::label('edit-adg', 'Average Daily Gain (grams)', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 
@@ -362,13 +362,13 @@
 					{{-- FCR --}}
 					<div class="input-field col s6">
 						{!! Form::text('edit-fcr', null, ['class' => 'validate'])!!}
-						{!! Form::label('edit-fcr', 'Feed Conversion Ratio') !!}
+						{!! Form::label('edit-fcr', 'Feed Conversion Ratio', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 
 					{{-- Backfat thickness --}}
 					<div class="input-field col s6">
 						{!! Form::text('edit-backfat_thickness', null, ['class' => 'validate'])!!}
-						{!! Form::label('edit-backfat_thickness', 'Backfat thickness (mm)') !!}
+						{!! Form::label('edit-backfat_thickness', 'Backfat thickness (mm)', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 
@@ -387,11 +387,11 @@
 						<div class="detail-container">
 							<div class="input-field col s6">
 								{!! Form::text('characteristic[]', null, ['class' => 'validate'])!!}
-								{!! Form::label('characteristic[]', 'Characteristic') !!}
+								{!! Form::label('characteristic[]', 'Characteristic', ['class' => 'grey-text text-darken-3']) !!}
 							</div>
 							<div class="input-field col s5">
 								{!! Form::text('value[]', null, ['class' => 'validate'])!!}
-								{!! Form::label('value[]', 'Value') !!}
+								{!! Form::label('value[]', 'Value', ['class' => 'grey-text text-darken-3']) !!}
 							</div>
 							<div class="input-field col s1 remove-button-container">
 								<a href="#" class="tooltipped remove-detail grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Remove detail">
