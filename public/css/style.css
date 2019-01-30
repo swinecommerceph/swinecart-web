@@ -369,29 +369,28 @@ body {
   overflow-x: hidden;
 }
 
-/*.tabs .active{
-  color: #b71c1c;
-}*/
-
-
-
-.tabs .tab a.active {
-  color: #00705E;
-  font-weight: 700;
+.tabs .tab a {
+  font-size: 1rem;
+  color: hsl(0, 0%, 13%);
+  border: solid 1px #00705E;
 }
 
 .tabs .tab a:hover {
-  color: hsl(0, 0%, 13%);
+  background-color: #F0F0F0;
+  color: black !important;
   font-weight: 700;
 }
 
-.tabs .tab a {
-	font-size: 1rem;
-  color: hsl(0, 0%, 13%);
+.tabs .tab a.active {
+  color: white !important;
+  font-weight: 700;
+  border-bottom: solid 2px #00705E;
+  background-color: #00705E;
 }
 
 .indicator {
   background-color: #00705E !important;
+
 }
 
 /* Blockquote styles */
