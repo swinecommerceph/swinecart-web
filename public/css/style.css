@@ -389,8 +389,7 @@ body {
 }
 
 .indicator {
-  background-color: #00705E !important;
-
+  background-color: transparent !important;
 }
 
 /* Blockquote styles */
