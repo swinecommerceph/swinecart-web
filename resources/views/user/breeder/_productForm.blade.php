@@ -249,9 +249,9 @@
 </div>
 
 {{-- Edit Product Modal --}}
-<div id="edit-product-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 80vh !important; width: 60vw !important;">
+<div id="edit-product-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 100vh !important; width: 60vw !important;">
 	{!! Form::open(['route' => 'products.update', 'class' => 's12', 'id' => 'edit-product']) !!}
-	<div class="modal-content">
+	<div class="modal-content" style="overflow-y: auto !important;">
 		<h4>Edit Product <i class="material-icons right modal-action modal-close">close</i> </h4>
 		<div class="row">
 			<div id="tabs-container" class="col s12">
