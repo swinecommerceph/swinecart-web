@@ -6,7 +6,7 @@
 --}}
 
 {{--  Add Product Modal --}}
-<div id="add-product-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 100vh !important; width: 60vw !important;">
+<div id="add-product-modal" class="modal modal-fixed-footer" style="max-height: 88vh; height: 88vh !important; width: 60vw !important;">
 	{!! Form::open(['route' => 'products.store', 'class' => 's12', 'id' => 'create-product']) !!}
 	<div class="modal-content" style="overflow-y: auto !important;">
 		<h4>Add Product <i class="material-icons right modal-action modal-close">close</i> </h4>
@@ -249,7 +249,7 @@
 </div>
 
 {{-- Edit Product Modal --}}
-<div id="edit-product-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 100vh !important; width: 60vw !important;">
+<div id="edit-product-modal" class="modal modal-fixed-footer" style="max-height: 88vh; height: 88vh !important; width: 60vw !important;">
 	{!! Form::open(['route' => 'products.update', 'class' => 's12', 'id' => 'edit-product']) !!}
 	<div class="modal-content" style="overflow-y: auto !important;">
 		<h4>Edit Product <i class="material-icons right modal-action modal-close">close</i> </h4>
