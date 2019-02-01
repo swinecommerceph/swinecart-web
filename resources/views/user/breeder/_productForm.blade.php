@@ -301,7 +301,7 @@
 				<div class="row">
 					{{-- Price --}}
 					<div class="input-field col s6">
-						{!! Form::text('edit-price', null, ['class' => 'validate input-manage-products'])!!}
+						{!! Form::text('edit-price', null, ['class' => 'validate input-manage-products', 'onchange' => 'addComma(this)'])!!}
 						{!! Form::label('edit-price', 'Price', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
