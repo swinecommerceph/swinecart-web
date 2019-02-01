@@ -347,7 +347,7 @@
 				<div class="row">
 					{{-- Birhtdate --}}
 					<div class="input-field col s6">
-						<input type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
+						<input style="cursor: pointer;" type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
 						<label class="grey-text text-darken-3" for="edit-birthdate">Birth Date</label>
 					</div>
 
