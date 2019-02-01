@@ -104,7 +104,7 @@
 				<div class="row">
 					{{-- Birthdate --}}
 					<div class="input-field col s6">
-						<input type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
+						<input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
 						<label class="grey-text text-darken-3" for="birthdate">Birth Date</label>
 					</div>
 
