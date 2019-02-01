@@ -737,3 +737,10 @@ var product = {
     }
 
 };
+
+function addComma(string) {
+    // clear every instance of keyup input with comma
+    string.value = string.value.replace(",", "");
+    // add comma to the string number
+    string.value = string.value.replace(/\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
+}
