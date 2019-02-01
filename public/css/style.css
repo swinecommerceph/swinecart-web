@@ -1270,6 +1270,7 @@ label {
   border-radius: 5px !important;
   margin-top: 5px !important;
   height: 2.5rem !important;
+  padding-left: 5px !important;
 }
 
 .login-password:focused {
