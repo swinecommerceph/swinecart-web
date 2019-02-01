@@ -25,7 +25,7 @@
 					<br>
 					{{-- Name --}}
 					<div class="input-field col s6">
-						{!! Form::text('name', null, ['id' => 'name', 'class' => 'validate'])!!}
+						{!! Form::text('name', null, ['id' => 'name', 'class' => 'validate input-manage-products'])!!}
 						{!! Form::label('name', 'Name*', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 
@@ -58,7 +58,7 @@
 				<div class="row">
 					{{-- Price --}}
 					<div class="input-field col s6">
-						{!! Form::text('price', null, ['class' => 'validate'])!!}
+						{!! Form::text('price', null, ['class' => 'validate input-manage-products'])!!}
 						{!! Form::label('price', 'Price', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
@@ -84,18 +84,18 @@
 					<div class="input-purebreed-container">
 						{{-- If pure breed --}}
 						<div class="input-field col s6">
-							{!! Form::text('breed', null, ['id' => 'breed'])!!}
+							{!! Form::text('breed', null, ['id' => 'breed', 'class' => 'validate input-manage-products'])!!}
 							{!! Form::label('breed', 'Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 					</div>
 					<div class="input-crossbreed-container">
 						{{-- If crossbreed --}}
 						<div class="input-field col s6">
-							{!! Form::text('fbreed', null, ['id' => 'fbreed'])!!}
+							{!! Form::text('fbreed', null, ['id' => 'fbreed', 'class' => 'validate input-manage-products'])!!}
 							{!! Form::label('fbreed', 'Father\'s Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 						<div class="input-field col s6">
-							{!! Form::text('mbreed', null, ['id' => 'mbreed'])!!}
+							{!! Form::text('mbreed', null, ['id' => 'mbreed', 'class' => 'validate input-manage-products'])!!}
 							{!! Form::label('mbreed', 'Mother\'s Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 					</div>
@@ -110,7 +110,7 @@
 
 					{{-- ADG --}}
 					<div class="input-field col s6">
-						{!! Form::text('adg', null, ['class' => 'validate'])!!}
+						{!! Form::text('adg', null, ['class' => 'validate input-manage-products'])!!}
 						{!! Form::label('adg', 'Average Daily Gain (grams)', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
@@ -118,13 +118,13 @@
 				<div class="row">
 					{{-- FCR --}}
 					<div class="input-field col s6">
-						{!! Form::text('fcr', null, ['class' => 'validate'])!!}
+						{!! Form::text('fcr', null, ['class' => 'validate input-manage-products'])!!}
 						{!! Form::label('fcr', 'Feed Conversion Ratio', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 
 					{{-- Backfat thickness --}}
 					<div class="input-field col s6">
-						{!! Form::text('backfat_thickness', null, ['class' => 'validate'])!!}
+						{!! Form::text('backfat_thickness', null, ['class' => 'validate input-manage-products'])!!}
 						{!! Form::label('backfat_thickness', 'Backfat thickness (mm)', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
@@ -143,11 +143,11 @@
 					<div class="other-details-container">
 						<div class="detail-container">
 							<div class="input-field col s6">
-								{!! Form::text('characteristic[]', null, ['class' => 'validate'])!!}
+								{!! Form::text('characteristic[]', null, ['class' => 'validate input-manage-products'])!!}
 								{!! Form::label('characteristic[]', 'Characteristic', ['class' => 'grey-text text-darken-3']) !!}
 							</div>
 							<div class="input-field col s5">
-								{!! Form::text('value[]', null, ['class' => 'validate'])!!}
+								{!! Form::text('value[]', null, ['class' => 'validate input-manage-products'])!!}
 								{!! Form::label('value[]', 'Value', ['class' => 'grey-text text-darken-3']) !!}
 							</div>
 							<div class="input-field col s1 remove-button-container">
