@@ -196,6 +196,7 @@ var product = {
             update_button.html('Update Product');
 
             // Then get the product summary
+            //product.modal_history.push('#edit-product-modal');
             product.get_summary($('#edit-product').find('input[name="productId"]').val());
         });
     },
@@ -431,8 +432,8 @@ var product = {
 
         // Set-up first modal action buttons depending
         // on what modal it came from
-
-        if(product.modal_history_tos().includes('add')){
+        
+        if (product.modal_history_tos() === '#add-product-modal') {
             $('.from-add-process').show();
             $('.from-edit-process').hide();
         }
@@ -441,6 +442,7 @@ var product = {
             $('.from-edit-process').show();
         }
 
+        console.log('here2')
         $('#product-summary-modal').modal({ dismissible: false });
         $('#product-summary-modal').modal('open');
         product.modal_history.push('#product-summary-modal');
