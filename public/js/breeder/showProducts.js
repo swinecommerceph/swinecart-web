@@ -66,6 +66,8 @@ var product = {
             "_token" : parent_form.find('input[name=_token]').val(),
         };
 
+        data_values.price = data_values.price.replace(",", ""); // remove comma in price before storing
+
         // Transform breed syntax if crossbreed
         if($("#create-product input:checked").val() === 'crossbreed'){
             var fbreed = parent_form.find('input[name=fbreed]').val();
@@ -151,6 +153,8 @@ var product = {
             "_token" : parent_form.find('input[name=_token]').val(),
         };
 
+        data_values.price = data_values.price.replace(",", "");
+
         // Transform breed syntax if crossbreed
         if($("#edit-product input:checked").val() === 'crossbreed'){
             var fbreed = parent_form.find("input[name='edit-fbreed']").val();
@@ -221,10 +225,7 @@ var product = {
                         config.preloader_progress.fadeOut();
                         Materialize.toast('Selected Products deleted!', 2000, 'green lighten-1');
 
-                        console.log('BEFORE HERE');
-                        console.log((products_container).children().length);
                         if ( (products_container).children().length == 0 ) {
-                            console.log('HERE!!!');
                             (products_container).append(`
                                 <table>
                                     <tr>
@@ -430,6 +431,7 @@ var product = {
 
         // Set-up first modal action buttons depending
         // on what modal it came from
+
         if(product.modal_history_tos().includes('add')){
             $('.from-add-process').show();
             $('.from-edit-process').hide();
@@ -744,6 +746,16 @@ function addComma(string) {
     // add comma to the string number
     string.value = string.value.replace(/\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
 }
+
+$('.price-field').keyup(function (event) {
+    // got this from: https://stackoverflow.com/questions/2632359/can-jquery-add-commas-while-user-typing-numbers
+
+    $(this).val(function (index, value) {
+        return value
+            .replace(",", "") // replace 
+            .replace(/\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
+    });
+});
 
 'use strict';
 
