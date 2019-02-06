@@ -111,7 +111,7 @@ var product = {
                 parent_form.find('#submit-button').removeClass('disabled');
 
                 $('#submit-button').removeClass('disabled');
-                $('#submit-button').html('Add');
+                $('#submit-button').html('Add Product');
 
                 // Open Add Media Modal
                 $('#add-media-modal').modal({
