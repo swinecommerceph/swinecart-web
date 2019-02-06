@@ -66,6 +66,8 @@
 
 			{{-- Breed Information --}}
 			<div id="breed-information" class="col s12 m12 l10 offset-l1">
+				<br>
+				<label class="grey-text text-darken-3">Type of Breed</label>
 				<div class="row">
 					 {{-- Breed --}}
 					<div class="input-field col s7">
@@ -309,6 +311,8 @@
 
 			{{-- Breed Information --}}
 			<div id="edit-breed-information" class="col s12 m12 l10 offset-l1">
+				<br>
+				<label class="grey-text text-darken-3">Type of Breed</label>
 				<div class="row">
 					 {{-- Breed --}}
 					<div class="input-field col s7">
