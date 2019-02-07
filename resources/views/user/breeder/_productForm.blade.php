@@ -157,7 +157,10 @@
 					</div>
 
 					<div class="col s12">
-						<a href="#" id="add-other-details" class="right tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail">Add Detail<i style="padding-top: 10px;" class="material-icons teal-text text-darken-3">add_circle</i></a>
+						<a 
+							style="text-transform: none !important; font-weight: 700;"
+							class="waves-effect waves-light btn-flat right add-other-details blue-text"
+						><i class="material-icons blue-text right">add_circle</i>Add Details</a>
 					</div>
 
 				</div>
@@ -403,7 +406,10 @@
 					</div>
 
 					<div class="col s12">
-						<a href="#" id="add-other-details" class="left tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-darken-3">add_circle</i></a>
+						<a 
+							style="text-transform: none !important; font-weight: 700;"
+							class="waves-effect waves-light btn-flat right add-other-details blue-text"
+						><i class="material-icons blue-text right">add_circle</i>Add Details</a>
 					</div>
 
 				</div>
