@@ -138,10 +138,6 @@
 				<div class="row">
 					<br>
 					{{-- Other Details --}}
-					<div class="col s12">
-						<a href="#" id="add-other-details" class="left tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-darken-3">add_circle</i></a>
-					</div>
-
 					<div class="other-details-container">
 						<div class="detail-container">
 							<div class="input-field col s6">
@@ -158,6 +154,10 @@
 						        </a>
 							</div>
 						</div>
+					</div>
+
+					<div class="col s12">
+						<a href="#" id="add-other-details" class="right tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail">Add Detail<i style="padding-top: 10px;" class="material-icons teal-text text-darken-3">add_circle</i></a>
 					</div>
 
 				</div>
@@ -383,10 +383,7 @@
 				<div class="row">
 					<br>
 					{{-- Other Details --}}
-					<div class="col s12">
-						<a href="#" id="add-other-details" class="left tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-darken-3">add_circle</i></a>
-					</div>
-
+				
 					<div class="other-details-container">
 						<div class="detail-container">
 							<div class="input-field col s6">
@@ -403,6 +400,10 @@
 						        </a>
 							</div>
 						</div>
+					</div>
+
+					<div class="col s12">
+						<a href="#" id="add-other-details" class="left tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-darken-3">add_circle</i></a>
 					</div>
 
 				</div>

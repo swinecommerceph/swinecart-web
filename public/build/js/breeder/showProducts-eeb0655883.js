@@ -8,12 +8,12 @@ var product = {
     other_details_default :
         '<div class="detail-container">'+
             '<div class="input-field col s6">'+
-                '<input class="validate" name="characteristic[]" type="text">'+
-                '<label for="characteristic[]">Characteristic</label>'+
+                '<input class="validate input-manage-products" name="characteristic[]" type="text">'+
+                '<label class="grey-text text-darken-3" for="characteristic[]">Characteristic</label>'+
             '</div>'+
             '<div class="input-field col s5">'+
-                '<input class="validate" name="value[]" type="text">'+
-                '<label for="value[]">Value</label>'+
+                '<input class="validate input-manage-products" name="value[]" type="text">'+
+                '<label class="grey-text text-darken-3" for="value[]">Value</label>'+
             '</div>'+
             '<div class="input-field col s1 remove-button-container">'+
 '                <a href="#" class="tooltipped remove-detail" data-position="top" data-delay="50" data-tooltip="Remove detail">'+
