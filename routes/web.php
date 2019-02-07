@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/public-products', function () {
+    return view('products');
+});
+
 Route::get('/',['as' => 'index_path', function () {
     return view('home');
 }])->middleware('guest');
