@@ -124,7 +124,7 @@ $factory->define(App\Models\Customer::class, function (Faker\Generator $faker) {
         'Basilan',
         'Sulu',
         'Maguindanao',
-        'Lanao del Sur'
+        'Lanao del Sur',
         // NCR
         'Caloocan City',
         'Las Piñas',
