@@ -235,8 +235,15 @@
 
 				{{-- Current Password --}}
 				<div class="row">
-					<div class="input-field col s4 offset-s4">
-						<input type="password" id="currentpassword" name="current_password" class="validate" required>
+					<div class="col s3"></div>				
+	
+					{{-- Show/Hide Password Button --}}
+	        <div class="col s1 show-hide-password">
+	          <i style="cursor: pointer;" id="show-hide-password-icon" class="grey-text text-lighten-1 material-icons center-align">visibility</i>
+	        </div>
+
+					<div class="input-field col s4">
+						<input type="password" id="currentpassword" name="current_password" class="validate login-password" required>
 						@if ($errors->has('current_password'))
 							<label for="currentpassword" data-error="{{ $errors->first('current_password') }}">Current Password</label>
 						@else
@@ -248,7 +255,7 @@
 				{{-- New Password --}}
 				<div class="row">
 					<div class="input-field col s4 offset-s4">
-						<input type="password" id="newpassword" name="new_password" class="validate" required>
+						<input type="password" id="newpassword" name="new_password" class="validate login-password" required>
 						@if ($errors->has('new_password'))
 							<label for="newpassword" data-error="{{ $errors->first('new_password') }}">New Password</label>
 						@else
@@ -260,7 +267,7 @@
 				{{-- Password Confirmation --}}
 				<div class="row">
 					<div class="input-field col s4 offset-s4">
-						<input type="password" id="newpasswordconfirm" name="new_password_confirmation" class="validate" required>
+						<input type="password" id="newpasswordconfirm" name="new_password_confirmation" class="validate login-password" required>
 						@if ($errors->has('new_password_confirmation'))
 							<label for="newpasswordconfirm" data-error="{{ $errors->first('new_password_confirmation') }}">Confirm Password</label>
 						@else

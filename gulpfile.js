@@ -32,7 +32,7 @@ elixir(function(mix) {
         .scripts([
             'validation/formValidationMethods.js',
             'validation/login_validation.js',
-            'login.js'
+            'show-hide-pw.js'
         ], 'public/js/login.js')
         .scripts([
             'vendor/elasticsearch.jquery.min.js',
@@ -51,7 +51,8 @@ elixir(function(mix) {
             'customer/profile.js',
             'customer/editProfile_script.js',
             'validation/formValidationMethods.js',
-            'validation/customer/editProfile_validation.js'
+            'validation/customer/editProfile_validation.js',
+            'show-hide-pw.js'
         ], 'public/js/customer/editProfile.js')
         .scripts([
             'vendor/VideoJS/video.min.js',
