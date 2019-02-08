@@ -437,7 +437,25 @@ class CustomerController extends Controller
             'Basilan' => 'Basilan',
             'Sulu' => 'Sulu',
             'Maguindanao' => 'Maguindanao',
-            'Lanao del Sur' => 'Lanao del Sur'
+            'Lanao del Sur' => 'Lanao del Sur',
+            // NCR
+            'Caloocan City' => 'Caloocan City',
+            'Las Piñas' => 'Las Piñas',
+            'Makati' => 'Makati',
+            'Malabon' => 'Malabon',
+            'Mandaluyong' => 'Mandaluyong',
+            'Manila' => 'Manila',
+            'Marikina' => 'Marikina',
+            'Muntinlupa' => 'Muntinlupa',
+            'Navotas' => 'Navotas',
+            'Parañaque' => 'Parañaque',
+            'Pasay City' => 'Pasay City',
+            'Pasig' => 'Pasig',
+            'Pateros' => 'Pateros',
+            'Quezon City' => 'Quezon City',
+            'San Juan' => 'San Juan',
+            'Taguig' => 'Taguig',
+            'Valenzuela' => 'Valenzuela'
         ])->sort();
     }
 
