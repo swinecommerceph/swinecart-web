@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Products
+    List of Products
 @endsection
 
 @section('breadcrumb')
