@@ -485,7 +485,8 @@ class ProductController extends Controller
      * @return View
      */
     public function viewProducts(Request $request, ProductRepository $repository)
-    {
+    {   
+        //dd($request->query());
         // Check if from a search query
         $products = ($request->q) ? $repository->search($request->q): Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0);
         $scores = ($request->q && isset($products->scores)) ? $products->scores : [];
@@ -711,7 +712,7 @@ class ProductController extends Controller
     private function getBreedIds($breedParameter)
     {
         $tempBreedIds = [];
-        foreach (explode(' ', $breedParameter) as $breedName) {
+        foreach (explode(',', $breedParameter) as $breedName) {
             if($breedName == 'crossbreed') {
                 // Get all breed ids that contain '+' in their breed name
                 $crossbreeds = Breed::where('name','like','%+%')->get();
