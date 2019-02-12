@@ -93,22 +93,21 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/{id}', 'MessageController@getMessages');
         });
     });
-    
-    
-    
+ 
     Route::group(['namespace' => 'Customer', 'prefix' => 'customer'], function() {
-        Route::group(['prefix' => 'edit-profile'], function() {
-            Route::get('/me', 'EditProfileController@me');
-            Route::get('/farm-addresses', 'EditProfileController@getFarmAddresses');
-            Route::get('/provinces', 'EditProfileController@getProvinces');
-
-            Route::post('/change-password', 'EditProfileController@changePassword');
+        Route::group(['prefix' => 'profile'], function() {
+            Route::get('/', 'EditProfileController@me');
+            Route::patch('/password', 'EditProfileController@changePassword');
             Route::post('/update-personal', 'EditProfileController@updatePersonal');
 
-            Route::post('/farm/add', 'EditProfileController@addFarm');
-            Route::post('/farm/update/{id}', 'EditProfileController@updateFarm');
-            Route::delete('/farm/delete/{id}', 'EditProfileController@deleteFarm');
+            Route::get('/farms', 'EditProfileController@getFarms');
+            Route::get('/farms/{id}', 'EditProfileController@getFarm');
 
+            Route::post('/farms', 'EditProfileController@addFarm');
+            Route::put('/farms/{id}', 'EditProfileController@updateFarm');
+            Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
+            
+            Route::get('/provinces', 'EditProfileController@getProvinces');
             Route::get('/breeders', 'EditProfileController@getBreeders');
         });
 

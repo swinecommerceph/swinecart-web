@@ -46,7 +46,7 @@ class UserInstancesSeeder extends Seeder
         });
 
     	// For Customers
-        factory(App\Models\User::class, 20)->create()->each(function($user){
+        factory(App\Models\User::class, 5)->create()->each(function($user){
             $faker = Faker\Factory::create();
             $user->assignRole('customer');
             $user->update_profile = 0;
@@ -96,7 +96,7 @@ class UserInstancesSeeder extends Seeder
             $rand = random_int(10,13);
             $types = ['sow', 'gilt', 'boar', 'semen']; // 4
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
-            for ($i = 0; $i < 50; $i++) {
+            for ($i = 0; $i < 20; $i++) {
                 $randType = $types[random_int(0,3)];
                 $randBreed = $breeds[random_int(0,6)];
                 $product = new App\Models\Product;
