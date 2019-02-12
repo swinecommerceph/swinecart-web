@@ -100,7 +100,9 @@ class EditProfileController extends Controller
 
         return response()->json([
             'message' => 'Update Personal successful!',
-            'data' => $customer
+            'data' => [
+                'customer' => $customer
+            ]
         ], 200);
     }
 
