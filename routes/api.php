@@ -15,8 +15,8 @@ use Illuminate\Http\Request;
 
 /* Setup CORS */
 header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
-header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header("Access-Control-Allow-Headers: Accept-Encoding, Content-Encoding, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, PATCH, DELETE");
 
 Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function() {
@@ -27,34 +27,37 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     });
 
     Route::group(['namespace' => 'Breeder', 'prefix' => 'breeder'], function() {
-        Route::group(['prefix' => 'edit-profile'], function() {
-            Route::get('/get', 'EditProfileController@getProfile');
+        Route::group(['prefix' => 'profile'], function() {
+            Route::get('/', 'EditProfileController@getProfile');
+            Route::put('/', 'EditProfileController@updatePersonal');
 
-            Route::post('/change-password', 'EditProfileController@changePassword');
-            Route::post('/update-personal', 'EditProfileController@updatePersonal');
+            Route::patch('/password', 'EditProfileController@changePassword');
             
-            Route::post('/farm/update/{id}', 'EditProfileController@updateFarm');
-            Route::delete('/farm/delete/{id}', 'EditProfileController@deleteFarm');
+            Route::get('/farms', 'EditProfileController@getFarms');
 
+            Route::get('/farms/{id}', 'EditProfileController@getFarm');
+            Route::put('/farms/{id}', 'EditProfileController@updateFarm');
+            Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
+            
             // Route::post('/upload-logo', 'EditProfileController@uploadLogo');
             // Route::delete('/delete-logo', 'EditProfileController@deleteLogo');
             // Route::post('/set-logo', 'EditProfileController@setLogo');
         });
 
         Route::group(['prefix' => 'products'], function() {
-            Route::get('/get', 'ProductController@getProducts');
-            Route::post('/get', 'ProductController@filterProducts');
-            Route::get('/get-farms', 'ProductController@getFarms');
+            Route::get('/', 'ProductController@getProducts');
+            Route::get('/filter', 'ProductController@filterProducts');
+            Route::delete('/', 'ProductController@deleteProducts');
+            Route::patch('/', 'ProductController@updateSelected');
 
-            Route::post('/product/display/{id}', 'ProductController@displayProduct');
-            Route::post('/product/update/{id}', 'ProductController@updateProduct');
-            Route::post('/product/store', 'ProductController@storeProduct');
-            Route::post('/product/update-selected', 'ProductController@updateSelected');
-            Route::post('/product/delete-selected', 'ProductController@deleteSelected');
-            Route::post('/set-primary-picture', 'ProductController@setPrimaryPicture');
-            Route::get('/product/summary/{id}', 'ProductController@getProductSummary');
-            Route::get('/product/detail/{id}', 'ProductController@getProductDetail');
-            
+            Route::get('/{id}', 'ProductController@getProduct');
+            Route::get('/{id}/details', 'ProductController@getProductDetails');
+            Route::post('/', 'ProductController@addProduct');
+            Route::put('/{id}', 'ProductController@updateProduct');
+            Route::patch('/{id}/status', 'ProductController@toggleProductStatus');
+
+
+            // Route::post('/set-primary-picture', 'ProductController@setPrimaryPicture');
             // Route::delete('/media/delete', 'ProductController@deleteMedium');
 
         });

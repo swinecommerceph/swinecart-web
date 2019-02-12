@@ -168,6 +168,10 @@ class DashboardController extends Controller
 
         if($product) {
             $result = $this->dashboard->updateStatus($request, $product);
+            return response()->json([
+                'message' => 'Update Product Status successful!',
+                'data' => $result
+            ]);
         }
         
         else return response()->json([

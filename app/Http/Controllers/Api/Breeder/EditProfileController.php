@@ -7,9 +7,9 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Carbon\Carbon;
 
+
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\BreederPersonalProfileRequest;
-use App\Http\Requests\BreederFarmProfileRequest;
 
 use App\Models\Image;
 use App\Models\User;
@@ -43,56 +43,116 @@ class EditProfileController extends Controller
         $breeder->logoImage = ($breeder->logo_img_id) 
             ? '/images/breeder/'.Image::find($breeder->logo_img_id)->name 
             : '/images/default_logo.png' ;
-        $farmAddresses = $breeder->farmAddresses;
-        $provinces = $this->getProvinces();
+        
         return response()->json([
             'message' => 'Get Profile successful!',
             'data' => [
                 'breeder' => $breeder,
-                'farmAddresses' => $farmAddresses,
-                'provinces' => $provinces
             ]
         ], 200);
     }
 
-    public function updateFarm(BreederFarmProfileRequest $request, $farm_id) 
+    public function getFarms(Request $request)
     {
-        $farmAddress = FarmAddress::find($farm_id);
+        $breeder = $this->user->userable;
+        $farms = $breeder->farmAddresses;
 
-        if($farmAddress) {
-            $farmAddress->addressLine1 = $request['addressLine1'];
-            $farmAddress->addressLine2 = $request['addressLine2'];
-            $farmAddress->province = $request['province'];
-            $farmAddress->zipCode = $request['zipCode'];
-            $farmAddress->farmType = $request['farmType'];
-            $farmAddress->landline = $request['landline'];
-            $farmAddress->mobile = $request['mobile'];
-            $farmAddress->save();
+        return response()->json([
+            'message' => 'Get Farms successful!',
+            'data' => [
+                'farms' => $farms,
+            ]
+        ], 200);
+    }
+    
+    public function getFarm(Request $request, $farm_id) 
+    {
+        $breeder = $this->user->userable;
+        $farms = $breeder->farmAddresses;
 
+        $farm = $farms->find($farm_id);
+
+        if($farm) {
             return response()->json([
                 'message' => 'Update Farm Info successful!',
-                'data' => $farmAddress
+                'data' => [
+                    'farm' => $farm
+                ]
             ], 200);
         }
         else return response()->json([
             'error' => 'Farm does not exist!',
-        ], 500);
+        ], 404);
 
     }
 
-    public function deleteFarm(Request $request, $id) 
+    public function updateFarm(Request $request, $farm_id) 
     {
-        $farmAddress = FarmAddress::find($id);
+        $breeder = $this->user->userable;
+        $farms = $breeder->farmAddresses;
+        $farm = $farms->find($farm_id);
 
-        if($farmAddress) {
-            $farmAddress->delete();
+        if($farm) {
+
+            $validator = Validator::make($request->all(), [
+                'addressLine1' => 'required',
+                'addressLine2' => 'required',
+                'province' => 'required',
+                'zipCode' => 'required|digits:4',
+                'farmType' => 'required',
+                'mobile' => 'required|digits:11|regex:/^09/',
+            ]);
+
+            if($validator->fails()) {
+                return response()->json([
+                    'message' => 'Update Farm Info successful!',
+                    'data' => [
+                        'farm' => $validator->errors()
+                    ]
+                ], 422);
+            }
+            else {
+                $farm->addressLine1 = $request['addressLine1'];
+                $farm->addressLine2 = $request['addressLine2'];
+                $farm->province = $request['province'];
+                $farm->zipCode = $request['zipCode'];
+                $farm->farmType = $request['farmType'];
+                $farm->landline = $request['landline'];
+                $farm->mobile = $request['mobile'];
+                $farm->save();
+
+                return response()->json([
+                    'message' => 'Update Farm Info successful!',
+                    'data' => [
+                        'farm' => $farm
+                    ]
+                ], 200);
+            }
+        }
+        else return response()->json([
+            'error' => 'Farm does not exist!',
+        ], 404);
+
+    }
+
+    public function deleteFarm(Request $request, $farm_id) 
+    {
+        $breeder = $this->user->userable;
+        $farms = $breeder->farmAddresses;
+        $farm = $farms->find($farm_id);
+
+        if($farm) {
+            $farm->delete();
             return response()->json([
-                'message' => 'Delete Farm successful!'
+                'message' => 'Delete Farm successful!',
+                'data' => [
+                    'farm' => $farm
+                ]
             ], 200);
         }
         else return response()->json([
             'error' => 'Farm does not exist!',
-        ], 500);
+        ], 404);
 
     }
 
@@ -125,7 +185,9 @@ class EditProfileController extends Controller
 
         return response()->json([
             'message' => 'Update Personal successful!',
-            'data' => $breeder
+            'data' => [
+                'breeder' => $breeder
+            ]
         ], 200);
     }
 

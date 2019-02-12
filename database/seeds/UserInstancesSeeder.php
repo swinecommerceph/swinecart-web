@@ -65,7 +65,7 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Breeders
-        factory(App\Models\User::class, 20)->create()->each(function($user)use($companyNames){
+        factory(App\Models\User::class, 2)->create()->each(function($user)use($companyNames){
             $faker = Faker\Factory::create();
             $user->assignRole('breeder');
             $user->update_profile = 0;
@@ -76,14 +76,17 @@ class UserInstancesSeeder extends Seeder
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address. Override accreditation default values
-            $farm = factory(App\Models\FarmAddress::class)->create([
-                'accreditation_no' => random_int(500,1000),
-                'accreditation_status' => 'active',
-                'accreditation_date' => \Carbon\Carbon::now()->subYear(),
-                'accreditation_expiry' => \Carbon\Carbon::now()->addYear()
-            ]);
+            for ($i = 0; $i < 10; $i++) {
+                $farm = factory(App\Models\FarmAddress::class)->create([
+                    'accreditation_no' => random_int(500,1000),
+                    'accreditation_status' => 'active',
+                    'accreditation_date' => \Carbon\Carbon::now()->subYear(),
+                    'accreditation_expiry' => \Carbon\Carbon::now()->addYear()
+                ]);
+                $breeder->farmAddresses()->save($farm);
+            }
+            
             $breeder->users()->save($user);
-            $breeder->farmAddresses()->save($farm);
             // Change name if Breeder
             $user->name = $companyNames[$breeder->id-1];
             $user->save();
@@ -93,7 +96,7 @@ class UserInstancesSeeder extends Seeder
             $rand = random_int(10,13);
             $types = ['sow', 'gilt', 'boar', 'semen']; // 4
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
-            for ($i = 0; $i < $rand; $i++) {
+            for ($i = 0; $i < 50; $i++) {
                 $randType = $types[random_int(0,3)];
                 $randBreed = $breeds[random_int(0,6)];
                 $product = new App\Models\Product;
@@ -125,7 +128,10 @@ class UserInstancesSeeder extends Seeder
                 elseif (($randType == 'boar' && $randBreed == 'largewhite+duroc') ||
                         ($randType == 'sow' && $randBreed == 'landrace+duroc') ||
                         ($randType == 'gilt' && $randBreed == 'landrace+duroc') ||
-                        ($randType == 'semen' && $randBreed == 'largewhite+duroc')) break;
+                        ($randType == 'semen' && $randBreed == 'largewhite+duroc')) {
+                            $i--;
+                            continue;
+                        }
 
                 // General
                 else $image->name = $randType.'_'.$randBreed.'1.jpg';
@@ -145,15 +151,16 @@ class UserInstancesSeeder extends Seeder
                 $product->adg = random_int(760,1450);
                 $product->fcr = random_int(10,30)/10.0;
                 $product->backfat_thickness = random_int(90,200)/10.0;
-                $product->other_details = 'Other Details = Our detailed information of our product,';
+                $product->other_details = '';
                 $product->status = 'displayed';
+                
                 $breeder->products()->save($product);
 
                 // Check if there is a second image
                 if($image2->id) $product->images()->saveMany([$image, $image2]);
                 else $product->images()->save($image);
                 $product->videos()->save($video);
-
+                
             }
 
         });

@@ -52,6 +52,13 @@ class MessageController extends Controller
 	    		->orderBy('created_at', 'DESC')
                 ->get();
 
+        foreach($messages as $message){
+            if($message->read_at == NULL){
+                $message->read_at = date('Y-m-d H:i:s');
+                $message->save();
+            }
+        }
+
         return response()->json([
             'message' => 'Get Messages successful!',
             'data' => $messages

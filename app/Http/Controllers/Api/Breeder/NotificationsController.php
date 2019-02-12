@@ -74,6 +74,7 @@ class NotificationsController extends Controller
             $notification->markAsRead();
             return response()->json([
                 'message' => 'See Notifications successful!',
+                'data' => $notification
             ]);
         }
         else return response()->json([
