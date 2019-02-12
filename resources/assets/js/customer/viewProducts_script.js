@@ -30,6 +30,7 @@ $(document).ready(function(){
     });
 
     // Append chip to #chip-container
+    console.log(chips);
     $('#chip-container').append(chips);
 
     // For Filter Container Pushpin

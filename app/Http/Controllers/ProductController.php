@@ -534,6 +534,8 @@ class ProductController extends Controller
 
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
+        //$breedFilters = str_replace(' ', '-', $breedFilters); 
+        //dd($breedFilters);
         $urlFilters = [
             'q' => $request->q,
             'type' => $request->type,
@@ -609,6 +611,7 @@ class ProductController extends Controller
         $breedInstance = Breed::where('name','like',$breed)->get()->first();
         if($breedInstance) return $breedInstance->id;
         else{
+            $breed = str_replace(' ', '-', $breed);
             $newBreed = Breed::create(['name' => $breed]);
             return $newBreed->id;
         }
@@ -712,7 +715,7 @@ class ProductController extends Controller
     private function getBreedIds($breedParameter)
     {
         $tempBreedIds = [];
-        foreach (explode(',', $breedParameter) as $breedName) {
+        foreach (explode(' ', $breedParameter) as $breedName) {
             if($breedName == 'crossbreed') {
                 // Get all breed ids that contain '+' in their breed name
                 $crossbreeds = Breed::where('name','like','%+%')->get();
