@@ -59,6 +59,58 @@ class SwineCartController extends Controller
         });
     }
 
+    public function getItems(Request $request)
+    {
+        $customer = $this->user->userable;
+        $swineCartItems = $customer->swineCartItems()->where('if_rated', 0)->paginate($request->perpage);
+        $items = [];
+
+        foreach ($swineCartItems as $item) {
+            $itemDetail = [];
+            $product = Product::find($item->product_id);
+            $breeder = Breeder::find($product->breeder_id)->users()->first();
+            $reservation = ProductReservation::find($item->reservation_id);
+
+            $itemDetail['id'] = $item->id;
+            $itemDetail['product_id'] = $item->product_id;
+            $itemDetail['product_name'] = $product->name;
+            $itemDetail['product_type'] = ucfirst($product->type);
+            $itemDetail['product_breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $itemDetail['product_quantity'] = $product->quantity;
+            $itemDetail['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]);
+            $itemDetail['breeder'] = $breeder->name;
+            $itemDetail['breeder_id'] = $product->breeder_id;
+            $itemDetail['user_id'] = $breeder->id;
+            $itemDetail['request_status'] = $item->if_requested;
+            $itemDetail['request_quantity'] = $item->quantity;
+            $itemDetail['status'] = ($item->reservation_id) ? $reservation->order_status : $product->status;
+            $itemDetail['delivery_date'] = ($reservation) ? $this->transformDateSyntax($reservation->delivery_date) : '';
+            $itemDetail['date_needed'] = ($item->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($item->date_needed);
+
+            array_push($items, $itemDetail);
+        }
+
+        return response()->json([
+            'message' => 'Get SwineCart items successful!',
+            'data' => [
+                'count' => sizeof($items),
+                'items' => $items
+            ]
+        ]);
+    }
+
+    public function getItemCount(Request $request)
+    {
+        $customer = $this->user->userable;
+        $count = $customer->swineCartItems()->where('if_rated', 0)->count();
+
+        return response()->json([
+            'message' => 'Get SwineCart Item Count successful!',
+            'data' => [
+                'count' => $count
+            ]
+        ], 200);
+    }
 
     public function addItem(Request $request, $product_id)
     {
@@ -77,16 +129,12 @@ class SwineCartController extends Controller
             if($item->if_requested) {
                 return response()->json([
                     'message' => 'Product already requested!',
-                    'cart' => $cart,
-                    'data' => $product->name
-                ]);
+                ], 409);
             }
             else {
                return response()->json([
-                    'message' => 'Item already Added!',
-                    'cart' => $cart,
-                    'data' => $product->name
-                ]); 
+                    'message' => 'Item already added!',
+                ], 409); 
             }
         }
         else {
@@ -98,77 +146,33 @@ class SwineCartController extends Controller
 
             return response()->json([
                 'message' => 'Add to Cart successful!',
-                'cart' => $cart,
                 'data' => [
-                    'product' => $product,
-                    'count' => $customer->swineCartItems()
-                        ->where('if_requested', 0)
-                        ->count()
+                    'product' => $product
                 ]
-            ]);
+            ], 200);
         }
 
         
-    }
-
-    public function getItems(Request $request)
-    {
-        $customer = $this->user->userable;
-        $swineCartItems = $customer->swineCartItems()->where('if_requested', 0)->get();
-        $items = [];
-
-        foreach ($swineCartItems as $item) {
-            $itemDetail = [];
-            $product = Product::find($item->product_id);
-            $breeder = Breeder::find($product->breeder_id)->users()->first();
-
-            $itemDetail['item_id'] = $item->id;
-            $itemDetail['product_id'] = $item->product_id;
-            $itemDetail['product_name'] = $product->name;
-            $itemDetail['product_type'] = $product->type;
-            $itemDetail['product_breed'] = Breed::find($product->breed_id)->name;
-            $itemDetail['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]);
-            $itemDetail['breeder'] = $breeder->name;
-            $itemDetail['user_id'] = $breeder->id;
-            
-            array_push($items, $itemDetail);
-        }
-
-        
-        
-        return response()->json([
-            'message' => 'Get SwineCart items successful!',
-            'data' => $items
-        ]);
-    }
-
-    public function getItemCount(Request $request)
-    {
-        $customer = $this->user->userable;
-        $count = $customer->swineCartItems()->where('if_requested', 0)->count();
-
-        return response()->json([
-            'message' => 'Get SwineCart items successful!',
-            'data' => $count
-        ]);
     }
 
     public function deleteItem(Request $request, $item_id)
     {
         $customer = $this->user->userable;
-        $item = $customer->swineCartItems()->where('id', $item_id)->first();
+        $item = $customer->swineCartItems()
+            ->where('if_rated', 0)    
+            ->where('id', $item_id)->first();
 
         if($item) {
-            $product = Product::find($item->product_id);
-            $item->delete();
+            if(!$item->if_requested) {
+                $item->delete();
 
-            return response()->json([
-                'message' => 'Delete SwineCart item successful!',
-                'data' => [
-                    'count' => $customer->swineCartItems()->where('if_requested', 0)->count(),
-                    'product' => $product
-                ]
-            ]);
+                return response()->json([
+                    'message' => 'Delete SwineCart item successful!',
+                ], 200);
+            }
+            else return response()->json([
+                'error' => 'Product already requested!' 
+            ], 404);
         }
         else return response()->json([
             'error' => 'SwineCart Item does not exist!' 
@@ -263,7 +267,7 @@ class SwineCartController extends Controller
             }
             else return response()->json([
                 'error' => 'SwineCart Item already requested!' 
-            ], 404);
+            ], 409);
         }
         else return response()->json([
             'error' => 'SwineCart Item does not exist!' 
@@ -271,9 +275,10 @@ class SwineCartController extends Controller
         
     }
 
-    public function getTransactionHistory(Request $request, $customer_id)
+    public function getTransactionHistory(Request $request)
     {
-        $history = Customer::find($customer_id)->transactionLogs;
+        $customer = $this->user->userable;
+        $history = $customer->transactionLogs;
 
         $restructuredHistory = $history->groupBy('product_id')->map(function($item, $key){
             $restructuredItem = [];

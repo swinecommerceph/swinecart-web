@@ -392,7 +392,7 @@ Vue.component('status-table',{
             );
         },
 
-        productOnSold: function(){
+        productOnSold: function(event){
             var soldButtons = $('.sold-product-buttons');
             this.disableButtons(soldButtons, event.target);
 

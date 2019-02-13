@@ -152,9 +152,9 @@ class ProductController extends Controller
                 $p = [];
 
                 $p['id'] = $product->id;
-                $p['breeder_id'] = $product->breeder_id;
-                $p['farm_from_id'] = $product->farm_from_id;
-                $p['primary_img_id'] = $product->primary_img_id;
+                // $p['breeder_id'] = $product->breeder_id;
+                // $p['farm_from_id'] = $product->farm_from_id;
+                // $p['primary_img_id'] = $product->primary_img_id;
                 $p['img_path'] = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
                 $p['name'] = $product->name;
                 $p['age'] = $this->computeAge($product->birthdate);
