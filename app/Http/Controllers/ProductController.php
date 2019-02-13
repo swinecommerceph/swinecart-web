@@ -634,8 +634,12 @@ class ProductController extends Controller
             $part = explode("+", $breed);
             $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
         }
-        else $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
+        else {
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
+        }
 
+        $mediaInfo['fileName'] = str_replace('/', '_', $mediaInfo['fileName']);
+        
         if($this->isImage($extension)){
             $mediaInfo['directoryPath'] = self::PRODUCT_IMG_PATH;
             $mediaInfo['type'] = new Image;

@@ -55,12 +55,12 @@
           <p class="center-align"> OR </p>
 
           {{-- Facebook Button --}}
-          <a href="/login/facebook" class="waves-effect waves-light col s12 btn facebook">
+          <!-- <a href="/login/facebook" class="waves-effect waves-light col s12 btn facebook">
             <i style="border-right: solid 1px rgba(0, 0, 0, 0.2); margin-right: 1rem; padding: 0 1.3rem;" class="fa fa-facebook"></i>
             Login with Facebook
-          </a>
+          </a> -->
 
-          <br><br>
+          <!-- <br><br> -->
 
           {{-- Google Button --}}
           <a href="/login/google" class="waves-effect waves-light red col s12 btn google">

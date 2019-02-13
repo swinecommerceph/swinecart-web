@@ -67,9 +67,9 @@
     				<div class="row">
     					<h5 class="center-align"> OR </h5>
     					{{-- Facebook Button --}}
-    					<div class="col s12">
-    						<a href="/login/facebook" class="btn-large waves-effect waves-light indigo darken-2 col s12 social-button"> Register with Facebook </a>
-    					</div>
+    					<!-- <div class="col s12">
+                            <a href="/login/facebook" class="btn-large waves-effect waves-light indigo darken-2 col s12 social-button"> Register with Facebook </a>
+                        </div> -->
     				</div>
 
     				<div class="row">
