@@ -638,7 +638,7 @@ class ProductController extends Controller
             $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
         }
 
-        $mediaInfo['fileName'] = str_replace('/', '_', $mediaInfo['fileName']);
+        //$mediaInfo['fileName'] = str_replace('/', '_', $mediaInfo['fileName']);
         
         if($this->isImage($extension)){
             $mediaInfo['directoryPath'] = self::PRODUCT_IMG_PATH;
