@@ -63,12 +63,12 @@ class ProductController extends Controller
 
     public function __construct() 
     {
-        $this->middleware('jwt:auth');
-        $this->middleware('jwt.role:breeder');
+        $this->middleware('jwt:auth', ['except' => ['getProductDetails']]);
+        $this->middleware('jwt.role:breeder', ['except' => ['getProductDetails']]);
         $this->middleware(function($request, $next) {
             $this->user = JWTAuth::user();
             return $next($request);
-        });
+        }, ['except' => ['getProductDetails']]);
     }
     /**
      * ---------------------------------------
@@ -282,29 +282,40 @@ class ProductController extends Controller
 
     public function getProductDetails(Request $request, $product_id) 
     {
-        $breeder = $this->user->userable;
-        $product = $this->getBreederProduct($breeder, $product_id);
+        $product = Product::find($product_id);
 
         if($product) {
 
             $primaryImg = Image::find($product->primary_img_id);
+            $breeder = Breeder::find($product->breeder_id);
+            $user = $breeder->users->first();
 
             $product->img_path = route('serveImage', ['size' => 'large', 'filename' => $primaryImg->name]);
             $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
-            $product->breeder = $this->user->name;
-            $product->type = ucfirst($product->type);
+            $product->breeder = $user->name;
+            $product->user_id = $user->id;
             $product->birthdate = $this->transformDateSyntax($product->birthdate);
             $product->age = $this->computeAge($product->birthdate);
+            $product->type = ucfirst($product->type);
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-            $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+            $product->other_details = $product->other_details;
             $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
             $product->videoCollection = $product->videos;
+            
+            $reviews = $breeder->reviews;    
+        
+            $ratings = [
+                'deliveryRating' => $reviews->avg('rating_delivery') ?? 0,
+                'transactionRating' => $reviews->avg('rating_transaction') ?? 0,
+                'productQualityRating' => $reviews->avg('rating_productQuality') ?? 0
+            ];
 
             return response()->json([
                 'message' => 'Get Product Details successful!',
                 'data' => [
-                    'product' => $product
+                    'product' => $product,
+                    'ratings' => $ratings
                 ]
             ], 200);
 

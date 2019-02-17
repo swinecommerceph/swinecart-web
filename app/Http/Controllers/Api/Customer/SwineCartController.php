@@ -128,12 +128,12 @@ class SwineCartController extends Controller
         if($item) {
             if($item->if_requested) {
                 return response()->json([
-                    'message' => 'Product already requested!',
+                    'error' => 'Product already requested!',
                 ], 409);
             }
             else {
                return response()->json([
-                    'message' => 'Item already added!',
+                    'error' => 'Item already added!',
                 ], 409); 
             }
         }
@@ -144,10 +144,31 @@ class SwineCartController extends Controller
             
             $items->save($new_item);
 
+            $itemDetail = [];
+            $product = Product::find($new_item->product_id);
+            $breeder = Breeder::find($product->breeder_id)->users()->first();
+            $reservation = ProductReservation::find($new_item->reservation_id);
+
+            $itemDetail['id'] = $new_item->id;
+            $itemDetail['product_id'] = $new_item->product_id;
+            $itemDetail['product_name'] = $product->name;
+            $itemDetail['product_type'] = ucfirst($product->type);
+            $itemDetail['product_breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $itemDetail['product_quantity'] = $product->quantity;
+            $itemDetail['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]);
+            $itemDetail['breeder'] = $breeder->name;
+            $itemDetail['breeder_id'] = $product->breeder_id;
+            $itemDetail['user_id'] = $breeder->id;
+            $itemDetail['request_status'] = 0;
+            $itemDetail['request_quantity'] = $new_item->quantity;
+            $itemDetail['status'] = ($new_item->reservation_id) ? $reservation->order_status : $product->status;
+            $itemDetail['delivery_date'] = ($reservation) ? $this->transformDateSyntax($reservation->delivery_date) : '';
+            $itemDetail['date_needed'] = ($new_item->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($new_item->date_needed);
+
             return response()->json([
                 'message' => 'Add to Cart successful!',
                 'data' => [
-                    'product' => $product
+                    'item' => $itemDetail
                 ]
             ], 200);
         }
@@ -172,7 +193,7 @@ class SwineCartController extends Controller
             }
             else return response()->json([
                 'error' => 'Product already requested!' 
-            ], 404);
+            ], 400);
         }
         else return response()->json([
             'error' => 'SwineCart Item does not exist!' 

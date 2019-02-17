@@ -24,7 +24,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::post('/login', 'LoginController@normalLogin');
         Route::get('/me', 'LoginController@me');
         Route::post('/logout', 'LogoutController@logout');
-    });
+    });    
 
     Route::group(['namespace' => 'Breeder', 'prefix' => 'breeder'], function() {
         Route::group(['prefix' => 'profile'], function() {
