@@ -460,7 +460,7 @@
                                 </p>
 
                             </div>
-                            <div class="card-action">
+                            <div style="height: 10vh !important;" class="card-action">
                                 <span class="status-icons-container">
                                     {{-- Product Status icons --}}
 
