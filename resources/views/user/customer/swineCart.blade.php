@@ -374,7 +374,7 @@
 
                             </div>
                             {{-- Product Card --}}
-                            <div class="card-content" :class="(product.request_status) ? 'white-text' : 'blue-grey-text text-darken-4'">
+                            <div style="height: 35vh !important;" class="card-content" :class="(product.request_status) ? 'white-text' : 'blue-grey-text text-darken-4'">
                                 {{-- Title --}}
                                 <span class="card-title">
                                     <a href="#"
