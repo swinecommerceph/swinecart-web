@@ -129,10 +129,10 @@ class EditProfileController extends Controller
     public function updateFarm(Request $request, $farm_id) 
     {
         $breeder = $this->user->userable;
-        $farms = $breeder->farmAddresses;
-        $farm = $farms->find($farm_id);
+        $farms = $this->getBreederFarms($breeder);
+        $item = $farms->find($farm_id);
 
-        if($farm) {
+        if($item) {
 
             $validator = Validator::make($request->all(), [
                 'addressLine1' => 'required',
@@ -145,21 +145,28 @@ class EditProfileController extends Controller
 
             if($validator->fails()) {
                 return response()->json([
-                    'message' => 'Update Farm Info successful!',
-                    'data' => [
-                        'farm' => $validator->errors()
-                    ]
+                    'error' => $validator->errors()
                 ], 422);
             }
             else {
-                $farm->addressLine1 = $request['addressLine1'];
-                $farm->addressLine2 = $request['addressLine2'];
-                $farm->province = $request['province'];
-                $farm->zipCode = $request['zipCode'];
-                $farm->farmType = $request['farmType'];
-                $farm->landline = $request['landline'];
-                $farm->mobile = $request['mobile'];
-                $farm->save();
+                $item->addressLine1 = $request['addressLine1'];
+                $item->addressLine2 = $request['addressLine2'];
+                $item->province = $request['province'];
+                $item->zipCode = $request['zipCode'];
+                $item->farmType = $request['farmType'];
+                $item->landline = $request['landline'];
+                $item->mobile = $request['mobile'];
+                $item->save();
+
+                $farm = [];
+
+                $farm['addressLine1'] = $item->addressLine1;
+                $farm['addressLine2'] = $item->addressLine2;
+                $farm['province'] = $item->province;
+                $farm['zipCode'] = $item->zipCode;
+                $farm['farmType'] = $item->farmType;
+                $farm['landline'] = $item->landline;
+                $farm['mobile'] = $item->mobile;
 
                 return response()->json([
                     'message' => 'Update Farm Info successful!',
@@ -178,7 +185,7 @@ class EditProfileController extends Controller
     public function deleteFarm(Request $request, $farm_id) 
     {
         $breeder = $this->user->userable;
-        $farms = $breeder->farmAddresses;
+        $farms = $this->getBreederFarms($breeder);
         $farm = $farms->find($farm_id);
 
         if($farm) {
@@ -210,7 +217,8 @@ class EditProfileController extends Controller
     public function updatePersonal(BreederPersonalProfileRequest $request) 
     {
         $breeder = $this->user->userable;
-        $breeder->fill($request->only([
+
+        $data = $request->only([
             'officeAddress_addressLine1',
             'officeAddress_addressLine2',
             'officeAddress_province',
@@ -221,15 +229,38 @@ class EditProfileController extends Controller
             'produce',
             'contactPerson_name',
             'contactPerson_mobile'
-        ]))->save();
+        ]);
 
-        return response()->json([
-            'message' => 'Update Personal successful!',
-            'data' => [
-                'breeder' => $breeder
-            ]
-        ], 200);
+        $validator = Validator::make($data, [
+            'officeAddress_addressLine1' => 'required',
+            'officeAddress_addressLine2' => 'required',
+            'officeAddress_province' => 'required',
+            'officeAddress_zipCode' => 'required|digits:4',
+            'office_mobile' => 'required|digits:11|regex:/^09/',
+            'contactPerson_name' => 'required',
+            'contactPerson_mobile' => 'required|digits:11|regex:/^09/',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'message' => 'Update Personal Info successful!',
+                'data' => [
+                    'farm' => $validator->errors()
+                ]
+            ], 422);
+        }
+        else {
+            $breeder->fill($data)->save();
+            return response()->json([
+                'message' => 'Update Personal successful!',
+                'data' => [
+                    'profile' => $breeder
+                ]
+            ], 200);
+        }
     }
+
+        
 
     public function uploadLogo(Request $request) 
     {

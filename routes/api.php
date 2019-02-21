@@ -56,7 +56,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::put('/{id}', 'ProductController@updateProduct');
             Route::patch('/{id}/status', 'ProductController@toggleProductStatus');
 
-
             // Route::post('/set-primary-picture', 'ProductController@setPrimaryPicture');
             // Route::delete('/media/delete', 'ProductController@deleteMedium');
 
@@ -106,8 +105,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/farms', 'EditProfileController@addFarm');
             Route::put('/farms/{id}', 'EditProfileController@updateFarm');
             Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
-            
-            Route::get('/provinces', 'EditProfileController@getProvinces');
+
             Route::get('/breeders', 'EditProfileController@getBreeders');
         });
 
