@@ -154,6 +154,9 @@ class ProductController extends Controller
             $product['breed'] = $p->breed;
             $product['status'] = $p->status;
             $product['age'] = $p->age;
+            $product['adg'] = $p->adg;
+            $product['fcr'] = $p->fcr;
+            $product['backfat_thickness'] = $p->backfat_thickness;
             $product['img_path'] = $p->img_path;
 
             return $product;
