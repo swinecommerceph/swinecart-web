@@ -137,19 +137,32 @@ class ProductController extends Controller
         $breeder = $this->user->userable;
         $products = $this->getBreederProducts($breeder);
 
-
-        $products = $products
+        $results = $products
             ->orderBy('id', 'desc')
-            ->paginate($request->perpage)
-            ->items();
+            ->paginate($request->perpage);
 
-        foreach ($products as $product) {
-            $product = $this->transformProduct($product);
-        }
+        $products = $results->items();
+        $count = $results->count();
+    
+        $products = array_map(function ($item) {
+            $p = $this->transformProduct($item);
+            $product = [];
+
+            $product['id'] = $p->id;
+            $product['name'] = $p->name;
+            $product['type'] = $p->type;
+            $product['breed'] = $p->breed;
+            $product['status'] = $p->status;
+            $product['age'] = $p->age;
+            $product['img_path'] = $p->img_path;
+
+            return $product;
+        }, $products);
 
         return response()->json([
             'message' => 'Get Products successful',
             'data' => [
+                'count' => $count,
                 'products' => $products
             ]
         ], 200);
