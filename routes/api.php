@@ -51,6 +51,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
             Route::get('/{id}', 'ProductController@getProduct');
             Route::get('/{id}/details', 'ProductController@getProductDetails');
+
             Route::post('/', 'ProductController@addProduct');
             Route::put('/{id}', 'ProductController@updateProduct');
             Route::patch('/{id}/status', 'ProductController@toggleProductStatus');
@@ -112,7 +113,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/', 'ProductController@getProducts');
 
             Route::post('/filter', 'ProductController@filterProducts');
-            Route::get('/product/detail/{id}', 'ProductController@getProductDetail');
             Route::get('/breeder/{id}', 'ProductController@getBreederProfile');
             Route::get('/breeds', 'ProductController@getBreeds');
         });

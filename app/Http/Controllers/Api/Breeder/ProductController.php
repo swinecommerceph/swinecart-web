@@ -275,7 +275,18 @@ class ProductController extends Controller
             'error' => 'Product does not exist!'
         ], 404);
     }
-
+    // $product->img_path = route('serveImage', ['size' => 'large', 'filename' => $primaryImg->name]);
+    //         $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
+    //         $product->breeder = $user->name;
+    //         $product->user_id = $user->id;
+    //         $product->birthdate = $this->transformDateSyntax($product->birthdate);
+    //         $product->age = $this->computeAge($product->birthdate);
+    //         $product->type = ucfirst($product->type);
+    //         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+    //         $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+    //         $product->other_details = $product->other_details;
+    //         $product->images = $product->images;
+    //         $product->videos = $product->videos;
     public function getProductDetails(Request $request, $product_id) 
     {
         $product = Product::find($product_id);
@@ -286,19 +297,31 @@ class ProductController extends Controller
             $breeder = Breeder::find($product->breeder_id);
             $user = $breeder->users->first();
 
-            $product->img_path = route('serveImage', ['size' => 'large', 'filename' => $primaryImg->name]);
-            $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
-            $product->breeder = $user->name;
-            $product->user_id = $user->id;
-            $product->birthdate = $this->transformDateSyntax($product->birthdate);
-            $product->age = $this->computeAge($product->birthdate);
-            $product->type = ucfirst($product->type);
-            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-            $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-            $product->other_details = $product->other_details;
-            $product->imageCollection = $product->images;
-            $product->videoCollection = $product->videos;
-            
+            $p = [];
+
+            $p['id'] = $product->id;
+            $p['breeder_id'] = $product->breeder_id;
+            // $p['farm_from_id'] = $product->farm_from_id;
+            // $p['primary_img_id'] = $product->primary_img_id;
+            $p['name'] = $product->name;
+            $p['type'] = ucfirst($product->type);
+            $p['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $p['birthdate'] = $this->transformDateSyntax($product->birthdate);
+            $p['price'] = $product->price;
+            $p['quantity'] = $product->quantity;
+            $p['adg'] = $product->adg;
+            $p['fcr'] = $product->fcr;
+            $p['backfat_thickness'] = $product->backfat_thickness;
+            $p['age'] = $this->computeAge($product->birthdate);
+            $p['other_details'] = $product->other_details;
+            $p['user_id'] = $user->id;
+            $p['breeder'] = $user->name;
+            $p['farm_name'] = FarmAddress::find($product->farm_from_id)->province;
+            $p['images'] = $product->images;
+            $p['videos'] = $product->videos;
+            $p['img_path'] = route('serveImage', ['size' => 'large', 'filename' => $primaryImg->name]);
+            $p['def_img_path'] = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
+
             $reviews = $breeder->reviews;    
         
             $ratings = [
@@ -310,7 +333,7 @@ class ProductController extends Controller
             return response()->json([
                 'message' => 'Get Product Details successful!',
                 'data' => [
-                    'product' => $product,
+                    'product' => $p,
                     'ratings' => $ratings
                 ]
             ], 200);
