@@ -136,11 +136,27 @@ class ProductController extends Controller
     {
         $breeder = $this->user->userable;
         $products = $this->getBreederProducts($breeder);
+        $perpage = $request->perpage;
+        
+        // Check for Filtering and Sorting
+        if($request->input('type')) {
+            $products = $products->where('type', $request->input('type'));
+        }
 
-        $results = $products
-            ->orderBy('id', 'desc')
-            ->paginate($request->perpage);
+        if($request->input('status')) {
+            $products = $products->where('status', $request->input('status'));
+        }
 
+        if($request->input('sort')) {
+            $part = explode('-', $request->input('sort'));
+            $products = $products->orderBy($part[0], $part[1]);
+        }
+        else {
+            $products = $products->orderBy('id', 'desc');
+        }
+
+        // Paginate and Transform Product
+        $results = $products->paginate($perpage);
         $products = $results->items();
         $count = $results->count();
     
@@ -168,42 +184,6 @@ class ProductController extends Controller
                 'count' => $count,
                 'products' => $products
             ]
-        ], 200);
-    }
-
-    public function filterProducts(Request $request) 
-    {
-        $breeder = $this->user->userable;
-        $products = $this->getBreederProducts($breeder);
-
-        $request->type  = $request->type ?? 'all';
-        $request->status  = $request->status ?? 'all';
-        $request->sort  = $request->sort ?? 'none';
-
-        if($request->type != 'all') {
-            $products = $products->where('type', $request->type)->paginate(self::RESULTS_PER_PAGE);
-        }
-        if($request->status != 'all') {
-            $products = $products->where('status', $request->status)->paginate(self::RESULTS_PER_PAGE);
-        }
-        if($request->sort != 'none') {
-            $part = explode('-', $request->sort);
-            // $part[0] is the field (birthdate, adg, fcr, backfat_thickness)
-            // $part[1] is the order (asc, desc)
-            $products = $products->orderBy($part[0], $part[1])->paginate(self::RESULTS_PER_PAGE);
-        }
-
-        if($request->type == 'all' && $request->status == 'all' && $request->sort == 'none') {
-            $products = $products->orderBy('id', 'desc')->paginate(self::RESULTS_PER_PAGE);
-        } 
-
-        foreach ($products as $product) {
-            $product = $this->transformProduct($product);
-        }
-
-        return response()->json([
-            'message' => 'Get Products successful',
-            'data' => $products
         ], 200);
     }
 

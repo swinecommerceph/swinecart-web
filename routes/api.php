@@ -46,7 +46,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'products'], function() {
             Route::get('/', 'ProductController@getProducts');
-            Route::get('/filter', 'ProductController@filterProducts');
             Route::delete('/', 'ProductController@deleteProducts');
             Route::patch('/', 'ProductController@updateSelected');
 
