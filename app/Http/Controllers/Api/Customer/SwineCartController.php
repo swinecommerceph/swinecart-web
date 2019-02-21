@@ -62,7 +62,7 @@ class SwineCartController extends Controller
     public function getItems(Request $request)
     {
         $customer = $this->user->userable;
-        $swineCartItems = $customer->swineCartItems()->where('if_rated', 0)->paginate($request->perpage);
+        $swineCartItems = $customer->swineCartItems()->where('if_rated', 0)->get();
         $items = [];
 
         foreach ($swineCartItems as $item) {
@@ -86,6 +86,12 @@ class SwineCartController extends Controller
             $itemDetail['status'] = ($item->reservation_id) ? $reservation->order_status : $product->status;
             $itemDetail['delivery_date'] = ($reservation) ? $this->transformDateSyntax($reservation->delivery_date) : '';
             $itemDetail['date_needed'] = ($item->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($item->date_needed);
+            $itemDetail['status_transactions'] = [
+                    "requested" => ($item->transactionLogs()->where('status', 'requested')->latest()->first()->created_at) ?? '',
+                    "reserved" => ($item->transactionLogs()->where('status', 'reserved')->latest()->first()->created_at) ?? '',
+                    "on_delivery" => ($item->transactionLogs()->where('status', 'on_delivery')->first()->created_at) ?? '',
+                    "sold" => ($item->transactionLogs()->where('status', 'sold')->first()->created_at) ?? ''
+                ];
 
             array_push($items, $itemDetail);
         }
