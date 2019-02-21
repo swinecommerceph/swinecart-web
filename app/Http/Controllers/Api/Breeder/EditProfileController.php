@@ -37,6 +37,12 @@ class EditProfileController extends Controller
         });
     }
 
+    private function getBreederFarms($breeder) {
+        $farms = FarmAddress::where('addressable_id', $breeder->id)
+            ->where('accreditation_status', 'active');
+        return $farms;
+    }
+
     public function getProfile(Request $request) 
     {
         $breeder = $this->user->userable;
@@ -47,7 +53,7 @@ class EditProfileController extends Controller
         return response()->json([
             'message' => 'Get Profile successful!',
             'data' => [
-                'breeder' => $breeder,
+                'profile' => $breeder,
             ]
         ], 200);
     }
@@ -55,11 +61,30 @@ class EditProfileController extends Controller
     public function getFarms(Request $request)
     {
         $breeder = $this->user->userable;
-        $farms = $breeder->farmAddresses;
+
+        $results = $this->getBreederFarms($breeder)->paginate($request->perpage);
+        $farms = $results->items();
+
+        $farms = array_map(function ($item) {
+            $farm = [];
+            
+            $farm['id'] = $item->id;
+            $farm['name'] = $item->name;
+            $farm['province'] = $item->province;
+            // $farm['addressLine1'] = $item->addressLine1;
+            // $farm['addressLine2'] = $item->addressLine2;
+            // $farm['zipCode'] = $item->zipCode;
+            // $farm['farmType'] = $item->farmType;
+            // $farm['landline'] = $item->landline;
+            // $farm['mobile'] = $item->mobile;
+
+            return $farm;
+        }, $farms);
 
         return response()->json([
             'message' => 'Get Farms successful!',
             'data' => [
+                'count' => $results->count(),
                 'farms' => $farms,
             ]
         ], 200);
@@ -68,13 +93,28 @@ class EditProfileController extends Controller
     public function getFarm(Request $request, $farm_id) 
     {
         $breeder = $this->user->userable;
-        $farms = $breeder->farmAddresses;
+        $farms = $this->getBreederFarms($breeder);
 
-        $farm = $farms->find($farm_id);
+        $item = $farms->find($farm_id);
 
-        if($farm) {
+        if($item) {
+            $farm = [];
+
+            $farm['id'] = $item->id;
+            $farm['name'] = $item->name;
+            $farm['province'] = $item->province;
+            $farm['addressLine1'] = $item->addressLine1;
+            $farm['addressLine2'] = $item->addressLine2;
+            $farm['zipCode'] = $item->zipCode;
+            $farm['farmType'] = $item->farmType;
+            $farm['landline'] = $item->landline;
+            $farm['mobile'] = $item->mobile;
+            $farm['accreditation_no'] = $item->accreditation_no;
+            $farm['accreditation_date'] = $item->accreditation_date;
+            $farm['accreditation_expiry'] = $item->accreditation_expiry;
+
             return response()->json([
-                'message' => 'Update Farm Info successful!',
+                'message' => 'Get Farm successful!',
                 'data' => [
                     'farm' => $farm
                 ]
