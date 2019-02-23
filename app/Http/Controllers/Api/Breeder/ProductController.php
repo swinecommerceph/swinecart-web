@@ -223,6 +223,7 @@ class ProductController extends Controller
 
         if($product) {
             $product = $this->transformProduct($product);
+
             return response()->json([
                 'message' => 'Get Product successful!',
                 'data' => $product
@@ -257,7 +258,7 @@ class ProductController extends Controller
                 $product->other_details = $request->other_details;
                 $product->save();
 
-                $product = $this->getBreederProduct($breeder, $product->id);
+                $product = $this->getBreederProduct($breeder, $product_id);
                 $product = $this->transformProduct($product);
 
                 return response()->json([
@@ -275,18 +276,7 @@ class ProductController extends Controller
             'error' => 'Product does not exist!'
         ], 404);
     }
-    // $product->img_path = route('serveImage', ['size' => 'large', 'filename' => $primaryImg->name]);
-    //         $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
-    //         $product->breeder = $user->name;
-    //         $product->user_id = $user->id;
-    //         $product->birthdate = $this->transformDateSyntax($product->birthdate);
-    //         $product->age = $this->computeAge($product->birthdate);
-    //         $product->type = ucfirst($product->type);
-    //         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-    //         $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-    //         $product->other_details = $product->other_details;
-    //         $product->images = $product->images;
-    //         $product->videos = $product->videos;
+
     public function getProductDetails(Request $request, $product_id) 
     {
         $product = Product::find($product_id);
@@ -347,37 +337,47 @@ class ProductController extends Controller
     public function addProduct(ProductRequest $request) 
     {
         $breeder = $this->user->userable;
+        $farms = $breeder->farmAddresses;
 
-        $product = new Product;
 
-        if($request->type == 'boar') $image = Image::firstOrCreate(['name' => 'boar_default.jpg']);
-        else if($request->type == 'sow') $image = Image::firstOrCreate(['name' => 'sow_default.jpg']);
-        else if($request->type == 'gilt') $image = Image::firstOrCreate(['name' => 'gilt_default.jpg']);
-        else $image = Image::firstOrCreate(['name' => 'semen_default.jpg']);
+        $farm = $farms->find($request->farm_from_id);
 
-        $product->farm_from_id = $request->farm_from_id;
-        $product->primary_img_id = $image->id;
-        $product->name = $request->name;
-        $product->type = $request->type;
-        $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
-        $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-        $product->price = $request->price;
-        $product->quantity = ($request->type == 'semen') ? -1 : 1;
-        $product->adg = $request->adg;
-        $product->fcr = $request->fcr;
-        $product->backfat_thickness = $request->backfat_thickness;
-        $product->other_details = $request->other_details;
-        $breeder->products()->save($product);
+        if ($farm) {
+            $product = new Product;
 
-        $product = $this->getBreederProduct($breeder, $product->id);
-        $product = $this->transformProduct($product);
+            if($request->type == 'boar') $image = Image::firstOrCreate(['name' => 'boar_default.jpg']);
+            else if($request->type == 'sow') $image = Image::firstOrCreate(['name' => 'sow_default.jpg']);
+            else if($request->type == 'gilt') $image = Image::firstOrCreate(['name' => 'gilt_default.jpg']);
+            else $image = Image::firstOrCreate(['name' => 'semen_default.jpg']);
 
-        return response()->json([
-            'message' => 'Add Product successful!',
-            'data' => [
-                'product' => $product,
-            ]
-        ], 200);
+            $product->farm_from_id = $request->farm_from_id;
+            $product->primary_img_id = $image->id;
+            $product->name = $request->name;
+            $product->type = $request->type;
+            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+            $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
+            $product->price = $request->price;
+            $product->quantity = ($request->type == 'semen') ? -1 : 1;
+            $product->adg = $request->adg;
+            $product->fcr = $request->fcr;
+            $product->backfat_thickness = $request->backfat_thickness;
+            $product->other_details = $request->other_details;
+            $breeder->products()->save($product);
+
+            $product = $this->getBreederProduct($breeder, $product->id);
+            $product = $this->transformProduct($product);
+
+            return response()->json([
+                'message' => 'Add Product successful!',
+                'data' => [
+                    'product' => $product,
+                ]
+            ], 200);
+        }
+        else return response()->json([
+                'error' => 'Farm does not exist!'
+            ], 404);
+        }
     }
 
     public function toggleProductStatuses(Request $request)
