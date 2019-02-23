@@ -32,7 +32,7 @@ use Storage;
 use Config;
 
 class ProductController extends Controller
-{   
+{
 
     use CustomHelpers {
         transformBreedSyntax as private;
@@ -334,7 +334,7 @@ class ProductController extends Controller
         ], 404);
     }
 
-    public function addProduct(ProductRequest $request) 
+    public function addProduct(ProductRequest $request)
     {
         $breeder = $this->user->userable;
         $farms = $breeder->farmAddresses;
@@ -375,9 +375,8 @@ class ProductController extends Controller
             ], 200);
         }
         else return response()->json([
-                'error' => 'Farm does not exist!'
-            ], 404);
-        }
+            'error' => 'Farm does not exist!'
+        ], 404);
     }
 
     public function toggleProductStatuses(Request $request)
@@ -413,7 +412,7 @@ class ProductController extends Controller
     }
     
     public function deleteProducts(Request $request)
-    {   
+    {
         $breeder = $this->user->userable;
         $undeletedProducts = [];
         $ids = $request->ids;
