@@ -175,7 +175,7 @@
             </li>
 
           <li class="sidenav-sub-element">
-            <a href="#">
+            <a href="{{ route('products.create') }}">
               <div class="btn teal darken-4">
                 Add Product
               </div>

@@ -170,6 +170,16 @@ class ProductController extends Controller
     }
 
     /**
+     * Go to Add Product form for storing Product
+     * @return View
+    */
+    
+    public function createProduct()
+    {
+      return view('user.breeder.addProduct');
+    }
+
+    /**
      * Store the Breeder's product
      * AJAX
      *

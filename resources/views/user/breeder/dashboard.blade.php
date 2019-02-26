@@ -312,6 +312,7 @@
         var rawDataSow = {{ json_encode($soldData['dataSets'][1]) }};
         var rawDataGilt = {{ json_encode($soldData['dataSets'][2]) }};
         var rawDataSemen = {{ json_encode($soldData['dataSets'][3]) }};
+        
         var rawDashboardStats = {!! json_encode($dashboardStats) !!};
     </script>
     <script src="{{ elixir('/js/breeder/dashboard.js') }}"></script>

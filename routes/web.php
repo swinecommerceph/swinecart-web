@@ -80,6 +80,7 @@ Route::group(['middleware' => ['web']], function () {
 
         // product-related
         Route::get('products',['as' => 'products', 'uses' => 'ProductController@showProducts']);
+        Route::get('products/add', ['as' => 'products.create', 'uses' => 'ProductController@createProduct']);
         Route::post('products',['as' => 'products.store', 'uses' => 'ProductController@storeProduct']);
         Route::put('products',['as' => 'products.update', 'uses' => 'ProductController@updateProduct']);
         Route::get('products/view/{product}',['as' => 'products.bViewDetail', 'uses' => 'ProductController@breederViewProductDetail']);
