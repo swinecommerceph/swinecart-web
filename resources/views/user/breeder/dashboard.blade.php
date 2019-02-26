@@ -28,8 +28,9 @@
             {{-- Product Status label --}}
             <div class="col s12">
                 <h4 class="left-align">
-                    <a href="{{ route('dashboard.productStatus') }}"
-                        style="font-weight: 500; color:hsl(0, 0%, 13%);"
+                    {{-- <a href="{{ route('dashboard.productStatus') }}" --}}
+                    <a href="#"
+                        style="font-weight: 500; color:hsl(0, 0%, 13%); cursor: default;"
                     >
                         Product Inventory and Status
                     </a>
@@ -101,9 +102,10 @@
             <div class="row"></div>
             <div class="row">
                 <h4 class="left-align" style="font-weight: 500; margin-left: 2vw; margin-top: 5vh;">
-                    <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}"
+                    {{-- <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}"
                         style="color:hsl(0, 0%, 13%);"
-                    >
+                    > --}}
+                    <a href="#" style="font-weight: 500; color:hsl(0, 0%, 13%); cursor: default;">
                         Product Management
                     </a>
                 </h4>
