@@ -167,28 +167,28 @@
               </li>
 
             <li class="sidenav-sub-element">
-                <a href="#">
-                  <div class="btn teal darken-4">
-                    Orders
-                  </div>
-                </a>
-              </li>
+              <a href="#">
+                <div class="btn teal darken-4">
+                  Orders
+                </div>
+              </a>
+            </li>
 
-              <li class="sidenav-sub-element">
-                  <a href="#">
-                    <div class="btn teal darken-4">
-                      Add Product
-                    </div>
-                  </a>
-                </li>
+            <li class="sidenav-sub-element">
+              <a href="#">
+                <div class="btn teal darken-4">
+                  Add Product
+                </div>
+              </a>
+            </li>
 
-                <li class="sidenav-sub-element">
-                    <a href="#">
-                      <div class="btn teal darken-4">
-                        Reporting
-                      </div>
-                    </a>
-                  </li>
+            <li class="sidenav-sub-element">
+              <a href="#">
+                <div class="btn teal darken-4">
+                  Reporting
+                </div>
+              </a>
+            </li>
         </div>
       
         <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
