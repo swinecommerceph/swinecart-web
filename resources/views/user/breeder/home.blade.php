@@ -150,45 +150,45 @@
         </a>
 
         <div class="sidenav-sub-element-container">
-            <li class="sidenav-sub-element">
-              <a href="#">
+          <li class="sidenav-sub-element">
+            <a href="#">
+              <div class="btn teal darken-4">
+                Orders
+              </div>
+            </a>
+          </li>
+        
+          <li class="sidenav-sub-element">
+            <a href="{{ route('dashboard.productStatus') }}"">
+              <div class="btn teal darken-4">
+                Product Inventory
+              </div>
+            </a>
+          </li>
+
+          <li class="sidenav-sub-element">
+              <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}">
                 <div class="btn teal darken-4">
-                  Orders
+                  Product Management
                 </div>
               </a>
             </li>
+
+          <li class="sidenav-sub-element">
+            <a href="#">
+              <div class="btn teal darken-4">
+                Add Product
+              </div>
+            </a>
+          </li>
           
-            <li class="sidenav-sub-element">
-              <a href="{{ route('dashboard.productStatus') }}"">
-                <div class="btn teal darken-4">
-                  Product Inventory
-                </div>
-              </a>
-            </li>
-
-            <li class="sidenav-sub-element">
-                <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}">
-                  <div class="btn teal darken-4">
-                    Product Management
-                  </div>
-                </a>
-              </li>
-
-            <li class="sidenav-sub-element">
-              <a href="#">
-                <div class="btn teal darken-4">
-                  Add Product
-                </div>
-              </a>
-            </li>
-            
-            <li class="sidenav-sub-element">
-              <a href="#">
-                <div class="btn teal darken-4">
-                  Reporting
-                </div>
-              </a>
-            </li>
+          <li class="sidenav-sub-element">
+            <a href="#">
+              <div class="btn teal darken-4">
+                Reporting
+              </div>
+            </a>
+          </li>
         </div>
       
         <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
