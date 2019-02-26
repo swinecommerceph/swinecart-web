@@ -22,7 +22,7 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row container">
         <div class="col s12 m10 offset-m1">
             @include('common._errors')
             @include('user.customer._editProfileForm')

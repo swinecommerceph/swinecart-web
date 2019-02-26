@@ -34,6 +34,63 @@ body {
   font-family: Source Sans Pro;
 }
 
+.navbar-container {
+  padding-left: 2vw;
+  padding-right: 7vw;
+}
+
+/* Sidenav Styes */
+#sidenav-container {
+  position: fixed;
+  top: 6.5vh;
+  height: 100vh;
+  padding-top: 1px;
+}
+
+.sidenav-main-element-container {
+  height: 8vh;
+  width: 25vw;
+}
+
+.sidenav-main-element {
+  color: white;
+  font-weight: 500;
+  text-transform:none !important;
+  text-align: left;
+  font-size: 1.4rem;
+}
+
+.sidenav-main-element i {
+  font-size: 3.5rem;
+}
+
+.sidenav-sub-element-container {
+  margin-left: 3.7vw;
+  padding-bottom: 1vh;
+}
+
+.sidenav-sub-element {
+  list-style-type: none;
+}
+
+.sidenav-sub-element a div {
+  padding-left: 0;
+  box-shadow: none;
+  width: 12vw;
+  text-align: left;
+  font-weight: 500;
+}
+
+.message-badge {
+  color: white !important;
+  background-color: #FF475D;
+  border-radius: 5px;
+  padding: 0.5rem;
+  min-width: 1.5rem;
+}
+
+
+
 /* Override collapsible components */
 .collapsible-body{
 	display:block;
@@ -60,6 +117,10 @@ body {
 }
 
 /* Breadcrumb styles */
+.breadcrumb-container {
+  padding-left: 3vw;
+}
+
 #breadcrumb{
 	margin-bottom:5px;
 }
@@ -1370,8 +1431,8 @@ label {
   text-transform: none !important;
 }
 
-.btn.teal.darken-3:hover {
-  background-color: #009688 !important;
+.btn:hover, .btn-large:hover {
+  background-color: #003831 !important;
 }
 
 .btn.blue:hover {

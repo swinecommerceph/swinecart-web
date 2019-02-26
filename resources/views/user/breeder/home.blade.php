@@ -25,7 +25,7 @@
 
 @section('navbarHead')
     @if(!Auth::user()->update_profile)
-        <li 
+        {{-- <li 
             id="message-main-container"
             class="tooltipped"
             data-position="bottom"
@@ -38,15 +38,15 @@
                 <span class="badge"
                     v-if="unreadCount > 0  && unreadCount <= 99"
                 >
-                    @{{ unreadCount }}
+                    @{{ unreadCount + " NEW"}}
                 </span>
                 <span class="badge"
                     v-if="unreadCount > 99"
                 >
-                    99+
+                    99+ NEW
                 </span>
             </a>
-        </li>
+        </li> --}}
         
         {{-- Notifications --}}
         <li id="notification-main-container">
@@ -135,6 +135,95 @@
         <li><a href="{{ route('dashboard.reviews') }}"> <i class="material-icons left">grade</i> Reviews </a></li>
         <li><a href="{{ route('breeder.edit') }}"> <i class="material-icons left">mode_edit</i> Update Profile </a></li>
     @endif
+@endsection
+
+@section('content')
+    <div class="row">
+      <div id="sidenav-container" class="col s2 teal darken-4">
+     
+        <li class="divider"></li>
+        <a class="sidenav-main-element" href="{{ route('home_path') }}">
+          <div style="box-shadow: none; text-align: left; width: 15.7vw; padding-left: 0;" class="btn-large teal darken-4">
+            <i class="material-icons left">assessment</i>
+            <span style="font-weight: 500; font-size: 1.4rem;">Dashboard</span>
+          </div>
+        </a>
+
+        <div class="sidenav-sub-element-container">
+            <li class="sidenav-sub-element">
+              <a href="{{ route('dashboard.productStatus') }}"">
+                <div class="btn teal darken-4">
+                  Product Inventory
+                </div>
+              </a>
+            </li>
+
+            <li class="sidenav-sub-element">
+                <a href="#">
+                  <div class="btn teal darken-4">
+                    Orders
+                  </div>
+                </a>
+              </li>
+
+              <li class="sidenav-sub-element">
+                  <a href="#">
+                    <div class="btn teal darken-4">
+                      Add Product
+                    </div>
+                  </a>
+                </li>
+
+                <li class="sidenav-sub-element">
+                    <a href="#">
+                      <div class="btn teal darken-4">
+                        Reporting
+                      </div>
+                    </a>
+                  </li>
+        </div>
+      
+        <li class="divider"></li>
+        <a class="sidenav-main-element" href="{{ route('breeder.messages') }}">
+          <div style="box-shadow: none; text-align: left; width: 15.7vw; padding-left: 0" class="btn-large teal darken-4">
+            <div v-cloak id="message-main-container">
+              <i class="material-icons left">message</i>
+              <span style="font-weight: 500; font-size: 1.4rem;">
+                Messages
+              </span>
+    
+              <span class="message-badge"
+                  v-if="unreadCount > 0  && unreadCount <= 99"
+              >
+                  @{{ unreadCount + " NEW"}}
+              </span>
+              <span class="message-badge"
+                  v-if="unreadCount > 99"
+              >
+                  99+ NEW
+              </span>
+            </div>
+          </div>
+        </a>
+        <li style="1vw !important;" class="divider"></li>
+      
+      
+        <a class="sidenav-main-element" href="{{ route('breeder.edit') }}">
+          <div style="box-shadow: none; text-align: left; width: 15.7vw; padding-left: 0" class="btn-large teal darken-4">
+            <i class="material-icons left">settings</i>
+            <span style="font-weight: 500; font-size: 1.4rem;">
+              Account Settings
+            </span>
+          </div>
+        </a>
+
+        <li class="divider"></li>
+      </div>
+      <div class="col s2"></div>
+      <div class="col s8">
+        @yield('breeder-content')
+      </div>
+    </div>
 @endsection
 
 @section('static')

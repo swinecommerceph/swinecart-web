@@ -26,7 +26,7 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row container">
         <div class="col s12 m10 offset-m1">
             <p class="caption">Please complete first your profile. <br>
                 <blockquote>Fields with * are required.</blockquote>

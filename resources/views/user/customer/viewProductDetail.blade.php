@@ -23,7 +23,7 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row container">
         <div class="col s12 m7">
             {{-- Primary Image --}}
             <div class="row">

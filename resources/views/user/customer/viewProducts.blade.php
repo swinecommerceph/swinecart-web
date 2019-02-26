@@ -22,6 +22,8 @@
 @endsection
 
 @section('content')
+  <div class="container">
+
     {{-- Search bar --}}
     <nav id="search-container">
         <div id="search-field" class="nav-wrapper white">
@@ -279,6 +281,7 @@
 
         </div>
     </div>
+  </div>
 
 @endsection
 

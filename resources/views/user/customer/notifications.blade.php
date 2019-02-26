@@ -22,7 +22,7 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row container">
         <div class="col s12">
             <p class="caption">
                 Your Notifications. <br>
@@ -30,7 +30,7 @@
         </div>
     </div>
 
-    <div class="row">
+    <div class="row container">
         <div id="notification-page-collection" class="collection">
             <a class="black-text collection-item"
                 v-for="(notification,index) in notifications"

@@ -22,7 +22,7 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row container">
         <p style="color:hsl(0, 0%, 40%);">Select which product(s) to find: </p>
         
         {{-- Checkbox --}}

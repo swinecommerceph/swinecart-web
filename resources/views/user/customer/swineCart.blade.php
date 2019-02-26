@@ -193,7 +193,7 @@
 @section('content')
     
     {{-- Swinecart Container --}}
-    <div class="" id="swine-cart-container">
+    <div class="container" id="swine-cart-container">
 
         {{-- Tabs --}}
         <ul class="tabs tabs-fixed-width">

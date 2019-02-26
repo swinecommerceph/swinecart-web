@@ -13,10 +13,12 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Your Dashboard.
+    <div class="breadcrumb-container">
+      Your Dashboard.
+    </div>    
 @endsection
 
-@section('content')
+@section('breeder-content')
     <br>
 
     <div id="card-status" class="row" v-cloak>

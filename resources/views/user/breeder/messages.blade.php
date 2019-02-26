@@ -14,10 +14,12 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Messages
+    <div class="breadcrumb-container">    
+      Messages
+    </div>
 @endsection
 
-@section('content')
+@section('breeder-content')
 <style>
  	#chatMessages{ width: 100%; min-height: 100px; height: 50vh; overflow-y: auto;}
  	#chatMessages li { width: 100%; padding: 10px;}

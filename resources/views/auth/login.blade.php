@@ -10,7 +10,7 @@
 
 @section('content')
 	<br>
-	<div class="row">
+	<div class="row container">
 		<div class="col s12 m4 offset-m4">
 			<div class="card-panel" style="border: solid 1px #E1E4EC !important; box-shadow: 0px 0px !important; border-radius: 3px !important;">
 				<div class="row s12">

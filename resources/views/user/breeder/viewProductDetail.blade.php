@@ -13,16 +13,20 @@
 @endsection
 
 @section('breadcrumbTitle')
-    {{$product->name}}
+    <div class="breadcrumb-container">    
+      {{$product->name}}
+    </div>
 @endsection
 
 @section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="{{ route('products') }}" class="breadcrumb">Products</a>
-    <a href="#!" class="breadcrumb">{{$product->name}}</a>
+    <div class="breadcrumb-container">
+        <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
+        <a href="{{ route('products') }}" class="breadcrumb">Products</a>
+        <a href="#!" class="breadcrumb">{{$product->name}}</a>
+    </div>
 @endsection
 
-@section('content')
+@section('breeder-content')
     <div class="row">
         <div class="col s12 m7">
             {{-- Primary Image --}}

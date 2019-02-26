@@ -23,7 +23,7 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row container">
         <div class="collection with-header">
             <div class="teal darken-2 white-text collection-header">
                 {{-- First Row --}}

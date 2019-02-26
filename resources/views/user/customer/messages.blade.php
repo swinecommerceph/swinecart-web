@@ -28,7 +28,7 @@
  	.chat-bubble.out { float:right; background-color: #0071FF; color: white;}
 </style>
 
-<div class="row" style="padding-left: 0.5vw;">
+<div class="row container" style="padding-left: 0.5vw;">
 	<div id="threadname">
 		@if($threadId != '' && sizeof($threads) == 0)
 			{{ $otherName }}
@@ -40,7 +40,7 @@
 	</div>
 </div>
 
-<div class="row">
+<div class="row container">
 
 	<div class="col m3 row">
 	  <ul class="collection" id="thread-collection" style="border: 1px solid #ddd !important; margin: 0 !important;">

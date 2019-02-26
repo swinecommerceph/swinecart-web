@@ -53,14 +53,14 @@
 	{{-- Navbar --}}
 	<div class="navbar-fixed">
 		<nav class="teal darken-3">
-		    <div class="nav-wrapper container">
+		    <div class="nav-wrapper navbar-container">
 		     	{{-- If user is a guest--}}
 		     	@if (Auth::guest())
 						<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;"/>
-						<a class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
+						<a style="font-weight: 700;" class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
 			  	@else
 						<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;" />
-						<a class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
+						<a style="font-weight: 700;" class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
 			  	@endif
 
 	      	<ul id="nav-mobile" class="right hide-on-med-and-down">
@@ -92,7 +92,7 @@
 					        <li class="divider"></li>
 					        <li><a href="{{ url('logout') }}">Logout</a></li>
 						    </ul>
-							</li>
+              </li>
 						@endif
 		      </ul>
 		    </div>
@@ -141,10 +141,10 @@
 	@yield('homeContent')
 
 	{{-- Common view for authenticated users --}}
-	@if(!Request::is('/'))
-		<div class="container">
-      		@yield('content')
-		</div>
+  @if(!Request::is('/'))
+		<div>
+      @yield('content')
+    </div>
 	@endif
 
 	<script src="{{ elixir('/js/vendor.js') }}"></script>
