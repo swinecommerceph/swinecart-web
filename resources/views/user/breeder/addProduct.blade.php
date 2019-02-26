@@ -17,7 +17,7 @@
 @section('breadcrumb')
   <div class="breadcrumb-container">    
       <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-      <a href="#!" class="breadcrumb">Products</a>
+      <a href="#!" class="breadcrumb">Add Product</a>
   </div>
 @endsection
 
