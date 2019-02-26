@@ -159,6 +159,14 @@
             </li>
 
             <li class="sidenav-sub-element">
+                <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}">
+                  <div class="btn teal darken-4">
+                    Product Management
+                  </div>
+                </a>
+              </li>
+
+            <li class="sidenav-sub-element">
                 <a href="#">
                   <div class="btn teal darken-4">
                     Orders
