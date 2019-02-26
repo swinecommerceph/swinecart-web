@@ -141,9 +141,9 @@
     <div class="row">
       <div id="sidenav-container" class="col s2 teal darken-4">
      
-        <li class="divider"></li>
+        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
         <a class="sidenav-main-element" href="{{ route('home_path') }}">
-          <div style="box-shadow: none; text-align: left; width: 15.7vw; padding-left: 0;" class="btn-large teal darken-4">
+          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0;" class="btn-large teal darken-4">
             <i class="material-icons left">assessment</i>
             <span style="font-weight: 500; font-size: 1.4rem;">Dashboard</span>
           </div>
@@ -183,9 +183,9 @@
                   </li>
         </div>
       
-        <li class="divider"></li>
+        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
         <a class="sidenav-main-element" href="{{ route('breeder.messages') }}">
-          <div style="box-shadow: none; text-align: left; width: 15.7vw; padding-left: 0" class="btn-large teal darken-4">
+          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0" class="btn-large teal darken-4">
             <div v-cloak id="message-main-container">
               <i class="material-icons left">message</i>
               <span style="font-weight: 500; font-size: 1.4rem;">
@@ -205,11 +205,11 @@
             </div>
           </div>
         </a>
-        <li style="1vw !important;" class="divider"></li>
+        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
       
       
         <a class="sidenav-main-element" href="{{ route('breeder.edit') }}">
-          <div style="box-shadow: none; text-align: left; width: 15.7vw; padding-left: 0" class="btn-large teal darken-4">
+          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0" class="btn-large teal darken-4">
             <i class="material-icons left">settings</i>
             <span style="font-weight: 500; font-size: 1.4rem;">
               Account Settings
@@ -217,7 +217,7 @@
           </div>
         </a>
 
-        <li class="divider"></li>
+        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
       </div>
       <div class="col s2"></div>
       <div class="col s8">
