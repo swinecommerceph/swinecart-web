@@ -151,6 +151,14 @@
 
         <div class="sidenav-sub-element-container">
             <li class="sidenav-sub-element">
+              <a href="#">
+                <div class="btn teal darken-4">
+                  Orders
+                </div>
+              </a>
+            </li>
+          
+            <li class="sidenav-sub-element">
               <a href="{{ route('dashboard.productStatus') }}"">
                 <div class="btn teal darken-4">
                   Product Inventory
@@ -169,19 +177,11 @@
             <li class="sidenav-sub-element">
               <a href="#">
                 <div class="btn teal darken-4">
-                  Orders
-                </div>
-              </a>
-            </li>
-
-            <li class="sidenav-sub-element">
-              <a href="#">
-                <div class="btn teal darken-4">
                   Add Product
                 </div>
               </a>
             </li>
-
+            
             <li class="sidenav-sub-element">
               <a href="#">
                 <div class="btn teal darken-4">
