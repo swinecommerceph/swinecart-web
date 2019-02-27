@@ -30,7 +30,7 @@ var product = {
     add : function(parent_form){
         // Attach overlay preloader
 
-        $('<div id="overlay-preloader-circular" class="valign-wrapper" style="padding:7rem;">'+
+        /* $('<div id="overlay-preloader-circular" class="valign-wrapper" style="padding:7rem;">'+
             '<div class="center-align preloader-overlay">'+
                 '<div class="preloader-wrapper big active">'+
                     '<div class="spinner-layer spinner-blue-only">'+
@@ -53,7 +53,7 @@ var product = {
         // Let the overlay preloader change its top position every scroll
         $('#add-product-modal .modal-content').scroll(function(){
             $('#overlay-preloader-circular').css({top:$(this).scrollTop()});
-        });
+        }); */
 
         var data_values = {
             "name": parent_form.find('input[name=name]').val(),
@@ -104,7 +104,7 @@ var product = {
 
                 Materialize.toast('Product added!', 2500, 'green lighten-1');
 
-                $('#media-dropzone').append(hidden_inputs);
+                /* $('#media-dropzone').append(hidden_inputs);
                 $('#add-media-modal h4').append(' to '+ "'" + data.name + "'");
                 $('.add-product-button').attr('href','#add-media-modal');
                 $('#overlay-preloader-circular').remove();
@@ -131,7 +131,7 @@ var product = {
                     }
                 });
                 $('#add-media-modal').modal('open');
-                product.modal_history.push('#add-media-modal');
+                product.modal_history.push('#add-media-modal'); */
             },
             error: function(message){
                 console.log(message['responseText']);
