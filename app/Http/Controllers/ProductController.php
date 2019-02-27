@@ -223,6 +223,7 @@ class ProductController extends Controller
             $productDetail['breed'] = $request->breed;
 
             return collect($productDetail)->toJson();
+            //return Redirect::to('user.breeder.showProducts');
         }
     }
 
