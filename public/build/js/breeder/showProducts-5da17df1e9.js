@@ -29,6 +29,7 @@ var product = {
 
     add : function(parent_form){
         // Attach overlay preloader
+
         $('<div id="overlay-preloader-circular" class="valign-wrapper" style="padding:7rem;">'+
             '<div class="center-align preloader-overlay">'+
                 '<div class="preloader-wrapper big active">'+

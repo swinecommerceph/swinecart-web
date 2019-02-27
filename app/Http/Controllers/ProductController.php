@@ -174,9 +174,12 @@ class ProductController extends Controller
      * @return View
     */
     
-    public function createProduct()
+    public function createProduct(Request $request)
     {
-      return view('user.breeder.addProduct');
+      $breeder = $this->user->userable;
+      $farms = $breeder->farmAddresses;
+
+      return view('user.breeder.addProduct', compact('farms'));
     }
 
     /**
