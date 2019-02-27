@@ -1000,7 +1000,7 @@ $(document).ready(function(){
     });
 
     // media-dropzone initialization and configuration
-    Dropzone.options.mediaDropzone = {
+    /* Dropzone.options.mediaDropzone = {
         paramName: 'media',
         uploadMultiple: true,
         parallelUploads: 1,
@@ -1015,7 +1015,8 @@ $(document).ready(function(){
             // Listen to events
             // Set default thumbnail for videos
             this.on("addedfile", function(file) {
-                if (file.type.match(/video.*/)) this.emit("thumbnail", file, config.images_path+'/video-icon.png');
+              // change '/video. * /' to /video. * / without spaces   
+              if (file.type.match('/video. * / ')) this.emit("thumbnail", file, config.images_path+'/video-icon.png');
             });
 
             // Inject attributes on element upon success of multiple uploads
@@ -1055,7 +1056,7 @@ $(document).ready(function(){
                 });
             });
         }
-    };
+    }; */
 
     /* ----------- Product Summary Product Modal functionalities ----------- */
     // Save as Draft the Product created
@@ -1132,7 +1133,7 @@ $(document).ready(function(){
 
     /* ----------- Edit Media Modal ----------- */
     // edit-media-dropzone initialization and configuration
-    Dropzone.options.editMediaDropzone = {
+    /* Dropzone.options.editMediaDropzone = {
         paramName: 'media',
         uploadMultiple: true,
         parallelUploads: 1,
@@ -1148,7 +1149,8 @@ $(document).ready(function(){
 
             // Set default thumbnail for videos
             this.on("addedfile", function(file) {
-                if (file.type.match(/video.*/)) this.emit("thumbnail", file, config.images_path+'/video-icon.png');
+              // change '/video. * /' to /video. * / without spaces   
+              if (file.type.match('/video. * / ')) this.emit("thumbnail", file, config.images_path+'/video-icon.png');
             });
 
             // Inject attributes on element upon success of multiple uploads
@@ -1188,7 +1190,7 @@ $(document).ready(function(){
                 });
             });
         }
-    };
+    }; */
 
     // Delete image / Delete video button
     $('body').on('click', '.delete-image, .delete-video' ,function(e){
