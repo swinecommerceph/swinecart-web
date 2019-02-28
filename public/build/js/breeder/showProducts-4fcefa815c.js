@@ -103,7 +103,7 @@ var product = {
                     '<input name="breed" type="hidden" value="'+data.breed+'">';
 
                 Materialize.toast('Product added!', 2500, 'green lighten-1');
-                location.href = location.origin + '/breeder/products'; // redirect to Show pProducts page
+                location.href = location.origin + '/breeder/products'; // redirect to Show Products page
 
                 /* $('#media-dropzone').append(hidden_inputs);
                 $('#add-media-modal h4').append(' to '+ "'" + data.name + "'");
