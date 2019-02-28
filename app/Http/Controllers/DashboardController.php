@@ -77,6 +77,15 @@ class DashboardController extends Controller
     }
 
     /**
+     * Show the reports of breeder's performance
+     * 
+     * @return View
+     */
+    public function showReports() {
+      return view('user.breeder.reports');
+    }
+
+    /**
      * Show the reviews and ratings of the Breeder from the Customers
      *
      * @return View

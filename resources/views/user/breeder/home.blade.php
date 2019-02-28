@@ -183,7 +183,7 @@
           </li>
           
           <li class="sidenav-sub-element">
-            <a href="#">
+            <a href="{{ route('dashboard.reports') }}">
               <div class="btn teal darken-4">
                 Reporting
               </div>
