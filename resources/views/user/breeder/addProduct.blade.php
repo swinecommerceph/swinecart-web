@@ -154,35 +154,38 @@
         
 
         {{-- Has a default value, no need to make it work since this will be changed --}}
-        {{-- <div class="row">
+        <div class="row">
           <div class="col s1"></div>
           <div class="col s6">
             <textarea class="materialize-textarea"></textarea>
           </div>
-        </div> --}}
+        </div>
 
         {{-- Add Image/Video --}}
-        <p style="font-weight: 600; margin-bottom: 2vh;" class="teal-text text-darken-4">Add Image/Video</p>
+        <div class="add-media-button">Add Image/Video</div>
         
-        <div class="row">
-            <div class="col s1"></div>
-            <div class="col s6">
 
-              {{-- <div id="add-media-modal">
-                <h4>Add Media</h4>
-                <div class="row">
-                  {!! Form::open(['route' => 'products.mediaUpload', 'class' => 's12 dropzone', 'id' => 'media-dropzone', 'enctype' => 'multipart/form-data']) !!}
-                    <div class="fallback">
-                      <input type="file" name="media[]" accept="image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov" multiple>
-                    </div>
-                  {!! Form::close() !!}
+
+        {{-- Add Media Modal --}}
+        <div id="add-media-modal" class="modal modal-fixed-footer">
+          <div class="modal-content">
+            <h4>Add Media</h4>
+            <div class="row">
+              {!! Form::open(['route' => 'products.mediaUpload', 'class' => 's12 dropzone', 'id' => 'media-dropzone', 'enctype' => 'multipart/form-data']) !!}
+                <div class="fallback">
+                  <input type="file" name="media[]" accept="image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov" multiple>
                 </div>
-              </div> --}}
-
+              {!! Form::close() !!}
             </div>
+          </div>
+          <div class="modal-footer">
+            <button id="next-button" type="submit" class="btn waves-effect waves-light modal-action teal darken-3"> Product Summary </button>
+            <a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
+          </div>
         </div>
 
         
+        <br><br><br><br>
         {{-- Add Product Button --}}
         <div>
           <button style="font-weight: 900; width: 15vw; font-size: 1.4rem" id="submit-button" type="submit" class="right btn-large waves-effect waves-light modal-action teal darken-4"> Add Product</button>

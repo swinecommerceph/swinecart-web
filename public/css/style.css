@@ -1451,4 +1451,16 @@ a.google {
  background-color: #DD0000 !important;  
 }
 
-
+.add-media-button {
+  border: 1px solid #004d40;
+  background-color: white;
+  color: #004d40;
+  cursor: pointer;
+  width: 10vw;
+  height: 6vh;
+  padding-top: 16px;
+  text-align: center;
+  font-size: 1rem;
+  border-radius: 5px;
+  font-weight: 600;
+}
