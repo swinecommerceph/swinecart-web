@@ -103,9 +103,9 @@ var product = {
                     '<input name="breed" type="hidden" value="'+data.breed+'">';
 
                 Materialize.toast('Product added!', 2500, 'green lighten-1');
-                //location.href = location.origin + '/breeder/products'; // redirect to Show Products page
+                location.href = location.origin + '/breeder/products'; // redirect to Show Products page
 
-                $('#media-dropzone').append(hidden_inputs);
+                /* $('#media-dropzone').append(hidden_inputs);
                 $('#add-media-modal h4').append(' to '+ "'" + data.name + "'");
                 $('.add-product-button').attr('href','#add-media-modal');
                 $('#overlay-preloader-circular').remove();
@@ -132,7 +132,7 @@ var product = {
                     }
                 });
                 $('#add-media-modal').modal('open');
-                product.modal_history.push('#add-media-modal');
+                product.modal_history.push('#add-media-modal'); */
             },
             error: function(message){
                 console.log(message['responseText']);
@@ -1001,7 +1001,7 @@ $(document).ready(function(){
     });
 
     // media-dropzone initialization and configuration
-    Dropzone.options.mediaDropzone = {
+    /* Dropzone.options.mediaDropzone = {
         paramName: 'media',
         uploadMultiple: true,
         parallelUploads: 1,
@@ -1014,11 +1014,10 @@ $(document).ready(function(){
         previewTemplate: document.getElementById('custom-preview').innerHTML,
         init: function() {
             // Listen to events
-            
             // Set default thumbnail for videos
             this.on("addedfile", function(file) {
               // change '/video. * /' to /video. * / without spaces   
-              if (file.type.match(/video.*/)) this.emit("thumbnail", file, config.images_path+'/video-icon.png');
+              if (file.type.match('/video. * / ')) this.emit("thumbnail", file, config.images_path+'/video-icon.png');
             });
 
             // Inject attributes on element upon success of multiple uploads
@@ -1058,7 +1057,7 @@ $(document).ready(function(){
                 });
             });
         }
-    };
+    }; */
 
     /* ----------- Product Summary Product Modal functionalities ----------- */
     // Save as Draft the Product created
@@ -1135,7 +1134,7 @@ $(document).ready(function(){
 
     /* ----------- Edit Media Modal ----------- */
     // edit-media-dropzone initialization and configuration
-    Dropzone.options.editMediaDropzone = {
+    /* Dropzone.options.editMediaDropzone = {
         paramName: 'media',
         uploadMultiple: true,
         parallelUploads: 1,
@@ -1151,7 +1150,8 @@ $(document).ready(function(){
 
             // Set default thumbnail for videos
             this.on("addedfile", function(file) {
-              if (file.type.match(/video.*/)) this.emit("thumbnail", file, config.images_path+'/video-icon.png');
+              // change '/video. * /' to /video. * / without spaces   
+              if (file.type.match('/video. * / ')) this.emit("thumbnail", file, config.images_path+'/video-icon.png');
             });
 
             // Inject attributes on element upon success of multiple uploads
@@ -1191,7 +1191,7 @@ $(document).ready(function(){
                 });
             });
         }
-    };
+    }; */
 
     // Delete image / Delete video button
     $('body').on('click', '.delete-image, .delete-video' ,function(e){

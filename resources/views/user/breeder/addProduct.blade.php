@@ -162,12 +162,12 @@
         </div>
 
         {{-- Add Image/Video --}}
-        <div class="add-media-button">Add Image/Video</div>
+        <button class="add-media-button">Add Image/Video</button>
         
 
 
         {{-- Add Media Modal --}}
-        <div id="add-media-modal" class="modal modal-fixed-footer">
+        {{-- <div id="add-media-modal" class="modal modal-fixed-footer">
           <div class="modal-content">
             <h4>Add Media</h4>
             <div class="row">
@@ -182,10 +182,10 @@
             <button id="next-button" type="submit" class="btn waves-effect waves-light modal-action teal darken-3"> Product Summary </button>
             <a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
           </div>
-        </div>
+        </div> --}}
 
         {{--  Custom preview for dropzone --}}
-        <div id="custom-preview" style="display:none;">
+        {{-- <div id="custom-preview" style="display:none;">
           <div class="dz-preview dz-file-preview">
             <div class="dz-image">
               <img data-dz-thumbnail alt="" src=""/>
@@ -200,7 +200,7 @@
             <div class="dz-error-message"><span data-dz-errormessage></span></div>
             <a><i class="dz-remove material-icons red-text text-lighten-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Remove this media" data-dz-remove>cancel</i></a>
           </div>
-        </div>
+        </div> --}}
 
         
         <br><br><br><br>
