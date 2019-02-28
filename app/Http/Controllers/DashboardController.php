@@ -51,14 +51,15 @@ class DashboardController extends Controller
         $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
         $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
 
-        $latestAccreditation = $this->user->userable->latest_accreditation;
         $serverDateNow = Carbon::now();
+        $latestAccreditation = $this->user->userable->latest_accreditation;
         $soldData = $this->dashboard->getSoldProducts(
-            (object) [
-                'dateFrom' => $serverDateNow->copy()->subMonths(2)->format('Y-m-d'),
-                'dateTo' => $serverDateNow->format('Y-m-d'),
-                'frequency' => 'monthly'
-            ], $breeder);
+          (object) [
+              'dateFrom' => $serverDateNow->copy()->subMonths(2)->format('Y-m-d'),
+              'dateTo' => $serverDateNow->format('Y-m-d'),
+              'frequency' => 'monthly'
+          ], $breeder);
+        
 
         return view('user.breeder.dashboard', compact('dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
     }
@@ -74,15 +75,6 @@ class DashboardController extends Controller
         $products = $this->dashboard->forBreeder($this->user->userable);
         $token = csrf_token();
         return view('user.breeder.dashboardProductStatus', compact('products', 'token'));
-    }
-
-    /**
-     * Show the reports of breeder's performance
-     * 
-     * @return View
-     */
-    public function showReports() {
-      return view('user.breeder.reports');
     }
 
     /**
