@@ -15,7 +15,7 @@ use Illuminate\Http\Request;
 
 /* Setup CORS */
 header('Access-Control-Allow-Origin: *');
-header("Access-Control-Allow-Headers: Accept-Encoding, Content-Encoding, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+header("Access-Control-Allow-Headers: Accept-Encoding, Content-Type, Accept, Access-Control-Request-Method, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, PATCH, DELETE");
 
 Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
@@ -63,22 +63,23 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'dashboard'], function() {
             Route::get('/stats', 'DashboardController@getDashBoardStats');
-            Route::get('/latest-accre', 'DashboardController@getLatestAccre');
-            Route::get('/server-date', 'DashboardController@getServerDate');
-            Route::get('/sold-data', 'DashboardController@getSoldData');
+            // Route::get('/latest-accre', 'DashboardController@getLatestAccre');
+            // Route::get('/server-date', 'DashboardController@getServerDate');
+            // Route::get('/sold-data', 'DashboardController@getSoldData');
 
-            Route::get('/product-status', 'DashboardController@getProductStatus');
             Route::get('/review-ratings', 'DashboardController@getReviewAndRatings');
-            
-            Route::get('/product-requests/{id}', 'DashboardController@getProductRequests');
             Route::post('/sold-products', 'DashboardController@getSoldProducts');
-
-            Route::post('/product-status/{id}', 'DashboardController@updateProductStatus');
-
-            Route::get('/customer-info/{id}', 'DashboardController@getCustomerInfo');
-
-            Route::get('/customers', 'DashboardController@getCustomers');
+            Route::get('/customers/{id}', 'DashboardController@getCustomer');
+            // Route::get('/customers', 'DashboardController@getCustomers');
         });
+
+        Route::group(['prefix' => 'inventory'], function() {
+            Route::get('/products', 'InventoryController@getProducts');
+            Route::get('/products/{id}/requests', 'InventoryController@getProductRequests');
+            Route::post('/products/{id}/order-status', 'InventoryController@updateOrderStatus');
+            Route::delete('/products/{id}/order-status', 'InventoryController@cancelTransaction');
+        });
+
 
         Route::group(['prefix' => 'notifications'], function() {
             Route::get('/', 'NotificationsController@getNotifications');

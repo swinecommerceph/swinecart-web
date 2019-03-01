@@ -41,6 +41,9 @@ trait CustomHelpers
                 // Same as log format for SMS except that it has fully-spelled month, date with leading zeros, and full year
                 return date_format(date_create($date), 'F j, Y h:i:sA');
 
+            case 3: 
+                return date_format(date_create($date), 'M j Y (D), h:iA');
+
             default:
                 // Default format would be fully-spelled month, date with leading zeros, and full year
                 return date_format(date_create($date), 'F j, Y');

@@ -55,6 +55,7 @@ class DashboardController extends Controller
         $dashboardStats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
         $dashboardStats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
         $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
+
         $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
 
         return response()->json([
@@ -101,17 +102,6 @@ class DashboardController extends Controller
         ], 200);
     }
 
-    public function getProductStatus(Request $request)
-    {
-        $breeder = $this->user->userable;
-        $products = $this->dashboard->forBreeder($breeder);
-        
-        return response()->json([
-            'message' => 'Get Product Status successful!',
-            'data' => json_decode($products)
-        ]);
-    }
-
     public function getReviewAndRatings(Request $request)
     {
         $breeder = $this->user->userable;
@@ -136,16 +126,6 @@ class DashboardController extends Controller
                 'reviews' => $reviews,
                 'ratings' => $overallRating
             ]
-        ]);
-    }
-
-    public function getProductRequests(Request $request, $product_id)
-    {
-        $productRequests = $this->dashboard->getProductRequests($product_id);
-
-        return response()->json([
-            'message' => 'Get Product Requests successful!',
-            'data' => $productRequests
         ]);
     }
 
@@ -179,20 +159,22 @@ class DashboardController extends Controller
         ], 200);
     }
 
-    public function getCustomerInfo(Request $request, $customer_id)
+    public function getCustomer(Request $request, $customer_id)
     {
         $customer = Customer::find($customer_id);
 
         if($customer) {
             return response()->json([
                 'message' => 'Get Customer Info successful!',
-                'data' => $customer
+                'data' => [
+                    'customer' => $customer
+                ]
             ]);
         }
 
         else return response()->json([
             'error' => 'Customer does not exist!'
-        ], 200); 
+        ], 404); 
     }
 
     public function getCustomers(Request $request)
