@@ -51,6 +51,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
             Route::get('/{id}', 'ProductController@getProduct');
             Route::get('/{id}/details', 'ProductController@getProductDetails');
+            Route::get('/{id}/media', 'ProductController@getProductMedia');
 
             Route::post('/', 'ProductController@addProduct');
             Route::put('/{id}', 'ProductController@updateProduct');

@@ -23,7 +23,7 @@ class CreateProductsTable extends Migration
             $table->integer('breed_id');
             $table->float('price')->nullable();
             $table->integer('quantity')->nullable();
-            $table->integer('adg')->nullable();
+            $table->float('adg')->nullable();
             $table->float('fcr')->nullable();
             $table->float('backfat_thickness')->nullable();
             $table->text('other_details')->nullable();

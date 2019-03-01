@@ -63,12 +63,12 @@ class ProductController extends Controller
 
     public function __construct() 
     {
-        $this->middleware('jwt:auth', ['except' => ['getProductDetails']]);
-        $this->middleware('jwt.role:breeder', ['except' => ['getProductDetails']]);
+        $this->middleware('jwt:auth', ['except' => ['getProductDetails', 'getProductMedia']]);
+        $this->middleware('jwt.role:breeder', ['except' => ['getProductDetails', 'getProductMedia']]);
         $this->middleware(function($request, $next) {
             $this->user = JWTAuth::user();
             return $next($request);
-        }, ['except' => ['getProductDetails']]);
+        }, ['except' => ['getProductDetails', 'getProductMedia']]);
     }
     /**
      * ---------------------------------------
@@ -172,7 +172,7 @@ class ProductController extends Controller
             $product['age'] = $p->age;
             $product['adg'] = $p->adg;
             $product['fcr'] = $p->fcr;
-            $product['backfat_thickness'] = $p->backfat_thickness;
+            $product['bft'] = $p->backfat_thickness;
             $product['img_path'] = $p->img_path;
 
             return $product;
@@ -222,7 +222,27 @@ class ProductController extends Controller
         $product = $this->getBreederProduct($breeder, $product_id);
 
         if($product) {
-            $product = $this->transformProduct($product);
+            $p = $this->transformProduct($product);
+
+            $product = [];
+
+            $product['id'] = $p->id;
+            $product['breeder_id'] = $p->breeder_id;
+            $product['farm_from_id'] = $p->farm_from_id;
+            $product['name'] = $p->name;
+            $product['type'] = $p->type;
+            $product['birthdate'] = $p->birthdate;
+            $product['breed'] = $p->breed;
+            $product['breed_id'] = $p->breed_id;
+            $product['price'] = $p->price;
+            $product['status'] = $p->status;
+            $product['quantity'] = $p->quantity;
+            $product['age'] = $p->age;
+            $product['adg'] = $p->adg;
+            $product['fcr'] = $p->fcr;
+            $product['bft'] = $p->backfat_thickness;
+            $product['other_details'] = $p->other_details;
+            $product['img_path'] = $p->img_path;
 
             return response()->json([
                 'message' => 'Get Product successful!',
@@ -234,7 +254,7 @@ class ProductController extends Controller
         ], 404);
     }
 
-    public function updateProduct(ProductRequest $request, $product_id)
+    public function updateProduct(Request $request, $product_id)
     {
         $breeder = $this->user->userable;
         $product = $this->getBreederProduct($breeder, $product_id);
@@ -246,20 +266,32 @@ class ProductController extends Controller
             $farm = $farms->find($request->farm_from_id);
 
             if($farm) {
-                $product->farm_from_id = $request->farm_from_id;
+                $product->farm_from_id = $farm->id;
                 $product->name = $request->name;
-                $product->type = $request->type;
-                $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+                $product->type = strtolower($request->type);
                 $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
+                $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
                 $product->price = $request->price;
-                $product->adg = $request->adg;
+                $product->adg = ($request->adg);
                 $product->fcr = $request->fcr;
-                $product->backfat_thickness = $request->backfat_thickness;
+                $product->backfat_thickness = $request->bft;
                 $product->other_details = $request->other_details;
                 $product->save();
 
-                $product = $this->getBreederProduct($breeder, $product_id);
-                $product = $this->transformProduct($product);
+                $p = $this->transformProduct($product);
+
+                $product = [];
+
+                $product['id'] = $p->id;
+                $product['name'] = $p->name;
+                $product['type'] = $p->type;
+                $product['breed'] = $p->breed;
+                $product['status'] = $p->status;
+                $product['age'] = $p->age;
+                $product['adg'] = $p->adg;
+                $product['fcr'] = $p->fcr;
+                $product['bft'] = $p->backfat_thickness;
+                $product['img_path'] = $p->img_path;
 
                 return response()->json([
                     'message' => 'Update Product successful!',
@@ -307,12 +339,9 @@ class ProductController extends Controller
             $p['user_id'] = $user->id;
             $p['breeder'] = $user->name;
             $p['farm_name'] = FarmAddress::find($product->farm_from_id)->province;
-            $p['images'] = $product->images;
-            $p['videos'] = $product->videos;
-            $p['img_path'] = route('serveImage', ['size' => 'large', 'filename' => $primaryImg->name]);
-            $p['def_img_path'] = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
+            $p['img_path'] = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
 
-            $reviews = $breeder->reviews;    
+            $reviews = $breeder->reviews;
         
             $ratings = [
                 'deliveryRating' => $reviews->avg('rating_delivery') ?? 0,
@@ -325,6 +354,29 @@ class ProductController extends Controller
                 'data' => [
                     'product' => $p,
                     'ratings' => $ratings
+                ]
+            ], 200);
+
+        }
+        else return response()->json([
+            'error' => 'Product does not exist!'
+        ], 404);
+    }
+
+    public function getProductMedia(Request $request, $product_id)
+    {
+        $product = Product::find($product_id);
+
+        if($product) {
+
+            $images = $product->images;
+            $videos = $product->videos;
+
+            return response()->json([
+                'message' => 'Get Product Media successful!',
+                'data' => [
+                    'images' => $images,
+                    'videos' => $videos,
                 ]
             ], 200);
 
@@ -380,7 +432,7 @@ class ProductController extends Controller
     }
 
     public function toggleProductStatuses(Request $request)
-    {   
+    {
         $breeder = $this->user->userable;
         $products = [];
         $ids = $request->ids;

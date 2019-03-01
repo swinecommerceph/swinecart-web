@@ -50,10 +50,25 @@ class EditProfileController extends Controller
             ? '/images/breeder/'.Image::find($breeder->logo_img_id)->name 
             : '/images/default_logo.png' ;
         
+        $profile = [];
+
+        $profile['id'] = $breeder->id;
+        $profile['officeAddress_addressLine1'] = $breeder->officeAddress_addressLine1;
+        $profile['officeAddress_addressLine2'] = $breeder->officeAddress_addressLine2;
+        $profile['officeAddress_province'] = $breeder->officeAddress_province;
+        $profile['officeAddress_zipCode'] = $breeder->officeAddress_zipCode;
+        $profile['office_landline'] = $breeder->office_landline;
+        $profile['office_mobile'] = $breeder->office_mobile;
+        $profile['website'] = $breeder->website;
+        $profile['produce'] = $breeder->produce;
+        $profile['contactPerson_name'] = $breeder->contactPerson_name;
+        $profile['contactPerson_mobile'] = $breeder->contactPerson_mobile;
+        $profile['img_path'] = $breeder->logoImage;
+
         return response()->json([
             'message' => 'Get Profile successful!',
             'data' => [
-                'profile' => $breeder,
+                'profile' => $profile,
             ]
         ], 200);
     }
@@ -69,7 +84,7 @@ class EditProfileController extends Controller
             $farm = [];
             
             $farm['id'] = $item->id;
-            $farm['name'] = $item->name;
+            $farm['name'] = ucfirst($item->name);
             $farm['province'] = $item->province;
             // $farm['addressLine1'] = $item->addressLine1;
             // $farm['addressLine2'] = $item->addressLine2;
@@ -89,7 +104,7 @@ class EditProfileController extends Controller
             ]
         ], 200);
     }
-    
+
     public function getFarm(Request $request, $farm_id) 
     {
         $breeder = $this->user->userable;
@@ -101,12 +116,12 @@ class EditProfileController extends Controller
             $farm = [];
 
             $farm['id'] = $item->id;
-            $farm['name'] = $item->name;
+            $farm['name'] = ucfirst($item->name);
             $farm['province'] = $item->province;
             $farm['addressLine1'] = $item->addressLine1;
             $farm['addressLine2'] = $item->addressLine2;
             $farm['zipCode'] = $item->zipCode;
-            $farm['farmType'] = $item->farmType;
+            $farm['farmType'] = ucfirst($item->farmType);
             $farm['landline'] = $item->landline;
             $farm['mobile'] = $item->mobile;
             $farm['accreditation_no'] = $item->accreditation_no;
@@ -259,8 +274,6 @@ class EditProfileController extends Controller
             ], 200);
         }
     }
-
-        
 
     public function uploadLogo(Request $request) 
     {

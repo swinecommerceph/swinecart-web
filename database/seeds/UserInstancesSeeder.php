@@ -148,7 +148,7 @@ class UserInstancesSeeder extends Seeder
                 $product->breed_id = App\Models\Breed::firstOrCreate(['name' => $randBreed])->id;
                 $product->price = random_int(35000,100000)/1.0;
                 $product->quantity = ($randType == 'semen') ? -1 : 1;
-                $product->adg = random_int(760,1450);
+                $product->adg = random_int(760,1450)/10.0;
                 $product->fcr = random_int(10,30)/10.0;
                 $product->backfat_thickness = random_int(90,200)/10.0;
                 $product->other_details = '';
