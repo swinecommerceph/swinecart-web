@@ -228,7 +228,7 @@
         <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
       </div>
       <div class="col s2"></div>
-      <div class="col s8">
+      <div class="col s9">
         @yield('breeder-content')
       </div>
     </div>
