@@ -50,6 +50,7 @@ class NotificationsController extends Controller
             $notification['type'] = end($type);
             $notification['message'] = strip_tags($item->data['description']);
             $notification['created_at'] = $item->created_at->toDateTimeString();
+            $notification['read_at'] = $item->read_at ? $item->read_at->toDateTimeString() : null;
 
             return $notification;
         }, $notifications);
