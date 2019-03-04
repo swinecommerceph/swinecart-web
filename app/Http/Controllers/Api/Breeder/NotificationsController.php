@@ -42,14 +42,18 @@ class NotificationsController extends Controller
         $count = $results->count();
 
         $notifications = array_map(function ($item) {
+
             $notification = [];
+            $type = explode('\\', $item->type);
+
             $notification['id'] = $item->id;
-            $notification['type'] = $item->type;0
-            $notification['message'] = $item->data['description'];
+            $notification['type'] = end($type);
+            $notification['message'] = strip_tags($item->data['description']);
             $notification['created_at'] = $item->created_at->toDateTimeString();
+
             return $notification;
         }, $notifications);
-        
+
         return response()->json([
             'message' => 'Get Notifications successful!',
             'data' => [
