@@ -4,6 +4,8 @@ $(document).ready(function () {
   // are selected or not
   var all_checked = false;
 
+  $('#add-media-modal').modal({ dismissible: false });
+
   // Hide certain elements
   $('.input-crossbreed-container').hide();
 

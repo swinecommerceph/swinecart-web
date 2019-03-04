@@ -105,34 +105,19 @@ var product = {
         Materialize.toast('Product added!', 2500, 'green lighten-1');
         //location.href = location.origin + '/breeder/products'; // redirect to Show Products page
 
-        /*  $('#media-dropzone').append(hidden_inputs);
-         $('#add-media-modal h4').append(' to ' + "'" + data.name + "'");
-         $('.add-product-button').attr('href', '#add-media-modal');
-         $('#overlay-preloader-circular').remove();
-         $('#add-product-modal').modal('close');
-         parent_form.find('#submit-button').removeClass('disabled');
- 
-         $('#submit-button').removeClass('disabled');
-         $('#submit-button').html('Add Product');
- 
-         // Open Add Media Modal
-         $('#add-media-modal').modal({
-           dismissible: false,
-           ready: function () {
-             // Resize media-dropzone's height
-             var content_height = $('#add-media-modal .modal-content').height();
-             var header_height = $('#add-media-modal h4').height();
-             $('#media-dropzone').css({ 'height': content_height - header_height });
- 
-             $(window).resize(function () {
-               var content_height = $('#add-media-modal .modal-content').height();
-               var header_height = $('#add-media-modal h4').height();
-               $('#media-dropzone').css({ 'height': content_height - header_height });
-             });
-           }
-         });
-         $('#add-media-modal').modal('open');
-         product.modal_history.push('#add-media-modal'); */
+        $('#media-dropzone').append(hidden_inputs);
+        $('#add-media-modal h4').append(' to ' + "'" + data.name + "'");
+        $('.add-product-button').attr('href', '#add-media-modal');
+        $('#overlay-preloader-circular').remove();
+        $('#add-product-modal').modal('close');
+        parent_form.find('#submit-button').removeClass('disabled');
+
+        $('#submit-button').removeClass('disabled');
+        $('#submit-button').html('Add Product');
+
+        // Open Add Media Modal
+        $('#add-media-modal').modal('open');
+        product.modal_history.push('#add-media-modal');
       },
       error: function (message) {
         console.log(message['responseText']);
@@ -444,7 +429,6 @@ var product = {
       $('.from-edit-process').show();
     }
 
-    console.log('here2')
     $('#product-summary-modal').modal({ dismissible: false });
     $('#product-summary-modal').modal('open');
     product.modal_history.push('#product-summary-modal');

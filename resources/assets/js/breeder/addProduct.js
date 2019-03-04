@@ -37,9 +37,43 @@ var product = {
       cache: false,
       data: data_values,
       success: function (data) {
+        var data = JSON.parse(data);
+        var hidden_inputs =
+          '<input name="productId" type="hidden" value="' + data.product_id + '">' +
+          '<input name="name" type="hidden" value="' + data.name + '">' +
+          '<input name="type" type="hidden" value="' + data.type + '">' +
+          '<input name="breed" type="hidden" value="' + data.breed + '">';
 
         Materialize.toast('Product added!', 2500, 'green lighten-1');
-        location.href = location.origin + '/breeder/products'; // redirect to Show Products page
+
+
+        $('#media-dropzone').append(hidden_inputs);
+        $('#add-media-modal h4').append(' to ' + "'" + data.name + "'");
+        $('.add-product-button').attr('href', '#add-media-modal');
+        $('#overlay-preloader-circular').remove();
+        $('#add-product-modal').modal('close');
+        parent_form.find('#submit-button').removeClass('disabled');
+
+        $('#submit-button').removeClass('disabled');
+        $('#submit-button').html('Add Product');
+
+        // Open Add Media Modal
+        $('#add-media-modal').modal({
+          dismissible: false,
+          ready: function () {
+            // Resize media-dropzone's height
+            var content_height = $('#add-media-modal .modal-content').height();
+            var header_height = $('#add-media-modal h4').height();
+            $('#media-dropzone').css({ 'height': content_height - header_height });
+
+            $(window).resize(function () {
+              var content_height = $('#add-media-modal .modal-content').height();
+              var header_height = $('#add-media-modal h4').height();
+              $('#media-dropzone').css({ 'height': content_height - header_height });
+            });
+          }
+        });
+        $('#add-media-modal').modal('open');
       },
       error: function (message) {
         console.log(message['responseText']);
@@ -62,25 +96,9 @@ $(document).ready(function () {
     format: 'mmmm d, yyyy'
   });
 
-  $('#add-media-button').click(function () {
-    // Open Add Media Modal
-    $('#add-media-modal').modal({
-      dismissible: false,
-      ready: function () {
-        // Resize media-dropzone's height
-        var content_height = $('#add-media-modal .modal-content').height();
-        var header_height = $('#add-media-modal h4').height();
-        $('#media-dropzone').css({ 'height': content_height - header_height });
+  /* $('#add-media-button').click(function () {
 
-        $(window).resize(function () {
-          var content_height = $('#add-media-modal .modal-content').height();
-          var header_height = $('#add-media-modal h4').height();
-          $('#media-dropzone').css({ 'height': content_height - header_height });
-        });
-      }
-    });
-    $('#add-media-modal').modal('open');
-  });
+  }); */
 
   /* ----------- Form functionalities ----------- */
   // Breed radio
