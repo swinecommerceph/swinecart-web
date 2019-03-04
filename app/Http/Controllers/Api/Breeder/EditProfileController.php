@@ -218,15 +218,32 @@ class EditProfileController extends Controller
 
     }
 
-    public function changePassword(ChangePasswordRequest $request) 
-    {
-        $this->user->password = bcrypt($request->new_password);
-        $this->user->save();
+    public function changePassword(Request $request) 
+    {   
+        $data = $request->only([
+            'current_password',
+            'new_password',
+            'new_password_confirmation'
+        ]);
+        
+        $validator = Validator::make($data, [
+            'current_password' => 'required|is_current_password',
+            'new_password' => 'required|confirmed|min:8'
+        ]);
 
-        return response()->json([
-            'message' => 'Change Password successful!',
-        ], 200);
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 422);
+        }
+        else {
+            $this->user->password = bcrypt($request->new_password);
+            $this->user->save();
 
+            return response()->json([
+                'message' => 'Change Password successful!',
+            ], 200);
+        }
     }
 
     public function updatePersonal(BreederPersonalProfileRequest $request) 
