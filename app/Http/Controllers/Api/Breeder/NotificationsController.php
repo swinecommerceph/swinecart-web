@@ -36,20 +36,25 @@ class NotificationsController extends Controller
 
     public function getNotifications(Request $request)
     {
-        $notifications = [];
 
-        foreach ($this->user->notifications as $notification) {
-            $notificationInstance = [];
-            $notificationInstance['id'] = $notification->id;
-            $notificationInstance['data'] = $notification->data;
-            $notificationInstance['read_at'] = $notification->read_at;
-            array_push($notifications, $notificationInstance);
-        }
+        $results = $this->user->notifications()->paginate($request->perpage);
+        $notifications = $results->items();
+        $count = $results->count();
 
+        $notifications = array_map(function ($item) {
+            $notification = [];
+            $notification['id'] = $item->id;
+            $notification['type'] = $item->type;0
+            $notification['message'] = $item->data['description'];
+            $notification['created_at'] = $item->created_at->toDateTimeString();
+            return $notification;
+        }, $notifications);
         
         return response()->json([
             'message' => 'Get Notifications successful!',
-            'data' => $notifications
+            'data' => [
+                'notifications' => $notifications
+            ]
         ], 200);
 
     }
