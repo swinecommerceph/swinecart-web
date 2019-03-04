@@ -57,6 +57,7 @@ class NotificationsController extends Controller
         return response()->json([
             'message' => 'Get Notifications successful!',
             'data' => [
+                'count' => $count,
                 'notifications' => $notifications
             ]
         ], 200);
