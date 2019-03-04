@@ -79,6 +79,7 @@ class EditProfileController extends Controller
 
         $results = $this->getBreederFarms($breeder)->paginate($request->perpage);
         $farms = $results->items();
+        $count = $results->count();
 
         $farms = array_map(function ($item) {
             $farm = [];
@@ -99,7 +100,7 @@ class EditProfileController extends Controller
         return response()->json([
             'message' => 'Get Farms successful!',
             'data' => [
-                'count' => $results->count(),
+                'count' => $count,
                 'farms' => $farms,
             ]
         ], 200);
@@ -164,13 +165,13 @@ class EditProfileController extends Controller
                 ], 422);
             }
             else {
-                $item->addressLine1 = $request['addressLine1'];
-                $item->addressLine2 = $request['addressLine2'];
-                $item->province = $request['province'];
-                $item->zipCode = $request['zipCode'];
-                $item->farmType = $request['farmType'];
-                $item->landline = $request['landline'];
-                $item->mobile = $request['mobile'];
+                $item->addressLine1 = $request->addressLine1;
+                $item->addressLine2 = $request->addressLine2;
+                $item->province = $request->province;
+                $item->zipCode = $request->zipCode;
+                $item->farmType = $request->farmType;
+                $item->landline = $request->landline;
+                $item->mobile = $request->mobile;
                 $item->save();
 
                 $farm = [];
@@ -207,9 +208,6 @@ class EditProfileController extends Controller
             $farm->delete();
             return response()->json([
                 'message' => 'Delete Farm successful!',
-                'data' => [
-                    'farm' => $farm
-                ]
             ], 200);
         }
         else return response()->json([
