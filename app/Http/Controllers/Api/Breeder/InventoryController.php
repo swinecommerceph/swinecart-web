@@ -186,7 +186,7 @@ class InventoryController extends Controller
             $request['customer_id'] = $item->customer_id;
             $request['swinecart_id'] = $item->id;
             $request['request_quantity'] = $item->quantity;
-            $request['date_needed'] = $item->date_needed;
+            $request['date_needed'] = $item->date_needed == '0000-00-00' ? null : $this->transformDateSyntax($item->date_needed);
             $request['special_request'] = $item->special_request;
 
             $request['customer_name'] = $customer->users()->first()->name;
