@@ -273,14 +273,12 @@ class EditProfileController extends Controller
 
         if($validator->fails()) {
             return response()->json([
-                'message' => 'Update Personal Info successful!',
-                'data' => [
-                    'farm' => $validator->errors()
-                ]
+                'error' => $validator->errors(),
             ], 422);
         }
         else {
             $breeder->fill($data)->save();
+
             return response()->json([
                 'message' => 'Update Personal successful!',
                 'data' => [
