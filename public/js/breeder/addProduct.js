@@ -269,7 +269,7 @@ $(document).ready(function () {
   });
 
   // Edit chosen product
-  $('.edit-product-button').click(function () {
+  /* $('.edit-product-button').click(function () {
     $('#edit-product-modal').modal({
       ready: function () {
         // Programmatically select the 'edit-swine-information' tab
@@ -278,7 +278,7 @@ $(document).ready(function () {
     });
     $('#edit-product-modal').modal('open');
     product.get_product($(this).attr('data-product-id'));
-  });
+  }); */
 
   // Delete chosen product
   $('.delete-product-button').click(function (e) {
