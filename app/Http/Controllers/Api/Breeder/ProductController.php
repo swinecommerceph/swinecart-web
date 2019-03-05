@@ -377,14 +377,35 @@ class ProductController extends Controller
 
         if($product) {
 
-            $images = $product->images;
-            $videos = $product->videos;
+            $images = $product->images->map(function ($item) {
+                $image = [];
+
+                $image['id'] = $item->id;
+                $image['link'] = route('serveImage', [
+                    'size' => 'large', 
+                    'filename' => $item->name
+                ]);
+
+                return $image;
+            });
+
+            $videos = $product->videos->map(function ($item) {
+                $video = [];
+
+                $video['id'] = $item->id;
+                $video['link'] = route('serveImage', [
+                    'size' => 'large', 
+                    'filename' => $item->name
+                ]);
+
+                return $video;
+            });
 
             return response()->json([
                 'message' => 'Get Product Media successful!',
                 'data' => [
                     'images' => $images,
-                    'videos' => $videos,
+                    // 'videos' => $videos,
                 ]
             ], 200);
 

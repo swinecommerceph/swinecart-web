@@ -102,7 +102,7 @@ class DashboardController extends Controller
         ], 200);
     }
 
-    public function getReviewAndRatings(Request $request)
+    public function getRatings(Request $request)
     {
         $breeder = $this->user->userable;
         $reviews = $breeder->reviews()->orderBy('created_at', 'desc')->get();
@@ -121,9 +121,8 @@ class DashboardController extends Controller
         $overallRating = round(($deliveryRating + $transactionRating + $productQualityRating)/3, 2);
 
         return response()->json([
-            'message' => 'Get Product Status successful!',
+            'message' => 'Get Ratings successful!',
             'data' => [
-                'reviews' => $reviews,
                 'ratings' => $overallRating
             ]
         ]);
