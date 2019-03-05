@@ -306,27 +306,8 @@ class ProductController extends Controller
                     $product->other_details = $data['other_details'];
                     $product->save();
 
-                    $product = $this->getBreederProduct($breeder, $product_id);
-                    $p = $this->transformProduct($product);
-
-                    $product = [];
-
-                    $product['id'] = $p->id;
-                    $product['name'] = $p->name;
-                    $product['type'] = $p->type;
-                    $product['breed'] = $p->breed;
-                    $product['status'] = $p->status;
-                    $product['age'] = $p->age;
-                    $product['adg'] = $p->adg;
-                    $product['fcr'] = $p->fcr;
-                    $product['bft'] = $p->backfat_thickness;
-                    $product['img_path'] = $p->img_path;
-
                     return response()->json([
-                        'message' => 'Update Product successful!',
-                        'data' => [
-                            'product' => $product
-                        ]
+                        'message' => 'Update Product successful!'
                     ], 200);
                 }
                 else return response()->json([
