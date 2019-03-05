@@ -37,28 +37,27 @@ class NotificationsController extends Controller
     public function getNotifications(Request $request)
     {
 
-        $results = $this->user->notifications()->paginate($request->perpage);
-        $notifications = $results->items();
-        $count = $results->count();
+        $notifications = $this->user->notifications();
 
-        $notifications = array_map(function ($item) {
+        $notifications = $notifications
+            ->paginate($request->limit)
+            ->map(function ($item) {
+                $notification = [];
+                $type = explode('\\', $item->type);
 
-            $notification = [];
-            $type = explode('\\', $item->type);
+                $notification['id'] = $item->id;
+                $notification['type'] = end($type);
+                $notification['message'] = strip_tags($item->data['description']);
+                $notification['created_at'] = $item->created_at->toDateTimeString();
+                $notification['read_at'] = $item->read_at ? $item->read_at->toDateTimeString() : null;
 
-            $notification['id'] = $item->id;
-            $notification['type'] = end($type);
-            $notification['message'] = strip_tags($item->data['description']);
-            $notification['created_at'] = $item->created_at->toDateTimeString();
-            $notification['read_at'] = $item->read_at ? $item->read_at->toDateTimeString() : null;
-
-            return $notification;
-        }, $notifications);
+                return $notification;
+            });
 
         return response()->json([
             'message' => 'Get Notifications successful!',
             'data' => [
-                'count' => $count,
+                'count' => $notifications->count(),
                 'notifications' => $notifications
             ]
         ], 200);
@@ -72,6 +71,7 @@ class NotificationsController extends Controller
 
         if($notification) {
             $notification->markAsRead();
+
             return response()->json([
                 'message' => 'See Notifications successful!',
                 'data' => $notification
