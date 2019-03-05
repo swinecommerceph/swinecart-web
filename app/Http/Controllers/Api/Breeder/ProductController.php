@@ -246,7 +246,9 @@ class ProductController extends Controller
 
             return response()->json([
                 'message' => 'Get Product successful!',
-                'data' => $product
+                'data' => [
+                    'product' => $product
+                ]
             ], 200);
         }
         else return response()->json([
@@ -333,7 +335,7 @@ class ProductController extends Controller
             $p['quantity'] = $product->quantity;
             $p['adg'] = $product->adg;
             $p['fcr'] = $product->fcr;
-            $p['backfat_thickness'] = $product->backfat_thickness;
+            $p['bft'] = $product->backfat_thickness;
             $p['age'] = $this->computeAge($product->birthdate);
             $p['other_details'] = $product->other_details;
             $p['user_id'] = $user->id;
