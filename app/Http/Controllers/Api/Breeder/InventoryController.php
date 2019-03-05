@@ -92,7 +92,7 @@ class InventoryController extends Controller
     {
         $breeder = $this->user->userable;
         
-        if ($request->input('status') === 'requested') {
+        if ($request->status === 'requested') {
             $perpage = $request->perpage;
 
             $results = $breeder
@@ -139,7 +139,7 @@ class InventoryController extends Controller
         }
         else {
 
-            $order_status = $request->input('status');
+            $order_status = $request->status;
             $perpage = $request->perpage;
 
             $results = $breeder
@@ -167,7 +167,7 @@ class InventoryController extends Controller
     }
 
     public function getProductRequests(Request $request, $product_id)
-    {   
+    {
         $perpage = $request->perpage;
 
         $results = SwineCartItem::where('product_id', $product_id)
