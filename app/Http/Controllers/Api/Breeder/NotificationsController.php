@@ -65,17 +65,6 @@ class NotificationsController extends Controller
 
     }
 
-    public function getNotificationsCount(Request $request)
-    {
-        $notifications = $this->user->unreadNotifications->count();
-
-        return response()->json([
-            'message' => 'Get Notifications Count successful!',
-            'data' => $notifications
-        ]);
-        
-    }
-
     public function seeNotification(Request $request, $notification_id)
     {   
 

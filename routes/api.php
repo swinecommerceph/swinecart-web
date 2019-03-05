@@ -76,10 +76,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::delete('/products/{id}/order-status', 'InventoryController@cancelTransaction');
         });
 
-
         Route::group(['prefix' => 'notifications'], function() {
             Route::get('/', 'NotificationsController@getNotifications');
-            Route::get('/count', 'NotificationsController@getNotificationsCount');
             Route::post('/see/{id}', 'NotificationsController@SeeNotification');
         });
 
