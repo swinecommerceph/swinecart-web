@@ -83,6 +83,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('products/add', ['as' => 'products.create', 'uses' => 'ProductController@createProduct']);
         Route::post('products',['as' => 'products.store', 'uses' => 'ProductController@storeProduct']);
         Route::put('products',['as' => 'products.update', 'uses' => 'ProductController@updateProduct']);
+        Route::get('products/edit/{product}', ['as' => 'products.editProduct', 'uses' => 'ProductController@editProduct']);
         Route::get('products/view/{product}',['as' => 'products.bViewDetail', 'uses' => 'ProductController@breederViewProductDetail']);
         Route::post('products/manage-selected',['as' => 'products.updateSelected', 'uses' => 'ProductController@updateSelected']);
         Route::delete('products/manage-selected',['as' => 'products.deleteSelected', 'uses' => 'ProductController@deleteSelected']);

@@ -226,7 +226,19 @@ class ProductController extends Controller
             //return Redirect::to('user.breeder.showProducts');
         }
     }
+    /**
+     * Go to Edit Page of a Product
+     * 
+     * @param Product $product
+     * @return View
+     *
+     */
 
+    public function editProduct(Product $product)
+    {
+      return view('user.breeder.editProduct');
+    }
+  
     /**
      * Update details of a Product
      * AJAX
