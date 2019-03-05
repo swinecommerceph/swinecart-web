@@ -95,7 +95,7 @@ class DashboardController extends Controller
         $reviews = $breeder
             ->reviews()
             ->orderBy('created_at', 'desc')
-            ->paginate($request->perpage)
+            ->paginate($request->limit)
             ->map(function ($item) {
                 $review = [];
                 $customer = Customer::find($item->customer_id);
