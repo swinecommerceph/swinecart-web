@@ -63,12 +63,18 @@ class ProductController extends Controller
 
     public function __construct() 
     {
-        $this->middleware('jwt:auth', ['except' => ['getProductDetails', 'getProductMedia']]);
-        $this->middleware('jwt.role:breeder', ['except' => ['getProductDetails', 'getProductMedia']]);
+        $this->middleware('jwt:auth', ['except' => [
+            'getProductDetails', 'getProductMedia'
+        ]]);
+        $this->middleware('jwt.role:breeder', ['except' => [
+            'getProductDetails', 'getProductMedia'
+        ]]);
         $this->middleware(function($request, $next) {
             $this->user = JWTAuth::user();
             return $next($request);
-        }, ['except' => ['getProductDetails', 'getProductMedia']]);
+        }, ['except' => [
+            'getProductDetails', 'getProductMedia'
+        ]]);
     }
     /**
      * ---------------------------------------
@@ -264,7 +270,6 @@ class ProductController extends Controller
         $breeder = $this->user->userable;
         $farms = $breeder->farmAddresses;
 
-
         $data = $request->only([
             'farm_from_id',
             'name',
@@ -353,19 +358,10 @@ class ProductController extends Controller
             $p['farm_name'] = FarmAddress::find($product->farm_from_id)->province;
             $p['img_path'] = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
 
-            $reviews = $breeder->reviews;
-        
-            $ratings = [
-                'deliveryRating' => $reviews->avg('rating_delivery') ?? 0,
-                'transactionRating' => $reviews->avg('rating_transaction') ?? 0,
-                'productQualityRating' => $reviews->avg('rating_productQuality') ?? 0
-            ];
-
             return response()->json([
                 'message' => 'Get Product Details successful!',
                 'data' => [
-                    'product' => $p,
-                    'ratings' => $ratings
+                    'product' => $p
                 ]
             ], 200);
 
