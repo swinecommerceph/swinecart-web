@@ -70,16 +70,25 @@ class NotificationsController extends Controller
         $notification = $this->user->notifications()->where('id', $notification_id)->get()->first();
 
         if($notification) {
-            $notification->markAsRead();
+            if($notification->read_at) {
+                return response()->json([
+                    'error' => 'Notification already seen!',
+                ], 409);
+            }
+            else {
+                $notification->markAsRead();
 
-            return response()->json([
-                'message' => 'See Notifications successful!',
-                'data' => $notification
-            ]);
+                return response()->json([
+                    'message' => 'See Notification successful!',
+                    'data' => [
+                        'read_at' => $notification->read_at->toDateTimeString()
+                    ]
+                ]);
+            }
         }
         else return response()->json([
             'error' => 'Notification does not exist!',
-        ]);
+        ], 404);
     }
     
 }

@@ -78,7 +78,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'notifications'], function() {
             Route::get('/', 'NotificationsController@getNotifications');
-            Route::post('/see/{id}', 'NotificationsController@SeeNotification');
+            Route::patch('/{id}', 'NotificationsController@SeeNotification');
         });
 
         Route::group(['prefix' => 'messages'], function() {
