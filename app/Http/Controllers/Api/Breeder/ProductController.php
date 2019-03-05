@@ -264,51 +264,80 @@ class ProductController extends Controller
         $breeder = $this->user->userable;
         $farms = $breeder->farmAddresses;
 
-        if($product) {
-            $farm = $farms->find($request->farm_from_id);
 
-            if($farm) {
-                $product->farm_from_id = $farm->id;
-                $product->name = $request->name;
-                $product->type = strtolower($request->type);
-                $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-                $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
-                $product->price = $request->price;
-                $product->adg = ($request->adg);
-                $product->fcr = $request->fcr;
-                $product->backfat_thickness = $request->bft;
-                $product->other_details = $request->other_details;
-                $product->save();
+        $data = $request->only([
+            'farm_from_id',
+            'name',
+            'type',
+            'breed',
+            'birthdate',
+            'price',
+            'adg',
+            'fcr',
+            'bft',
+            'other_details'
+        ]);
 
-                $p = $this->transformProduct($product);
+        $validator = Validator::make($data, [
+            'name' => 'required',
+            'type' => 'required',
+            'farm_from_id' => 'required',
+            'breed' => 'required'
+        ]);
+        
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 422);
+        }
+        else {
+            if($product) {
+                $farm = $farms->find($request->farm_from_id);
+                if($farm) {
+                    $product->farm_from_id = $farm->id;
+                    $product->name = $data['name'];
+                    $product->type = strtolower($data['type']);
+                    $product->breed_id = $this->findOrCreateBreed(strtolower($data['breed']));
+                    $product->birthdate = date_format(date_create($data['birthdate']), 'Y-n-j');
+                    $product->price = $data['price'];
+                    $product->adg = $data['adg'];
+                    $product->fcr = $data['fcr'];
+                    $product->backfat_thickness = $data['bft'];
+                    $product->other_details = $data['other_details'];
+                    $product->save();
 
-                $product = [];
+                    $product = $this->getBreederProduct($breeder, $product_id);
+                    $p = $this->transformProduct($product);
 
-                $product['id'] = $p->id;
-                $product['name'] = $p->name;
-                $product['type'] = $p->type;
-                $product['breed'] = $p->breed;
-                $product['status'] = $p->status;
-                $product['age'] = $p->age;
-                $product['adg'] = $p->adg;
-                $product['fcr'] = $p->fcr;
-                $product['bft'] = $p->backfat_thickness;
-                $product['img_path'] = $p->img_path;
+                    $product = [];
 
-                return response()->json([
-                    'message' => 'Update Product successful!',
-                    'data' => [
-                        'product' => $product
-                    ]
-                ], 200);
+                    $product['id'] = $p->id;
+                    $product['name'] = $p->name;
+                    $product['type'] = $p->type;
+                    $product['breed'] = $p->breed;
+                    $product['status'] = $p->status;
+                    $product['age'] = $p->age;
+                    $product['adg'] = $p->adg;
+                    $product['fcr'] = $p->fcr;
+                    $product['bft'] = $p->backfat_thickness;
+                    $product['img_path'] = $p->img_path;
+
+                    return response()->json([
+                        'message' => 'Update Product successful!',
+                        'data' => [
+                            'product' => $product
+                        ]
+                    ], 200);
+                }
+                else return response()->json([
+                    'error' => 'Farm does not exist!'
+                ], 404);
             }
             else return response()->json([
-                'error' => 'Farm does not exist!'
+                'error' => 'Product does not exist!'
             ], 404);
         }
-        else return response()->json([
-            'error' => 'Product does not exist!'
-        ], 404);
+        
     }
 
     public function getProductDetails(Request $request, $product_id) 
