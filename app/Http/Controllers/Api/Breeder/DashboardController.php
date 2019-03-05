@@ -107,14 +107,6 @@ class DashboardController extends Controller
         $breeder = $this->user->userable;
         $reviews = $breeder->reviews()->orderBy('created_at', 'desc')->get();
 
-        foreach ($reviews as $review) {
-            $review->date = Carbon::createFromFormat('Y-m-d H:i:s', $review->created_at)->toFormattedDateString();
-            $customer = Customer::find($review->customer_id);
-            $review->customerName = $customer->users()->first()->name;
-            $review->customerProvince = $customer->address_province;
-            $review->showDetailedRatings = false;
-        }
-
         $deliveryRating = $reviews->avg('rating_delivery');
         $transactionRating = $reviews->avg('rating_transaction');
         $productQualityRating = $reviews->avg('rating_productQuality');
@@ -123,9 +115,47 @@ class DashboardController extends Controller
         return response()->json([
             'message' => 'Get Ratings successful!',
             'data' => [
-                'ratings' => $overallRating
+                'ratings' => [
+                    'delivery' => $deliveryRating,
+                    'transaction' => $transactionRating,
+                    'productQuality' => $productQualityRating,
+                    'overall' => $overallRating
+                ]
             ]
-        ]);
+        ], 200);
+    }
+
+    public function getReviews(Request $request)
+    {
+        $breeder = $this->user->userable;
+
+        $reviews = $breeder
+            ->reviews()
+            ->orderBy('created_at', 'desc')
+            ->paginate($request->perpage)
+            ->map(function ($item) {
+                $review = [];
+                $customer = Customer::find($item->customer_id);
+
+                $review['id'] = $item->id;
+                $review['comment'] = $item->comment;
+                $review['customer_name'] = $customer->users()->first()->name;
+                $review['customer_provce'] = $customer->address_province;
+                $review['created_at'] = $item->created_at->toDateTimeString();
+                $review['rating']['delivery'] = $item->rating_delivery;
+                $review['rating']['transaction'] = $item->rating_transaction;
+                $review['rating']['productQuality'] = $item->rating_productQuality;
+
+                return $review;
+            });
+
+        return response()->json([
+            'message' => 'Get Reviews successful!',
+            'data' => [
+                'count' => $reviews->count(),
+                'reviews' => $reviews
+            ]
+        ], 200);
     }
 
     public function getSoldProducts(Request $request)
