@@ -64,16 +64,9 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'dashboard'], function() {
             Route::get('/stats', 'DashboardController@getDashBoardStats');
-            // Route::get('/latest-accre', 'DashboardController@getLatestAccre');
-            // Route::get('/server-date', 'DashboardController@getServerDate');
-            // Route::get('/sold-data', 'DashboardController@getSoldData');
-            // Route::post('/sold-products', 'DashboardController@getSoldProducts');
-
+            Route::get('/server-date', 'DashboardController@getServerDate');
             Route::get('/ratings', 'DashboardController@getRatings');
             Route::get('/reviews', 'DashboardController@getReviews');
-
-            Route::get('/customers/{id}', 'DashboardController@getCustomer');
-            // Route::get('/customers', 'DashboardController@getCustomers');
         });
 
         Route::group(['prefix' => 'inventory'], function() {

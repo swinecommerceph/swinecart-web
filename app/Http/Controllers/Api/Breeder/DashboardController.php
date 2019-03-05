@@ -35,15 +35,6 @@ class DashboardController extends Controller
         $this->dashboard = $dashboard;
     }
 
-    private function getBreederProduct($breeder, $product_id)
-    {
-        $breeder_id = $breeder->id;
-        return Product::where([
-            ['breeder_id', '=', $breeder_id],
-            ['id', '=', $product_id]
-        ])->first();
-    }
-
     public function getDashboardStats(Request $request) 
     {
         $breeder = $this->user->userable;
@@ -64,41 +55,13 @@ class DashboardController extends Controller
         ], 200);
     }
 
-    public function getLatestAccre(Request $request) 
-    {
-        $latestAccreditation = $this->user->userable->latest_accreditation;
-
-        return response()->json([
-            'message' => 'Get Latest Accrediation successful!',
-            'data' => $latestAccreditation
-        ], 200);
-    }
-
     public function getServerDate(Request $request)
     {
-        $serverDateNow = Carbon::now();
-
         return response()->json([
             'message' => 'Get Server Date successful!',
-            'data' => $serverDateNow
-        ], 200);
-    }
-
-    public function getSoldData(Request $request)
-    {   
-        $breeder = $this->user->userable;
-        $serverDateNow = Carbon::now();
-
-        $soldData = $this->dashboard->getSoldProducts(
-            (object) [
-                'dateFrom' => $serverDateNow->copy()->subMonths(2)->format('Y-m-d'),
-                'dateTo' => $serverDateNow->format('Y-m-d'),
-                'frequency' => 'monthly'
-            ], $breeder);
-
-        return response()->json([
-            'message' => 'Get Sold Data successful!',
-            'data' => $soldData
+            'data' => [
+                'server_date' => Carbon::now()
+            ]
         ], 200);
     }
 
@@ -140,7 +103,7 @@ class DashboardController extends Controller
                 $review['id'] = $item->id;
                 $review['comment'] = $item->comment;
                 $review['customer_name'] = $customer->users()->first()->name;
-                $review['customer_provce'] = $customer->address_province;
+                $review['customer_province'] = $customer->address_province;
                 $review['created_at'] = $item->created_at->toDateTimeString();
                 $review['rating']['delivery'] = $item->rating_delivery;
                 $review['rating']['transaction'] = $item->rating_transaction;
@@ -156,72 +119,5 @@ class DashboardController extends Controller
                 'reviews' => $reviews
             ]
         ], 200);
-    }
-
-    public function getSoldProducts(Request $request)
-    {
-        $breeder = $this->user->userable;
-        
-        $soldProducts = $this->dashboard->getSoldProducts($request, $breeder);
-
-        return response()->json([
-            'message' => 'Get Sold Products successful!',
-            'data' => $soldProducts
-        ]);
-    }
-
-    public function updateProductStatus(Request $request, $product_id)
-    {
-        $breeder = $this->user->userable;
-        $product = $this->getBreederProduct($breeder, $product_id);
-
-        if($product) {
-            $result = $this->dashboard->updateStatus($request, $product);
-            return response()->json([
-                'message' => 'Update Product Status successful!',
-                'data' => $result
-            ]);
-        }
-        
-        else return response()->json([
-            'error' => 'Product does not exist!'
-        ], 200);
-    }
-
-    public function getCustomer(Request $request, $customer_id)
-    {
-        $customer = Customer::find($customer_id);
-
-        if($customer) {
-            return response()->json([
-                'message' => 'Get Customer Info successful!',
-                'data' => [
-                    'customer' => $customer
-                ]
-            ]);
-        }
-
-        else return response()->json([
-            'error' => 'Customer does not exist!'
-        ], 404); 
-    }
-
-    public function getCustomers(Request $request)
-    {
-        $breeder = $this->user->userable;
-
-        // $customers = $breeder->transactionLogs()->get();
-        $customers = $breeder->transactionLogs()->where('status', '!=', 'cancel_transaction')->get();
-
-        $customers = $customers->map(function ($log) {
-            $log->customer = $log->customer()->first();
-            return $log;
-        });
-
-
-        return response()->json([
-            'message' => 'Get Customers successful!',
-            'data' => $customers
-        ]);
     }
 }
