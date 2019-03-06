@@ -57,11 +57,13 @@ class UserInstancesSeeder extends Seeder
 
             // Create Customer Profile
             $customer = factory(App\Models\Customer::class)->create();
-            // Create Farm Address
-            $farm = factory(App\Models\FarmAddress::class)->create();
-
             $customer->users()->save($user);
-            $customer->farmAddresses()->save($farm);
+
+            // Create Farm Address
+            for ($i = 0; $i < 30; $i++) {
+                $farm = factory(App\Models\FarmAddress::class)->create();
+                $customer->farmAddresses()->save($farm);
+            }
         });
 
         // For Breeders
@@ -76,7 +78,7 @@ class UserInstancesSeeder extends Seeder
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address. Override accreditation default values
-            for ($i = 0; $i < 10; $i++) {
+            for ($i = 0; $i < 30; $i++) {
                 $farm = factory(App\Models\FarmAddress::class)->create([
                     'accreditation_no' => random_int(500,1000),
                     'accreditation_status' => 'active',

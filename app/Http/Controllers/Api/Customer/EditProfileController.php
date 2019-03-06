@@ -50,20 +50,32 @@ class EditProfileController extends Controller
     public function getFarms(Request $request)
     {   
         $customer = $this->user->userable;
-        $farms = $customer->farmAddresses;
+        $farms = $customer
+            ->farmAddresses()
+            ->paginate($request->limit)
+            ->map(function ($item) {
+                $farm = [];
 
-        if($farms) {
-            return response()->json([
-                'message' => 'Get Farm Addresses successful!',
-                'data' => [
-                    'farms' => $farms
-                ]
-            ], 200);
-        }
-        else return response()->json([
-            'error' => 'Farm Addresses does not exist!',
-        ], 404);
+                $farm['id'] = $item->id;
+                $farm['name'] = ucfirst($item->name);
+                $farm['province'] = $item->province;
+                // $farm['addressLine1'] = $item->addressLine1;
+                // $farm['addressLine2'] = $item->addressLine2;
+                // $farm['zipCode'] = $item->zipCode;
+                // $farm['farmType'] = $item->farmType;
+                // $farm['landline'] = $item->landline;
+                // $farm['mobile'] = $item->mobile;
 
+                return $farm;
+            });
+
+        return response()->json([
+            'message' => 'Get Farms successful!',
+            'data' => [
+                'count' => $farms->count(),
+                'farms' => $farms,
+            ]
+        ], 200);
     }
 
     public function getFarm(Request $request, $farm_id)
