@@ -25,43 +25,40 @@ class MessageController extends Controller
         });
     }
 
-
-    public function unreadCount(Request $request)
-    {   
-        $user_id = $this->user->id;
-
-        $count = Message::where('breeder_id', '=', $user_id)
-				->where('read_at', NULL)
-				->where('direction', 0) //from customer to breeder
-	    		->orderBy('created_at', 'ASC')
-	    		->groupBy('customer_id')
-                ->get();
-                
-        return response()->json([
-            'message' => 'Unread Count successful!',
-            'data' => sizeof($count)
-        ], 200);
-    }
-
     public function getMessages(Request $request, $customer_id)
     {   
         $user_id = $this->user->id;
 
         $messages = Message::where('breeder_id', '=', $user_id)
                 ->where('customer_id', $customer_id)
-	    		->orderBy('created_at', 'DESC')
-                ->get();
+                ->orderBy('id', 'DESC')
+                ->paginate($request->limit)
+                ->map(function ($item) {
 
-        foreach($messages as $message){
-            if($message->read_at == NULL){
-                $message->read_at = date('Y-m-d H:i:s');
-                $message->save();
-            }
-        }
+                    // if($item->read_at == NULL){
+                    //     $item->read_at = date('Y-m-d H:i:s');
+                    //     $item->save();
+                    // }
+
+                    $message = [];
+
+                    $message['id'] = $item->id;
+                    $message['id'] = $item->id;
+                    $message['direction'] = $item->direction;
+                    $message['message'] = $item->message;
+                    $message['read_at'] = $item->read_at;
+                    $message['customer_id'] = $item->customer_id;
+                    $message['breeder_id'] = $item->breeder_id;
+
+                    return $message;
+                });
 
         return response()->json([
             'message' => 'Get Messages successful!',
-            'data' => $messages
+            'data' => [
+                'count' => $messages->count(),
+                'messages' => $messages
+            ]
         ], 200);
     }
 
@@ -73,17 +70,41 @@ class MessageController extends Controller
 	    		->orderBy('created_at', 'DESC')
                 ->get()
                 ->unique('customer_id')
-                ->values();
+                ->values()
+                ->forPage($request->page, $request->limit)
+                ->map(function ($item) {
 
-        $threads = $threads->map(function ($thread) {
-            $thread->user = User::where('id', '=', $thread->customer_id)->first();
-            return $thread;
-        });
+                    $thread = [];
+
+                    $user = User::find($item->customer_id);
+
+                    $thread['user'] = [ 
+                        'id' => $user->id,
+                        'name' => $user->name
+                    ];
+
+                    $thread['message'] = [
+                        'id' => $item->id,
+                        'direction' => $item->direction,
+                        'content' => $item->message,
+                        'read_at' => $item->read_at,
+                    ];
+
+                    return $thread;
+                });
 
         return response()->json([
             'message' => 'Get Threads successful!',
-            'data' => $threads
+            'data' => [
+                'count' => $threads->count(),
+                'threads' => $threads,
+            ]
         ], 200);
         
+    }
+
+    public function seeMessage(Request $request)
+    {
+
     }
 }
