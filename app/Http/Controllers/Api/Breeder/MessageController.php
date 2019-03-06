@@ -103,8 +103,33 @@ class MessageController extends Controller
         
     }
 
-    public function seeMessage(Request $request)
+    public function seeMessage(Request $request, $customer_id, $message_id)
     {
+        $user_id = $this->user->id;
 
+        $message = Message::where('breeder_id', '=', $user_id)
+                ->where('customer_id', $customer_id)
+                ->where('id', $message_id)
+                ->first();
+
+        if($message) {
+
+            if($message->read_at) {
+                return response()->json([
+                    'error' => 'Message already seen!'
+                ], 409);
+            }
+            else {
+                $message->read_at = date('Y-m-d H:i:s');
+                $message->save();
+
+                return response()->json([
+                    'message' => 'See Message successful!',
+                ], 200);
+            }
+        }
+        else return response()->json([
+            'error' => 'Message does not exist!'
+        ], 404);
     }
 }

@@ -84,6 +84,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::group(['prefix' => 'chats'], function() {
             Route::get('/', 'MessageController@getThreads');
             Route::get('/{id}', 'MessageController@getMessages');
+            Route::patch('/{id}/{messageId}', 'MessageController@seeMessage');
         });
     });
  
