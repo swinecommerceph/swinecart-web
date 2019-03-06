@@ -96,12 +96,9 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
             Route::get('/farms', 'EditProfileController@getFarms');
             Route::get('/farms/{id}', 'EditProfileController@getFarm');
-
             Route::post('/farms', 'EditProfileController@addFarm');
             Route::put('/farms/{id}', 'EditProfileController@updateFarm');
             Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
-
-            Route::get('/breeders', 'EditProfileController@getBreeders');
         });
 
         Route::group(['prefix' => 'products'], function() {
