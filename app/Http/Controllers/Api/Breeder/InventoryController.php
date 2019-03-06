@@ -291,4 +291,26 @@ class InventoryController extends Controller
 
     }
 
+    public function getCustomer(Request $request, $customer_id)
+    {
+        $customer = Customer::find($customer_id);
+        $user = $customer->users()->first();
+
+        $c = [];
+
+        // $c['id'] = $customer->id;
+        $c['name'] = $user->name;
+        $c['addressLine1'] = $customer->address_addressLine1;
+        $c['addressLine2'] = $customer->address_addressLine2;
+        $c['province'] = $customer->address_province;
+        $c['mobile'] = $customer->mobile;
+
+
+        return response()->json([
+            'message' => 'Get Customer successful!',
+            'data' => [
+                'customer' => $c
+            ]
+        ], 200);
+    }
 }
