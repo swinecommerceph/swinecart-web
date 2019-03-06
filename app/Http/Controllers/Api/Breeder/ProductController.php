@@ -502,16 +502,12 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Toggle Product Statuses successful!',
-            'data' => [
-                'products' => '$products'
-            ]
         ], 200);
     }
     
     public function deleteProducts(Request $request)
     {
         $breeder = $this->user->userable;
-        $undeletedProducts = [];
         $ids = $request->ids;
 
         foreach (explode(',', $ids) as $id) {
@@ -549,17 +545,10 @@ class ProductController extends Controller
                     $breed->delete();
                 }
             }
-            else {
-                array_push($undeletedProducts, $id);
-            }
         }
 
         return response()->json([
-            'message' => 'Delete Products successful!',
-            'data' => [
-                'ids' => $ids,
-                'undeletedIds' => $undeletedProducts,
-            ]
+            'message' => 'Delete Products successful!'
         ], 200);
     }
 
