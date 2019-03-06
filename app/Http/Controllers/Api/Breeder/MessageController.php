@@ -112,7 +112,7 @@ class MessageController extends Controller
                 ->where('id', $message_id)
                 ->first();
 
-        if($message) {
+        if($message && $message->direction == 0) {
 
             if($message->read_at) {
                 return response()->json([
@@ -120,6 +120,7 @@ class MessageController extends Controller
                 ], 409);
             }
             else {
+
                 $message->read_at = date('Y-m-d H:i:s');
                 $message->save();
 
