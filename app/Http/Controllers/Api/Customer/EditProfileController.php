@@ -81,9 +81,21 @@ class EditProfileController extends Controller
     public function getFarm(Request $request, $farm_id)
     {   
         $customer = $this->user->userable;
-        $farm = $customer->farmAddresses()->find($farm_id);
+        $item = $customer->farmAddresses()->find($farm_id);
 
-        if($farm) {
+        if($item) {
+            $farm = [];
+
+            $farm['id'] = $item->id;
+            $farm['name'] = ucfirst($item->name);
+            $farm['province'] = $item->province;
+            $farm['addressLine1'] = $item->addressLine1;
+            $farm['addressLine2'] = $item->addressLine2;
+            $farm['zipCode'] = $item->zipCode;
+            $farm['farmType'] = ucfirst($item->farmType);
+            $farm['landline'] = $item->landline;
+            $farm['mobile'] = $item->mobile;
+
             return response()->json([
                 'message' => 'Get Farm successful!',
                 'data' => [
@@ -94,7 +106,6 @@ class EditProfileController extends Controller
         else return response()->json([
             'error' => 'Farm does not exist!',
         ], 404);
-
     }
 
     public function updatePersonal(CustomerPersonalProfileRequest $request)
