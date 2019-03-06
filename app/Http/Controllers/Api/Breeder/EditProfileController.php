@@ -77,30 +77,29 @@ class EditProfileController extends Controller
     {
         $breeder = $this->user->userable;
 
-        $results = $this->getBreederFarms($breeder)->paginate($request->perpage);
-        $farms = $results->items();
-        $count = $results->count();
+        $farms = $this
+            ->getBreederFarms($breeder)
+            ->paginate($request->limit)
+            ->map(function ($item) {
+                $farm = [];
 
-        $farms = array_map(function ($item) {
-            $farm = [];
-            
-            $farm['id'] = $item->id;
-            $farm['name'] = ucfirst($item->name);
-            $farm['province'] = $item->province;
-            // $farm['addressLine1'] = $item->addressLine1;
-            // $farm['addressLine2'] = $item->addressLine2;
-            // $farm['zipCode'] = $item->zipCode;
-            // $farm['farmType'] = $item->farmType;
-            // $farm['landline'] = $item->landline;
-            // $farm['mobile'] = $item->mobile;
+                $farm['id'] = $item->id;
+                $farm['name'] = ucfirst($item->name);
+                $farm['province'] = $item->province;
+                // $farm['addressLine1'] = $item->addressLine1;
+                // $farm['addressLine2'] = $item->addressLine2;
+                // $farm['zipCode'] = $item->zipCode;
+                // $farm['farmType'] = $item->farmType;
+                // $farm['landline'] = $item->landline;
+                // $farm['mobile'] = $item->mobile;
 
-            return $farm;
-        }, $farms);
+                return $farm;
+            });
 
         return response()->json([
             'message' => 'Get Farms successful!',
             'data' => [
-                'count' => $count,
+                'count' => $farms->count(),
                 'farms' => $farms,
             ]
         ], 200);
