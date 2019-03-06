@@ -243,7 +243,7 @@ class EditProfileController extends Controller
         }
     }
 
-    public function updatePersonal(BreederPersonalProfileRequest $request) 
+    public function updatePersonal(Request $request) 
     {
         $breeder = $this->user->userable;
 
@@ -279,10 +279,7 @@ class EditProfileController extends Controller
             $breeder->fill($data)->save();
 
             return response()->json([
-                'message' => 'Update Personal successful!',
-                'data' => [
-                    'profile' => $breeder
-                ]
+                'message' => 'Update Personal successful!'
             ], 200);
         }
     }

@@ -90,7 +90,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
  
     Route::group(['namespace' => 'Customer', 'prefix' => 'customer'], function() {
         Route::group(['prefix' => 'profile'], function() {
-            Route::get('/', 'EditProfileController@me');
+            Route::get('/', 'EditProfileController@getProfile');
             Route::put('/', 'EditProfileController@updatePersonal');
             Route::patch('/password', 'EditProfileController@changePassword');
 

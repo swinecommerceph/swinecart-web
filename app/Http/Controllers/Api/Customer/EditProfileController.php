@@ -35,14 +35,14 @@ class EditProfileController extends Controller
         });
     }
 
-    public function me(Request $request)
+    public function getProfile(Request $request)
     {
         $customer = $this->user->userable;
 
         return response()->json([
             'message' => 'Customer Me successful!',
             'data' => [
-                'customer' => $customer
+                'profile' => $customer
             ]
         ], 200);
     }
@@ -112,21 +112,35 @@ class EditProfileController extends Controller
     {
         $customer = $this->user->userable;
 
-        $customer->fill($request->only([
+        $data = $request->only([
             'address_addressLine1',
             'address_addressLine2',
             'address_province',
             'address_zipCode',
             'landline',
             'mobile'
-        ]))->save();
+        ]);
 
-        return response()->json([
-            'message' => 'Update Personal successful!',
-            'data' => [
-                'customer' => $customer
-            ]
-        ], 200);
+        $validator = Validator::make($data, [
+            'address_addressLine1' => 'required',
+            'address_addressLine2' => 'required',
+            'address_province' => 'required',
+            'address_zipCode' => 'required|digits:4',
+            'mobile' => 'required|digits:11|regex:/^09/',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 422);
+        }
+        else {
+            $customer->fill($data)->save();
+
+            return response()->json([
+                'message' => 'Update Personal successful!'
+            ], 200);
+        }
     }
 
     public function addFarm(Request $request)
@@ -174,10 +188,7 @@ class EditProfileController extends Controller
             $customer->farmAddresses()->save($farmAddress);
 
             return response()->json([
-                'message' => 'Add Farm successful!',
-                'data' => [
-                    'farm' => $farmAddress
-                ]
+                'message' => 'Add Farm successful!'
             ], 200);
             
         }
@@ -212,10 +223,7 @@ class EditProfileController extends Controller
         
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Error in Update Farm!',
-                'data' => [
-                    'errors' => $validator->errors()
-                ]
+                'error' => $validator->errors()
             ], 422);
         }
 
@@ -231,10 +239,7 @@ class EditProfileController extends Controller
             $farmAddress->save();
 
             return response()->json([
-                'message' => 'Update Farm Info successful!',
-                'data' => [
-                    'farm' => $farmAddress
-                ]
+                'message' => 'Update Farm Info successful!'
             ], 200);
         }
         else return response()->json([
@@ -257,7 +262,6 @@ class EditProfileController extends Controller
             'error' => 'Farm Address does not exist!',
         ], 404);
     }
-
 
     public function changePassword(Request $request) 
     {
