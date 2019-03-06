@@ -30,11 +30,9 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::group(['prefix' => 'profile'], function() {
             Route::get('/', 'EditProfileController@getProfile');
             Route::put('/', 'EditProfileController@updatePersonal');
-
             Route::patch('/password', 'EditProfileController@changePassword');
-            
-            Route::get('/farms', 'EditProfileController@getFarms');
 
+            Route::get('/farms', 'EditProfileController@getFarms');
             Route::get('/farms/{id}', 'EditProfileController@getFarm');
             Route::put('/farms/{id}', 'EditProfileController@updateFarm');
             Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');

@@ -47,8 +47,6 @@ class DashboardController extends Controller
         $dashboardStats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
         $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
 
-        $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
-
         return response()->json([
             'message' => 'Get Dashboard Stats successful!',
             'data' => $dashboardStats
