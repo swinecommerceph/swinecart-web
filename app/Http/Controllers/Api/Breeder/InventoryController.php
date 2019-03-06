@@ -160,38 +160,33 @@ class InventoryController extends Controller
 
     public function getProductRequests(Request $request, $product_id)
     {
-        $perpage = $request->perpage;
+        $limit = $request->limit;
 
-        $results = SwineCartItem::where('product_id', $product_id)
+        $requests = SwineCartItem::where('product_id', $product_id)
             ->where('if_requested', 1)
             ->where('reservation_id', 0)
-            ->paginate($perpage);
+            ->paginate($limit)
+            ->map(function ($item) {
+                $customer = Customer::find($item->customer_id);
+                $request = [];
 
-        $requests = $results->items();
-        $count = $results->count();
+                $request['product_id'] = $item->product_id;
+                $request['customer_id'] = $item->customer_id;
+                $request['swinecart_id'] = $item->id;
+                $request['request_quantity'] = $item->quantity;
+                $request['date_needed'] = $item->date_needed == '0000-00-00' ? null : $this->transformDateSyntax($item->date_needed);
+                $request['special_request'] = $item->special_request;
 
-        $requests = array_map(function ($item) {
-            $customer = Customer::find($item->customer_id);
-            $request = [];
+                $request['customer_name'] = $customer->users()->first()->name;
+                $request['customer_province'] = $customer->address_province;
 
-            $request['product_id'] = $item->product_id;
-            $request['customer_id'] = $item->customer_id;
-            $request['swinecart_id'] = $item->id;
-            $request['request_quantity'] = $item->quantity;
-            $request['date_needed'] = $item->date_needed == '0000-00-00' ? null : $this->transformDateSyntax($item->date_needed);
-            $request['special_request'] = $item->special_request;
-
-            $request['customer_name'] = $customer->users()->first()->name;
-            $request['customer_province'] = $customer->address_province;
-
-            return $request;
-
-        }, $requests);
+                return $request;
+            });
 
         return response()->json([
             'message' => 'Get Product Requests successful!',
             'data' => [
-                'count' => $count,
+                'count' => $requests->count(),
                 'requests' => $requests,
             ]
         ], 200);
