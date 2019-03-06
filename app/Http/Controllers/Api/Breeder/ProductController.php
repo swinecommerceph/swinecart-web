@@ -142,7 +142,6 @@ class ProductController extends Controller
     {
         $breeder = $this->user->userable;
         $products = $this->getBreederProducts($breeder);
-        $perpage = $request->perpage;
         
         // Check for Filtering and Sorting
         if($request->input('type')) {
@@ -162,32 +161,30 @@ class ProductController extends Controller
         }
 
         // Paginate and Transform Product
-        $results = $products->paginate($perpage);
-        $products = $results->items();
-        $count = $results->count();
-    
-        $products = array_map(function ($item) {
-            $p = $this->transformProduct($item);
-            $product = [];
+        $products = $products
+            ->paginate($request->limit)
+            ->map(function ($item) {
+                $p = $this->transformProduct($item);
+                $product = [];
 
-            $product['id'] = $p->id;
-            $product['name'] = $p->name;
-            $product['type'] = $p->type;
-            $product['breed'] = $p->breed;
-            $product['status'] = $p->status;
-            $product['age'] = $p->age;
-            $product['adg'] = $p->adg;
-            $product['fcr'] = $p->fcr;
-            $product['bft'] = $p->backfat_thickness;
-            $product['img_path'] = $p->img_path;
+                $product['id'] = $p->id;
+                $product['name'] = $p->name;
+                $product['type'] = $p->type;
+                $product['breed'] = $p->breed;
+                $product['status'] = $p->status;
+                $product['age'] = $p->age;
+                $product['adg'] = $p->adg;
+                $product['fcr'] = $p->fcr;
+                $product['bft'] = $p->backfat_thickness;
+                $product['img_path'] = $p->img_path;
 
-            return $product;
-        }, $products);
+                return $product;
+            });
 
         return response()->json([
             'message' => 'Get Products successful',
             'data' => [
-                'count' => $count,
+                'count' => $products->count(),
                 'products' => $products
             ]
         ], 200);
@@ -267,7 +264,6 @@ class ProductController extends Controller
         $breeder = $this->user->userable;
         $product = $this->getBreederProduct($breeder, $product_id);
 
-        $breeder = $this->user->userable;
         $farms = $breeder->farmAddresses;
 
         $data = $request->only([
@@ -415,49 +411,69 @@ class ProductController extends Controller
         ], 404);
     }
 
-    public function addProduct(ProductRequest $request)
+    public function addProduct(Request $request)
     {
         $breeder = $this->user->userable;
         $farms = $breeder->farmAddresses;
 
-
         $farm = $farms->find($request->farm_from_id);
 
-        if ($farm) {
-            $product = new Product;
+        $data = $request->only([
+            'farm_from_id',
+            'name',
+            'type',
+            'breed',
+            'birthdate',
+            'price',
+            'adg',
+            'fcr',
+            'bft',
+            'other_details'
+        ]);
 
-            if($request->type == 'boar') $image = Image::firstOrCreate(['name' => 'boar_default.jpg']);
-            else if($request->type == 'sow') $image = Image::firstOrCreate(['name' => 'sow_default.jpg']);
-            else if($request->type == 'gilt') $image = Image::firstOrCreate(['name' => 'gilt_default.jpg']);
-            else $image = Image::firstOrCreate(['name' => 'semen_default.jpg']);
+        $validator = Validator::make($data, [
+            'name' => 'required',
+            'type' => 'required',
+            'farm_from_id' => 'required',
+            'breed' => 'required'
+        ]);
 
-            $product->farm_from_id = $request->farm_from_id;
-            $product->primary_img_id = $image->id;
-            $product->name = $request->name;
-            $product->type = $request->type;
-            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
-            $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-            $product->price = $request->price;
-            $product->quantity = ($request->type == 'semen') ? -1 : 1;
-            $product->adg = $request->adg;
-            $product->fcr = $request->fcr;
-            $product->backfat_thickness = $request->backfat_thickness;
-            $product->other_details = $request->other_details;
-            $breeder->products()->save($product);
-
-            $product = $this->getBreederProduct($breeder, $product->id);
-            $product = $this->transformProduct($product);
-
+        if($validator->fails()) {
             return response()->json([
-                'message' => 'Add Product successful!',
-                'data' => [
-                    'product' => $product,
-                ]
-            ], 200);
+                'error' => $validator->errors(),
+            ], 422);
         }
-        else return response()->json([
-            'error' => 'Farm does not exist!'
-        ], 404);
+        else {
+            if ($farm) {
+                $product = new Product;
+
+                if($request->type == 'boar') $image = Image::firstOrCreate(['name' => 'boar_default.jpg']);
+                else if($request->type == 'sow') $image = Image::firstOrCreate(['name' => 'sow_default.jpg']);
+                else if($request->type == 'gilt') $image = Image::firstOrCreate(['name' => 'gilt_default.jpg']);
+                else $image = Image::firstOrCreate(['name' => 'semen_default.jpg']);
+
+                $product->farm_from_id = $request->farm_from_id;
+                $product->primary_img_id = $image->id;
+                $product->name = $request->name;
+                $product->type = $request->type;
+                $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+                $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
+                $product->price = $request->price;
+                $product->quantity = ($request->type == 'semen') ? -1 : 1;
+                $product->adg = $request->adg;
+                $product->fcr = $request->fcr;
+                $product->backfat_thickness = $request->backfat_thickness;
+                $product->other_details = $request->other_details;
+                $breeder->products()->save($product);
+
+                return response()->json([
+                    'message' => 'Add Product successful!',
+                ], 200);
+            }
+            else return response()->json([
+                'error' => 'Farm does not exist!'
+            ], 404);
+        }
     }
 
     public function toggleProductStatuses(Request $request)
