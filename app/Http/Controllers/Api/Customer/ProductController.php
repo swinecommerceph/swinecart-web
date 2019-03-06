@@ -57,7 +57,7 @@ class ProductController extends Controller
     private function getBreedIds($breedParameter)
     {
         $tempBreedIds = [];
-        foreach (explode(' ', $breedParameter) as $breedName) {
+        foreach (explode(',', $breedParameter) as $breedName) {
             if($breedName == 'crossbreed') {
                 // Get all breed ids that contain '+' in their breed name
                 $crossbreeds = Breed::where('name','like','%+%')->get();
@@ -66,8 +66,11 @@ class ProductController extends Controller
                 }
                 continue;
             }
-            else $breedInstance = Breed::where('name', $breedName)->get()->first()->id;
-            array_push($tempBreedIds, $breedInstance);
+            else {
+                $breedInstance = Breed::where('name', $breedName)->get()->first();
+                array_push($tempBreedIds, $breedInstance && $breedInstance->id);
+            }
+            
         }
 
         return $tempBreedIds;
@@ -85,53 +88,61 @@ class ProductController extends Controller
         ], 200);
     }
 
-    public function getProducts(Request $request)
+    public function getProducts(Request $request, ProductRepository $repository)
     {   
-        $perpage = $request->perpage;
+        $products = Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '<>', 0);
 
-        $products = Product::whereIn('status', ['displayed', 'requested'])
-            ->where('quantity', '!=', 0)
-            ->orderBy('id', 'DESC')
-            ->paginate($perpage);
+        // Search
+        if($request->input('q')) {
+            // $products = $repository->search($request->q);
+            // $scores = $products->scores;
+        }
 
-        $products = $products->reduce(function($array, $product) {
+        // Filter
+        if($request->input('type')) {
+            $product = $products->whereIn('type', explode(' ', $request->input('type')));
+        }
 
-            if($product->farmFrom->accreditation_status == 'active') {
+        if($request->input('breed')) {
+            $breedIds = $this->getBreedIds($request->input('breed'));
+            $products = $products->whereIn('breed_id', $breedIds);
+        }
 
-                // $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
-                // $product->type = ucfirst($product->type);
-                // $product->birthdate = $this->transformDateSyntax($product->birthdate);
-                // $product->age = $this->computeAge($product->birthdate);
-                // $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-                // $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
-                // $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-                // $product->score = 0;
+        if($request->input('sort')) {
+            $part = explode('-', $request->input('sort'));
+            $products = $products->orderBy($part[0], $part[1]);
+        }
+        else {
+            $products = $products->orderBy('id', 'desc');
+        }
 
-                // array_push($array, $product);
+        // Paginate and Transform Product
+        $products = $products
+            ->paginate($request->limit)
+            ->reduce(function($array, $product) {
+                if($product->farmFrom->accreditation_status == 'active') {
+                    $p = [];
+                    $p['id'] = $product->id;
+                    // $p['breeder_id'] = $product->breeder_id;
+                    // $p['farm_from_id'] = $product->farm_from_id;
+                    // $p['primary_img_id'] = $product->primary_img_id;
+                    $p['img_path'] = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
+                    $p['name'] = $product->name;
+                    $p['age'] = $this->computeAge($product->birthdate);
+                    $p['type'] = ucfirst($product->type);
+                    $p['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
 
-                $p = [];
+                    $array->push($p);
+                }
 
-                $p['id'] = $product->id;
-                // $p['breeder_id'] = $product->breeder_id;
-                // $p['farm_from_id'] = $product->farm_from_id;
-                // $p['primary_img_id'] = $product->primary_img_id;
-                $p['img_path'] = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
-                $p['name'] = $product->name;
-                $p['age'] = $this->computeAge($product->birthdate);
-                $p['type'] = ucfirst($product->type);
-                $p['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-
-                array_push($array, $p);
-            }
-
-            return $array;
-        }, []);
-
+                return $array;
+            }, collect([]));
+    
         return response()->json([
             'message' => 'Get Products successful',
             'data' => [
-                'count' => sizeof($products),
-                'products' => $products
+                'count' => $products->count(),
+                'products' => $products,
             ]
         ], 200);
     }
@@ -146,74 +157,6 @@ class ProductController extends Controller
         return response()->json([
             'message' => 'Get Breeds successful',
             'data' => $breeds
-        ], 200);
-    }
-    
-    public function filterProducts(Request $request, ProductRepository $repository)
-    {
-        $data = $request->query();
-
-        $products = Product::whereIn('status', ['displayed', 'requested'])
-            ->where('quantity', '!=', 0);
-
-        $scores = [];
-
-        $query = isset($data['query']);
-
-        if($query) {
-            $products = $repository->search($data['query']);
-            $scores = $products->scores;
-        }
-
-        if(isset($data['type'])) {
-            $types = explode(' ', $data['type']);
-            $products = $products->whereIn('type', $types);
-        }
-
-        if(isset($data['breed'])) {
-            $breedIds = $this->getBreedIds($data['breed']);
-            $products = $products->whereIn('breed_id', $breedIds);
-        }
-
-        if(isset($data['sort'])) {
-            $sort = explode('-', $data['sort']);
-            $products = $products->orderBy($sort[0], $sort[1]);
-        }
-        else {
-            $products = $products->orderBy('id', 'DESC');
-        }
-        
-        $products = $products->get();
-
-        $products = $products->reduce(function($collection, $product) use ($scores, $query) {
-
-            if($product->farmFrom->accreditation_status == 'active') {
-                $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
-                $product->type = ucfirst($product->type);
-                $product->birthdate = $this->transformDateSyntax($product->birthdate);
-                $product->age = $this->computeAge($product->birthdate);
-                $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-                $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
-                $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-                $product->score = $query ? $scores[$product->id] : 0;
-
-                $collection->push($product);
-            }
-
-            return $collection;
-        }, new Collection([]));
-
-        if($query) {
-            $products = $products->sortByDesc('score')->values()->all();
-        }
-
-        return response()->json([
-            'message' => 'Filter Products successful',
-            'data' => [
-                'count' => sizeof($products),
-                'products' => $products,
-                'queries' => $data
-            ]
         ], 200);
     }
 }

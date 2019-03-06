@@ -46,7 +46,7 @@ class UserInstancesSeeder extends Seeder
         });
 
     	// For Customers
-        factory(App\Models\User::class, 5)->create()->each(function($user){
+        factory(App\Models\User::class, 2)->create()->each(function($user){
             $faker = Faker\Factory::create();
             $user->assignRole('customer');
             $user->update_profile = 0;
@@ -60,7 +60,7 @@ class UserInstancesSeeder extends Seeder
             $customer->users()->save($user);
 
             // Create Farm Address
-            for ($i = 0; $i < 30; $i++) {
+            for ($i = 0; $i < 10; $i++) {
                 $farm = factory(App\Models\FarmAddress::class)->create();
                 $customer->farmAddresses()->save($farm);
             }
@@ -78,7 +78,7 @@ class UserInstancesSeeder extends Seeder
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address. Override accreditation default values
-            for ($i = 0; $i < 30; $i++) {
+            for ($i = 0; $i < 10; $i++) {
                 $farm = factory(App\Models\FarmAddress::class)->create([
                     'accreditation_no' => random_int(500,1000),
                     'accreditation_status' => 'active',
@@ -98,7 +98,7 @@ class UserInstancesSeeder extends Seeder
             $rand = random_int(10,13);
             $types = ['sow', 'gilt', 'boar', 'semen']; // 4
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
-            for ($i = 0; $i < 20; $i++) {
+            for ($i = 0; $i < 30; $i++) {
                 $randType = $types[random_int(0,3)];
                 $randBreed = $breeds[random_int(0,6)];
                 $product = new App\Models\Product;
