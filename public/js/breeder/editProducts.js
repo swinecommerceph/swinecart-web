@@ -1,5 +1,83 @@
 $(document).ready(function () {
 
+  /** 
+   *  Used for filling the input fields of the product with the initial data from the database
+  */
+
+  // SWINE INFORMATION
+  $('#edit-name').val(product.name);
+  $('#edit-select-type').val(product.type.toLowerCase());
+  $('#edit-select-farm').val(product.farm_from_id);
+  $('#edit-price').val(product.price);
+
+  // BREED INFORMATION
+
+  // For the breed initialization
+  if (product.breed.includes('x')) {
+    var crossbreed = product.breed.split('x');
+
+    // Check the crossbreed radio
+    $('.edit-crossbreed').prop('checked', true);
+
+    $('#edit-fbreed').val(crossbreed[0].toString().trim());
+    $('#edit-mbreed').val(crossbreed[1].toString().trim());
+    setTimeout(function () {
+      $('.input-purebreed-container').hide();
+      $('.input-crossbreed-container').show();
+    }, 100);
+
+  }
+  else {
+    // Check the purebreed radio
+    $('.edit-purebreed').prop('checked', true);
+
+    $('#edit-breed').val(product.breed);
+    $('.input-crossbreed-container').hide();
+    $('.input-purebreed-container').show();
+  }
+
+  // setting the birthdate differently since simple val() does not work
+  var birthdatePicker = $('#edit-birthdate').pickadate();
+  var picker = birthdatePicker.pickadate('picker');
+  console.log(product.birthdate);
+  picker.set('select', new Date(product.birthdate));
+
+  $('#edit-adg').val(product.adg);
+  $('#edit-fcr').val(product.fcr);
+  $('#edit-backfat_thickness').val(product.backfat_thickness);
+
+  // for enabling select tags
+  $('select').material_select();
+});
+
+'use strict';
+
+var filter = {
+    apply: function(){
+        // URL search syntax: ?type=value[+value]*&status=value[+value]&sort=value*
+        var filter_parameters = '?';
+        var type_url = 'type=';
+        var status_url = '&status=';
+        var sort_url = '&sort=';
+
+        // Type parameter
+        type_url += $('#type-select option:selected').val();
+
+        // Status parameter
+        status_url += $('#status-select option:selected').val();
+
+        // Sort parameter
+        sort_url += $('#sort-select option:selected').val();
+
+        filter_parameters += type_url + status_url + sort_url;
+
+        window.location = config.manageProducts_url+filter_parameters;
+
+    }
+};
+
+$(document).ready(function () {
+
   // Variable for checking if all products
   // are selected or not
   var all_checked = false;
@@ -502,3 +580,250 @@ $(document).ready(function () {
 
 
 });
+
+'use strict';
+
+// Place error on specific HTML input
+var placeError = function(inputElement, errorMsg){
+    // Parse id of element if it contains '-' for the special
+    // case of finding the input's respective
+    // label on editProfile pages
+    var inputId = (inputElement.id.includes('-') && /\d/.test(inputElement.id))
+        ? (inputElement.id.split('-')[2])
+        : inputElement.id;
+
+    $(inputElement)
+        .parents("form")
+        .find("label[for='" + inputId + "']")
+        .attr('data-error', errorMsg);
+
+    setTimeout(function(){
+        if(inputElement.id.includes('select')){
+            // For select input, find first its respective input text
+            // then add the 'invalid' class
+            $(inputElement)
+                .parents('.select-wrapper')
+                .find('input.select-dropdown')
+                .addClass('invalid');
+        }
+        else $(inputElement).addClass('invalid');
+    },0);
+};
+
+// Place success from specific HTML input
+var placeSuccess = function(inputElement){
+
+    // For select input, find first its respective input text
+    // then add the needed classes
+    var inputTextFromSelect = (inputElement.id.includes('select')) ? $(inputElement).parents('.select-wrapper').find('input.select-dropdown') : '';
+
+    // Check first if it is invalid
+    if($(inputElement).hasClass('invalid') || $(inputTextFromSelect).hasClass('invalid')){
+        $(inputElement)
+            .parents("form")
+            .find("label[for='" + inputElement.id + "']")
+            .attr('data-error', false);
+
+        setTimeout(function(){
+            if(inputElement.id.includes('select')) inputTextFromSelect.removeClass('invalid').addClass('valid');
+            else $(inputElement).removeClass('invalid').addClass('valid');
+        },0);
+    }
+    else {
+        if(inputElement.id.includes('select')) inputTextFromSelect.addClass('valid');
+        else $(inputElement).addClass('valid');
+    }
+}
+
+var validationMethods = {
+    // functions must return either true or the errorMsg only
+    required: function(inputElement){
+        var errorMsg = 'This field is required';
+        return inputElement.value ? true : errorMsg;
+    },
+    requiredIfRadio: function(inputElement, radioId){
+        var errorMsg = 'This field is required';
+        var radioInputElement = document.getElementById(radioId);
+        if(radioInputElement.checked) return inputElement.value ? true : errorMsg;
+        else return true;
+    },
+    requiredDropdown: function(inputElement){
+        var errorMsg = 'This field is required';
+        return inputElement.value ? true : errorMsg;
+    },
+    email: function(inputElement){
+        var errorMsg = 'Please enter a valid email address';
+        return /\S+@\S+\.\S+/.test(inputElement.value) ? true : errorMsg;
+    },
+    minLength: function(inputElement, min){
+        var errorMsg = 'Please enter ' + min + ' or more characters';
+        return (inputElement.value.length >= min) ? true : errorMsg;
+    },
+    equalTo: function(inputElement, compareInputElementId){
+        var errorMsg = 'Please enter the same value';
+        var compareInputElement = document.getElementById(compareInputElementId);
+        return (inputElement.value === compareInputElement.value) ? true : errorMsg;
+    },
+    zipCodePh: function(inputElement){
+        var errorMsg = 'Please enter zipcode of 4 number characters';
+        return (/\d{4}/.test(inputElement.value) && inputElement.value.length === 4) ? true : errorMsg;
+    },
+    phoneNumber: function(inputElement){
+        var errorMsg = 'Please enter 11-digit phone number starting with 09';
+        return (/^09\d{9}/.test(inputElement.value) && inputElement.value.length === 11)  ? true : errorMsg;
+    }
+
+};
+
+'use strict';
+
+var validateFunction = function () {
+
+  return function () {
+    var validateInput = function (inputElement, modal) {
+
+      // Initialize needed validations
+      var validations = {
+        name: ['required'],
+        breed: ['requiredIfRadio:purebreed'],
+        fbreed: ['requiredIfRadio:crossbreed'],
+        mbreed: ['requiredIfRadio:crossbreed'],
+        'select-type': ['requiredDropdown'],
+        'select-farm': ['requiredDropdown'],
+        'edit-name': ['required'],
+        'edit-breed': ['requiredIfRadio:edit-purebreed'],
+        'edit-fbreed': ['requiredIfRadio:edit-crossbreed'],
+        'edit-mbreed': ['requiredIfRadio:edit-crossbreed'],
+        'edit-select-type': ['requiredDropdown'],
+        'edit-select-farm': ['requiredDropdown'],
+      };
+
+      // Check if validation rules exist
+      if (validations[inputElement.id]) {
+        var result = true;
+
+        for (var i = 0; i < validations[inputElement.id].length; i++) {
+          var element = validations[inputElement.id][i];
+
+          // Split arguments if there are any
+          var method = element.includes(':') ? element.split(':') : element;
+
+          result = (typeof (method) === 'object')
+            ? (validationMethods[method[0]](inputElement, method[1]))
+            : (validationMethods[method](inputElement));
+
+          // Result would return to a string errorMsg if validation fails
+          if (result !== true) {
+            placeError(inputElement, result);
+            return false;
+          }
+        }
+
+        // If all validations succeed then
+        if (result === true) {
+          placeSuccess(inputElement);
+          return true;
+        }
+      }
+    };
+
+    // focusout events on add-product-modal
+    $('body').on('focusout', '#add-product-modal input', function (e) {
+      validateInput(this, 'add-product-modal');
+    });
+
+    // keyup events on add-product-modal
+    $('body').on('keyup', '#add-product-modal input', function (e) {
+      if ($(this).hasClass('invalid') || $(this).hasClass('valid')) validateInput(this, 'add-product-modal');
+    });
+
+    // focusout and keyup events on add-product-modal
+    $('body').on('focusout keyup', '#edit-product-modal input', function (e) {
+      validateInput(this, 'edit-product-modal');
+    });
+
+    // select change events
+    $('select').change(function () {
+      validateInput(this);
+    });
+
+    // Remove respective 'invalid' class and input text value
+    // of current radio when radio value changes
+    $("#create-product input[name='radio-breed']").change(function () {
+      if ($("#create-product input:checked").val() === 'crossbreed') {
+        $('input#breed').val('');
+        $('input#breed').removeClass('valid invalid');
+      }
+      else {
+        $('input#fbreed, input#mbreed').val('');
+        $('input#fbreed, input#mbreed').removeClass('valid invalid');
+      }
+    });
+
+    // Temporary fix for prompting 'valid' class after
+    // value change on datepicker
+    $('#birthdate, #edit-birthdate').change(function (e) {
+      e.stopPropagation();
+      $(this).removeClass('invalid').addClass('valid');
+    });
+
+    // Submit add product
+    $("#create-product").submit(function (e) {
+      e.preventDefault();
+
+      var validName = validateInput(document.getElementById('name'));
+      var validType = validateInput(document.getElementById('select-type'));
+      var validFarmFrom = validateInput(document.getElementById('select-farm'));
+      var validBreed = true;
+
+      // Validate appropriate breed input/s according to chosen radio breed value
+      if ($('#create-product input:checked').val() === 'crossbreed') {
+        var validFbreed = validateInput(document.getElementById('fbreed'));
+        var validMbreed = validateInput(document.getElementById('mbreed'));
+        validBreed = validBreed && validFbreed && validMbreed;
+      }
+      else validBreed = validateInput(document.getElementById('breed'));
+
+      if (validName && validType && validFarmFrom && validBreed) {
+        // Disable submit/add product button
+        $('#submit-button').addClass('disabled');
+        $('#submit-button').html('Adding Product ...');
+
+        product.add($('#create-product'));
+      }
+      else Materialize.toast('Please properly fill all required fields.', 2500, 'orange accent-2');
+
+    });
+
+    // Update details of a product
+    $('.update-button').click(function (e) {
+      e.preventDefault();
+
+      var validName = validateInput(document.getElementById('edit-name'));
+      var validType = validateInput(document.getElementById('edit-select-type'));
+      var validFarmFrom = validateInput(document.getElementById('edit-select-farm'));
+      var validBreed = true;
+
+      // Validate appropriate breed input/s according to chosen radio breed value
+      if ($('#edit-product input:checked').val() === 'crossbreed') {
+        var validFbreed = validateInput(document.getElementById('edit-fbreed'));
+        var validMbreed = validateInput(document.getElementById('edit-mbreed'));
+        validBreed = validBreed && validFbreed && validMbreed;
+      }
+      else validBreed = validateInput(document.getElementById('edit-breed'));
+
+      if (validName && validType && validFarmFrom && validBreed) {
+        // Disable update-button
+        $(this).addClass('disabled');
+        $(this).html('Updating...');
+
+        product.edit($('#edit-product'), $(this));
+      }
+      else Materialize.toast('Please properly fill all required fields.', 2500, 'orange accent-2');
+
+    });
+  }
+}
+
+$(document).ready(validateFunction());
+//# sourceMappingURL=editProducts.js.map

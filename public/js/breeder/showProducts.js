@@ -1229,13 +1229,26 @@ $(document).ready(function () {
 
   /* ----------- Form functionalities ----------- */
   // Breed radio
-  $("input.purebreed").on('click', function () {
+  $("input.purebreed , input.edit-purebreed").on('click', function () {
     $(this).parents('form').find('.input-crossbreed-container').hide();
     $(this).parents('form').find('.input-purebreed-container').fadeIn(300);
   });
-  $("input.crossbreed").on('click', function () {
+  $("input.crossbreed , input.edit-crossbreed").on('click', function () {
     $(this).parents('form').find('.input-purebreed-container').hide();
     $(this).parents('form').find('.input-crossbreed-container').fadeIn(300);
+  });
+
+  $("input.purebreed , input.edit-purebreed").change(function () {
+    if (this.checked) {
+      $(this).parents('form').find('.input-crossbreed-container').hide();
+      $(this).parents('form').find('.input-purebreed-container').fadeIn(300);
+    }
+  });
+  $("input.crossbreed , input.edit-crossbreed").change(function () {
+    if (this.checked) {
+      $(this).parents('form').find('.input-purebreed-container').hide();
+      $(this).parents('form').find('.input-crossbreed-container').fadeIn(300);
+    }
   });
 
   // Manage necessary fields depending on product type

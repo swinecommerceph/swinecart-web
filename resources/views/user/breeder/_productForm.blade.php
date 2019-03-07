@@ -279,7 +279,7 @@
 
 					{{-- Type --}}
 					<div class="input-field col s6">
-						<select id="edit-select-type" data-form="add">
+						<select id="edit-select-type"data-form="add">
 					      <option value="" disabled selected>Choose Type</option>
 					      <option value="boar">Boar</option>
 					      <option value="sow">Sow</option>

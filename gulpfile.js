@@ -100,6 +100,13 @@ elixir(function (mix) {
       'validation/breeder/manageProducts_validation.js'
     ], 'public/js/breeder/addProduct.js')
     .scripts([
+      'breeder/editProduct.js',
+      'breeder/filter.js',
+      'breeder/manageProducts_script.js',
+      'validation/formValidationMethods.js',
+      'validation/breeder/manageProducts_validation.js'
+    ], 'public/js/breeder/editProducts.js')
+    .scripts([
       'vendor/imagezoom.min.js',
       'breeder/viewProductDetail_script.js'
     ], 'public/js/breeder/viewProductDetail.js')
