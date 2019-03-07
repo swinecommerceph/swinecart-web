@@ -14,10 +14,11 @@ $(document).ready(function () {
 
   // For the breed initialization
   if (product.breed.includes('x')) {
+    console.log('here');
     var crossbreed = product.breed.split('x');
 
     // Check the crossbreed radio
-    $('.edit-crossbreed').prop('checked', true);
+    $('.crossbreed').prop('checked', true);
 
     $('#edit-fbreed').val(crossbreed[0].toString().trim());
     $('#edit-mbreed').val(crossbreed[1].toString().trim());
@@ -29,7 +30,7 @@ $(document).ready(function () {
   }
   else {
     // Check the purebreed radio
-    $('.edit-purebreed').prop('checked', true);
+    $('.purebreed').prop('checked', true);
 
     $('#edit-breed').val(product.breed);
     $('.input-crossbreed-container').hide();
@@ -39,7 +40,6 @@ $(document).ready(function () {
   // setting the birthdate differently since simple val() does not work
   var birthdatePicker = $('#edit-birthdate').pickadate();
   var picker = birthdatePicker.pickadate('picker');
-  console.log(product.birthdate);
   picker.set('select', new Date(product.birthdate));
 
   $('#edit-adg').val(product.adg);

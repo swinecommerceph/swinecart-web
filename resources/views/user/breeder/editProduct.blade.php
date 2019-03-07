@@ -25,158 +25,158 @@
 
 
   {{-- Edit Product Modal --}}
-<div id="edit-product-modal" class="row">
-  <div class="col s1"></div>
-  <div class="col s11">
-    @include('common._errors')
-    {!! Form::open(['route' => 'products.update', 'class' => 's12', 'id' => 'edit-product']) !!}
+  <div id="edit-product-modal" class="row">
+    <div class="col s1"></div>
+    <div class="col s11">
+      @include('common._errors')
+      {!! Form::open(['route' => 'products.update', 'class' => 's12', 'id' => 'edit-product']) !!}
 
-    {{-- Swine Information --}}
-    <p style="font-weight: 600; margin-bottom: 2vh;" class="teal-text text-darken-4">Swine Information</p> 
-    <div class="row">
-      <div class="col s1"></div>
-      <div class="col s6">
-        
-        {{-- Name --}}
-        <div class="input-field">
-          {!! Form::text('edit-name', null, ['id' => 'edit-name', 'class' => 'validate input-manage-products'])!!}
-          {!! Form::label('edit-name', 'Name*', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
-        </div>
+      {{-- Swine Information --}}
+      <p style="font-weight: 600; margin-bottom: 2vh;" class="teal-text text-darken-4">Swine Information</p> 
+      <div class="row">
+        <div class="col s1"></div>
+        <div class="col s6">
+          
+          {{-- Name --}}
+          <div class="input-field">
+            {!! Form::text('edit-name', null, ['id' => 'edit-name', 'class' => 'validate input-manage-products'])!!}
+            {!! Form::label('edit-name', 'Name*', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+          </div>
 
-        {{-- Type --}}
-        <div style="margin-bottom: 4vh;" class="input-field">
-          <select id="edit-select-type" data-form="add">
-            <option value="" disabled selected>Choose Type</option>
-            <option value="boar">Boar</option>
-            <option value="sow">Sow</option>
-            <option value="gilt">Gilt</option>
-            <option value="semen">Semen</option>
-          </select>
-          <label style="font-size: 1rem;" class="teal-text text-darken-4">Type*</label>
-        </div>
-
-        {{-- Farm From --}}
-        <div style="margin-bottom: 4vh;" class="input-field">
-          <select id="edit-select-farm">
-              <option value="" disabled selected>Choose Farm</option>
-              @foreach($farms as $farm)
-                <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
-              @endforeach
+          {{-- Type --}}
+          <div style="margin-bottom: 4vh;" class="input-field">
+            <select id="edit-select-type" data-form="add">
+              <option value="" disabled selected>Choose Type</option>
+              <option value="boar">Boar</option>
+              <option value="sow">Sow</option>
+              <option value="gilt">Gilt</option>
+              <option value="semen">Semen</option>
             </select>
-            <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From*</label>
-        </div>
-
-        {{-- Price --}}
-        <div style="margin-bottom: 4vh;" class="input-field">
-          {!! Form::text('edit-price', null, ['id' => 'edit-price', 'class' => 'validate input-manage-products price-field'])!!}
-          {!! Form::label('edit-price', 'Price', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
-        </div>
-
-      </div>
-    </div>
-
-    {{-- Breed Information --}}
-    <p style="font-weight: 600; margin-bottom: 2vh;" class="teal-text text-darken-4">Breed Information</p>
-    
-    <div class="row">
-      <div class="col s1"></div>
-      <div class="col s6">
-        
-        {{-- Breed Type --}}
-        <label style="font-size: 1rem;" class="teal-text text-darken-4">Breed Type</label>
-        <div class="row">
-          <div class="input-field col s7">
-            <p>
-              <input name="radio-breed" type="radio" value="purebreed" id="purebreed" class="with-gap edit-purebreed" checked/>
-              <label class="teal-text text-darken-4" for="purebreed">Purebreed</label>
-            </p>
-            <p>
-              <input name="radio-breed" type="radio" value="crossbreed" id="crossbreed" class="with-gap edit-crossbreed"/>
-              <label class="teal-text text-darken-4" for="crossbreed">Crossbreed</label>
-            </p>
+            <label style="font-size: 1rem;" class="teal-text text-darken-4">Type*</label>
           </div>
-        </div>
 
-        {{-- Breed --}}
-        <div class="row">
-          <div class="input-purebreed-container">
-            {{-- If pure breed --}}
-            <div class="input-field">
-              {!! Form::text('edit-breed', null, ['id' => 'edit-breed', 'class' => 'validate input-manage-products'])!!}
-              {!! Form::label('edit-breed', 'Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+          {{-- Farm From --}}
+          <div style="margin-bottom: 4vh;" class="input-field">
+            <select id="edit-select-farm">
+                <option value="" disabled selected>Choose Farm</option>
+                @foreach($farms as $farm)
+                  <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                @endforeach
+              </select>
+              <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From*</label>
+          </div>
+
+          {{-- Price --}}
+          <div style="margin-bottom: 4vh;" class="input-field">
+            {!! Form::text('edit-price', null, ['id' => 'edit-price', 'class' => 'validate input-manage-products price-field'])!!}
+            {!! Form::label('edit-price', 'Price', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+          </div>
+
+        </div>
+      </div>
+
+      {{-- Breed Information --}}
+      <p style="font-weight: 600; margin-bottom: 2vh;" class="teal-text text-darken-4">Breed Information</p>
+      
+      <div class="row">
+        <div class="col s1"></div>
+        <div class="col s6">
+          
+          {{-- Breed Type --}}
+          <label style="font-size: 1rem;" class="teal-text text-darken-4">Breed Type</label>
+          <div class="row">
+            <div class="input-field col s7">
+              <p>
+                <input name="radio-breed" type="radio" value="purebreed" id="edit-purebreed" class="with-gap purebreed" checked/>
+                <label class="teal-text text-darken-4" for="purebreed">Purebreed</label>
+              </p>
+              <p>
+                <input name="radio-breed" type="radio" value="crossbreed" id="edit-crossbreed" class="with-gap crossbreed"/>
+                <label class="teal-text text-darken-4" for="crossbreed">Crossbreed</label>
+              </p>
             </div>
           </div>
-          <div class="input-crossbreed-container">
-            {{-- If crossbreed --}}
-            <div class="input-field">
-              {!! Form::text('edit-fbreed', null, ['id' => 'edit-fbreed', 'class' => 'validate input-manage-products'])!!}
-              {!! Form::label('edit-fbreed', 'Father\'s Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+
+          {{-- Breed --}}
+          <div class="row">
+            <div class="input-purebreed-container">
+              {{-- If pure breed --}}
+              <div class="input-field">
+                {!! Form::text('edit-breed', null, ['id' => 'edit-breed', 'class' => 'validate input-manage-products'])!!}
+                {!! Form::label('edit-breed', 'Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              </div>
             </div>
+            <div class="input-crossbreed-container">
+              {{-- If crossbreed --}}
+              <div class="input-field">
+                {!! Form::text('edit-fbreed', null, ['id' => 'edit-fbreed', 'class' => 'validate input-manage-products'])!!}
+                {!! Form::label('edit-fbreed', 'Father\'s Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              </div>
+              <div class="input-field">
+                {!! Form::text('edit-mbreed', null, ['id' => 'edit-mbreed', 'class' => 'validate input-manage-products'])!!}
+                {!! Form::label('edit-mbreed', 'Mother\'s Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              </div>
+            </div>
+          </div>
+
+          <div class="row">
+            {{-- Birthdate --}}
             <div class="input-field">
-              {!! Form::text('edit-mbreed', null, ['id' => 'edit-mbreed', 'class' => 'validate input-manage-products'])!!}
-              {!! Form::label('edit-mbreed', 'Mother\'s Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              <input style="cursor: pointer;" type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
+              <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit-birthdate">Birth Date</label>
+            </div>
+
+            {{-- ADG --}}
+            <div class="input-field">
+              {!! Form::text('edit-adg', null, ['id' => 'edit-adg', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::label('edit-adg', 'Average Daily Gain (grams)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+            </div>
+          </div>
+
+          <div class="row">
+            {{-- FCR --}}
+            <div class="input-field">
+              {!! Form::text('edit-fcr', null, ['id' => 'edit-fcr', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::label('edit-fcr', 'Feed Conversion Ratio', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+            </div>
+
+            {{-- Backfat thickness --}}
+            <div class="input-field">
+              {!! Form::text('edit-backfat_thickness', null, ['id' => 'edit-backfat_thickness', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::label('edit-backfat_thickness', 'Backfat thickness (mm)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
             </div>
           </div>
         </div>
+      </div>
 
-        <div class="row">
-          {{-- Birthdate --}}
-          <div class="input-field">
-            <input style="cursor: pointer;" type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
-            <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit-birthdate">Birth Date</label>
-          </div>
+      {{-- Other Details --}}
+      <p style="font-weight: 600; margin-bottom: 2vh;" class="teal-text text-darken-4">Other Details</p>
+      
 
-          {{-- ADG --}}
-          <div class="input-field">
-            {!! Form::text('edit-adg', null, ['id' => 'edit-adg', 'class' => 'validate input-manage-products'])!!}
-            {!! Form::label('edit-adg', 'Average Daily Gain (grams)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
-          </div>
-        </div>
-
-        <div class="row">
-          {{-- FCR --}}
-          <div class="input-field">
-            {!! Form::text('edit-fcr', null, ['id' => 'edit-fcr', 'class' => 'validate input-manage-products'])!!}
-            {!! Form::label('edit-fcr', 'Feed Conversion Ratio', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
-          </div>
-
-          {{-- Backfat thickness --}}
-          <div class="input-field">
-            {!! Form::text('edit-backfat_thickness', null, ['id' => 'edit-backfat_thickness', 'class' => 'validate input-manage-products'])!!}
-            {!! Form::label('edit-backfat_thickness', 'Backfat thickness (mm)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
-          </div>
+      {{-- Has a default value, no need to make it work since this will be changed --}}
+      <div class="row">
+        <div class="col s1"></div>
+        <div class="col s6">
+          <textarea class="materialize-textarea"></textarea>
         </div>
       </div>
-    </div>
 
-    {{-- Other Details --}}
-    <p style="font-weight: 600; margin-bottom: 2vh;" class="teal-text text-darken-4">Other Details</p>
-    
-
-    {{-- Has a default value, no need to make it work since this will be changed --}}
-    <div class="row">
-      <div class="col s1"></div>
-      <div class="col s6">
-        <textarea class="materialize-textarea"></textarea>
-      </div>
-    </div>
-
-    {{-- Add Media --}}
-    {{-- <div class="row">
-      <div class="col s3">
-        <div id="add-media-button" class="btn blue">
-          Add Media
+      {{-- Add Media --}}
+      {{-- <div class="row">
+        <div class="col s3">
+          <div id="add-media-button" class="btn blue">
+            Add Media
+          </div>
         </div>
-      </div>
-    </div> --}}
+      </div> --}}
 
+      </div>
+    <div>
+      <button style="font-weight: 900; width: 15vw; font-size: 1.4rem" type="submit" class="right btn-large waves-effect waves-light teal darken-4 update-button">Edit Product</button>
     </div>
-	<div>
-		<button style="font-weight: 900; width: 15vw; font-size: 1.4rem" id="submit-button" type="submit" class="right btn-large waves-effect waves-light teal darken-4"> Edit Product</button>
-	</div>
-    
-  {!! Form::close() !!}
-</div>
+      
+    {!! Form::close() !!}
+  </div>
 
   {{-- Edit Media Modal --}}
   <div id="edit-media-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 80vh !important; width: 60vw !important;">
