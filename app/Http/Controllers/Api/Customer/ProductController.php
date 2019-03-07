@@ -76,18 +76,6 @@ class ProductController extends Controller
         return $tempBreedIds;
     }
 
-    public function getBreederProfile(Request $request, $breeder_id)
-    {
-        $breeder = Breeder::find($breeder_id);
-        $breeder->farms = $breeder->farmAddresses()->get();
-        $breeder->logoImage = ($breeder->logo_img_id) ? self::BREEDER_IMG_PATH.Image::find($breeder->logo_img_id)->name : self::IMG_PATH.'default_logo.png' ;
-
-        return response()->json([
-            'message' => 'Get Breeder Profile successful',
-            'data' => $breeder
-        ], 200);
-    }
-
     public function getProducts(Request $request, ProductRepository $repository)
     {   
         $products = Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '<>', 0);
@@ -108,6 +96,11 @@ class ProductController extends Controller
             $products = $products->whereIn('breed_id', $breedIds);
         }
 
+        if($request->input('breeder')) {
+            $breeders = explode(',', $request->input('breeder'));
+            $products = $products->whereIn('breeder_id', $breeders);
+        }
+
         if($request->input('sort')) {
             $part = explode('-', $request->input('sort'));
             $products = $products->orderBy($part[0], $part[1]);
@@ -123,7 +116,7 @@ class ProductController extends Controller
                 if($product->farmFrom->accreditation_status == 'active') {
                     $p = [];
                     $p['id'] = $product->id;
-                    // $p['breeder_id'] = $product->breeder_id;
+                    $p['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
                     // $p['farm_from_id'] = $product->farm_from_id;
                     // $p['primary_img_id'] = $product->primary_img_id;
                     $p['img_path'] = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
@@ -152,11 +145,37 @@ class ProductController extends Controller
         $breeds = Breed::where('name','not like', '%+%')
             ->where('name','not like', '')
             ->orderBy('name','asc')
-            ->get();
+            ->get()
+            ->map(function ($item) {
+                $breed = [];
+                $breed['id'] = $item->id;   
+                $breed['name'] = ucwords($item->name);
+                return $breed;
+            });
 
         return response()->json([
             'message' => 'Get Breeds successful',
-            'data' => $breeds
+            'data' => [
+                'breeds' => $breeds
+            ]
+        ], 200);
+    }
+
+    public function getBreeders(Request $request)
+    {
+        $breeders = Breeder::all()
+            ->map(function ($item) {
+                $breeder = [];
+                $breeder['id'] = $item->id;   
+                $breeder['name'] = ucwords($item->users()->first()->name);
+                return $breeder;
+            });
+
+        return response()->json([
+            'message' => 'Get Breeders successful',
+            'data' => [
+                'breeders' => $breeders
+            ]
         ], 200);
     }
 }

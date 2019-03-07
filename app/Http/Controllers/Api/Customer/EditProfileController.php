@@ -291,17 +291,6 @@ class EditProfileController extends Controller
         }
     }
 
-    public function getBreeders(Request $request)
-    {
-        $breeders = Breeder::all();
-
-        return response()->json([
-            'message' => 'Get Breeders successful!',
-            'data' => $breeders
-        ], 200);
-
-    }
-
     private function getProvinces()
     {
         return collect([
