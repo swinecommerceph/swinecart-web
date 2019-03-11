@@ -188,7 +188,7 @@ var product = {
     });
   },
 
-  prepare_for_edit: function() {
+  prepare_for_edit: function () {
     /** 
    *  Used for filling the input fields of the product with the initial data from the database
   */

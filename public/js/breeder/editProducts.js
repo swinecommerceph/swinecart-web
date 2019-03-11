@@ -188,7 +188,7 @@ var product = {
     });
   },
 
-  prepare_for_edit: function() {
+  prepare_for_edit: function () {
     /** 
    *  Used for filling the input fields of the product with the initial data from the database
   */
@@ -798,7 +798,7 @@ $('.price-field').keyup(function (event) {
 
 function submitEditedProduct(parent_form, update_button) {
   var data_values = {
-    "id": product.id,
+    "id": product_data.id,
     "name": parent_form.find("input[name='edit-name']").val(),
     "type": parent_form.find('#edit-select-type').val(),
     "farm_from_id": parent_form.find('#edit-select-farm').val(),
@@ -847,7 +847,7 @@ function submitEditedProduct(parent_form, update_button) {
 
     // Then get the product summary
     //product.modal_history.push('#edit-product-modal');
-    product.get_summary(product.id);
+    product.get_summary(product_data.id);
   });
 }
 

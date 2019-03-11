@@ -220,6 +220,68 @@
     </div>
   </div>
 
+  {{-- Product Summary Modal --}}
+  <div id="product-summary-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 80vh !important; width: 60vw !important;">
+	<div class="modal-content">
+		<h4>Product Summary</h4>
+		<div class="row">
+			<ul id="product-summary-collection" class="collection with-header">
+				<li class="collection-header">
+					<h5 style="font-weight: 700;">Product Name</h5>
+					<h6>Province</h6>
+				</li>
+				<div></div>
+			</ul>
+		</div>
+		<div class="row">
+	        <div class="col s12">
+	            <div id="other-details-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
+	                <div class="card-content black-text">
+	                    <span class="card-title">Other Details</span>
+						<div></div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+		<div class="row">
+	        <div class="col s12">
+	            <div id="images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
+	                <div class="card-content black-text">
+	                    <span class="card-title">List of Images</span>
+						{!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
+						<div class="row"></div>
+						{!! Form::close() !!}
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	    
+		<div class="row">
+	        <div class="col s12">
+	            <div id="videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
+	                <div class="card-content black-text">
+	                    <span class="card-title">List of Videos</span>
+						<div class="row"></div>
+	                </div>
+	            </div>
+	        </div>
+	    </div>
+	</div>
+
+	<div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
+		<div class="from-add-process">
+			{!! Form::open(['route' => 'products.display', 'class' => 's12', 'id' => 'display-product-form']) !!}
+				<button id="display-button" class="btn waves-effect waves-light modal-action teal darken-3"> Display Product</button>
+				<button id="save-draft-button" class="btn waves-effect waves-light modal-action teal darken-3"> Save as Draft </button>
+			{!! Form::close() !!}
+		</div>
+		<div class="from-edit-process">
+			<button id="save-button" class="btn waves-effect waves-light modal-action teal darken-3"> Save </button>
+			<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
+		</div>
+	</div>
+</div>
+
   {{--  Custom preview for dropzone --}}
   <div id="custom-preview" style="display:none;">
     <div class="dz-preview dz-file-preview">
