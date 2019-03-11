@@ -119,9 +119,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         });
 
         Route::group(['prefix' => 'notifications'], function() {
-            Route::get('/get', 'NotificationsController@getNotifications');
-            Route::get('/count', 'NotificationsController@getNotificationsCount');
-            Route::post('/see/{id}', 'NotificationsController@SeeNotification');
+            Route::get('/', 'NotificationsController@getNotifications');
+            Route::patch('/{id}', 'NotificationsController@SeeNotification');
         });
 
         Route::group(['prefix' => 'messages'], function() {
