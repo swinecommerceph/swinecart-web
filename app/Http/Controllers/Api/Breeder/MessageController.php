@@ -43,7 +43,6 @@ class MessageController extends Controller
                     $message = [];
 
                     $message['id'] = $item->id;
-                    $message['id'] = $item->id;
                     $message['direction'] = $item->direction;
                     $message['message'] = $item->message;
                     $message['read_at'] = $item->read_at;
