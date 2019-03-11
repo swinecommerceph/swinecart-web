@@ -171,7 +171,7 @@ var product = {
         data: data_values,
         success: function (data) {
           Materialize.toast('Product updated!', 1500, 'green lighten-1');
-         // $('#edit-product-modal').modal('close');
+          // $('#edit-product-modal').modal('close');
         },
         error: function (message) {
           console.log(message['responseText']);
@@ -186,6 +186,57 @@ var product = {
       //product.modal_history.push('#edit-product-modal');
       product.get_summary($('#edit-product').find('input[name="productId"]').val());
     });
+  },
+
+  prepare_for_edit: function() {
+    /** 
+   *  Used for filling the input fields of the product with the initial data from the database
+  */
+
+    // SWINE INFORMATION
+    $('#edit-name').val(product_data.name);
+    $('#edit-select-type').val(product_data.type.toLowerCase());
+    $('#edit-select-farm').val(product_data.farm_from_id);
+    $('#edit-price').val(product_data.price);
+
+    // BREED INFORMATION
+
+    // For the breed initialization
+    if (product_data.breed.includes('x')) {
+      console.log('here');
+      var crossbreed = product_data.breed.split('x');
+
+      // Check the crossbreed radio
+      $('.crossbreed').prop('checked', true);
+
+      $('#edit-fbreed').val(crossbreed[0].toString().trim());
+      $('#edit-mbreed').val(crossbreed[1].toString().trim());
+      setTimeout(function () {
+        $('.input-purebreed-container').hide();
+        $('.input-crossbreed-container').show();
+      }, 100);
+
+    }
+    else {
+      // Check the purebreed radio
+      $('.purebreed').prop('checked', true);
+
+      $('#edit-breed').val(product_data.breed);
+      $('.input-crossbreed-container').hide();
+      $('.input-purebreed-container').show();
+    }
+
+    // setting the birthdate differently since simple val() does not work
+    var birthdatePicker = $('#edit-birthdate').pickadate();
+    var picker = birthdatePicker.pickadate('picker');
+    picker.set('select', new Date(product_data.birthdate));
+
+    $('#edit-adg').val(product_data.adg);
+    $('#edit-fcr').val(product_data.fcr);
+    $('#edit-backfat_thickness').val(product_data.backfat_thickness);
+
+    // for enabling select tags
+    $('select').material_select();
   },
 
   delete_selected: function (parent_form, products, products_container) {
@@ -742,3 +793,5 @@ $('.price-field').keyup(function (event) {
       .replace(/\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
   });
 });
+
+

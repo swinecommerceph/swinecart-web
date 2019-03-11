@@ -1,5 +1,7 @@
 $(document).ready(function () {
 
+  product.prepare_for_edit();
+
   // Variable for checking if all products
   // are selected or not
   var all_checked = false;
