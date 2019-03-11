@@ -45,7 +45,7 @@ function submitEditedProduct(parent_form, update_button) {
   ).done(function () {
     // Enable update-button
     update_button.removeClass('disabled');
-    update_button.html('Update Product');
+    update_button.html('Edit Product');
 
     // Then get the product summary
     //product.modal_history.push('#edit-product-modal');
