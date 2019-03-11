@@ -264,20 +264,20 @@ class ProductController extends Controller
     public function updateProduct(ProductRequest $request)
     {
         if($request->ajax()){
-            $product = Product::find($request->id);
-            $product->farm_from_id = $request->farm_from_id;
-            $product->name = $request->name;
-            $product->type = $request->type;
-            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
-            $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-            $product->price = $request->price;
-            $product->adg = $request->adg;
-            $product->fcr = $request->fcr;
-            $product->backfat_thickness = $request->backfat_thickness;
-            $product->other_details = $request->other_details;
-            $product->save();
+          $product = Product::find($request->id);
+          $product->farm_from_id = $request->farm_from_id;
+          $product->name = $request->name;
+          $product->type = $request->type;
+          $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+          $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
+          $product->price = $request->price;
+          $product->adg = $request->adg;
+          $product->fcr = $request->fcr;
+          $product->backfat_thickness = $request->backfat_thickness;
+          $product->other_details = $request->other_details;
+          $product->save();
 
-            return "OK";
+          return "OK";
         }
     }
 

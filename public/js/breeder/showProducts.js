@@ -171,7 +171,7 @@ var product = {
         data: data_values,
         success: function (data) {
           Materialize.toast('Product updated!', 1500, 'green lighten-1');
-          $('#edit-product-modal').modal('close');
+         // $('#edit-product-modal').modal('close');
         },
         error: function (message) {
           console.log(message['responseText']);
@@ -1238,26 +1238,13 @@ $(document).ready(function () {
     $(this).parents('form').find('.input-crossbreed-container').fadeIn(300);
   });
 
-  $("input.purebreed , input.edit-purebreed").change(function () {
-    if (this.checked) {
-      $(this).parents('form').find('.input-crossbreed-container').hide();
-      $(this).parents('form').find('.input-purebreed-container').fadeIn(300);
-    }
-  });
-  $("input.crossbreed , input.edit-crossbreed").change(function () {
-    if (this.checked) {
-      $(this).parents('form').find('.input-purebreed-container').hide();
-      $(this).parents('form').find('.input-crossbreed-container').fadeIn(300);
-    }
-  });
-
   // Manage necessary fields depending on product type
-  $("#select-type").on('change', function () {
+  /* $("#select-type").on('change', function () {
     product.manage_necessary_fields($(this).parents('form'), $(this).val());
   });
   $("#edit-select-type").on('change', function () {
     product.manage_necessary_fields($(this).parents('form'), $(this).val());
-  });
+  }); */
 
   // Add other details button
   $(".add-other-details").click(function (e) {
@@ -1510,7 +1497,7 @@ var validateFunction = function () {
         $(this).addClass('disabled');
         $(this).html('Updating...');
 
-        product.edit($('#edit-product'), $(this));
+        submitEditedProduct($('#edit-product'), $(this));
       }
       else Materialize.toast('Please properly fill all required fields.', 2500, 'orange accent-2');
 

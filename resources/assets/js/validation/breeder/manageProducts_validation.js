@@ -140,7 +140,7 @@ var validateFunction = function () {
         $(this).addClass('disabled');
         $(this).html('Updating...');
 
-        product.edit($('#edit-product'), $(this));
+        submitEditedProduct($('#edit-product'), $(this));
       }
       else Materialize.toast('Please properly fill all required fields.', 2500, 'orange accent-2');
 

@@ -17,7 +17,7 @@
 @section('breadcrumb')
   <div class="breadcrumb-container">    
       <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}" class="breadcrumb">Products</a>
-      <a href="#!" class="breadcrumb">Edit Product </a>
+      <a href="#!" class="breadcrumb">Edit the product: <b>{{ $product->name }}</b></a>
   </div>
 @endsection
 

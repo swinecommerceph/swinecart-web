@@ -171,7 +171,7 @@ var product = {
         data: data_values,
         success: function (data) {
           Materialize.toast('Product updated!', 1500, 'green lighten-1');
-          $('#edit-product-modal').modal('close');
+         // $('#edit-product-modal').modal('close');
         },
         error: function (message) {
           console.log(message['responseText']);
