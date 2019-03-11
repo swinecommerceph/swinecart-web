@@ -123,10 +123,10 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::patch('/{id}', 'NotificationsController@SeeNotification');
         });
 
-        Route::group(['prefix' => 'messages'], function() {
-            Route::get('/threads', 'MessageController@getThreads');
-            Route::get('/unread/count', 'MessageController@unreadCount');
+        Route::group(['prefix' => 'chats'], function() {
+            Route::get('/', 'MessageController@getThreads');
             Route::get('/{id}', 'MessageController@getMessages');
+            Route::patch('/{id}/{messageId}', 'MessageController@seeMessage');
         });
     });
     
