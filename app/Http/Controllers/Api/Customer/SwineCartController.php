@@ -59,6 +59,28 @@ class SwineCartController extends Controller
         });
     }
 
+    public function getItem(Request $request, $item_id)
+    {
+        $customer = $this->user->userable;
+        $item = $customer
+            ->swineCartItems()
+            ->where('if_rated', 0)
+            ->where('id', $item_id)
+            ->first();
+
+        if ($item) {
+            return response()->json([
+                'message' => 'Get Item successful!',
+                'data' => [
+                    'item' => $item
+                ]
+            ]);
+        }
+        else return response()->json([
+            'error' => 'SwineCart Item does not exist!' 
+        ], 404);
+    }
+
     public function getItems(Request $request)
     {
         $customer = $this->user->userable;
@@ -168,7 +190,6 @@ class SwineCartController extends Controller
             'error' => 'SwineCart Item does not exist!' 
         ], 404);
     }
-
 
     public function requestItem(Request $request, $item_id)
     {
