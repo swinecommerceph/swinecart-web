@@ -1,7 +1,5 @@
 $(document).ready(function () {
 
-  product.prepare_for_edit();
-
   // Variable for checking if all products
   // are selected or not
   var all_checked = false;
@@ -327,7 +325,7 @@ $(document).ready(function () {
   // Open Edit Media Modal
   $('#edit-media-button').click(function (e) {
     e.preventDefault();
-    $('#edit-product-modal').modal('close');
+    //$('#edit-product-modal').modal('close');
     $('#edit-media-modal').modal({ dismissible: false });
     $('#edit-media-modal').modal('open');
     product.modal_history.push('#edit-media-modal')

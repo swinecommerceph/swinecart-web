@@ -103,7 +103,7 @@ elixir(function (mix) {
       'breeder/product.js',
       'breeder/editProduct.js',
       'breeder/filter.js',
-      'breeder/manageProducts_script.js',
+      'breeder/manageProducts_script-edit.js',
       'validation/formValidationMethods.js',
       'validation/breeder/manageProducts_validation.js'
     ], 'public/js/breeder/editProducts.js')
