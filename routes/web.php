@@ -90,7 +90,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('products/product-summary',['as' => 'products.summary', 'uses' => 'ProductController@productSummary']);
         Route::post('products/set-primary-picture',['as' => 'products.setPrimaryPicture', 'uses' => 'ProductController@setPrimaryPicture']);
         Route::post('products/display-product',['as' => 'products.display', 'uses' => 'ProductController@displayProduct']);
-        Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
+      Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
         Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'ProductController@deleteMedium']);
 
         // dashboard-related

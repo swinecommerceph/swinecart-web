@@ -243,7 +243,7 @@
   </div>
 
   {{-- Edit Media Modal --}}
-  <div id="edit-media-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 80vh !important; width: 60vw !important;">
+  <div id="edit-media-modal" class="modal modal-fixed-footer">
     <div class="modal-content">
       <h4>Edit Media </h4>
       <div class="row">
@@ -296,8 +296,8 @@
       </div>
       <div class="dz-progress progress red lighten-4"><div class="determinate green" style="width:0%" data-dz-uploadprogress></div></div>
       <div class="dz-success-mark"><span><i class='medium material-icons green-text'>check_circle</i></span></div>
-      <div class="dz-error-mark"><span><i class='medium material-icons orange-text text-lighten-1'>error</i></span></div>
-      <div class="dz-error-message"><span data-dz-errormessage></span></div>
+      <div class="dz-error-mark"><span><i class='medium material-icons red-text text-darken-4'>error</i></span></div>
+      {{-- <div class="dz-error-message"><span data-dz-errormessage></span></div> --}}
       <a><i class="dz-remove material-icons red-text text-lighten-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Remove this media" data-dz-remove>cancel</i></a>
     </div>
   </div>

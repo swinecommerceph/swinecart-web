@@ -1096,13 +1096,13 @@ $(document).ready(function () {
 
   /* ----------- Edit Product Modal functionalities ----------- */
   // Open Edit Media Modal
-  $('#edit-media-button').click(function (e) {
+  /* $('#edit-media-button').click(function (e) {
     e.preventDefault();
     //$('#edit-product-modal').modal('close');
     $('#edit-media-modal').modal({ dismissible: false });
     $('#edit-media-modal').modal('open');
     product.modal_history.push('#edit-media-modal')
-  });
+  }); */
 
   // Open Add Media Modal
   $('#add-media-button').click(function (e) {

@@ -842,7 +842,6 @@ $(document).ready(function () {
 
   // For the breed initialization
   if (product_data.breed.includes('x')) {
-    console.log('here');
     var crossbreed = product_data.breed.split('x');
 
     // Check the crossbreed radio
@@ -873,6 +872,16 @@ $(document).ready(function () {
   $('#edit-adg').val(product_data.adg);
   $('#edit-fcr').val(product_data.fcr);
   $('#edit-backfat_thickness').val(product_data.backfat_thickness);
+
+  var parent_form = $('#edit-product');
+  var hidden_inputs =
+    '<input name="productId" type="hidden" value="' + product_data.id + '">' +
+    '<input name="name" type="hidden" value="' + product_data.name + '">' +
+    '<input name="type" type="hidden" value="' + product_data.type + '">' +
+    '<input name="breed" type="hidden" value="' + product_data.breed + '">';
+  
+  $(parent_form).append('<input name="productId" type="hidden" value="' + product_data.id + '">');
+  $('#edit-media-dropzone').append(hidden_inputs);
 
   // for enabling select tags
   $('select').material_select();
@@ -1195,6 +1204,7 @@ $(document).ready(function () {
 
     window.setTimeout(function () {
       location.reload(true);
+      location.href = location.origin + '/breeder/products'; // redirect to Show Products page
     }, 1200);
   });
 
@@ -1205,7 +1215,7 @@ $(document).ready(function () {
     //$('#edit-product-modal').modal('close');
     $('#edit-media-modal').modal({ dismissible: false });
     $('#edit-media-modal').modal('open');
-    product.modal_history.push('#edit-media-modal')
+    //product.modal_history.push('#edit-media-modal')
   });
 
   // Open Add Media Modal
@@ -1277,6 +1287,11 @@ $(document).ready(function () {
             console.log(message['responseText']);
           }
         });
+      });
+
+      this.on('error', function (file, errorMessage) {
+        console.log(errorMessage);
+        console.log('Error in uploading...');
       });
     }
   };
