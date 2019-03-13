@@ -37,7 +37,7 @@
             {{-- Name --}}
             <div class="input-field">
               {!! Form::text('name', null, ['id' => 'name', 'class' => 'validate input-manage-products'])!!}
-              {!! Form::label('name', 'Name*', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              {!! Form::label('name', 'Name', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
             </div>
 
             {{-- Type --}}
@@ -49,13 +49,35 @@
               <option value="gilt">Gilt</option>
                 <option value="semen">Semen</option>
               </select>
-              <label style="font-size: 1rem;" class="teal-text text-darken-4">Type*</label>
+              <label style="font-size: 1rem;" class="teal-text text-darken-4">Type</label>
             </div>
 
             {{-- Price --}}
-            <div style="margin-bottom: 4vh;" class="input-field">
+
+            {{-- <div style="margin-bottom: 4vh;" class="input-field">
               {!! Form::text('price', null, ['class' => 'validate input-manage-products price-field'])!!}
               {!! Form::label('price', 'Price', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+            </div> --}}
+            <p style="margin-bottom: 1vh;" class="teal-text text-darken-4">
+              Price (range)
+              <span class="grey-text">
+                <i> - Optional
+                </i>
+              </span>
+            </p>
+
+            {{-- Price (from) --}}
+            <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
+              {!! Form::text('price_from', null, ['class' => 'validate input-manage-products'])!!}
+            </div>
+            
+            <div class="col s1" style="padding-top: 1vh;">
+              to
+            </div>
+
+            {{-- Price (to) --}}
+            <div class="col s4 input-field" style="margin-top: 0vh !important;">
+              {!! Form::text('price_to', null, ['class' => 'validate input-manage-products'])!!}
             </div>
 
           </div>
@@ -108,13 +130,16 @@
               {{-- Birthdate --}}
               <div class="input-field">
                 <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4" for="birthdate">Birth Date</label>
+                <label style="font-size: 1rem;" class="teal-text text-darken-4" for="birthdate">
+                  Birth Date
+                  <span class="grey-text"><i> - Optional</i></span>
+                </label>
               </div>
 
               {{-- Birth weight --}}
               <div class="input-field">
                 {!! Form::text('birth_weight', null, ['class' => 'validate input-manage-products'])!!}
-                {!! Form::label('birth_weight', 'Birth weight (grams)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+                {!! Html::decode(Form::label('birth_weight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
               </div>
 
               {{-- Farm From --}}
@@ -125,7 +150,7 @@
                     <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
                   @endforeach
                 </select>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From*</label>
+                <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
               </div>
 
               {{-- House type --}}
@@ -141,7 +166,8 @@
               {{-- ADG --}}
               <div class="input-field">
                 {!! Form::text('adg', null, ['class' => 'validate input-manage-products'])!!}
-                {!! Form::label('adg', 'Average Daily Gain (grams)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+                {!! Html::decode(Form::label('adg','<p style="font-size:1rem;" class="teal-text text-darken-4">Average Daily Gain (grams) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
+                
               </div>
             </div>
     
@@ -149,34 +175,41 @@
               {{-- FCR --}}
               <div class="input-field">
                 {!! Form::text('fcr', null, ['class' => 'validate input-manage-products'])!!}
-                {!! Form::label('fcr', 'Feed Conversion Ratio', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+                {!! Html::decode(Form::label('fcr','<p style="font-size:1rem;" class="teal-text text-darken-4">Feed Conversion Ratio <span class="grey-text"><i>- Optional</i></span></p>')) !!}
               </div>
     
               {{-- Backfat thickness --}}
               <div class="input-field">
                 {!! Form::text('backfat_thickness', null, ['class' => 'validate input-manage-products'])!!}
-                {!! Form::label('backfat_thickness', 'Backfat thickness (mm)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+                {!! Html::decode(Form::label('backfat_thickness','<p style="font-size:1rem;" class="teal-text text-darken-4">Backfat thickness (mm) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
               </div>
 
               {{-- Litter size born alive --}}
               <div class="input-field">
                 {!! Form::text('lsba', null, ['class' => 'validate input-manage-products'])!!}
-                {!! Form::label('lsba', 'Litter size born alive', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+                {!! Html::decode(Form::label('lsba','<p style="font-size:1rem;" class="teal-text text-darken-4">Litter size born alive <span class="grey-text"><i>- Optional</i></span></p>')) !!}
               </div>
             </div>
 
-            <div class="row">
-              {{-- Number of teats (left) --}}
-              <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
-                {!! Form::text('left_teats', null, ['class' => 'validate input-manage-products'])!!}
-                {!! Form::label('left_teats', 'Number of teats (left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
-              </div>
-
-              {{-- Number of teats (right) --}}
-              <div class="col s4 input-field" style="margin-top: 0vh !important;">
-                {!! Form::text('right_teats', null, ['class' => 'validate input-manage-products'])!!}
-                {!! Form::label('right_teats', 'Number of teats (right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
-              </div>
+            {{-- Number of teats --}}
+            <p style="margin-bottom: 3vh;" class="teal-text text-darken-4">
+              Number of teats
+              <span class="grey-text">
+                <i> - Optional
+                </i>
+              </span>
+            </p>
+            
+            {{-- Number of teats (left) --}}
+            <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
+              {!! Form::text('left_teats', null, ['class' => 'validate input-manage-products'])!!}
+              {!! Form::label('left_teats', '(left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
+            </div>
+            
+            {{-- Number of teats (right) --}}
+            <div class="col s4 input-field" style="margin-top: 0vh !important;">
+              {!! Form::text('right_teats', null, ['class' => 'validate input-manage-products'])!!}
+              {!! Form::label('right_teats', '(right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
             </div>
 
 
