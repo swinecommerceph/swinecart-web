@@ -207,13 +207,20 @@ class ProductController extends Controller
             $product->primary_img_id = $image->id;
             $product->name = $request->name;
             $product->type = $request->type;
+            $product->house_type = $request->house_type;
             $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+            $product->birthweight = $request->birthweight;
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-            $product->price = $request->price;
+            // $product->price = $request->price;
+            $product->min_price = $request->min_price;
+            $product->max_price = $request->max_price;
             $product->quantity = ($request->type == 'semen') ? -1 : 1;
+            $product->lsba = $request->lsba;
             $product->adg = $request->adg;
             $product->fcr = $request->fcr;
             $product->backfat_thickness = $request->backfat_thickness;
+            $product->left_teats = $request->left_teats;
+            $product->right_teats = $request->right_teats;
             $product->other_details = $request->other_details;
             $breeder->products()->save($product);
 
