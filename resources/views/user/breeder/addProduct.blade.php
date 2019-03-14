@@ -68,7 +68,7 @@
 
             {{-- Price (from) --}}
             <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
-              {!! Form::text('price_from', null, ['class' => 'validate input-manage-products'])!!}
+              {!! Form::text('min_price', null, ['class' => 'validate input-manage-products'])!!}
             </div>
             
             <div class="col s1" style="padding-top: 1vh;">
@@ -77,7 +77,7 @@
 
             {{-- Price (to) --}}
             <div class="col s4 input-field" style="margin-top: 0vh !important;">
-              {!! Form::text('price_to', null, ['class' => 'validate input-manage-products'])!!}
+              {!! Form::text('max_price', null, ['class' => 'validate input-manage-products'])!!}
             </div>
 
           </div>
@@ -157,8 +157,8 @@
               <div style="margin-bottom: 8vh;" class="input-field">
                 <select id="select-housetype">
                   <option value="" disabled selected>Choose house type</option>
-                  <option value="tunnel_ventilated">tunnel ventilated</option>
-                  <option value="open_sided">open sided</option>
+                  <option value="tunnel_ventilated">Tunnel ventilated</option>
+                  <option value="open_sided">Open sided</option>
                 </select>
                 <label style="font-size: 1rem;" class="teal-text text-darken-4">House type</label>
               </div>

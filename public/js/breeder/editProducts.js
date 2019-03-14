@@ -67,7 +67,7 @@ var product = {
       "_token": parent_form.find('input[name=_token]').val(),
     };
 
-    data_values.price = data_values.price.replace(",", ""); // remove comma in price before storing
+    // data_values.price = data_values.price.replace(",", ""); // remove comma in price before storing
 
     // Transform breed syntax if crossbreed
     if ($("#create-product input:checked").val() === 'crossbreed') {
