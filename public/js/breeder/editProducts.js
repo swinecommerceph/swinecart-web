@@ -726,7 +726,7 @@ var product = {
   }
 };
 
-function addComma(string) {
+/* function addComma(string) {
   // clear every instance of keyup input with comma
   string.value = string.value.replace(",", "");
   // add comma to the string number
@@ -738,10 +738,10 @@ $('.price-field').keyup(function (event) {
 
   $(this).val(function (index, value) {
     return value
-      .replace(",", "") // replace 
+      .replace(",", "") // replace
       .replace(/\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
   });
-});
+}); */
 
 
 
@@ -759,7 +759,7 @@ function submitEditedProduct(parent_form, update_button) {
     "_token": parent_form.find('input[name=_token]').val(),
   };
 
-  data_values.price = data_values.price.replace(",", "");
+  // data_values.price = data_values.price.replace(",", "");
 
   // Transform breed syntax if crossbreed
   if ($("#edit-product input:checked").val() === 'crossbreed') {

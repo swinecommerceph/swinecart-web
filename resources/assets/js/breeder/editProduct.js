@@ -12,7 +12,7 @@ function submitEditedProduct(parent_form, update_button) {
     "_token": parent_form.find('input[name=_token]').val(),
   };
 
-  data_values.price = data_values.price.replace(",", "");
+  // data_values.price = data_values.price.replace(",", "");
 
   // Transform breed syntax if crossbreed
   if ($("#edit-product input:checked").val() === 'crossbreed') {
