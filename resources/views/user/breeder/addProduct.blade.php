@@ -160,7 +160,14 @@
                   <option value="tunnel_ventilated">Tunnel ventilated</option>
                   <option value="open_sided">Open sided</option>
                 </select>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4">House type</label>
+                <label style="font-size: 1rem;" class="teal-text text-darken-4">
+                  House type
+                  <span class="grey-text">
+                    <i>
+                      - Optional
+                    </i>
+                  </span>
+                </label>
               </div>
     
               {{-- ADG --}}
@@ -217,7 +224,13 @@
         </div>
 
         {{-- Other Details --}}
-        <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Other Details</p>
+        <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">
+          Other Details
+          <span style="font-size: 1rem; font-weight: 400" class="grey-text">
+            <i> - Optional
+            </i>
+          </span>
+        </p>
         {{-- Has a default value, no need to make it work since this will be changed --}}
         <div class="row">
           <div class="col s0.5"></div>
