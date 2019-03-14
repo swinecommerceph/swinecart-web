@@ -9,8 +9,8 @@
     <div class="col s4 left">
         {!! Form::open(['route' => 'products.updateSelected', 'id' => 'manage-selected-form']) !!}
             {{-- Add Button --}}
-            <a href="#!" class="btn-floating btn-large waves-effect waves-light blue tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
-                <i class="material-icons">add</i>
+            {{-- <a href="#!" class="btn-floating btn-large waves-effect waves-light blue tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
+                <i class="material-icons">add</i> --}}
             </a>
             {{-- Select All Button --}}
             <a href="#!" class="btn-floating btn-large waves-effect waves-light green tooltipped select-all-button" data-position="top" data-delay="50" data-tooltip="Select All Products">
