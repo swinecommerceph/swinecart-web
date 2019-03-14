@@ -276,11 +276,26 @@ class ProductController extends Controller
           $product->name = $request->name;
           $product->type = $request->type;
           $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+          
+          $product->birthweight = $request->birthweight;
+
           $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-          $product->price = $request->price;
+          
+          $product->house_type = $request->house_type;
+          
+          // $product->price = $request->price;
+          $product->min_price = $request->min_price;
+          $product->max_price = $request->max_price;
+
+
           $product->adg = $request->adg;
           $product->fcr = $request->fcr;
           $product->backfat_thickness = $request->backfat_thickness;
+          $product->lsba = $request->lsba;
+
+          $product->left_teats = $request->left_teats;
+          $product->right_teats = $request->right_teats;
+
           $product->other_details = $request->other_details;
           $product->save();
 
