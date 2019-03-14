@@ -32,15 +32,15 @@
       {!! Form::open(['route' => 'products.update', 'class' => 's12', 'id' => 'edit-product']) !!}
 
       {{-- Swine Information --}}
-      <p style="font-weight: 600; margin-bottom: 2vh;" class="teal-text text-darken-4">Swine Information</p> 
+      <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Product Information</p> 
       <div class="row">
-        <div class="col s1"></div>
+        <div class="col s0.5"></div>
         <div class="col s6">
           
           {{-- Name --}}
           <div class="input-field">
             {!! Form::text('edit-name', null, ['id' => 'edit-name', 'class' => 'validate input-manage-products'])!!}
-            {!! Form::label('edit-name', 'Name*', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+            {!! Form::label('edit-name', 'Name', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
           </div>
 
           {{-- Type --}}
@@ -52,34 +52,44 @@
               <option value="gilt">Gilt</option>
               <option value="semen">Semen</option>
             </select>
-            <label style="font-size: 1rem;" class="teal-text text-darken-4">Type*</label>
-          </div>
-
-          {{-- Farm From --}}
-          <div style="margin-bottom: 4vh;" class="input-field">
-            <select id="edit-select-farm">
-                <option value="" disabled selected>Choose Farm</option>
-                @foreach($farms as $farm)
-                  <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
-                @endforeach
-              </select>
-              <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From*</label>
+            <label style="font-size: 1rem;" class="teal-text text-darken-4">Type</label>
           </div>
 
           {{-- Price --}}
-          <div style="margin-bottom: 4vh;" class="input-field">
+          <p style="margin-bottom: 1vh;" class="teal-text text-darken-4">
+            Price (range)
+            <span class="grey-text">
+              <i> - Optional
+              </i>
+            </span>
+          </p>
+          
+          {{-- <div style="margin-bottom: 4vh;" class="input-field">
             {!! Form::text('edit-price', null, ['id' => 'edit-price', 'class' => 'validate input-manage-products price-field'])!!}
             {!! Form::label('edit-price', 'Price', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+          </div> --}}
+          {{-- Price (from) --}}
+          <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
+            {!! Form::text('edit-min_price', null, ['id' => 'edit-min_price', 'class' => 'validate input-manage-products'])!!}
+          </div>
+          
+          <div class="col s1" style="padding-top: 1vh;">
+            to
+          </div>
+
+          {{-- Price (to) --}}
+          <div class="col s4 input-field" style="margin-top: 0vh !important;">
+            {!! Form::text('edit-max_price', null, ['id' => 'edit-max_price', 'class' => 'validate input-manage-products'])!!}
           </div>
 
         </div>
       </div>
 
       {{-- Breed Information --}}
-      <p style="font-weight: 600; margin-bottom: 2vh;" class="teal-text text-darken-4">Breed Information</p>
+      <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Swine Information</p>
       
       <div class="row">
-        <div class="col s1"></div>
+        <div class="col s0.5"></div>
         <div class="col s6">
           
           {{-- Breed Type --}}
@@ -123,13 +133,50 @@
             {{-- Birthdate --}}
             <div class="input-field">
               <input style="cursor: pointer;" type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
-              <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit-birthdate">Birth Date</label>
+              <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit-birthdate">
+                  Birth Date
+                  <span class="grey-text"><i> - Optional</i></span>
+                </label>
+            </div>
+
+            {{-- Birth weight --}}
+            <div class="input-field">
+              {!! Form::text('edit-birthweight', null, ['id' => 'edit-birthweight', 'class' => 'validate input-manage-products'])!!}
+              {!! Html::decode(Form::label('edit-birthweight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
+            </div>
+
+            {{-- Farm From --}}
+            <div style="margin-bottom: 4vh;" class="input-field">
+              <select id="edit-select-farm">
+                  <option value="" disabled selected>Choose Farm</option>
+                  @foreach($farms as $farm)
+                    <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                  @endforeach
+                </select>
+                <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
+            </div>
+
+            {{-- House type --}}
+            <div style="margin-bottom: 8vh;" class="input-field">
+              <select id="edit-select-housetype">
+                <option value="" disabled selected>Choose house type</option>
+                <option value="tunnel_ventilated">Tunnel ventilated</option>
+                <option value="open_sided">Open sided</option>
+              </select>
+              <label style="font-size: 1rem;" class="teal-text text-darken-4">
+                House type
+                <span class="grey-text">
+                  <i>
+                    - Optional
+                  </i>
+                </span>
+              </label>
             </div>
 
             {{-- ADG --}}
             <div class="input-field">
               {!! Form::text('edit-adg', null, ['id' => 'edit-adg', 'class' => 'validate input-manage-products'])!!}
-              {!! Form::label('edit-adg', 'Average Daily Gain (grams)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              {!! Html::decode(Form::label('edit-adg','<p style="font-size:1rem;" class="teal-text text-darken-4">Average Daily Gain (grams) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
           </div>
 
@@ -137,25 +184,53 @@
             {{-- FCR --}}
             <div class="input-field">
               {!! Form::text('edit-fcr', null, ['id' => 'edit-fcr', 'class' => 'validate input-manage-products'])!!}
-              {!! Form::label('edit-fcr', 'Feed Conversion Ratio', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              {!! Html::decode(Form::label('edit-fcr','<p style="font-size:1rem;" class="teal-text text-darken-4">Feed Conversion Ratio <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
 
             {{-- Backfat thickness --}}
             <div class="input-field">
               {!! Form::text('edit-backfat_thickness', null, ['id' => 'edit-backfat_thickness', 'class' => 'validate input-manage-products'])!!}
-              {!! Form::label('edit-backfat_thickness', 'Backfat thickness (mm)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              {!! Html::decode(Form::label('edit-backfat_thickness','<p style="font-size:1rem;" class="teal-text text-darken-4">Backfat thickness (mm) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
+
+            {{-- Litter size born alive --}}
+            <div class="input-field">
+              {!! Form::text('edit-lsba', null, ['id' => 'edit-lsba', 'class' => 'validate input-manage-products'])!!}
+              {!! Html::decode(Form::label('edit-lsba','<p style="font-size:1rem;" class="teal-text text-darken-4">Litter size born alive <span class="grey-text"><i>- Optional</i></span></p>')) !!}
+            </div>
+
+            {{-- Number of teats --}}
+            <p style="margin-bottom: 3vh;" class="teal-text text-darken-4">
+              Number of teats
+              <span class="grey-text">
+                <i> - Optional
+                </i>
+              </span>
+            </p>
+            
+            {{-- Number of teats (left) --}}
+            <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
+              {!! Form::text('edit-left_teats', null, ['id' => 'edit-left_teats', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::label('edit-left_teats', '(left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
+            </div>
+            
+            {{-- Number of teats (right) --}}
+            <div class="col s4 input-field" style="margin-top: 0vh !important;">
+              {!! Form::text('edit-right_teats', null, ['id' => 'edit-right_teats', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::label('edit-right_teats', '(right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+            </div>
+            
           </div>
         </div>
       </div>
 
       {{-- Other Details --}}
-      <p style="font-weight: 600; margin-bottom: 2vh;" class="teal-text text-darken-4">Other Details</p>
+      <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Other Details</p>
       
 
       {{-- Has a default value, no need to make it work since this will be changed --}}
       <div class="row">
-        <div class="col s1"></div>
+        <div class="col s0.5"></div>
         <div class="col s6">
           <textarea class="materialize-textarea"></textarea>
         </div>

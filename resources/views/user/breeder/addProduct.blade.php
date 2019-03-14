@@ -138,7 +138,7 @@
 
               {{-- Birth weight --}}
               <div class="input-field">
-                {!! Form::text('birth_weight', null, ['class' => 'validate input-manage-products'])!!}
+                {!! Form::text('birthweight', null, ['class' => 'validate input-manage-products'])!!}
                 {!! Html::decode(Form::label('birth_weight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
               </div>
 
