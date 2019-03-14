@@ -55,7 +55,7 @@ class CreateProductsTable extends Migration
             $table->float('min_price')->nullable();
             $table->float('max_price')->nullable();
 
-            $table->enum('house_type', ['opensided', 'tunnelventilated'])->nullable();
+            $table->string('house_type')->nullable();
 
             $table->integer('quantity')->nullable();
             $table->integer('adg')->nullable();

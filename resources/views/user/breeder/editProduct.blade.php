@@ -160,8 +160,8 @@
             <div style="margin-bottom: 8vh;" class="input-field">
               <select id="edit-select-housetype">
                 <option value="" disabled selected>Choose house type</option>
-                <option value="tunnel_ventilated">Tunnel ventilated</option>
-                <option value="open_sided">Open sided</option>
+                <option value="tunnelventilated">Tunnel ventilated</option>
+                <option value="opensided">Open sided</option>
               </select>
               <label style="font-size: 1rem;" class="teal-text text-darken-4">
                 House type
@@ -232,7 +232,7 @@
       <div class="row">
         <div class="col s0.5"></div>
         <div class="col s6">
-          <textarea class="materialize-textarea"></textarea>
+          <textarea id="edit-other_details" class="materialize-textarea"></textarea>
         </div>
       </div>
 
@@ -381,6 +381,7 @@
 @section('customScript')
     <script type="text/javascript">
       var product_data = {!! json_encode($product) !!};
+      console.table(product_data);
     </script>
     <script src="{{ elixir('/js/breeder/editProducts.js') }}"></script>
 @endsection

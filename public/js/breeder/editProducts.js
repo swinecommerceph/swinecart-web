@@ -58,16 +58,27 @@ var product = {
     var data_values = {
       "name": parent_form.find('input[name=name]').val(),
       "type": parent_form.find('#select-type').val(),
+      //"price": parent_form.find('input[name=price]').val(),
+
+      "min_price": parent_form.find('input[name=min_price]').val(),
+      "max_price": parent_form.find('input[name=max_price]').val(),
+
       "farm_from_id": parent_form.find('#select-farm').val(),
       "birthdate": parent_form.find('input[name=birthdate]').val(),
-      "price": parent_form.find('input[name=price]').val(),
+      "birthweight": parent_form.find('input[name=birthweight]').val(),
+      "house_type": parent_form.find('#select-housetype').val(),
       "adg": parent_form.find('input[name=adg]').val(),
       "fcr": parent_form.find('input[name=fcr]').val(),
       "backfat_thickness": parent_form.find('input[name=backfat_thickness]').val(),
+      "lsba": parent_form.find('input[name=lsba]').val(),
+      "left_teats": parent_form.find('input[name=left_teats]').val(),
+      "right_teats": parent_form.find('input[name=right_teats]').val(),
+      "other_details": $('textarea#other_details').val(),
       "_token": parent_form.find('input[name=_token]').val(),
     };
 
-    // data_values.price = data_values.price.replace(",", ""); // remove comma in price before storing
+    data_values.min_price = data_values.min_price.replace(",", ""); // remove comma in price before storing
+    data_values.max_price = data_values.max_price.replace(",", ""); // remove comma in price before storing
 
     // Transform breed syntax if crossbreed
     if ($("#create-product input:checked").val() === 'crossbreed') {
@@ -79,14 +90,12 @@ var product = {
     else data_values["breed"] = parent_form.find('input[name=breed]').val().toLowerCase().trim();
 
     // Transform syntax of Other details category values
-    var other_details = '';
+    /* var other_details = '';
     $(parent_form).find('.detail-container').map(function () {
       var characteristic = $(this).find('input[name="characteristic[]"]').val();
       var value = $(this).find('input[name="value[]"]').val();
       if (characteristic && value) other_details += characteristic + ' = ' + value + ',';
-    });
-
-    data_values["other_details"] = other_details;
+    }); */
 
     // Do AJAX
     $.ajax({
@@ -750,16 +759,30 @@ function submitEditedProduct(parent_form, update_button) {
     "id": product_data.id,
     "name": parent_form.find("input[name='edit-name']").val(),
     "type": parent_form.find('#edit-select-type').val(),
+
+    "min_price": parent_form.find('input[name=edit-min_price]').val(),
+    "max_price": parent_form.find('input[name=edit-max_price]').val(),
+
     "farm_from_id": parent_form.find('#edit-select-farm').val(),
     "birthdate": parent_form.find("input[name='edit-birthdate']").val(),
-    "price": parent_form.find("input[name='edit-price']").val(),
+    "birthweight": parent_form.find('input[name=edit-birthweight]').val(),
+
+    "house_type": parent_form.find('#edit-select-housetype').val(),
+
+    // "price": parent_form.find("input[name='edit-price']").val(),
     "adg": parent_form.find("input[name='edit-adg']").val(),
     "fcr": parent_form.find("input[name='edit-fcr']").val(),
     "backfat_thickness": parent_form.find("input[name='edit-backfat_thickness']").val(),
+    "lsba": parent_form.find('input[name=edit-lsba]').val(),
+    "left_teats": parent_form.find('input[name=edit-left_teats]').val(),
+    "right_teats": parent_form.find('input[name=edit-right_teats]').val(),
+    "other_details": $('textarea#edit-other_details').val(),
     "_token": parent_form.find('input[name=_token]').val(),
   };
 
   // data_values.price = data_values.price.replace(",", "");
+  data_values.min_price = data_values.min_price.replace(",", ""); // remove comma in price before storing
+  data_values.max_price = data_values.max_price.replace(",", ""); // remove comma in price before storing
 
   // Transform breed syntax if crossbreed
   if ($("#edit-product input:checked").val() === 'crossbreed') {
@@ -770,7 +793,7 @@ function submitEditedProduct(parent_form, update_button) {
   }
   else data_values["breed"] = parent_form.find("input[name='edit-breed']").val().toLowerCase().trim();
 
-  data_values["other_details"] = '';
+  /* data_values["other_details"] = ''; */
 
   $.when(
     // Wait for the update on the database
@@ -836,9 +859,19 @@ $(document).ready(function () {
   $('#edit-name').val(product_data.name);
   $('#edit-select-type').val(product_data.type.toLowerCase());
   $('#edit-select-farm').val(product_data.farm_from_id);
-  $('#edit-price').val(product_data.price);
+
+  $('#edit-min_price').val(product_data.min_price);
+  $('#edit-max_price').val(product_data.max_price);
 
   // BREED INFORMATION
+
+  $('#edit-birthweight').val(product_data.birthweight);
+  $('#edit-select-housetype').val(product_data.house_type);
+
+  $('#edit-lsba').val(product_data.lsba);
+  $('#edit-left_teats').val(product_data.left_teats);
+  $('#edit-right_teats').val(product_data.right_teats);
+
 
   // For the breed initialization
   if (product_data.breed.includes('x')) {
@@ -873,13 +906,15 @@ $(document).ready(function () {
   $('#edit-fcr').val(product_data.fcr);
   $('#edit-backfat_thickness').val(product_data.backfat_thickness);
 
+  $('#edit-other_details').val(product_data.other_details);
+
   var parent_form = $('#edit-product');
   var hidden_inputs =
     '<input name="productId" type="hidden" value="' + product_data.id + '">' +
     '<input name="name" type="hidden" value="' + product_data.name + '">' +
     '<input name="type" type="hidden" value="' + product_data.type + '">' +
     '<input name="breed" type="hidden" value="' + product_data.breed + '">';
-  
+
   $(parent_form).append('<input name="productId" type="hidden" value="' + product_data.id + '">');
   $('#edit-media-dropzone').append(hidden_inputs);
 

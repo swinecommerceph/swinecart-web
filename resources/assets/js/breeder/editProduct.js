@@ -3,16 +3,30 @@ function submitEditedProduct(parent_form, update_button) {
     "id": product_data.id,
     "name": parent_form.find("input[name='edit-name']").val(),
     "type": parent_form.find('#edit-select-type').val(),
+
+    "min_price": parent_form.find('input[name=edit-min_price]').val(),
+    "max_price": parent_form.find('input[name=edit-max_price]').val(),
+
     "farm_from_id": parent_form.find('#edit-select-farm').val(),
     "birthdate": parent_form.find("input[name='edit-birthdate']").val(),
-    "price": parent_form.find("input[name='edit-price']").val(),
+    "birthweight": parent_form.find('input[name=edit-birthweight]').val(),
+
+    "house_type": parent_form.find('#edit-select-housetype').val(),
+
+    // "price": parent_form.find("input[name='edit-price']").val(),
     "adg": parent_form.find("input[name='edit-adg']").val(),
     "fcr": parent_form.find("input[name='edit-fcr']").val(),
     "backfat_thickness": parent_form.find("input[name='edit-backfat_thickness']").val(),
+    "lsba": parent_form.find('input[name=edit-lsba]').val(),
+    "left_teats": parent_form.find('input[name=edit-left_teats]').val(),
+    "right_teats": parent_form.find('input[name=edit-right_teats]').val(),
+    "other_details": $('textarea#edit-other_details').val(),
     "_token": parent_form.find('input[name=_token]').val(),
   };
 
   // data_values.price = data_values.price.replace(",", "");
+  data_values.min_price = data_values.min_price.replace(",", ""); // remove comma in price before storing
+  data_values.max_price = data_values.max_price.replace(",", ""); // remove comma in price before storing
 
   // Transform breed syntax if crossbreed
   if ($("#edit-product input:checked").val() === 'crossbreed') {
@@ -23,7 +37,7 @@ function submitEditedProduct(parent_form, update_button) {
   }
   else data_values["breed"] = parent_form.find("input[name='edit-breed']").val().toLowerCase().trim();
 
-  data_values["other_details"] = '';
+  /* data_values["other_details"] = ''; */
 
   $.when(
     // Wait for the update on the database

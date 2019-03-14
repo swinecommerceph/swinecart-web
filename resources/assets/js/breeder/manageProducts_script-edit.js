@@ -8,9 +8,19 @@ $(document).ready(function () {
   $('#edit-name').val(product_data.name);
   $('#edit-select-type').val(product_data.type.toLowerCase());
   $('#edit-select-farm').val(product_data.farm_from_id);
-  $('#edit-price').val(product_data.price);
+
+  $('#edit-min_price').val(product_data.min_price);
+  $('#edit-max_price').val(product_data.max_price);
 
   // BREED INFORMATION
+
+  $('#edit-birthweight').val(product_data.birthweight);
+  $('#edit-select-housetype').val(product_data.house_type);
+
+  $('#edit-lsba').val(product_data.lsba);
+  $('#edit-left_teats').val(product_data.left_teats);
+  $('#edit-right_teats').val(product_data.right_teats);
+
 
   // For the breed initialization
   if (product_data.breed.includes('x')) {
@@ -45,13 +55,15 @@ $(document).ready(function () {
   $('#edit-fcr').val(product_data.fcr);
   $('#edit-backfat_thickness').val(product_data.backfat_thickness);
 
+  $('#edit-other_details').val(product_data.other_details);
+
   var parent_form = $('#edit-product');
   var hidden_inputs =
     '<input name="productId" type="hidden" value="' + product_data.id + '">' +
     '<input name="name" type="hidden" value="' + product_data.name + '">' +
     '<input name="type" type="hidden" value="' + product_data.type + '">' +
     '<input name="breed" type="hidden" value="' + product_data.breed + '">';
-  
+
   $(parent_form).append('<input name="productId" type="hidden" value="' + product_data.id + '">');
   $('#edit-media-dropzone').append(hidden_inputs);
 

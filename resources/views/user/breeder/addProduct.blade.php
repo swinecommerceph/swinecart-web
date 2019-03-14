@@ -157,8 +157,8 @@
               <div style="margin-bottom: 8vh;" class="input-field">
                 <select id="select-housetype">
                   <option value="" disabled selected>Choose house type</option>
-                  <option value="tunnel_ventilated">Tunnel ventilated</option>
-                  <option value="open_sided">Open sided</option>
+                  <option value="tunnelventilated">Tunnel ventilated</option>
+                  <option value="opensided">Open sided</option>
                 </select>
                 <label style="font-size: 1rem;" class="teal-text text-darken-4">
                   House type
@@ -235,7 +235,7 @@
         <div class="row">
           <div class="col s0.5"></div>
           <div class="col s6">
-            <textarea class="materialize-textarea"></textarea>
+            <textarea id="other_details" class="materialize-textarea"></textarea>
           </div>
         </div>
 

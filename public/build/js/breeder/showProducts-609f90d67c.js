@@ -58,16 +58,27 @@ var product = {
     var data_values = {
       "name": parent_form.find('input[name=name]').val(),
       "type": parent_form.find('#select-type').val(),
+      //"price": parent_form.find('input[name=price]').val(),
+
+      "min_price": parent_form.find('input[name=min_price]').val(),
+      "max_price": parent_form.find('input[name=max_price]').val(),
+
       "farm_from_id": parent_form.find('#select-farm').val(),
       "birthdate": parent_form.find('input[name=birthdate]').val(),
-      "price": parent_form.find('input[name=price]').val(),
+      "birthweight": parent_form.find('input[name=birthweight]').val(),
+      "house_type": parent_form.find('#select-housetype').val(),
       "adg": parent_form.find('input[name=adg]').val(),
       "fcr": parent_form.find('input[name=fcr]').val(),
       "backfat_thickness": parent_form.find('input[name=backfat_thickness]').val(),
+      "lsba": parent_form.find('input[name=lsba]').val(),
+      "left_teats": parent_form.find('input[name=left_teats]').val(),
+      "right_teats": parent_form.find('input[name=right_teats]').val(),
+      "other_details": $('textarea#other_details').val(),
       "_token": parent_form.find('input[name=_token]').val(),
     };
 
-    // data_values.price = data_values.price.replace(",", ""); // remove comma in price before storing
+    data_values.min_price = data_values.min_price.replace(",", ""); // remove comma in price before storing
+    data_values.max_price = data_values.max_price.replace(",", ""); // remove comma in price before storing
 
     // Transform breed syntax if crossbreed
     if ($("#create-product input:checked").val() === 'crossbreed') {
@@ -79,14 +90,12 @@ var product = {
     else data_values["breed"] = parent_form.find('input[name=breed]').val().toLowerCase().trim();
 
     // Transform syntax of Other details category values
-    var other_details = '';
+    /* var other_details = '';
     $(parent_form).find('.detail-container').map(function () {
       var characteristic = $(this).find('input[name="characteristic[]"]').val();
       var value = $(this).find('input[name="value[]"]').val();
       if (characteristic && value) other_details += characteristic + ' = ' + value + ',';
-    });
-
-    data_values["other_details"] = other_details;
+    }); */
 
     // Do AJAX
     $.ajax({
