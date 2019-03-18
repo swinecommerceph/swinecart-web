@@ -231,7 +231,8 @@ class SwineCartController extends Controller
     public function addItem(Request $request, $product_id)
     {
         $customer = $this->user->userable;
-        $item = $customer->swineCartItems()
+        $item = $customer
+            ->swineCartItems()
             ->where('product_id', $product_id)
             ->where('reservation_id', 0)
             ->first();
@@ -271,9 +272,11 @@ class SwineCartController extends Controller
     public function deleteItem(Request $request, $item_id)
     {
         $customer = $this->user->userable;
-        $item = $customer->swineCartItems()
+        $item = $customer
+            ->swineCartItems()
             ->where('if_rated', 0)    
-            ->where('id', $item_id)->first();
+            ->where('id', $item_id)
+            ->first();
 
         if($item) {
             if(!$item->if_requested) {
@@ -295,9 +298,10 @@ class SwineCartController extends Controller
     public function requestItem(Request $request, $item_id)
     {
         $customer = $this->user->userable;
-        $items = $customer->swineCartItems();
-
-        $item = $items->where('id', $item_id)->first();
+        $item = $customer
+            ->swineCartItems()
+            ->where('id', $item_id)
+            ->first();
 
         if($item) {
             if(!$item->if_requested) {
@@ -393,7 +397,6 @@ class SwineCartController extends Controller
             $product = Product::find($key);
             $reviews = $product->breeder->reviews;
 
-            $restructuredItem['showFullLogs'] = false;
             $restructuredItem['logs'] = $item->toArray();
             $restructuredItem['product_details'] = [
                 "quantity" => (SwineCartItem::find($restructuredItem['logs'][0]['swineCart_id'])->quantity) ?? '',
@@ -420,7 +423,7 @@ class SwineCartController extends Controller
             'message' => 'Get Transaction History successful',
             'data' => $restructuredHistory
         ]);
-        
+
     }
 
     public function rateBreeder(Request $request, $breeder_id)
