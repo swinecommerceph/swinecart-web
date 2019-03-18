@@ -231,41 +231,41 @@ class SwineCartController extends Controller
     public function addItem(Request $request, $product_id)
     {
         $customer = $this->user->userable;
-        $items = $customer->swineCartItems();
-        $cart = $items->get();
+        $item = $customer->swineCartItems()
+            ->where('product_id', $product_id)
+            ->where('reservation_id', 0)
+            ->first();
 
-        $item = $items->where([
-            ['product_id', $product_id],
-            ['reservation_id', 0]
-        ])->first();
-        
         $product = Product::find($product_id);
 
-        if($item) {
-            if($item->if_requested) {
-                return response()->json([
-                    'error' => 'Product already requested!',
-                ], 409);
+        if($product) {
+            if($item) {
+                if($item->if_requested) {
+                    return response()->json([
+                        'error' => 'Product already requested!',
+                    ], 409);
+                }
+                else {
+                    return response()->json([
+                        'error' => 'Item already added!',
+                    ], 409); 
+                }
             }
             else {
-               return response()->json([
-                    'error' => 'Item already added!',
-                ], 409); 
+                $new_item = new SwineCartItem;
+                $new_item->product_id = $product_id;
+                $new_item->quantity = $product->type == 'semen' ? 2 : 1;
+                
+                $customer->swineCartItems()->save($new_item);
+
+                return response()->json([
+                    'message' => 'Add to Cart successful!'
+                ], 200);
             }
         }
-        else {
-            $new_item = new SwineCartItem;
-            $new_item->product_id = $product_id;
-            $new_item->quantity = $product->type == 'semen' ? 2 : 1;
-            
-            $items->save($new_item);
-
-            return response()->json([
-                'message' => 'Add to Cart successful!'
-            ], 200);
-        }
-
-        
+        else return response()->json([
+            'error' => 'Product does not exist!' 
+        ], 404);
     }
 
     public function deleteItem(Request $request, $item_id)
