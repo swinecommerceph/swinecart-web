@@ -133,7 +133,7 @@ class TransactionsController extends Controller
                 $transaction['logs'] = $item->map(function ($item) {
                     $log = [];
                     $log['status'] = $item->status;
-                    $log['created_at'] = $item->created_at;
+                    $log['created_at'] = $this->transformDateSyntax($item->created_at, 3);
                     return $log;
                 });
 
