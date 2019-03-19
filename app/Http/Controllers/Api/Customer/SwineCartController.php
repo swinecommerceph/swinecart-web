@@ -34,6 +34,7 @@ use JWTAuth;
 use Mail;
 use Storage;
 use Config;
+use DB;
 
 class SwineCartController extends Controller
 {
@@ -390,38 +391,43 @@ class SwineCartController extends Controller
     public function getTransactionHistory(Request $request)
     {
         $customer = $this->user->userable;
-        $history = $customer->transactionLogs;
+        $history = $customer
+            ->transactionLogs()
+            ->with('product.breed')
+            ->orderBy('created_at', 'DESC')
+            ->get()
+            ->groupBy('swineCart_id')
+            ->map(function ($item) {
 
-        $restructuredHistory = $history->groupBy('product_id')->map(function($item, $key){
-            $restructuredItem = [];
-            $product = Product::find($key);
-            $reviews = $product->breeder->reviews;
+                $transaction = [];
 
-            $restructuredItem['logs'] = $item->toArray();
-            $restructuredItem['product_details'] = [
-                "quantity" => (SwineCartItem::find($restructuredItem['logs'][0]['swineCart_id'])->quantity) ?? '',
-                "name" => $product->name,
-                "type" => $product->type,
-                "s_img_path" => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                "l_img_path" => route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]),
-                "breed" => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
-                "breeder_name" => Breeder::find($product->breeder_id)->users()->first()->name,
-                "farm_from" => FarmAddress::find($product->farm_from_id)->province,
-                "birthdate" => $product->birthdate,
-                "adg" => $product->adg,
-                "fcr" => $product->fcr,
-                "bft" => $product->backfat_thickness,
-                "other_details" => $product->other_details,
-                "avg_delivery" => ($reviews->avg('rating_delivery')) ? $reviews->avg('rating_delivery') : 0,
-                "avg_transaction" => ($reviews->avg('rating_transaction')) ? $reviews->avg('rating_transaction') : 0,
-                "avg_productQuality" => ($reviews->avg('rating_productQuality')) ? $reviews->avg('rating_productQuality') : 0
-            ];
-            return $restructuredItem;
-        });
+                $product = $item[0]->product;
+                $breed = $product->breed;
+
+                $transaction['id'] = $item[0]->swineCart_id;
+
+                $transaction['product'] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'breed' => $this->transformBreedSyntax($breed->name),
+                    'type' => ucfirst($product->type),
+                ];
+
+                $transaction['logs'] = $item->map(function ($item) {
+                    $log = [];
+                    $log['status'] = $item->status;
+                    $log['created_at'] = $item->created_at;
+                    return $log;
+                });
+
+                return $transaction;
+            });
 
         return response()->json([
             'message' => 'Get Transaction History successful',
-            'data' => $restructuredHistory
+            'data' => [
+                'history' => $history
+            ]
         ]);
 
     }
