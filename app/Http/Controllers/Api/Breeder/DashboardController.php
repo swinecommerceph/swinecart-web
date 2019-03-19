@@ -10,6 +10,7 @@ use App\Http\Requests;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Repositories\DashboardRepository;
+use App\Repositories\CustomHelpers;
 
 use Auth;
 use Response;
@@ -21,6 +22,11 @@ use Config;
 
 class DashboardController extends Controller
 {   
+
+    use CustomHelpers {
+        transformDateSyntax as private;
+        computeAge as private;
+    }
 
     protected $dashboard;
 
@@ -102,7 +108,7 @@ class DashboardController extends Controller
                 $review['comment'] = $item->comment;
                 $review['customer_name'] = $customer->users()->first()->name;
                 $review['customer_province'] = $customer->address_province;
-                $review['created_at'] = $item->created_at->toDateTimeString();
+                $review['created_at'] = $this->transformDateSyntax($item->created_at, 3);
                 $review['rating']['delivery'] = $item->rating_delivery;
                 $review['rating']['transaction'] = $item->rating_transaction;
                 $review['rating']['productQuality'] = $item->rating_productQuality;
