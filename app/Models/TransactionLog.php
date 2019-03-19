@@ -33,7 +33,7 @@ class TransactionLog extends Model
      */
     public function swineCartItem()
     {
-        return $this->belongsTo(SwineCartItem::class);
+        return $this->belongsTo(SwineCartItem::class, 'swineCart_id');
     }
 
     /**

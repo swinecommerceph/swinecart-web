@@ -393,16 +393,22 @@ class SwineCartController extends Controller
         $customer = $this->user->userable;
         $history = $customer
             ->transactionLogs()
-            ->with('product.breed')
+            ->with(
+                'product.breed', 'swineCartItem', 'product.farmFrom',
+                'product.breeder.users'
+            )
             ->orderBy('created_at', 'DESC')
             ->get()
             ->groupBy('swineCart_id')
-            ->map(function ($item) {
+            ->reduce(function ($history, $item) {
 
                 $transaction = [];
 
                 $product = $item[0]->product;
+                $swineCartItem = $item[0]->swineCartItem;
+                $province = $product->farmFrom->province;
                 $breed = $product->breed;
+                $breeder = $product->breeder->users()->first()->name;
 
                 $transaction['id'] = $item[0]->swineCart_id;
 
@@ -411,6 +417,8 @@ class SwineCartController extends Controller
                     'name' => $product->name,
                     'breed' => $this->transformBreedSyntax($breed->name),
                     'type' => ucfirst($product->type),
+                    'province' => $province,
+                    'breeder' => $breeder,
                 ];
 
                 $transaction['logs'] = $item->map(function ($item) {
@@ -420,13 +428,22 @@ class SwineCartController extends Controller
                     return $log;
                 });
 
-                return $transaction;
-            });
+                $transaction['request'] = [
+                    'quantity' => $swineCartItem->quantity
+                ];
+
+                $history->push($transaction);
+
+                return $history;
+
+            }, collect([]))
+            ->forPage($request->page, $request->limit);
 
         return response()->json([
             'message' => 'Get Transaction History successful',
             'data' => [
-                'history' => $history
+                'count' => $history->count(),
+                'history' => $history,
             ]
         ]);
 
