@@ -95,10 +95,10 @@
                     <div class="card-content">
                         <div class="row">
                             <div class="col s10">
-                                 <span class="card-title activator grey-text text-darken-4 truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}</span>
+                                 <span class="card-title grey-text text-darken-4 truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}</span>
                             </div>
                             <div class="col s1">
-                                <span><i class="card-title material-icons right" style="cursor: pointer;">more_vert</i></span>
+                                <span><i class="card-title activator material-icons right">more_vert</i></span>
                             </div>
                         </div>
                        

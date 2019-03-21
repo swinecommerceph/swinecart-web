@@ -348,7 +348,7 @@ $(document).ready(function () {
   });
 
   // Change Logo
-  $("#change-logo").click(function (e) {
+  $("#change-logo").on('click', function (e) {
     e.preventDefault();
 
     $("#change-logo-modal").modal({ dismissible: false });
