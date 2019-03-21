@@ -164,11 +164,11 @@
                     <div class="card-content" style="background: hsl(0, 0%, 97%);">
                       <div class="row">
                           <div class="col s10">
-                            <span class="card-title activator truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}</span>        
+                            <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}</span>        
                           </div>
                           <div class="col s1">
                               <span>
-                                  <i class="material-icons right" style="cursor: pointer;">more_vert</i>
+                                  <i class="activator material-icons right" style="cursor: pointer;">more_vert</i>
                               </span>
                           </div>
                       </div>
