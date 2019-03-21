@@ -196,7 +196,7 @@
                                 <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}</span>        
                             </div>
                             <div class="col s1">
-                              <span><i class="material-icons right" style="cursor: pointer;">close</i></span>  
+                              <span><i class="card-title material-icons right" style="cursor: pointer;">close</i></span>  
                             </div>
                         </div>
                         <br>
