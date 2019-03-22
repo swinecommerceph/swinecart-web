@@ -285,12 +285,12 @@
     {{-- Customer Mapping Container--}}
     <div class="row">
         {{-- Location --}}
-        <div class="col s12">
+        <div class="col s14">
             <a href="{{route('map.customers')}}" >
-                <div class="card hoverable teal darken-3">
+                <div class="waves-effect waves-light card hoverable teal darken-3" style="border-radius: 7px !important;">
                     <div class="card-content center-align">
                         <span class="card-title" style="font-weight: 600; color: #fafafa;">
-                            Customer Mapping
+                            See the locations of your customers!
                         </span>
                     </div>
                 </div>
