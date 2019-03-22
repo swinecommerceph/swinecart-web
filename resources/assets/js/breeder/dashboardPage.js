@@ -61,6 +61,7 @@ var vm = new Vue({
     barChart: '',
     barChartConfig: {},
     chosenFrequency: 'monthly',
+    chosenFarm: 'all-farms',
     dateFromInput: '',
     dateToInput: '',
     dateFromObject: {},
@@ -213,6 +214,8 @@ var vm = new Vue({
       // Get Sold Products data from server according to chosen frequency
       if ((this.dateFromObject.get() && this.dateToObject.get()) || this.chosenFrequency === 'weekly') {
 
+        console.log(this.chosenFarm);
+
         // Do AJAX
         this.$http.get(
           config.dashboard_url + '/sold-products',
@@ -229,6 +232,7 @@ var vm = new Vue({
             // Store fetched data in local component data
             var soldData = response.body;
             this.barChartConfig.labels = soldData.labels;
+            console.table(soldData.datasets);
             this.barChartConfig.datasets.forEach(function (dataset, i) {
               dataset.data = soldData.dataSets[i];
             });

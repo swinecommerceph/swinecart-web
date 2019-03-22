@@ -186,7 +186,7 @@
           {{-- Selecting which farm to graph --}}
           <div class="col s4">
             <div style="margin-bottom: 4vh; margin-left: 0.5vw;" class="input-field">
-              <select id="select-farm">
+              <select v-model="chosenFarm">
                 <option value="" disabled selected>Choose farm</option>
                 @foreach($farmAddresses as $farm)
                   <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
@@ -201,7 +201,7 @@
           <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select a frequency to graph to see your performance:</p>
           
           {{-- Charts --}}
-          <div id="charts-container" class="">  
+          <div id="charts-container" class="">
             {{-- Frequencies --}}
             <div class="col s2">
               <div class="">
