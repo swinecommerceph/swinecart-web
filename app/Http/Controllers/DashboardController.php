@@ -42,9 +42,9 @@ class DashboardController extends Controller
     public function showDashboard(Request $request)
     {
         $breeder = $this->user->userable;
-
+        $farmAddresses = $breeder->farmAddresses;
+        
         if($request->user()->updateProfileNeeded()){
-          $farmAddresses = $breeder->farmAddresses;
           $provinces = $this->getProvinces();
           return view('user.breeder.createProfile', compact('breeder', 'farmAddresses', 'provinces'));
         }
@@ -69,7 +69,7 @@ class DashboardController extends Controller
           ], $breeder);
         
 
-        return view('user.breeder.dashboard', compact('dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
+        return view('user.breeder.dashboard', compact('farmAddresses', 'dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
     }
 
     /**

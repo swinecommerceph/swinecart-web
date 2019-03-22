@@ -181,7 +181,21 @@
         <div class="row">
           <h4 class="left-align" style="font-weight: 500; margin-left: 1vw;">
             Overall Performance
-          </h4>
+          </h4> <br>
+
+          {{-- Selecting which farm to graph --}}
+          <div class="col s4">
+            <div style="margin-bottom: 4vh; margin-left: 0.5vw;" class="input-field">
+              <select id="select-farm">
+                <option value="" disabled selected>Choose farm</option>
+                @foreach($farmAddresses as $farm)
+                  <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                @endforeach
+                <option value="all-farms">All farms</option>
+              </select>
+              <label style="font-size: 1rem; color:hsl(0, 0%, 30%);">Select which farm to graph:</label>
+            </div>
+          </div> <br><br><br><br>
 
           {{-- Guide text --}}
           <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select a frequency to graph to see your performance:</p>
