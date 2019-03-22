@@ -34,6 +34,7 @@ class Chat implements MessageComponentInterface {
             return;
         }
         else{
+            //$test = "";
             if($msg->direction == 0){
                 Message::create([
                     'customer_id' => $msg->from,
@@ -51,7 +52,7 @@ class Chat implements MessageComponentInterface {
             }
             
             if(array_key_exists($msg->to, $this->maps)){
-                $msg->from_id = $msg->from;
+                //$msg->created_at = $test->created_at;
                 $msg->from = User::where('id', $msg->from)->first()->name;
                 $this->maps[$msg->to]->send(json_encode($msg));
             }

@@ -97,9 +97,11 @@ class UserInstancesSeeder extends Seeder
             // Initialization
             $rand = random_int(10,13);
             $types = ['sow', 'gilt', 'boar', 'semen']; // 4
+            $housetypes = ['opensided', 'tunnelventilated']; // 2
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
             for ($i = 0; $i < 30; $i++) {
                 $randType = $types[random_int(0,3)];
+                $randHouseType = $housetypes[random_int(0,1)];
                 $randBreed = $breeds[random_int(0,6)];
                 $product = new App\Models\Product;
                 $image = new App\Models\Image;
@@ -146,13 +148,23 @@ class UserInstancesSeeder extends Seeder
                 $product->primary_img_id = $image->id;
                 $product->name = random_int(1000,3000);
                 $product->type = $randType;
+                $product->house_type = $randHouseType;
                 $product->birthdate = date('Y-m-d', time() - (15 * (7 * 24 * 60 * 60)));
+                $product->birthweight = random_int(1500,2300)/1.0;
                 $product->breed_id = App\Models\Breed::firstOrCreate(['name' => $randBreed])->id;
-                $product->price = random_int(35000,100000)/1.0;
+                
+                //$product->price = random_int(35000,100000)/1.0;
+
+                $product->min_price = random_int(10000,35000)/1.0;
+                $product->max_price = random_int(40000,100000)/1.0;
+
                 $product->quantity = ($randType == 'semen') ? -1 : 1;
                 $product->adg = random_int(760,1450)/10.0;
                 $product->fcr = random_int(10,30)/10.0;
                 $product->backfat_thickness = random_int(90,200)/10.0;
+                $product->lsba = random_int(8,15);
+                $product->left_teats = random_int(5,7);
+                $product->right_teats = random_int(5,7);
                 $product->other_details = '';
                 $product->status = 'displayed';
                 

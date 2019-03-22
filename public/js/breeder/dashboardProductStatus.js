@@ -53,6 +53,10 @@ Vue.component('status-table',{
     data: function(){
         return {
             sortKey: '',
+            isProductInformationUpActive: '',
+            isProductInformationUpActiveFlag: true,
+            isStatusUpActive: '',
+            isStatusUpActiveFlag: true,
             sortOrders:{
                 name: 1,
                 status: 1
@@ -136,6 +140,41 @@ Vue.component('status-table',{
     methods:{
 
         sortBy: function(key){
+
+            // sort alphabetically according to 'name' of product
+            if (key === 'name') {
+                // reset the color of arrows in Status header if Product Info is clicked
+                this.isStatusUpActive = '';
+
+                /* this if condition is for the first visit of user 
+                 * in which the table rows are not yet sorted, and
+                 * the color of the arrows are still black
+                 */
+                if (this.isProductInformationUpActiveFlag) {
+                    this.isProductInformationUpActiveFlag = false;
+                    this.isProductInformationUpActive = false;
+                }
+
+                // for the switching color of arrow up and down
+                this.isProductInformationUpActive = !this.isProductInformationUpActive
+            }
+            // sort alphabetically according to 'status' of product
+            else if (key === 'status') {
+                // reset the color of arrows in Product Info header if Status is clicked
+                this.isProductInformationUpActive = '';
+
+                /* this if condition is for the first visit of user 
+                 * in which the table rows are not yet sorted, and
+                 * the color of the arrows are still black
+                 */
+                if (this.isStatusUpActiveFlag) {
+                    this.isStatusUpActiveFlag = false;
+                    this.isStatusUpActive = false;
+                }
+                // for the switching color of arrow up and down
+                this.isStatusUpActive = !this.isStatusUpActive
+            }
+
             // Sort table column according to what's chosen
             this.sortKey = key;
             this.sortOrders[key] = this.sortOrders[key] * -1;
@@ -618,6 +657,10 @@ var vm = new Vue({
     mounted: function(){
         var self = this;
 
+        // Determine if connection to websocket server must
+        // be secure depending on the protocol
+        var pubsubServer = (location.protocol === 'https:') ? config.pubsubWSSServer : config.pubsubWSServer;
+
         // Set-up configuration and subscribe to a topic in the pubsub server
         var onConnectCallback = function(session){
 
@@ -646,7 +689,7 @@ var vm = new Vue({
         };
 
         var conn = new ab.connect(
-            config.pubsubWSServer,
+            pubsubServer,
             onConnectCallback,
             onHangupCallback,
             {
@@ -657,3 +700,5 @@ var vm = new Vue({
         );
     }
 });
+
+//# sourceMappingURL=dashboardProductStatus.js.map

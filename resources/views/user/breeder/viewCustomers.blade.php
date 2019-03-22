@@ -13,26 +13,29 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Customers
+    <div class="breadcrumb-container">    
+      Customers
+    </div>
 @endsection
 
 @section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="#!" class="breadcrumb">Customers</a>
+    <div class="breadcrumb-container">
+        <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
+        <a href="#!" class="breadcrumb">Customers</a>
+    </div>
 @endsection
 
-@section('content')
+@section('breeder-content')
+    <div class="row">
+        <h5>Know your customers' location.</h5>
+    </div>
+    
+    {{-- Map --}}
     <div id="map-container">
-    <div id="map-canvas" style="height:80vh;"></div>
-  </div>
-
-
-
-
+    <div id="map-canvas" style="height:60vh;"></div>
 @endsection
 
 @section('customScript')
-
     <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBjcVoiwU44Pj1fdY8JyxjORa8RElQQlGY"></script>
     <script src="/js/markerclusterer.js"></script>
     <script src="/js/Mapster.js"></script>
@@ -81,14 +84,6 @@
                     id : '{{ $customer->id }}'
                 });
             @endforeach
-
-
-
-
         }(window, google, window.Mapster || (window.Mapster = {})))
-
-
-
     </script>
-
 @endsection

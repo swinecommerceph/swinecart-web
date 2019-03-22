@@ -697,6 +697,10 @@ var vm = new Vue({
     mounted: function(){
 
         var self = this;
+        
+        // Determine if connection to websocket server must
+        // be secure depending on the protocol
+        var pubsubServer = (location.protocol === 'https:') ? config.pubsubWSSServer : config.pubsubWSServer;
 
         // Set-up configuration and subscribe to a topic in the pubsub server
         var onConnectCallback = function(session){
@@ -719,7 +723,13 @@ var vm = new Vue({
 
                         self.products[index].status = 'on_delivery';
                         self.products[index].status_transactions.on_delivery = data.on_delivery;
-                        self.products[index].delivery_date = data.delivery_date;
+
+                        /* 
+                            format the date to an abbreviated month so
+                            the product cards will not overflow when the
+                            size increase
+                        */
+                        self.products[index].delivery_date = moment(data.delivery_date).format("MMM D, YYYY");
 
                         break;
                     case 'sc-sold':
@@ -772,7 +782,7 @@ var vm = new Vue({
         };
 
         var conn = new ab.connect(
-            config.pubsubWSServer,
+            pubsubServer,
             onConnectCallback,
             onHangupCallback,
             {
@@ -783,3 +793,5 @@ var vm = new Vue({
         );
     }
 });
+
+//# sourceMappingURL=swinecartPage.js.map

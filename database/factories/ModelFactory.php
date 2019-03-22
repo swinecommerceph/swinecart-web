@@ -124,7 +124,25 @@ $factory->define(App\Models\Customer::class, function (Faker\Generator $faker) {
         'Basilan',
         'Sulu',
         'Maguindanao',
-        'Lanao del Sur'
+        'Lanao del Sur',
+        // NCR
+        'Caloocan City',
+        'Las Piñas',
+        'Makati',
+        'Malabon',
+        'Mandaluyong',
+        'Manila',
+        'Marikina',
+        'Muntinlupa',
+        'Navotas',
+        'Parañaque',
+        'Pasay City',
+        'Pasig',
+        'Pateros',
+        'Quezon City',
+        'San Juan',
+        'Taguig',
+        'Valenzuela'
     ];
 
     // Generate random integer for choosing province
@@ -240,7 +258,25 @@ $factory->define(App\Models\Breeder::class, function (Faker\Generator $faker) {
         'Basilan',
         'Sulu',
         'Maguindanao',
-        'Lanao del Sur'
+        'Lanao del Sur',
+        // NCR
+        'Caloocan City',
+        'Las Piñas',
+        'Makati',
+        'Malabon',
+        'Mandaluyong',
+        'Manila',
+        'Marikina',
+        'Muntinlupa',
+        'Navotas',
+        'Parañaque',
+        'Pasay City',
+        'Pasig',
+        'Pateros',
+        'Quezon City',
+        'San Juan',
+        'Taguig',
+        'Valenzuela'
     ];
 
     // Generate random integer for choosing province

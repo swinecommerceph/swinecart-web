@@ -147,7 +147,6 @@ class ProductController extends Controller
      */
     public function breederViewProductDetail(Product $product)
     {
-        // if($product->status == 'hidden') return back();
         $product->img_path = route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]);
         $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => Image::find($product->primary_img_id)->name]);
         $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
@@ -168,6 +167,19 @@ class ProductController extends Controller
         ];
 
         return view('user.breeder.viewProductDetail', compact('product', 'breederRatings'));
+    }
+
+    /**
+     * Go to Add Product form for storing Product
+     * @return View
+    */
+    
+    public function createProduct(Request $request)
+    {
+      $breeder = $this->user->userable;
+      $farms = $breeder->farmAddresses;
+
+      return view('user.breeder.addProduct', compact('farms'));
     }
 
     /**
@@ -195,13 +207,20 @@ class ProductController extends Controller
             $product->primary_img_id = $image->id;
             $product->name = $request->name;
             $product->type = $request->type;
+            $product->house_type = $request->house_type;
             $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+            $product->birthweight = $request->birthweight;
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-            $product->price = $request->price;
+            // $product->price = $request->price;
+            $product->min_price = $request->min_price;
+            $product->max_price = $request->max_price;
             $product->quantity = ($request->type == 'semen') ? -1 : 1;
+            $product->lsba = $request->lsba;
             $product->adg = $request->adg;
             $product->fcr = $request->fcr;
             $product->backfat_thickness = $request->backfat_thickness;
+            $product->left_teats = $request->left_teats;
+            $product->right_teats = $request->right_teats;
             $product->other_details = $request->other_details;
             $breeder->products()->save($product);
 
@@ -211,9 +230,37 @@ class ProductController extends Controller
             $productDetail['breed'] = $request->breed;
 
             return collect($productDetail)->toJson();
+            //return Redirect::to('user.breeder.showProducts');
         }
     }
+    /**
+     * Go to Edit Page of a Product
+     * 
+     * @param Product $product
+     * @return View
+     *
+     */
 
+    public function editProduct(Product $product)
+    {       
+      $breeder = $this->user->userable;
+      $farms = $breeder->farmAddresses;
+
+      $product->img_path = route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]);
+      $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => Image::find($product->primary_img_id)->name]);
+      $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
+      $product->type = ucfirst($product->type);
+      $product->birthdate = $this->transformDateSyntax($product->birthdate);
+      $product->age = $this->computeAge($product->birthdate);
+      $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+      $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+      $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+      $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
+      $product->videoCollection = $product->videos;
+      
+      return view('user.breeder.editProduct', compact('product', 'farms'));
+    }
+  
     /**
      * Update details of a Product
      * AJAX
@@ -224,20 +271,35 @@ class ProductController extends Controller
     public function updateProduct(ProductRequest $request)
     {
         if($request->ajax()){
-            $product = Product::find($request->id);
-            $product->farm_from_id = $request->farm_from_id;
-            $product->name = $request->name;
-            $product->type = $request->type;
-            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
-            $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-            $product->price = $request->price;
-            $product->adg = $request->adg;
-            $product->fcr = $request->fcr;
-            $product->backfat_thickness = $request->backfat_thickness;
-            $product->other_details = $request->other_details;
-            $product->save();
+          $product = Product::find($request->id);
+          $product->farm_from_id = $request->farm_from_id;
+          $product->name = $request->name;
+          $product->type = $request->type;
+          $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+          
+          $product->birthweight = $request->birthweight;
 
-            return "OK";
+          $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
+          
+          $product->house_type = $request->house_type;
+          
+          // $product->price = $request->price;
+          $product->min_price = $request->min_price;
+          $product->max_price = $request->max_price;
+
+
+          $product->adg = $request->adg;
+          $product->fcr = $request->fcr;
+          $product->backfat_thickness = $request->backfat_thickness;
+          $product->lsba = $request->lsba;
+
+          $product->left_teats = $request->left_teats;
+          $product->right_teats = $request->right_teats;
+
+          $product->other_details = $request->other_details;
+          $product->save();
+
+          return "OK";
         }
     }
 
@@ -486,10 +548,11 @@ class ProductController extends Controller
      * @return View
      */
     public function viewProducts(Request $request, ProductRepository $repository)
-    {
+    {   
+        //dd($request->query());
         // Check if from a search query
         $products = ($request->q) ? $repository->search($request->q): Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0);
-        $scores = ($request->q) ? $products->scores : [];
+        $scores = ($request->q && isset($products->scores)) ? $products->scores : [];
 
         $parsedTypes = ($request->type) ? explode(' ',$request->type) : '';
         $parsedBreedIds = ($request->breed) ? $this->getBreedIds($request->breed) : '';
@@ -514,7 +577,7 @@ class ProductController extends Controller
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
             $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-            $product->score = ($request->q) ? $scores[$product->id] : 0;
+            $product->score = ($request->q && count($scores) > 0) ? $scores[$product->id] : 0;
         }
 
         // Sort according to score if from a search query
@@ -534,6 +597,8 @@ class ProductController extends Controller
 
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
+        //$breedFilters = str_replace(' ', '-', $breedFilters); 
+        //dd($breedFilters);
         $urlFilters = [
             'q' => $request->q,
             'type' => $request->type,
@@ -609,6 +674,7 @@ class ProductController extends Controller
         $breedInstance = Breed::where('name','like',$breed)->get()->first();
         if($breedInstance) return $breedInstance->id;
         else{
+            $breed = str_replace(' ', '-', $breed);
             $newBreed = Breed::create(['name' => $breed]);
             return $newBreed->id;
         }
@@ -631,8 +697,12 @@ class ProductController extends Controller
             $part = explode("+", $breed);
             $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
         }
-        else $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
+        else {
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
+        }
 
+        //$mediaInfo['fileName'] = str_replace('/', '_', $mediaInfo['fileName']);
+        
         if($this->isImage($extension)){
             $mediaInfo['directoryPath'] = self::PRODUCT_IMG_PATH;
             $mediaInfo['type'] = new Image;

@@ -13,23 +13,27 @@
 @endsection
 
 @section('breadcrumbTitle')
-    {{$product->name}}
+    <div class="breadcrumb-container">    
+      {{$product->name}}
+    </div>
 @endsection
 
 @section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="{{ route('products') }}" class="breadcrumb">Products</a>
-    <a href="#!" class="breadcrumb">{{$product->name}}</a>
+    <div class="breadcrumb-container">
+        <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
+        <a href="{{ route('products') }}" class="breadcrumb">Products</a>
+        <a href="#!" class="breadcrumb">{{$product->name}}</a>
+    </div>
 @endsection
 
-@section('content')
+@section('breeder-content')
     <div class="row">
         <div class="col s12 m7">
             {{-- Primary Image --}}
             <div class="row">
                 <div class="card">
                     <div class="card-image">
-                        <img src="{{$product->img_path}}" data-imagezoom="{{ $product->def_img_path }}">
+                        <img style="width: 40vw; height: 50vh;" src="{{$product->img_path}}" data-imagezoom="{{ $product->def_img_path }}">
                     </div>
                 </div>
             </div>
@@ -72,54 +76,16 @@
             <ul class="collection with-header">
                 <li class="collection-header">
                     <h4 class="row">
-                        <div class="col">
+                        <div class="col" style="color: hsl(0, 0%, 13%); font-weight: 700">
                             {{ $product->name }}
                         </div>
-                        <div class="col right">
-                            {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
-                                <a href="#" class="right tooltipped add-to-cart"  data-position="left" data-delay="50" data-tooltip="Add to Swine Cart">
-                                    <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
-                                </a>
-                            {!! Form::close() !!}
-                        </div>
                     </h4>
-                    <div class="row">
-                        <div class="col">
-                            {{ $product->breeder }} <br>
-                            {{ $product->farm_province }}
-                        </div>
-                    </div>
                 </li>
-                <li class="collection-item">{{$product->type}} - {{$product->breed}}</li>
+                <li class="collection-item" style="font-weight: 700;">{{$product->type}} - {{$product->breed}}</li>
                 <li class="collection-item">Born on {{$product->birthdate}} ({{$product->age}} days old)</li>
                 <li class="collection-item">Average Daily Gain: {{$product->adg}} g</li>
                 <li class="collection-item">Feed Conversion Ratio: {{$product->fcr}}</li>
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
-                <li id="stars-container" class="collection-item">
-                    Breeder Ratings
-                    <a href="#!" class="right tooltipped" data-position="left" data-delay="50" data-tooltip="Send message to Breeder">
-                        <i class="material-icons red-text" style="font-size:35px;">message</i>
-                    </a>
-                    <br><br>
-                    <span class="row">
-                        <i class="col s6">Delivery</i>
-                        <span class="col s6">
-                            <average-star-rating :rating="{{ $breederRatings['deliveryRating'] }}"> </average-star-rating>
-                        </span>
-                    </span>
-                    <span class="row">
-                        <i class="col s6">Transaction</i>
-                        <span class="col s6">
-                            <average-star-rating :rating="{{ $breederRatings['transactionRating'] }}"> </average-star-rating>
-                        </span>
-                    </span>
-                    <span class="row">
-                        <i class="col s6">Product Quality</i>
-                        <span class="col s6">
-                            <average-star-rating :rating="{{ $breederRatings['productQualityRating'] }}"> </average-star-rating>
-                        </span>
-                    </span>
-                </li>
             </ul>
         </div>
     </div>

@@ -13,20 +13,21 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Products
+    <div class="breadcrumb-container">    
+      Manage your products
+    </div>
 @endsection
 
 @section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="#!" class="breadcrumb">Products</a>
+    <div class="breadcrumb-container">    
+        <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
+        <a href="#!" class="breadcrumb">Products</a>
+    </div>
 @endsection
 
-@section('content')
+@section('breeder-content')
     <div class="row">
         <div class="col s12">
-            <p class="caption">
-                Manage your products. <br>
-            </p>
             @include('user.breeder._displayProducts')
         </div>
         <div class="col s12 m12 l8 offset-l2">

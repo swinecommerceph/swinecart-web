@@ -99,7 +99,7 @@
 					  </button>
 				  </div>
 				  <div class="col right">
-					  <a href="#!" id="" class="btn-floating btn-medium waves-effect waves-light red lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
+					  <a href="#!" id="" class="btn-floating btn-medium waves-effect waves-light grey lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
 						  <i class="material-icons">clear</i>
 					  </a>
 				  </div>
@@ -184,7 +184,7 @@
 										  </button>
 									  </div>
 									  <div class="col right">
-										  <a href="#!" class="btn-floating btn-medium waves-effect waves-light red lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
+										  <a href="#!" class="btn-floating btn-medium waves-effect waves-light grey lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
 											  <i class="material-icons">clear</i>
 										  </a>
 									  </div>
@@ -196,7 +196,7 @@
 								{!! Form::open(['route' => 'customer.deleteFarm', 'method' => 'DELETE', 'class' => 'delete-farm', 'data-farm-id' => $farmAddress->id]) !!}
 									<div class="row ">
 										<div class="col offset-s10 remove-button-field">
-											<a href="#!" class="btn-floating btn-medium waves-effect waves-light grey tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove {{$farmAddress->name}}">
+											<a href="#!" class="btn-floating btn-medium waves-effect waves-light red tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove {{$farmAddress->name}}">
 												<i class="material-icons">remove</i>
 											</a>
 										</div>
@@ -235,8 +235,15 @@
 
 				{{-- Current Password --}}
 				<div class="row">
-					<div class="input-field col s4 offset-s4">
-						<input type="password" id="currentpassword" name="current_password" class="validate" required>
+					<div class="col s3"></div>				
+	
+					{{-- Show/Hide Password Button --}}
+	        <div class="col s1 show-hide-password">
+	          <i style="cursor: pointer;" id="show-hide-password-icon" class="grey-text text-lighten-1 material-icons center-align">visibility</i>
+	        </div>
+
+					<div class="input-field col s4">
+						<input type="password" id="currentpassword" name="current_password" class="validate login-password" required>
 						@if ($errors->has('current_password'))
 							<label for="currentpassword" data-error="{{ $errors->first('current_password') }}">Current Password</label>
 						@else
@@ -248,7 +255,7 @@
 				{{-- New Password --}}
 				<div class="row">
 					<div class="input-field col s4 offset-s4">
-						<input type="password" id="newpassword" name="new_password" class="validate" required>
+						<input type="password" id="newpassword" name="new_password" class="validate login-password" required>
 						@if ($errors->has('new_password'))
 							<label for="newpassword" data-error="{{ $errors->first('new_password') }}">New Password</label>
 						@else
@@ -260,7 +267,7 @@
 				{{-- Password Confirmation --}}
 				<div class="row">
 					<div class="input-field col s4 offset-s4">
-						<input type="password" id="newpasswordconfirm" name="new_password_confirmation" class="validate" required>
+						<input type="password" id="newpasswordconfirm" name="new_password_confirmation" class="validate login-password" required>
 						@if ($errors->has('new_password_confirmation'))
 							<label for="newpasswordconfirm" data-error="{{ $errors->first('new_password_confirmation') }}">Confirm Password</label>
 						@else
@@ -271,7 +278,7 @@
 
 				<div class="row">
 					<div class="col s4 offset-s4">
-						<a href="#" id="change-password-button" class="btn btn-medium waves-effect waves-light right">
+						<a href="#" style="width: 17vw;" id="change-password-button" class="btn teal darken-3 btn-medium waves-effect waves-light right">
 							Change Password
 						</a>
 					</div>

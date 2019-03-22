@@ -294,8 +294,21 @@ class CustomerController extends Controller
 
     public function viewBreeders(){
 
-        $breeders = Breeder::all();
-        return view('user.customer.viewBreeders', compact('breeders'));
+        // getting the breeders having the attribute 'farm addresses'
+        $breeders = Breeder::with(['farmAddresses'])->get();
+        $results = [];
+
+        // inserting the farm address per breeder and returning it
+        foreach ($breeders as $breeder) {
+            foreach ($breeder->farmAddresses as $fas) {
+                $results[] = $fas;
+            }
+        }
+
+        //$results = Breeder::all();
+        
+        //dd($results);
+        return view('user.customer.viewBreeders', compact('results'));
     }
 
     public function viewBreedersChange(Request $request){
@@ -424,7 +437,25 @@ class CustomerController extends Controller
             'Basilan' => 'Basilan',
             'Sulu' => 'Sulu',
             'Maguindanao' => 'Maguindanao',
-            'Lanao del Sur' => 'Lanao del Sur'
+            'Lanao del Sur' => 'Lanao del Sur',
+            // NCR
+            'Caloocan City' => 'Caloocan City',
+            'Las Piñas' => 'Las Piñas',
+            'Makati' => 'Makati',
+            'Malabon' => 'Malabon',
+            'Mandaluyong' => 'Mandaluyong',
+            'Manila' => 'Manila',
+            'Marikina' => 'Marikina',
+            'Muntinlupa' => 'Muntinlupa',
+            'Navotas' => 'Navotas',
+            'Parañaque' => 'Parañaque',
+            'Pasay City' => 'Pasay City',
+            'Pasig' => 'Pasig',
+            'Pateros' => 'Pateros',
+            'Quezon City' => 'Quezon City',
+            'San Juan' => 'San Juan',
+            'Taguig' => 'Taguig',
+            'Valenzuela' => 'Valenzuela'
         ])->sort();
     }
 

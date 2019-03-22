@@ -26,7 +26,7 @@ class UserController extends Controller
     public function index(Request $request)
     {
         $user = $request->user();
-        if($user->hasRole('breeder')) return redirect()->action('BreederController@index');
+        if($user->hasRole('breeder')) return redirect()->action('DashboardController@showDashboard');
         else if($user->hasRole('admin')) return redirect()->action('AdminController@index');
         else if($user->hasRole('spectator')) return redirect()->action('SpectatorController@index');
         else if($user->hasRole('customer')) {

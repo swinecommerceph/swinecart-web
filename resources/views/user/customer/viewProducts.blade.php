@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Products
+    List of Products
 @endsection
 
 @section('breadcrumb')
@@ -22,6 +22,8 @@
 @endsection
 
 @section('content')
+  <div class="container">
+
     {{-- Search bar --}}
     <nav id="search-container">
         <div id="search-field" class="nav-wrapper white">
@@ -63,14 +65,16 @@
 
     <div id="general-container" class="row">
         {{-- For the Filters (left column) --}}
-        <div id="filter-container" class="col m3 l3">
+        <div id="filter-container" class="col m3 l3" style="font-size: 0.96em;">
             <div style="height: 1px;">
             </div>
             <div id="collapsible-container">
                 <ul class="collapsible" data-collapsible="accordion">
 
                         <li id="filter-type">
-                          <div class="collapsible-header active"><i class="material-icons">more</i>Type</div>
+                          <div class="collapsible-header active">
+                            <i class="material-icons teal-text">more</i>Type
+                          </div>
                           <div class="collapsible-body">
                                 {{-- Type --}}
                                 <p>
@@ -105,7 +109,7 @@
                           </div>
                         </li>
                         <li id="filter-details">
-                          <div class="collapsible-header"><i class="material-icons">details</i>Breed</div>
+                          <div class="collapsible-header"><i class="material-icons teal-text">details</i>Breed</div>
                           <div class="collapsible-body">
                             <p class="range-field">
 
@@ -132,7 +136,7 @@
                           </div>
                         </li>
                         <li id="filter-location">
-                            <div class="collapsible-header"><i class="material-icons">place</i>Breeder Locations</div>
+                            <div class="collapsible-header"><i class="material-icons teal-text">place</i>Breeder Locations</div>
                             <div class="collapsible-body">
                                 <p>
                                     <a href="{{ route('map.breeders') }}">Check locations</a>
@@ -154,44 +158,62 @@
                   <div class="card hoverable">
                     <div class="card-image">
                         <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}">
-                            <img src="{{ $product->img_path }}">
+                            <img style="width: 23vw;" src="{{ $product->img_path }}">
                         </a>
                     </div>
-                    <div class="card-content">
-                      <span class="card-title activator grey-text text-darken-4">{{$product->name}}<i class="material-icons right">more_vert</i></span>
+                    <div class="card-content" style="background: hsl(0, 0%, 97%);">
+                      <div class="row">
+                          <div class="col s10">
+                            <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}</span>        
+                          </div>
+                          <div class="col s1">
+                              <span>
+                                  <i class="activator material-icons right" style="cursor: pointer;">more_vert</i>
+                              </span>
+                          </div>
+                      </div>
+                      
                       <div class="row">
                           <div class="col s9">
-                              {{$product->type}} - {{$product->breed}} <br>
-                              Birthdate: {{$product->birthdate}} <br>
-                              Age: {{$product->age}} days old
+                              <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} - {{$product->breed}}</span> <br>
+                              <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span> 
                           </div>
                           <div class="col right">
                             {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
                                 <a href="#" class="tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart">
-                                    <i class="material-icons red-text" style="font-size:35px">add_shopping_cart</i>
+                                    <i class="material-icons blue-text text-darken-2" style="font-size:35px">add_shopping_cart</i>
 
                                 </a>
                             {!! Form::close()!!}
                           </div>
                       </div>
                     </div>
+
+                    {{-- View All Info--}}
                     <div class="card-reveal">
-                        <span class="card-title grey-text text-darken-4">{{$product['name']}}<i class="material-icons right">close</i></span>
+                        <div class="row">
+                            <div class="col s10">
+                                <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}</span>        
+                            </div>
+                            <div class="col s1">
+                              <span><i class="card-title material-icons right" style="cursor: pointer;">close</i></span>  
+                            </div>
+                        </div>
                         <br>
-                        <table class="col s9">
+                        <table class="col s10">
                             <thead> </thead>
                             <tbody>
                                 <tr>
-                                    <td class="grey-text text-darken-2"> Average Daily Gain (g) </td>
-                                    <td class="right-align"> {{ $product->adg }} </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
                                 </tr>
                                 <tr>
-                                    <td class="grey-text text-darken-2"> Feed Conversion Ratio </td>
-                                    <td class="right-align"> {{ $product->fcr }} </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio: </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->fcr }} </td>
                                 </tr>
                                 <tr>
-                                    <td class="grey-text text-darken-2"> Backfat Thickness (mm) </td>
-                                    <td class="right-align"> {{ $product->backfat_thickness }} </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm): </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->backfat_thickness }} </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -202,12 +224,12 @@
                             <thead> </thead>
                             <tbody>
                                 <tr>
-                                    <td class="grey-text text-darken-2"> Breeder Name </td>
-                                    <td> {{ $product->breeder }} </td>
+                                    <td style="color: hsl(0, 0%, 45%);"> Breeder Name: </td>
+                                    <td style="color: hsl(0, 0%, 45%);"> {{ $product->breeder }} </td>
                                 </tr>
                                 <tr>
-                                    <td class="grey-text text-darken-2"> Farm Location </td>
-                                    <td> {{ $product->farm_province }} </td>
+                                    <td style="color: hsl(0, 0%, 45%);"> Farm Location: </td>
+                                    <td style="color: hsl(0, 0%, 45%);"> {{ $product->farm_province }} </td>
                                 </tr>
                             </tbody>
                         </table>
@@ -216,12 +238,24 @@
                         <div class="row">
                             <br>
                             <div class="col">
-                                <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
+                                <a href="{{ route('products.cViewDetail', ['product' => $product->id]) }}"
+                                    class="waves-effect waves-light"
+                                    style="
+                                        border: 2px solid #bbdefb;
+                                        background-color: white;
+                                        padding: 8px 18px;
+                                        font-size: 16px;
+                                        cursor: pointer;
+                                        color: #2196f3;
+                                        font-weight: 700;
+                                        border-radius: 5px;
+                                    "
+                                >View All Info</a>
                             </div>
                             <div class="col right">
                                 {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
                                     <a href="#" class="tooltipped add-to-cart"  data-position="bottom" data-delay="50" data-tooltip="Add to Swine Cart">
-                                        <i class="material-icons red-text" style="font-size:35px;">add_shopping_cart</i>
+                                        <i class="material-icons blue-text text-darken-2" style="font-size:35px;">add_shopping_cart</i>
                                     </a>
                                 {!! Form::close() !!}
                             </div>
@@ -247,6 +281,7 @@
 
         </div>
     </div>
+  </div>
 
 @endsection
 

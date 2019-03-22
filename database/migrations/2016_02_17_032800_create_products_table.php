@@ -12,6 +12,34 @@ class CreateProductsTable extends Migration
      */
     public function up()
     {
+        /** 
+         * name `
+         * type (boar, gilt, sow, semen) `
+         * min price `
+         * max price `
+         * breed type `
+         * birth date `
+         * birth weight `
+         * farm from `
+         * house type `
+         * adg `
+         * fcr `
+         * bft `
+         * lsba `
+         * left teats `
+         * right teats `
+         * other details `
+         * 
+         * added fields:
+         * - house type `
+         * - min price `
+         * - max price `
+         * - birth weight `
+         * - lsba `
+         * - left teats `
+         * - right teats `
+        */
+
         Schema::create('products', function (Blueprint $table) {
             $table->increments('id');
             $table->integer('breeder_id')->unsigned();
@@ -20,12 +48,25 @@ class CreateProductsTable extends Migration
             $table->string('name');
             $table->string('type');
             $table->date('birthdate');
+            $table->float('birthweight')->nullable();
             $table->integer('breed_id');
-            $table->float('price')->nullable();
+            
+            // $table->float('price')->nullable();
+            $table->float('min_price')->nullable();
+            $table->float('max_price')->nullable();
+
+            $table->string('house_type')->nullable();
+
             $table->integer('quantity')->nullable();
             $table->float('adg')->nullable();
             $table->float('fcr')->nullable();
             $table->float('backfat_thickness')->nullable();
+
+            $table->integer('lsba')->nullable();
+
+            $table->integer('left_teats')->nullable();
+            $table->integer('right_teats')->nullable();
+
             $table->text('other_details')->nullable();
             $table->enum('status',
                 ['hidden', 'displayed', 'requested']

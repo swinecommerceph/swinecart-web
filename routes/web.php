@@ -11,6 +11,10 @@
 |
 */
 
+Route::get('/public-products', function () {
+    return view('products');
+});
+
 Route::get('/',['as' => 'index_path', function () {
     return view('home');
 }])->middleware('guest');
@@ -61,7 +65,7 @@ Route::group(['middleware' => ['web']], function () {
     // Breeder
     Route::group(['prefix' => 'breeder'], function(){
 
-    	Route::get('home',['as' => 'breeder_path', 'uses' => 'BreederController@index']);
+    	Route::get('home',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
 
         // profile-related
     	Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
@@ -76,15 +80,17 @@ Route::group(['middleware' => ['web']], function () {
 
         // product-related
         Route::get('products',['as' => 'products', 'uses' => 'ProductController@showProducts']);
+        Route::get('products/add', ['as' => 'products.create', 'uses' => 'ProductController@createProduct']);
         Route::post('products',['as' => 'products.store', 'uses' => 'ProductController@storeProduct']);
         Route::put('products',['as' => 'products.update', 'uses' => 'ProductController@updateProduct']);
+        Route::get('products/edit/{product}', ['as' => 'products.editProduct', 'uses' => 'ProductController@editProduct']);
         Route::get('products/view/{product}',['as' => 'products.bViewDetail', 'uses' => 'ProductController@breederViewProductDetail']);
         Route::post('products/manage-selected',['as' => 'products.updateSelected', 'uses' => 'ProductController@updateSelected']);
         Route::delete('products/manage-selected',['as' => 'products.deleteSelected', 'uses' => 'ProductController@deleteSelected']);
         Route::get('products/product-summary',['as' => 'products.summary', 'uses' => 'ProductController@productSummary']);
         Route::post('products/set-primary-picture',['as' => 'products.setPrimaryPicture', 'uses' => 'ProductController@setPrimaryPicture']);
         Route::post('products/display-product',['as' => 'products.display', 'uses' => 'ProductController@displayProduct']);
-        Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
+      Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
         Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'ProductController@deleteMedium']);
 
         // dashboard-related
@@ -95,7 +101,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('dashboard/sold-products',['as' => 'dashboard.soldProducts', 'uses' => 'DashboardController@retrieveSoldProducts']);
         Route::get('dashboard/reviews-and-ratings',['as' => 'dashboard.reviews', 'uses' => 'DashboardController@showReviewsAndRatings']);
         Route::patch('dashboard/product-status/update-status',['as' => 'dashboard.reserveProduct', 'uses' => 'DashboardController@updateProductStatus']);
-
+        Route::get('dashboard/reports', ['as' => 'dashboard.reports', 'uses' => 'DashboardController@showReports']);
+        
         // notification-related
         Route::get('notifications',['as' => 'bNotifs', 'uses' => 'BreederController@showNotificationsPage']);
         Route::get('notifications/get',['as' => 'bNotifs.get', 'uses' => 'BreederController@getNotifications']);

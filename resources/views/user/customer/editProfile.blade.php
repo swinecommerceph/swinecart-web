@@ -22,9 +22,8 @@
 @endsection
 
 @section('content')
-    <div class="row">
+    <div class="row container">
         <div class="col s12 m10 offset-m1">
-            <p class="caption">Update your profile.</p>
             @include('common._errors')
             @include('user.customer._editProfileForm')
         </div>

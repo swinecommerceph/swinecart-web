@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Breeders
+    Breeder Farms and their Products
 @endsection
 
 @section('breadcrumb')
@@ -22,9 +22,11 @@
 @endsection
 
 @section('content')
-
-    <div class="row">
-        <form class="col s1" id="map-params" action="breeders" method="post">
+    <div class="row container">
+        <p style="color:hsl(0, 0%, 40%);">Select which product(s) to find: </p>
+        
+        {{-- Checkbox --}}
+        <form class="col s2" id="map-params" action="breeders" method="post">
             <p>
               <input type="checkbox" class="filled-in cb-type" id="cb-gilt" name="gilt" {{ (isset($_POST['gilt']) || !isset($_POST['_token']))?'checked="checked"':''}}/>
               <label for="cb-gilt">Gilt</label>
@@ -42,12 +44,16 @@
             <br/>
         </form>
 
-        <div class="col s11">
-            <div class="progress geocoding" style="display:none;">
+        {{-- World Map --}}
+        <div class="col s10">
+            {{-- Preloader --}}
+            <div class="row s12 progress geocoding" style="display:none;">
               <div class="indeterminate"></div>
             </div>
-            <div id="map-container">
-                <div id="map-canvas" style="height:70vh;"></div>
+
+            {{-- Actual Map --}}
+            <div class="row" id="map-container">
+                <div id="map-canvas" style="height:60vh; max-width: auto;"></div>
             </div>
         </div>
     </div>
@@ -137,11 +143,11 @@
                 });
             }
            
-            @foreach($breeders as $breeder)
+            @foreach($results as $result)
                 geocode({
-                    address : '{{ $breeder->officeAddress_province }}, Philippines',
-                    content : '{{ $breeder->users()->first()->name }}',
-                    id : '{{ $breeder->id }}'
+                    address : '{{ $result->province }}, Philippines',
+                    content : '{{ $result->name }}, {{ $result->province }}',
+                    id : '{{ $result->id }}'
                 });
             @endforeach
             

@@ -202,6 +202,7 @@ class DashboardRepository
                 for ($i = 0; $i < $diff + 1; $i++) {
 
                     $boarQuery = $breeder->transactionLogs()
+                        // ->with('product.farmFrom')
                         ->where('status','sold')
                         ->whereYear('created_at', $currentDate->year)
                         ->whereMonth('created_at', $currentDate->month)

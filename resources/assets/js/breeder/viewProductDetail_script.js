@@ -16,14 +16,16 @@ $(document).ready(function(){
 		$('#videos-carousel .carousel').carousel('next');
 	});
 
-	// Change display to respective image upon carousel-item click
+  // Change display to respective image upon carousel-item click
+  // Change display (and image zoom) to respective image upon carousel-item click
 	$('#images-carousel .carousel-item').click(function(e){
 		e.preventDefault();
 
 		var img_src = $(this).find('img').attr('src');
 		
 		$('#video-display').hide();
-		$('.card-image img').attr('src', img_src);
+    $('.card-image img').attr('src', img_src);
+    $('.card-image img').attr('data-imagezoom', img_src);
 		$('.card-image img').show();
 	});
 

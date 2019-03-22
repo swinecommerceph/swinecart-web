@@ -9,68 +9,71 @@
 @endsection
 
 @section('content')
-	<div class="row">
-		<div class="col s12 m6 offset-m3">
-			<div class="card-panel">
+	<br>
+	<div class="row container">
+		<div class="col s12 m4 offset-m4">
+			<div class="card-panel" style="border: solid 1px #E1E4EC !important; box-shadow: 0px 0px !important; border-radius: 3px !important;">
 				<div class="row s12">
-					<h4 class="center-align"> Login </h4>
+					<p class="left-align" style="font-size: 1.125rem; line-height: 1.2; color: hsl(0, 0%, 45%);"> Login to your account</p>
 					{{-- Display Validation Errors --}}
-					@include('common._errors')
+					
 
 					{{-- Login Form --}}
 					<form action="{{ url('login') }}" method="POST" class="col s12">
 						{!! csrf_field() !!}
 
 						{{-- E-Mail Address --}}
-						<div class="row">
-							<div class="input-field col s12">
-								<input type="email" id="email" name="email" value="{{ old('email') }}" autofocus required>
-								<label for="email">E-mail</label>
-							</div>
-						</div>
+            <div class="row input-field">
+              <input class="validate" type="email" id="email" name="email" value="{{ old('email') }}" autofocus placeholder="  Enter Email">
+              <label for="email">E-mail Address</label>
+            </div>
 
 						{{-- Password --}}
-						<div class="row">
-							<div class="input-field col s12">
-								<input type="password" id="password" name="password" required>
-								<label for="password">Password</label>
-							</div>
-						</div>
+            <div id="password-container" class="row input-field">
+              <!-- <span style="display: inline-block; width: 4rem;"></span>
+              <span><a style="font-size: 0.9rem;" href="/password/reset"> I forgot my password </a></span> -->
+              
+              {{-- Input field for password --}}
+              <input class="validate col s11 login-password" type="password" id="password" name="password" placeholder="  Enter Password">
+              <label for="password">Password</label>
+
+              {{-- Show/Hide Password Button --}}
+              <div class="col s1 show-hide-password"
+                  style="cursor: pointer;">
+                <i id="show-hide-password-icon" class="grey-text text-lighten-1 material-icons center-align">visibility</i>
+              </div>
+            </div>
 
 						{{-- Login Button --}}
 						<div class="row">
-							<div class="">
-								<button type="submit" class="btn waves-effect waves-light col s4 push-s8"> Login
-									<i class="material-icons right">send</i>
-								</button>
-							</div>
-						</div>
+                <button type="submit" class="btn waves-effect waves-light col s12 teal darken-3">Login with Email</button>
+            </div>
 
 					</form>
 
-					<div class="row">
-						<h5 class="center-align"> OR </h5>
-						{{-- Facebook Button --}}
-						<div class="col s12">
-							<a href="/login/facebook" class="btn-large waves-effect waves-light indigo darken-2 col s12 social-button"> Login with Facebook </a>
-						</div>
-					</div>
+					{{-- Social Login --}}
+          <p class="center-align"> OR </p>
 
-					<div class="row">
-						{{-- Google Button --}}
-						<div class="col s12">
-							<a href="/login/google" class="btn-large waves-effect waves-light red col s12 social-button"> Login with Google </a>
-						</div>
-					</div>
+          {{-- Facebook Button --}}
+          <!-- <a href="/login/facebook" class="waves-effect waves-light col s12 btn facebook">
+            <i style="border-right: solid 1px rgba(0, 0, 0, 0.2); margin-right: 1rem; padding: 0 1.3rem;" class="fa fa-facebook"></i>
+            Login with Facebook
+          </a> -->
 
-                    <div class="row">
-						{{-- Forgot Password --}}
-						<div class="col s12 center-align">
-							<a href="/password/reset"> Forgot Password </a>
-						</div>
-					</div>
+          <!-- <br><br> -->
+
+          {{-- Google Button --}}
+          <a href="/login/google" class="waves-effect waves-light red col s12 btn google">
+            <i style="border-right: solid 1px rgba(0, 0, 0, 0.2); margin-right: 1rem; padding-right: 1rem; padding-left: 0.1rem;" class="fa fa-google"></i>
+            Login with Google
+          </a>
+                   
 				</div>
 			</div>
 		</div>
 	</div>
+@endsection
+
+@section('customScript')
+  <script src="{{ elixir('/js/login.js') }}"></script>
 @endsection

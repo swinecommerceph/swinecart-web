@@ -34,6 +34,7 @@ var filter = {
 
         // Join breed filter values by '+' and append to filter_parameters
         if(breeds.length > 0){
+            //console.log(breeds);
             breed_url = 'breed=';
             breed_url += breeds.join('+');
             filter_parameters += (filter_parameters.length > 1) ? '&'+breed_url : breed_url;

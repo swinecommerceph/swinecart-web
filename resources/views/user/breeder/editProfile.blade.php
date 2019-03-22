@@ -13,15 +13,19 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Update Profile
+    <div class="breadcrumb-container">    
+      Update Profile
+    </div>
 @endsection
 
 @section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="#!" class="breadcrumb">Update Profile</a>
+    <div class="breadcrumb-container">
+        <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
+        <a href="#!" class="breadcrumb">Update Profile</a>
+    </div>
 @endsection
 
-@section('content')
+@section('breeder-content')
     <div class="row">
         <div class="col s12 m10 offset-m1">
             <p class="caption">Update your profile.</p>

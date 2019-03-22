@@ -13,15 +13,19 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Notifications
+    <div class="breadcrumb-container">    
+      Notifications
+    </div>  
 @endsection
 
 @section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="#!" class="breadcrumb">Notifications</a>
+    <div class="breadcrumb-container">
+        <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
+        <a href="#!" class="breadcrumb">Notifications</a>
+    </div>
 @endsection
 
-@section('content')
+@section('breeder-content')
     <div class="row">
         <div class="col s12">
             <p class="caption">

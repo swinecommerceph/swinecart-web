@@ -24,7 +24,7 @@
 @section('navbarHead')
     <li><a href="{{ route('products.view') }}"> Products </a></li>
     <li id="message-main-container">
-        <a href="{{ route('customer.messages') }}" id="message-icon"
+        <a v-cloak href="{{ route('customer.messages') }}" id="message-icon"
             data-alignment="right"
         >
             <i class="material-icons left">message</i>
@@ -104,8 +104,10 @@
                 </li>
             </ul>
         </li>
+
+        {{-- Notifications --}}
         <li id="notification-main-container">
-            <a href="#!" id="notification-icon"
+            <a v-cloak href="#!" id="notification-icon"
                 class="dropdown-button"
                 data-beloworigin="true"
                 data-hover="false"
@@ -129,6 +131,8 @@
                     99+
                 </span>
             </a>
+
+            {{-- Notification Dropdown --}}
             <ul id="notification-dropdown" class="dropdown-content collection">
                 <div id="notification-preloader-circular" class="row">
                     <div class="center-align">
@@ -148,6 +152,7 @@
                     </div>
                 </div>
                 <li>
+                    {{-- Notification List --}}
                     <ul id="notification-container" class="collection">
                         <li v-for="(notification,index) in notifications"
                             style="overflow:auto;"
@@ -157,15 +162,20 @@
                                 :href="notification.url"
                                 @click.prevent="goToNotification(index)"
                             >
+                                {{-- Radio Button Icon --}}
                                 <span class="left" v-if="!notification.read_at">
                                     <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_checked</i>
                                 </span>
                                 <span class="left" v-else >
                                     <i class="material-icons indigo-text text-darken-2" style="font-size:1rem;">radio_button_unchecked</i>
                                 </span>
+
+                                {{-- Notification Description--}}
                                 <p style="margin-left:1.5rem;" :class=" (notification.read_at) ? 'grey-text' : '' ">
                                     <span v-html="notification.data.description"></span>
                                 </p>
+
+                                {{-- Timestamp --}}
                                 <p class="right-align grey-text text-darken-1" style="font-size:0.8rem;"> @{{ notification.data.time.date | transformToReadableDate }} </p>
                             </a>
                         </li>
@@ -181,8 +191,9 @@
 @endsection
 
 @section('content')
-
-    <div class="" id="swine-cart-container">
+    
+    {{-- Swinecart Container --}}
+    <div class="container" id="swine-cart-container">
 
         {{-- Tabs --}}
         <ul class="tabs tabs-fixed-width">
@@ -201,8 +212,9 @@
         </order-details>
         <transaction-history :history="history"></transaction-history>
 
-        {{-- Product Info Modal --}}
-        <div id="info-modal" class="modal">
+        {{-- Product Info Modal in Transaction History Tab--}}
+        <div id="info-modal" class="modal" style="width: 70% !important;
+                max-height: 80% !important;">
           <div class="modal-content">
             <h4 style="overflow:auto"><a href="#"><i class="material-icons black-text right modal-close">close</i></a></h4>
             <div class="row">
@@ -212,7 +224,7 @@
                     <div class="row">
                         <div class="card">
                             <div class="card-image">
-                                <img id="modal-img" :src="productInfoModal.imgPath">
+                                <img id="modal-img" :src="productInfoModal.imgPath" style="width: 38vw; height: 50vh;">
                             </div>
                         </div>
                     </div>
@@ -234,7 +246,7 @@
                 <ul class="collection with-header">
                     <li class="collection-header">
                         <h4 class="row">
-                            <div class="col product-name">
+                            <div class="col product-name"  style="color: hsl(0, 0%, 13%); font-weight: 700">
                                 {{-- productName --}}
                                 @{{ productInfoModal.name }}
                             </div>
@@ -242,11 +254,46 @@
                         <div class="row">
                             <div class="col breeder product-farm">
                               {{-- Breeder and farm_province --}}
-                              @{{ productInfoModal.breeder }} <br>
-                              @{{ productInfoModal.province }}
+                              Breeder:
+                              <span class="blue-text" style="font-weight: 700;">
+                                @{{ productInfoModal.breeder }}
+                              </span><br>
+                              Farm Province: 
+                              <span>@{{ productInfoModal.province }}</span>
                             </div>
                         </div>
                     </li>
+
+                    {{-- Details --}}
+                    <table class="white highlight responsive-table">
+                        <tr>
+                            <td style="color: hsl(0, 0%, 13%); font-weight: 600;">
+                                @{{ capitalizedProductType }} - @{{ productInfoModal.breed }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: hsl(0, 0%, 45%);">
+                                Born on @{{ productInfoModal.birthdate }} (@{{ productInfoModal.age }} days old)
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: hsl(0, 0%, 45%);">
+                                Average Daily Gain: @{{ productInfoModal.adg }} g
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: hsl(0, 0%, 45%);">
+                                Feed Conversion Ratio: @{{ productInfoModal.fcr }}
+                            </td>
+                        </tr>
+                        <tr>
+                            <td style="color: hsl(0, 0%, 45%);">
+                                Backfat Thickness: @{{ productInfoModal.bft }} mm
+                            </td>
+                        </tr>
+                    </table>                            
+                    
+                    <!-- 
                     <li class="collection-item product-type">{{--{{$product->type}} - {{$product->breed}} --}}
                         <span class="type"> @{{ capitalizedProductType }} </span> -
                         <span class="breed"> @{{ productInfoModal.breed }} </span>
@@ -263,7 +310,11 @@
                     <li class="collection-item product-backfat_thickness">{{--Backfat Thickness: {{$product->backfat_thickness}} --}}
                         Backfat Thickness: <span> @{{ productInfoModal.bft }} </span> mm
                     </li>
-                    <li class="row collection-item rating">
+                    -->
+                    
+                    {{-- Breeder Ratings --}}
+                    <li class="row collection-item rating  grey lighten-4">
+                        <span style="color: hsl(0, 0%, 13%); font-weight: 700;">Breeder Ratings</span>
                         <div class="delivery-rating">
                             <span class="col s6"> Delivery: </span>
                             <span class="col s6"> <average-star-rating :rating="productInfoModal.avgDelivery | round"></average-star-rating> </span>
@@ -282,7 +333,6 @@
             </div>
           </div>
         </div>
-
     </div>
 
     {{-- Template for <order-details> component --}}
@@ -296,7 +346,7 @@
 
                     {{-- Card --}}
                     <div class="col m4" v-for="(product, index) in sortedProducts">
-                        <div class="card sticky-action" :class="(product.request_status) ? 'teal' : ''">
+                        <div class="card hoverable sticky-action" :class="(product.request_status) ? 'teal darken-2' : 'blue-grey lighten-5'">
                             {{-- Product Image --}}
                             <div class="card-image">
                                 <img class="activator" :src="product.img_path">
@@ -305,7 +355,7 @@
                                 <a class="btn-floating btn-large halfway-fab waves-effect waves-light red tooltipped"
                                     data-position="top"
                                     data-delay="50"
-                                    data-tooltip="Send meesage to Breeder"
+                                    data-tooltip="Send message to Breeder"
                                     :href="'/customer/messages/' + product.user_id"
                                     v-if="product.status === 'reserved' | product.status === 'on_delivery' | product.status === 'paid'"
                                 >
@@ -323,13 +373,15 @@
                                 </a>
 
                             </div>
-                            <div class="card-content" :class="(product.request_status) ? 'white-text' : 'grey-text'">
+                            {{-- Product Card --}}
+                            <div style="height: 35vh !important;" class="card-content" :class="(product.request_status) ? 'white-text' : 'blue-grey-text text-darken-4'">
                                 {{-- Title --}}
                                 <span class="card-title">
                                     <a href="#"
                                         class="anchor-title"
-                                        :class="(product.request_status) ? 'white-text' : 'grey-text'"
+                                        :class="(product.request_status) ? 'white-text' : 'blue-grey-text text-darken-4'"
                                         @click.prevent="viewProductModalFromCart(product.item_id)"
+                                        style="font-weight: 700;"
                                     >
                                         @{{ product.product_name }}
                                     </a>
@@ -338,32 +390,40 @@
                                 {{-- Product Info --}}
                                 <p class="row" style="min-height:100px;">
                                     <span class="col s12">
-                                        @{{ product.product_type | capitalize }} - @{{ product.product_breed }} <br>
-                                        @{{ product.breeder }}
+                                        <span style="font-weight: 600;">@{{ product.product_type | capitalize }} - @{{ product.product_breed }}</span>
+                                        <br>
+                                        Breeder: @{{ product.breeder }}
                                     </span>
 
+                                    {{-- product not yet requested--}}
                                     <span class="col s12 input-quantity-container" v-if="product.product_type === 'semen' && !product.request_status">
                                         {{-- Request Quantity for semen --}}
                                         <span class="col s6">
                                             Quantity:
                                         </span>
                                         <span class="col s6">
+
+                                            {{-- minus button--}}
                                             <span class="col s4 center-align">
                                                 <a href="#"
-                                                    class="btn col s12"
-                                                    style="padding:0;"
+                                                    class="btn col s12" 
+                                                    style="padding:0; width: 2vw;"
                                                     @click.prevent="subtractQuantity(product.item_id)"
                                                 >
                                                     <i class="material-icons">remove</i>
                                                 </a>
                                             </span>
+
+                                            {{-- product quantity --}}
                                             <span class="col s4 center-align" style="padding:0;">
                                                 <quantity-input v-model="product.request_quantity"> </quantity-input>
                                             </span>
+                                            
+                                            {{-- plus button--}}
                                             <span class="col s4 center-align">
                                                 <a href="#"
                                                     class="btn col s12"
-                                                    style="padding:0;"
+                                                    style="padding:0; width: 2vw;"
                                                     @click.prevent="addQuantity(product.item_id)"
                                                 >
                                                     <i class="material-icons">add</i>
@@ -372,10 +432,11 @@
                                         </span>
                                     </span>
 
+                                    {{-- product was requested --}}
                                     <span class="col s6" v-else>
                                         Quantity: @{{ product.request_quantity }}
                                     </span>
-
+                                    
                                     {{-- Show Request Details if product is already requested --}}
                                     <span class="col s12"
                                         v-if="product.request_status && product.status === 'requested'"
@@ -383,67 +444,79 @@
                                         <a href="#"
                                             class="anchor-title white-text"
                                             @click.prevent="viewRequestDetails(product.item_id)"
+                                            style="font-weight: 600; text-decoration: underline;" 
                                         >
-                                            REQUEST DETAILS
+                                            Request Details
                                         </a>
                                     </span>
 
                                     {{-- Show expected date to be delivered if product is already On Delivery --}}
                                     <span class="col s12"
                                         v-if="product.status === 'on_delivery'"
+                                        style="font-weight: 700; font-size: 2vh;"
                                     >
-                                        <b>Expected to arrive on @{{ product.delivery_date }}</b>
+                                        Expected to arrive on: @{{ product.delivery_date }}
                                     </span>
-
                                 </p>
 
                             </div>
-                            <div class="card-action">
+                            <div style="height: 10vh !important;" class="card-action">
                                 <span class="status-icons-container">
                                     {{-- Product Status icons --}}
 
                                     {{-- Not yet Requested --}}
-                                    <template v-if="!product.request_status">
-                                        <a class="btn teal"
-                                            href="#!"
-                                            @click.prevent="confirmRequest(product.item_id)"
-                                        >
-                                            Request
-                                        </a>
-                                        <a class="btn grey"
-                                            href="#!"
-                                            @click.prevent="confirmRemoval(product.item_id)"
-                                        >
-                                            Remove
-                                        </a>
-                                    </template>
+                                    <div class="row">
+                                        <template v-if="!product.request_status">
+                                            <a class="btn blue"
+                                                href="#!"
+                                                style="font-weight: 700;" 
+                                                @click.prevent="confirmRequest(product.item_id)"
+                                            >
+                                                Request
+                                            </a>
+                                            <a href="#!"
+                                                @click.prevent="confirmRemoval(product.item_id)"
+                                                class="blue-grey lighten-5"
+                                                style="color: #37474f; font-weight: 700; padding-left: 2vw;"
+                                            >
+                                                Remove
+                                            </a>
+                                        </template>
+                                    </div>
 
                                     {{-- Requested --}}
+                                    <div class="row">
                                     <template v-if="product.request_status && product.status === 'requested'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Reserved">save</i>
                                         <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
-                                    </template>
+                                    </template>                                        
+                                    </div>
 
                                     {{-- Reserved --}}
+                                    <div class="row">
                                     <template v-if="product.status === 'reserved'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
                                         <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
                                     </template>
+                                    </div>
 
                                     {{-- On Delivery --}}
+                                    <div class="row">
                                     <template v-if="product.status === 'on_delivery'">
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
                                         <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.on_delivery | transformToDetailedDate('On Delivery')">local_shipping</i>
                                     </template>
+                                    </div>
 
                                     {{-- Sold --}}
+                                    <div class="row">
                                     <template v-if="product.status === 'sold'">
                                         <i class="medium material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.sold | transformToDetailedDate('Sold')">local_offer</i>
                                     </template>
-
+                                    </div>
                                 </span>
                             </div>
                         </div>
@@ -460,31 +533,41 @@
             {{--  Remove Product Confirmation Modal --}}
             <div id="remove-product-confirmation-modal" class="modal">
                 <div class="modal-content">
-                    <h4>Remove Product Confirmation</h4>
-                    <p>
-                        Are you sure you want to remove @{{ productRemove.name }} from your Swine Cart?
+                    <h4 class="grey-text text-darken-2">Remove Product?</h4>
+                    <p class="grey-text text-darken-2">
+                        Removing @{{ productRemove.name}} will be removed from your Swine Cart.
                     </p>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn-flat remove-product-button"
+                    <a class="modal-action waves-effect
+                        waves-green btn-flat remove-product-button
+                        grey-text"
+                        style="text-transform: none;  font-weight: 700;"
                         @click.prevent="removeProduct"
                     >
-                        Yes
+                        Yes, Remove the product
                     </a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                    <a class="modal-action modal-close
+                        waves-effect waves-green btn-flat blue white-text"
+                        style="text-transform: none; font-weight: 700;"
+                    >
+                        No, Keep the product
+                    </a>
                 </div>
             </div>
 
             {{--  Request Product Confirmation Modal--}}
-            <div id="request-product-confirmation-modal" class="modal">
+            <div id="request-product-confirmation-modal" class="modal"
+                style="width: 60% !important;
+                max-height: 100% !important;">
                 <div class="modal-content">
-                    <h4>Request Product Confirmation</h4>
-                    <p>
-                        Are you sure you want to request @{{ productRequest.name }}?
-                        <blockquote class="info" v-if="productRequest.type === 'semen'">
+                    <h4 class="grey-text text-darken-2">Request Product?</h4>
+                    <p class="grey-text text-darken-2">    
+                        Requesting @{{ productRequest.name }} sends a request to the breeder for buying the product.
+                        <blockquote style="background-color:#ffcdd2; border-left: 3px solid red;" class="info" v-if="productRequest.type === 'semen'">
                             Once requested, request quantity can never be changed. Also, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
                         </blockquote>
-                        <blockquote class="info" v-else>
+                        <blockquote style="background-color:#ffcdd2; border-left: 3px solid red;" class="info" v-else>
                             Once requested, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
                         </blockquote>
                     </p>
@@ -503,20 +586,23 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn-flat request-product-buttons"
+                    <a class="modal-action waves-effect waves-green btn blue request-product-buttons"
                         @click.prevent="requestProduct($event)"
+                        style="text-transform: none;  font-weight: 700;"
                     >
-                        Yes
+                        Yes, Confirm Request Product
                     </a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons">Close</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat grey-text request-product-buttons"
+                        style="text-transform: none; font-weight: 700;"
+                    >Cancel</a>
                 </div>
             </div>
 
             {{--  Product Request Details modal --}}
             <div id="product-request-details-modal" class="modal">
                 <div class="modal-content">
-                    <h4>@{{ requestDetails.name }} Request Details</h4>
-                    <table>
+                    <h4 class="grey-text text-darken-2">@{{ requestDetails.name }} Request Details</h4>
+                    <table class="grey-text">
                         <thead>
                             <tr> </tr>
                         </thead>
@@ -533,18 +619,18 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Ok</a>
                 </div>
             </div>
 
             {{-- Rating Modal --}}
             <div id="rate-modal" class="modal">
               <div class="modal-content">
-                <h4 class="flow-text">@{{ breederRate.breederName }} <i class="material-icons right modal-close">close</i></h4>
+                <h4 class="flow-text grey-text text-darken-2">Breeder: @{{ breederRate.breederName }} <i class="material-icons right modal-close">close</i></h4>
                 <div class="divider"></div>
                 <div>
                     <br>
-                    <span class="row">
+                    <span class="row grey-text text-darken-2">
                         <span class="col s6">Delivery</span>
                         <span id="delivery" class="col s6 right-align">
                             <star-rating ref="delivery"
@@ -554,7 +640,7 @@
                             </star-rating>
                         </span>
                     </span>
-                    <span class="row">
+                    <span class="row grey-text text-darken-2">
                         <span class="col s6">Transaction</span>
                         <span id="transaction" class="col s6 right-align">
                             <star-rating ref="transaction"
@@ -564,7 +650,7 @@
                             </star-rating>
                         </span>
                     </span>
-                    <span class="row">
+                    <span class="row grey-text text-darken-2">
                         <span class="col s6">Product Quality</span>
                         <span id="productQuality" class="col s6 right-align">
                             <star-rating ref="productQuality"
@@ -582,8 +668,9 @@
                 </div>
               </div>
               <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn-flat rate-breeder-buttons"
+                    <a class="modal-action waves-effect waves-green btn blue rate-breeder-buttons"
                         @click.prevent="rateAndRecord($event)"
+                        style="font-weight: 700;"
                     >
                         Rate
                     </a>
@@ -596,18 +683,18 @@
     {{-- Template for <transaction-history> component --}}
     <template id="transaction-history-template">
 
-        <div class="">
+        <div class="row">
             {{-- Transaction History --}}
             <div id="transaction-history">
                 <div class="row">
-                    <div class="col s5">
+                    <div class="col s5 center-align" style="font-weight: 700;">
                         ITEM(S)
                     </div>
-                    <div class="col s3">
+                    <div class="col s3" style="font-weight: 700;">
                         BREEDER
                     </div>
-                    <div class="col s4">
-                        LOG
+                    <div class="col s4" style="font-weight: 700;">
+                        LOGS
                     </div>
                 </div>
                 <ul id="transaction-cart" class="collection cart">
@@ -616,13 +703,15 @@
                     >
                         <div class="row swine-cart-item valign-wrapper">
                             <div class="col s2 center-align">
-                                <a href="#"><img :src="item.product_details.s_img_path" width="75" height="75" class="circle"></a>
+                                <a><img :src="item.product_details.s_img_path" width="75" height="75" class="circle"></a>
                             </div>
                             <div class="col s3 verticalLine valign-wrapper">
                                 <div class="valign">
+
                                     {{-- Name --}}
-                                    <a href="#" class="anchor-title teal-text"
+                                    <a href="#" class="anchor-title blue-text"
                                         @click.prevent="viewProductModalFromHistory(key)"
+                                        style="font-weight: 700;"
                                     >
                                         <span class="col s12">@{{ item.product_details.name }}</span>
                                     </a>
@@ -640,21 +729,23 @@
                                     </span>
                                 </div>
                             </div>
+
+                            {{-- Breeder and Farm --}}
                             <div class="col s3 verticalLine valign-wrapper">
                                 <div class="valign">
-                                    @{{ item.product_details.breeder_name }} <br>
-                                    @{{ item.product_details.farm_from }}
+                                    <span style="color:hsl(0, 0%, 10%);">@{{ item.product_details.breeder_name }}</span><br>
+                                    <span style="color:hsl(0, 0%, 45%);">@{{ item.product_details.farm_from }}</span>
                                 </div>
                             </div>
                             <div class="col s4">
                                 {{-- Just show three of the recent logs --}}
-                                <div v-for="log in reverseArray(item.logs)">
+                                <div style="color:hsl(0, 0%, 45%);" v-for="log in reverseArray(item.logs)">
                                     <span class="col s6"> @{{ log.status | transformToReadableStatus }} </span>
                                     <span class="col s6 left-align grey-text"> @{{ log.created_at | transformToDetailedDate }} </span>
                                 </div>
 
                                 {{-- Extra logs if there are any --}}
-                                <div class=""
+                                <div style="color:hsl(0, 0%, 30%);"
                                     v-show="item.showFullLogs"
                                     v-for="log in trimmedArray(item.logs)"
                                 >
@@ -668,7 +759,7 @@
                                         <a href="#"
                                             @click.prevent="toggleShowFullLogs(key)"
                                         >
-                                            @{{ (!item.showFullLogs) ? 'Show More...' : 'Show Less...' }}
+                                            @{{ (!item.showFullLogs) ? 'Show More' : 'Show Less' }}
                                         </a>
                                     </span>
                                 </div>
@@ -724,6 +815,7 @@
     <script type="text/javascript">
         // Variables
         var rawProducts = {!! $products !!};
+        console.log(rawProducts);
     </script>
     <script src="{{ elixir('/js/customer/swinecartPage.js') }}"></script>
 @endsection

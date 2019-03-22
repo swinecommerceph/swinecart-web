@@ -13,221 +13,284 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Dashboard
+    <div class="breadcrumb-container">
+      Your Dashboard.
+    </div>    
 @endsection
 
-@section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="#!" class="breadcrumb">Dashboard</a>
-@endsection
+@section('breeder-content')
+    <br>
 
-@section('content')
-    <div class="row">
-        <div class="col s12">
-            <p class="caption">
-                Your Dashboard. <br>
-            </p>
-        </div>
-    </div>
-    <div id="card-status" class="row">
+    <div id="card-status" class="row" v-cloak>
 
-        {{-- Charts --}}
-        <div id="charts-container" class="">
-            <p><br></p>
-
-            <div class="col s1">
-                <div class="">
-                    <input class="with-gap" name="frequency" type="radio" id="frequency-monthly" value="monthly" v-model="chosenFrequency" @change="valueChange" />
-                    <label for="frequency-monthly">Monthly</label>
-                </div>
-                <div class="">
-                    <input class="with-gap" name="frequency" type="radio" id="frequency-weekly" value="weekly" v-model="chosenFrequency" @change="valueChange" />
-                    <label for="frequency-weekly">Weekly</label>
-                </div>
-                <div class="">
-                    <input class="with-gap" name="frequency" type="radio" id="frequency-daily" value="daily" v-model="chosenFrequency" @change="valueChange" />
-                    <label for="frequency-daily">Daily</label>
-                </div>
-            </div>
-            <div class="col s5">
-                <div class="input-field col s5">
-                    <custom-date-from-select v-model="dateFromInput"
-                        :date-accreditation="latestAccreditation"
-                        @date-from-select="dateFromChange"
+        {{-- Product Status --}}
+        <div id="card-product-status" class="col grey lighten-4">
+            {{-- Product Status label --}}
+            <div class="col s12">
+                <h4 class="left-align">
+                    {{-- <a href="{{ route('dashboard.productStatus') }}" --}}
+                    <a href="#"
+                        style="font-weight: 500; color:hsl(0, 0%, 13%); cursor: default;"
                     >
-                    </custom-date-from-select>
-                </div>
-                <div class="input-field col s5">
-                    <custom-date-to-select v-model="dateToInput"
-                        @date-to-select="dateToChange"
-                        v-show="chosenFrequency !== 'weekly'"> </custom-date-to-select>
-                </div>
-                <div class="" style="margin-top:1rem;">
-                    <a class="btn-floating" @click.prevent="retrieveSoldProducts"><i class="material-icons">send</i></a>
-                </div>
-            </div>
-
-            <div class="col s12">
-                <canvas id="barChart"></canvas>
-            </div>
-
-            <p><br></p>
-        </div>
-
-        <div class="col s12">
-            <br>
-        </div>
-
-        <div id="card-product-status" class="col z-depth-1">
-            <p></p>
-            <div class="col s12">
-                <h5 class="center-align">
-                    <a href="{{ route('dashboard.productStatus') }}" class="black-text">Product Status</a>
-                </h5>
+                        Product Inventory and Status
+                    </a>
+                </h4>
             </div>
 
             {{-- Requested Products --}}
             <div class="col s12 m4">
-                <div class="card">
-                    <div class="card-content teal white-text">
-                        <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'requested'])}}" class="white-text">Requested</a>
-                        </span>
-                        <h3>@{{ overallRequested }}</h3>
-                    </div>
-                    <div class="card-action teal">
-                        <a class="white-text">Boar: @{{ dashboardStats.requested.boar }} </a>
-                        <a class="white-text">Sow: @{{ dashboardStats.requested.sow }} </a>
-                        <a class="white-text">Gilt: @{{ dashboardStats.requested.gilt }} </a>
-                        <a class="white-text">Semen: @{{ dashboardStats.requested.semen }} </a>
-                    </div>
-                </div>
+                <a href="{{route('dashboard.productStatus',['status' => 'requested'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content  grey lighten-5">
+                            <span class="card-title">
+                                <b>Requested</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallRequested }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.requested.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.requested.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.requested.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.requested.semen }} </a>
+                        </div>
+                    </div>      
+                </a>
             </div>
 
             {{-- Reserved Products --}}
             <div class="col s12 m4">
-                <div class="card">
-                    <div class="card-content grey white-text">
-                        <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'reserved'])}}" class="white-text">Reserved</a>
-                        </span>
-                        <h3>@{{ overallReserved }}</h3>
+                <a href="{{route('dashboard.productStatus',['status' => 'reserved'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content  grey lighten-5">
+                            <span class="card-title">
+                                <b>Reserved</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallReserved }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.reserved.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.reserved.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.reserved.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.reserved.semen }} </a>
+                        </div>
                     </div>
-                    <div class="card-action grey">
-                        <a class="white-text">Boar: @{{ dashboardStats.reserved.boar }} </a>
-                        <a class="white-text">Sow: @{{ dashboardStats.reserved.sow }} </a>
-                        <a class="white-text">Gilt: @{{ dashboardStats.reserved.gilt }} </a>
-                        <a class="white-text">Semen: @{{ dashboardStats.reserved.semen }} </a>
-                    </div>
-                </div>
+                </a>
             </div>
 
             {{-- On Delivery Products --}}
             <div class="col s12 m4">
-                <div class="card">
-                    <div class="card-content pink white-text">
-                        <span class="card-title">
-                            <a href="{{route('dashboard.productStatus',['status' => 'on_delivery'])}}" class="white-text">On Delivery</a>
-                        </span>
-                        <h3>@{{ overallOnDelivery }}</h3>
+                <a href="{{route('dashboard.productStatus',['status' => 'on_delivery'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content  grey lighten-5">
+                            <span class="card-title">
+                                <b>On Delivery</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallOnDelivery }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.on_delivery.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.on_delivery.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.on_delivery.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.on_delivery.semen }} </a>
+                        </div>
                     </div>
-                    <div class="card-action pink">
-                        <a class="white-text">Boar: @{{ dashboardStats.on_delivery.boar }} </a>
-                        <a class="white-text">Sow: @{{ dashboardStats.on_delivery.sow }} </a>
-                        <a class="white-text">Gilt: @{{ dashboardStats.on_delivery.gilt }} </a>
-                        <a class="white-text">Semen: @{{ dashboardStats.on_delivery.semen }} </a>
-                    </div>
-                </div>
+                    
+                </a>
             </div>
 
-
+            {{-- Product Management --}}
+            <div class="row"></div>
+            <div class="row">
+                <h4 class="left-align" style="font-weight: 500; margin-left: 2vw; margin-top: 5vh;">
+                    {{-- <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}"
+                        style="color:hsl(0, 0%, 13%);"
+                    > --}}
+                    <a href="#" style="font-weight: 500; color:hsl(0, 0%, 13%); cursor: default;">
+                        Product Management
+                    </a>
+                </h4>
+            </div>
+            
             {{-- Hidden Products --}}
             <div class="col s12 m4">
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title">
-                            <a href="{{route('products',['type' => 'all-type', 'status' => 'hidden', 'sort' => 'none'])}}" class="black-text">Hidden</a>
-                        </span>
-                        <h3>@{{ overallHidden }}</h3>
+                <a href="{{route('products',['type' => 'all-type', 'status' => 'hidden', 'sort' => 'none'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content   grey lighten-5">
+                            <span class="card-title">
+                                <b>Hidden</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallHidden }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.hidden.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.hidden.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.hidden.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.hidden.semen }} </a>
+                        </div>
                     </div>
-                    <div class="card-action pink">
-                        <a class="white-text">Boar: @{{ dashboardStats.hidden.boar }} </a>
-                        <a class="white-text">Sow: @{{ dashboardStats.hidden.sow }} </a>
-                        <a class="white-text">Gilt: @{{ dashboardStats.hidden.gilt }} </a>
-                        <a class="white-text">Semen: @{{ dashboardStats.hidden.semen }} </a>
-                    </div>
-                </div>
+                    
+                </a>
             </div>
 
             {{-- Displayed Products --}}
             <div class="col s12 m4">
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title">
-                            <a href="{{route('products',['type' => 'all-type', 'status' => 'displayed', 'sort' => 'none'])}}" class="black-text">Displayed</a>
-                        </span>
-                        <h3>@{{ overallDisplayed }}</h3>
+                <a href="{{route('products',['type' => 'all-type', 'status' => 'displayed', 'sort' => 'none'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content  grey lighten-5">
+                            <span class="card-title">
+                                <b>Displayed</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallDisplayed }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.displayed.boar + dashboardStats.requested.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.displayed.sow + dashboardStats.requested.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.displayed.gilt + dashboardStats.requested.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.displayed.semen + dashboardStats.requested.semen }} </a>
+                        </div>
                     </div>
-                    <div class="card-action teal">
-                        <a class="white-text">Boar: @{{ dashboardStats.displayed.boar + dashboardStats.requested.boar }} </a>
-                        <a class="white-text">Sow: @{{ dashboardStats.displayed.sow + dashboardStats.requested.sow }} </a>
-                        <a class="white-text">Gilt: @{{ dashboardStats.displayed.gilt + dashboardStats.requested.gilt }} </a>
-                        <a class="white-text">Semen: @{{ dashboardStats.displayed.semen + dashboardStats.requested.semen }} </a>
-                    </div>
-                </div>
+                </a>
             </div>
 
             {{-- Total Products Available --}}
             <div class="col s12 m4">
-                <div class="card">
-                    <div class="card-content">
-                        <span class="card-title">
-                            <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}" class="black-text">Available Products</a>
-                        </span>
-                        <h3>@{{ overallProductsAvailable }}</h3>
+                <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}">
+                    <div class="card hoverable">
+                        <div class="card-content  grey lighten-5">
+                            <span class="card-title">
+                                <b>Available Products</b>
+                            </span>
+                            <h3 class="black-text">@{{ overallProductsAvailable }}</h3>
+                        </div>
+                        <div class="card-action teal darken-3 ">
+                            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.requested.boar + dashboardStats.displayed.boar + dashboardStats.hidden.boar }} </a>
+                            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.requested.sow + dashboardStats.displayed.sow + dashboardStats.hidden.sow }} </a>
+                            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.requested.gilt + dashboardStats.displayed.gilt + dashboardStats.hidden.gilt }} </a>
+                            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.requested.semen + dashboardStats.displayed.semen + dashboardStats.hidden.semen }} </a>
+                        </div>
                     </div>
-                    <div class="card-action grey">
-                        <a class="white-text">Boar: @{{ dashboardStats.requested.boar + dashboardStats.displayed.boar + dashboardStats.hidden.boar }} </a>
-                        <a class="white-text">Sow: @{{ dashboardStats.requested.sow + dashboardStats.displayed.sow + dashboardStats.hidden.sow }} </a>
-                        <a class="white-text">Gilt: @{{ dashboardStats.requested.gilt + dashboardStats.displayed.gilt + dashboardStats.hidden.gilt }} </a>
-                        <a class="white-text">Semen: @{{ dashboardStats.requested.semen + dashboardStats.displayed.semen + dashboardStats.hidden.semen }} </a>
-                    </div>
-                </div>
+                </a>
             </div>
+
         </div>
 
-        {{-- Overall Average Rating --}}
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        {{-- Overall Performance --}}
+        <div class="row">
+          <h4 class="left-align" style="font-weight: 500; margin-left: 1vw;">
+            Overall Performance
+          </h4> <br>
+
+          {{-- Selecting which farm to graph --}}
+          <div class="col s4">
+            <div style="margin-bottom: 4vh; margin-left: 0.5vw;" class="input-field">
+              <select v-model="chosenFarm">
+                <option value="" disabled selected>Choose farm</option>
+                @foreach($farmAddresses as $farm)
+                  <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                @endforeach
+                <option value="all-farms">All farms</option>
+              </select>
+              <label style="font-size: 1rem; color:hsl(0, 0%, 30%);">Select which farm to graph:</label>
+            </div>
+          </div> <br><br><br><br>
+
+          {{-- Guide text --}}
+          <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select a frequency to graph to see your performance:</p>
+          
+          {{-- Charts --}}
+          <div id="charts-container" class="">
+            {{-- Frequencies --}}
+            <div class="col s2">
+              <div class="">
+                <input class="with-gap" name="frequency" type="radio" id="frequency-monthly" value="monthly" v-model="chosenFrequency" @change="valueChange" />
+                <label for="frequency-monthly">Monthly</label>
+              </div>
+              <div class="">
+                <input class="with-gap" name="frequency" type="radio" id="frequency-weekly" value="weekly" v-model="chosenFrequency" @change="valueChange" />
+                <label for="frequency-weekly">Weekly</label>
+              </div>
+              <div class="">
+                <input class="with-gap" name="frequency" type="radio" id="frequency-daily" value="daily" v-model="chosenFrequency" @change="valueChange" />
+                <label for="frequency-daily">Daily</label>
+              </div>
+            </div>
+
+            {{-- Dates --}}
+            <div class="col s8">
+              <div class="input-field col s4">
+                <custom-date-from-select v-model="dateFromInput"
+                    :date-accreditation="latestAccreditation"
+                    @date-from-select="dateFromChange"
+                >
+                </custom-date-from-select>
+            </div>
+            <div class="input-field col s4">
+              <custom-date-to-select v-model="dateToInput"
+                  @date-to-select="dateToChange"
+                  v-show="chosenFrequency !== 'weekly'">
+              </custom-date-to-select>
+            </div>
+            <div class="" style="margin-top:1rem;">
+              <a class="btn teal darken-3" @click.prevent="retrieveSoldProducts">
+                <b>Graph</b>
+              </a>
+            </div>
+          </div>
+        
+          {{-- Bar Chart--}}
+          <div class="col s12">
+              <canvas id="barChart"></canvas>
+          </div>
+        </div>
+        
+        <div class="row"></div>
+        <div class="row"></div>
+
+        {{-- Overall Average Rating Container --}}    
         <div class="col s12 m6">
-            <div class="card">
-                <div class="card-content grey white-text">
+            <br>
+            <div class="card hoverable">
+                <div class="card-content white">
                     <span class="card-title">
-                        <a href="{{route('dashboard.reviews')}}" class="white-text">Overall Average Rating</a>
+                        <a href="{{route('dashboard.reviews')}}"
+                            style="font-weight: 700; color:hsl(0, 0%, 13%);"
+                        >
+                            Overall Average Rating
+                        </a>
                     </span>
-                    <h3>@{{ overallRatings }}/5</h3>
-                    <span>No. of reviews: @{{ dashboardStats.ratings.reviewsSize }}</span>
+                    <h2 class="blue-text">@{{ overallRatings }}/5</h2>
+                    <br><br>
+                    <span style="color:hsl(0, 0%, 45%);">No. of reviews: @{{ dashboardStats.ratings.reviewsSize }}</span>
                 </div>
-                <div class="card-action grey">
-                    <a class="white-text">Delivery: @{{ dashboardStats.ratings.delivery }} </a>
-                    <a class="white-text">Transaction: @{{ dashboardStats.ratings.transaction }} </a>
-                    <a class="white-text">Product Quality: @{{ dashboardStats.ratings.productQuality }} </a>
+                <div class="left-align" style="background: hsl(0, 0%, 97%); padding-top: 3vh; padding-bottom: 2vh;">
+                    <a style="color:hsl(0, 0%, 29%); padding-left: 2vw;">Delivery: @{{ dashboardStats.ratings.delivery }} </a><br>
+                    <a style="color:hsl(0, 0%, 29%); padding-left: 2vw;">Transaction: @{{ dashboardStats.ratings.transaction }} </a><br>
+                    <a style="color:hsl(0, 0%, 29%); padding-left: 2vw;">Product Quality: @{{ dashboardStats.ratings.productQuality }} </a>
                 </div>
             </div>
         </div>
 
         {{-- Reviews --}}
         <div class="col s12 m6">
-            <div class="card">
-                <div class="card-content teal white-text">
+            <br>
+            <div class="card hoverable">
+                <div class="card-content">
                     <span class="card-title">
-                        <a href="{{route('dashboard.reviews')}}" class="white-text">Reviews</a>
+                        <a href="{{route('dashboard.reviews')}}"
+                            style="font-weight: 700;  color:hsl(0, 0%, 13%);"
+                        >
+                            Reviews
+                        </a>
                     </span>
                     <div id="review-slider" class="slider">
-                        <ul class="slides teal">
-                            <li v-for="review in dashboardStats.ratings.reviews">
-                                <img src="">
-                                <div class="caption center-align">
-                                    <h5 style="margin:0;">"@{{ review.comment }}"</h5>
-                                    <h6 class="light grey-text text-lighten-3">- @{{ review.customerName }}</h6>
+                        <ul class="slides" style="background:hsl(0, 0%, 97%);">
+                            <li v-for="review in (dashboardStats.ratings.reviews).slice(0,3)">
+                                <div class="caption right-align">
+                                    <h5 class="center-align" style="margin:0; color:hsl(0, 0%, 29%);">"@{{ review.comment }}"</h5>
+                                    <h6 class="center-align" style="color:hsl(0, 0%, 45%);">- @{{ review.customerName }}</h6>
                                 </div>
                             </li>
                         </ul>
@@ -235,49 +298,39 @@
                 </div>
             </div>
         </div>
-
     </div>
 
+    {{-- Customer Mapping Container--}}
     <div class="row">
         {{-- Location --}}
-        <div class="col s12">
-            <div class="card">
-                <div class="card-content teal darken-4 white-text">
-                    <span class="card-title">
-                        <a href="{{route('map.customers')}}" class="white-text">Customer Mapping</a>
-                    </span>
+        <div class="col s14">
+            <a href="{{route('map.customers')}}" >
+                <div class="waves-effect waves-light card hoverable teal darken-3" style="border-radius: 7px !important;">
+                    <div class="card-content center-align">
+                        <span class="card-title" style="font-weight: 600; color: #fafafa;">
+                            See the locations of your customers!
+                        </span>
+                    </div>
                 </div>
-            </div>
+            </a>
         </div>
     </div>
 @endsection
 
 @section('customScript')
     <script type="text/javascript">
+        // Get the data from the Dashboard Controller and transfer it to Vue
+        
         var rawLatestAccreditation = "{{ $latestAccreditation }}";
         var rawServerDateNow = "{{ $serverDateNow }}";
         var rawChartTitle = "{!! $soldData['title'] !!}";
-        var rawBarChartData = {
-            labels: {!! json_encode($soldData['labels']) !!},
-            datasets: [{
-                label: 'Boar',
-                backgroundColor: 'rgb(255, 99, 132)',
-                data: {{ json_encode($soldData['dataSets'][0]) }}
-            }, {
-                label: 'Sow',
-                backgroundColor: 'rgb(54, 162, 235)',
-                data: {{ json_encode($soldData['dataSets'][1]) }}
-            }, {
-                label: 'Gilt',
-                backgroundColor: 'rgb(75, 192, 192)',
-                data: {{ json_encode($soldData['dataSets'][2]) }}
-            }, {
-                label: 'Semen',
-                backgroundColor: 'rgb(153, 102, 255)',
-                data: {{ json_encode($soldData['dataSets'][3]) }}
-            }]
 
-        };
+        var rawLabels = {!! json_encode($soldData['labels'])!!};
+        var rawDataBoar = {{ json_encode($soldData['dataSets'][0]) }};
+        var rawDataSow = {{ json_encode($soldData['dataSets'][1]) }};
+        var rawDataGilt = {{ json_encode($soldData['dataSets'][2]) }};
+        var rawDataSemen = {{ json_encode($soldData['dataSets'][3]) }};
+        
         var rawDashboardStats = {!! json_encode($dashboardStats) !!};
     </script>
     <script src="{{ elixir('/js/breeder/dashboard.js') }}"></script>

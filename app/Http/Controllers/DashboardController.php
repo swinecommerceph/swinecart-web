@@ -25,7 +25,7 @@ class DashboardController extends Controller
     public function __construct(DashboardRepository $dashboard)
     {
         $this->middleware('role:breeder');
-        $this->middleware('updateProfile:breeder');
+        //$this->middleware('updateProfile:breeder');
         $this->middleware(function($request, $next){
             $this->user = Auth::user();
 
@@ -36,13 +36,21 @@ class DashboardController extends Controller
 
     /**
      * Show the Breeder' Dashboard
-     *
+     * @param Request $request
      * @return View
      */
-    public function showDashboard()
+    public function showDashboard(Request $request)
     {
-        $dashboardStats = [];
         $breeder = $this->user->userable;
+        $farmAddresses = $breeder->farmAddresses;
+        
+        if($request->user()->updateProfileNeeded()){
+          $provinces = $this->getProvinces();
+          return view('user.breeder.createProfile', compact('breeder', 'farmAddresses', 'provinces'));
+        }
+
+        $dashboardStats = [];
+        // $breeder = $this->user->userable;
 
         $dashboardStats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
         $dashboardStats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
@@ -51,16 +59,27 @@ class DashboardController extends Controller
         $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
         $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
 
-        $latestAccreditation = $this->user->userable->latest_accreditation;
         $serverDateNow = Carbon::now();
+        $latestAccreditation = $this->user->userable->latest_accreditation;
         $soldData = $this->dashboard->getSoldProducts(
-            (object) [
-                'dateFrom' => $serverDateNow->copy()->subMonths(2)->format('Y-m-d'),
-                'dateTo' => $serverDateNow->format('Y-m-d'),
-                'frequency' => 'monthly'
-            ], $breeder);
+          (object) [
+              'dateFrom' => $serverDateNow->copy()->subMonths(2)->format('Y-m-d'),
+              'dateTo' => $serverDateNow->format('Y-m-d'),
+              'frequency' => 'monthly'
+          ], $breeder);
+        
 
-        return view('user.breeder.dashboard', compact('dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
+        return view('user.breeder.dashboard', compact('farmAddresses', 'dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
+    }
+
+    /**
+     * Show the Breeder' Reports
+     * @param Request $request
+     * @return View
+     */
+    public function showReports(Request $request)
+    {      
+      return view('user.breeder.reports');
     }
 
     /**
@@ -157,5 +176,114 @@ class DashboardController extends Controller
         if($request->ajax()){
             return Customer::find($request->customer_id);
         }
+    }
+
+    /**
+     * Get the sorted provinces all over the Philippines
+     *
+     * @return  Array
+     */
+    private function getProvinces()
+    {
+        return collect([
+            // Negros Island Rregion
+            'Negros Occidental' => 'Negros Occidental',
+            'Negros Oriental' => 'Negros Oriental',
+            // Cordillera Administrative Region
+            'Mountain Province' => 'Mountain Province',
+            'Ifugao' => 'Ifugao',
+            'Benguet' => 'Benguet',
+            'Abra' => 'Abra',
+            'Apayao' => 'Apayao',
+            'Kalinga' => 'Kalinga',
+            // Region I
+            'La Union' => 'La Union',
+            'Ilocos Norte' => 'Ilocos Norte',
+            'Ilocos Sur' => 'Ilocos Sur',
+            'Pangasinan' => 'Pangasinan',
+            // Region II
+            'Nueva Vizcaya' => 'Nueva Vizcaya',
+            'Cagayan' => 'Cagayan',
+            'Isabela' => 'Isabela',
+            'Quirino' => 'Quirino',
+            'Batanes' => 'Batanes',
+            // Region III
+            'Bataan' => 'Bataan',
+            'Zambales' => 'Zambales',
+            'Tarlac' => 'Tarlac',
+            'Pampanga' => 'Pampanga',
+            'Bulacan' => 'Bulacan',
+            'Nueva Ecija' => 'Nueva Ecija',
+            'Aurora' => 'Aurora',
+            // Region IV-A
+            'Rizal' => 'Rizal',
+            'Cavite' => 'Cavite',
+            'Laguna' => 'Laguna',
+            'Batangas' => 'Batangas',
+            'Quezon' => 'Quezon',
+            // Region IV-B
+            'Occidental Mindoro' => 'Occidental Mindoro',
+            'Oriental Mindoro' => 'Oriental Mindoro',
+            'Romblon' => 'Romblon',
+            'Palawan' => 'Palawan',
+            'Marinduque' => 'Marinduque',
+            // Region V
+            'Catanduanes' => 'Catanduanes',
+            'Camarines Norte' => 'Camarines Norte',
+            'Sorsogon' => 'Sorsogon',
+            'Albay' => 'Albay',
+            'Masbate' => 'Masbate',
+            'Camarines Sur' => 'Camarines Sur',
+            // Region VI
+            'Capiz' => 'Capiz',
+            'Aklan' => 'Aklan',
+            'Antique' => 'Antique',
+            'Iloilo' => 'Iloilo',
+            'Guimaras' => 'Guimaras',
+            // Region VII
+            'Cebu' => 'Cebu',
+            'Bohol' => 'Bohol',
+            'Siquijor' => 'Siquijor',
+            // Region VIII
+            'Southern Leyte' => 'Southern Leyte',
+            'Eastern Samar' => 'Eastern Samar',
+            'Northern Samar' => 'Northern Samar',
+            'Western Samar' => 'Western Samar',
+            'Leyte' => 'Leyte',
+            'Biliran' => 'Biliran',
+            // Region IX
+            'Zamboanga Sibugay' => 'Zamboanga Sibugay',
+            'Zamboanga del Norte' => 'Zamboanga del Norte',
+            'Zamboanga del Sur' => 'Zamboanga del Sur',
+            // Region X
+            'Misamis Occidental' => 'Misamis Occidental',
+            'Bukidnon' => 'Bukidnon',
+            'Lanao del Norte' => 'Lanao del Norte',
+            'Misamis Oriental' => 'Misamis Oriental',
+            'Camiguin' => 'Camiguin',
+            // Region XI
+            'Davao Oriental' => 'Davao Oriental',
+            'Compostela Valley' => 'Compostela Valley',
+            'Davao del Sur' => 'Davao del Sur',
+            'Davao Occidental' => 'Davao Occidental',
+            'Davao del Norte' => 'Davao del Norte',
+            // Region XII
+            'South Cotabato' => 'South Cotabato',
+            'Sultan Kudarat' => 'Sultan Kudarat',
+            'North Cotabato' => 'North Cotabato',
+            'Sarangani' => 'Sarangani',
+            // Region XIII
+            'Agusan del Norte' => 'Agusan del Norte',
+            'Agusan del Sur' => 'Agusan del Sur',
+            'Surigao del Sur' => 'Surigao del Sur',
+            'Surigao del Norte' => 'Surigao del Norte',
+            'Dinagat Islands' => 'Dinagat Islands',
+            // ARMM
+            'Tawi-tawi' => 'Tawi-tawi',
+            'Basilan' => 'Basilan',
+            'Sulu' => 'Sulu',
+            'Maguindanao' => 'Maguindanao',
+            'Lanao del Sur' => 'Lanao del Sur'
+        ])->sort();
     }
 }

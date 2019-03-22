@@ -10,6 +10,22 @@
 	<meta http-equiv="X-UA-Compatible" content="IE=edge">
 	<meta name="viewport" content="width=device-width, initial-scale=1">
 
+	<meta name="csrf-token" content="{{ csrf_token() }}">
+  
+  {{-- Google Analytics here --}}
+	
+	<!-- Global site tag (gtag.js) - Google Analytics -->
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131910879-1"></script>
+  <script>
+    window.dataLayer = window.dataLayer || [];
+    function gtag(){dataLayer.push(arguments);}
+    gtag('js', new Date());
+
+    gtag('config', 'UA-131910879-1');
+  </script>
+
+
+
 	<title>SwineCart @yield('title') </title>
 
 	{{-- <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet" type="text/css"> --}}
@@ -24,6 +40,7 @@
 	<link href="/css/icon.css" rel="stylesheet" type="text/css">
 	<link href="/css/style.css" rel="stylesheet" type="text/css">
 	<link href="/js/vendor/VideoJS/video-js.min.css" rel="stylesheet">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
 	<!-- If you'd like to support IE8 -->
   	{{-- <script src="http://vjs.zencdn.net/ie8/1.1.2/videojs-ie8.min.js"></script> --}}
@@ -36,44 +53,48 @@
 	{{-- Navbar --}}
 	<div class="navbar-fixed">
 		<nav class="teal darken-3">
-		    <div class="nav-wrapper container">
-		      	@if (Auth::guest())
-					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;"/>
-					<a class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
+		    <div class="nav-wrapper navbar-container">
+		     	{{-- If user is a guest--}}
+		     	@if (Auth::guest())
+						<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;"/>
+						<a style="font-weight: 700;" class="brand-logo" href="{{ route('index_path') }}">SwineCart</a>
 			  	@else
-					<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;" />
-					<a class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
+						<img src="/images/logowhite.png" height=65 style="padding:.4rem 0 .4rem 0; margin-right:1rem;" />
+						<a style="font-weight: 700;" class="brand-logo" href="{{ route('home_path') }}">SwineCart</a>
 			  	@endif
 
-		      	<ul id="nav-mobile" class="right hide-on-med-and-down">
+	      	<ul id="nav-mobile" class="right hide-on-med-and-down">
+	      		{{-- If user is a guest --}}
 		        @if(Auth::guest())
-					<li><a href="{{ route('home_path') }}"> Products </a></li>
-					<li><a href="{{ route('home_path') }}"> ASBAP </a></li>
-					@if(Request::is('/'))
-						<li><a href="{{ route('login') }}"> Login </a></li>
-						<li><a href="{{ route('register') }}"> Register </a></li>
-					@else
-						@if(!Request::is('login'))
-							<li><a href="{{ route('login') }}" class="waves-effect waves-light btn">Login</a></li>
-						@elseif(!Request::is('register'))
-							<li><a href="{{ url('register') }}" class="waves-effect waves-light btn">Register</a></li>
-						@endif
-					@endif
-				@else
-					<li> <a>{{ Auth::user()->name }}</a> </li>
-					@yield('navbarHead')
-					<li>
-						<a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
-							<i class="material-icons">arrow_drop_down</i>
-						</a>
-						<ul id="nav-dropdown" class="dropdown-content">
+							<li><a href="/public-products"> Products </a></li>
+							<li><a target="_blank" href="http://www.bai.da.gov.ph/index.php/regulatory/item/356-accreditation-of-swine-breeder-farm"> SBFAP </a></li>
+							@if(Request::is('/'))
+								<li><a href="{{ route('login') }}"> Login </a></li>
+								<li><a href="{{ route('register') }}"> Register </a></li>
+							@else
+								@if(!Request::is('login'))
+									<li><a href="{{ route('login') }}" class="waves-effect waves-light btn">Login</a></li>
+								@elseif(!Request::is('register'))
+									<li><a href="{{ url('register') }}" class="waves-effect waves-light btn">Register</a></li>
+								@endif
+							@endif
+						
+						{{-- If user is authenticated --}}
+						@else
+							<li style="margin-right: 10px;">{{ Auth::user()->name }}</li>
+							@yield('navbarHead')
+							<li>
+								<a class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="nav-dropdown">
+									<i class="material-icons">arrow_drop_down</i>
+								</a>
+								<ul id="nav-dropdown" class="dropdown-content">
 					        @yield('navbarDropdown')
 					        <li class="divider"></li>
 					        <li><a href="{{ url('logout') }}">Logout</a></li>
-					    </ul>
-					</li>
-				@endif
-		      	</ul>
+						    </ul>
+              </li>
+						@endif
+		      </ul>
 		    </div>
 
 			{{-- Preloader Progress --}}
@@ -120,10 +141,10 @@
 	@yield('homeContent')
 
 	{{-- Common view for authenticated users --}}
-	@if(!Request::is('/'))
-		<div class="container">
-			@yield('content')
-		</div>
+  @if(!Request::is('/'))
+		<div>
+      @yield('content')
+    </div>
 	@endif
 
 	<script src="{{ elixir('/js/vendor.js') }}"></script>

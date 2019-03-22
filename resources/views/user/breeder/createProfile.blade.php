@@ -13,14 +13,12 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Comlplete Profile
+    <div class="breadcrumb-container">
+      Comlplete Profile
+    </div>
 @endsection
 
-@section('homeContent')
-
-@endsection
-
-@section('content')
+@section('breeder-content')
     <div class="row">
         <div class="col s12 m10 offset-m1">
             <p class="caption">Please complete first your profile. <br>

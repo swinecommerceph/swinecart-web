@@ -27,13 +27,22 @@
 @section('navbarHead')
     @if(!Auth::user()->update_profile)
         <li><a href="{{ route('products.view') }}"> Products </a></li>
-        <li id="message-main-container">
-            <a href="{{ route('customer.messages') }}" id="message-icon"
+
+        {{-- Messaging --}}
+        <li id="message-main-container"
+            class="tooltipped"
+            data-position="bottom"
+            data-tooltip="Messages"
+        >
+            <a v-cloak href="{{ route('customer.messages') }}" id="message-icon"
                 data-alignment="right"
+                class="waves-effect waves-light"
+                
             >
                 <i class="material-icons left">message</i>
                 <span class="badge"
                     v-if="unreadCount > 0  && unreadCount <= 99"
+                    v-cloak 
                 >
                     @{{ unreadCount }}
                 </span>
@@ -44,8 +53,17 @@
                 </span>
             </a>
         </li>
+        
         {{-- Swine Cart --}}
-        <li><a href="{{ route('view.cart') }}" id="cart-icon" class="dropdown-button" data-beloworigin="true" data-hover="true" data-alignment="right" data-activates="cart-dropdown">
+        <li><a href="{{ route('view.cart') }}"
+            id="cart-icon"
+            class="dropdown-button tooltipped"
+            data-beloworigin="true"
+            data-alignment="right"
+            data-activates="cart-dropdown"
+            data-position="bottom"
+            data-tooltip="Shopping Cart"
+            >
                 <i class="material-icons">shopping_cart</i>
                 <span></span>
             </a>
@@ -107,12 +125,15 @@
                 </li>
             </ul>
         </li>
+        
+        {{-- Notification --}}
         <li id="notification-main-container">
-            <a href="#!" id="notification-icon"
-                class="dropdown-button"
+            <a v-cloak href="#!" id="notification-icon"
+                class="dropdown-button tooltipped"
                 data-beloworigin="true"
-                data-hover="false"
                 data-alignment="right"
+                data-position="bottom"
+                data-tooltip="Notifications"
                 data-activates="notification-dropdown"
                 @click.prevent="getNotificationInstances"
             >
@@ -242,22 +263,22 @@
                             <li>
                                 <img src="/images/demo/home1.jpg"> <!-- random image -->
                                 <div class="caption center-align">
-                                    <h3>Welcome to SwineCart!</h3>
-                                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                                    <!-- <h3>Welcome to SwineCart!</h3>
+                                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5> -->
                                 </div>
                             </li>
                             <li>
                                 <img src="/images/demo/home2.jpg"> <!-- random image -->
                                 <div class="caption left-align">
-                                    <h3>Left Aligned Caption</h3>
-                                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                                    <!-- <h3>Left Aligned Caption</h3>
+                                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5> -->
                                 </div>
                             </li>
                             <li>
                                 <img src="/images/demo/home3.jpg"> <!-- random image -->
                                 <div class="caption right-align">
-                                    <h3>Right Aligned Caption</h3>
-                                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
+                                    <!-- <h3>Right Aligned Caption</h3>
+                                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5> -->
                                 </div>
                             </li>
                         @endforelse
@@ -274,10 +295,10 @@
                         <h2 class="right teal-text text-darken-4" style="margin:0; font-family:Electrolize;">SwineCart</h2>
                     </div>
                     <div class="col s12">
-                        <h5 class="right-align grey-text" style="margin:0">
+                        <h5 class="right-align" style="margin:0; color: hsl(0, 0%, 29%);">
                             Your next premium breed is just a click away
                         </h5>
-                        <p class="grey-text">
+                        <p style="color: hsl(0, 0%, 45%);">
                             SwineCart is an e-commerce system that facilitates secure business transactions
                             between buyers and sellers of breeder swine and semen
                         </p>
@@ -310,7 +331,7 @@
                                 </p>
                             </div>
                             <div class="col s12" style="">
-                                <a id="learn-more-breeder" href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
+                                <a id="learn-more-breeder" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
                             </div>
                         </div>
                     </div>
@@ -328,7 +349,7 @@
                                 </p>
                             </div>
                             <div class="col s12" style="">
-                                <a id="learn-more-customer" href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
+                                <a id="learn-more-customer" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
                             </div>
                         </div>
                     </div>
@@ -490,6 +511,74 @@
                                 </p>
                             </div>
                         </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        {{-- Footer / Fifth Row --}}
+        <div class="container">
+            <div class="row">
+                {{-- SwineCart simple description --}}
+                <div class="row">
+                    <div class="col 16 s12">
+                        <p
+                            style="
+                            text-align: justify;
+                            text-justify: inter-word;
+                            ">
+                            SwineCart is a project of the UPLB Institute of Computer Science. It is funded by  Department of Science and Technology - Philippine Council for Agriculture, Forestry and Natural Resources Research and Development (DOST-PCAARRD) and in cooperation with Accredited Swine Breeders Association of the Philippines (ASBAP).
+                        </p>
+                    </div>
+                </div>
+
+                {{-- Contact Information and Logos --}}
+                <div class="row">
+                    <div class="col s4"></div>
+                    {{-- Contact Information for SwineCart--}}
+                    <div class="col s5 teal-text darken-3">
+                        <p>swinecommerceph@gmail.com</p>
+                        <p>(049) 536 2302 | (049) 536 2313</p>
+                    </div>
+                    {{-- Logos of ICS, PCAARRD, and UP --}}
+                    <div class="col s1">
+                        {{-- ICS logo --}}
+                        <img 
+                            style="
+                                margin-top: 20%;
+                                height: auto;
+                                width: 100%
+                            "
+                            src="/images/ics-logo.jpg">
+                    </div>
+                    <div class="col s1">
+                        {{-- UP logo --}}
+                        <img 
+                            style="
+                                margin-top: 20%;
+                                height: auto;
+                                width: 100%
+                            "
+                            src="/images/up-logo.png">
+                    </div>
+                    <div class="col s1">
+                        {{-- PCAARRD logo --}}
+                        <img 
+                            style="
+                                margin-top: 20%;
+                                height: auto;
+                                width: 100%
+                            "
+                            src="/images/pcaarrd-logo.png">
+                    </div>
+                </div>
+                
+                {{-- Copyrights --}}
+                <div class="row">
+                    <div class="col s12">
+                        <p>
+                            Copyright All Rights Resevered © 2018
+                        </p>
                     </div>
                 </div>
             </div>

@@ -9,11 +9,11 @@
     <div class="col s4 left">
         {!! Form::open(['route' => 'products.updateSelected', 'id' => 'manage-selected-form']) !!}
             {{-- Add Button --}}
-            <a href="#!" class="btn-floating btn-large waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
-                <i class="material-icons">add</i>
+            {{-- <a href="#!" class="btn-floating btn-large waves-effect waves-light blue tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
+                <i class="material-icons">add</i> --}}
             </a>
             {{-- Select All Button --}}
-            <a href="#!" class="btn-floating btn-large waves-effect waves-light teal tooltipped select-all-button" data-position="top" data-delay="50" data-tooltip="Select All Products">
+            <a href="#!" class="btn-floating btn-large waves-effect waves-light green tooltipped select-all-button" data-position="top" data-delay="50" data-tooltip="Select All Products">
                 <i class="material-icons">event_available</i>
             </a>
             {{-- Display selected Button. Only show when products are hidden --}}
@@ -28,7 +28,7 @@
                 </a>
             @endif
             {{-- Delete selected Button --}}
-            <a href="#!" class="btn-floating btn-large waves-effect waves-light grey tooltipped delete-selected-button" data-position="top" data-delay="50" data-tooltip="Delete all chosen">
+            <a href="#!" class="btn-floating btn-large waves-effect waves-light red darken-4 tooltipped delete-selected-button" data-position="top" data-delay="50" data-tooltip="Delete all chosen">
                 <i class="material-icons">delete</i>
             </a>
         {!! Form::close() !!}
@@ -67,104 +67,146 @@
                 </select>
                 <label>Show</label>
             </div>
-
         </div>
-
     </div>
 </div>
 
 {{-- Products in card elements container --}}
-<div id="view-products-container" class="row">
-    <?php $productNumber = 1; ?>
-    @foreach($products as $product)
-        <div class="col s12 m6 l4" id="product-{{$product->id}}">
-            <div class="card hoverable">
-                <div class="card-image">
-                    @if($product->status == 'hidden')
-                        <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
-                            <img src="{{$product->img_path}}" class="hidden">
-                        </a>
-                    @else
-                        <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
-                            <img src="{{$product->img_path}}">
-                        </a>
-                    @endif
-                </div>
-                <div class="card-content">
-                    <span class="card-title activator grey-text text-darken-4 truncate">{{$product->name}}<i class="material-icons right">more_vert</i></span>
-                    <p>
-                        {{$product->type}} - {{$product->breed}} <br>
-                        Birthdate: {{$product->birthdate}} <br>
-                        Age: {{$product->age}} days old
-                    </p>
-                </div>
-                <div class="card-action">
-                    <div class="row">
-                        <div class="col left">
-                            <input type="checkbox" id="check-{{$productNumber}}" data-product-id="{{$product->id}}" class="filled-in"/>
-                            <label for="check-{{$productNumber}}"></label>
-                        </div>
-                        <div class="col right">
-                            {{-- Edit Button --}}
-                            <a href="#!" class="tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit {{$product->name}}" data-product-id="{{$product->id}}">
-                                <i class="material-icons teal-text text-darken-2" style="font-size:30px">edit</i>
+<div id="view-products-container" class="row grey lighten-4">
+    @if (count($products) > 0)
+        <?php $productNumber = 1; ?>
+        @foreach($products as $product)
+            <div class="col s12 m6 l4" id="product-{{$product->id}}">
+                <div
+                    class="card hoverable"
+                    style="border: solid 4px transparent;"
+                >
+                    <div class="card-image">
+                        @if($product->status == 'hidden')
+                            <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
+                                <img src="{{$product->img_path}}" class="hidden">
                             </a>
-                            @if(!empty($filters['hidden']) || $product->status == 'hidden')
-                                {{-- Display Button --}}
-                                <a href="#!" class="tooltipped display-product-button" data-position="top" data-delay="50" data-tooltip="Display {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
-                                    <i class="material-icons teal-text" style="font-size:30px">visibility</i>
-                                </a>
-                            @elseif(!empty($filters['displayed']) || $product->status == 'displayed')
-                                {{-- Hide Button --}}
-                                <a href="#!" class="tooltipped hide-product-button" data-position="top" data-delay="50" data-tooltip="Hide {{$product->name}}" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
-                                    <i class="material-icons teal-text" style="font-size:30px">visibility_off</i>
-                                </a>
-                            @endif
-                            {{-- Delete Button --}}
-                            <a href="#!" class="tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete {{$product->name}}" data-product-id="{{$product->id}}">
-                                <i class="material-icons grey-text text-darken-1" style="font-size:30px">delete</i>
+                        @else
+                            <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}">
+                                <img src="{{$product->img_path}}">
                             </a>
-                        </div>
+                        @endif
                     </div>
-                </div>
-                <div class="card-reveal">
-                    <span class="card-title grey-text text-darken-4">{{$product['name']}}<i class="material-icons right">close</i></span>
-                    <br>
-                    <table class="col s10">
-                        <thead> </thead>
-                        <tbody>
-                            <tr>
-                                <td class="grey-text text-darken-2"> Average Daily Gain (g) </td>
-                                <td class="right-align"> {{ $product->adg }} </td>
-                            </tr>
-                            <tr>
-                                <td class="grey-text text-darken-2"> Feed Conversion Ratio </td>
-                                <td class="right-align"> {{ $product->fcr }} </td>
-                            </tr>
-                            <tr>
-                                <td class="grey-text text-darken-2"> Backfat Thickness (mm) </td>
-                                <td class="right-align"> {{ $product->backfat_thickness }} </td>
-                            </tr>
-                        </tbody>
-                    </table>
-                    <div class="col s10"> <br> </div>
+                    <div class="card-content">
+                        <div class="row">
+                            <div class="col s10">
+                                 <span class="card-title grey-text text-darken-4 truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}</span>
+                            </div>
+                            <div class="col s1">
+                                <span><i class="card-title activator material-icons right">more_vert</i></span>
+                            </div>
+                        </div>
+                       
+                        <p>
 
-                    <div class="row">
-                        {{-- Quantity: {{$product->quantity}} <br>
-                        ADG: {{$product->adg}} g<br>
-                        FCR: {{$product->fcr}} <br>
-                        Backfat Thickness: {{$product['backfat_thickness']}} mm <br>
-                        <br> --}}
-                        <div class="col">
-                            <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}" class="waves-effect waves-light btn red">View All Info</a>
+                            <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} - {{$product->breed}}</span> <br>
+                            <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span>
+                        </p>
+                    </div>
+                    <div class="card-action" style="background: hsl(0, 0%, 95%); border-top: none !important;">
+                        <div class="row">
+                            <div class="col left">
+                                <input type="checkbox" id="check-{{$productNumber}}" data-product-id="{{$product->id}}" class="filled-in single-checkbox"/>
+                                <label for="check-{{$productNumber}}"></label>
+                            </div>
+                            <div class="col right">
+                                {{-- Edit Button --}}
+                                <a href="{{ route('products.editProduct', ['product' => $product->id]) }}" class="tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit '{{$product->name}}'" data-product-id="{{$product->id}}">
+                                    <i class="material-icons teal-text text-darken-3" style="font-size:30px">edit</i>
+                                </a>
+                                @if(!empty($filters['hidden']) || $product->status == 'hidden')
+                                    {{-- Display Button --}}
+                                    <a href="#!" class="tooltipped display-product-button" data-position="top" data-delay="50" data-tooltip="Display '{{$product->name}}'" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
+                                        <i class="material-icons teal-text text-darken-3" style="font-size:30px">visibility</i>
+                                    </a>
+                                @elseif(!empty($filters['displayed']) || $product->status == 'displayed')
+                                    {{-- Hide Button --}}
+                                    <a href="#!" class="tooltipped hide-product-button" data-position="top" data-delay="50" data-tooltip="Hide '{{$product->name}}'" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
+                                        <i class="material-icons teal-text text-darken-3" style="font-size:30px">visibility_off</i>
+                                    </a>
+                                @endif
+                                {{-- Delete Button --}}
+                                <a href="#!" class="tooltipped delete-product-button" data-position="top" data-delay="50" data-tooltip="Delete '{{$product->name}}'" data-product-id="{{$product->id}}">
+                                    <i class="material-icons grey-text text-darken-1" style="font-size:30px">delete</i>
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card-reveal">
+                        <div class="row">
+                            <div class="col s10">
+                                <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}</span>
+                            </div>
+                            <div class="col s1">
+                                <span><i class="card-title material-icons right">close</i></span>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <table class="col s12">
+                                <thead> </thead>
+                                <tbody>
+                                    <tr>
+                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
+                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio: </td>
+                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->fcr }} </td>
+                                    </tr>
+                                    <tr>
+                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm): </td>
+                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->backfat_thickness }} </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                        <div class="col s10"> <br> </div>
+
+                        <div class="row">
+                            {{-- Quantity: {{$product->quantity}} <br>
+                            ADG: {{$product->adg}} g<br>
+                            FCR: {{$product->fcr}} <br>
+                            Backfat Thickness: {{$product['backfat_thickness']}} mm <br>
+                            <br> --}}
+                            <div class="col">
+                                <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}"
+                                    class="waves-effect waves-light"
+                                    style="
+                                        border: 2px solid #bbdefb;
+                                        background-color: white;
+                                        padding: 8px 18px;
+                                        font-size: 16px;
+                                        cursor: pointer;
+                                        color: #2196f3;
+                                        font-weight: 700;
+                                        border-radius: 5px;
+                                    "
+                                >
+                                    View All Info
+                                </a>
+                            </div>
                         </div>
                     </div>
                 </div>
+
             </div>
-
-        </div>
-        <?php $productNumber++; ?>
-    @endforeach
+            <?php $productNumber++; ?>
+        @endforeach
+    @else
+        <table>
+            <tr>
+                <td>
+                    <h5 class="center">There are no products</h5>
+                </td>
+            </tr>
+        </table>
+    @endif
 </div>
 
 {{-- Pagination --}}

@@ -6,9 +6,9 @@
 --}}
 
 {{--  Add Product Modal --}}
-<div id="add-product-modal" class="modal modal-fixed-footer">
+<div id="add-product-modal" class="modal modal-fixed-footer" style="max-height: 88vh; height: 88vh !important; width: 60vw !important;">
 	{!! Form::open(['route' => 'products.store', 'class' => 's12', 'id' => 'create-product']) !!}
-	<div class="modal-content">
+	<div class="modal-content" style="overflow-y: auto !important;">
 		<h4>Add Product <i class="material-icons right modal-action modal-close">close</i> </h4>
 		<div class="row">
 			<div id="tabs-container" class="col s12">
@@ -25,8 +25,8 @@
 					<br>
 					{{-- Name --}}
 					<div class="input-field col s6">
-						{!! Form::text('name', null, ['id' => 'name', 'class' => 'validate'])!!}
-						{!! Form::label('name', 'Name*') !!}
+						{!! Form::text('name', null, ['id' => 'name', 'class' => 'validate input-manage-products'])!!}
+						{!! Form::label('name', 'Name*', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 
 					{{-- Type --}}
@@ -38,7 +38,7 @@
 						  <option value="gilt">Gilt</option>
 					      <option value="semen">Semen</option>
 					    </select>
-					    <label>Type*</label>
+					    <label class="grey-text text-darken-3">Type*</label>
 					</div>
 				</div>
 
@@ -51,31 +51,33 @@
 								<option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
 							@endforeach
 					    </select>
-					    <label>Farm From*</label>
+					    <label class="grey-text text-darken-3">Farm From*</label>
 					</div>
 				</div>
 
 				<div class="row">
 					{{-- Price --}}
 					<div class="input-field col s6">
-						{!! Form::text('price', null, ['class' => 'validate'])!!}
-						{!! Form::label('price', 'Price') !!}
+						{!! Form::text('price', null, ['class' => 'validate input-manage-products price-field'])!!}
+						{!! Form::label('price', 'Price', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 			</div>
 
 			{{-- Breed Information --}}
 			<div id="breed-information" class="col s12 m12 l10 offset-l1">
+				<br>
+				<label class="grey-text text-darken-3">Type of Breed</label>
 				<div class="row">
 					 {{-- Breed --}}
 					<div class="input-field col s7">
 						<p>
 							<input name="radio-breed" type="radio" value="purebreed" id="purebreed" class="with-gap purebreed" checked/>
-		      				<label for="purebreed">Purebreed</label>
+		      				<label class="grey-text text-darken-3" for="purebreed">Purebreed</label>
 						</p>
 						<p>
 							<input name="radio-breed" type="radio" value="crossbreed" id="crossbreed" class="with-gap crossbreed"/>
-		      				<label for="crossbreed">Crossbreed</label>
+		      				<label class="grey-text text-darken-3" for="crossbreed">Crossbreed</label>
 						</p>
 					</div>
 				</div>
@@ -84,19 +86,19 @@
 					<div class="input-purebreed-container">
 						{{-- If pure breed --}}
 						<div class="input-field col s6">
-							{!! Form::text('breed', null, ['id' => 'breed'])!!}
-							{!! Form::label('breed', 'Breed*') !!}
+							{!! Form::text('breed', null, ['id' => 'breed', 'class' => 'validate input-manage-products'])!!}
+							{!! Form::label('breed', 'Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 					</div>
 					<div class="input-crossbreed-container">
 						{{-- If crossbreed --}}
 						<div class="input-field col s6">
-							{!! Form::text('fbreed', null, ['id' => 'fbreed'])!!}
-							{!! Form::label('fbreed', 'Father\'s Breed*') !!}
+							{!! Form::text('fbreed', null, ['id' => 'fbreed', 'class' => 'validate input-manage-products'])!!}
+							{!! Form::label('fbreed', 'Father\'s Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 						<div class="input-field col s6">
-							{!! Form::text('mbreed', null, ['id' => 'mbreed'])!!}
-							{!! Form::label('mbreed', 'Mother\'s Breed*') !!}
+							{!! Form::text('mbreed', null, ['id' => 'mbreed', 'class' => 'validate input-manage-products'])!!}
+							{!! Form::label('mbreed', 'Mother\'s Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 					</div>
 				</div>
@@ -104,28 +106,28 @@
 				<div class="row">
 					{{-- Birthdate --}}
 					<div class="input-field col s6">
-						<input type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
-						<label for="birthdate">Birth Date</label>
+						<input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
+						<label class="grey-text text-darken-3" for="birthdate">Birth Date</label>
 					</div>
 
 					{{-- ADG --}}
 					<div class="input-field col s6">
-						{!! Form::text('adg', null, ['class' => 'validate'])!!}
-						{!! Form::label('adg', 'Average Daily Gain (grams)') !!}
+						{!! Form::text('adg', null, ['class' => 'validate input-manage-products'])!!}
+						{!! Form::label('adg', 'Average Daily Gain (grams)', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 
 				<div class="row">
 					{{-- FCR --}}
 					<div class="input-field col s6">
-						{!! Form::text('fcr', null, ['class' => 'validate'])!!}
-						{!! Form::label('fcr', 'Feed Conversion Ratio') !!}
+						{!! Form::text('fcr', null, ['class' => 'validate input-manage-products'])!!}
+						{!! Form::label('fcr', 'Feed Conversion Ratio', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 
 					{{-- Backfat thickness --}}
 					<div class="input-field col s6">
-						{!! Form::text('backfat_thickness', null, ['class' => 'validate'])!!}
-						{!! Form::label('backfat_thickness', 'Backfat thickness (mm)') !!}
+						{!! Form::text('backfat_thickness', null, ['class' => 'validate input-manage-products'])!!}
+						{!! Form::label('backfat_thickness', 'Backfat thickness (mm)', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 
@@ -136,19 +138,15 @@
 				<div class="row">
 					<br>
 					{{-- Other Details --}}
-					<div class="col s12">
-						<a href="#" id="add-other-details" class="left tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-lighten-2">add_circle</i></a>
-					</div>
-
 					<div class="other-details-container">
 						<div class="detail-container">
 							<div class="input-field col s6">
-								{!! Form::text('characteristic[]', null, ['class' => 'validate'])!!}
-								{!! Form::label('characteristic[]', 'Characteristic') !!}
+								{!! Form::text('characteristic[]', null, ['class' => 'validate input-manage-products'])!!}
+								{!! Form::label('characteristic[]', 'Characteristic', ['class' => 'grey-text text-darken-3']) !!}
 							</div>
 							<div class="input-field col s5">
-								{!! Form::text('value[]', null, ['class' => 'validate'])!!}
-								{!! Form::label('value[]', 'Value') !!}
+								{!! Form::text('value[]', null, ['class' => 'validate input-manage-products'])!!}
+								{!! Form::label('value[]', 'Value', ['class' => 'grey-text text-darken-3']) !!}
 							</div>
 							<div class="input-field col s1 remove-button-container">
 								<a href="#" class="tooltipped remove-detail grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Remove detail">
@@ -158,12 +156,19 @@
 						</div>
 					</div>
 
+					<div class="col s12">
+						<a 
+							style="text-transform: none !important; font-weight: 700;"
+							class="waves-effect waves-light btn-flat right add-other-details blue-text"
+						><i class="material-icons blue-text right">add_circle</i>Add Details</a>
+					</div>
+
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="modal-footer">
-		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action" style="display:none;"> Add </button>
+	<div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
+		<button id="submit-button" type="submit" class="btn waves-effect waves-light modal-action teal darken-3" style="display:none;"> Add Product</button>
 	</div>
 	{!! Form::close() !!}
 </div>
@@ -181,19 +186,19 @@
 		</div>
 	</div>
 	<div class="modal-footer">
-		<button id="next-button" type="submit" class="btn waves-effect waves-light modal-action"> Product Summary </button>
+		<button id="next-button" type="submit" class="btn waves-effect waves-light modal-action teal darken-3"> Product Summary </button>
 		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
 
 {{-- Product Summary Modal --}}
-<div id="product-summary-modal" class="modal modal-fixed-footer">
+<div id="product-summary-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 80vh !important; width: 60vw !important;">
 	<div class="modal-content">
 		<h4>Product Summary</h4>
 		<div class="row">
 			<ul id="product-summary-collection" class="collection with-header">
 				<li class="collection-header">
-					<h5>Product Name</h5>
+					<h5 style="font-weight: 700;">Product Name</h5>
 					<h6>Province</h6>
 				</li>
 				<div></div>
@@ -201,7 +206,7 @@
 		</div>
 		<div class="row">
 	        <div class="col s12">
-	            <div id="other-details-summary" class="card">
+	            <div id="other-details-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
 	                <div class="card-content black-text">
 	                    <span class="card-title">Other Details</span>
 						<div></div>
@@ -211,9 +216,9 @@
 	    </div>
 		<div class="row">
 	        <div class="col s12">
-	            <div id="images-summary" class="card">
+	            <div id="images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
 	                <div class="card-content black-text">
-	                    <span class="card-title">Images</span>
+	                    <span class="card-title">List of Images</span>
 						{!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
 						<div class="row"></div>
 						{!! Form::close() !!}
@@ -221,11 +226,12 @@
 	            </div>
 	        </div>
 	    </div>
+	    
 		<div class="row">
 	        <div class="col s12">
-	            <div id="videos-summary" class="card">
+	            <div id="videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
 	                <div class="card-content black-text">
-	                    <span class="card-title">Videos</span>
+	                    <span class="card-title">List of Videos</span>
 						<div class="row"></div>
 	                </div>
 	            </div>
@@ -233,24 +239,24 @@
 	    </div>
 	</div>
 
-	<div class="modal-footer">
+	<div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
 		<div class="from-add-process">
 			{!! Form::open(['route' => 'products.display', 'class' => 's12', 'id' => 'display-product-form']) !!}
-				<button id="display-button" class="btn waves-effect waves-light modal-action"> Display </button>
+				<button id="display-button" class="btn waves-effect waves-light modal-action teal darken-3"> Display Product</button>
+				<button id="save-draft-button" class="btn waves-effect waves-light modal-action teal darken-3"> Save as Draft </button>
 			{!! Form::close() !!}
-			<button id="save-draft-button" class="btn waves-effect waves-light modal-action"> Save as Draft </button>
 		</div>
 		<div class="from-edit-process">
-			<button id="save-button" class="btn waves-effect waves-light modal-action"> Save </button>
+			<button id="save-button" class="btn waves-effect waves-light modal-action teal darken-3"> Save </button>
+			<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 		</div>
-		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
 
 {{-- Edit Product Modal --}}
-<div id="edit-product-modal" class="modal modal-fixed-footer">
+<div id="edit-product-modal" class="modal modal-fixed-footer" style="max-height: 88vh; height: 88vh !important; width: 60vw !important;">
 	{!! Form::open(['route' => 'products.update', 'class' => 's12', 'id' => 'edit-product']) !!}
-	<div class="modal-content">
+	<div class="modal-content" style="overflow-y: auto !important;">
 		<h4>Edit Product <i class="material-icons right modal-action modal-close">close</i> </h4>
 		<div class="row">
 			<div id="tabs-container" class="col s12">
@@ -267,20 +273,20 @@
 					<br>
 					{{-- Name --}}
 					<div class="input-field col s6">
-						{!! Form::text('edit-name', null, ['id' => 'edit-name'])!!}
-						{!! Form::label('edit-name', 'Name*') !!}
+						{!! Form::text('edit-name', null, ['id' => 'edit-name', 'class' => 'validate input-manage-products'])!!}
+						{!! Form::label('edit-name', 'Name*', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 
 					{{-- Type --}}
 					<div class="input-field col s6">
-						<select id="edit-select-type" data-form="add">
+						<select id="edit-select-type"data-form="add">
 					      <option value="" disabled selected>Choose Type</option>
 					      <option value="boar">Boar</option>
 					      <option value="sow">Sow</option>
 						  <option value="gilt">Gilt</option>
 					      <option value="semen">Semen</option>
 					    </select>
-					    <label>Type*</label>
+					    <label class="grey-text text-darken-3">Type*</label>
 					</div>
 				</div>
 
@@ -293,31 +299,33 @@
 								<option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
 							@endforeach
 					    </select>
-					    <label>Farm From*</label>
+					    <label class="grey-text text-darken-3">Farm From*</label>
 					</div>
 				</div>
 
 				<div class="row">
 					{{-- Price --}}
 					<div class="input-field col s6">
-						{!! Form::text('edit-price', null, ['class' => 'validate'])!!}
-						{!! Form::label('edit-price', 'Price') !!}
+						{!! Form::text('edit-price', null, ['class' => 'validate input-manage-products', 'onchange' => 'addComma(this)'])!!}
+						{!! Form::label('edit-price', 'Price', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 			</div>
 
 			{{-- Breed Information --}}
 			<div id="edit-breed-information" class="col s12 m12 l10 offset-l1">
+				<br>
+				<label class="grey-text text-darken-3">Type of Breed</label>
 				<div class="row">
 					 {{-- Breed --}}
 					<div class="input-field col s7">
 						<p>
 							<input name="radio-breed" type="radio" value="purebreed" id="edit-purebreed" class="with-gap purebreed" checked/>
-		      				<label for="edit-purebreed">Purebreed</label>
+		      				<label class="grey-text text-darken-3" for="edit-purebreed">Purebreed</label>
 						</p>
 						<p>
 							<input name="radio-breed" type="radio" value="crossbreed" id="edit-crossbreed" class="with-gap crossbreed"/>
-		      				<label for="edit-crossbreed">Crossbreed</label>
+		      				<label class="grey-text text-darken-3" for="edit-crossbreed">Crossbreed</label>
 						</p>
 					</div>
 				</div>
@@ -326,19 +334,19 @@
 					<div class="input-purebreed-container">
 						{{-- If pure breed --}}
 						<div class="input-field col s6">
-							{!! Form::text('edit-breed', null, ['id' => 'edit-breed'])!!}
-							{!! Form::label('edit-breed', 'Breed*') !!}
+							{!! Form::text('edit-breed', null, ['id' => 'edit-breed', 'class' => 'validate validate input-manage-products'])!!}
+							{!! Form::label('edit-breed', 'Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 					</div>
 					<div class="input-crossbreed-container">
 						{{-- If crossbreed --}}
 						<div class="input-field col s6">
-							{!! Form::text('edit-fbreed', null, ['id' => 'edit-fbreed'])!!}
-							{!! Form::label('edit-fbreed', 'Father\'s Breed*') !!}
+							{!! Form::text('edit-fbreed', null, ['id' => 'edit-fbreed', 'class' => 'validate validate input-manage-products'])!!}
+							{!! Form::label('edit-fbreed', 'Father\'s Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 						<div class="input-field col s6">
-							{!! Form::text('edit-mbreed', null, ['id' => 'edit-mbreed'])!!}
-							{!! Form::label('edit-mbreed', 'Mother\'s Breed*') !!}
+							{!! Form::text('edit-mbreed', null, ['id' => 'edit-mbreed', 'class' => 'validate validate input-manage-products'])!!}
+							{!! Form::label('edit-mbreed', 'Mother\'s Breed*', ['class' => 'grey-text text-darken-3']) !!}
 						</div>
 					</div>
 				</div>
@@ -346,28 +354,28 @@
 				<div class="row">
 					{{-- Birhtdate --}}
 					<div class="input-field col s6">
-						<input type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
-						<label for="edit-birthdate">Birth Date</label>
+						<input style="cursor: pointer;" type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
+						<label class="grey-text text-darken-3" for="edit-birthdate">Birth Date</label>
 					</div>
 
 					{{-- ADG --}}
 					<div class="input-field col s6">
-						{!! Form::text('edit-adg', null, ['class' => 'validate'])!!}
-						{!! Form::label('edit-adg', 'Average Daily Gain (grams)') !!}
+						{!! Form::text('edit-adg', null, ['class' => 'validate input-manage-products'])!!}
+						{!! Form::label('edit-adg', 'Average Daily Gain (grams)', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 
 				<div class="row">
 					{{-- FCR --}}
 					<div class="input-field col s6">
-						{!! Form::text('edit-fcr', null, ['class' => 'validate'])!!}
-						{!! Form::label('edit-fcr', 'Feed Conversion Ratio') !!}
+						{!! Form::text('edit-fcr', null, ['class' => 'validate input-manage-products'])!!}
+						{!! Form::label('edit-fcr', 'Feed Conversion Ratio', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 
 					{{-- Backfat thickness --}}
 					<div class="input-field col s6">
-						{!! Form::text('edit-backfat_thickness', null, ['class' => 'validate'])!!}
-						{!! Form::label('edit-backfat_thickness', 'Backfat thickness (mm)') !!}
+						{!! Form::text('edit-backfat_thickness', null, ['class' => 'validate input-manage-products'])!!}
+						{!! Form::label('edit-backfat_thickness', 'Backfat thickness (mm)', ['class' => 'grey-text text-darken-3']) !!}
 					</div>
 				</div>
 
@@ -378,19 +386,16 @@
 				<div class="row">
 					<br>
 					{{-- Other Details --}}
-					<div class="col s12">
-						<a href="#" id="add-other-details" class="left tooltipped add-other-details" data-position="right" data-delay="50" data-tooltip="Add detail"><i class="material-icons teal-text text-lighten-2">add_circle</i></a>
-					</div>
-
+				
 					<div class="other-details-container">
 						<div class="detail-container">
 							<div class="input-field col s6">
-								{!! Form::text('characteristic[]', null, ['class' => 'validate'])!!}
-								{!! Form::label('characteristic[]', 'Characteristic') !!}
+								{!! Form::text('characteristic[]', null, ['class' => 'validate input-manage-products'])!!}
+								{!! Form::label('characteristic[]', 'Characteristic', ['class' => 'grey-text text-darken-3']) !!}
 							</div>
 							<div class="input-field col s5">
-								{!! Form::text('value[]', null, ['class' => 'validate'])!!}
-								{!! Form::label('value[]', 'Value') !!}
+								{!! Form::text('value[]', null, ['class' => 'validate input-manage-products'])!!}
+								{!! Form::label('value[]', 'Value', ['class' => 'grey-text text-darken-3']) !!}
 							</div>
 							<div class="input-field col s1 remove-button-container">
 								<a href="#" class="tooltipped remove-detail grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Remove detail">
@@ -400,24 +405,31 @@
 						</div>
 					</div>
 
+					<div class="col s12">
+						<a 
+							style="text-transform: none !important; font-weight: 700;"
+							class="waves-effect waves-light btn-flat right add-other-details blue-text"
+						><i class="material-icons blue-text right">add_circle</i>Add Details</a>
+					</div>
+
 				</div>
 			</div>
 		</div>
 	</div>
-	<div class="modal-footer">
+	<div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
 		<div class="from-add-process" style="display:none;">
 			<button id="add-media-button" class="btn waves-effect waves-light modal-action"> Add Media </button>
 		</div>
 		<div class="from-edit-process">
-			<button class="btn waves-effect waves-light modal-action update-button"> Update Product </button>
-			<button id="edit-media-button" class="btn waves-effect waves-light modal-action"> Edit Media </button>
+			<button class="btn waves-effect waves-light modal-action update-button teal darken-3"> Update Product </button>
+			<button id="edit-media-button" class="btn waves-effect waves-light modal-action teal darken-3"> Edit Media </button>
 		</div>
 	</div>
 	{!! Form::close() !!}
 </div>
 
 {{-- Edit Media Modal --}}
-<div id="edit-media-modal" class="modal modal-fixed-footer">
+<div id="edit-media-modal" class="modal modal-fixed-footer" style="max-height: 90%; height: 80vh !important; width: 60vw !important;">
 	<div class="modal-content">
 		<h4>Edit Media </h4>
 		<div class="row">
@@ -429,9 +441,9 @@
 		</div>
 		<div class="row">
 	        <div class="col s12">
-	            <div id="edit-images-summary" class="card">
+	            <div id="edit-images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
 	                <div class="card-content black-text">
-	                    <span class="card-title">Images</span>
+	                    <span class="card-title">List of Images</span>
 						{!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
 						<div class="row"></div>
 						{!! Form::close() !!}
@@ -439,11 +451,12 @@
 	            </div>
 	        </div>
 	    </div>
+	  <hr style="border-top: #ccc;">
 		<div class="row">
 	        <div class="col s12">
-	            <div id="edit-videos-summary" class="card">
+	            <div id="edit-videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
 	                <div class="card-content black-text">
-	                    <span class="card-title">Videos</span>
+	                    <span class="card-title">List of Videos</span>
 						<div class="row"></div>
 	                </div>
 	            </div>
@@ -451,8 +464,8 @@
 	    </div>
 	</div>
 
-	<div class="modal-footer">
-		<button class="btn waves-effect waves-light modal-action update-button"> Update Product </button>
+	<div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
+		<button class="btn waves-effect waves-light modal-action update-button teal darken-3"> Update Product </button>
 		<a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
 	</div>
 </div>
@@ -460,11 +473,25 @@
 {{-- Confirmation Modal --}}
 <div id="confirmation-modal" class="modal">
 	<div class="modal-content">
-	  <p>Are you sure you want to remove the products chosen?</p>
+	  <h5>Remove product/s from your database?</h5>
 	</div>
 	<div class="modal-footer">
-	  <a href="#!" id="confirm-remove" class=" modal-action modal-close waves-effect waves-green btn-flat">Yes</a>
-	  <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">No</a>
+	  <a
+	  	href="#!"
+	  	id="confirm-remove"
+	  	class=" modal-action modal-close waves-effect waves-green btn-flat red darken-4 white-text"
+	  	style="text-transform: none;  font-weight: 700;"
+	  >
+			Remove
+		</a>
+	  
+	  <a
+	  	href="#!"
+	  	class="modal-action modal-close waves-effect waves-green btn-flat grey-text"
+	  	style="text-transform: none; font-weight: 700;"
+	  >
+			No
+		</a>
 	</div>
 </div>
 

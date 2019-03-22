@@ -25,30 +25,38 @@
 
 @section('navbarHead')
     @if(!Auth::user()->update_profile)
-        <li id="message-main-container">
-            <a href="{{ route('breeder.messages') }}" id="message-icon"
+        {{-- <li 
+            id="message-main-container"
+            class="tooltipped"
+            data-position="bottom"
+            data-tooltip="Messages"
+        >
+            <a v-cloak href="{{ route('breeder.messages') }}" id="message-icon"
                 data-alignment="right"
             >
                 <i class="material-icons left">message</i>
                 <span class="badge"
                     v-if="unreadCount > 0  && unreadCount <= 99"
                 >
-                    @{{ unreadCount }}
+                    @{{ unreadCount + " NEW"}}
                 </span>
                 <span class="badge"
                     v-if="unreadCount > 99"
                 >
-                    99+
+                    99+ NEW
                 </span>
             </a>
-        </li>
-        <li><a href="{{ route('dashboard') }}"> <i class="material-icons">assessment</i></a></li>
+        </li> --}}
+        
+        {{-- Notifications --}}
         <li id="notification-main-container">
-            <a href="#!" id="notification-icon"
-                class="dropdown-button"
+            <a v-cloak href="#!" id="notification-icon"
+                class="dropdown-button tooltipped"
                 data-beloworigin="true"
                 data-hover="false"
                 data-alignment="right"
+                data-position="bottom"
+                data-tooltip="Notifications"
                 data-activates="notification-dropdown"
                 @click.prevent="getNotificationInstances"
             >
@@ -68,6 +76,7 @@
                     99+
                 </span>
             </a>
+            {{-- Notification --}}
             <ul id="notification-dropdown" class="dropdown-content collection">
                 <div id="notification-preloader-circular" class="row">
                     <div class="center-align">
@@ -128,301 +137,122 @@
     @endif
 @endsection
 
-@section('static')
-    <div class="fixed-action-btn click-to-toggle" style="bottom: 30px; right: 24px;">
-      <a id="action-button" class="btn-floating btn-large waves-effect waves-light red" style="display:none;" data-position="left" data-delay="50" data-tooltip="More Actions">
-        <i class="material-icons">more_vert</i>
-        <ul>
-            <li><a class="btn-floating waves-effect waves-light grey tooltipped delete-selected-button" data-position="left" data-delay="50" data-tooltip="Delete all chosen"><i class="material-icons">delete</i></a></li>
-            @if(!empty($filters['hidden']))
-                {{-- Only show when products are unshowcased --}}
-                <li><a class="btn-floating waves-effect waves-light teal ligthen-2 tooltipped display-selected-button" data-position="left" data-delay="50" data-tooltip="Display all chosen"><i class="material-icons">visibility</i></a></li>
-            @elseif(!empty($filters['displayed']))
-                {{-- Only show when products are showcased --}}
-                <li><a class="btn-floating waves-effect waves-light teal ligthen-2 tooltipped hide-selected-button" data-position="left" data-delay="50" data-tooltip="Hide all chosen"><i class="material-icons">visibility_off</i></a></li>
-            @endif
-            <li><a href="#" class="btn-floating modal-trigger waves-effect waves-light teal tooltipped select-all-button" data-position="left" data-delay="50" data-tooltip="Select All Products"><i class="material-icons">event_available</i></a></li>
-            <li><a href="#" class="btn-floating modal-trigger waves-effect waves-light teal darken-2 tooltipped add-product-button" data-position="left" data-delay="50" data-tooltip="Add product"><i class="material-icons">add</i></a></li>
-        </ul>
-      </a>
+@section('content')
+    <div class="row">
+      <div id="sidenav-container" class="col s2 teal darken-4">
+     
+        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
+        <a class="sidenav-main-element" href="{{ route('home_path') }}">
+          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0;" class="btn-large teal darken-4">
+            <i class="material-icons left">assessment</i>
+            <span style="font-weight: 500; font-size: 1.4rem;">Dashboard</span>
+          </div>
+        </a>
+
+        <div class="sidenav-sub-element-container">
+          <li class="sidenav-sub-element">
+            <a href="#">
+              <div class="btn teal darken-4">
+                Orders
+              </div>
+            </a>
+          </li>
+        
+          <li class="sidenav-sub-element">
+            <a href="{{ route('dashboard.productStatus') }}"">
+              <div class="btn teal darken-4">
+                Product Inventory
+              </div>
+            </a>
+          </li>
+
+          <li class="sidenav-sub-element">
+              <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}">
+                <div class="btn teal darken-4">
+                  Product Management
+                </div>
+              </a>
+            </li>
+
+          <li class="sidenav-sub-element">
+            <a href="{{ route('products.create') }}">
+              <div class="btn teal darken-4">
+                Add Product
+              </div>
+            </a>
+          </li>
+          
+          {{-- <li class="sidenav-sub-element">
+            <a href="{{ route('dashboard.reports') }}">
+              <div class="btn teal darken-4">
+                Reporting
+              </div>
+            </a>
+          </li> --}}
+        </div>
+      
+        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
+        <a class="sidenav-main-element" href="{{ route('breeder.messages') }}">
+          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0" class="btn-large teal darken-4">
+            <div v-cloak id="message-main-container">
+              <i class="material-icons left">message</i>
+              <span style="font-weight: 500; font-size: 1.4rem;">
+                Messages
+              </span>
+    
+              <span class="message-badge"
+                  v-if="unreadCount > 0  && unreadCount <= 99"
+              >
+                  @{{ unreadCount + " NEW"}}
+              </span>
+              <span class="message-badge"
+                  v-if="unreadCount > 99"
+              >
+                  99+ NEW
+              </span>
+            </div>
+          </div>
+        </a>
+        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
+      
+      
+        <a class="sidenav-main-element" href="{{ route('breeder.edit') }}">
+          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0" class="btn-large teal darken-4">
+            <i class="material-icons left">settings</i>
+            <span style="font-weight: 500; font-size: 1.4rem;">
+              Account Settings
+            </span>
+          </div>
+        </a>
+
+        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
+      </div>
+      <div class="col s2"></div>
+      <div class="col s9">
+        @yield('breeder-content')
+      </div>
     </div>
 @endsection
 
-@section('homeContent')
-    @if(Request::is('breeder/home'))
-        <div class="row"> </div>
-
-        {{-- First row --}}
-        <div class="row">
-
-            <div class="col s7 offset-s1">
-                <div id="homepage-slider" class="slider">
-                    <ul class="slides">
-                        @forelse($homeContent as $content)
-                            <li>
-                                <img src= {{$content->path.$content->name}}>
-                                <div class="caption center-align">
-                                    <h3>{{$content->title}}</h3>
-                                    <h5 class="light grey-text text-lighten-3 content-text">{{$content->text}}</h5>
-                                </div>
-                            </li>
-                        @empty
-                            <li>
-                                <img src="/images/demo/home1.jpg"> <!-- random image -->
-                                <div class="caption center-align">
-                                    <h3>Welcome to SwineCart!</h3>
-                                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
-                                </div>
-                            </li>
-                            <li>
-                                <img src="/images/demo/home2.jpg"> <!-- random image -->
-                                <div class="caption left-align">
-                                    <h3>Left Aligned Caption</h3>
-                                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
-                                </div>
-                            </li>
-                            <li>
-                                <img src="/images/demo/home3.jpg"> <!-- random image -->
-                                <div class="caption right-align">
-                                    <h3>Right Aligned Caption</h3>
-                                    <h5 class="light grey-text text-lighten-3">Here's our small slogan.</h5>
-                                </div>
-                            </li>
-                        @endforelse
-                    </ul>
-                </div>
-            </div>
-            <div class="col s3 valign-wrapper">
-                <div>
-                    <div class="col s12">
-                        <p><br><br></p>
-                        <img class="right" src="/images/logodark.png" alt="" width="180" height="180"/>
-                    </div>
-                    <div class="col s12">
-                        <h2 class="right teal-text text-darken-4" style="margin:0; font-family:Electrolize;">SwineCart</h2>
-                    </div>
-                    <div class="col s12">
-                        <h5 class="right-align grey-text" style="margin:0">
-                            Your next premium breed is just a click away
-                        </h5>
-                        <p class="grey-text">
-                            SwineCart is an e-commerce system that facilitates secure business transactions
-                            between buyers and sellers of breeder swine and semen
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-        </div>
-
-        {{-- Second row --}}
-        <div id="swinecart-users" class="row">
-            <div class="col s12 center-align teal darken-3">
-                <p>
-                    <h4 class="white-text">SWINECART USERS</h4>
-                </p>
-            </div>
-            <div class="col s12 teal darken-3">
-                <div class="container">
-                    <div class="col s6" style="margin: 3rem 0 2rem 0; border-right: thick solid #fff;">
-                        <div class="col s12 white-text">
-                            <div class="col s12 center">
-                                <i class="ecommerce-icon white-text" style="font-size:10rem;">n</i>
-                            </div>
-                            <div class="col s12 center">
-                                <h4 class="">BREEDER</h4>
-                            </div>
-                            <div class="col s12 center">
-                                <p class="">
-                                    SBFAP Accredited Breeder Farm? Sell your products here.
-                                </p>
-                            </div>
-                            <div class="col s12" style="">
-                                <a id="learn-more-breeder" href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col s6" style="margin: 3rem 0 2rem 0;">
-                        <div class="col s12 white-text">
-                            <div class="col s12 center">
-                                <i class="ecommerce-icon white-text" style="font-size:10rem;">v</i>
-                            </div>
-                            <div class="col s12 center">
-                                <h4 class="">CUSTOMER</h4>
-                            </div>
-                            <div class="col s12 center">
-                                <p class="">
-                                    Commercial hog raiser or backyard farmer? Find the good breeds here.
-                                </p>
-                            </div>
-                            <div class="col s12" style="">
-                                <a id="learn-more-customer" href="#!" class="btn-flat white-text"><i class="material-icons right">chevron_right</i> Learn More </a>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Third row --}}
-        <div id="breeder-features" class="row" style="margin-bottom:0;">
-            <div class="col s12 center-align">
-                <p class="teal-text text-darken-3">
-                    <h4>KEY FEATURES AND ADVANTAGES FOR BREEDERS</h4>
-                </p>
-            </div>
-
-            {{-- First three features --}}
-            <div class="col s12">
-                <div class="col s4 center" style="margin: 2rem 0 2rem 0;">
-                    <div class="col s12">
-                        <i class="ecommerce-icon black-text">a</i>
-                        <h4 class="teal-text text-darken-2">REGISTRATION AND VERIFICATION</h4>
-                        <p class="teal-text text-darken-1">
-                            Already an SBFAP accredited breeder? Just create an account at swinecart.cf
-                        </p>
-                        <p class="teal-text text-darken-1">
-                            Not yet an SBFAP accredited breeder? Visit swinecart.cf/sbfap for more information.
-                        </p>
-                    </div>
-                </div>
-                <div class="col s4 center" style="margin: 2rem 0 2rem 0; border-left: thick solid #00695c; border-right: thick solid #00695c;">
-                    <div class="col s12">
-                        <i class="ecommerce-icon black-text">p</i>
-                        <h4 class="teal-text text-darken-2">SET-UP BREEDER PROFILE</h4>
-                        <p class="teal-text text-darken-1">
-                            After creating your account fill out your breeder profile and start managing your farms.
-                        </p>
-                    </div>
-                </div>
-                <div class="col s4 center" style="margin: 2rem 0 2rem 0;">
-                    <div class="col s12">
-                        <i class="ecommerce-icon black-text">f</i>
-                        <h4 class="teal-text text-darken-2">SHOWCASE PRODUCTS</h4>
-                        <p class="teal-text text-darken-1">
-                            Display your products to let potential customers browse through product reviews, photos and videos.
-                        </p>
-                        <p class="teal-text text-darken-1">
-                            Customers around the Philippines can search and purchase your products.
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Last three features --}}
-            <div class="col s12">
-                <div class="col s4 center" style="margin: 2rem 0 2rem 0;">
-                    <div class="col s12">
-                        <i class="ecommerce-icon black-text">b</i>
-                        <h4 class="teal-text text-darken-2">CONNECT WITH CUSTOMERS</h4>
-                        <p class="teal-text text-darken-1">
-                            SwineCart supports various platforms to allow you to talk with your potential and exising customers.
-                        </p>
-                        <p class="teal-text text-darken-1">
-                            It supports chat, email, and SMS.
-                        </p>
-                    </div>
-                </div>
-                <div class="col s4 center" style="margin: 2rem 0 2rem 0; border-left: thick solid #00695c; border-right: thick solid #00695c;">
-                    <div class="col s12">
-                        <i class="ecommerce-icon black-text">n</i>
-                        <h4 class="teal-text text-darken-2">MANAGE INVENTORIES</h4>
-                        <p class="teal-text text-darken-1">
-                            Get real-time sales updates on all your farms in your SwineCart dashboard and prevent inventory outage and overstock through SwineCart's inventory tracking.
-                        </p>
-                    </div>
-                </div>
-                <div class="col s4 center" style="margin: 2rem 0 2rem 0;">
-                    <div class="col s12">
-                        <i class="ecommerce-icon black-text">a</i>
-                        <h4 class="teal-text text-darken-2">ENGAGE YOUR CUSTOMERS</h4>
-                        <p class="teal-text text-darken-1">
-                            Boost your product sales by letting your customers leave feedback and ratings in your breeder profile.
-                        </p>
-                    </div>
-                </div>
-            </div>
-        </div>
-
-        {{-- Fourth row --}}
-        <div id="customer-features" class="row">
-            <div class="col s12 center-align teal darken-3">
-                <p>
-                    <h4 class="white-text">KEY FEATURES AND ADVANTAGES FOR CUSTOMERS</h4>
-                </p>
-            </div>
-
-            {{-- First three features --}}
-            <div class="col s12 teal darken-3">
-                <div class="col s4 center" style="margin: 2rem 0 2rem 0;">
-                    <div class="col s12 white-text">
-                        <i class="ecommerce-icon white-text">n</i>
-                        <h4 class="">TRUSTED SELLERS</h4>
-                        <p class="">
-                            Only farms accredited by Swine Breeders Farm Accreditation Program (SBFAP) can sell their products in SwineCart.
-                        </p>
-                        <p class="">
-                            SBFAP is a program by  Bureau of Animal Industry (BAI) that ensures the availability of quality breeder swines in farms
-                        </p>
-                    </div>
-                </div>
-                <div class="col s4 center" style="margin: 2rem 0 2rem 0; border-left: thick solid white; border-right: thick solid white;">
-                    <div class="col s12 white-text">
-                        <i class="ecommerce-icon white-text">a</i>
-                        <h4 class="">FIND VARIETY OF BREEDERS</h4>
-                        <p class="">
-                            Search for sellers near your area through an integrated map that approximates the location of accredited breeders.
-                        </p>
-                    </div>
-                </div>
-                <div class="col s4 center" style="margin: 2rem 0 2rem 0;">
-                    <div class="col s12 white-text">
-                        <i class="ecommerce-icon white-text">d</i>
-                        <h4 class="">HIGH QUALITY PRODUCTS</h4>
-                        <p class="">
-                            Search for premium quality breeder swine and boar semen and browse through a wide variety of products from accredited breeders. Select products with the aid photos, videos, and complete product specifications
-                        </p>
-                    </div>
-                </div>
-            </div>
-
-            {{-- Last two features --}}
-            <div class="col s12 teal darken-3">
-                <div class="container">
-                    <div class="col s6" style="margin: 3rem 0 2rem 0; border-right: thick solid #fff;">
-                        <div class="col s12 white-text">
-                            <div class="col s12 center">
-                                <i class="ecommerce-icon white-text">c</i>
-                            </div>
-                            <div class="col s12 center">
-                                <h4 class="">FAST TRANSACTION</h4>
-                            </div>
-                            <div class="col s12 center">
-                                <p class="">
-                                    Communicate with breeders through SwineCart's built-in chat feature. You can also monitor your orders in real-time from reservation to delivery and get updates via SMS and email.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col s6" style="margin: 3rem 0 2rem 0;">
-                        <div class="col s12 white-text">
-                            <div class="col s12 center">
-                                <i class="ecommerce-icon white-text">v</i>
-                            </div>
-                            <div class="col s12 center">
-                                <h4 class="">RATING AND FEEDBACK</h4>
-                            </div>
-                            <div class="col s12 center">
-                                <p class="">
-                                    After buying from SwineCart, share your experience with the SwineCart community by posting product and breeder ratings. By sharing your feedback, you can help other customers understand the product and easily find what they need.
-                                </p>
-                            </div>
-                        </div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    @endif
+@section('static')
+    {{-- Floating Action Button --}}
+    {{-- <div class="fixed-action-btn" style="bottom: 30px; right: 24px;">
+      <a id="action-button" class="btn-floating btn-large waves-effect waves-light red" style="display:none;" data-position="left" data-delay="50" data-tooltip="More Actions">
+        <i class="material-icons">more_vert</i>
+        <ul>
+            <li><a class="btn-floating waves-effect waves-light red darken-4 tooltipped delete-selected-button" data-position="left" data-delay="50" data-tooltip="Delete all chosen"><i class="material-icons">delete</i></a></li>
+            @if(!empty($filters['hidden']))
+                Only show when products are unshowcased
+                <li><a class="btn-floating waves-effect waves-light teal ligthen-2 tooltipped display-selected-button" data-position="left" data-delay="50" data-tooltip="Display all chosen"><i class="material-icons">visibility</i></a></li>
+            @elseif(!empty($filters['displayed']))
+                Only show when products are showcased
+                <li><a class="btn-floating waves-effect waves-light teal ligthen-2 tooltipped hide-selected-button" data-position="left" data-delay="50" data-tooltip="Hide all chosen"><i class="material-icons">visibility_off</i></a></li>
+            @endif
+            <li><a href="#" class="btn-floating modal-trigger waves-effect waves-light green tooltipped select-all-button" data-tooltip="Select all Products" data-position="left" data-delay="50"><i class="material-icons">event_available</i></a></li>
+            <li><a href="#" class="btn-floating modal-trigger waves-effect waves-light blue tooltipped add-product-button" data-position="left" data-delay="50" data-tooltip="Add product"><i class="material-icons">add</i></a></li>
+        </ul>
+      </a>
+    </div> --}}
 @endsection
 
 @section('initScript')

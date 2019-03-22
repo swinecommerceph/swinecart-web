@@ -13,16 +13,19 @@
 @endsection
 
 @section('breadcrumbTitle')
-    Reviews and Ratings
+    <div class="breadcrumb-container">    
+      Reviews and Ratings
+    </div>
 @endsection
 
 @section('breadcrumb')
-    <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-    <a href="{{ route('dashboard') }}" class="breadcrumb">Dashboard</a>
-    <a href="#!" class="breadcrumb">Reviews and Ratings</a>
+    <div class="breadcrumb-container">
+        <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
+        <a href="#!" class="breadcrumb">Reviews and Ratings</a>
+    </div>
 @endsection
 
-@section('content')
+@section('breeder-content')
     <div class="row">
         <div class="col s12">
             <p class="caption">
