@@ -58,7 +58,7 @@ class CreateProductsTable extends Migration
             $table->string('house_type')->nullable();
 
             $table->integer('quantity')->nullable();
-            $table->integer('adg')->nullable();
+            $table->float('adg')->nullable();
             $table->float('fcr')->nullable();
             $table->float('backfat_thickness')->nullable();
 

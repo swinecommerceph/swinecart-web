@@ -58,15 +58,12 @@ class Chat implements MessageComponentInterface {
             }
             
 
+            // foreach ($this->clients as $client) {
+            //     if($client != $from){
+            //         $client->send(json_encode($msg));
+            //     }
 
-            /*
-            foreach ($this->clients as $client) {
-                if($client != $from){
-                    $client->send(json_encode($msg));
-                }
-
-            }
-            */
+            // }
 
         }
 

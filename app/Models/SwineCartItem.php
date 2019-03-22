@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Customer;
+use App\Models\Product;
 use App\Models\TransactionLog;
 use App\Models\ProductReservation;
 use Illuminate\Database\Eloquent\Model;
@@ -48,5 +49,10 @@ class SwineCartItem extends Model
     public function productReservation()
     {
         return $this->belongsTo(ProductReservation::class, 'reservation_id');
+    }
+
+    public function product()
+    {
+        return $this->belongsTo(Product::class, 'product_id');
     }
 }

@@ -35,7 +35,7 @@ class Kernel extends HttpKernel
         ],
 
         'api' => [
-            'throttle:60,1',
+            'throttle:100,1',
             'bindings',
         ],
     ];
@@ -56,5 +56,7 @@ class Kernel extends HttpKernel
         'throttle' => \Illuminate\Routing\Middleware\ThrottleRequests::class,
         'role' => \App\Http\Middleware\RoleMiddleware::class,
         'updateProfile' => \App\Http\Middleware\UpdateProfileMiddleware::class,
+        'jwt' => \App\Http\Middleware\JWT::class,
+        'jwt.role' => \App\Http\Middleware\JWTRole::class,
     ];
 }

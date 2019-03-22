@@ -46,7 +46,7 @@ class UserInstancesSeeder extends Seeder
         });
 
     	// For Customers
-        factory(App\Models\User::class, 20)->create()->each(function($user){
+        factory(App\Models\User::class, 2)->create()->each(function($user){
             $faker = Faker\Factory::create();
             $user->assignRole('customer');
             $user->update_profile = 0;
@@ -57,15 +57,17 @@ class UserInstancesSeeder extends Seeder
 
             // Create Customer Profile
             $customer = factory(App\Models\Customer::class)->create();
-            // Create Farm Address
-            $farm = factory(App\Models\FarmAddress::class)->create();
-
             $customer->users()->save($user);
-            $customer->farmAddresses()->save($farm);
+
+            // Create Farm Address
+            for ($i = 0; $i < 10; $i++) {
+                $farm = factory(App\Models\FarmAddress::class)->create();
+                $customer->farmAddresses()->save($farm);
+            }
         });
 
         // For Breeders
-        factory(App\Models\User::class, 20)->create()->each(function($user)use($companyNames){
+        factory(App\Models\User::class, 2)->create()->each(function($user)use($companyNames){
             $faker = Faker\Factory::create();
             $user->assignRole('breeder');
             $user->update_profile = 0;
@@ -75,10 +77,8 @@ class UserInstancesSeeder extends Seeder
 
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
-            
-            // Make farm count per breeder up to 3 
-            for ($i = 0; $i < 3; $i++) {
-                // Create Farm Address. Override accreditation default values
+            // Create Farm Address. Override accreditation default values
+            for ($i = 0; $i < 10; $i++) {
                 $farm = factory(App\Models\FarmAddress::class)->create([
                     'accreditation_no' => random_int(500,1000),
                     'accreditation_status' => 'active',
@@ -89,8 +89,6 @@ class UserInstancesSeeder extends Seeder
             }
             
             $breeder->users()->save($user);
-            
-
             // Change name if Breeder
             $user->name = $companyNames[$breeder->id-1];
             $user->save();
@@ -101,7 +99,7 @@ class UserInstancesSeeder extends Seeder
             $types = ['sow', 'gilt', 'boar', 'semen']; // 4
             $housetypes = ['opensided', 'tunnelventilated']; // 2
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
-            for ($i = 0; $i < $rand; $i++) {
+            for ($i = 0; $i < 30; $i++) {
                 $randType = $types[random_int(0,3)];
                 $randHouseType = $housetypes[random_int(0,1)];
                 $randBreed = $breeds[random_int(0,6)];
@@ -134,7 +132,10 @@ class UserInstancesSeeder extends Seeder
                 elseif (($randType == 'boar' && $randBreed == 'largewhite+duroc') ||
                         ($randType == 'sow' && $randBreed == 'landrace+duroc') ||
                         ($randType == 'gilt' && $randBreed == 'landrace+duroc') ||
-                        ($randType == 'semen' && $randBreed == 'largewhite+duroc')) break;
+                        ($randType == 'semen' && $randBreed == 'largewhite+duroc')) {
+                            $i--;
+                            continue;
+                        }
 
                 // General
                 else $image->name = $randType.'_'.$randBreed.'1.jpg';
@@ -158,21 +159,22 @@ class UserInstancesSeeder extends Seeder
                 $product->max_price = random_int(40000,100000)/1.0;
 
                 $product->quantity = ($randType == 'semen') ? -1 : 1;
-                $product->adg = random_int(760,1450);
+                $product->adg = random_int(760,1450)/10.0;
                 $product->fcr = random_int(10,30)/10.0;
                 $product->backfat_thickness = random_int(90,200)/10.0;
-                $product->other_details = 'Other Details = Our detailed information of our product,';
                 $product->lsba = random_int(8,15);
                 $product->left_teats = random_int(5,7);
                 $product->right_teats = random_int(5,7);
+                $product->other_details = '';
                 $product->status = 'displayed';
+                
                 $breeder->products()->save($product);
 
                 // Check if there is a second image
                 if($image2->id) $product->images()->saveMany([$image, $image2]);
                 else $product->images()->save($image);
                 $product->videos()->save($video);
-
+                
             }
 
         });
