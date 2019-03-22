@@ -575,7 +575,8 @@ class ProductController extends Controller
             $product->birthdate = $this->transformDateSyntax($product->birthdate);
             $product->age = $this->computeAge($product->birthdate);
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-            $product->breeder = Breeder::find($product->breeder_id)->users()->first()->name;
+            $product->breeder = Breeder::find($product->breeder_id)->users()->first();
+            $product->breeder = $product->breeder['name'];
             $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
             $product->score = ($request->q && count($scores) > 0) ? $scores[$product->id] : 0;
         }
