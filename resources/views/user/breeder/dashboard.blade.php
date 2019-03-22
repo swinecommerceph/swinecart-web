@@ -176,6 +176,7 @@
 
         <div class="row"></div>
         <div class="row"></div>
+        <div class="row"></div>
         {{-- Overall Performance --}}
         <div class="row">
           <h4 class="left-align" style="font-weight: 500; margin-left: 1vw;">
@@ -231,6 +232,9 @@
           </div>
         </div>
         
+        <div class="row"></div>
+        <div class="row"></div>
+
         {{-- Overall Average Rating Container --}}    
         <div class="col s12 m6">
             <br>
