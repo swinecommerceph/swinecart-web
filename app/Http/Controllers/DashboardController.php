@@ -73,6 +73,15 @@ class DashboardController extends Controller
     }
 
     /**
+     * Show the Breeder' Reports
+     * @return View
+     */
+    public function showReports()
+    {
+        return view('user.breeder.reports');
+    }
+
+    /**
      * Show the statuses of the Breeder's products
      * Basically, more like an inventory
      *
