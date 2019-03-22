@@ -182,13 +182,13 @@
             </a>
           </li>
           
-          <li class="sidenav-sub-element">
+          {{-- <li class="sidenav-sub-element">
             <a href="{{ route('dashboard.reports') }}">
               <div class="btn teal darken-4">
                 Reporting
               </div>
             </a>
-          </li>
+          </li> --}}
         </div>
       
         <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>

@@ -25,6 +25,10 @@
     <div class="row">
       <div class="col s12">
         <h3>Report of Performance</h3>
+
+        <div id="card-status" class="row" v-cloak>
+
+        </div>
       </div>
     </div>
 @endsection

@@ -74,11 +74,12 @@ class DashboardController extends Controller
 
     /**
      * Show the Breeder' Reports
+     * @param Request $request
      * @return View
      */
-    public function showReports()
-    {
-        return view('user.breeder.reports');
+    public function showReports(Request $request)
+    {      
+      return view('user.breeder.reports');
     }
 
     /**
