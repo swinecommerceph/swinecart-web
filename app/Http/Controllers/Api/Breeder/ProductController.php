@@ -428,6 +428,13 @@ class ProductController extends Controller
             'adg',
             'fcr',
             'bft',
+            'lsba',
+            'house_type',
+            'birth_weight',
+            'min_price',
+            'max_price',
+            'left_teats',
+            'right_teats',
             'other_details'
         ]);
 
@@ -462,7 +469,7 @@ class ProductController extends Controller
                 $product->quantity = ($request->type == 'semen') ? -1 : 1;
                 $product->adg = $request->adg;
                 $product->fcr = $request->fcr;
-                $product->backfat_thickness = $request->backfat_thickness;
+                $product->backfat_thickness = $request->bft;
                 $product->other_details = $request->other_details;
                 $breeder->products()->save($product);
 
