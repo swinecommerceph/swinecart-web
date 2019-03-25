@@ -342,11 +342,17 @@ class ProductController extends Controller
             $p['type'] = ucfirst($product->type);
             $p['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $p['birthdate'] = $this->transformDateSyntax($product->birthdate);
-            $p['price'] = $product->price;
             $p['quantity'] = $product->quantity;
             $p['adg'] = $product->adg;
             $p['fcr'] = $product->fcr;
             $p['bft'] = $product->backfat_thickness;
+            $p['lsba'] = $product->lsba;
+            $p['house_type'] = $product->house_type;
+            $p['min_price'] = $product->min_price;
+            $p['max_price'] = $product->max_price;
+            $p['left_teats'] = $product->left_teats;
+            $p['right_teats'] = $product->right_teats;
+            $p['birth_weight'] = $product->birthweight;
             $p['age'] = $this->computeAge($product->birthdate);
             $p['other_details'] = $product->other_details;
             $p['user_id'] = $user->id;
@@ -424,7 +430,6 @@ class ProductController extends Controller
             'type',
             'breed',
             'birthdate',
-            'price',
             'adg',
             'fcr',
             'bft',
@@ -465,16 +470,41 @@ class ProductController extends Controller
                 $product->type = $request->type;
                 $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
                 $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-                $product->price = $request->price;
+                $product->min_price = $request->min_price;
+                $product->max_price = $request->max_price;
+                $product->left_teats = $request->left_teats;
+                $product->right_teats = $request->right_teats;
+                $product->birthweight = $request->birth_weight;
+                $product->house_type = $request->house_type;
                 $product->quantity = ($request->type == 'semen') ? -1 : 1;
                 $product->adg = $request->adg;
                 $product->fcr = $request->fcr;
+                $product->lsba = $request->lsba;
                 $product->backfat_thickness = $request->bft;
                 $product->other_details = $request->other_details;
                 $breeder->products()->save($product);
 
+                $p = Product::find($product->id);
+                $p = $this->transformProduct($p);
+
+                $product = [];
+
+                $product['id'] = $p->id;
+                $product['name'] = $p->name;
+                $product['type'] = $p->type;
+                $product['breed'] = $p->breed;
+                $product['status'] = $p->status;
+                $product['age'] = $p->age;
+                $product['adg'] = $p->adg;
+                $product['fcr'] = $p->fcr;
+                $product['bft'] = $p->backfat_thickness;
+                $product['img_path'] = $p->img_path;
+
                 return response()->json([
                     'message' => 'Add Product successful!',
+                    'data' => [
+                        'product' => $product
+                    ]
                 ], 200);
             }
             else return response()->json([
