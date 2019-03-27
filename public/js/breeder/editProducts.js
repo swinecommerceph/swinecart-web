@@ -851,6 +851,14 @@ var filter = {
 
 $(document).ready(function () {
 
+  // initialization of Materialize's Date Picker
+  $('.datepicker').pickadate({
+    max: true,
+    selectMonths: true,
+    selectYears: 4,
+    format: 'mmmm d, yyyy'
+  });
+
   /** 
      *  Used for filling the input fields of the product with the initial data from the database
     */
@@ -929,14 +937,6 @@ $(document).ready(function () {
 
   // Hide certain elements
   $('.input-crossbreed-container').hide();
-
-  // initialization of Materialize's Date Picker
-  $('.datepicker').pickadate({
-    max: true,
-    selectMonths: true,
-    selectYears: 4,
-    format: 'mmmm d, yyyy'
-  });
 
   /* ----------- Manage Products page general functionalities ----------- */
   // Always showing FAB
