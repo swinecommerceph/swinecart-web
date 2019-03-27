@@ -14,7 +14,7 @@
 
 @section('breadcrumbTitle')
     <div class="breadcrumb-container">    
-      {{$product->name}}
+      Product: {{$product->name}}
     </div>
 @endsection
 
@@ -72,7 +72,7 @@
 
         </div>
         {{-- Product Details --}}
-        <div class="col s12 m5">
+        {{-- <div class="col s12 m5">
             <ul class="collection with-header">
                 <li class="collection-header">
                     <h4 class="row">
@@ -87,18 +87,65 @@
                 <li class="collection-item">Feed Conversion Ratio: {{$product->fcr}}</li>
                 <li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
             </ul>
-        </div>
-    </div>
+        </div> --}}
 
-    <div class="row">
-        <div class="col s12">
-            <div class="card">
-                <div class="card-content black-text">
-                    <span class="card-title">Other Details</span>
-                    <p>{!! $product->other_details !!}</p>
-                </div>
-            </div>
+        <div id="product-details-table" class="col s12 m5">
+          <h3 style="color: hsl(0, 0%, 13%); font-weight: 700">{{ $product->name }}</h3>
+          <h5 style="color: hsl(0, 0%, 29%);">{{$product->type}} - {{$product->breed}}</h5>
+          <p style="color: hsl(0, 0%, 45%);">Born on {{$product->birthdate}} ({{$product->age}} days old)</p>
+           
+        
+          {{-- SwineCart Information --}}
+          <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Swine Information</p>
+
+          <li style="color: hsl(0, 0%, 29%);">Average Daily Gain:
+            <span style="color: hsl(0, 0%, 13%);">
+            {{$product->adg}} g
+            </span>
+          </li>
+
+          <li style="color: hsl(0, 0%, 29%);">Feed Conversion Ratio:
+            <span style="color: hsl(0, 0%, 13%);">
+            {{$product->fcr}}
+            </span>
+          </li>
+
+          <li style="color: hsl(0, 0%, 29%);">Backfat Thickness:
+            <span style="color: hsl(0, 0%, 13%);">
+            {{$product->backfat_thickness}} mm
+            </span>
+          </li>
+
+          <li style="color: hsl(0, 0%, 29%);">Litter size born alive: 
+            <span style="color: hsl(0, 0%, 13%);">
+            {{$product->lsba}}
+            </span>
+          </li>
+
+          <li style="color: hsl(0, 0%, 29%);">Birth weight:
+            <span style="color: hsl(0, 0%, 13%);">
+            {{$product->birthweight}}
+            </span>
+          </li>
+
+          <li style="color: hsl(0, 0%, 29%);">Number of teats: 
+            <span style="color: hsl(0, 0%, 13%);">
+            {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
+            </span>
+          </li>
+
+          <li style="color: hsl(0, 0%, 29%);">House type: 
+            <span style="color: hsl(0, 0%, 13%);">
+            {{$product->house_type}}
+            </span>
+          </li>
+
+          {{-- Other Information --}}
+          <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Other Information</p>
+          <p>{!! $product->other_details !!}</p>
+
         </div>
+
     </div>
 
     <script type="text/x-template" id="average-star-rating">
