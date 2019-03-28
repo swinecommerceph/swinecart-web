@@ -381,7 +381,6 @@
 @section('customScript')
     <script type="text/javascript">
       var product_data = {!! json_encode($product) !!};
-      console.table(product_data);
     </script>
     <script src="{{ elixir('/js/breeder/editProducts.js') }}"></script>
 @endsection
