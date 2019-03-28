@@ -77,7 +77,8 @@ elixir(function (mix) {
       'breeder/profile.js',
       'breeder/editProfile_script.js',
       'validation/formValidationMethods.js',
-      'validation/breeder/editProfile_validation.js'
+      'validation/breeder/editProfile_validation.js',
+      'show-hide-pw.js'
     ], 'public/js/breeder/editProfile.js')
     .scripts([
       'vendor/chart.min.js',
