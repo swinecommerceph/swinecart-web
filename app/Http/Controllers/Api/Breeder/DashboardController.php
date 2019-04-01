@@ -45,17 +45,20 @@ class DashboardController extends Controller
     {
         $breeder = $this->user->userable;
 
-        $dashboardStats = [];
+        $stats = [];
         
-        $dashboardStats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
-        $dashboardStats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
-        $dashboardStats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
-        $dashboardStats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
-        $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
+        $stats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
+        $stats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
+        $stats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
+        $stats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
+        $stats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
+        $stats['sold'] = $this->dashboard->getProductNumberStatus($breeder,'sold');
 
         return response()->json([
             'message' => 'Get Dashboard Stats successful!',
-            'data' => $dashboardStats
+            'data' => [
+                'stats' => $stats
+            ]
         ], 200);
     }
 
