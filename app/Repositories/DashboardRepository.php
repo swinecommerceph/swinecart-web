@@ -103,7 +103,8 @@ class DashboardRepository
             $itemDetail['status'] = $reservation->order_status;
             $itemDetail['status_time'] = $reservation->transactionLogs->where('status', $reservation->order_status)->first()->created_at;
             $itemDetail['customer_id'] = $reservation->customer_id;
-            $itemDetail['customer_name'] = Customer::find($reservation->customer_id)->users()->first()->name;
+            $itemDetail['customer_name'] = Customer::find($reservation->customer_id)->users()->first();
+            $itemDetail['customer_name'] = $itemDetail['customer_name']['name'];
             $itemDetail['userid'] = Customer::find($reservation->customer_id)->users()->first()->id;
             $itemDetail['date_needed'] = $this->transformDateSyntax($reservation->date_needed);
             $itemDetail['special_request'] = $reservation->special_request;

@@ -46,7 +46,7 @@ class UserInstancesSeeder extends Seeder
         });
 
     	// For Customers
-        factory(App\Models\User::class, 20)->create()->each(function($user){
+        factory(App\Models\User::class, 2)->create()->each(function($user){
             $faker = Faker\Factory::create();
             $user->assignRole('customer');
             $user->update_profile = 0;
@@ -65,7 +65,7 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Breeders
-        factory(App\Models\User::class, 20)->create()->each(function($user)use($companyNames){
+        factory(App\Models\User::class, 2)->create()->each(function($user)use($companyNames){
             $faker = Faker\Factory::create();
             $user->assignRole('breeder');
             $user->update_profile = 0;
@@ -101,7 +101,7 @@ class UserInstancesSeeder extends Seeder
             $types = ['sow', 'gilt', 'boar', 'semen']; // 4
             $housetypes = ['opensided', 'tunnelventilated']; // 2
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
-            for ($i = 0; $i < $rand; $i++) {
+            for ($i = 0; $i < 30; $i++) {
                 $randType = $types[random_int(0,3)];
                 $randHouseType = $housetypes[random_int(0,1)];
                 $randBreed = $breeds[random_int(0,6)];
