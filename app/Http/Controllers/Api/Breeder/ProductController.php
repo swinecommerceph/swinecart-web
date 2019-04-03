@@ -341,7 +341,7 @@ class ProductController extends Controller
             $p['name'] = $product->name;
             $p['type'] = ucfirst($product->type);
             $p['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-            $p['birthdate'] = $this->transformDateSyntax($product->birthdate);
+            $p['birth_date'] = $this->transformDateSyntax($product->birthdate);
             $p['quantity'] = $product->quantity;
             $p['adg'] = $product->adg;
             $p['fcr'] = $product->fcr;
@@ -357,7 +357,8 @@ class ProductController extends Controller
             $p['other_details'] = $product->other_details;
             $p['user_id'] = $user->id;
             $p['breeder'] = $user->name;
-            $p['farm_name'] = FarmAddress::find($product->farm_from_id)->province;
+            $p['farm_name'] = FarmAddress::find($product->farm_from_id)->name;
+            $p['farm_from_id'] = $product->farm_from_id;
             $p['img_path'] = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
 
             return response()->json([
