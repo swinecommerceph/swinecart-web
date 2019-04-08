@@ -44,8 +44,9 @@ class MessageController extends Controller
 
                     $message['id'] = $item->id;
                     $message['direction'] = $item->direction;
-                    $message['message'] = $item->message;
-                    $message['read_at'] = $item->read_at;
+                    $message['content'] = $item->message;
+                    $message['read_at'] = $item->read_at; 
+                    $message['created_at'] = $item->created_at->toDateTimeString();
                     $message['customer_id'] = $item->customer_id;
                     $message['breeder_id'] = $item->breeder_id;
 
@@ -66,7 +67,7 @@ class MessageController extends Controller
         $user_id = $this->user->id;
 
         $threads = Message::where('breeder_id', '=', $user_id)
-	    		->orderBy('created_at', 'DESC')
+	    		->orderBy('id', 'DESC')
                 ->get()
                 ->unique('customer_id')
                 ->values()
@@ -87,6 +88,7 @@ class MessageController extends Controller
                         'direction' => $item->direction,
                         'content' => $item->message,
                         'read_at' => $item->read_at,
+                        'created_at' => $item->created_at->toDateTimeString(),
                     ];
 
                     return $thread;
