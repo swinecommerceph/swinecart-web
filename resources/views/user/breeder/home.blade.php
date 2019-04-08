@@ -175,6 +175,14 @@
             </li>
 
           <li class="sidenav-sub-element">
+            <a href="{{ route('dashboard.reviews') }}"">
+              <div class="btn teal darken-4">
+                Your Reviews
+              </div>
+            </a>
+          </li>
+
+          <li class="sidenav-sub-element">
             <a href="{{ route('products.create') }}">
               <div class="btn teal darken-4">
                 Add Product
