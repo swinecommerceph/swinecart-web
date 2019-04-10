@@ -125,32 +125,32 @@ class SwineCartController extends Controller
                     ->map(function ($data) {
                         $item = [];
 
-                        // $product = Product::find($data->product_id);
-                        // $breeder = Breeder::find($product->breeder_id)->users()->first();
+                        $product = Product::find($data->product_id);
+                        $breeder = Breeder::find($product->breeder_id)->users()->first();
 
-                        // $item['id'] = $data->id;
-                        // $item['status'] = 'requested';
-                        // $item['status_time'] = $this->transformDateSyntax(
-                        //     $data
-                        //         ->transactionLogs()
-                        //         ->where('status', 'requested')
-                        //         ->latest()->first()->created_at
-                        // , 2);
+                        $item['id'] = $data->id;
+                        $item['status'] = 'requested';
+                        $item['status_time'] = $this->transformDateSyntax(
+                            $data
+                                ->transactionLogs()
+                                ->where('status', 'requested')
+                                ->latest()->first()->created_at
+                        , 2);
 
-                        // $item['product'] = [
-                        //     'id' =>  $data->product_id,
-                        //     'name' => $product->name,
-                        //     'type' =>  ucfirst($product->type),
-                        //     'breed' =>  $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
-                        //     'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                        //     'breeder' => $breeder->name
-                        // ];
+                        $item['product'] = [
+                            'id' =>  $data->product_id,
+                            'name' => $product->name,
+                            'type' =>  ucfirst($product->type),
+                            'breed' =>  $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
+                            'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
+                            'breeder' => $breeder->name
+                        ];
 
-                        // $item['request'] = [
-                        //     'special_request' => $data->special_request,
-                        //     'quantity' => $data->quantity,
-                        //     'date_needed' => ($data->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($data->date_needed),
-                        // ];
+                        $item['request'] = [
+                            'special_request' => $data->special_request,
+                            'quantity' => $data->quantity,
+                            'date_needed' => ($data->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($data->date_needed),
+                        ];
 
                         return $data;
                     });
