@@ -473,25 +473,27 @@
 {{-- Confirmation Modal --}}
 <div id="confirmation-modal" class="modal">
 	<div class="modal-content">
-	  <h5>Remove product/s from your database?</h5>
+    <h5>Delete product/s?</h5>
+    <p style="font-size: 1.2rem; color: hsl(0, 0%, 45%)">Deleted products will no longer be in your inventory.</p>
 	</div>
 	<div class="modal-footer">
-	  <a
-	  	href="#!"
-	  	id="confirm-remove"
-	  	class=" modal-action modal-close waves-effect waves-green btn-flat red darken-4 white-text"
-	  	style="text-transform: none;  font-weight: 700;"
+    
+    <a
+    href="#!"
+    class="modal-action modal-close waves-effect waves-green btn-flat grey-text"
+    style="text-transform: none; font-weight: 700;"
 	  >
-			Remove
-		</a>
-	  
-	  <a
-	  	href="#!"
-	  	class="modal-action modal-close waves-effect waves-green btn-flat grey-text"
-	  	style="text-transform: none; font-weight: 700;"
-	  >
-			No
-		</a>
+    No
+  </a>
+
+  <a
+    href="#!"
+    id="confirm-remove"
+    class=" modal-action modal-close waves-effect waves-green btn-flat red darken-4 white-text"
+    style="text-transform: none;  font-weight: 700;"
+  >
+    Yes, Delete product/s
+  </a>
 	</div>
 </div>
 
