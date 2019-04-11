@@ -309,8 +309,8 @@
                 <div class="modal-footer"
                     style="background: hsl(0, 0%, 97%);"
                 >
-                    <a class="modal-action waves-effect waves-green btn-flat reserve-product-buttons" @click.prevent="reserveToCustomer($event)">Yes</a>
-                    <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat reserve-product-buttons">Close</a>
+                <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat reserve-product-buttons">Close</a>
+                <a class="modal-action waves-effect waves-green blue btn reserve-product-buttons" @click.prevent="reserveToCustomer($event)"><b>Yes, reserve it</b></a>
                 </div>
             </div>
 
