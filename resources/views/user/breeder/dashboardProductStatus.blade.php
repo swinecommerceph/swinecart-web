@@ -275,16 +275,16 @@
                                         :data-tooltip="'Reserve product to ' + customer.customerName"
                                         @click.prevent="confirmReservation(index)"
                                     >
-                                        Reserve
+                                        <b>Reserve</b>
                                     </a> <br>
                                     <a v-bind:href="'{{ route('breeder.messages') }}/' + customer.userId"
-                                        class="btn tooltipped teal darken-3"
+                                        class="tooltipped blue-text"
                                         style="width: 10vw;"
                                         data-position="top"
                                         data-delay="50"
                                         :data-tooltip="'Send message to ' + customer.customerName"
                                     >
-                                        Message
+                                        <b>Message Customer</b>
                                     </a>
                                 </td>
                             </tr>
