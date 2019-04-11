@@ -332,7 +332,7 @@
 
             {{-- Product Delivery Confirmation Modal --}}
             <div id="product-delivery-confirmation-modal" class="modal"
-                 style="height: 80vh !important; overflow-y: hidden; max-height: 90%;">
+                 style="height: 50% !important; overflow-y: hidden; max-height: 90%;">
                 <div class="modal-content">
                     <h4>Deliver <b>@{{ productInfoModal.productName }}</b> to @{{ productInfoModal.customerName }}?</h4>
                     <div>
@@ -350,8 +350,8 @@
                 </div>
                 <br><br><br><br><br><br><br><br><br><br>
                 <div class="modal-footer" style="background: hsl(0, 0%, 97%);">
-                    <a class="modal-action waves-effect waves-green btn-flat delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes</a>
                     <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat delivery-product-buttons">Close</a>
+                    <a class="modal-action waves-effect waves-green btn blue delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes, deliver the product</a>
                 </div>
             </div>
 
