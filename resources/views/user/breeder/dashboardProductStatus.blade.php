@@ -362,7 +362,7 @@
                 </div>
                 <div class="modal-footer"  style="background: hsl(0, 0%, 97%);">
                     <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat sold-product-buttons">Close</a>
-                    <a class="modal-action waves-effect waves-green btn blue sold-product-buttons" @click.prevent="productOnSold($event)">Yes, it is sold</a>
+                    <a class="modal-action waves-effect waves-green btn blue sold-product-buttons" @click.prevent="productOnSold($event)"><b>Yes, it is sold</b></a>
                 </div>
             </div>
 
