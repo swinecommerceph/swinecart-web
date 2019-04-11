@@ -77,6 +77,23 @@ class SwineCartController extends Controller
         ], 404);
     }
 
+    public function getItemCount(Request $request)
+    {
+        $customer = $this->user->userable;
+        $items = $customer
+            ->swineCartItems()
+            ->where('if_rated', 0)
+            ->where('if_requested', 0)
+            ->get();
+
+        return response()->json([
+            'message' => 'Get SwineCart items successful!',
+            'data' => [
+                'itemCount' => $items->count(),
+            ]
+        ]);
+    }
+
     public function getItems(Request $request)
     {
         $customer = $this->user->userable;
