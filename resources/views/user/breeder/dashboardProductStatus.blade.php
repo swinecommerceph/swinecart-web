@@ -174,7 +174,7 @@
                                 >
                                     Send
                                 </a> <br>
-                                <a class="btn red darken-2 tooltipped"
+                                <a class="btn red darken-4 tooltipped red-button"
                                     data-position="right"
                                     data-tooltip="Cancel transaction"
                                     style="margin-bottom:1rem; width: 13vw;"
@@ -325,8 +325,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn-flat cancel-transaction" @click.prevent="productCancelTransaction($event)">Yes</a>
-                    <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat cancel-transaction">Close</a>
+                  <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat cancel-transaction">Close</a>
+                  <a class="modal-action waves-effect waves-green btn red darken-4 cancel-transaction" @click.prevent="productCancelTransaction($event)"><b>Yes, cancel transaction</b></a>
                 </div>
             </div>
 
