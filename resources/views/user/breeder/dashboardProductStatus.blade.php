@@ -226,17 +226,19 @@
             {{-- Product Requests Modal --}}
             <div id="product-requests-modal"
                  class="modal modal-fixed-footer"
-                 style="width: 75% !important;"
+                 style="width: 75% !important; height: 60%; overflow-x: auto;"
             >
                 <div class="modal-content">
-                    <p style="color: hsl(0, 0%, 29%);">Product Request for:</p>
+                    <span style="font-size: 2.5rem;">Product Request for:&ensp;</span>
                     <span 
                         style=" font-weight: 700;
-                                font-size: 7vh;"
+                                font-size: 2.5rem;
+                                color: hsl(0, 0%, 29%);"
                     >
                         @{{ productRequest.productName }}
                     </span>
-                    <span>(@{{ productRequest.type | capitalize }} - @{{ productRequest.breed }})</span>
+                    <span style="font-size: 1.4rem;">(@{{ productRequest.type | capitalize }} - @{{ productRequest.breed }})</span>
+                    <br><br>
                     <table class="responsive-table bordered highlight">
                         <thead>
                             <tr>
@@ -259,13 +261,13 @@
                                     </span>
                                 </td>
                                 <td> @{{ customer.customerProvince }} </td>
-                                <td>
-                                    <p style="max-width:15rem;">
+                                <td style="width: 15vw; word-break: break-word;">
+                                    <p>
                                         @{{ customer.specialRequest }}
                                     </p>
                                 </td>
-                                <td class="center-align"> @{{ customer.requestQuantity }} </td>
-                                <td class="center-align" v-show="productRequest.type === 'semen'"> @{{ customer.dateNeeded }} </td>
+                                <td style="width: 2vw;" class="center-align"> @{{ customer.requestQuantity }} </td>
+                                <td class="right-align" v-show="productRequest.type === 'semen'"> @{{ customer.dateNeeded }} </td>
                                 <td class="center-align">
                                     <a href="#!"
                                         class="btn tooltipped teal darken-3"
@@ -295,7 +297,7 @@
                      style="background: hsl(0, 0%, 97%);
                             border: none !important;"
                 >
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                    <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
                 </div>
             </div>
 
