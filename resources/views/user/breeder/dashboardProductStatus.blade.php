@@ -358,11 +358,11 @@
             {{-- Sold Product Confirmation Modal --}}
             <div id="sold-product-confirmation-modal" class="modal">
                 <div class="modal-content">
-                    <h5>Confirm that the product: <b>@{{ productInfoModal.productName }}</b> was sold to @{{ productInfoModal.customerName }}?</h5>
+                    <h5>Confirm that the product: <b>@{{ productInfoModal.productName }}</b> was sold to <b>@{{ productInfoModal.customerName }}</b>?</h5>
                 </div>
                 <div class="modal-footer"  style="background: hsl(0, 0%, 97%);">
-                    <a class="modal-action waves-effect waves-green btn-flat sold-product-buttons" @click.prevent="productOnSold($event)">Yes</a>
                     <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat sold-product-buttons">Close</a>
+                    <a class="modal-action waves-effect waves-green btn blue sold-product-buttons" @click.prevent="productOnSold($event)">Yes, it is sold</a>
                 </div>
             </div>
 
