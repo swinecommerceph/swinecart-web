@@ -35,13 +35,13 @@
           <div class="col s6">
             
             {{-- Name --}}
-            <div style="margin-bottom: 2vh;" class="input-field">
+            <div style="margin-bottom: 2vh; width: 20vw;" class="input-field">
               {!! Form::text('name', null, ['id' => 'name', 'class' => 'validate input-manage-products'])!!}
               {!! Form::label('name', 'Name', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
             </div>
 
             {{-- Type --}}
-            <div style="margin-bottom: 2vh;" class="input-field">
+            <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
               <select id="select-type" data-form="add">
                 <option value="" disabled selected>Choose Type</option>
                 <option value="boar">Boar</option>
@@ -67,7 +67,7 @@
             </p>
 
             {{-- Price (from) --}}
-            <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
+            <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important; width: 7vw;">
               {!! Form::text('min_price', null, ['class' => 'validate input-manage-products'])!!}
             </div>
             
@@ -76,7 +76,7 @@
             </div>
 
             {{-- Price (to) --}}
-            <div class="col s4 input-field" style="margin-top: 0vh !important;">
+            <div class="col s4 input-field" style="margin-top: 0vh !important; width: 8vw;">
               {!! Form::text('max_price', null, ['class' => 'validate input-manage-products'])!!}
             </div>
 
@@ -108,18 +108,18 @@
             <div class="row">
               <div class="input-purebreed-container">
                 {{-- If pure breed --}}
-                <div class="input-field">
+                <div class="input-field" style="width: 20vw;">
                   {!! Form::text('breed', null, ['id' => 'breed', 'class' => 'validate input-manage-products'])!!}
                   {!! Form::label('breed', 'Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
                 </div>
               </div>
               <div class="input-crossbreed-container">
                 {{-- If crossbreed --}}
-                <div class="input-field">
+                <div class="input-field" style="width: 20vw;">
                   {!! Form::text('fbreed', null, ['id' => 'fbreed', 'class' => 'validate input-manage-products'])!!}
                   {!! Form::label('fbreed', 'Father\'s Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
                 </div>
-                <div class="input-field">
+                <div class="input-field" style="width: 20vw;">
                   {!! Form::text('mbreed', null, ['id' => 'mbreed', 'class' => 'validate input-manage-products'])!!}
                   {!! Form::label('mbreed', 'Mother\'s Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
                 </div>
@@ -128,7 +128,7 @@
 
             <div class="row">
               {{-- Birthdate --}}
-              <div class="input-field">
+              <div class="input-field" style="width: 13vw;">
                 <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
                 <label style="font-size: 1rem;" class="teal-text text-darken-4" for="birthdate">
                   Birth Date
@@ -138,12 +138,12 @@
 
               {{-- Birth weight --}}
               <div class="input-field">
-                {!! Form::text('birthweight', null, ['class' => 'validate input-manage-products'])!!}
+                {!! Form::text('birthweight', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
                 {!! Html::decode(Form::label('birth_weight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
               </div>
 
               {{-- Farm From --}}
-              <div style="margin-bottom: 4vh;" class="input-field">
+              <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
                 <select id="select-farm">
                   <option value="" disabled selected>Choose farm</option>
                   @foreach($farms as $farm)
@@ -154,7 +154,7 @@
               </div>
 
               {{-- House type --}}
-              <div style="margin-bottom: 8vh;" class="input-field">
+              <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
                 <select id="select-housetype">
                   <option value="" disabled selected>Choose house type</option>
                   <option value="tunnelventilated">Tunnel ventilated</option>
@@ -172,7 +172,7 @@
     
               {{-- ADG --}}
               <div class="input-field">
-                {!! Form::text('adg', null, ['class' => 'validate input-manage-products'])!!}
+                {!! Form::text('adg', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
                 {!! Html::decode(Form::label('adg','<p style="font-size:1rem;" class="teal-text text-darken-4">Average Daily Gain (grams) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
                 
               </div>
@@ -181,19 +181,19 @@
             <div class="row">
               {{-- FCR --}}
               <div class="input-field">
-                {!! Form::text('fcr', null, ['class' => 'validate input-manage-products'])!!}
+                {!! Form::text('fcr', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
                 {!! Html::decode(Form::label('fcr','<p style="font-size:1rem;" class="teal-text text-darken-4">Feed Conversion Ratio <span class="grey-text"><i>- Optional</i></span></p>')) !!}
               </div>
     
               {{-- Backfat thickness --}}
               <div class="input-field">
-                {!! Form::text('backfat_thickness', null, ['class' => 'validate input-manage-products'])!!}
+                {!! Form::text('backfat_thickness', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
                 {!! Html::decode(Form::label('backfat_thickness','<p style="font-size:1rem;" class="teal-text text-darken-4">Backfat thickness (mm) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
               </div>
 
               {{-- Litter size born alive --}}
               <div class="input-field">
-                {!! Form::text('lsba', null, ['class' => 'validate input-manage-products'])!!}
+                {!! Form::text('lsba', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
                 {!! Html::decode(Form::label('lsba','<p style="font-size:1rem;" class="teal-text text-darken-4">Litter size born alive <span class="grey-text"><i>- Optional</i></span></p>')) !!}
               </div>
             </div>
@@ -209,13 +209,13 @@
             
             {{-- Number of teats (left) --}}
             <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
-              {!! Form::text('left_teats', null, ['class' => 'validate input-manage-products'])!!}
+              {!! Form::text('left_teats', null, ['class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
               {!! Form::label('left_teats', '(left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
             </div>
             
             {{-- Number of teats (right) --}}
             <div class="col s4 input-field" style="margin-top: 0vh !important;">
-              {!! Form::text('right_teats', null, ['class' => 'validate input-manage-products'])!!}
+              {!! Form::text('right_teats', null, ['class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
               {!! Form::label('right_teats', '(right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
             </div>
 
