@@ -305,6 +305,14 @@ body {
 	display:block;
 }
 
+.select-wrapper input.select-dropdown {
+  border: solid 1px #9e9e9e;
+  border-radius: 4px;
+}
+
+.select-wrapper+label {
+  top: -2.5vh;
+}
 
  /* Pagination styles */
 .pagination .active span{

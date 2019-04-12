@@ -35,18 +35,18 @@
           <div class="col s6">
             
             {{-- Name --}}
-            <div class="input-field">
+            <div style="margin-bottom: 2vh;" class="input-field">
               {!! Form::text('name', null, ['id' => 'name', 'class' => 'validate input-manage-products'])!!}
               {!! Form::label('name', 'Name', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
             </div>
 
             {{-- Type --}}
-            <div style="margin-bottom: 4vh;" class="input-field">
+            <div style="margin-bottom: 2vh;" class="input-field">
               <select id="select-type" data-form="add">
                 <option value="" disabled selected>Choose Type</option>
                 <option value="boar">Boar</option>
                 <option value="sow">Sow</option>
-              <option value="gilt">Gilt</option>
+                <option value="gilt">Gilt</option>
                 <option value="semen">Semen</option>
               </select>
               <label style="font-size: 1rem;" class="teal-text text-darken-4">Type</label>
