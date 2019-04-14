@@ -160,7 +160,8 @@ class SwineCartController extends Controller
                             'type' =>  ucfirst($product->type),
                             'breed' =>  $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
                             'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                            'breeder' => $breeder->name
+                            'breeder' => $breeder->name,
+                            'breeder_id' => $product->breeder_id
                         ];
 
                         $item['request'] = [
@@ -169,7 +170,7 @@ class SwineCartController extends Controller
                             'date_needed' => ($data->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($data->date_needed),
                         ];
 
-                        return $data;
+                        return $item;
                     });
 
                 return response()->json([
@@ -216,7 +217,8 @@ class SwineCartController extends Controller
                             'type' => ucwords($product->type),
                             'breed' => $this->transformBreedSyntax($breed->name),
                             'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                            'breeder' => $breeder
+                            'breeder' => $breeder,
+                            'breeder_id' => $product->breeder_id
                         ];
 
                         $item['reservation'] = [
