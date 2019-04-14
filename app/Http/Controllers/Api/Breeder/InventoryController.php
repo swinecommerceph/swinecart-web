@@ -48,6 +48,7 @@ class InventoryController extends Controller
         $product = [];
 
         $status_time = $reservation->transactionLogs->where('status', $reservation->order_status)->sortByDesc('created_at')->first()->created_at;
+        $user = Customer::find($reservation->customer_id)->users()->first();
 
         $product['id'] = $reservation->product->id;
         $product['name'] = $reservation->product->name;
@@ -65,7 +66,8 @@ class InventoryController extends Controller
         $product['reservation']['delivery_date'] = $this->transformDateSyntax($reservation->delivery_date);
         $product['reservation']['special_request'] = $reservation->special_request;
         $product['reservation']['customer_id'] = $reservation->customer_id;
-        $product['reservation']['customer_name'] = Customer::find($reservation->customer_id)->users()->first()->name;
+        $product['reservation']['customer_name'] = $user->name;
+        $product['reservation']['user_id'] = $user->id;
 
         return $product;
     }
@@ -168,6 +170,7 @@ class InventoryController extends Controller
             ->paginate($limit)
             ->map(function ($item) {
                 $customer = Customer::find($item->customer_id);
+                $user = $customer->users()->first();
                 $request = [];
 
                 $request['product_id'] = $item->product_id;
@@ -177,7 +180,9 @@ class InventoryController extends Controller
                 $request['date_needed'] = $item->date_needed == '0000-00-00' ? null : $this->transformDateSyntax($item->date_needed);
                 $request['special_request'] = $item->special_request;
 
-                $request['customer_name'] = $customer->users()->first()->name;
+                $request['customer_name'] = $user->name;
+                $request['user_id'] = $user->id;
+
                 $request['customer_province'] = $customer->address_province;
 
                 return $request;

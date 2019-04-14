@@ -354,7 +354,7 @@ class ProductController extends Controller
             $p['right_teats'] = $product->right_teats;
             $p['birth_weight'] = $product->birthweight;
             $p['age'] = $this->computeAge($product->birthdate);
-            $p['other_details'] = $product->other_details;
+            $p['other_details'] = strip_tags($product->other_details);
             $p['user_id'] = $user->id;
             $p['breeder'] = $user->name;
             $p['farm_name'] = FarmAddress::find($product->farm_from_id)->name;
