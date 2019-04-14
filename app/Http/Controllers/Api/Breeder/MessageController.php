@@ -47,8 +47,8 @@ class MessageController extends Controller
                     $message['content'] = $item->message;
                     $message['read_at'] = $item->read_at; 
                     $message['created_at'] = $item->created_at->toDateTimeString();
-                    $message['customer_id'] = $item->customer_id;
-                    $message['breeder_id'] = $item->breeder_id;
+                    $message['from_id'] = $item->direction === 1 ? $item->breeder_id : $item->customer_id;
+                    $message['to_id'] = $item->direction === 1 ? $item->customer_id : $item->breeder_id;
 
                     return $message;
                 });
@@ -89,6 +89,8 @@ class MessageController extends Controller
                         'content' => $item->message,
                         'read_at' => $item->read_at,
                         'created_at' => $item->created_at->toDateTimeString(),
+                        'from_id' => $item->direction === 1 ? $item->breeder_id : $item->customer_id,
+                        'to_id' => $item->direction === 1 ? $item->customer_id : $item->breeder_id
                     ];
 
                     return $thread;

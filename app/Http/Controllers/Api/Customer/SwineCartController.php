@@ -118,7 +118,7 @@ class SwineCartController extends Controller
                             'type' =>  ucfirst($product->type),
                             'breed' =>  $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
                             'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                            'breeder' => $breeder->name
+                            'breeder_name' => $breeder->name
                         ];
 
                         return $item;
@@ -201,7 +201,7 @@ class SwineCartController extends Controller
                         $reservation = $data->productReservation;
                         $product = $data->productReservation->product;
                         $breed = $data->productReservation->product->breed;
-                        $breeder = $data->productReservation->product->breeder->users->first()->name;
+                        $breeder = $data->productReservation->product->breeder->users->first();
                         $logs = $data->transactionLogs();
 
                         $item['id'] = $data->id;
@@ -217,7 +217,8 @@ class SwineCartController extends Controller
                             'type' => ucwords($product->type),
                             'breed' => $this->transformBreedSyntax($breed->name),
                             'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                            'breeder' => $breeder,
+                            'breeder_name' => $breeder->name,
+                            'user_id' => $breeder->id,
                             'breeder_id' => $product->breeder_id
                         ];
 
@@ -304,7 +305,7 @@ class SwineCartController extends Controller
                     'type' =>  ucfirst($product->type),
                     'breed' =>  $this->transformBreedSyntax($breed->name),
                     'img_path' => route('serveImage', ['size' => 'small', 'filename' => $image->name]),
-                    'breeder' => $breeder->name
+                    'breeder_name' => $breeder->name
                 ];
 
                 return response()->json([

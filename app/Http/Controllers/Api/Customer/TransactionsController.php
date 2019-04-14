@@ -187,8 +187,8 @@ class TransactionsController extends Controller
                     $review->rating_productQuality = $request->productQuality;
 
                     $item->if_rated = 1;
-                    $item->save();
                     $reviews->save($review);
+                    $item->save();
 
                     $this->dispatchRatedNotif($item, $product, $review, $customer, $breeder);
 
