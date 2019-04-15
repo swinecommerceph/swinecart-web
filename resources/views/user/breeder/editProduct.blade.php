@@ -38,13 +38,13 @@
         <div class="col s6">
           
           {{-- Name --}}
-          <div class="input-field">
+          <div style="margin-bottom: 2vh; width: 20vw;" class="input-field">
             {!! Form::text('edit-name', null, ['id' => 'edit-name', 'class' => 'validate input-manage-products'])!!}
             {!! Form::label('edit-name', 'Name', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
           </div>
 
           {{-- Type --}}
-          <div style="margin-bottom: 4vh;" class="input-field">
+          <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
             <select id="edit-select-type" data-form="add">
               <option value="" disabled selected>Choose Type</option>
               <option value="boar">Boar</option>
@@ -69,7 +69,7 @@
             {!! Form::label('edit-price', 'Price', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
           </div> --}}
           {{-- Price (from) --}}
-          <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
+          <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important; width: 7vw;">
             {!! Form::text('edit-min_price', null, ['id' => 'edit-min_price', 'class' => 'validate input-manage-products'])!!}
           </div>
           
@@ -78,7 +78,7 @@
           </div>
 
           {{-- Price (to) --}}
-          <div class="col s4 input-field" style="margin-top: 0vh !important;">
+          <div class="col s4 input-field" style="margin-top: 0vh !important; width: 8vw;">
             {!! Form::text('edit-max_price', null, ['id' => 'edit-max_price', 'class' => 'validate input-manage-products'])!!}
           </div>
 
@@ -111,18 +111,18 @@
           <div class="row">
             <div class="input-purebreed-container">
               {{-- If pure breed --}}
-              <div class="input-field">
+              <div class="input-field" style="width: 20vw;">
                 {!! Form::text('edit-breed', null, ['id' => 'edit-breed', 'class' => 'validate input-manage-products'])!!}
                 {!! Form::label('edit-breed', 'Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
               </div>
             </div>
             <div class="input-crossbreed-container">
               {{-- If crossbreed --}}
-              <div class="input-field">
+              <div class="input-field" style="width: 20vw;">
                 {!! Form::text('edit-fbreed', null, ['id' => 'edit-fbreed', 'class' => 'validate input-manage-products'])!!}
                 {!! Form::label('edit-fbreed', 'Father\'s Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
               </div>
-              <div class="input-field">
+              <div class="input-field" style="width: 20vw;">
                 {!! Form::text('edit-mbreed', null, ['id' => 'edit-mbreed', 'class' => 'validate input-manage-products'])!!}
                 {!! Form::label('edit-mbreed', 'Mother\'s Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
               </div>
@@ -131,7 +131,7 @@
 
           <div class="row">
             {{-- Birthdate --}}
-            <div class="input-field">
+            <div class="input-field" style="width: 13vw;">
               <input style="cursor: pointer;" type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
               <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit-birthdate">
                   Birth Date
@@ -141,12 +141,12 @@
 
             {{-- Birth weight --}}
             <div class="input-field">
-              {!! Form::text('edit-birthweight', null, ['id' => 'edit-birthweight', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::text('edit-birthweight', null, ['id' => 'edit-birthweight', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
               {!! Html::decode(Form::label('edit-birthweight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
 
             {{-- Farm From --}}
-            <div style="margin-bottom: 4vh;" class="input-field">
+            <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
               <select id="edit-select-farm">
                   <option value="" disabled selected>Choose Farm</option>
                   @foreach($farms as $farm)
@@ -157,7 +157,7 @@
             </div>
 
             {{-- House type --}}
-            <div style="margin-bottom: 8vh;" class="input-field">
+            <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
               <select id="edit-select-housetype">
                 <option value="" disabled selected>Choose house type</option>
                 <option value="tunnelventilated">Tunnel ventilated</option>
@@ -175,7 +175,7 @@
 
             {{-- ADG --}}
             <div class="input-field">
-              {!! Form::text('edit-adg', null, ['id' => 'edit-adg', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::text('edit-adg', null, ['id' => 'edit-adg', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
               {!! Html::decode(Form::label('edit-adg','<p style="font-size:1rem;" class="teal-text text-darken-4">Average Daily Gain (grams) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
           </div>
@@ -183,19 +183,19 @@
           <div class="row">
             {{-- FCR --}}
             <div class="input-field">
-              {!! Form::text('edit-fcr', null, ['id' => 'edit-fcr', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::text('edit-fcr', null, ['id' => 'edit-fcr', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
               {!! Html::decode(Form::label('edit-fcr','<p style="font-size:1rem;" class="teal-text text-darken-4">Feed Conversion Ratio <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
 
             {{-- Backfat thickness --}}
             <div class="input-field">
-              {!! Form::text('edit-backfat_thickness', null, ['id' => 'edit-backfat_thickness', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::text('edit-backfat_thickness', null, ['id' => 'edit-backfat_thickness', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
               {!! Html::decode(Form::label('edit-backfat_thickness','<p style="font-size:1rem;" class="teal-text text-darken-4">Backfat thickness (mm) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
 
             {{-- Litter size born alive --}}
             <div class="input-field">
-              {!! Form::text('edit-lsba', null, ['id' => 'edit-lsba', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::text('edit-lsba', null, ['id' => 'edit-lsba', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
               {!! Html::decode(Form::label('edit-lsba','<p style="font-size:1rem;" class="teal-text text-darken-4">Litter size born alive <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
 
@@ -210,13 +210,13 @@
             
             {{-- Number of teats (left) --}}
             <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
-              {!! Form::text('edit-left_teats', null, ['id' => 'edit-left_teats', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::text('edit-left_teats', null, ['id' => 'edit-left_teats', 'class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
               {!! Form::label('edit-left_teats', '(left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
             </div>
             
             {{-- Number of teats (right) --}}
             <div class="col s4 input-field" style="margin-top: 0vh !important;">
-              {!! Form::text('edit-right_teats', null, ['id' => 'edit-right_teats', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::text('edit-right_teats', null, ['id' => 'edit-right_teats', 'class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
               {!! Form::label('edit-right_teats', '(right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
             </div>
             
@@ -311,8 +311,8 @@
         {!! Form::close() !!}
       </div>
       <div class="from-edit-process">
+        <a href="#!" style="text-transform: none !important;" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
         <button id="save-button" class="btn waves-effect waves-light modal-action teal darken-3"> Save </button>
-        <a href="#!" class="modal-action waves-effect waves-green btn-flat back-button">Back</a>
       </div>
     </div>
   </div>
@@ -381,7 +381,6 @@
 @section('customScript')
     <script type="text/javascript">
       var product_data = {!! json_encode($product) !!};
-      console.table(product_data);
     </script>
     <script src="{{ elixir('/js/breeder/editProducts.js') }}"></script>
 @endsection

@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    <span style="color: hsl(0, 0%, 13%);">{{$product->name}}</span>
+    Product: {{$product->name}}
 @endsection
 
 @section('breadcrumb')
@@ -29,7 +29,7 @@
             <div class="row">
                 <div class="card">
                     <div class="card-image">
-                        <img style="width: 40vw; height: 50vh;" src="{{$product->img_path}}" data-imagezoom="{{ $product->def_img_path }}">
+                        <img style="width: 39vw; height: 50vh;" src="{{$product->img_path}}" data-imagezoom="{{ $product->def_img_path }}">
                     </div>
                 </div>
             </div>
@@ -101,78 +101,99 @@
                     </div>
                 </li>
 
-                {{-- Details--}}
-                <table class="white highlight responsive-table">
-                    <tr>
-                        <th style="color: hsl(0, 0%, 13%); font-weight: 600;">
-                            {{$product->type}} - {{$product->breed}}
-                        </th>
-                    </tr>
-                    <tr>
-                        <td style="color: hsl(0, 0%, 45%);">
-                            Born on {{$product->birthdate}} ({{$product->age}} days old)
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="color: hsl(0, 0%, 45%);">
-                            Average Daily Gain: {{$product->adg}} g
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="color: hsl(0, 0%, 45%);">
-                            Feed Conversion Ratio: {{$product->fcr}}
-                        </td>
-                    </tr>
-                    <tr>
-                        <td style="color: hsl(0, 0%, 45%);">
-                            Backfat Thickness: {{$product->backfat_thickness}} mm
-                        </td>
-                    </tr>
-                </table>
-                <li id="stars-container" class="collection-item grey lighten-4" >
-                    <span style="color: hsl(0, 0%, 13%); font-weight: 600;">Breeder Ratings</span>
-                    {{-- Tool tip will not work because of the overriding of JQuery UI in the stars-container id --}}
-                    <a  href="/customer/messages/{{ $product->userid }}" 
-                        class="right tooltipped"
-                        data-position="left"
-                        data-delay="50"
-                        data-tooltip="Send Message to Breeder"
-                    >
-                        <i class="material-icons blue-text" style="font-size:35px;">message</i>
-                    </a>
-                    <br><br>
-                    <span class="row">
-                        <i class="col s6" style="color: hsl(0, 0%, 45%);">Delivery</i>
-                        <span class="col s6">
-                            <average-star-rating :rating="{{ $breederRatings['deliveryRating'] }}"> </average-star-rating>
-                        </span>
+                {{-- Product Details --}}
+                <div style="margin-left: 1vw;">
+                  {{-- SwineCart Information --}}
+                  <p style="font-weight:600; font-size: 1.4rem;" class="teal-text text-darken-4">Swine Information</p>
+
+                  <li style="color: hsl(0, 0%, 29%);">Average Daily Gain:
+                    <span style="color: hsl(0, 0%, 13%);">
+                    {{$product->adg}} g
                     </span>
-                    <span class="row">
-                        <i class="col s6" style="color: hsl(0, 0%, 45%);">Transaction</i>
-                        <span class="col s6">
-                            <average-star-rating :rating="{{ $breederRatings['transactionRating'] }}"> </average-star-rating>
-                        </span>
+                  </li>
+
+                  <li style="color: hsl(0, 0%, 29%);">Feed Conversion Ratio:
+                    <span style="color: hsl(0, 0%, 13%);">
+                    {{$product->fcr}}
                     </span>
-                    <span class="row">
-                        <i class="col s6" style="color: hsl(0, 0%, 45%);">Product Quality</i>
-                        <span class="col s6">
-                            <average-star-rating :rating="{{ $breederRatings['productQualityRating'] }}"> </average-star-rating>
-                        </span>
+                  </li>
+
+                  <li style="color: hsl(0, 0%, 29%);">Backfat Thickness:
+                    <span style="color: hsl(0, 0%, 13%);">
+                    {{$product->backfat_thickness}} mm
                     </span>
-                </li>
+                  </li>
+
+                  <li style="color: hsl(0, 0%, 29%);">Litter size born alive: 
+                    <span style="color: hsl(0, 0%, 13%);">
+                    {{$product->lsba}}
+                    </span>
+                  </li>
+
+                  <li style="color: hsl(0, 0%, 29%);">Birth weight:
+                    <span style="color: hsl(0, 0%, 13%);">
+                    {{$product->birthweight}}
+                    </span>
+                  </li>
+
+                  <li style="color: hsl(0, 0%, 29%);">Number of teats: 
+                    <span style="color: hsl(0, 0%, 13%);">
+                    {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
+                    </span>
+                  </li>
+
+                  <li style="color: hsl(0, 0%, 29%);">House type: 
+                    <span style="color: hsl(0, 0%, 13%);">
+                    {{$product->house_type}}
+                    </span>
+                  </li>
+
+                  {{-- Other Information --}}
+                  <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Other Information</p>
+                  <p>{!! $product->other_details !!}</p>
+                </div>
+
             </ul>
         </div>
     </div>
 
-    <div class="row">
-        <div class="col s12">
-            <div class="card">
-                <div class="card-content">
-                    <span class="card-title">Other Details</span>
-                    <p>{!! $product->other_details !!}</p>
-                </div>
-            </div>
-        </div>
+    <div class="row container" style="margin-top: 0px !important;">
+      <div class="col s7">
+        <ul>
+          <li id="stars-container" class="collection-item grey lighten-4" >
+              <span style="color: hsl(0, 0%, 13%); font-weight: 600;">
+                Breeder Ratings
+              </span>
+              {{-- Tool tip will not work because of the overriding of JQuery UI in the stars-container id --}}
+              <a  href="/customer/messages/{{ $product->userid }}" 
+                  class="right tooltipped"
+                  data-position="left"
+                  data-delay="50"
+                  data-tooltip="Send Message to Breeder"
+              >
+                  <i class="material-icons blue-text" style="font-size:35px;">message</i>
+              </a><br><br>
+              <span class="row">
+                  <i class="col s6" style="color: hsl(0, 0%, 45%);">Delivery</i>
+                  <span class="col s6">
+                      <average-star-rating :rating="{{ $breederRatings['deliveryRating'] }}"> </average-star-rating>
+                  </span>
+              </span>
+              <span class="row">
+                  <i class="col s6" style="color: hsl(0, 0%, 45%);">Transaction</i>
+                  <span class="col s6">
+                      <average-star-rating :rating="{{ $breederRatings['transactionRating'] }}"> </average-star-rating>
+                  </span>
+              </span>
+              <span class="row">
+                  <i class="col s6" style="color: hsl(0, 0%, 45%);">Product Quality</i>
+                  <span class="col s6">
+                      <average-star-rating :rating="{{ $breederRatings['productQualityRating'] }}"> </average-star-rating>
+                  </span>
+              </span>
+          </li>
+        </ul>
+      </div>
     </div>
 
     <script type="text/x-template" id="average-star-rating">

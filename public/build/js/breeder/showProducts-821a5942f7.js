@@ -1100,6 +1100,7 @@ $(document).ready(function () {
 
     window.setTimeout(function () {
       location.reload(true);
+      location.href = location.origin + '/breeder/products'; // redirect to Show Products page
     }, 1200);
   });
 

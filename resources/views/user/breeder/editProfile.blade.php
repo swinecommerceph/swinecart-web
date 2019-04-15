@@ -59,7 +59,7 @@
     {{-- Change Logo Modal --}}
     <div id="change-logo-modal" class="modal">
         <div class="modal-content">
-            <h5>Change Logo</h5>
+            <h5>Set new logo</h5>
             <div class="row">
                 <div class="col s12">
                     {!! Form::open(['route' => 'breeder.logoUpload', 'class' => 's12 dropzone', 'id' => 'logo-dropzone', 'enctype' => 'multipart/form-data']) !!}
@@ -71,8 +71,8 @@
             </div>
         </div>
         <div class="modal-footer">
-            <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-            <a href="#!" id="confirm-change-logo" class="waves-effect waves-green btn-flat">Set Logo</a>
+            <a style="text-transform: none;" href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
+            <a style="text-transform: none;" href="#!" id="confirm-change-logo" class="waves-effect waves-green btn blue white-text">Set Logo</a>
         </div>
     </div>
 

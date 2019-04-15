@@ -174,7 +174,7 @@
                                 >
                                     Send
                                 </a> <br>
-                                <a class="btn red darken-2 tooltipped"
+                                <a class="btn red darken-4 tooltipped red-button"
                                     data-position="right"
                                     data-tooltip="Cancel transaction"
                                     style="margin-bottom:1rem; width: 13vw;"
@@ -226,17 +226,19 @@
             {{-- Product Requests Modal --}}
             <div id="product-requests-modal"
                  class="modal modal-fixed-footer"
-                 style="width: 75% !important;"
+                 style="width: 75% !important; height: 60%; overflow-x: auto;"
             >
                 <div class="modal-content">
-                    <p style="color: hsl(0, 0%, 29%);">Product Request for:</p>
+                    <span style="font-size: 2.5rem;">Product Request for:&ensp;</span>
                     <span 
                         style=" font-weight: 700;
-                                font-size: 7vh;"
+                                font-size: 2.5rem;
+                                color: hsl(0, 0%, 29%);"
                     >
                         @{{ productRequest.productName }}
                     </span>
-                    <span>(@{{ productRequest.type | capitalize }} - @{{ productRequest.breed }})</span>
+                    <span style="font-size: 1.4rem;">(@{{ productRequest.type | capitalize }} - @{{ productRequest.breed }})</span>
+                    <br><br>
                     <table class="responsive-table bordered highlight">
                         <thead>
                             <tr>
@@ -259,13 +261,13 @@
                                     </span>
                                 </td>
                                 <td> @{{ customer.customerProvince }} </td>
-                                <td>
-                                    <p style="max-width:15rem;">
+                                <td style="width: 15vw; word-break: break-word;">
+                                    <p>
                                         @{{ customer.specialRequest }}
                                     </p>
                                 </td>
-                                <td class="center-align"> @{{ customer.requestQuantity }} </td>
-                                <td class="center-align" v-show="productRequest.type === 'semen'"> @{{ customer.dateNeeded }} </td>
+                                <td style="width: 2vw;" class="center-align"> @{{ customer.requestQuantity }} </td>
+                                <td class="right-align" v-show="productRequest.type === 'semen'"> @{{ customer.dateNeeded }} </td>
                                 <td class="center-align">
                                     <a href="#!"
                                         class="btn tooltipped teal darken-3"
@@ -275,16 +277,16 @@
                                         :data-tooltip="'Reserve product to ' + customer.customerName"
                                         @click.prevent="confirmReservation(index)"
                                     >
-                                        Reserve
+                                        <b>Reserve</b>
                                     </a> <br>
                                     <a v-bind:href="'{{ route('breeder.messages') }}/' + customer.userId"
-                                        class="btn tooltipped teal darken-3"
+                                        class="tooltipped blue-text"
                                         style="width: 10vw;"
                                         data-position="top"
                                         data-delay="50"
                                         :data-tooltip="'Send message to ' + customer.customerName"
                                     >
-                                        Message
+                                        <b>Message Customer</b>
                                     </a>
                                 </td>
                             </tr>
@@ -295,7 +297,7 @@
                      style="background: hsl(0, 0%, 97%);
                             border: none !important;"
                 >
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                    <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
                 </div>
             </div>
 
@@ -307,8 +309,8 @@
                 <div class="modal-footer"
                     style="background: hsl(0, 0%, 97%);"
                 >
-                    <a class="modal-action waves-effect waves-green btn-flat reserve-product-buttons" @click.prevent="reserveToCustomer($event)">Yes</a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat reserve-product-buttons">Close</a>
+                <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat reserve-product-buttons">Close</a>
+                <a class="modal-action waves-effect waves-green blue btn reserve-product-buttons" @click.prevent="reserveToCustomer($event)"><b>Yes, reserve it</b></a>
                 </div>
             </div>
 
@@ -323,14 +325,14 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn-flat cancel-transaction" @click.prevent="productCancelTransaction($event)">Yes</a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat cancel-transaction">Close</a>
+                  <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat cancel-transaction">Close</a>
+                  <a class="modal-action waves-effect waves-green btn red darken-4 cancel-transaction" @click.prevent="productCancelTransaction($event)"><b>Yes, cancel transaction</b></a>
                 </div>
             </div>
 
             {{-- Product Delivery Confirmation Modal --}}
             <div id="product-delivery-confirmation-modal" class="modal"
-                 style="height: 80vh !important; overflow-y: hidden; max-height: 90%;">
+                 style="height: 50% !important; overflow-y: hidden; max-height: 90%;">
                 <div class="modal-content">
                     <h4>Deliver <b>@{{ productInfoModal.productName }}</b> to @{{ productInfoModal.customerName }}?</h4>
                     <div>
@@ -348,19 +350,19 @@
                 </div>
                 <br><br><br><br><br><br><br><br><br><br>
                 <div class="modal-footer" style="background: hsl(0, 0%, 97%);">
-                    <a class="modal-action waves-effect waves-green btn-flat delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes</a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat delivery-product-buttons">Close</a>
+                    <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat delivery-product-buttons">Close</a>
+                    <a class="modal-action waves-effect waves-green btn blue delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes, deliver the product</a>
                 </div>
             </div>
 
             {{-- Sold Product Confirmation Modal --}}
             <div id="sold-product-confirmation-modal" class="modal">
                 <div class="modal-content">
-                    <h5>Confirm that the product: <b>@{{ productInfoModal.productName }}</b> was sold to @{{ productInfoModal.customerName }}?</h5>
+                    <h5>Confirm that the product: <b>@{{ productInfoModal.productName }}</b> was sold to <b>@{{ productInfoModal.customerName }}</b>?</h5>
                 </div>
                 <div class="modal-footer"  style="background: hsl(0, 0%, 97%);">
-                    <a class="modal-action waves-effect waves-green btn-flat sold-product-buttons" @click.prevent="productOnSold($event)">Yes</a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat sold-product-buttons">Close</a>
+                    <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat sold-product-buttons">Close</a>
+                    <a class="modal-action waves-effect waves-green btn blue sold-product-buttons" @click.prevent="productOnSold($event)"><b>Yes, it is sold</b></a>
                 </div>
             </div>
 
@@ -392,7 +394,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                    <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
                 </div>
             </div>
 
@@ -425,7 +427,7 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
+                    <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat ">Close</a>
                 </div>
             </div>
 
