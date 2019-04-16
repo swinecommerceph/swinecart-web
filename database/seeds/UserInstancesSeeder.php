@@ -46,7 +46,7 @@ class UserInstancesSeeder extends Seeder
         });
 
     	// For Customers
-        factory(App\Models\User::class, 2)->create()->each(function($user){
+        /* factory(App\Models\User::class, 2)->create()->each(function($user){
             $faker = Faker\Factory::create();
             $user->assignRole('customer');
             $user->update_profile = 0;
@@ -62,10 +62,10 @@ class UserInstancesSeeder extends Seeder
 
             $customer->users()->save($user);
             $customer->farmAddresses()->save($farm);
-        });
+        }); */
 
         // For Breeders
-        factory(App\Models\User::class, 2)->create()->each(function($user)use($companyNames){
+        /* factory(App\Models\User::class, 2)->create()->each(function($user)use($companyNames){
             $faker = Faker\Factory::create();
             $user->assignRole('breeder');
             $user->update_profile = 0;
@@ -175,7 +175,7 @@ class UserInstancesSeeder extends Seeder
 
             }
 
-        });
+        }); */
 
         // For Spectator
         factory(App\Models\User::class, 2)->create()->each(function($user){
