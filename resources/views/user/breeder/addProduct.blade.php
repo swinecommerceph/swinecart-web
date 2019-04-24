@@ -239,6 +239,20 @@
           </div>
         </div>
 
+        {{-- Checkbox if the product is unique --}}
+        <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">
+          Is this product unique?
+          <span style="font-size: 1rem; font-weight: 400" class="grey-text">
+            <i> - If any customer buys this product, it will disappear upon being sold
+            </i>
+          </span>
+        </p>
+
+        <div>
+          <input type="checkbox" id="check">
+          <label for="check">Yes, this product is unique</label>
+        </div>
+
         {{-- Add Product button --}}
         <div>
           <button style="font-weight: 900; width: 15vw; font-size: 1.4rem" id="submit-button" type="submit" class="right btn-large waves-effect waves-light teal darken-4"> Add Product</button>
