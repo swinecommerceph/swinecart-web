@@ -222,6 +222,7 @@ class ProductController extends Controller
             $product->left_teats = $request->left_teats;
             $product->right_teats = $request->right_teats;
             $product->other_details = $request->other_details;
+            $product->is_unique = $request->is_unique;
             $breeder->products()->save($product);
 
             $productDetail['product_id'] = $product->id;
