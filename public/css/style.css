@@ -1370,6 +1370,20 @@ label {
    padding-top: 0.4rem;
 }
 
+.input-field label[for='name']::after {
+   padding-top: 0.4rem;
+   /* Check to other input fields */
+   transform: translate(300%, -120%);
+}
+
+.input-field label[for='breed']::after {
+   padding-top: 0.4rem;
+   /* Check to other input fields */
+   transform: translate(300%, -120%);
+}
+
+
+
 /* Override search icon label */
 .input-field label[for='search']{
 	font-size: inherit;
