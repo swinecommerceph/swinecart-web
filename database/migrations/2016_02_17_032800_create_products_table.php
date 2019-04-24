@@ -67,6 +67,8 @@ class CreateProductsTable extends Migration
             $table->integer('left_teats')->nullable();
             $table->integer('right_teats')->nullable();
 
+            $table->boolean('is_unique')->default(0);
+
             $table->text('other_details')->nullable();
             $table->enum('status',
                 ['hidden', 'displayed', 'requested']
