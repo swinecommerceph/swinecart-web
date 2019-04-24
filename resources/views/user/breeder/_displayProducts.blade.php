@@ -151,6 +151,12 @@
                             <table class="col s12">
                                 <thead> </thead>
                                 <tbody>
+                                    @if($product->quantity !== -1)
+                                      <tr>
+                                          <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Quantity: </td>
+                                          <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->quantity }} </td>
+                                      </tr>
+                                    @endif
                                     <tr>
                                         <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
                                         <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
