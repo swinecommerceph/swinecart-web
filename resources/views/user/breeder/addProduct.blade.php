@@ -243,7 +243,7 @@
         <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">
           Is this product unique?
           <span style="font-size: 1rem; font-weight: 400" class="grey-text">
-            <i> - If any customer buys this product, it will disappear upon being sold
+            <i> - If any cu qstomer buys a unique product, it will disappear upon being sold
             </i>
           </span>
         </p>
