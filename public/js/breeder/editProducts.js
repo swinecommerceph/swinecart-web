@@ -74,6 +74,8 @@ var product = {
       "left_teats": parent_form.find('input[name=left_teats]').val(),
       "right_teats": parent_form.find('input[name=right_teats]').val(),
       "other_details": $('textarea#other_details').val(),
+      "quantity": $('.product-quantity').val(),
+      "is_unique": $('.product-unique-checker').val(),
       "_token": parent_form.find('input[name=_token]').val(),
     };
 
