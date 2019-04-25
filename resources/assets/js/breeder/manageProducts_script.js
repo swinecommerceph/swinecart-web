@@ -143,6 +143,30 @@ $(document).ready(function () {
     product.update_selected($('#manage-selected-form'), $(this), [$(this).attr('data-product-id')], 'hide');
   });
 
+  /**
+   * This is for handling unique products.
+   * Unique products should only have a product quantity of one 
+   */
+  $('.product-unique-checker').change(function(e) {
+    e.preventDefault();
+
+    if ($(this).is(':checked')) $('.product-quantity').attr('disabled', 'true');
+    else $('.product-quantity').removeAttr('disabled');
+    
+  });
+
+  /**
+   * This is for handling unique products.
+   * Unique products should only have a product quantity of one
+   */
+  $('.product-quantity').change(function(e) {
+    e.preventDefault();
+
+    if ($(this).val() > 1) $('.product-unique-checker').attr('disabled', 'true');
+    else $(".product-unique-checker").removeAttr("disabled");
+    
+  });
+
   // Add a product
   $('.add-product-button').click(function () {
     $('#add-product-modal').modal({

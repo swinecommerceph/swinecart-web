@@ -249,7 +249,7 @@
         </p>
 
         <div>
-          <input type="checkbox" id="check">
+          <input type="checkbox" id="check" class="product-unique-checker">
           <label for="check">Yes, this product is unique</label>
         </div>
 
@@ -268,17 +268,22 @@
         <div class="s6 col">
           <span class="col s2 center-align" style="padding:0; margin-left: 1rem; margin-right: 0.5rem;">
               <span class="col s12" style="padding:0;">
-                <input type="number"
+                <input 
+                    type="number"
                     ref="input"
                     value="1"
                     min="1"
-                    class="center-align"
+                    class="product-quantity center-align"
                     style="margin:0;"
                 >
                 </span>
           </span>
         </div>
 
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
+        <div class="row"></div>
         {{-- Add Product button --}}
         <div>
           <button style="font-weight: 900; width: 15vw; font-size: 1.4rem" id="submit-button" type="submit" class="right btn-large waves-effect waves-light teal darken-4"> Add Product</button>
