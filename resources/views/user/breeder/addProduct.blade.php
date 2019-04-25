@@ -243,7 +243,7 @@
         <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">
           Is this product unique?
           <span style="font-size: 1rem; font-weight: 400" class="grey-text">
-            <i> - If any cu qstomer buys a unique product, it will disappear upon being sold
+            <i> - If any customer buys a unique product, it will disappear upon being sold
             </i>
           </span>
         </p>
@@ -251,6 +251,32 @@
         <div>
           <input type="checkbox" id="check">
           <label for="check">Yes, this product is unique</label>
+        </div>
+
+        <br>
+
+        {{-- Checkbox if the product is unique --}}
+        <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">
+          Quantity of Product to be Added
+          <span style="font-size: 1rem; font-weight: 400" class="grey-text">
+            <i> - Unique products will always have a value of one (1).
+            </i>
+          </span>
+        </p>
+        
+        {{-- Product Quantity --}}
+        <div class="s6 col">
+          <span class="col s2 center-align" style="padding:0; margin-left: 1rem; margin-right: 0.5rem;">
+              <span class="col s12" style="padding:0;">
+                <input type="number"
+                    ref="input"
+                    value="1"
+                    min="1"
+                    class="center-align"
+                    style="margin:0;"
+                >
+                </span>
+          </span>
         </div>
 
         {{-- Add Product button --}}
