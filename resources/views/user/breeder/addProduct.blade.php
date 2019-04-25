@@ -132,7 +132,6 @@
                 <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
                 <label style="font-size: 1rem;" class="teal-text text-darken-4" for="birthdate">
                   Birth Date
-                  <span class="grey-text"><i> - Optional</i></span>
                 </label>
               </div>
 

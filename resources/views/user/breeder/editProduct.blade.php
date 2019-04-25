@@ -135,8 +135,7 @@
               <input style="cursor: pointer;" type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
               <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit-birthdate">
                   Birth Date
-                  <span class="grey-text"><i> - Optional</i></span>
-                </label>
+              </label>
             </div>
 
             {{-- Birth weight --}}
