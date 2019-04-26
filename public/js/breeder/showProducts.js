@@ -946,9 +946,15 @@ $(document).ready(function () {
   $('#select-type').change(function (e) {
     var select_type_value = $('#select-type option:selected').text();
     if (select_type_value === "Semen") {
-      $("#semen-blockquote").show(300);
+      $('#semen-blockquote').show(300);
+      $('.product-unique-checker').attr('disabled', 'true');
+      $('.product-quantity').attr('disabled', 'true');
     }
-    else $("#semen-blockquote").hide(300);
+    else {
+      $('#semen-blockquote').hide(300);
+      $('.product-unique-checker').removeAttr('disabled');
+      $('.product-quantity').removeAttr('disabled');
+    }
   });
 
   /**
