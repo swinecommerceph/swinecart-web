@@ -82,6 +82,13 @@ var product = {
     if ($('.product-unique-checker').is(":checked")) data_values["is_unique"] = 1;
     else data_values["is_unique"] = 0;
 
+    /* Set proper values for semen type */
+    var select_type_value = $("#select-type option:selected").text();
+    if (select_type_value === "Semen") {
+      data_values["is_unique"] = 0;
+      data_values.quantity = -1;
+    }
+
     data_values.min_price = data_values.min_price.replace(",", ""); // remove comma in price before storing
     data_values.max_price = data_values.max_price.replace(",", ""); // remove comma in price before storing
 
