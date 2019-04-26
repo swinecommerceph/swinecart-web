@@ -84,7 +84,11 @@
 
           
         </div>
-        <br>
+        
+
+        <blockquote id="semen-blockquote" class="info">
+          <b>Product with type 'Semen' will have no quantity and will not be unique</b>
+        </blockquote>
 
         {{-- Checkbox if the product is unique --}}
         <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">
