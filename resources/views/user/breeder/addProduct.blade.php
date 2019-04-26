@@ -81,12 +81,14 @@
             </div>
 
           </div>
-
-          
         </div>
-        
+        <br>
 
-        <blockquote id="semen-blockquote" class="info">
+        {{-- Prompt for semen type product --}}
+        <blockquote 
+          id="semen-blockquote"
+          class="info"
+          style="display: none !important;">
           <b>Product with type 'Semen' will have no quantity and will not be unique</b>
         </blockquote>
 

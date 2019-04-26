@@ -155,6 +155,15 @@ $(document).ready(function () {
     
   });
 
+  /* Shows a prompt only for semen-type product */
+  $('#select-type').change(function (e) {
+    var select_type_value = $('#select-type option:selected').text();
+    if (select_type_value === "Semen") {
+      $("#semen-blockquote").show(300);
+    }
+    else $("#semen-blockquote").hide(300);
+  });
+
   /**
    * This is for handling unique products.
    * Unique products should only have a product quantity of one
