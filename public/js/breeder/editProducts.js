@@ -904,7 +904,10 @@ $(document).ready(function() {
     $('.edit-product-quantity').prop('disabled', true);
   }
   else {
-    $('.edit-product-quantity').val(product_data.quantity);
+    // Semen will have no quantity
+    var actual_quantity; 
+    if (product_data.quantity === -1) actual_quantity = '';
+    $(".edit-product-quantity").val(actual_quantity);
   }
 
   // PRODUCT QUANTITY
@@ -1144,12 +1147,24 @@ $(document).ready(function() {
     else $(".edit-product-quantity").removeAttr("disabled");
   });
 
+  /* Set prompt if initial type is Semen */
+  var select_type_value_semen = $("#edit-select-type option:selected").text();
+  if (select_type_value_semen === "Semen") {
+    $("#semen-blockquote").show(300);
+    $(".edit-product-unique-checker").prop('checked', false);
+    $(".edit-product-unique-checker").attr("disabled", "true");
+    $(".edit-product-quantity").val('');
+    $(".edit-product-quantity").attr("disabled", "true");
+  }
+  
   /* Shows a prompt only for semen-type product */
   $("#edit-select-type").change(function (e) {
     var select_type_value = $("#edit-select-type option:selected").text();
     if (select_type_value === "Semen") {
       $("#semen-blockquote").show(300);
+      $(".edit-product-unique-checker").prop('checked', false);
       $(".edit-product-unique-checker").attr("disabled", "true");
+      $(".edit-product-quantity").val('');
       $(".edit-product-quantity").attr("disabled", "true");
     } else {
       $("#semen-blockquote").hide(300);
