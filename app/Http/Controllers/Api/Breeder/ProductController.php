@@ -270,6 +270,8 @@ class ProductController extends Controller
             'farm_from_id',
             'name',
             'type',
+            'quantity',
+            'is_unique'
             'breed',
             'birthdate',
             'price',
@@ -302,6 +304,8 @@ class ProductController extends Controller
                     $product->birthdate = date_format(date_create($data['birthdate']), 'Y-n-j');
                     $product->price = $data['price'];
                     $product->adg = $data['adg'];
+                    $product->quantity = $data['quantity'];
+                    $product->is_unique = $data['is_unique'];
                     $product->fcr = $data['fcr'];
                     $product->backfat_thickness = $data['bft'];
                     $product->other_details = $data['other_details'];
@@ -429,6 +433,8 @@ class ProductController extends Controller
             'farm_from_id',
             'name',
             'type',
+            'quantity',
+            'is_unique',
             'breed',
             'birthdate',
             'adg',
@@ -477,7 +483,8 @@ class ProductController extends Controller
                 $product->right_teats = $request->right_teats;
                 $product->birthweight = $request->birth_weight;
                 $product->house_type = $request->house_type;
-                $product->quantity = ($request->type == 'semen') ? -1 : 1;
+                $product->quantity = $request->quantity;
+                $product->is_unique = $request->is_unique;
                 $product->adg = $request->adg;
                 $product->fcr = $request->fcr;
                 $product->lsba = $request->lsba;
@@ -492,6 +499,8 @@ class ProductController extends Controller
 
                 $product['id'] = $p->id;
                 $product['name'] = $p->name;
+                $product['quantity'] = $p->quantity;
+                $product['is_unique'] = $p->is_unique;
                 $product['type'] = $p->type;
                 $product['breed'] = $p->breed;
                 $product['status'] = $p->status;
