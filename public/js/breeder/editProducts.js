@@ -882,6 +882,18 @@ $(document).ready(function() {
   $("#edit-min_price").val(product_data.min_price);
   $("#edit-max_price").val(product_data.max_price);
 
+  // PRODUCT UNIQUENESS
+  if (product_data.is_unique) {
+    $('.edit-product-unique-checker').prop('checked', true);
+    $('.edit-product-quantity').val(1);
+    $('.edit-product-quantity').prop('disabled', true);
+  }
+  else {
+    $('.edit-product-quantity').val(product_data.quantity);
+  }
+
+  // PRODUCT QUANTITY
+
   // BREED INFORMATION
 
   $("#edit-birthweight").val(product_data.birthweight);
