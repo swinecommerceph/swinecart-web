@@ -114,7 +114,7 @@
         <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">
           Quantity of Product to be Added
           <span style="font-size: 1rem; font-weight: 400" class="grey-text">
-            <i> - Unique products will always have a value of one (1).
+            <i> - Unique products will always have a quantity of one (1).
             </i>
           </span>
         </p>
