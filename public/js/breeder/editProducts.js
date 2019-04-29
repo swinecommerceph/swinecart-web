@@ -1156,7 +1156,7 @@ $(document).ready(function() {
     $(".edit-product-quantity").val('');
     $(".edit-product-quantity").attr("disabled", "true");
   }
-  
+
   /* Shows a prompt only for semen-type product */
   $("#edit-select-type").change(function (e) {
     var select_type_value = $("#edit-select-type option:selected").text();
@@ -1169,6 +1169,7 @@ $(document).ready(function() {
     } else {
       $("#semen-blockquote").hide(300);
       $(".edit-product-unique-checker").removeAttr("disabled");
+      $(".edit-product-quantity").val(1);
       $(".edit-product-quantity").removeAttr("disabled");
     }
   });
