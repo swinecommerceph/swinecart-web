@@ -116,7 +116,7 @@ $(document).ready(function() {
           $('.fixed-action-btn').closeFAB();
           $('#action-button').fadeOut(200);
       }
-  });*/
+});*/
 
   // Giving a border on product card/s when checkbox is clicked
   $(".single-checkbox").change(function(e) {
@@ -259,7 +259,10 @@ $(document).ready(function() {
   $(".edit-product-unique-checker").change(function (e) {
     e.preventDefault();
 
-    if ($(this).is(":checked")) $(".edit-product-quantity").attr("disabled", "true");
+    if ($(this).is(":checked")) {
+      $(".edit-product-quantity").attr("disabled", "true");
+      $('.edit-product-quantity').val(1);
+    }
     else $(".edit-product-quantity").removeAttr("disabled");
   });
 

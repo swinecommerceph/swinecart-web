@@ -21,8 +21,23 @@ function submitEditedProduct(parent_form, update_button) {
     "left_teats": parent_form.find('input[name=edit-left_teats]').val(),
     "right_teats": parent_form.find('input[name=edit-right_teats]').val(),
     "other_details": $('textarea#edit-other_details').val(),
+    "quantity": $('.edit-product-quantity').val(),
     "_token": parent_form.find('input[name=_token]').val(),
   };
+
+  /* Check if the checkbox for product uniqueness is checked or not */
+  if ($('.edit-product-unique-checker').is(":checked")) {
+    data_values["is_unique"] = 1;
+    data_values.quantity = 1;
+  }
+  else data_values["is_unique"] = 0;
+
+  /* Set proper values for semen type */
+  var edit_select_type_value = $("#edit-select-type option:selected").text();
+  if (edit_select_type_value === "Semen") {
+    data_values["is_unique"] = 0;
+    data_values.quantity = -1;
+  }
 
   // data_values.price = data_values.price.replace(",", "");
   data_values.min_price = data_values.min_price.replace(",", ""); // remove comma in price before storing
