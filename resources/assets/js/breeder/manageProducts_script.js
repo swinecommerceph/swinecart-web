@@ -180,10 +180,12 @@ $(document).ready(function() {
     if (select_type_value === "Semen") {
       $("#semen-blockquote").show(300);
       $(".product-unique-checker").attr("disabled", "true");
+      $(".product-quantity").val("");
       $(".product-quantity").attr("disabled", "true");
     } else {
       $("#semen-blockquote").hide(300);
       $(".product-unique-checker").removeAttr("disabled");
+      $(".product-quantity").val(1);
       $(".product-quantity").removeAttr("disabled");
     }
   });
