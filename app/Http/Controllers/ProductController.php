@@ -99,7 +99,18 @@ class ProductController extends Controller
     public function showProducts(Request $request)
     {
         $breeder = $this->user->userable;
-        $products = $breeder->products()->whereIn('status',['hidden','displayed','requested'])->where('quantity','<>',0);
+        $products = $breeder->products()->whereIn('status',['hidden','displayed','requested'])
+          ->where(
+            [
+              ['is_unique', '=', 1], ['quantity', '!=', 0] 
+            ]
+          )
+          ->orWhere(
+            [
+              ['is_unique', '=', 0], ['quantity', '>=', -1],
+            ]
+          )
+        ;
 
         // Check filters
         if($request->type && $request->type != 'all-type') $products = $products->where('type',$request->type);
@@ -223,6 +234,8 @@ class ProductController extends Controller
             $product->right_teats = $request->right_teats;
             $product->other_details = $request->other_details;
             $product->is_unique = $request->is_unique;
+            $product->quantity = $request->quantity;
+
             $breeder->products()->save($product);
 
             $productDetail['product_id'] = $product->id;
@@ -296,6 +309,9 @@ class ProductController extends Controller
 
           $product->left_teats = $request->left_teats;
           $product->right_teats = $request->right_teats;
+
+          $product->quantity = $request->quantity;
+          $product->is_unique = $request->is_unique;
 
           $product->other_details = $request->other_details;
           $product->save();

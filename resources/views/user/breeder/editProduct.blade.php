@@ -84,6 +84,58 @@
 
         </div>
       </div>
+      <br>
+
+      {{-- Prompt for semen type product --}}
+        <blockquote 
+          id="semen-blockquote"
+          class="info"
+          style="display: none !important;">
+          <b>Product with type 'Semen' will have no quantity and will not be unique</b>
+        </blockquote>
+
+        {{-- Checkbox if the product is unique --}}
+        <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">
+          Is this product unique?
+          <span style="font-size: 1rem; font-weight: 400" class="grey-text">
+            <i> - If any customer buys a unique product, it will disappear upon being sold
+            </i>
+          </span>
+        </p>
+
+        <div>
+          <input type="checkbox" id="check" class="edit-product-unique-checker">
+          <label for="check">Yes, this product is unique</label>
+        </div>
+
+        <br>
+
+        {{-- Checkbox if the product is unique --}}
+        <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">
+          Quantity of Product to be Added
+          <span style="font-size: 1rem; font-weight: 400" class="grey-text">
+            <i> - Unique products will always have a quantity of one (1).
+            </i>
+          </span>
+        </p>
+        
+        {{-- Product Quantity --}}
+        <div class="s6 col">
+          <span class="col s2 center-align" style="padding:0; margin-left: 1rem; margin-right: 0.5rem;">
+              <span class="col s12" style="padding:0;">
+                <input 
+                    type="number"
+                    ref="input"
+                    min="1"
+                    onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 49 && event.charCode <= 57"
+                    class="edit-product-quantity center-align"
+                    style="margin:0;"
+                >
+                </span>
+          </span>
+        </div>
+
+        <br><br><br><br>
 
       {{-- Breed Information --}}
       <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Swine Information</p>
@@ -135,8 +187,7 @@
               <input style="cursor: pointer;" type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
               <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit-birthdate">
                   Birth Date
-                  <span class="grey-text"><i> - Optional</i></span>
-                </label>
+              </label>
             </div>
 
             {{-- Birth weight --}}

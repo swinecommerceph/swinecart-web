@@ -57,6 +57,7 @@ class Product extends Model
         'fcr',
         'backfat_thickness',
         'other_details',
+        'is_unique',
         'status'];
 
     /**

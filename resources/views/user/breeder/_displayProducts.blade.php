@@ -106,6 +106,15 @@
 
                             <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} - {{$product->breed}}</span> <br>
                             <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span>
+                        
+                            @if($product->is_unique === 1)
+                              <span class="badge blue white-text right-align"><b>UNIQUE</b></span>
+                            @else
+                              <span class="badge pink accent-1 white-text right-align"><b>MULTIPLIER</b></span>
+                              @if($product->quantity === 0)
+                              <span class="badge orange darken-4 white-text right-align"><b>OUT OF STOCK</b></span>
+                              @endif
+                            @endif
                         </p>
                     </div>
                     <div class="card-action" style="background: hsl(0, 0%, 95%); border-top: none !important;">
@@ -151,6 +160,12 @@
                             <table class="col s12">
                                 <thead> </thead>
                                 <tbody>
+                                    @if($product->quantity !== -1)
+                                      <tr>
+                                          <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Quantity: </td>
+                                          <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->quantity }} </td>
+                                      </tr>
+                                    @endif
                                     <tr>
                                         <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
                                         <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
