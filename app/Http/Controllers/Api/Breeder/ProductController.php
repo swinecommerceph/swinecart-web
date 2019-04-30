@@ -271,7 +271,7 @@ class ProductController extends Controller
             'name',
             'type',
             'quantity',
-            'is_unique'
+            'is_unique',
             'breed',
             'birthdate',
             'price',
