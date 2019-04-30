@@ -49,7 +49,7 @@ var profile = {
             var details = {
                 "addressLine1": parent_form.find('input[name=addressLine1]').val(),
                 "addressLine2": parent_form.find('input[name=addressLine2]').val(),
-                "province": parent_form.find('select[name=province] option:checked').val(),
+                "province": parent_form.find('input[class=select-dropdown]').val(),
                 "zipCode": parent_form.find('input[name=zipCode]').val(),
                 "farmType": parent_form.find('input[name=farmType]').val(),
                 "landline": parent_form.find('input[name=landline]').val(),
@@ -370,9 +370,7 @@ $(document).ready(function () {
       // set values
       $(farm_specific + "-addressLine1").val(office_address1);
       $(farm_specific + "-addressLine2").val(office_address2);
-      
       $(farm_specific).find('input[class=select-dropdown]').val(office_province);
-
       $(farm_specific + "-zipCode").val(office_postal_zip_code);
       $(farm_specific + "-landline").val(office_landline);
       $(farm_specific + "-mobile").val(office_mobile);
@@ -380,7 +378,7 @@ $(document).ready(function () {
     else {
       $(farm_specific + "-addressLine1").val('');
       $(farm_specific + "-addressLine2").val('');
-      $(farm_specific).find('input[class=select-dropdown]').val('Abra');
+      // $(farm_specific).find('input[class=select-dropdown]').val('Abra');
       $(farm_specific + "-zipCode").val('');
       $(farm_specific + "-farmType").val('');
       $(farm_specific + "-landline").val('');

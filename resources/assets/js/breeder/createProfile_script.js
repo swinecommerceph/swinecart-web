@@ -67,7 +67,7 @@ $(document).ready(function(){
     else {
       $(farm_specific + "-addressLine1").val('');
       $(farm_specific + "-addressLine2").val('');
-      $(farm_specific_province).find('input[class=select-dropdown]').val('Abra');
+      // $(farm_specific_province).find('input[class=select-dropdown]').val('Abra');
       $(farm_specific + "-zipCode").val('');
       $(farm_specific + "-farmType").val('');
       $(farm_specific + "-landline").val('');
