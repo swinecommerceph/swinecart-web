@@ -53,7 +53,7 @@
 			<div class="row">
 			{{-- Office Address: Province --}}
 				<div class="input-field col s5 push-s1">
-					{!! Form::select('officeAddress_province', $provinces, null); !!}
+					{!! Form::select('officeAddress_province', $provinces, null, ['id' => 'office_provinces']); !!}
 					<label>Province*</label>
 				</div>
 
@@ -67,8 +67,8 @@
 			<div class="row">
 			{{-- Office Landline --}}
 				<div class="input-field col s5 push-s1">
-					{!! Form::text('office_landline', null)!!}
-					{!! Form::label('office_landline', 'Landline', ['id' => 'office_landline']) !!}
+					{!! Form::text('office_landline', null, ['id' => 'office_landline'])!!}
+					{!! Form::label('office_landline', 'Landline') !!}
 				</div>
 
 			{{-- Office Mobile --}}
@@ -132,6 +132,7 @@
 
 		<div id="farm-information" class="card-panel">
 			<div id="farm-address-body">
+        <?php $farmNumber = 1; ?>
 				@foreach($farmAddresses as $farmAddress)
 					<div class="row add-farm">
 					<div class="col s10 offset-s1">
@@ -161,9 +162,17 @@
 							</div>
 
 							<div class="row">
+
+                {{-- Checkbox if Farm Address is same as Office Address --}}
+                <div>
+                  <input type="checkbox" id="check" class="same-address-checker farm-{{ $farmNumber }}">
+                  <label for="check" class="teal-text text-darken-4"><b>Address is same as Office Information</b></label>
+                </div>
+                <br>
+
 							{{-- Farm Address: Address Line 1 --}}
 								<div class="input-field col s10 push-s1">
-									{!! Form::text('farmAddress[' . $loop->iteration . '][addressLine1]', null, ['id' => 'farmAddress[' . $loop->iteration . '][addressLine1]'])!!}
+									{!! Form::text('farmAddress[' . $loop->iteration . '][addressLine1]', null, ['id' => 'farmAddress[' . $loop->iteration . '][addressLine1]', 'class' => 'farm-' . $loop->iteration . '-addressLine1'])!!}
 									{!! Form::label('farmAddress[' . $loop->iteration . '][addressLine1]', 'Address Line 1* : Street, Road, Subdivision') !!}
 								</div>
 							</div>
@@ -171,21 +180,21 @@
 							<div class="row">
 							{{-- Farm Address: Address Line 2 --}}
 								<div class="input-field col s10 push-s1">
-									{!! Form::text('farmAddress[' . $loop->iteration . '][addressLine2]', null, ['id' => 'farmAddress[' . $loop->iteration . '][addressLine2]'])!!}
+									{!! Form::text('farmAddress[' . $loop->iteration . '][addressLine2]', null, ['id' => 'farmAddress[' . $loop->iteration . '][addressLine2]', 'class' => 'farm-' . $loop->iteration . '-addressLine2'])!!}
 									{!! Form::label('farmAddress[' . $loop->iteration . '][addressLine2]', 'Address Line 2* : Barangay, Town, City') !!}
 								</div>
 							</div>
 
 							<div class="row">
 								{{-- Farm Address: Province --}}
-								<div class="input-field col s5 push-s1">
+								<div class="input-field col s5 push-s1" id="farm-{{ $farmNumber }}">
 									{!! Form::select('farmAddress[' . $loop->iteration . '][province]', $provinces, null); !!}
 									<label>Province*</label>
 								</div>
 
 								{{-- Farm Address: Zip Code --}}
 								<div class="input-field col s5 push-s1">
-									{!! Form::text('farmAddress[' . $loop->iteration . '][zipCode]', null, ['id' => 'farmAddress[' . $loop->iteration . '][zipCode]'])!!}
+									{!! Form::text('farmAddress[' . $loop->iteration . '][zipCode]', null, ['id' => 'farmAddress[' . $loop->iteration . '][zipCode]', 'class' => 'farm-' . $loop->iteration . '-zipCode'])!!}
 									{!! Form::label('farmAddress[' . $loop->iteration . '][zipCode]', 'Postal/ZIP Code*') !!}
 								</div>
 							</div>
@@ -201,19 +210,20 @@
 							<div class="row">
 								{{-- Farm Landline --}}
 								<div class="input-field col s5 push-s1">
-									{!! Form::text('farmAddress[' . $loop->iteration . '][landline]', null, ['id' => 'farmAddress[' . $loop->iteration . '][landline]'])!!}
+									{!! Form::text('farmAddress[' . $loop->iteration . '][landline]', null, ['id' => 'farmAddress[' . $loop->iteration . '][landline]', 'class' => 'farm-' . $loop->iteration . '-landline'])!!}
 									{!! Form::label('farmAddress[' . $loop->iteration . '][landline]', 'Farm Landline') !!}
 								</div>
 
 								{{-- Farm Mobile --}}
 								<div class="input-field col s5 push-s1">
-									{!! Form::text('farmAddress[' . $loop->iteration . '][mobile]', null, ['id' => 'farmAddress[' . $loop->iteration . '][mobile]'])!!}
+									{!! Form::text('farmAddress[' . $loop->iteration . '][mobile]', null, ['id' => 'farmAddress[' . $loop->iteration . '][mobile]', 'class' => 'farm-' . $loop->iteration . '-mobile'])!!}
 									{!! Form::label('farmAddress[' . $loop->iteration . '][mobile]', 'Farm Mobile*') !!}
 								</div>
 							</div>
 						</div>
 					</div>
-					</div>
+          </div>
+          <?php $farmNumber++; ?>
 				@endforeach
 			</div>
 
