@@ -483,6 +483,11 @@ blockquote.info{
 	background-color: #e7f5f4;
 }
 
+blockquote.info-two{
+	border-left: 5px solid #1976d2;
+	background-color: #bbdefb;
+}
+
 /* Form component styles */
 #page-breeder-manage-products #other-details{
 	min-height: 310px;

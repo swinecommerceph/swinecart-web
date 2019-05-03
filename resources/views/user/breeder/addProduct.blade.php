@@ -87,7 +87,7 @@
         {{-- Prompt for semen type product --}}
         <blockquote 
           id="semen-blockquote"
-          class="info"
+          class="info-two"
           style="display: none !important;">
           <b>Product with type 'Semen' will have no quantity and will not be unique</b>
         </blockquote>
