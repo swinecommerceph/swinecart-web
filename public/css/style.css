@@ -1302,6 +1302,23 @@ label {
    width: 100%;
 }
 
+@-o-keyframes fadeIt {
+  0%   { background-color: #FFFFFF; }
+  50%  { background-color: #c8e6c9; }
+  100% { background-color: #FFFFFF; }
+}
+@keyframes fadeIt {
+  0%   { background-color: #FFFFFF; }
+  50%  { background-color: #c8e6c9; }
+  100% { background-color: #FFFFFF; }
+}
+
+.input-show-hide{    
+    background-image:none !important; 
+        -o-animation: fadeIt 0.05s ease-in-out; 
+            animation: fadeIt 1s ease-in-out; 
+}
+
 .input-field label[for='email'] {
   font-size: 0.8rem;
    -webkit-transform: none;

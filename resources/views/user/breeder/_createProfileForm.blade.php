@@ -165,7 +165,10 @@
 
                 {{-- Checkbox if Farm Address is same as Office Address --}}
                 <div>
-                  <input type="checkbox" id="check" class="same-address-checker farm-{{ $farmNumber }}">
+                  <input
+                    type="checkbox"
+                    id="check"
+                    class="same-address-checker farm-{{ $farmNumber }}">
                   <label for="check" class="teal-text text-darken-4"><b>Address is same as Office Information</b></label>
                 </div>
                 <br>
@@ -187,7 +190,7 @@
 
 							<div class="row">
 								{{-- Farm Address: Province --}}
-								<div class="input-field col s5 push-s1" id="farm-{{ $farmNumber }}">
+								<div class="input-field col s5 push-s1">
 									{!! Form::select('farmAddress[' . $loop->iteration . '][province]', $provinces, null); !!}
 									<label>Province*</label>
 								</div>
