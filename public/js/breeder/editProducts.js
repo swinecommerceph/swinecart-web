@@ -315,8 +315,7 @@ var product = {
         var videos = data.videoCollection;
         var image_list = "";
         var video_list = "";
-        var empty_video_prompt =
-          '<p class="grey-text">(No uploaded videos)</p>';
+    
         var hidden_inputs =
           '<input name="productId" type="hidden" value="' +
           data.id +
@@ -444,62 +443,75 @@ var product = {
           product.modal_history.push("#edit-product-modal");
 
           // Set-up Images in Edit Media Modal
-          images.forEach(function(element) {
-            var anchor_tag_html = "Set";
-            var delete_anchor_tag_html = "Delete";
-            var cursor_none_prop = '"';
+          var images_length = images.length;
+          if (images_length === 0) {
+            console.log("here video");
+            $(".edit-image-contents").html(
+              '<p class="grey-text">(No uploaded images)</p>'
+            );
+          } else {
 
-            // Change html value of set-display-photo anchor tag if image is the display photo
-            if (element.id == data.primary_img_id) {
-              product.current_display_photo = element.id;
-              anchor_tag_html = "Displayed";
-              cursor_none_prop = 'cursor: none;"';
-            }
+            images.forEach(function(element) {
+              var anchor_tag_html = "Set";
+              var delete_anchor_tag_html = "Delete";
+              var cursor_none_prop = '"';
 
-            image_list +=
-              '<div class="col s12 m6">' +
-              '<div class="card hoverable">' +
-              '<div class="card-image white">' +
-              '<img src="' +
-              config.productImages_path +
-              "/" +
-              element.name +
-              '">' +
-              "</div>" +
-              '<div class="card-action grey lighten-5" style="border-top: none !important;">' +
-              "<div class=row>" +
-              '<div class="col s4 m6 l3">' +
-              '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important; ' +
-              cursor_none_prop +
-              'class="set-display-photo btn blue lighten-1" data-product-id="' +
-              data.id +
-              '" data-img-id="' +
-              element.id +
-              '">' +
-              anchor_tag_html +
-              "</a>" +
-              "</div>" +
-              '<div class="col s3"></div>' +
-              '<div class="col s4 m6 l3">' +
-              '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-5" data-media-id="' +
-              element.id +
-              '">' +
-              delete_anchor_tag_html +
-              "</a>" +
-              "</div>" +
-              "</div>" +
-              "</div>" +
-              "</div>" +
-              "</div>";
-          });
+              // Change html value of set-display-photo anchor tag if image is the display photo
+              if (element.id == data.primary_img_id) {
+                product.current_display_photo = element.id;
+                anchor_tag_html = "Displayed";
+                cursor_none_prop = 'cursor: none;"';
+              }
 
-          $("#edit-images-summary .card-content .row").html(image_list);
+              image_list +=
+                '<div class="col s12 m6">' +
+                '<div class="card hoverable">' +
+                '<div class="card-image white">' +
+                '<img src="' +
+                config.productImages_path +
+                "/" +
+                element.name +
+                '">' +
+                "</div>" +
+                '<div class="card-action grey lighten-5" style="border-top: none !important;">' +
+                "<div class=row>" +
+                '<div class="col s4 m6 l3">' +
+                '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important; ' +
+                cursor_none_prop +
+                'class="set-display-photo btn blue lighten-1" data-product-id="' +
+                data.id +
+                '" data-img-id="' +
+                element.id +
+                '">' +
+                anchor_tag_html +
+                "</a>" +
+                "</div>" +
+                '<div class="col s3"></div>' +
+                '<div class="col s4 m6 l3">' +
+                '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-5" data-media-id="' +
+                element.id +
+                '">' +
+                delete_anchor_tag_html +
+                "</a>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>" +
+                "</div>";
+            });
+            
+            $(
+              "#edit-images-summary .card-content .edit-image-contents"
+            ).html(image_list);
+          }
+
 
           // Set-up Videos in Edit Media Modal
           var videos_length = videos.length;
-          if (videos_length == 0) {
-            $("#edit-videos-summary .card-content .row").html(
-              empty_video_prompt
+          if (videos_length === 0) {
+            console.log('here video');
+            $(".edit-video-contents").html(
+              '<p class="grey-text">(No uploaded videos)</p>'
             );
           } else {
             videos.forEach(function(element) {
@@ -525,8 +537,11 @@ var product = {
                 "</div>";
             });
 
-            $("#edit-videos-summary .card-content .row").html(video_list);
+            $(
+              "#edit-videos-summary .card-content .edit-video-contents"
+            ).html(video_list);
           }
+          
         }
       },
       error: function(message) {
@@ -1597,6 +1612,7 @@ $(document).ready(function() {
     $("#edit-media-modal").modal({ dismissible: false });
     $("#edit-media-modal").modal("open");
     //product.modal_history.push('#edit-media-modal')
+    //product.get_product($("#edit-product-modal").attr("data-product-id"));
   });
 
   // Open Add Media Modal

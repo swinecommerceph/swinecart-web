@@ -336,7 +336,7 @@
                     <div class="card-content black-text">
                         <span class="card-title">List of Images</span>
               {!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
-              <div class="row"></div>
+              <div class="image-contents"></div>
               {!! Form::close() !!}
                     </div>
                 </div>
@@ -348,7 +348,7 @@
                 <div id="videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
                     <div class="card-content black-text">
                         <span class="card-title">List of Videos</span>
-              <div class="row"></div>
+              <div class="video-contents"></div>
                     </div>
                 </div>
             </div>
@@ -380,29 +380,7 @@
           </div>
         {!! Form::close() !!}
       </div>
-      <div class="row">
-            <div class="col s12">
-                <div id="edit-images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
-                    <div class="card-content black-text">
-                        <span class="card-title">List of Images</span>
-              {!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
-              <div class="row"></div>
-              {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
-        </div>
-      <hr style="border-top: #ccc;">
-      <div class="row">
-            <div class="col s12">
-                <div id="edit-videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
-                    <div class="card-content black-text">
-                        <span class="card-title">List of Videos</span>
-              <div class="row"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      
     </div>
 
     <div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">

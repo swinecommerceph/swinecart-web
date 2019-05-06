@@ -515,6 +515,7 @@ $(document).ready(function() {
     $("#edit-media-modal").modal({ dismissible: false });
     $("#edit-media-modal").modal("open");
     //product.modal_history.push('#edit-media-modal')
+    //product.get_product($("#edit-product-modal").attr("data-product-id"));
   });
 
   // Open Add Media Modal
