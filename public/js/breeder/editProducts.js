@@ -1,7 +1,5 @@
 "use strict";
 
-$("#add-media-modal").modal("open");
-
 var product = {
   before_select_value: "",
   current_display_photo: 0,
