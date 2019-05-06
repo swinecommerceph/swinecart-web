@@ -126,6 +126,7 @@
                 <input 
                     type="number"
                     ref="input"
+                    value="{{ $product->quantity }}"
                     min="1"
                     onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 49 && event.charCode <= 57"
                     class="edit-product-quantity center-align"

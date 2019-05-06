@@ -1111,6 +1111,7 @@ $(document).ready(function() {
     // Semen will have no quantity
     var actual_quantity; 
     if (product_data.quantity === -1) actual_quantity = '';
+    else actual_quantity = product_data.quantity;
     $(".edit-product-quantity").val(actual_quantity);
   }
 
