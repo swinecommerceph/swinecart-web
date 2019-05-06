@@ -262,7 +262,8 @@ class ProductController extends Controller
 
       $product->img_path = route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]);
       $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => Image::find($product->primary_img_id)->name]);
-      $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
+      $product->breeder = Breeder::find($product->breeder_id)->users->first();
+      $product->breeder = $product->breeder['name'];
       $product->type = ucfirst($product->type);
       $product->birthdate = $this->transformDateSyntax($product->birthdate);
       $product->age = $this->computeAge($product->birthdate);
