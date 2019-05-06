@@ -36,15 +36,15 @@
             
             {{-- Name --}}
             <div style="margin-bottom: 2vh; width: 20vw;" class="input-field">
-              {!! Form::text('name', null, ['id' => 'name', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::text('name', 'Piggy One', ['id' => 'name', 'class' => 'validate input-manage-products'])!!}
               {!! Form::label('name', 'Name', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
             </div>
 
             {{-- Type --}}
             <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
               <select id="select-type" data-form="add">
-                <option value="" disabled selected>&emsp;Choose Type</option>
-                <option value="boar">Boar</option>
+                <option value="" disabled>&emsp;Choose Type</option>
+                <option value="boar" selected>Boar</option>
                 <option value="sow">Sow</option>
                 <option value="gilt">Gilt</option>
                 <option value="semen">Semen</option>
@@ -162,7 +162,7 @@
               <div class="input-purebreed-container">
                 {{-- If pure breed --}}
                 <div class="input-field" style="width: 20vw;">
-                  {!! Form::text('breed', null, ['id' => 'breed', 'class' => 'validate input-manage-products'])!!}
+                  {!! Form::text('breed', 'Landrace', ['id' => 'breed', 'class' => 'validate input-manage-products'])!!}
                   {!! Form::label('breed', 'Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
                 </div>
               </div>
@@ -197,8 +197,11 @@
               {{-- Farm From --}}
               <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
                 <select id="select-farm">
-                  <option value="" disabled selected>&emsp;Choose farm</option>
+                  <option value="" disabled>&emsp;Choose farm</option>
                   @foreach($farms as $farm)
+                    @if($farm->name === "aliquid, Siquijor")
+                      <option value="{{$farm->id}}" selected>{{$farm->name}}, {{$farm->province}}</option>
+                    @endif
                     <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
                   @endforeach
                 </select>
@@ -357,7 +360,7 @@
                     <div class="card-content black-text">
                         <span class="card-title">List of Images</span>
               {!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
-              <div class="row"></div>
+              <div class="image-contents"></div>
               {!! Form::close() !!}
                     </div>
                 </div>
@@ -369,12 +372,12 @@
                 <div id="videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
                     <div class="card-content black-text">
                         <span class="card-title">List of Videos</span>
-              <div class="row"></div>
+                        <div class="video-contents"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+      </div>
 
     <div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
       <div class="from-add-process">

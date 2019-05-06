@@ -633,6 +633,13 @@ var product = {
         });
         other_details_list += "</p>";
 
+        var images_length = images.length;
+        if (images_length === 0) {
+          $(".image-contents").html(
+            '<p class="grey-text">(No uploaded images)</p>'
+          );
+        } else {
+
         // Images
         images.forEach(function(element) {
           var anchor_tag_html = "Set";
@@ -645,7 +652,7 @@ var product = {
             anchor_tag_html = "Displayed";
             cursor_none_prop = 'cursor: none;"';
           }
-
+          
           image_list +=
             '<div class="col s12 m6">' +
             '<div class="card hoverable">' +
@@ -681,21 +688,36 @@ var product = {
             "</div>" +
             "</div>" +
             "</div>";
-        });
+          });
+
+          $("#images-summary .card-content .image-contents").html(image_list);
+        }
+        
+        
 
         // Videos
-        videos.forEach(function(element) {
-          video_list +=
-            '<div class="col s12 m6">' +
-            '<video class="responsive-video hoverable" controls>' +
-            '<source src="' +
-            config.productVideos_path +
-            "/" +
-            element.name +
-            '" type="video/mp4">' +
-            "</video>" +
-            "</div>";
-        });
+        var videos_length = videos.length;
+        if (videos_length === 0) {
+          $(".video-contents").html(
+            '<p class="grey-text">(No uploaded videos)</p>'
+          );
+        } else {
+          videos.forEach(function(element) {
+            video_list +=
+              '<div class="col s12 m6">' +
+              '<video class="responsive-video hoverable" controls>' +
+              '<source src="' +
+              config.productVideos_path +
+              "/" +
+              element.name +
+              '" type="video/mp4">' +
+              "</video>" +
+              "</div>";
+          });
+
+          $("#videos-summary .card-content .video-contents").html(video_list);
+        }
+
 
         $("#product-summary-collection h5").html(data.name);
         $("#product-summary-collection h6").html(
@@ -703,8 +725,8 @@ var product = {
         );
         $("#product-summary-collection div").html(items);
         $("#other-details-summary .card-content div").html(other_details_list);
-        $("#images-summary .card-content .row").html(image_list);
-        $("#videos-summary .card-content .row").html(video_list);
+        
+        
         $("#display-product-form").prepend(
           '<input name="productId" type="hidden" value="' + data.id + '">'
         );
