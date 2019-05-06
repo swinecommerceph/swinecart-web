@@ -316,6 +316,12 @@
           </div>
         {!! Form::close() !!}
       </div>
+
+      <blockquote
+        class="info-two"
+      >
+        <b>Note:</b> Adding media (images or videos) is not required in Adding a Product. You can add them later when editing a product.
+      </blockquote>
     </div>
     <div class="modal-footer">
       <button id="next-button" type="submit" class="btn waves-effect waves-light modal-action teal darken-3"> Product Summary </button>
