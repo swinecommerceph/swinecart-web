@@ -43,8 +43,8 @@
             {{-- Type --}}
             <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
               <select id="select-type" data-form="add">
-                <option value="" disabled>&emsp;Choose Type</option>
-                <option value="boar" selected>Boar</option>
+                <option value="" disabled selected>&emsp;Choose Type</option>
+                <option value="boar" >Boar</option>
                 <option value="sow">Sow</option>
                 <option value="gilt">Gilt</option>
                 <option value="semen">Semen</option>
@@ -254,24 +254,26 @@
             </div>
 
             {{-- Number of teats --}}
-            <p style="margin-bottom: 3vh;" class="teal-text text-darken-4">
-              Number of teats
-              <span class="grey-text">
-                <i> - Optional
-                </i>
-              </span>
-            </p>
-            
-            {{-- Number of teats (left) --}}
-            <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
-              {!! Form::text('left_teats', null, ['class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
-              {!! Form::label('left_teats', '(left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
-            </div>
-            
-            {{-- Number of teats (right) --}}
-            <div class="col s4 input-field" style="margin-top: 0vh !important;">
-              {!! Form::text('right_teats', null, ['class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
-              {!! Form::label('right_teats', '(right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+            <div id="number-of-teats-container" style="display: none;">
+              <p style="margin-bottom: 3vh;" class="teal-text text-darken-4">
+                Number of teats
+                <span class="grey-text">
+                  <i> - Optional
+                  </i>
+                </span>
+              </p>
+              
+              {{-- Number of teats (left) --}}
+              <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
+                {!! Form::text('left_teats', null, ['class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
+                {!! Form::label('left_teats', '(left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
+              </div>
+              
+              {{-- Number of teats (right) --}}
+              <div class="col s4 input-field" style="margin-top: 0vh !important;">
+                {!! Form::text('right_teats', null, ['class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
+                {!! Form::label('right_teats', '(right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              </div>
             </div>
 
 
