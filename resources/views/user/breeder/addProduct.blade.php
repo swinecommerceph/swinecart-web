@@ -181,8 +181,12 @@
 
             <div class="row">
               {{-- Birthdate --}}
-              <div class="input-field" style="width: 13vw;">
+              <div class="input-field" style="width: 13vw; display: flex !important;">
                 <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
+                <i 
+                  class="material-icons teal-text text-darken-2"
+                  style="font-size: 3rem; z-index: -1 !important; left: 10.5vw; !important; position: absolute;"
+                >date_range</i>
                 <label style="font-size: 1rem;" class="teal-text text-darken-4" for="birthdate">
                   Birth Date
                 </label>
