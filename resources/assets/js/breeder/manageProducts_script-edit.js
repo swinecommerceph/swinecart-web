@@ -297,6 +297,24 @@ $(document).ready(function() {
     }
   });
 
+  /* Shows number of teats field only for sow or gilt */
+  
+  /* For getting initial product type */
+  var edit_select_type_value = $("#edit-select-type option:selected").text();
+  if (edit_select_type_value === "Sow" || edit_select_type_value === "Gilt")
+    $("#edit-number-of-teats-container").show();
+  else
+    $("#edit-number-of-teats-container").hide();
+
+  /* For changing the product type */
+  $("#edit-select-type").change(function () {
+    var edit_change_select_type_value = $("#edit-select-type option:selected").text();
+    if (edit_change_select_type_value === "Sow" || edit_change_select_type_value === "Gilt")
+      $("#edit-number-of-teats-container").show();
+    else
+      $("#edit-number-of-teats-container").hide();
+  });
+
   /**
    * This is for handling unique products.
    * Unique products should only have a product quantity of one
