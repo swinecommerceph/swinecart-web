@@ -43,7 +43,7 @@
             {{-- Type --}}
             <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
               <select id="select-type" data-form="add">
-                <option value="" disabled selected>&emsp;Choose Type</option>
+                <option value="" disabled selected>Choose Type</option>
                 <option value="boar" >Boar</option>
                 <option value="sow">Sow</option>
                 <option value="gilt">Gilt</option>

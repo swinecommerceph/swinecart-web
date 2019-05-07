@@ -308,6 +308,12 @@ body {
 .select-wrapper input.select-dropdown {
   border: solid 1px #9e9e9e;
   border-radius: 4px;
+  padding-left: 7px !important;
+  padding-right: 5px !important;
+}
+
+span.caret {
+  font-size: 1.5rem !important;
 }
 
 .select-wrapper+label {
