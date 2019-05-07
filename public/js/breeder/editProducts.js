@@ -1113,9 +1113,6 @@ $(document).ready(function() {
   $("#edit-select-type").val(product_data.type.toLowerCase());
   $("#edit-select-farm").val(product_data.farm_from_id);
 
-  $("#edit-min_price").val(product_data.min_price);
-  $("#edit-max_price").val(product_data.max_price);
-
   // PRODUCT UNIQUENESS
   if (product_data.is_unique) {
     $('.edit-product-unique-checker').prop('checked', true);
@@ -1134,12 +1131,7 @@ $(document).ready(function() {
 
   // BREED INFORMATION
 
-  $("#edit-birthweight").val(product_data.birthweight);
   $("#edit-select-housetype").val(product_data.house_type);
-
-  $("#edit-lsba").val(product_data.lsba);
-  $("#edit-left_teats").val(product_data.left_teats);
-  $("#edit-right_teats").val(product_data.right_teats);
 
   // For the breed initialization
   if (product_data.breed.includes("x")) {
@@ -1168,10 +1160,54 @@ $(document).ready(function() {
   var picker = birthdatePicker.pickadate("picker");
   picker.set("select", new Date(product_data.birthdate));
 
-  $("#edit-adg").val(product_data.adg);
-  $("#edit-fcr").val(product_data.fcr);
-  $("#edit-backfat_thickness").val(product_data.backfat_thickness);
+  /** Clearing the values if initial attribute has 
+   * no initial value since 0 is different from null
+   */
+  if (product_data.min_price === 0.0)
+    $("#edit-min_price").val();
+  else
+    $("#edit-min_price").val(product_data.min_price);
+  
+  if (product_data.max_price === 0.0)
+    $("#edit-max_price").val();
+  else
+    $("#edit-max_price").val(product_data.max_price);
+  
+  if (product_data.birthweight === 0.0)
+    $("#edit-birthweight").val();
+  else 
+    $("#edit-birthweight").val(product_data.birthweight);
 
+  if (product_data.adg === 0)
+    $("#edit-adg").val();
+  else 
+    $("#edit-adg").val(product_data.adg);
+
+  if (product_data.fcr === 0.0)
+    $("#edit-fcr").val();
+  else
+    $("#edit-fcr").val(product_data.fcr);
+
+  if (product_data.backfat_thickness === 0.0)
+    $("#edit-backfat_thickness").val();
+  else
+    $("#edit-backfat_thickness").val(product_data.backfat_thickness);
+
+  if (product_data.lsba === 0)
+    $("#edit-lsba").val();
+  else
+    $("#edit-lsba").val(product_data.lsba);
+  
+  if (product_data.left_teats === 0)
+    $("#edit-left_teats").val();
+  else
+    $("#edit-left_teats").val(product_data.left_teats);
+  
+  if (product_data.right_teats === 0)
+    $("#edit-right_teats").val();
+  else
+    $("#edit-right_teats").val(product_data.right_teats)
+  
   $("#edit-other_details").val(product_data.other_details);
 
   var parent_form = $("#edit-product");
