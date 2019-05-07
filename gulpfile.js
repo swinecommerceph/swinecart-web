@@ -95,12 +95,6 @@ elixir(function (mix) {
       'validation/breeder/manageProducts_validation.js'
     ], 'public/js/breeder/showProducts.js')
     .scripts([
-      'breeder/addProduct.js',
-      'breeder/manageProducts_script.js',
-      'validation/formValidationMethods.js',
-      'validation/breeder/manageProducts_validation.js'
-    ], 'public/js/breeder/addProduct.js')
-    .scripts([
       'breeder/product.js',
       'breeder/editProduct.js',
       'breeder/filter.js',
