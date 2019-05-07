@@ -164,7 +164,7 @@
           <div class="row">
             <div class="input-purebreed-container">
               {{-- If pure breed --}}
-              <div class="input-field" style="width: 20vw;">
+              <div class="input-field" style="width: 10vw;">
                 {!! Form::text('edit-breed', null, ['id' => 'edit-breed', 'class' => 'validate input-manage-products'])!!}
                 {!! Form::label('edit-breed', 'Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
               </div>
