@@ -102,7 +102,7 @@
         </p>
 
         <div>
-          <input type="checkbox" id="check" class="product-unique-checker">
+          <input type="checkbox" id="check" class="product-unique-checker filled-in">
           <label for="check">Yes, this product is unique</label>
         </div>
 
