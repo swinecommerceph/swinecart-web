@@ -148,7 +148,7 @@
             </span>
           </li>
 
-          @if ( $product->type === "Gilt")
+          @if ( $product->type === "Gilt" || $product->type === "Sow")
             <li style="color: hsl(0, 0%, 29%);">Number of teats: 
               <span style="color: hsl(0, 0%, 13%);">
                 @if ( $product->left_teats === 0 || $product->right_teats === 0)
