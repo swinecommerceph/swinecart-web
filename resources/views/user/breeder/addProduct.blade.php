@@ -355,7 +355,7 @@
                 <div id="other-details-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
                     <div class="card-content black-text">
                         <span class="card-title">Other Details</span>
-              <div></div>
+                        <div class="other-details-contents"></div>
                     </div>
                 </div>
             </div>

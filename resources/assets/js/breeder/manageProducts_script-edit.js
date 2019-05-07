@@ -111,7 +111,10 @@ $(document).ready(function() {
   else
     $("#edit-right_teats").val(product_data.right_teats)
   
-  $("#edit-other_details").val(product_data.other_details);
+  if (product_data.other_details === "")
+    $("#edit-other_details").val();
+  else 
+    $("#edit-other_details").val(product_data.other_details);
 
   var parent_form = $("#edit-product");
   var hidden_inputs =
@@ -427,22 +430,6 @@ $(document).ready(function() {
     } else $(product.modal_history_tos()).modal("open");
   });
 
-  /* ----------- Add Product Modal functionalities ----------- */
-  $("#add-product-modal #other-details-tab").click(function(e) {
-    $("#submit-button").show();
-  });
-
-  /* ----------- Add Media Modal functionalities ----------- */
-  // Move to Product Summary Modal
-  $("#next-button").click(function(e) {
-    e.preventDefault();
-    product.get_summary(
-      $("#add-media-modal form")
-        .find('input[name="productId"]')
-        .val()
-    );
-  });
-
   // media-dropzone initialization and configuration
   Dropzone.options.mediaDropzone = {
     paramName: "media",
@@ -749,15 +736,4 @@ $(document).ready(function() {
     product.manage_necessary_fields($(this).parents('form'), $(this).val());
   }); */
 
-  // Add other details button
-  $(".add-other-details").click(function(e) {
-    e.preventDefault();
-    product.add_other_detail($(this).parents("form"));
-  });
-
-  // Remove a detail from other details section
-  $("body").on("click", ".remove-detail", function(e) {
-    e.preventDefault();
-    product.remove_other_detail($(this));
-  });
 });

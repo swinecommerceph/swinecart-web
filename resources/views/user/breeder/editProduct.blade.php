@@ -303,7 +303,7 @@
         </div>
       </div> --}}
 
-      </div>
+    </div>
     <div class="row">
       <button id="edit-media-button" style="font-weight: 900; width: 15vw; font-size: 1.4rem" type="submit" class="right btn-large waves-effect waves-light teal darken-4">Edit Media</button>
       <button style="font-weight: 900; width: 15vw; font-size: 1.4rem; margin-right: 2vw;" type="submit" class="right btn-large waves-effect waves-light teal darken-4 update-button">Edit Product</button>

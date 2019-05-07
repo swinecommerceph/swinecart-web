@@ -4,22 +4,6 @@ var product = {
   before_select_value: "",
   current_display_photo: 0,
   modal_history: [],
-  other_details_default:
-    '<div class="detail-container">' +
-    '<div class="input-field col s6">' +
-    '<input class="validate input-manage-products" name="characteristic[]" type="text">' +
-    '<label class="grey-text text-darken-3" for="characteristic[]">Characteristic</label>' +
-    "</div>" +
-    '<div class="input-field col s5">' +
-    '<input class="validate input-manage-products" name="value[]" type="text">' +
-    '<label class="grey-text text-darken-3" for="value[]">Value</label>' +
-    "</div>" +
-    '<div class="input-field col s1 remove-button-container">' +
-    '                <a href="#" class="tooltipped remove-detail" data-position="top" data-delay="50" data-tooltip="Remove detail">' +
-    '<i class="material-icons grey-text text-lighten-1">remove_circle</i>' +
-    "</a>" +
-    "</div>" +
-    "</div>",
   modal_history_tos: function() {
     return product.modal_history[product.modal_history.length - 1];
   },
@@ -82,11 +66,11 @@ var product = {
       lsba: parent_form.find("input[name=lsba]").val(),
       left_teats: parent_form.find("input[name=left_teats]").val(),
       right_teats: parent_form.find("input[name=right_teats]").val(),
-      other_details: $("textarea#other_details").val(),
+      other_details: $("#other_details").val(),
       quantity: $(".product-quantity").val(),
       _token: parent_form.find("input[name=_token]").val()
     };
-
+  
     /* Check if the checkbox for product uniqueness is checked or not */
     if ($(".product-unique-checker").is(":checked"))
       data_values["is_unique"] = 1;
@@ -115,15 +99,7 @@ var product = {
         .val()
         .toLowerCase()
         .trim();
-
-    // Transform syntax of Other details category values
-    /* var other_details = '';
-    $(parent_form).find('.detail-container').map(function () {
-      var characteristic = $(this).find('input[name="characteristic[]"]').val();
-      var value = $(this).find('input[name="value[]"]').val();
-      if (characteristic && value) other_details += characteristic + ' = ' + value + ',';
-    }); */
-
+        
     // Do AJAX
     $.ajax({
       url: parent_form.attr("action"),
@@ -201,23 +177,6 @@ var product = {
         .val()
         .toLowerCase()
         .trim();
-
-    // Transform syntax of Other details category values
-    var other_details = "";
-    $(parent_form)
-      .find(".detail-container")
-      .map(function() {
-        var characteristic = $(this)
-          .find('input[name="characteristic[]"]')
-          .val();
-        var value = $(this)
-          .find('input[name="value[]"]')
-          .val();
-        if (characteristic && value)
-          other_details += characteristic + " = " + value + ",";
-      });
-
-    data_values["other_details"] = other_details;
 
     $.when(
       // Wait for the update on the database
@@ -390,55 +349,6 @@ var product = {
 
         // Other Details
         if (data.other_details) {
-          var other_details_info = data.other_details.split(",");
-          var details = "";
-          other_details_info.forEach(function(element) {
-            var information = element.split("=");
-            if (information != "") {
-              details +=
-                '<div class="detail-container">' +
-                '<div class="input-field col s6">' +
-                '<input class="validate" name="characteristic[]" type="text" value="' +
-                information[0].toString().trim() +
-                '">' +
-                '<label for="characteristic[]" class="active">Characteristic</label>' +
-                "</div>" +
-                '<div class="input-field col s5">' +
-                '<input class="validate" name="value[]" type="text" value="' +
-                information[1].toString().trim() +
-                '">' +
-                '<label for="value[]" class="active">Value</label>' +
-                "</div>" +
-                '<div class="input-field col s1 remove-button-container">' +
-                '<a href="#" class="tooltipped remove-detail" data-position="top" data-delay="50" data-tooltip="Remove detail">' +
-                '<i class="material-icons grey-text text-lighten-1">remove_circle</i>' +
-                "</a>" +
-                "</div>" +
-                "</div>";
-            }
-          });
-
-          parent_form.find(".other-details-container").html("");
-          $(details)
-            .prependTo(parent_form.find(".other-details-container"))
-            .fadeIn(300);
-
-          // Open Edit Product Modal after product information has been fetched
-          $("#edit-product-modal").modal({
-            ready: function() {
-              var whole_tab_width = $("#edit-product-modal .tabs").width();
-              var swine_tab_width = $("#edit-product-modal .tab")
-                .first()
-                .width();
-
-              $(".indicator").css({
-                right: whole_tab_width - swine_tab_width,
-                left: "0px"
-              });
-            }
-          });
-          $("#edit-product-modal").modal("open");
-
           // Set-up value of current_modal_id
           product.modal_history.push("#edit-product-modal");
 
@@ -614,7 +524,6 @@ var product = {
       },
       success: function(data) {
         var data = JSON.parse(data);
-        var other_details = data.other_details.split(",");
         var images = data.imageCollection;
         var videos = data.videoCollection;
 
@@ -638,15 +547,9 @@ var product = {
           data.backfat_thickness +
           " mm</li>";
 
-        var other_details_list = "<p>";
+        
         var image_list = "";
         var video_list = "";
-
-        // Other Details
-        other_details.forEach(function(element) {
-          other_details_list += element.trim() + "<br>";
-        });
-        other_details_list += "</p>";
 
         var images_length = images.length;
         if (images_length === 0) {
@@ -739,7 +642,9 @@ var product = {
           "Farm Address: " + data.farm_province
         );
         $("#product-summary-collection div").html(items);
-        $("#other-details-summary .card-content div").html(other_details_list);
+        var other_details_data = '<p>' + data.other_details + '</p>';
+        $("#other-details-summary .card-content .other-details-contents")
+          .html(other_details_data);
         
         
         $("#display-product-form").prepend(
@@ -878,93 +783,6 @@ var product = {
         }
       });
     } else Materialize.toast("No products chosen!", 1500, "orange accent-2");
-  },
-
-  manage_necessary_fields: function(parent_form, type) {
-    if (type === "semen") {
-      if (
-        product.before_select_value === "sow" ||
-        product.before_select_value === "gilt"
-      ) {
-        parent_form.find(".other-details-container").html("");
-        $(product.other_details_default)
-          .prependTo(parent_form.find(".other-details-container"))
-          .fadeIn(300);
-      }
-      product.before_select_value = "semen";
-    }
-    // Provide default values in other_details category for sow
-    else if (type === "sow" || type === "gilt") {
-      parent_form.find(".other-details-container").html("");
-      $(
-        '<div class="detail-container">' +
-          '<div class="input-field col s6">' +
-          '<input class="validate valid" name="characteristic[]" type="text" value="Litter Size">' +
-          '<label for="characteristic[]" class="active">Characteristic</label>' +
-          "</div>" +
-          '<div class="input-field col s5">' +
-          '<input class="validate" name="value[]" type="text" value="">' +
-          '<label for="value[]" class="active">Value</label>' +
-          "</div>" +
-          '<div class="input-field col s1 remove-button-container">' +
-          '<a href="#" class="tooltipped remove-detail" data-position="top" data-delay="50" data-tooltip="Remove detail">' +
-          '<i class="material-icons grey-text text-lighten-1">remove_circle</i>' +
-          "</a>" +
-          "</div>" +
-          "</div>" +
-          '<div class="detail-container">' +
-          '<div class="input-field col s6">' +
-          '<input class="validate valid" name="characteristic[]" type="text" value="Number of teats">' +
-          '<label for="characteristic[]" class="active">Characteristic</label>' +
-          "</div>" +
-          '<div class="input-field col s5">' +
-          '<input class="validate" name="value[]" type="text" value="">' +
-          '<label for="value[]" class="active">Value</label>' +
-          "</div>" +
-          '<div class="input-field col s1 remove-button-container">' +
-          '                <a href="#" class="tooltipped remove-detail" data-position="top" data-delay="50" data-tooltip="Remove detail">' +
-          '<i class="material-icons grey-text text-lighten-1">remove_circle</i>' +
-          "</a>" +
-          "</div>" +
-          "</div>"
-      )
-        .hide()
-        .prependTo(parent_form.find(".other-details-container"))
-        .fadeIn(300);
-
-      parent_form.find(".remove-detail").tooltip({ delay: 50 });
-      product.before_select_value = type;
-    }
-
-    // Boar
-    else {
-      if (
-        product.before_select_value === "sow" ||
-        product.before_select_value === "gilt"
-      ) {
-        parent_form.find(".other-details-container").html("");
-        $(product.other_details_default)
-          .prependTo(parent_form.find(".other-details-container"))
-          .fadeIn(300);
-      }
-      product.before_select_value = "boar";
-    }
-  },
-
-  add_other_detail: function(parent_form) {
-    $(product.other_details_default)
-      .hide()
-      .appendTo(parent_form.find(".other-details-container"))
-      .fadeIn(300);
-    $(".remove-detail").tooltip({ delay: 50 });
-  },
-
-  remove_other_detail: function(remove_icon) {
-    var parent_container = remove_icon.parents(".detail-container");
-    remove_icon.tooltip("remove");
-    $.when(parent_container.fadeOut(300)).done(function() {
-      parent_container.remove();
-    });
   }
 };
 
