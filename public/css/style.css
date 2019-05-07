@@ -1410,6 +1410,19 @@ label {
    transform: translate(300%, -120%);
 }
 
+.input-field label[for='fbreed']::after {
+   padding-top: 0.4rem;
+   /* Check to other input fields */
+   transform: translate(300%, -120%);
+}
+
+.input-field label[for='mbreed']::after {
+   padding-top: 0.4rem;
+   /* Check to other input fields */
+   transform: translate(300%, -120%);
+}
+
+
 
 
 /* Override search icon label */
@@ -1462,6 +1475,11 @@ label {
 input[type=text]:not(.browser-default) {
   border: solid 1px #9e9e9e;
   border-radius: 3px;
+}
+
+input[type=text]:not(.browser-default).invalid {
+  border: 1px solid red !important;
+  border-bottom: none !important;
 }
 
 /* Checkbox */

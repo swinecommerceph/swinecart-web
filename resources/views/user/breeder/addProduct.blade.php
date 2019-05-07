@@ -36,7 +36,7 @@
             
             {{-- Name --}}
             <div style="margin-bottom: 2vh; width: 20vw;" class="input-field">
-              {!! Form::text('name', 'Piggy One', ['id' => 'name', 'class' => 'validate input-manage-products'])!!}
+              {!! Form::text('name', null, ['id' => 'name', 'class' => 'validate input-manage-products'])!!}
               {!! Form::label('name', 'Name', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
             </div>
 
@@ -159,10 +159,10 @@
 
             {{-- Breed --}}
             <div class="row">
-              <div class="input-purebreed-container">
+              <div class="in  put-purebreed-container">
                 {{-- If pure breed --}}
-                <div class="input-field" style="width: 10vw;">
-                  {!! Form::text('breed', 'Landrace', ['id' => 'breed', 'class' => 'validate input-manage-products'])!!}
+                <div class="input-field" style="width: 20vw;">
+                  {!! Form::text('breed', null, ['id' => 'breed', 'class' => 'validate input-manage-products'])!!}
                   {!! Form::label('breed', 'Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
                 </div>
               </div>
@@ -201,11 +201,11 @@
               {{-- Farm From --}}
               <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
                 <select id="select-farm">
-                  <option value="" disabled>&emsp;Choose farm</option>
+                  <option value="" disabled selected>Choose farm</option>
                   @foreach($farms as $farm)
-                    @if($farm->name === "aliquid, Siquijor")
+                    {{-- @if($farm->name === "aliquid, Siquijor")
                       <option value="{{$farm->id}}" selected>{{$farm->name}}, {{$farm->province}}</option>
-                    @endif
+                    @endif --}}
                     <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
                   @endforeach
                 </select>
@@ -215,7 +215,7 @@
               {{-- House type --}}
               <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
                 <select id="select-housetype">
-                  <option value="" disabled selected>&emsp;Choose house type</option>
+                  <option value="" disabled selected>Choose house type</option>
                   <option value="tunnelventilated">Tunnel ventilated</option>
                   <option value="opensided">Open sided</option>
                 </select>
