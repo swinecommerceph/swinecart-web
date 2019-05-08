@@ -1723,7 +1723,12 @@ var placeSuccess = function(inputElement) {
 var validationMethods = {
   // functions must return either true or the errorMsg only
   required: function(inputElement) {
-    var errorMsg = "This field is required";
+    var errorMsg;
+    if (inputElement.name === "name")
+      errorMsg = "Please enter product name"; 
+    else 
+      errorMsg = "This field is required"; 
+
     return inputElement.value ? true : errorMsg;
   },
   requiredIfRadio: function(inputElement, radioId) {

@@ -1401,7 +1401,7 @@ label {
 .input-field label[for='name']::after {
    padding-top: 0.4rem;
    /* Check to other input fields */
-   transform: translate(300%, -120%);
+   transform: translate(220%, -120%);
 }
 
 .input-field label[for='breed']::after {
