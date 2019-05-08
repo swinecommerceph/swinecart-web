@@ -93,6 +93,9 @@ var product = {
 
       data_values["breed"] =
         fbreed.toLowerCase().trim() + "+" + mbreed.toLowerCase().trim();
+      console.log(
+        fbreed.toLowerCase().trim() + "+" + mbreed.toLowerCase().trim()
+      );
     } else
       data_values["breed"] = parent_form
         .find("input[name=breed]")

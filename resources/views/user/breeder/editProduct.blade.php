@@ -141,6 +141,7 @@
       {{-- Breed Information --}}
       <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Swine Information</p>
       
+      
       <div class="row">
         <div class="col s0.5"></div>
         <div class="col s6">
@@ -150,11 +151,11 @@
           <div class="row">
             <div class="input-field col s7">
               <p>
-                <input name="radio-breed" type="radio" value="purebreed" id="edit-purebreed" class="with-gap purebreed" checked/>
+                <input name="radio-breed" type="radio" value="purebreed" id="purebreed" class="with-gap purebreed" checked/>
                 <label class="teal-text text-darken-4" for="purebreed">Purebreed</label>
               </p>
               <p>
-                <input name="radio-breed" type="radio" value="crossbreed" id="edit-crossbreed" class="with-gap crossbreed"/>
+                <input name="radio-breed" type="radio" value="crossbreed" id="crossbreed" class="with-gap crossbreed"/>
                 <label class="teal-text text-darken-4" for="crossbreed">Crossbreed</label>
               </p>
             </div>
@@ -164,7 +165,7 @@
           <div class="row">
             <div class="input-purebreed-container">
               {{-- If pure breed --}}
-              <div class="input-field" style="width: 10vw;">
+              <div class="input-field" style="width: 20vw;">
                 {!! Form::text('edit-breed', null, ['id' => 'edit-breed', 'class' => 'validate input-manage-products'])!!}
                 {!! Form::label('edit-breed', 'Breed', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
               </div>

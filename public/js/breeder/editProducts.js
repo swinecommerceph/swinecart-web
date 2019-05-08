@@ -93,6 +93,9 @@ var product = {
 
       data_values["breed"] =
         fbreed.toLowerCase().trim() + "+" + mbreed.toLowerCase().trim();
+      console.log(
+        fbreed.toLowerCase().trim() + "+" + mbreed.toLowerCase().trim()
+      );
     } else
       data_values["breed"] = parent_form
         .find("input[name=breed]")
@@ -1776,9 +1779,9 @@ var validateFunction = function() {
         birthdate: ["required"],
         "select-farm": ["requiredDropdown"],
         "edit-name": ["required"],
-        "edit-breed": ["requiredIfRadio:edit-purebreed"],
-        "edit-fbreed": ["requiredIfRadio:edit-crossbreed"],
-        "edit-mbreed": ["requiredIfRadio:edit-crossbreed"],
+        "edit-breed": ["requiredIfRadio:purebreed"],
+        "edit-fbreed": ["requiredIfRadio:crossbreed"],
+        "edit-mbreed": ["requiredIfRadio:crossbreed"],
         "edit-select-type": ["requiredDropdown"],
         "edit-select-farm": ["requiredDropdown"]
       };
@@ -1884,12 +1887,7 @@ var validateFunction = function() {
         $("#submit-button").html("Adding Product ...");
 
         product.add($("#create-product"));
-      } else
-        Materialize.toast(
-          "Please properly fill all required fields.",
-          2500,
-          "orange accent-2"
-        );
+      } else Materialize.toast("Please properly fill all required fields.", 2500, "orange accent-2");
     });
 
     // Update details of a product

@@ -562,7 +562,7 @@ $(document).ready(function() {
 
   /* ----------- Form functionalities ----------- */
   // Breed radio
-  $("input.purebreed , input.edit-purebreed").on("click", function() {
+  $("input.purebreed").on("click", function() {
     $(this)
       .parents("form")
       .find(".input-crossbreed-container")
@@ -572,7 +572,7 @@ $(document).ready(function() {
       .find(".input-purebreed-container")
       .fadeIn(300);
   });
-  $("input.crossbreed , input.edit-crossbreed").on("click", function() {
+  $("input.crossbreed").on("click", function() {
     $(this)
       .parents("form")
       .find(".input-purebreed-container")
