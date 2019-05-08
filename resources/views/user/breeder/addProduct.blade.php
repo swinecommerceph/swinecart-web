@@ -159,7 +159,7 @@
 
             {{-- Breed --}}
             <div class="row">
-              <div class="in  put-purebreed-container">
+              <div class="input-purebreed-container">
                 {{-- If pure breed --}}
                 <div class="input-field" style="width: 20vw;">
                   {!! Form::text('breed', null, ['id' => 'breed', 'class' => 'validate input-manage-products'])!!}
