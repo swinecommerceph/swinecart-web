@@ -41,15 +41,24 @@
             </div>
 
             {{-- Type --}}
-            <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
-              <select id="select-type" data-form="add">
-                <option value="" disabled selected>Choose Type</option>
-                <option value="boar" >Boar</option>
-                <option value="sow">Sow</option>
-                <option value="gilt">Gilt</option>
-                <option value="semen">Semen</option>
-              </select>
-              <label style="font-size: 1rem;" class="teal-text text-darken-4">Type</label>
+            <div class="row">
+                <div class="col s4.5" style="padding-left: 0px !important">
+                  <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
+                    <select id="select-type" data-form="add">
+                      <option value="" disabled selected>Choose Type</option>
+                      <option value="boar" >Boar</option>
+                      <option value="sow">Sow</option>
+                      <option value="gilt">Gilt</option>
+                      <option value="semen">Semen</option>
+                    </select>
+                    <label id="select-type-label" for="type" style="font-size: 1rem; margin-top: 2rem;" class="teal-text text-darken-4">Type</label>
+                  </div>
+                </div>              
+              
+                <div id="select-type-data-error" style="display:none;" class="col s5">
+                  <p style="margin-top: 3vh;" class="red-text">Please choose a product type</p> 
+                </div>
+              
             </div>
 
             {{-- Price --}}
@@ -199,17 +208,25 @@
               </div>
 
               {{-- Farm From --}}
-              <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
-                <select id="select-farm">
-                  <option value="" disabled selected>Choose farm</option>
-                  @foreach($farms as $farm)
-                    {{-- @if($farm->name === "aliquid, Siquijor")
-                      <option value="{{$farm->id}}" selected>{{$farm->name}}, {{$farm->province}}</option>
-                    @endif --}}
-                    <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
-                  @endforeach
-                </select>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
+              <div class="row">
+                <div class="col s6" style="padding-left: 0px !important">
+                  <div style="margin-bottom: 4vh; width: 15vw;" class="input-field">
+                    <select id="select-farm">
+                      <option value="" disabled selected>Choose farm</option>
+                      @foreach($farms as $farm)
+                        {{-- @if($farm->name === "aliquid, Siquijor")
+                          <option value="{{$farm->id}}" >{{$farm->name}}, {{$farm->province}}</option>
+                        @endif --}}
+                        <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                      @endforeach
+                    </select>
+                    <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
+                  </div>
+                </div>
+  
+                <div id="select-farm-data-error" style="display: none;" class="col s5">
+                  <p style="margin-top: 3vh;" class="red-text">Please choose a farm</p> 
+                </div>
               </div>
 
               {{-- House type --}}

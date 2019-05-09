@@ -1404,26 +1404,35 @@ label {
    transform: translate(220%, -120%);
 }
 
+.input-field label[for='type']::after {
+   padding-top: 0.4rem;
+   /* Check to other input fields */
+   transform: translate(220%, -120%);
+}
+
 .input-field label[for='breed']::after {
    padding-top: 0.4rem;
    /* Check to other input fields */
-   transform: translate(300%, -120%);
+   transform: translate(240%, -120%);
 }
 
 .input-field label[for='fbreed']::after {
    padding-top: 0.4rem;
    /* Check to other input fields */
-   transform: translate(300%, -120%);
+   transform: translate(240%, -120%);
 }
 
 .input-field label[for='mbreed']::after {
    padding-top: 0.4rem;
    /* Check to other input fields */
-   transform: translate(300%, -120%);
+   transform: translate(240%, -120%);
 }
 
-
-
+/* .input-field label[id='select-type-label']::after {
+  content: "Twice is heart" !important;
+  color: blue !important;
+  /* transform: translate(240%, -120%) !important; */
+} */
 
 /* Override search icon label */
 .input-field label[for='search']{
