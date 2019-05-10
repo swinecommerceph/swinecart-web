@@ -1404,6 +1404,12 @@ label {
    transform: translate(220%, -120%);
 }
 
+.input-field label[for='edit-name']::after {
+   padding-top: 0.4rem;
+   /* Check to other input fields */
+   transform: translate(300%, -120%);
+}
+
 .input-field label[for='type']::after {
    padding-top: 0.4rem;
    /* Check to other input fields */
