@@ -1601,6 +1601,7 @@ var validateFunction = function() {
         "edit-fbreed": ["requiredIfRadio:crossbreed"],
         "edit-mbreed": ["requiredIfRadio:crossbreed"],
         "edit-select-type": ["requiredDropdown"],
+        edit_birthdate: ["required"],
         "edit-select-farm": ["requiredDropdown"]
       };
 
@@ -1669,7 +1670,7 @@ var validateFunction = function() {
 
     // Temporary fix for prompting 'valid' class after
     // value change on datepicker
-    $("#birthdate, #edit-birthdate").change(function(e) {
+    $("#birthdate, #edit_birthdate").change(function(e) {
       e.stopPropagation();
       $(this)
         .removeClass("invalid")
@@ -1716,6 +1717,9 @@ var validateFunction = function() {
       var validType = validateInput(
         document.getElementById("edit-select-type")
       );
+      var validBirthdate = validateInput(
+        document.getElementById("edit_birthdate")
+      );
       var validFarmFrom = validateInput(
         document.getElementById("edit-select-farm")
       );
@@ -1728,7 +1732,13 @@ var validateFunction = function() {
         validBreed = validBreed && validFbreed && validMbreed;
       } else validBreed = validateInput(document.getElementById("edit-breed"));
 
-      if (validName && validType && validFarmFrom && validBreed) {
+      if (
+        validName &&
+        validType &&
+        validFarmFrom &&
+        validBirthdate &&
+        validBreed
+      ) {
         // Disable update-button
         $(this).addClass("disabled");
         $(this).html("Updating...");

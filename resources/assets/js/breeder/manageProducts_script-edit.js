@@ -59,7 +59,7 @@ $(document).ready(function() {
   }
 
   // setting the birthdate differently since simple val() does not work
-  var birthdatePicker = $("#edit-birthdate").pickadate();
+  var birthdatePicker = $("#edit_birthdate").pickadate();
   var picker = birthdatePicker.pickadate("picker");
   picker.set("select", new Date(product_data.birthdate));
 
