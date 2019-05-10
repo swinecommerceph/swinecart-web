@@ -1422,6 +1422,12 @@ label {
    transform: translate(240%, -120%);
 }
 
+.input-field label[for='edit-breed']::after {
+   padding-top: 0.4rem;
+   /* Check to other input fields */
+   transform: translate(280%, -120%);
+}
+
 .input-field label[for='fbreed']::after {
    padding-top: 0.4rem;
    /* Check to other input fields */
