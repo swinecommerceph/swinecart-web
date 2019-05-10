@@ -1486,6 +1486,10 @@ input[type=text]:not(.browser-default) {
   border-radius: 3px;
 }
 
+input[type=text]:not(.browser-default).valid {
+  border-bottom: 1px solid #00705E !important;
+}
+
 input[type=text]:not(.browser-default).invalid {
   border: 1px solid red !important;
   border-bottom: none !important;

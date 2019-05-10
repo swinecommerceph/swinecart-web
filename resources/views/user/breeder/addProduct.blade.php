@@ -30,6 +30,7 @@
 
         {{-- Product Information --}}
         <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Product Information</p> 
+        
         <div class="row">
           <div class="col s0.5"></div>
           <div class="col s6">
@@ -60,13 +61,7 @@
                 </div>
               
             </div>
-
-            {{-- Price --}}
-
-            {{-- <div style="margin-bottom: 4vh;" class="input-field">
-              {!! Form::text('price', null, ['class' => 'validate input-manage-products price-field'])!!}
-              {!! Form::label('price', 'Price', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
-            </div> --}}
+            
             <p style="margin-bottom: 1vh;" class="teal-text text-darken-4">
               Price (range)
               <span class="grey-text">
@@ -90,6 +85,7 @@
             </div>
 
           </div>
+
         </div>
         <br>
 
@@ -110,9 +106,12 @@
           </span>
         </p>
 
-        <div>
-          <input type="checkbox" id="check" class="product-unique-checker filled-in">
-          <label for="check">Yes, this product is unique</label>
+        <div class="row">
+          <div class="col s0.5"></div>
+          <div class="col s6">
+            <input type="checkbox" id="check" class="product-unique-checker filled-in">
+            <label for="check">Yes, this product is unique</label>
+          </div>
         </div>
 
         <br>
@@ -139,7 +138,7 @@
                     class="product-quantity center-align"
                     style="margin:0;"
                 >
-                </span>
+              </span>
           </span>
         </div>
 
@@ -189,69 +188,77 @@
             </div>
 
             <div class="row">
+              
               {{-- Birthdate --}}
-              <div class="input-field" style="width: 13vw; display: flex !important;">
-                <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
-                <i 
-                  class="material-icons teal-text text-darken-2"
-                  style="font-size: 3rem; z-index: -1 !important; left: 10.5vw; !important; position: absolute;"
-                >date_range</i>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4" for="birthdate">
-                  Birth Date
-                </label>
-              </div>
-
-              {{-- Birth weight --}}
-              <div class="input-field">
-                {!! Form::text('birthweight', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
-                {!! Html::decode(Form::label('birth_weight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
-              </div>
-
-              {{-- Farm From --}}
-              <div class="row">
-                <div class="col s6" style="padding-left: 0px !important">
-                  <div style="margin-bottom: 4vh; width: 15vw;" class="input-field">
-                    <select id="select-farm">
-                      <option value="" disabled selected>Choose farm</option>
-                      @foreach($farms as $farm)
-                        {{-- @if($farm->name === "aliquid, Siquijor")
-                          <option value="{{$farm->id}}" >{{$farm->name}}, {{$farm->province}}</option>
-                        @endif --}}
-                        <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
-                      @endforeach
-                    </select>
-                    <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
-                  </div>
+              <div class="col s5.5" style="padding-left: 0px !important">
+                <div class="input-field" style="width: 13vw; display: flex !important;">
+                  <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
+                  <i 
+                    class="material-icons teal-text text-darken-2"
+                    style="font-size: 3rem; z-index: -1 !important; left: 10.5vw; !important; position: absolute;"
+                  >date_range</i>
+                  <label style="font-size: 1rem;" class="teal-text text-darken-4" for="birthdate">
+                    Birth Date
+                  </label>
                 </div>
+              </div>
   
-                <div id="select-farm-data-error" style="display: none;" class="col s5">
-                  <p style="margin-top: 3vh;" class="red-text">Please choose a farm</p> 
+              <div id="birthdate-data-error" style="display:none;" class="col s5">
+                <p style="margin-top: 3vh;" class="red-text">Please choose swine's birthdate</p> 
+              </div>
+
+            </div>
+
+             
+            {{-- Birth weight --}}
+            <div class="input-field">
+              {!! Form::text('birthweight', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
+              {!! Html::decode(Form::label('birth_weight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
+            </div>
+
+            {{-- Farm From --}}
+            <div class="row">
+              <div class="col s6" style="padding-left: 0px !important">
+                <div style="margin-bottom: 4vh; width: 15vw;" class="input-field">
+                  <select id="select-farm">
+                    <option value="" disabled selected>Choose farm</option>
+                    @foreach($farms as $farm)
+                      {{-- @if($farm->name === "aliquid, Siquijor")
+                        <option value="{{$farm->id}}" >{{$farm->name}}, {{$farm->province}}</option>
+                      @endif --}}
+                      <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                    @endforeach
+                  </select>
+                  <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
                 </div>
               </div>
 
-              {{-- House type --}}
-              <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
-                <select id="select-housetype">
-                  <option value="" disabled selected>Choose house type</option>
-                  <option value="tunnelventilated">Tunnel ventilated</option>
-                  <option value="opensided">Open sided</option>
-                </select>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4">
-                  House type
-                  <span class="grey-text">
-                    <i>
-                      - Optional
-                    </i>
-                  </span>
-                </label>
+              <div id="select-farm-data-error" style="display: none;" class="col s5">
+                <p style="margin-top: 3vh;" class="red-text">Please choose a farm</p> 
               </div>
+            </div>
+
+            {{-- House type --}}
+            <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
+              <select id="select-housetype">
+                <option value="" disabled selected>Choose house type</option>
+                <option value="tunnelventilated">Tunnel ventilated</option>
+                <option value="opensided">Open sided</option>
+              </select>
+              <label style="font-size: 1rem;" class="teal-text text-darken-4">
+                House type
+                <span class="grey-text">
+                  <i>
+                    - Optional
+                  </i>
+                </span>
+              </label>
+            </div>
     
-              {{-- ADG --}}
-              <div class="input-field">
-                {!! Form::text('adg', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
-                {!! Html::decode(Form::label('adg','<p style="font-size:1rem;" class="teal-text text-darken-4">Average Daily Gain (grams) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
-                
-              </div>
+            {{-- ADG --}}
+            <div class="input-field">
+              {!! Form::text('adg', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
+              {!! Html::decode(Form::label('adg','<p style="font-size:1rem;" class="teal-text text-darken-4">Average Daily Gain (grams) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
     
             <div class="row">
@@ -316,8 +323,6 @@
             <textarea id="other_details" class="materialize-textarea"></textarea>
           </div>
         </div>
-
-        
 
         <div class="row"></div>
         <div class="row"></div>

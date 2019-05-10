@@ -494,7 +494,11 @@ var placeError = function(inputElement, errorMsg) {
       }
 
     } else if (inputElement.id.includes("birthdate")) {
-      //console.log('here')
+      $("#birthdate-data-error").show();
+      $("#birthdate").on('change', function () {
+        /* Remove validation error if an option is selected */
+        $("#birthdate-data-error").hide();
+      });
       $(inputElement).addClass("invalid");
     } else $(inputElement).addClass("invalid");
   }, 0);
