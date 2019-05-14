@@ -531,26 +531,107 @@ var product = {
         var videos = data.videoCollection;
 
         // General Info
-        var items =
-          '<li class="collection-item" style="font-weight: 700;">' +
-          data.type +
-          " - " +
-          data.breed +
-          "</li>" +
-          '<li class="collection-item">Born on: ' +
-          data.birthdate +
-          "</li>" +
-          '<li class="collection-item">Average Daily Gain: ' +
-          data.adg +
-          " g</li>" +
-          '<li class="collection-item">Feed Conversion Ratio: ' +
-          data.fcr +
-          "</li>" +
-          '<li class="collection-item">Backfat Thickness: ' +
-          data.backfat_thickness +
-          " mm</li>";
+        /* Catching the unfilled input fields */
 
+        // ADG
+        if (data.adg === 0 ) {
+          var item_adg =
+            '<li class="collection-item">Average Daily Gain: <i class="grey-text">Not indicated</i></li>';
+        }
+        else {
+          var item_adg =
+            '<li class="collection-item">Average Daily Gain: ' +
+            data.adg +
+            ' g</li>'
+        }
+
+        // FCR
+        if (data.fcr === 0.0) {
+          var item_fcr =
+            '<li class="collection-item">Feed Conversion Ratio: <i class="grey-text">Not indicated</i></li>';
+        }
+        else {
+          var item_fcr =
+            '<li class="collection-item">Feed Conversion Ratio: ' +
+            data.fcr +
+            '</li>'
+        }
+
+        // Backfat Thickness
+        if (data.backfat_thickness === 0.0) {
+          var item_backfat_thickness =
+            '<li class="collection-item">Backfat Thickness: <i class="grey-text">Not indicated</i></li>';
+        }
+        else {
+          var item_backfat_thickness =
+            '<li class="collection-item">Backfat Thickness: ' +
+            data.backfat_thickness +
+            'mm </li>'
+        }
         
+        // Backfat Thickness
+        if (data.lsba === 0) {
+          var item_lsba =
+            '<li class="collection-item">Litter size born alive: <i class="grey-text">Not indicated</i></li>';
+        }
+        else {
+          var item_lsba =
+            '<li class="collection-item">Litter size born alive: ' +
+            data.lsba +
+            '</li>'
+        }
+
+        // Birthweight
+        if (data.birthweight === 0.0) {
+          var item_birthweight =
+            '<li class="collection-item">Birth weight: <i class="grey-text">Not indicated</i></li>';
+        }
+        else {
+          var item_birthweight =
+            '<li class="collection-item">Birth weight: ' +
+            data.birthweight +
+            'g </li>'
+        }
+
+        // Number of teats only for Gilt and Sow
+        if (data.type === "Gilt" || data.type === "Sow") {
+          // number of teats
+          if (data.left_teats === 0 || data.right_teats === 0) {
+            var item_number_of_teats =
+              '<li class="collection-item">Number of teats <i class="grey-text">Not indicated</i></li>';
+          }
+          else {
+            var item_number_of_teats =
+              '<li class="collection-item">Number of teats: ' +
+              data.left_teats + "(left) | " + data.right_teats + " (right)" +
+              '</li>'
+          }
+        }
+        else
+          var item_number_of_teats = "";
+      
+        // House Type
+        if (data.house_type === "") {
+          var item_house_type =
+            '<li class="collection-item">House Type: <i class="grey-text">Not indicated</i></li>';
+        }
+        else {
+          var item_house_type =
+            '<li class="collection-item">House Type: ' +
+            data.house_type +
+            '</li>'
+        }
+
+        var items =
+          item_adg +
+          item_fcr +
+          item_backfat_thickness +
+          item_lsba +
+          item_birthweight +
+          item_number_of_teats +
+          item_house_type
+        ;
+
         var image_list = "";
         var video_list = "";
 
@@ -640,13 +721,22 @@ var product = {
         }
 
 
-        $("#product-summary-collection h5").html(data.name);
-        $("#product-summary-collection h6").html(
+        $("#product-summary-collection h3").html(data.name);
+        
+        var item_type = data.type + " - " + data.breed;
+        $("#product-summary-collection h5").html(item_type);
+
+        $("#product-summary-province").html(
           "Farm Address: " + data.farm_province
         );
-        $("#product-summary-collection div").html(items);
+
+        $("#product-summary-birthdate").html(
+          "Born on: " + data.birthdate
+        );
+
+        $("#swine-information").html(items);
         var other_details_data = '<p>' + data.other_details + '</p>';
-        $("#other-details-summary .card-content .other-details-contents")
+        $("#other-information")
           .html(other_details_data);
         
         

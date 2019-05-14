@@ -364,24 +364,31 @@
     <div class="modal-content">
       <h4>Product Summary</h4>
       <div class="row">
-        <ul id="product-summary-collection" class="collection with-header">
-          <li class="collection-header">
-            <h5 style="font-weight: 700;">Product Name</h5>
-            <h6>Province</h6>
-          </li>
-          <div></div>
-        </ul>
-      </div>
-      <div class="row">
-            <div class="col s12">
-                <div id="other-details-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
-                    <div class="card-content black-text">
-                        <span class="card-title">Other Details</span>
-                        <div class="other-details-contents"></div>
-                    </div>
-                </div>
-            </div>
+        <div 
+          id="product-summary-collection"
+          style="
+            background-color: white; 
+            padding-top: 1vh;
+            padding-left: 1vw;
+            border: solid 1px #eeeeee;
+          "
+        >
+          
+          <h3 style="color: hsl(0, 0%, 13%); font-weight: 700; margin-left: -3px !important;">Product Name</h3>
+          <h5 style="color: hsl(0, 0%, 29%); margin-left: -3px !important;">Product Type</h5>
+          <p id="product-summary-province" style="color: hsl(0, 0%, 45%); margin-bottom: 0 !important;">Province</p>
+          <p id="product-summary-birthdate" style="color: hsl(0, 0%, 45%); margin-top: 0 !important; margin-bottom: 0 !important;">Birthdate</p>
+          
+          {{-- SwineCart Information --}}
+          <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Swine Information</p>
+          <div id="swine-information"></div>
+
+          {{-- Other Information --}}
+          <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Other Information</p>
+          <div id="other-information"></div>
         </div>
+      </div>
+      
       <div class="row">
             <div class="col s12">
                 <div id="images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
