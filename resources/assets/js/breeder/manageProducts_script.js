@@ -190,6 +190,15 @@ $(document).ready(function() {
     }
   });
 
+  /* Shows number of teats field only for sow or gilt */
+  $("#select-type").change(function () {
+    var select_type_value = $("#select-type option:selected").text();
+    if (select_type_value === "Sow" || select_type_value === "Gilt")
+      $("#number-of-teats-container").show();
+    else 
+      $("#number-of-teats-container").hide();
+  });
+
   /**
    * This is for handling unique products.
    * Unique products should only have a product quantity of one
@@ -553,7 +562,7 @@ $(document).ready(function() {
 
   /* ----------- Form functionalities ----------- */
   // Breed radio
-  $("input.purebreed , input.edit-purebreed").on("click", function() {
+  $("input.purebreed").on("click", function() {
     $(this)
       .parents("form")
       .find(".input-crossbreed-container")
@@ -563,7 +572,7 @@ $(document).ready(function() {
       .find(".input-purebreed-container")
       .fadeIn(300);
   });
-  $("input.crossbreed , input.edit-crossbreed").on("click", function() {
+  $("input.crossbreed").on("click", function() {
     $(this)
       .parents("form")
       .find(".input-purebreed-container")

@@ -114,17 +114,18 @@ class BreederController extends Controller
         $breeder->save();
 
         for ($i = 1; $i <= count($request->input('farmAddress.*.*'))/8; $i++) {
-            $farmAddress = FarmAddress::find($request->input('farmAddress.'.$i.'.id'));
-            $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
-            $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
-            $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
-            $farmAddress->zipCode = $request->input('farmAddress.'.$i.'.zipCode');
-            $farmAddress->farmType = $request->input('farmAddress.'.$i.'.farmType');
-            $farmAddress->landline = $request->input('farmAddress.'.$i.'.landline');
-            $farmAddress->mobile = $request->input('farmAddress.'.$i.'.mobile');
-            $farmAddress->save();
+          $farmAddress = FarmAddress::find($request->input('farmAddress.'.$i.'.id'));
+          $farmAddress->addressLine1 = $request->input('farmAddress.'.$i.'.addressLine1');
+          $farmAddress->addressLine2 = $request->input('farmAddress.'.$i.'.addressLine2');
+          $farmAddress->province = $request->input('farmAddress.'.$i.'.province');
+          $farmAddress->zipCode = $request->input('farmAddress.'.$i.'.zipCode');
+          $farmAddress->farmType = $request->input('farmAddress.'.$i.'.farmType');
+          $farmAddress->landline = $request->input('farmAddress.'.$i.'.landline');
+          $farmAddress->mobile = $request->input('farmAddress.'.$i.'.mobile');
+          $farmAddress->save();
         }
 
+        // dd($farmAddress->province);
         $user->update_profile = 0;
         $user->save();
         return redirect()->route('breeder.edit')

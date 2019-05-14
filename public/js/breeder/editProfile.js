@@ -49,7 +49,7 @@ var profile = {
             var details = {
                 "addressLine1": parent_form.find('input[name=addressLine1]').val(),
                 "addressLine2": parent_form.find('input[name=addressLine2]').val(),
-                "province": parent_form.find('select[name=province] option:checked').val(),
+                "province": parent_form.find('input[class=select-dropdown]').val(),
                 "zipCode": parent_form.find('input[name=zipCode]').val(),
                 "farmType": parent_form.find('input[name=farmType]').val(),
                 "landline": parent_form.find('input[name=landline]').val(),
@@ -347,6 +347,45 @@ $(document).ready(function () {
     }
   });
 
+  
+  // for enabling select tags
+  $("select").material_select();
+
+  // Same address as office information feature
+  $(".same-address-checker").change(function (e) {
+    e.preventDefault();
+
+    var farm_specific = $(this).attr('class').split(' ')[1];
+    farm_specific = "#" + farm_specific;
+
+    var office_address1 = $("#officeAddress_addressLine1").val();
+    var office_address2 = $("#officeAddress_addressLine2").val();
+    var office_province = $("#office_provinces").val();
+    var office_postal_zip_code = $("#officeAddress_zipCode").val();
+    var office_landline = $("#office_landline").val();
+    var office_mobile = $("#office_mobile").val();
+
+    if ($(this).is(":checked")) {
+
+      // set values
+      $(farm_specific + "-addressLine1").val(office_address1);
+      $(farm_specific + "-addressLine2").val(office_address2);
+      $(farm_specific).find('input[class=select-dropdown]').val(office_province);
+      $(farm_specific + "-zipCode").val(office_postal_zip_code);
+      $(farm_specific + "-landline").val(office_landline);
+      $(farm_specific + "-mobile").val(office_mobile);
+    }
+    else {
+      $(farm_specific + "-addressLine1").val('');
+      $(farm_specific + "-addressLine2").val('');
+      // $(farm_specific).find('input[class=select-dropdown]').val('Abra');
+      $(farm_specific + "-zipCode").val('');
+      $(farm_specific + "-farmType").val('');
+      $(farm_specific + "-landline").val('');
+      $(farm_specific + "-mobile").val('');
+    }
+  });
+
   // Change Logo
   $("#change-logo").on('click', function (e) {
     e.preventDefault();
@@ -421,6 +460,31 @@ var placeError = function(inputElement, errorMsg) {
         .parents(".select-wrapper")
         .find("input.select-dropdown")
         .addClass("invalid");
+
+      if (inputId === "select-type") {
+        /* Show the validation error  */
+        $("#select-type-data-error").show();
+        $("#select-type").on('change', function () {
+          /* Remove validation error if an option is selected */
+          $("#select-type-data-error").hide();
+        });
+      }
+      else if (inputId === "select-farm") {
+        /* Show the validation error  */
+        $("#select-farm-data-error").show();
+        $("#select-farm").on('change', function () {
+          /* Remove validation error if an option is selected */
+          $("#select-farm-data-error").hide();
+        });
+      }
+
+    } else if (inputElement.id.includes("birthdate")) {
+      $("#birthdate-data-error").show();
+      $("#birthdate , #edit_birthdate").on('change', function () {
+        /* Remove validation error if an option is selected */
+        $("#birthdate-data-error").hide();
+      });
+      $(inputElement).addClass("invalid");
     } else $(inputElement).addClass("invalid");
   }, 0);
 };
@@ -463,11 +527,22 @@ var placeSuccess = function(inputElement) {
 var validationMethods = {
   // functions must return either true or the errorMsg only
   required: function(inputElement) {
-    var errorMsg = "This field is required";
+    var errorMsg;
+    if (inputElement.name === "name") errorMsg = "Please enter product name";
+    else errorMsg = "This field is required";
+
     return inputElement.value ? true : errorMsg;
   },
   requiredIfRadio: function(inputElement, radioId) {
-    var errorMsg = "This field is required";
+    var errorMsg;
+    if (
+      inputElement.name === "breed" ||
+      inputElement.name === "fbreed" ||
+      inputElement.name === "mbreed"
+    ) {
+      errorMsg = "Please enter swine breed";
+    } else errorMsg = "This field is required.";
+
     var radioInputElement = document.getElementById(radioId);
     if (radioInputElement.checked) return inputElement.value ? true : errorMsg;
     else return true;

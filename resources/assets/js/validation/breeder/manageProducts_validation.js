@@ -13,10 +13,11 @@ var validateFunction = function() {
         birthdate: ["required"],
         "select-farm": ["requiredDropdown"],
         "edit-name": ["required"],
-        "edit-breed": ["requiredIfRadio:edit-purebreed"],
-        "edit-fbreed": ["requiredIfRadio:edit-crossbreed"],
-        "edit-mbreed": ["requiredIfRadio:edit-crossbreed"],
+        "edit-breed": ["requiredIfRadio:purebreed"],
+        "edit-fbreed": ["requiredIfRadio:crossbreed"],
+        "edit-mbreed": ["requiredIfRadio:crossbreed"],
         "edit-select-type": ["requiredDropdown"],
+        edit_birthdate: ["required"],
         "edit-select-farm": ["requiredDropdown"]
       };
 
@@ -85,7 +86,7 @@ var validateFunction = function() {
 
     // Temporary fix for prompting 'valid' class after
     // value change on datepicker
-    $("#birthdate, #edit-birthdate").change(function(e) {
+    $("#birthdate, #edit_birthdate").change(function(e) {
       e.stopPropagation();
       $(this)
         .removeClass("invalid")
@@ -121,12 +122,7 @@ var validateFunction = function() {
         $("#submit-button").html("Adding Product ...");
 
         product.add($("#create-product"));
-      } else
-        Materialize.toast(
-          "Please properly fill all required fields.",
-          2500,
-          "orange accent-2"
-        );
+      } else Materialize.toast("Please properly fill all required fields.", 2500, "orange accent-2");
     });
 
     // Update details of a product
@@ -136,6 +132,9 @@ var validateFunction = function() {
       var validName = validateInput(document.getElementById("edit-name"));
       var validType = validateInput(
         document.getElementById("edit-select-type")
+      );
+      var validBirthdate = validateInput(
+        document.getElementById("edit_birthdate")
       );
       var validFarmFrom = validateInput(
         document.getElementById("edit-select-farm")
@@ -149,7 +148,13 @@ var validateFunction = function() {
         validBreed = validBreed && validFbreed && validMbreed;
       } else validBreed = validateInput(document.getElementById("edit-breed"));
 
-      if (validName && validType && validFarmFrom && validBreed) {
+      if (
+        validName &&
+        validType &&
+        validFarmFrom &&
+        validBirthdate &&
+        validBreed
+      ) {
         // Disable update-button
         $(this).addClass("disabled");
         $(this).html("Updating...");

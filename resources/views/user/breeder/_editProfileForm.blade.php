@@ -61,7 +61,7 @@
 			<div class="row">
 			<!-- Address: Province -->
 				<div class="input-field col s5 push-s1">
-					{!! Form::select('officeAddress_province', $provinces, null, ['disabled' => 'disabled']); !!}
+					{!! Form::select('officeAddress_province', $provinces, null, ['id' => 'office_provinces', 'disabled' => 'disabled']); !!}
 					<label>Province*</label>
 				</div>
 
@@ -145,10 +145,11 @@
 
 		<div id="farm-information" class="card-panel">
 			<div id="farm-address-body">
+        <?php $farmNumber = 1; ?>
 				@foreach($farmAddresses as $farmAddress)
 					<div class="row add-farm">
 						<div class="col s10 offset-s1">
-							<div id="{{ $farmAddress->name }}" class="card-panel hoverable">
+            <div id="{{ $farmAddress->name }}" class="card-panel hoverable">
 								{!! Form::open(['route' => 'breeder.updateFarm', 'method' => 'PUT', 'class' => 'edit-farm', 'data-farm-id' => $farmAddress->id, 'data-farm-order' => $loop->iteration]) !!}
 								<h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
 								<div class="row">
@@ -171,9 +172,18 @@
 											</tbody>
 										</table>
 									</div>
-								</div>
-
+                </div>
+                
+                
 								<div class="row">
+                  
+                  {{-- Checkbox if Farm Address is same as Office Address --}}
+                  <div>
+                    <input type="checkbox" id="check" class="same-address-checker farm-{{ $farmNumber }}" disabled>
+                    <label for="check" class="teal-text text-darken-4"><b>Address is same as Office Information</b></label>
+                  </div>
+                  <br>
+
 								<!-- Farm Address: Address Line 1 -->
 									<div class="input-field col s10 push-s1">
 										{!! Form::text('addressLine1', $farmAddress->addressLine1, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-addressLine1'])!!}
@@ -191,7 +201,7 @@
 
 								<div class="row">
 									<!-- Farm Address: Province -->
-									<div class="input-field col s5 push-s1">
+									<div class="input-field col s5 push-s1" id="farm-{{ $farmNumber }}">
 										{!! Form::select('province', $provinces, $farmAddress->province, ['disabled' => 'disabled']); !!}
 										<label>Province*</label>
 									</div>
@@ -255,7 +265,8 @@
 
 							</div>
 						</div>
-					</div>
+          </div>
+          <?php $farmNumber++; ?>
 				@endforeach
 			</div>
 

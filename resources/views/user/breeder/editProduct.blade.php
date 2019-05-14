@@ -104,7 +104,7 @@
         </p>
 
         <div>
-          <input type="checkbox" id="check" class="edit-product-unique-checker">
+          <input type="checkbox" id="check" class="edit-product-unique-checker filled-in">
           <label for="check">Yes, this product is unique</label>
         </div>
 
@@ -126,6 +126,7 @@
                 <input 
                     type="number"
                     ref="input"
+                    value="{{ $product->quantity }}"
                     min="1"
                     onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 49 && event.charCode <= 57"
                     class="edit-product-quantity center-align"
@@ -140,6 +141,7 @@
       {{-- Breed Information --}}
       <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Swine Information</p>
       
+      
       <div class="row">
         <div class="col s0.5"></div>
         <div class="col s6">
@@ -149,11 +151,11 @@
           <div class="row">
             <div class="input-field col s7">
               <p>
-                <input name="radio-breed" type="radio" value="purebreed" id="edit-purebreed" class="with-gap purebreed" checked/>
+                <input name="radio-breed" type="radio" value="purebreed" id="purebreed" class="with-gap purebreed" checked/>
                 <label class="teal-text text-darken-4" for="purebreed">Purebreed</label>
               </p>
               <p>
-                <input name="radio-breed" type="radio" value="crossbreed" id="edit-crossbreed" class="with-gap crossbreed"/>
+                <input name="radio-breed" type="radio" value="crossbreed" id="crossbreed" class="with-gap crossbreed"/>
                 <label class="teal-text text-darken-4" for="crossbreed">Crossbreed</label>
               </p>
             </div>
@@ -183,29 +185,44 @@
 
           <div class="row">
             {{-- Birthdate --}}
-            <div class="input-field" style="width: 13vw;">
-              <input style="cursor: pointer;" type="date" id="edit-birthdate" name="edit-birthdate" class="datepicker"/>
-              <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit-birthdate">
-                  Birth Date
-              </label>
+            <div class="col s5.5" style="padding-left: 0px !important">
+              <div class="input-field" style="width: 13vw; display: flex !important;">
+                <input style="cursor: pointer;" type="date" id="edit_birthdate" name="edit_birthdate" class="datepicker"/>
+                <i 
+                  class="material-icons teal-text text-darken-2"
+                  style="font-size: 3rem; z-index: -1 !important; left: 10.5vw; !important; position: absolute;"
+                >date_range</i>
+                <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit_birthdate">
+                    Birth Date
+                </label>
+              </div>
             </div>
 
-            {{-- Birth weight --}}
-            <div class="input-field">
-              {!! Form::text('edit-birthweight', null, ['id' => 'edit-birthweight', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
-              {!! Html::decode(Form::label('edit-birthweight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
+            <div id="birthdate-data-error" style="display: none;" class="col s5">
+              <p style="margin-top: 3vh;" class="red-text">Please choose swine's birthdate</p> 
             </div>
+          </div>
 
-            {{-- Farm From --}}
-            <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
-              <select id="edit-select-farm">
-                  <option value="" disabled selected>Choose Farm</option>
-                  @foreach($farms as $farm)
-                    <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
-                  @endforeach
-                </select>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
+          {{-- Birth weight --}}
+          <div class="input-field">
+            {!! Form::text('edit-birthweight', null, ['id' => 'edit-birthweight', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
+            {!! Html::decode(Form::label('edit-birthweight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
+          </div>
+
+          <div class="row">
+            <div class="col s6" style="padding-left: 0px !important">
+              {{-- Farm From --}}
+              <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
+                <select id="edit-select-farm">
+                    <option value="" disabled selected>Choose Farm</option>
+                    @foreach($farms as $farm)
+                      <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                    @endforeach
+                  </select>
+                  <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
+              </div>
             </div>
+          </div>
 
             {{-- House type --}}
             <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
@@ -229,7 +246,7 @@
               {!! Form::text('edit-adg', null, ['id' => 'edit-adg', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
               {!! Html::decode(Form::label('edit-adg','<p style="font-size:1rem;" class="teal-text text-darken-4">Average Daily Gain (grams) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
-          </div>
+          
 
           <div class="row">
             {{-- FCR --}}
@@ -249,31 +266,34 @@
               {!! Form::text('edit-lsba', null, ['id' => 'edit-lsba', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
               {!! Html::decode(Form::label('edit-lsba','<p style="font-size:1rem;" class="teal-text text-darken-4">Litter size born alive <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
+          </div>
 
             {{-- Number of teats --}}
-            <p style="margin-bottom: 3vh;" class="teal-text text-darken-4">
-              Number of teats
-              <span class="grey-text">
-                <i> - Optional
-                </i>
-              </span>
-            </p>
-            
-            {{-- Number of teats (left) --}}
-            <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
-              {!! Form::text('edit-left_teats', null, ['id' => 'edit-left_teats', 'class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
-              {!! Form::label('edit-left_teats', '(left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
-            </div>
-            
-            {{-- Number of teats (right) --}}
-            <div class="col s4 input-field" style="margin-top: 0vh !important;">
-              {!! Form::text('edit-right_teats', null, ['id' => 'edit-right_teats', 'class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
-              {!! Form::label('edit-right_teats', '(right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+            <div id="edit-number-of-teats-container" style="display: none;>
+              <p style="margin-bottom: 3vh;" class="teal-text text-darken-4">
+                Number of teats
+                <span class="grey-text">
+                  <i> - Optional
+                  </i>
+                </span>
+              </p>
+              
+              {{-- Number of teats (left) --}}
+              <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
+                {!! Form::text('edit-left_teats', null, ['id' => 'edit-left_teats', 'class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
+                {!! Form::label('edit-left_teats', '(left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
+              </div>
+              
+              {{-- Number of teats (right) --}}
+              <div class="col s4 input-field" style="margin-top: 0vh !important;">
+                {!! Form::text('edit-right_teats', null, ['id' => 'edit-right_teats', 'class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
+                {!! Form::label('edit-right_teats', '(right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              </div>
             </div>
             
           </div>
         </div>
-      </div>
+      
 
       {{-- Other Details --}}
       <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Other Details</p>
@@ -296,7 +316,7 @@
         </div>
       </div> --}}
 
-      </div>
+    </div>
     <div class="row">
       <button id="edit-media-button" style="font-weight: 900; width: 15vw; font-size: 1.4rem" type="submit" class="right btn-large waves-effect waves-light teal darken-4">Edit Media</button>
       <button style="font-weight: 900; width: 15vw; font-size: 1.4rem; margin-right: 2vw;" type="submit" class="right btn-large waves-effect waves-light teal darken-4 update-button">Edit Product</button>
@@ -311,31 +331,37 @@
     <div class="modal-content">
       <h4>Product Summary</h4>
       <div class="row">
-        <ul id="product-summary-collection" class="collection with-header">
-          <li class="collection-header">
-            <h5 style="font-weight: 700;">Product Name</h5>
-            <h6>Province</h6>
-          </li>
-          <div></div>
-        </ul>
-      </div>
-      <div class="row">
-            <div class="col s12">
-                <div id="other-details-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
-                    <div class="card-content black-text">
-                        <span class="card-title">Other Details</span>
-              <div></div>
-                    </div>
-                </div>
-            </div>
+        <div 
+          id="product-summary-collection"
+          style="
+            background-color: white; 
+            padding-top: 1vh;
+            padding-left: 1vw;
+            border: solid 1px #eeeeee;
+          "
+        >
+          <h3 style="color: hsl(0, 0%, 13%); font-weight: 700; margin-left: -3px !important;">Product Name</h3>
+          <h5 style="color: hsl(0, 0%, 29%); margin-left: -3px !important;">Product Type</h5>
+          <p id="product-summary-province" style="color: hsl(0, 0%, 45%); margin-bottom: 0 !important;">Province</p>
+          <p id="product-summary-birthdate" style="color: hsl(0, 0%, 45%); margin-top: 0 !important; margin-bottom: 0 !important;">Birthdate</p>
+        
+          {{-- SwineCart Information --}}
+          <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Swine Information</p>
+          <div id="swine-information"></div>
+
+          {{-- Other Information --}}
+          <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Other Information</p>
+          <div id="other-information"></div>
         </div>
+      </div>
+      
       <div class="row">
             <div class="col s12">
                 <div id="images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
                     <div class="card-content black-text">
                         <span class="card-title">List of Images</span>
               {!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
-              <div class="row"></div>
+              <div class="image-contents"></div>
               {!! Form::close() !!}
                     </div>
                 </div>
@@ -347,7 +373,7 @@
                 <div id="videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
                     <div class="card-content black-text">
                         <span class="card-title">List of Videos</span>
-              <div class="row"></div>
+              <div class="video-contents"></div>
                     </div>
                 </div>
             </div>
@@ -379,29 +405,7 @@
           </div>
         {!! Form::close() !!}
       </div>
-      <div class="row">
-            <div class="col s12">
-                <div id="edit-images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
-                    <div class="card-content black-text">
-                        <span class="card-title">List of Images</span>
-              {!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
-              <div class="row"></div>
-              {!! Form::close() !!}
-                    </div>
-                </div>
-            </div>
-        </div>
-      <hr style="border-top: #ccc;">
-      <div class="row">
-            <div class="col s12">
-                <div id="edit-videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
-                    <div class="card-content black-text">
-                        <span class="card-title">List of Videos</span>
-              <div class="row"></div>
-                    </div>
-                </div>
-            </div>
-        </div>
+      
     </div>
 
     <div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">

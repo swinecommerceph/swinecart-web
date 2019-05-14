@@ -16,9 +16,6 @@ $(document).ready(function() {
   $("#edit-select-type").val(product_data.type.toLowerCase());
   $("#edit-select-farm").val(product_data.farm_from_id);
 
-  $("#edit-min_price").val(product_data.min_price);
-  $("#edit-max_price").val(product_data.max_price);
-
   // PRODUCT UNIQUENESS
   if (product_data.is_unique) {
     $('.edit-product-unique-checker').prop('checked', true);
@@ -29,6 +26,7 @@ $(document).ready(function() {
     // Semen will have no quantity
     var actual_quantity; 
     if (product_data.quantity === -1) actual_quantity = '';
+    else actual_quantity = product_data.quantity;
     $(".edit-product-quantity").val(actual_quantity);
   }
 
@@ -36,12 +34,7 @@ $(document).ready(function() {
 
   // BREED INFORMATION
 
-  $("#edit-birthweight").val(product_data.birthweight);
   $("#edit-select-housetype").val(product_data.house_type);
-
-  $("#edit-lsba").val(product_data.lsba);
-  $("#edit-left_teats").val(product_data.left_teats);
-  $("#edit-right_teats").val(product_data.right_teats);
 
   // For the breed initialization
   if (product_data.breed.includes("x")) {
@@ -66,15 +59,62 @@ $(document).ready(function() {
   }
 
   // setting the birthdate differently since simple val() does not work
-  var birthdatePicker = $("#edit-birthdate").pickadate();
+  var birthdatePicker = $("#edit_birthdate").pickadate();
   var picker = birthdatePicker.pickadate("picker");
   picker.set("select", new Date(product_data.birthdate));
 
-  $("#edit-adg").val(product_data.adg);
-  $("#edit-fcr").val(product_data.fcr);
-  $("#edit-backfat_thickness").val(product_data.backfat_thickness);
+  /** Clearing the values if initial attribute has 
+   * no initial value since 0 is different from null
+   */
+  if (product_data.min_price === 0.0)
+    $("#edit-min_price").val();
+  else
+    $("#edit-min_price").val(product_data.min_price);
+  
+  if (product_data.max_price === 0.0)
+    $("#edit-max_price").val();
+  else
+    $("#edit-max_price").val(product_data.max_price);
+  
+  if (product_data.birthweight === 0.0)
+    $("#edit-birthweight").val();
+  else 
+    $("#edit-birthweight").val(product_data.birthweight);
 
-  $("#edit-other_details").val(product_data.other_details);
+  if (product_data.adg === 0)
+    $("#edit-adg").val();
+  else 
+    $("#edit-adg").val(product_data.adg);
+
+  if (product_data.fcr === 0.0)
+    $("#edit-fcr").val();
+  else
+    $("#edit-fcr").val(product_data.fcr);
+
+  if (product_data.backfat_thickness === 0.0)
+    $("#edit-backfat_thickness").val();
+  else
+    $("#edit-backfat_thickness").val(product_data.backfat_thickness);
+
+  if (product_data.lsba === 0)
+    $("#edit-lsba").val();
+  else
+    $("#edit-lsba").val(product_data.lsba);
+  
+  if (product_data.left_teats === 0)
+    $("#edit-left_teats").val();
+  else
+    $("#edit-left_teats").val(product_data.left_teats);
+  
+  if (product_data.right_teats === 0)
+    $("#edit-right_teats").val();
+  else
+    $("#edit-right_teats").val(product_data.right_teats)
+  
+  if (product_data.other_details === "")
+    $("#edit-other_details").val();
+  else 
+    $("#edit-other_details").val(product_data.other_details);
 
   var parent_form = $("#edit-product");
   var hidden_inputs =
@@ -296,6 +336,24 @@ $(document).ready(function() {
     }
   });
 
+  /* Shows number of teats field only for sow or gilt */
+  
+  /* For getting initial product type */
+  var edit_select_type_value = $("#edit-select-type option:selected").text();
+  if (edit_select_type_value === "Sow" || edit_select_type_value === "Gilt")
+    $("#edit-number-of-teats-container").show();
+  else
+    $("#edit-number-of-teats-container").hide();
+
+  /* For changing the product type */
+  $("#edit-select-type").change(function () {
+    var edit_change_select_type_value = $("#edit-select-type option:selected").text();
+    if (edit_change_select_type_value === "Sow" || edit_change_select_type_value === "Gilt")
+      $("#edit-number-of-teats-container").show();
+    else
+      $("#edit-number-of-teats-container").hide();
+  });
+
   /**
    * This is for handling unique products.
    * Unique products should only have a product quantity of one
@@ -370,22 +428,6 @@ $(document).ready(function() {
         $(".from-edit-process").show();
       }
     } else $(product.modal_history_tos()).modal("open");
-  });
-
-  /* ----------- Add Product Modal functionalities ----------- */
-  $("#add-product-modal #other-details-tab").click(function(e) {
-    $("#submit-button").show();
-  });
-
-  /* ----------- Add Media Modal functionalities ----------- */
-  // Move to Product Summary Modal
-  $("#next-button").click(function(e) {
-    e.preventDefault();
-    product.get_summary(
-      $("#add-media-modal form")
-        .find('input[name="productId"]')
-        .val()
-    );
   });
 
   // media-dropzone initialization and configuration
@@ -514,6 +556,7 @@ $(document).ready(function() {
     $("#edit-media-modal").modal({ dismissible: false });
     $("#edit-media-modal").modal("open");
     //product.modal_history.push('#edit-media-modal')
+    //product.get_product($("#edit-product-modal").attr("data-product-id"));
   });
 
   // Open Add Media Modal
@@ -693,15 +736,4 @@ $(document).ready(function() {
     product.manage_necessary_fields($(this).parents('form'), $(this).val());
   }); */
 
-  // Add other details button
-  $(".add-other-details").click(function(e) {
-    e.preventDefault();
-    product.add_other_detail($(this).parents("form"));
-  });
-
-  // Remove a detail from other details section
-  $("body").on("click", ".remove-detail", function(e) {
-    e.preventDefault();
-    product.remove_other_detail($(this));
-  });
 });

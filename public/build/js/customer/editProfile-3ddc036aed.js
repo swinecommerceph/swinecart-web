@@ -475,6 +475,31 @@ var placeError = function(inputElement, errorMsg) {
         .parents(".select-wrapper")
         .find("input.select-dropdown")
         .addClass("invalid");
+
+      if (inputId === "select-type") {
+        /* Show the validation error  */
+        $("#select-type-data-error").show();
+        $("#select-type").on('change', function () {
+          /* Remove validation error if an option is selected */
+          $("#select-type-data-error").hide();
+        });
+      }
+      else if (inputId === "select-farm") {
+        /* Show the validation error  */
+        $("#select-farm-data-error").show();
+        $("#select-farm").on('change', function () {
+          /* Remove validation error if an option is selected */
+          $("#select-farm-data-error").hide();
+        });
+      }
+
+    } else if (inputElement.id.includes("birthdate")) {
+      $("#birthdate-data-error").show();
+      $("#birthdate , #edit_birthdate").on('change', function () {
+        /* Remove validation error if an option is selected */
+        $("#birthdate-data-error").hide();
+      });
+      $(inputElement).addClass("invalid");
     } else $(inputElement).addClass("invalid");
   }, 0);
 };
@@ -517,11 +542,22 @@ var placeSuccess = function(inputElement) {
 var validationMethods = {
   // functions must return either true or the errorMsg only
   required: function(inputElement) {
-    var errorMsg = "This field is required";
+    var errorMsg;
+    if (inputElement.name === "name") errorMsg = "Please enter product name";
+    else errorMsg = "This field is required";
+
     return inputElement.value ? true : errorMsg;
   },
   requiredIfRadio: function(inputElement, radioId) {
-    var errorMsg = "This field is required";
+    var errorMsg;
+    if (
+      inputElement.name === "breed" ||
+      inputElement.name === "fbreed" ||
+      inputElement.name === "mbreed"
+    ) {
+      errorMsg = "Please enter swine breed";
+    } else errorMsg = "This field is required.";
+
     var radioInputElement = document.getElementById(radioId);
     if (radioInputElement.checked) return inputElement.value ? true : errorMsg;
     else return true;

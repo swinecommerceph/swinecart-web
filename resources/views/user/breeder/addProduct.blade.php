@@ -30,6 +30,7 @@
 
         {{-- Product Information --}}
         <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Product Information</p> 
+        
         <div class="row">
           <div class="col s0.5"></div>
           <div class="col s6">
@@ -41,23 +42,26 @@
             </div>
 
             {{-- Type --}}
-            <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
-              <select id="select-type" data-form="add">
-                <option value="" disabled selected>&emsp;Choose Type</option>
-                <option value="boar">Boar</option>
-                <option value="sow">Sow</option>
-                <option value="gilt">Gilt</option>
-                <option value="semen">Semen</option>
-              </select>
-              <label style="font-size: 1rem;" class="teal-text text-darken-4">Type</label>
+            <div class="row">
+                <div class="col s4.5" style="padding-left: 0px !important">
+                  <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
+                    <select id="select-type" data-form="add">
+                      <option value="" disabled selected>Choose Type</option>
+                      <option value="boar" >Boar</option>
+                      <option value="sow">Sow</option>
+                      <option value="gilt">Gilt</option>
+                      <option value="semen">Semen</option>
+                    </select>
+                    <label id="select-type-label" for="type" style="font-size: 1rem; margin-top: 2rem;" class="teal-text text-darken-4">Type</label>
+                  </div>
+                </div>              
+              
+                <div id="select-type-data-error" style="display:none;" class="col s5">
+                  <p style="margin-top: 3vh;" class="red-text">Please choose a product type</p> 
+                </div>
+              
             </div>
-
-            {{-- Price --}}
-
-            {{-- <div style="margin-bottom: 4vh;" class="input-field">
-              {!! Form::text('price', null, ['class' => 'validate input-manage-products price-field'])!!}
-              {!! Form::label('price', 'Price', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
-            </div> --}}
+            
             <p style="margin-bottom: 1vh;" class="teal-text text-darken-4">
               Price (range)
               <span class="grey-text">
@@ -81,13 +85,14 @@
             </div>
 
           </div>
+
         </div>
         <br>
 
         {{-- Prompt for semen type product --}}
         <blockquote 
           id="semen-blockquote"
-          class="info"
+          class="info-two"
           style="display: none !important;">
           <b>Product with type 'Semen' will have no quantity and will not be unique</b>
         </blockquote>
@@ -101,9 +106,12 @@
           </span>
         </p>
 
-        <div>
-          <input type="checkbox" id="check" class="product-unique-checker">
-          <label for="check">Yes, this product is unique</label>
+        <div class="row">
+          <div class="col s0.5"></div>
+          <div class="col s6">
+            <input type="checkbox" id="check" class="product-unique-checker filled-in">
+            <label for="check">Yes, this product is unique</label>
+          </div>
         </div>
 
         <br>
@@ -130,7 +138,7 @@
                     class="product-quantity center-align"
                     style="margin:0;"
                 >
-                </span>
+              </span>
           </span>
         </div>
 
@@ -180,54 +188,77 @@
             </div>
 
             <div class="row">
+              
               {{-- Birthdate --}}
-              <div class="input-field" style="width: 13vw;">
-                <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4" for="birthdate">
-                  Birth Date
-                </label>
+              <div class="col s5.5" style="padding-left: 0px !important">
+                <div class="input-field" style="width: 13vw; display: flex !important;">
+                  <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
+                  <i 
+                    class="material-icons teal-text text-darken-2"
+                    style="font-size: 3rem; z-index: -1 !important; left: 10.5vw; !important; position: absolute;"
+                  >date_range</i>
+                  <label style="font-size: 1rem;" class="teal-text text-darken-4" for="birthdate">
+                    Birth Date
+                  </label>
+                </div>
+              </div>
+  
+              <div id="birthdate-data-error" style="display:none;" class="col s5">
+                <p style="margin-top: 3vh;" class="red-text">Please choose swine's birthdate</p> 
               </div>
 
-              {{-- Birth weight --}}
-              <div class="input-field">
-                {!! Form::text('birthweight', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
-                {!! Html::decode(Form::label('birth_weight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
+            </div>
+
+             
+            {{-- Birth weight --}}
+            <div class="input-field">
+              {!! Form::text('birthweight', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
+              {!! Html::decode(Form::label('birth_weight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
+            </div>
+
+            {{-- Farm From --}}
+            <div class="row">
+              <div class="col s6" style="padding-left: 0px !important">
+                <div style="margin-bottom: 4vh; width: 15vw;" class="input-field">
+                  <select id="select-farm">
+                    <option value="" disabled selected>Choose farm</option>
+                    @foreach($farms as $farm)
+                      {{-- @if($farm->name === "aliquid, Siquijor")
+                        <option value="{{$farm->id}}" >{{$farm->name}}, {{$farm->province}}</option>
+                      @endif --}}
+                      <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                    @endforeach
+                  </select>
+                  <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
+                </div>
               </div>
 
-              {{-- Farm From --}}
-              <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
-                <select id="select-farm">
-                  <option value="" disabled selected>&emsp;Choose farm</option>
-                  @foreach($farms as $farm)
-                    <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
-                  @endforeach
-                </select>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
+              <div id="select-farm-data-error" style="display: none;" class="col s5">
+                <p style="margin-top: 3vh;" class="red-text">Please choose a farm</p> 
               </div>
+            </div>
 
-              {{-- House type --}}
-              <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
-                <select id="select-housetype">
-                  <option value="" disabled selected>&emsp;Choose house type</option>
-                  <option value="tunnelventilated">Tunnel ventilated</option>
-                  <option value="opensided">Open sided</option>
-                </select>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4">
-                  House type
-                  <span class="grey-text">
-                    <i>
-                      - Optional
-                    </i>
-                  </span>
-                </label>
-              </div>
+            {{-- House type --}}
+            <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
+              <select id="select-housetype">
+                <option value="" disabled selected>Choose house type</option>
+                <option value="tunnelventilated">Tunnel ventilated</option>
+                <option value="opensided">Open sided</option>
+              </select>
+              <label style="font-size: 1rem;" class="teal-text text-darken-4">
+                House type
+                <span class="grey-text">
+                  <i>
+                    - Optional
+                  </i>
+                </span>
+              </label>
+            </div>
     
-              {{-- ADG --}}
-              <div class="input-field">
-                {!! Form::text('adg', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
-                {!! Html::decode(Form::label('adg','<p style="font-size:1rem;" class="teal-text text-darken-4">Average Daily Gain (grams) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
-                
-              </div>
+            {{-- ADG --}}
+            <div class="input-field">
+              {!! Form::text('adg', null, ['class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
+              {!! Html::decode(Form::label('adg','<p style="font-size:1rem;" class="teal-text text-darken-4">Average Daily Gain (grams) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
     
             <div class="row">
@@ -251,24 +282,26 @@
             </div>
 
             {{-- Number of teats --}}
-            <p style="margin-bottom: 3vh;" class="teal-text text-darken-4">
-              Number of teats
-              <span class="grey-text">
-                <i> - Optional
-                </i>
-              </span>
-            </p>
-            
-            {{-- Number of teats (left) --}}
-            <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
-              {!! Form::text('left_teats', null, ['class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
-              {!! Form::label('left_teats', '(left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
-            </div>
-            
-            {{-- Number of teats (right) --}}
-            <div class="col s4 input-field" style="margin-top: 0vh !important;">
-              {!! Form::text('right_teats', null, ['class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
-              {!! Form::label('right_teats', '(right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+            <div id="number-of-teats-container" style="display: none;">
+              <p style="margin-bottom: 3vh;" class="teal-text text-darken-4">
+                Number of teats
+                <span class="grey-text">
+                  <i> - Optional
+                  </i>
+                </span>
+              </p>
+              
+              {{-- Number of teats (left) --}}
+              <div class="col s4 input-field" style="padding-left: 0vw !important; margin-top: 0vh !important;">
+                {!! Form::text('left_teats', null, ['class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
+                {!! Form::label('left_teats', '(left)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem; padding-left: 0vw;']) !!}
+              </div>
+              
+              {{-- Number of teats (right) --}}
+              <div class="col s4 input-field" style="margin-top: 0vh !important;">
+                {!! Form::text('right_teats', null, ['class' => 'validate input-manage-products', 'style' => 'width: 4vw;'])!!}
+                {!! Form::label('right_teats', '(right)', ['class' => 'teal-text text-darken-4', 'style' => 'font-size: 1rem;']) !!}
+              </div>
             </div>
 
 
@@ -290,8 +323,6 @@
             <textarea id="other_details" class="materialize-textarea"></textarea>
           </div>
         </div>
-
-        
 
         <div class="row"></div>
         <div class="row"></div>
@@ -316,6 +347,12 @@
           </div>
         {!! Form::close() !!}
       </div>
+
+      <blockquote
+        class="info-two"
+      >
+        <b>Note:</b> Adding media (images or videos) is not required in Adding a Product. You can add them later when editing a product.
+      </blockquote>
     </div>
     <div class="modal-footer">
       <button id="next-button" type="submit" class="btn waves-effect waves-light modal-action teal darken-3"> Product Summary </button>
@@ -327,31 +364,38 @@
     <div class="modal-content">
       <h4>Product Summary</h4>
       <div class="row">
-        <ul id="product-summary-collection" class="collection with-header">
-          <li class="collection-header">
-            <h5 style="font-weight: 700;">Product Name</h5>
-            <h6>Province</h6>
-          </li>
-          <div></div>
-        </ul>
-      </div>
-      <div class="row">
-            <div class="col s12">
-                <div id="other-details-summary" class="card" style="box-shadow: 0px 0px !important; border: 1px solid #DFDFDF;">
-                    <div class="card-content black-text">
-                        <span class="card-title">Other Details</span>
-              <div></div>
-                    </div>
-                </div>
-            </div>
+        <div 
+          id="product-summary-collection"
+          style="
+            background-color: white; 
+            padding-top: 1vh;
+            padding-left: 1vw;
+            border: solid 1px #eeeeee;
+          "
+        >
+          
+          <h3 style="color: hsl(0, 0%, 13%); font-weight: 700; margin-left: -3px !important;">Product Name</h3>
+          <h5 style="color: hsl(0, 0%, 29%); margin-left: -3px !important;">Product Type</h5>
+          <p id="product-summary-province" style="color: hsl(0, 0%, 45%); margin-bottom: 0 !important;">Province</p>
+          <p id="product-summary-birthdate" style="color: hsl(0, 0%, 45%); margin-top: 0 !important; margin-bottom: 0 !important;">Birthdate</p>
+          
+          {{-- SwineCart Information --}}
+          <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Swine Information</p>
+          <div id="swine-information"></div>
+
+          {{-- Other Information --}}
+          <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Other Information</p>
+          <div id="other-information"></div>
         </div>
+      </div>
+      
       <div class="row">
             <div class="col s12">
                 <div id="images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
                     <div class="card-content black-text">
                         <span class="card-title">List of Images</span>
               {!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
-              <div class="row"></div>
+              <div class="image-contents"></div>
               {!! Form::close() !!}
                     </div>
                 </div>
@@ -363,12 +407,12 @@
                 <div id="videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
                     <div class="card-content black-text">
                         <span class="card-title">List of Videos</span>
-              <div class="row"></div>
+                        <div class="video-contents"></div>
                     </div>
                 </div>
             </div>
         </div>
-    </div>
+      </div>
 
     <div class="modal-footer" style="background: hsl(0, 0%, 97%); border: none;">
       <div class="from-add-process">
