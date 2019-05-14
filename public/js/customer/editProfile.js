@@ -495,7 +495,7 @@ var placeError = function(inputElement, errorMsg) {
 
     } else if (inputElement.id.includes("birthdate")) {
       $("#birthdate-data-error").show();
-      $("#birthdate").on('change', function () {
+      $("#birthdate , #edit_birthdate").on('change', function () {
         /* Remove validation error if an option is selected */
         $("#birthdate-data-error").hide();
       });

@@ -185,33 +185,44 @@
 
           <div class="row">
             {{-- Birthdate --}}
-            <div class="input-field" style="width: 13vw; display: flex !important;">
-              <input style="cursor: pointer;" type="date" id="edit_birthdate" name="edit_birthdate" class="datepicker"/>
-              <i 
-                class="material-icons teal-text text-darken-2"
-                style="font-size: 3rem; z-index: -1 !important; left: 10.5vw; !important; position: absolute;"
-              >date_range</i>
-              <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit_birthdate">
-                  Birth Date
-              </label>
+            <div class="col s5.5" style="padding-left: 0px !important">
+              <div class="input-field" style="width: 13vw; display: flex !important;">
+                <input style="cursor: pointer;" type="date" id="edit_birthdate" name="edit_birthdate" class="datepicker"/>
+                <i 
+                  class="material-icons teal-text text-darken-2"
+                  style="font-size: 3rem; z-index: -1 !important; left: 10.5vw; !important; position: absolute;"
+                >date_range</i>
+                <label style="font-size: 1rem;" class="teal-text text-darken-4" for="edit_birthdate">
+                    Birth Date
+                </label>
+              </div>
             </div>
 
-            {{-- Birth weight --}}
-            <div class="input-field">
-              {!! Form::text('edit-birthweight', null, ['id' => 'edit-birthweight', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
-              {!! Html::decode(Form::label('edit-birthweight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
+            <div id="birthdate-data-error" style="display: none;" class="col s5">
+              <p style="margin-top: 3vh;" class="red-text">Please choose swine's birthdate</p> 
             </div>
+          </div>
 
-            {{-- Farm From --}}
-            <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
-              <select id="edit-select-farm">
-                  <option value="" disabled selected>Choose Farm</option>
-                  @foreach($farms as $farm)
-                    <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
-                  @endforeach
-                </select>
-                <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
+          {{-- Birth weight --}}
+          <div class="input-field">
+            {!! Form::text('edit-birthweight', null, ['id' => 'edit-birthweight', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
+            {!! Html::decode(Form::label('edit-birthweight','<p style="font-size:1rem;" class="teal-text text-darken-4">Birth weight <span class="grey-text"><i>- Optional</i></span></p>')) !!}
+          </div>
+
+          <div class="row">
+            <div class="col s6" style="padding-left: 0px !important">
+              {{-- Farm From --}}
+              <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
+                <select id="edit-select-farm">
+                    <option value="" disabled selected>Choose Farm</option>
+                    @foreach($farms as $farm)
+                      <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                    @endforeach
+                  </select>
+                  <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
+              </div>
             </div>
+          </div>
 
             {{-- House type --}}
             <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
@@ -235,7 +246,7 @@
               {!! Form::text('edit-adg', null, ['id' => 'edit-adg', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
               {!! Html::decode(Form::label('edit-adg','<p style="font-size:1rem;" class="teal-text text-darken-4">Average Daily Gain (grams) <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
-          </div>
+          
 
           <div class="row">
             {{-- FCR --}}
@@ -255,6 +266,7 @@
               {!! Form::text('edit-lsba', null, ['id' => 'edit-lsba', 'class' => 'validate input-manage-products', 'style' => 'width: 7vw;'])!!}
               {!! Html::decode(Form::label('edit-lsba','<p style="font-size:1rem;" class="teal-text text-darken-4">Litter size born alive <span class="grey-text"><i>- Optional</i></span></p>')) !!}
             </div>
+          </div>
 
             {{-- Number of teats --}}
             <div id="edit-number-of-teats-container" style="display: none;>
@@ -281,7 +293,7 @@
             
           </div>
         </div>
-      </div>
+      
 
       {{-- Other Details --}}
       <p style="font-weight: 600; margin-bottom: 2vh; font-size: 1.2rem;" class="teal-text text-darken-4">Other Details</p>
