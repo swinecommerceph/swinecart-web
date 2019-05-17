@@ -896,6 +896,12 @@ $('.price-field').keyup(function (event) {
   });
 }); */
 
+$(".product-quantity , .edit-product-quantity").keyup(function() {
+  var pattern = /^[1-9]\d*$/;
+  $(this).val(function(index, value) {
+    return value.match(pattern);
+  });
+});
 'use strict';
 
 var filter = {

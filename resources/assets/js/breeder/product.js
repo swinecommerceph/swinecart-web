@@ -895,3 +895,10 @@ $('.price-field').keyup(function (event) {
       .replace(/\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
   });
 }); */
+
+$(".product-quantity , .edit-product-quantity").keyup(function() {
+  var pattern = /^[1-9]\d*$/;
+  $(this).val(function(index, value) {
+    return value.match(pattern);
+  });
+});
