@@ -1767,7 +1767,7 @@ var validateFunction = function() {
     // Temporary fix for prompting 'valid' class after
     // value change on datepicker
     $("#birthdate, #edit_birthdate").change(function(e) {
-      e.stopPropagation();
+      e.preventDefault();
       $(this)
         .removeClass("invalid")
         .addClass("valid");
