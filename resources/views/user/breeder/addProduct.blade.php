@@ -221,12 +221,17 @@
                 <div style="margin-bottom: 4vh; width: 15vw;" class="input-field">
                   <select id="select-farm">
                     <option value="" disabled selected>Choose farm</option>
-                    @foreach($farms as $farm)
-                      {{-- @if($farm->name === "aliquid, Siquijor")
-                        <option value="{{$farm->id}}" >{{$farm->name}}, {{$farm->province}}</option>
-                      @endif --}}
-                      <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
-                    @endforeach
+                    
+                      @foreach($farms as $farm)
+                        {{-- @if($farm->name === "aliquid, Siquijor")
+                          <option value="{{$farm->id}}" >{{$farm->name}}, {{$farm->province}}</option>
+                        @endif --}}
+                        @if(count($farms) === 1)
+                          <option value="{{$farm->id}}" selected>{{$farm->name}}, {{$farm->province}}</option>
+                        @else
+                          <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                        @endif
+                      @endforeach
                   </select>
                   <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
                 </div>
