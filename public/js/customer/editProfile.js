@@ -493,14 +493,8 @@ var placeError = function(inputElement, errorMsg) {
         });
       }
 
-    } else if (inputElement.id.includes("birthdate")) {
-      $("#birthdate-data-error").show();
-      $("#birthdate , #edit_birthdate").on('change', function () {
-        /* Remove validation error if an option is selected */
-        $("#birthdate-data-error").hide();
-      });
-      $(inputElement).addClass("invalid");
-    } else $(inputElement).addClass("invalid");
+    }
+    else $(inputElement).addClass("invalid");
   }, 0);
 };
 

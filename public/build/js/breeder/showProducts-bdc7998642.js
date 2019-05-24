@@ -1577,14 +1577,8 @@ var placeError = function(inputElement, errorMsg) {
         });
       }
 
-    } else if (inputElement.id.includes("birthdate")) {
-      $("#birthdate-data-error").show();
-      $("#birthdate , #edit_birthdate").on('change', function () {
-        /* Remove validation error if an option is selected */
-        $("#birthdate-data-error").hide();
-      });
-      $(inputElement).addClass("invalid");
-    } else $(inputElement).addClass("invalid");
+    }
+    else $(inputElement).addClass("invalid");
   }, 0);
 };
 
@@ -1690,14 +1684,12 @@ var validateFunction = function() {
         fbreed: ["requiredIfRadio:crossbreed"],
         mbreed: ["requiredIfRadio:crossbreed"],
         "select-type": ["requiredDropdown"],
-        birthdate: ["required"],
         "select-farm": ["requiredDropdown"],
         "edit-name": ["required"],
         "edit-breed": ["requiredIfRadio:purebreed"],
         "edit-fbreed": ["requiredIfRadio:crossbreed"],
         "edit-mbreed": ["requiredIfRadio:crossbreed"],
         "edit-select-type": ["requiredDropdown"],
-        edit_birthdate: ["required"],
         "edit-select-farm": ["requiredDropdown"]
       };
 
@@ -1764,15 +1756,6 @@ var validateFunction = function() {
       }
     });
 
-    // Temporary fix for prompting 'valid' class after
-    // value change on datepicker
-    $("#birthdate, #edit_birthdate").change(function(e) {
-      e.preventDefault();
-      $(this)
-        .removeClass("invalid")
-        .addClass("valid");
-    });
-
     // Submit add product
     $("#create-product").submit(function(e) {
       e.preventDefault();
@@ -1780,7 +1763,6 @@ var validateFunction = function() {
       var validName = validateInput(document.getElementById("name"));
       var validType = validateInput(document.getElementById("select-type"));
       var validFarmFrom = validateInput(document.getElementById("select-farm"));
-      var validBirthdate = validateInput(document.getElementById("birthdate"));
       var validBreed = true;
 
       // Validate appropriate breed input/s according to chosen radio breed value
@@ -1794,7 +1776,6 @@ var validateFunction = function() {
         validName &&
         validType &&
         validFarmFrom &&
-        validBirthdate &&
         validBreed
       ) {
         // Disable submit/add product button
@@ -1813,9 +1794,6 @@ var validateFunction = function() {
       var validType = validateInput(
         document.getElementById("edit-select-type")
       );
-      var validBirthdate = validateInput(
-        document.getElementById("edit_birthdate")
-      );
       var validFarmFrom = validateInput(
         document.getElementById("edit-select-farm")
       );
@@ -1832,7 +1810,6 @@ var validateFunction = function() {
         validName &&
         validType &&
         validFarmFrom &&
-        validBirthdate &&
         validBreed
       ) {
         // Disable update-button
