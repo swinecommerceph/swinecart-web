@@ -532,7 +532,7 @@ var product = {
 
         // General Info
         /* Catching the unfilled input fields */
-
+        
         // ADG
         if (data.adg === 0 ) {
           var item_adg =
@@ -730,8 +730,14 @@ var product = {
           "Farm Address: " + data.farm_province
         );
 
+        if (data.birthdate === "November 30, -0001") {
+          var item_birthdate =
+            'Born on: <i class="grey-text">Not indicated</i>';
+        } else {
+          var item_birthdate = "Born on: " + data.birthdate
+        }
         $("#product-summary-birthdate").html(
-          "Born on: " + data.birthdate
+          item_birthdate
         );
 
         $("#swine-information").html(items);

@@ -219,7 +219,12 @@ class ProductController extends Controller
             $product->name = $request->name;
             $product->type = $request->type;
             $product->house_type = $request->house_type;
-            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+            if ($request->birthdate === "") {
+              $product->birthdate = '';
+            }
+            else {
+              $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+            }
             $product->birthweight = $request->birthweight;
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
             // $product->price = $request->price;
