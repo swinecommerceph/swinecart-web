@@ -61,7 +61,9 @@ $(document).ready(function() {
   // setting the birthdate differently since simple val() does not work
   var birthdatePicker = $("#edit_birthdate").pickadate();
   var picker = birthdatePicker.pickadate("picker");
-  picker.set("select", new Date(product_data.birthdate));
+  
+  if (product_data.birthdate !== "November 30, -0001") 
+    picker.set("select", new Date(product_data.birthdate));
 
   /** Clearing the values if initial attribute has 
    * no initial value since 0 is different from null
