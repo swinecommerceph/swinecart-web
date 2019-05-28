@@ -1502,11 +1502,11 @@ input[type=text]:not(.browser-default).valid {
   border-bottom: 1px solid #00705E !important;
 }
 
-input[type=text]:not(.browser-default).invalid {
+/* input[type=text]:not(.browser-default).invalid {
   border: 1px solid red !important;
   border-bottom: none !important;
 }
-
+ */
 /* Checkbox */
 [type="checkbox"].filled-in:checked+label:after {
   border: 2px solid #00705E;

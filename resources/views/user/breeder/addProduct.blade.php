@@ -191,7 +191,7 @@
               {{-- Birthdate --}}
               <div class="col s5.5" style="padding-left: 0px !important">
                 <div class="input-field" style="width: 13vw; display: flex !important;">
-                  <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
+                  <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker"/>
                   <i 
                     class="material-icons teal-text text-darken-2"
                     style="font-size: 3rem; z-index: -1 !important; left: 10.5vw; !important; position: absolute;"
@@ -202,9 +202,7 @@
                 </div>
               </div>
   
-              <div id="birthdate-data-error" style="display:none;" class="col s5">
-                <p style="margin-top: 3vh;" class="red-text">Please choose swine's birthdate</p> 
-              </div>
+             
 
             </div>
 
