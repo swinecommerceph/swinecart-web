@@ -294,7 +294,12 @@ class ProductController extends Controller
           $product->farm_from_id = $request->farm_from_id;
           $product->name = $request->name;
           $product->type = $request->type;
-          $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+          if ($request->birthdate === NULL) {
+            $product->birthdate = '';
+          }
+          else {
+            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+          }
           
           $product->birthweight = $request->birthweight;
 

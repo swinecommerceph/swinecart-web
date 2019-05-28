@@ -196,10 +196,6 @@
                 </label>
               </div>
             </div>
-
-            <div id="birthdate-data-error" style="display: none;" class="col s5">
-              <p style="margin-top: 3vh;" class="red-text">Please choose swine's birthdate</p> 
-            </div>
           </div>
 
           {{-- Birth weight --}}
