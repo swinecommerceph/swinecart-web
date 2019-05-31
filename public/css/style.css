@@ -1386,12 +1386,21 @@ label {
 }
 
 .input-field label[for] {
-	font-size: 0.8rem;
-   -webkit-transform: translateY(-140%);
-   -moz-transform: translateY(-140%);
-   -ms-transform: translateY(-140%);
-   -o-transform: translateY(-140%);
-   transform: translateY(-140%);
+  font-size: 0.8rem;
+  -webkit-transform: translateY(-140%);
+  -moz-transform: translateY(-140%);
+  -ms-transform: translateY(-140%);
+  -o-transform: translateY(-140%);
+  transform: translateY(-140%);
+}
+
+.input-field label[for='search'] {
+  font-size: 0.8rem;
+  -webkit-transform: none !important;
+  -moz-transform: none !important;
+  -ms-transform: none !important;
+  -o-transform: none !important;
+  transform: none !important;
 }
 
 .input-field label[for]::after {
