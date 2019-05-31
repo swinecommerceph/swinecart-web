@@ -616,9 +616,15 @@ var product = {
             '<li class="collection-item">House Type: <i class="grey-text">Not indicated</i></li>';
         }
         else {
+          var house_type_string;
+          if (data.house_type === "tunnelventilated") 
+            house_type_string = "Tunnel ventilated" 
+          else 
+            house_type_string = "Open sided"
+
           var item_house_type =
             '<li class="collection-item">House Type: ' +
-            data.house_type +
+            house_type_string +
             '</li>'
         }
 
