@@ -169,7 +169,13 @@
               @if ( $product->house_type === "")
                 <i class="grey-text">Not Indicated</i>
               @else
-                {{$product->house_type}}
+                <span style="color: hsl(0, 0%, 13%);">
+                  @if($product->house_type === "tunnelventilated")
+                    Tunnel ventilated
+                  @else
+                    Open sided
+                  @endif
+                </span>
               @endif
             </span>
           </li>
