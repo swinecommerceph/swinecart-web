@@ -142,7 +142,7 @@
                     @endif
                   </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Litter size born alive:
+                  <li style="color: hsl(0, 0%, 13%);">Litter size born alive:
                     @if($product->lsba === 0)
                       <span style="color: hsl(0, 0%, 29%);">
                         <i class="text-grey">Not indicated</i>
@@ -154,7 +154,7 @@
                     @endif
                   </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Birth weight:
+                  <li style="color: hsl(0, 0%, 13%);">Birth weight:
                     @if($product->birthweight === 0.0)
                       <span style="color: hsl(0, 0%, 29%);">
                         <i class="text-grey">Not indicated</i>
@@ -167,25 +167,30 @@
                   </li>
 
                   @if ( $product->type === "Gilt" || $product->type === "Sow")
-                    <li style="color: hsl(0, 0%, 29%);">Number of teats: 
-                      <span style="color: hsl(0, 0%, 13%);">
+                    <li style="color: hsl(0, 0%, 13%);">Number of teats: 
                         @if ( $product->left_teats === 0 || $product->right_teats === 0)
-                          <i class="grey-text">Not Indicated</i>
+                          <span style="color: hsl(0, 0%, 29%);">
+                            <i class="text-grey">Not Indicated</i>
+                          </span>
                         @else
-                          {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
+                          <span style="color: hsl(0, 0%, 13%);">
+                            {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
+                          </span>
                         @endif
                       </span>
                     </li>
                   @endif
 
-                  <li style="color: hsl(0, 0%, 29%);">House type: 
-                    <span style="color: hsl(0, 0%, 13%);">
-                      @if ( $product->house_type === "")
-                        <i class="grey-text">Not Indicated</i>
-                      @else
+                  <li style="color: hsl(0, 0%, 13%);">House type: 
+                    @if ( $product->house_type === "")
+                      <span style="color: hsl(0, 0%, 29%);">
+                        <i class="text-grey">Not Indicated</i>
+                      </span>
+                    @else
+                      <span style="color: hsl(0, 0%, 13%);">
                         {{$product->house_type}}
-                      @endif
-                    </span>
+                      </span>
+                    @endif
                   </li>
 
                   {{-- Other Information --}}
