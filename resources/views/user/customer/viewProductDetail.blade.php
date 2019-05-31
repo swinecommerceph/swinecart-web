@@ -106,45 +106,83 @@
                   {{-- SwineCart Information --}}
                   <p style="font-weight:600; font-size: 1.4rem;" class="teal-text text-darken-4">Swine Information</p>
 
-                  <li style="color: hsl(0, 0%, 29%);">Average Daily Gain:
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->adg}} g
-                    </span>
+                  <li style="color: hsl(0, 0%, 13%);">Average Daily Gain:
+                    @if($product->adg === 0)
+                      <span style="color: hsl(0, 0%, 29%);">
+                        <i class="text-grey">Not indicated</i>
+                      </span>
+                    @else
+                      <span style="color: hsl(0, 0%, 13%);">
+                        {{$product->adg}} g
+                      </span>
+                    @endif
                   </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Feed Conversion Ratio:
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->fcr}}
-                    </span>
+                  <li style="color: hsl(0, 0%, 13%);">Feed Conversion Ratio:
+                    @if($product->fcr === 0.0)
+                      <span style="color: hsl(0, 0%, 29%);">
+                        <i class="text-grey">Not indicated</i>
+                      </span>
+                    @else
+                      <span style="color: hsl(0, 0%, 13%);">
+                        {{$product->fcr}}
+                      </span>
+                    @endif
                   </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Backfat Thickness:
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->backfat_thickness}} mm
-                    </span>
+                  <li style="color: hsl(0, 0%, 13%);">Backfat Thickness:
+                    @if($product->backfat_thickness === 0.0)
+                      <span style="color: hsl(0, 0%, 29%);">
+                        <i class="text-grey">Not indicated</i>
+                      </span>
+                    @else
+                      <span style="color: hsl(0, 0%, 13%);">
+                        {{$product->backfat_thickness}}
+                      </span>
+                    @endif
                   </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Litter size born alive: 
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->lsba}}
-                    </span>
+                  <li style="color: hsl(0, 0%, 29%);">Litter size born alive:
+                    @if($product->lsba === 0)
+                      <span style="color: hsl(0, 0%, 29%);">
+                        <i class="text-grey">Not indicated</i>
+                      </span>
+                    @else
+                      <span style="color: hsl(0, 0%, 13%);">
+                        {{$product->lsba}}
+                      </span>
+                    @endif
                   </li>
 
                   <li style="color: hsl(0, 0%, 29%);">Birth weight:
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->birthweight}}
-                    </span>
+                    @if($product->birthweight === 0.0)
+                      <span style="color: hsl(0, 0%, 29%);">
+                        <i class="text-grey">Not indicated</i>
+                      </span>
+                    @else
+                      <span style="color: hsl(0, 0%, 13%);">
+                        {{$product->birthweight}}
+                      </span>
+                    @endif
                   </li>
 
                   <li style="color: hsl(0, 0%, 29%);">Number of teats: 
                     <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
+                      @if ( $product->left_teats === 0 || $product->right_teats === 0)
+                        <i class="grey-text">Not Indicated</i>
+                      @else
+                        {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
+                      @endif
                     </span>
                   </li>
 
                   <li style="color: hsl(0, 0%, 29%);">House type: 
                     <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->house_type}}
+                      @if ( $product->house_type === "")
+                        <i class="grey-text">Not Indicated</i>
+                      @else
+                        {{$product->house_type}}
+                      @endif
                     </span>
                   </li>
 
