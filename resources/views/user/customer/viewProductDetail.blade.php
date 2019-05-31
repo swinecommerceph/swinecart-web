@@ -189,7 +189,7 @@
                         </span>
                       @else
                         <span style="color: hsl(0, 0%, 13%);">
-                          @if($product->house_type)
+                          @if($product->house_type === "tunnelventilated")
                             Tunnel ventilated
                           @else
                             Open sided
