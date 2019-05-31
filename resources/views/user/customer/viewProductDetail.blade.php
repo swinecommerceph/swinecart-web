@@ -166,15 +166,17 @@
                     @endif
                   </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Number of teats: 
-                    <span style="color: hsl(0, 0%, 13%);">
-                      @if ( $product->left_teats === 0 || $product->right_teats === 0)
-                        <i class="grey-text">Not Indicated</i>
-                      @else
-                        {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
-                      @endif
-                    </span>
-                  </li>
+                  @if ( $product->type === "Gilt" || $product->type === "Sow")
+                    <li style="color: hsl(0, 0%, 29%);">Number of teats: 
+                      <span style="color: hsl(0, 0%, 13%);">
+                        @if ( $product->left_teats === 0 || $product->right_teats === 0)
+                          <i class="grey-text">Not Indicated</i>
+                        @else
+                          {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
+                        @endif
+                      </span>
+                    </li>
+                  @endif
 
                   <li style="color: hsl(0, 0%, 29%);">House type: 
                     <span style="color: hsl(0, 0%, 13%);">
