@@ -189,7 +189,11 @@
                         </span>
                       @else
                         <span style="color: hsl(0, 0%, 13%);">
-                          {{$product->house_type}}
+                          @if($product->house_type)
+                            Tunnel ventilated
+                          @else
+                            Open sided
+                          @endif
                         </span>
                       @endif
                     </li>
