@@ -176,7 +176,13 @@
                       <div class="row">
                           <div class="col s9">
                               <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} - {{$product->breed}}</span> <br>
-                              <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span> 
+                              @if($product->age < 0)
+                                <span style="color: hsl(0, 0%, 45%);">
+                                  Age: <i>Birthdate not included</i>
+                                </span>
+                              @else
+                                <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span> 
+                              @endif
                           </div>
                           <div class="col right">
                             {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
