@@ -188,8 +188,6 @@ $(document).ready(function(){
       var address_landline = $("#landline").val();
       var address_mobile = $("#mobile").val();
 
-      console.log(address_address1);
-
       if ($(this).is(":checked")) {
 
         // set values
