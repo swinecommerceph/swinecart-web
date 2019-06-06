@@ -115,15 +115,25 @@
 						<div class="col s10 offset-s1">
 							<div id="{{ $farmAddress->name }}" class="card-panel hoverable">
 								{!! Form::open(['route' => 'customer.updateFarm', 'method' => 'PUT', 'class' => 'edit-farm', 'data-farm-id' => $farmAddress->id, 'data-farm-order' => $loop->iteration]) !!}
-								<h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
+                <h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
+                
+                <div class="row">
+                  {{-- Checkbox if Farm Address is same as Office Address --}}
+                  <div>
+                    <input type="checkbox" id="check" class="same-address-checker filled-in farm-{{ $loop->iteration }}">
+                    <label for="check" class="teal-text text-darken-4"><b>Address is same as Personal Information</b></label>
+                  </div>
+                  <br>
+                </div>
+
 								<div class="row">
 									{{-- Farm Address: Name --}}
 									<div class="input-field col s10 push-s1">
 										{!! Form::text('name', $farmAddress->name, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-name'])!!}
 										{!! Form::label('name', 'Name*') !!}
 									</div>
-								</div>
-
+                </div>
+    
 								<div class="row">
 									{{-- Farm Address: Address Line 1 --}}
 									<div class="input-field col s10 push-s1">
