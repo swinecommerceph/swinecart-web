@@ -171,4 +171,44 @@ $(document).ready(function(){
         }
     });
 
+    // for enabling select tags
+    $("select").material_select();
+
+    // Same address as office information feature
+    $(".same-address-checker").change(function (e) {
+      e.preventDefault();
+
+      var farm_specific = $(this).attr('class').split(' ')[1];
+      farm_specific = "#" + farm_specific;
+
+      var address_address1 = $("#address_addressLine1").val();
+      var address_address2 = $("#address_addressLine2").val();
+      var address_province = $("#address_province").val();
+      var address_postal_zip_code = $("#address_zipCode").val();
+      var address_landline = $("#landline").val();
+      var address_mobile = $("#mobile").val();
+
+      console.log(address_address1);
+
+      if ($(this).is(":checked")) {
+
+        // set values
+        $(farm_specific + "-addressLine1").val(address_address1).addClass('input-show-hide');
+        $(farm_specific + "-addressLine2").val(address_address2).addClass('input-show-hide');
+        $(farm_specific).find('input[class=select-dropdown]').val(address_province).addClass('input-show-hide');
+        $(farm_specific + "-zipCode").val(address_postal_zip_code).addClass('input-show-hide');
+        $(farm_specific + "-landline").val(address_landline).addClass('input-show-hide');
+        $(farm_specific + "-mobile").val(address_mobile).addClass('input-show-hide');
+      }
+      else {
+        $(farm_specific + "-addressLine1").val('').removeClass('input-show-hide');
+        $(farm_specific + "-addressLine2").val('').removeClass('input-show-hide');
+        // $(farm_specific).find('input[class=select-dropdown]').val('Abra').removeClass('input-show-hide');
+        $(farm_specific + "-zipCode").val('').removeClass('input-show-hide');
+        $(farm_specific + "-farmType").val('').removeClass('input-show-hide');
+        $(farm_specific + "-landline").val('').removeClass('input-show-hide');
+        $(farm_specific + "-mobile").val('').removeClass('input-show-hide');
+      }
+    });
+
 });

@@ -66,7 +66,7 @@
 			<div class="row">
 				{{-- Address: Province --}}
 				<div class="input-field col s5 push-s1">
-					{!! Form::select('address_province', $provinces, null, ['disabled' => 'disabled']); !!}
+					{!! Form::select('address_province', $provinces, null, ['id' => 'address_province', 'disabled' => 'disabled']); !!}
 					<label>Province*</label>
 				</div>
 
@@ -120,7 +120,7 @@
                 <div class="row">
                   {{-- Checkbox if Farm Address is same as Office Address --}}
                   <div>
-                    <input type="checkbox" id="check" class="same-address-checker filled-in farm-{{ $loop->iteration }}">
+                    <input type="checkbox" id="check" class="same-address-checker farm-{{ $loop->iteration }} filled-in" disabled>
                     <label for="check" class="teal-text text-darken-4"><b>Address is same as Personal Information</b></label>
                   </div>
                   <br>
@@ -152,7 +152,7 @@
 
 								<div class="row">
 									{{-- Farm Address: Province --}}
-									<div class="input-field col s5 push-s1">
+									<div class="input-field col s5 push-s1" id="farm-{{ $loop->iteration }}">
 										{!! Form::select('province', $provinces, $farmAddress->province, ['disabled' => 'disabled']); !!}
 										<label>Province*</label>
 									</div>
