@@ -120,8 +120,8 @@
                 <div class="row">
                   {{-- Checkbox if Farm Address is same as Office Address --}}
                   <div>
-                    <input type="checkbox" id="check" class="same-address-checker farm-{{ $loop->iteration }} filled-in" disabled>
-                    <label for="check" class="teal-text text-darken-4"><b>Address is same as Personal Information</b></label>
+                    <input type="checkbox" id="check-{{ $loop->iteration }}" class="same-address-checker farm-{{ $loop->iteration }} filled-in" disabled>
+                    <label for="check-{{ $loop->iteration }}" class="teal-text text-darken-4"><b>Address is same as Personal Information</b></label>
                   </div>
                   <br>
                 </div>
