@@ -92,6 +92,16 @@
 					<div id="farm-1" class="card-panel hoverable">
 						<h5 class="center-align"> Farm 1 </h5>
 
+            {{-- Checkbox if Farm Address is same as Office Address --}}
+            <div class="row">
+              <input
+                type="checkbox"
+                id="check-1"
+                class="same-address-checker farm-1 filled-in">
+              <label for="check-1" class="teal-text text-darken-4"><b>Address is same as Office Information</b></label>
+            </div>
+            <br>
+
 						<div class="row">
 							{{-- Farm Address: Name --}}
 							<div class="input-field col s10 push-s1">
@@ -100,10 +110,11 @@
 							</div>
 						</div>
 
+
 						<div class="row">
 							{{-- Farm Address: Address Line 1 --}}
 							<div class="input-field col s10 push-s1">
-								{!! Form::text('farmAddress[1][addressLine1]', null, ['id' => 'farmAddress[1][addressLine1]'])!!}
+								{!! Form::text('farmAddress[1][addressLine1]', null, ['id' => 'farmAddress[1][addressLine1]', 'class' => 'farm-1-addressLine1'])!!}
 								{!! Form::label('farmAddress[1][addressLine1]', 'Address Line 1* : Street, Road, Subdivision') !!}
 							</div>
 						</div>
@@ -111,7 +122,7 @@
 						<div class="row">
 							{{-- Farm Address: Address Line 2 --}}
 							<div class="input-field col s10 push-s1">
-								{!! Form::text('farmAddress[1][addressLine2]', null, ['id' => 'farmAddress[1][addressLine2]'])!!}
+								{!! Form::text('farmAddress[1][addressLine2]', null, ['id' => 'farmAddress[1][addressLine2]', 'class' => 'farm-1-addressLine2'])!!}
 								{!! Form::label('farmAddress[1][addressLine2]', 'Address Line 2* : Barangay, Town, City') !!}
 							</div>
 						</div>
@@ -125,7 +136,7 @@
 
 							{{-- Farm Address: Zip Code --}}
 							<div class="input-field col s5 push-s1">
-								{!! Form::text('farmAddress[1][zipCode]', null, ['id' => 'farmAddress[1][zipCode]'])!!}
+								{!! Form::text('farmAddress[1][zipCode]', null, ['id' => 'farmAddress[1][zipCode]', 'class' => 'farm-1-zipCode'])!!}
 								{!! Form::label('farmAddress[1][zipCode]', 'Postal/ZIP Code*') !!}
 							</div>
 						</div>
@@ -141,13 +152,13 @@
 						<div class="row">
 							{{-- Farm Landline --}}
 							<div class="input-field col s5 push-s1">
-								{!! Form::text('farmAddress[1][landline]', null, ['id' => 'farmAddress[1][landline]'])!!}
+								{!! Form::text('farmAddress[1][landline]', null, ['id' => 'farmAddress[1][landline]', 'class' => 'farm-1-landline'])!!}
 								{!! Form::label('farmAddress[1][landline]', 'Farm Landline') !!}
 							</div>
 
 							{{-- Farm Mobile --}}
 							<div class="input-field col s5 push-s1">
-								{!! Form::text('farmAddress[1][mobile]', null, ['id' => 'farmAddress[1][mobile]'])!!}
+								{!! Form::text('farmAddress[1][mobile]', null, ['id' => 'farmAddress[1][mobile]', 'class' => 'farm-1-mobile'])!!}
 								{!! Form::label('farmAddress[1][mobile]', 'Farm Mobile*') !!}
 							</div>
 						</div>
