@@ -532,7 +532,7 @@ var product = {
 
         // General Info
         /* Catching the unfilled input fields */
-
+        
         // ADG
         if (data.adg === 0 ) {
           var item_adg =
@@ -616,9 +616,15 @@ var product = {
             '<li class="collection-item">House Type: <i class="grey-text">Not indicated</i></li>';
         }
         else {
+          var house_type_string;
+          if (data.house_type === "tunnelventilated") 
+            house_type_string = "Tunnel ventilated" 
+          else 
+            house_type_string = "Open sided"
+
           var item_house_type =
             '<li class="collection-item">House Type: ' +
-            data.house_type +
+            house_type_string +
             '</li>'
         }
 
@@ -730,8 +736,14 @@ var product = {
           "Farm Address: " + data.farm_province
         );
 
+        if (data.birthdate === "November 30, -0001") {
+          var item_birthdate =
+            'Born on: <i class="grey-text">Not indicated</i>';
+        } else {
+          var item_birthdate = "Born on: " + data.birthdate
+        }
         $("#product-summary-birthdate").html(
-          "Born on: " + data.birthdate
+          item_birthdate
         );
 
         $("#swine-information").html(items);
@@ -896,6 +908,12 @@ $('.price-field').keyup(function (event) {
   });
 }); */
 
+$(".product-quantity , .edit-product-quantity").keyup(function() {
+  var pattern = /^[1-9]\d*$/;
+  $(this).val(function(index, value) {
+    return value.match(pattern);
+  });
+});
 'use strict';
 
 var filter = {
@@ -1571,14 +1589,8 @@ var placeError = function(inputElement, errorMsg) {
         });
       }
 
-    } else if (inputElement.id.includes("birthdate")) {
-      $("#birthdate-data-error").show();
-      $("#birthdate , #edit_birthdate").on('change', function () {
-        /* Remove validation error if an option is selected */
-        $("#birthdate-data-error").hide();
-      });
-      $(inputElement).addClass("invalid");
-    } else $(inputElement).addClass("invalid");
+    }
+    else $(inputElement).addClass("invalid");
   }, 0);
 };
 
@@ -1684,14 +1696,12 @@ var validateFunction = function() {
         fbreed: ["requiredIfRadio:crossbreed"],
         mbreed: ["requiredIfRadio:crossbreed"],
         "select-type": ["requiredDropdown"],
-        birthdate: ["required"],
         "select-farm": ["requiredDropdown"],
         "edit-name": ["required"],
         "edit-breed": ["requiredIfRadio:purebreed"],
         "edit-fbreed": ["requiredIfRadio:crossbreed"],
         "edit-mbreed": ["requiredIfRadio:crossbreed"],
         "edit-select-type": ["requiredDropdown"],
-        edit_birthdate: ["required"],
         "edit-select-farm": ["requiredDropdown"]
       };
 
@@ -1758,15 +1768,6 @@ var validateFunction = function() {
       }
     });
 
-    // Temporary fix for prompting 'valid' class after
-    // value change on datepicker
-    $("#birthdate, #edit_birthdate").change(function(e) {
-      e.stopPropagation();
-      $(this)
-        .removeClass("invalid")
-        .addClass("valid");
-    });
-
     // Submit add product
     $("#create-product").submit(function(e) {
       e.preventDefault();
@@ -1774,7 +1775,6 @@ var validateFunction = function() {
       var validName = validateInput(document.getElementById("name"));
       var validType = validateInput(document.getElementById("select-type"));
       var validFarmFrom = validateInput(document.getElementById("select-farm"));
-      var validBirthdate = validateInput(document.getElementById("birthdate"));
       var validBreed = true;
 
       // Validate appropriate breed input/s according to chosen radio breed value
@@ -1788,7 +1788,6 @@ var validateFunction = function() {
         validName &&
         validType &&
         validFarmFrom &&
-        validBirthdate &&
         validBreed
       ) {
         // Disable submit/add product button
@@ -1807,9 +1806,6 @@ var validateFunction = function() {
       var validType = validateInput(
         document.getElementById("edit-select-type")
       );
-      var validBirthdate = validateInput(
-        document.getElementById("edit_birthdate")
-      );
       var validFarmFrom = validateInput(
         document.getElementById("edit-select-farm")
       );
@@ -1826,7 +1822,6 @@ var validateFunction = function() {
         validName &&
         validType &&
         validFarmFrom &&
-        validBirthdate &&
         validBreed
       ) {
         // Disable update-button

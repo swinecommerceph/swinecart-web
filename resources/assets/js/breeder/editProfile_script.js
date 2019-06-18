@@ -79,21 +79,21 @@ $(document).ready(function () {
     if ($(this).is(":checked")) {
 
       // set values
-      $(farm_specific + "-addressLine1").val(office_address1);
-      $(farm_specific + "-addressLine2").val(office_address2);
-      $(farm_specific).find('input[class=select-dropdown]').val(office_province);
-      $(farm_specific + "-zipCode").val(office_postal_zip_code);
-      $(farm_specific + "-landline").val(office_landline);
-      $(farm_specific + "-mobile").val(office_mobile);
+      $(farm_specific + "-addressLine1").val(office_address1).addClass('input-show-hide');
+      $(farm_specific + "-addressLine2").val(office_address2).addClass('input-show-hide');
+      $(farm_specific).find('input[class=select-dropdown]').val(office_province).addClass('input-show-hide');
+      $(farm_specific + "-zipCode").val(office_postal_zip_code).addClass('input-show-hide');
+      $(farm_specific + "-landline").val(office_landline).addClass('input-show-hide');
+      $(farm_specific + "-mobile").val(office_mobile).addClass('input-show-hide');
     }
     else {
-      $(farm_specific + "-addressLine1").val('');
-      $(farm_specific + "-addressLine2").val('');
-      // $(farm_specific).find('input[class=select-dropdown]').val('Abra');
-      $(farm_specific + "-zipCode").val('');
-      $(farm_specific + "-farmType").val('');
-      $(farm_specific + "-landline").val('');
-      $(farm_specific + "-mobile").val('');
+      $(farm_specific + "-addressLine1").val('').removeClass('input-show-hide');
+      $(farm_specific + "-addressLine2").val('').removeClass('input-show-hide');
+      // $(farm_specific).find('input[class=select-dropdown]').val('Abra').removeClass('input-show-hide');
+      $(farm_specific + "-zipCode").val('').removeClass('input-show-hide');
+      $(farm_specific + "-farmType").val('').removeClass('input-show-hide');
+      $(farm_specific + "-landline").val('').removeClass('input-show-hide');
+      $(farm_specific + "-mobile").val('').removeClass('input-show-hide');
     }
   });
 

@@ -66,7 +66,7 @@
 			<div class="row">
 				{{-- Address: Province --}}
 				<div class="input-field col s5 push-s1">
-					{!! Form::select('address_province', $provinces, null, ['disabled' => 'disabled']); !!}
+					{!! Form::select('address_province', $provinces, null, ['id' => 'address_province', 'disabled' => 'disabled']); !!}
 					<label>Province*</label>
 				</div>
 
@@ -115,15 +115,25 @@
 						<div class="col s10 offset-s1">
 							<div id="{{ $farmAddress->name }}" class="card-panel hoverable">
 								{!! Form::open(['route' => 'customer.updateFarm', 'method' => 'PUT', 'class' => 'edit-farm', 'data-farm-id' => $farmAddress->id, 'data-farm-order' => $loop->iteration]) !!}
-								<h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
+                <h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
+                
+                <div class="row">
+                  {{-- Checkbox if Farm Address is same as Office Address --}}
+                  <div>
+                    <input type="checkbox" id="check-{{ $loop->iteration }}" class="same-address-checker farm-{{ $loop->iteration }} filled-in" disabled>
+                    <label for="check-{{ $loop->iteration }}" class="teal-text text-darken-4"><b>Address is same as Personal Information</b></label>
+                  </div>
+                  <br>
+                </div>
+
 								<div class="row">
 									{{-- Farm Address: Name --}}
 									<div class="input-field col s10 push-s1">
 										{!! Form::text('name', $farmAddress->name, ['disabled' => 'disabled', 'id' => 'farm-' . $loop->iteration . '-name'])!!}
 										{!! Form::label('name', 'Name*') !!}
 									</div>
-								</div>
-
+                </div>
+    
 								<div class="row">
 									{{-- Farm Address: Address Line 1 --}}
 									<div class="input-field col s10 push-s1">
@@ -142,7 +152,7 @@
 
 								<div class="row">
 									{{-- Farm Address: Province --}}
-									<div class="input-field col s5 push-s1">
+									<div class="input-field col s5 push-s1" id="farm-{{ $loop->iteration }}">
 										{!! Form::select('province', $provinces, $farmAddress->province, ['disabled' => 'disabled']); !!}
 										<label>Province*</label>
 									</div>

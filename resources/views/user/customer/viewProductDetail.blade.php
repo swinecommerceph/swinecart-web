@@ -106,47 +106,98 @@
                   {{-- SwineCart Information --}}
                   <p style="font-weight:600; font-size: 1.4rem;" class="teal-text text-darken-4">Swine Information</p>
 
-                  <li style="color: hsl(0, 0%, 29%);">Average Daily Gain:
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->adg}} g
-                    </span>
-                  </li>
+                  <ul style="margin-left: 1vw;">
+                    <li style="color: hsl(0, 0%, 13%); list-style-type: disc;">Average Daily Gain:
+                      @if($product->adg === 0)
+                        <span style="color: hsl(0, 0%, 29%);">
+                          <i class="text-grey">Not indicated</i>
+                        </span>
+                      @else
+                        <span style="color: hsl(0, 0%, 13%);">
+                          {{$product->adg}} g
+                        </span>
+                      @endif
+                    </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Feed Conversion Ratio:
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->fcr}}
-                    </span>
-                  </li>
+                    <li style="color: hsl(0, 0%, 13%); list-style-type: disc;">Feed Conversion Ratio:
+                      @if($product->fcr === 0.0)
+                        <span style="color: hsl(0, 0%, 29%);">
+                          <i class="text-grey">Not indicated</i>
+                        </span>
+                      @else
+                        <span style="color: hsl(0, 0%, 13%);">
+                          {{$product->fcr}}
+                        </span>
+                      @endif
+                    </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Backfat Thickness:
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->backfat_thickness}} mm
-                    </span>
-                  </li>
+                    <li style="color: hsl(0, 0%, 13%); list-style-type: disc;">Backfat Thickness:
+                      @if($product->backfat_thickness === 0.0)
+                        <span style="color: hsl(0, 0%, 29%);">
+                          <i class="text-grey">Not indicated</i>
+                        </span>
+                      @else
+                        <span style="color: hsl(0, 0%, 13%);">
+                          {{$product->backfat_thickness}}
+                        </span>
+                      @endif
+                    </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Litter size born alive: 
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->lsba}}
-                    </span>
-                  </li>
+                    <li style="color: hsl(0, 0%, 13%); list-style-type: disc;">Litter size born alive:
+                      @if($product->lsba === 0)
+                        <span style="color: hsl(0, 0%, 29%);">
+                          <i class="text-grey">Not indicated</i>
+                        </span>
+                      @else
+                        <span style="color: hsl(0, 0%, 13%);">
+                          {{$product->lsba}}
+                        </span>
+                      @endif
+                    </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Birth weight:
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->birthweight}}
-                    </span>
-                  </li>
+                    <li style="color: hsl(0, 0%, 13%); list-style-type: disc;">Birth weight:
+                      @if($product->birthweight === 0.0)
+                        <span style="color: hsl(0, 0%, 29%);">
+                          <i class="text-grey">Not indicated</i>
+                        </span>
+                      @else
+                        <span style="color: hsl(0, 0%, 13%);">
+                          {{$product->birthweight}}
+                        </span>
+                      @endif
+                    </li>
 
-                  <li style="color: hsl(0, 0%, 29%);">Number of teats: 
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
-                    </span>
-                  </li>
+                    @if ( $product->type === "Gilt" || $product->type === "Sow")
+                      <li style="color: hsl(0, 0%, 13%); list-style-type: disc;">Number of teats: 
+                          @if ( $product->left_teats === 0 || $product->right_teats === 0)
+                            <span style="color: hsl(0, 0%, 29%);">
+                              <i class="text-grey">Not Indicated</i>
+                            </span>
+                          @else
+                            <span style="color: hsl(0, 0%, 13%);">
+                              {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
+                            </span>
+                          @endif
+                        </span>
+                      </li>
+                    @endif
 
-                  <li style="color: hsl(0, 0%, 29%);">House type: 
-                    <span style="color: hsl(0, 0%, 13%);">
-                    {{$product->house_type}}
-                    </span>
-                  </li>
+                    <li style="color: hsl(0, 0%, 13%); list-style-type: disc;">House type: 
+                      @if ( $product->house_type === "")
+                        <span style="color: hsl(0, 0%, 29%);">
+                          <i class="text-grey">Not Indicated</i>
+                        </span>
+                      @else
+                        <span style="color: hsl(0, 0%, 13%);">
+                          @if($product->house_type === "tunnelventilated")
+                            Tunnel ventilated
+                          @else
+                            Open sided
+                          @endif
+                        </span>
+                      @endif
+                    </li>
+                  </ul>
 
                   {{-- Other Information --}}
                   <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Other Information</p>

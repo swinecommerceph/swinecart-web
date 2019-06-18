@@ -532,7 +532,7 @@ var product = {
 
         // General Info
         /* Catching the unfilled input fields */
-
+        
         // ADG
         if (data.adg === 0 ) {
           var item_adg =
@@ -616,9 +616,15 @@ var product = {
             '<li class="collection-item">House Type: <i class="grey-text">Not indicated</i></li>';
         }
         else {
+          var house_type_string;
+          if (data.house_type === "tunnelventilated") 
+            house_type_string = "Tunnel ventilated" 
+          else 
+            house_type_string = "Open sided"
+
           var item_house_type =
             '<li class="collection-item">House Type: ' +
-            data.house_type +
+            house_type_string +
             '</li>'
         }
 
@@ -730,8 +736,14 @@ var product = {
           "Farm Address: " + data.farm_province
         );
 
+        if (data.birthdate === "November 30, -0001") {
+          var item_birthdate =
+            'Born on: <i class="grey-text">Not indicated</i>';
+        } else {
+          var item_birthdate = "Born on: " + data.birthdate
+        }
         $("#product-summary-birthdate").html(
-          "Born on: " + data.birthdate
+          item_birthdate
         );
 
         $("#swine-information").html(items);
@@ -895,3 +907,10 @@ $('.price-field').keyup(function (event) {
       .replace(/\d{1,3}(?=(\d{3})+(?!\d))/g, "$&,");
   });
 }); */
+
+$(".product-quantity , .edit-product-quantity").keyup(function() {
+  var pattern = /^[1-9]\d*$/;
+  $(this).val(function(index, value) {
+    return value.match(pattern);
+  });
+});

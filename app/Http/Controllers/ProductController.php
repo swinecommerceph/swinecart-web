@@ -219,7 +219,12 @@ class ProductController extends Controller
             $product->name = $request->name;
             $product->type = $request->type;
             $product->house_type = $request->house_type;
-            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+            if ($request->birthdate === "") {
+              $product->birthdate = '';
+            }
+            else {
+              $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+            }
             $product->birthweight = $request->birthweight;
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
             // $product->price = $request->price;
@@ -289,7 +294,12 @@ class ProductController extends Controller
           $product->farm_from_id = $request->farm_from_id;
           $product->name = $request->name;
           $product->type = $request->type;
-          $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+          if ($request->birthdate === NULL) {
+            $product->birthdate = '';
+          }
+          else {
+            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+          }
           
           $product->birthweight = $request->birthweight;
 
@@ -424,6 +434,8 @@ class ProductController extends Controller
                     $fileName = $file->getClientOriginalName();
 
                     // Get media (Image/Video) info according to extension
+                    //if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($file);
+                    //else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($file);
                     if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileName, $fileExtension, $request->productId, $request->type, $request->breed);
                     else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileName, $fileExtension, $request->productId, $request->type, $request->breed);
                     else return response()->json('Invalid file extension', 500);
@@ -450,7 +462,10 @@ class ProductController extends Controller
                     }
                     else return response()->json('Move file failed', 500);
                 }
-                else return response()->json('Upload failed', 500);
+                else {
+                  $dd("hello");
+                  return response()->json('Upload failed', 500);
+                }
             }
 
             return response()->json(collect($fileDetails)->toJson(), 200);
@@ -708,6 +723,7 @@ class ProductController extends Controller
      * @param  String           $breed
      * @return AssociativeArray $mediaInfo
      */
+    //private function createMediaInfo($file)
     private function createMediaInfo($filename, $extension, $productId, $type, $breed)
     {
         $mediaInfo = [];
@@ -718,6 +734,11 @@ class ProductController extends Controller
         else {
             $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
         }
+        /* $filename = $file->getClientOriginalName();
+        $pathname = $file->getPathName();
+        dd($pathname);
+        $fileExtension = $file->getClientOriginalExtension();
+        $mediaInfo['filename'] = md5_file($pathname . '/' . $filename) . '.' . $fileExtension; */
 
         //$mediaInfo['fileName'] = str_replace('/', '_', $mediaInfo['fileName']);
         

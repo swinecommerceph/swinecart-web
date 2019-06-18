@@ -134,7 +134,6 @@
                     ref="input"
                     value="1"
                     min="1"
-                    onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 49 && event.charCode <= 57"
                     class="product-quantity center-align"
                     style="margin:0;"
                 >
@@ -186,13 +185,13 @@
                 </div>
               </div>
             </div>
-
+            
             <div class="row">
               
               {{-- Birthdate --}}
               <div class="col s5.5" style="padding-left: 0px !important">
                 <div class="input-field" style="width: 13vw; display: flex !important;">
-                  <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker validate"/>
+                  <input style="cursor: pointer;" type="date" id="birthdate" name="birthdate" class="datepicker"/>
                   <i 
                     class="material-icons teal-text text-darken-2"
                     style="font-size: 3rem; z-index: -1 !important; left: 10.5vw; !important; position: absolute;"
@@ -203,9 +202,7 @@
                 </div>
               </div>
   
-              <div id="birthdate-data-error" style="display:none;" class="col s5">
-                <p style="margin-top: 3vh;" class="red-text">Please choose swine's birthdate</p> 
-              </div>
+             
 
             </div>
 
@@ -222,12 +219,17 @@
                 <div style="margin-bottom: 4vh; width: 15vw;" class="input-field">
                   <select id="select-farm">
                     <option value="" disabled selected>Choose farm</option>
-                    @foreach($farms as $farm)
-                      {{-- @if($farm->name === "aliquid, Siquijor")
-                        <option value="{{$farm->id}}" >{{$farm->name}}, {{$farm->province}}</option>
-                      @endif --}}
-                      <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
-                    @endforeach
+                    
+                      @foreach($farms as $farm)
+                        {{-- @if($farm->name === "aliquid, Siquijor")
+                          <option value="{{$farm->id}}" >{{$farm->name}}, {{$farm->province}}</option>
+                        @endif --}}
+                        @if(count($farms) === 1)
+                          <option value="{{$farm->id}}" selected>{{$farm->name}}, {{$farm->province}}</option>
+                        @else
+                          <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
+                        @endif
+                      @endforeach
                   </select>
                   <label style="font-size: 1rem;" class="teal-text text-darken-4">Farm From</label>
                 </div>

@@ -92,7 +92,11 @@
         <div id="product-details-table" class="col s12 m5">
           <h3 style="color: hsl(0, 0%, 13%); font-weight: 700">{{ $product->name }}</h3>
           <h5 style="color: hsl(0, 0%, 29%);">{{$product->type}} - {{$product->breed}}</h5>
-          <p style="color: hsl(0, 0%, 45%);">Born on {{$product->birthdate}} ({{$product->age}} days old)</p>
+          @if($product->birthdate === "November 30, -0001")
+            <p style="color: hsl(0, 0%, 45%);">Born on: <i>Not indicated</i></p>
+          @else
+            <p style="color: hsl(0, 0%, 45%);">Born on {{$product->birthdate}} ({{$product->age}} days old)</p>
+          @endif 
            
         
           {{-- SwineCart Information --}}
@@ -165,7 +169,13 @@
               @if ( $product->house_type === "")
                 <i class="grey-text">Not Indicated</i>
               @else
-                {{$product->house_type}}
+                <span style="color: hsl(0, 0%, 13%);">
+                  @if($product->house_type === "tunnelventilated")
+                    Tunnel ventilated
+                  @else
+                    Open sided
+                  @endif
+                </span>
               @endif
             </span>
           </li>

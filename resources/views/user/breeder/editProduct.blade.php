@@ -128,7 +128,6 @@
                     ref="input"
                     value="{{ $product->quantity }}"
                     min="1"
-                    onkeypress="return (event.charCode == 8 || event.charCode == 0) ? null : event.charCode >= 49 && event.charCode <= 57"
                     class="edit-product-quantity center-align"
                     style="margin:0;"
                 >
@@ -196,10 +195,6 @@
                     Birth Date
                 </label>
               </div>
-            </div>
-
-            <div id="birthdate-data-error" style="display: none;" class="col s5">
-              <p style="margin-top: 3vh;" class="red-text">Please choose swine's birthdate</p> 
             </div>
           </div>
 

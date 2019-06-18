@@ -176,7 +176,13 @@
                       <div class="row">
                           <div class="col s9">
                               <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} - {{$product->breed}}</span> <br>
-                              <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span> 
+                              @if($product->age < 0)
+                                <span style="color: hsl(0, 0%, 45%);">
+                                  Age: <i>Birthdate not included</i>
+                                </span>
+                              @else
+                                <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span> 
+                              @endif
                           </div>
                           <div class="col right">
                             {!! Form::open(['route' => 'cart.add', 'data-product-id' => $product->id, 'data-type' => $product->type]) !!}
@@ -205,15 +211,33 @@
                             <tbody>
                                 <tr>
                                     <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
-                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
+                                    @if($product->adg === 0)
+                                      <td style="color: hsl(0, 0%, 29%);">
+                                        <i class="text-grey">Not Indicated</i>
+                                      </td>
+                                    @else
+                                      <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio: </td>
-                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->fcr }} </td>
+                                    @if($product->fcr === 0.0)
+                                      <td style="color: hsl(0, 0%, 29%);">
+                                        <i class="text-grey">Not Indicated</i>
+                                      </td>
+                                    @else
+                                      <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->fcr }} </td>
+                                    @endif
                                 </tr>
                                 <tr>
                                     <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm): </td>
-                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->backfat_thickness }} </td>
+                                    @if($product->backfat_thickness === 0.0)
+                                      <td style="color: hsl(0, 0%, 29%);">
+                                        <i class="text-grey">Not Indicated</i>
+                                      </td>
+                                    @else
+                                      <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->backfat_thickness }} </td>
+                                    @endif
                                 </tr>
                             </tbody>
                         </table>
