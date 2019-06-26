@@ -99,21 +99,13 @@ class ProductController extends Controller
     public function showProducts(Request $request)
     {
         $breeder = $this->user->userable;
-        //dd($breeder->products()->get());
-        /* $products = $breeder->products()
-                    ->whereIn('status',['hidden','displayed','requested']); */
-                      
-        /* $products = $products->where([
-                          ['is_unique', '=', 1],
-                          ['quantity', '>', 0] 
-                      ])
-                      ->orWhere([
-                          ['is_unique', '=', 0],
-                          ['quantity', '>=', -1]
-                      ]); */
-        
-        
-                    
+         
+        /*   
+          getting the breeder's products that are:
+            quantity of non zero
+            or
+            quantity of zero but is a multiplier product
+        */
         $products = $breeder->products()
                     ->whereIn('status',['hidden','displayed','requested'])
                     ->where('quantity','<>',0)
@@ -156,8 +148,6 @@ class ProductController extends Controller
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
         }
-
-        /* dd($products); */
 
         return view('user.breeder.showProducts', compact('products', 'farms', 'filters', 'urlFilters'));
     }
