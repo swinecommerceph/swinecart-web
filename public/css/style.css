@@ -1538,7 +1538,7 @@ input[type=text]:not(.browser-default).valid {
   text-transform: none !important;
 }
 
-.btn:hover, .btn-large:hover {
+.side-nav-btn:hover, .side-nav-btn-large:hover {
   background-color: #003831 !important;
 }
 
