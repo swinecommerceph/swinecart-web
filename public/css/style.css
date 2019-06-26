@@ -1538,12 +1538,20 @@ input[type=text]:not(.browser-default).valid {
   text-transform: none !important;
 }
 
-.btn:hover, .btn-large:hover {
+.side-nav-btn:hover, .side-nav-btn-large:hover {
   background-color: #003831 !important;
+}
+
+.btn-large.green:hover {
+  background-color: #81c784 !important;
 }
 
 .btn.blue:hover {
   background-color: #64b5f6 !important;
+}
+
+.btn-large.red.darken-4:hover {
+  background-color: #d50000 !important;
 }
 
 .red-button:hover {
