@@ -379,7 +379,7 @@
                                 <span class="card-title">
                                     <a href="#"
                                         class="anchor-title"
-                                        :class="(product.request_status) ? 'white-text' : 'blue-grey-text text-darken-4'"
+                                        :class="(product.request_status) ? 'white-text' : 'grey-text text-darken-4'"
                                         @click.prevent="viewProductModalFromCart(product.item_id)"
                                         style="font-weight: 700;"
                                     >
