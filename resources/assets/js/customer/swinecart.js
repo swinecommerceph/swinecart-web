@@ -127,7 +127,7 @@ var swinecart = {
                             '<form method="POST" action="' + config.host_url + config.swineCart_url + '/delete" accept-charset="UTF-8" data-item-id="' + element.item_id + '">' +
                             '<input name="_method" type="hidden" value="DELETE">' +
                             '<input name="_token" type="hidden" value="' + element.token + '">' +
-                            '<a class="secondary-content delete-from-swinecart"><i class="material-icons">clear</i></a>' +
+                            '<a class="secondary-content delete-from-swinecart red-text text-darken-4" style="margin-top: 1rem; font-size: 1rem;">REMOVE</a>' +
                             '</form>' +
                             '</li>';
                     });
