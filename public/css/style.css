@@ -1507,6 +1507,12 @@ input[type=text]:not(.browser-default) {
   border-radius: 3px;
 }
 
+.remove-borders {
+  border: none !important;
+  border-radius: 0px !important;
+  border-bottom: solid 1px #616161 !important;
+}
+
 input[type=text]:not(.browser-default).valid {
   border-bottom: 1px solid #00705E !important;
 }

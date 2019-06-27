@@ -108,7 +108,7 @@ Vue.component('quantity-input',{
         <span class="col s12" style="padding:0;"> \
             <input type="text" \
                 ref="input" \
-                class="center-align" \
+                class="center-align remove-borders" \
                 style="margin:0;" \
                 :value="value" \
                 @input="updateValue($event.target.value)" \
