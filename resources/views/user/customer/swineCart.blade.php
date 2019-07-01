@@ -562,7 +562,7 @@
                 style="width: 60% !important;
                 max-height: 100% !important;">
                 <div class="modal-content">
-                    <h4 class="grey-text text-darken-2">Request Product?</h4>
+                    <h4>Request Product?</h4>
                     <p class="grey-text text-darken-2">    
                         Requesting @{{ productRequest.name }} sends a request to the breeder for buying the product.
                         <blockquote style="background-color:#ffcdd2; border-left: 3px solid red;" class="info" v-if="productRequest.type === 'semen'">
