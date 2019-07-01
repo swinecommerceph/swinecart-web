@@ -376,7 +376,7 @@
                             {{-- Product Card --}}
                             <div style="height: 25vh !important;" class="card-content" :class="(product.request_status) ? 'white-text' : 'blue-grey-text text-darken-4'">
                                 {{-- Title --}}
-                                <span class="card-title">
+                                  <span class="card-title">
                                     <a href="#"
                                         class="anchor-title"
                                         :class="(product.request_status) ? 'white-text' : 'grey-text text-darken-4'"
@@ -385,12 +385,12 @@
                                     >
                                         @{{ product.product_name }}
                                     </a>
-                                </span>
+                                  </span>
 
                                 {{-- Product Info --}}
-                                <p class="row" style="min-height:100px;">
+                                <span class="row" style="min-height:100px; font-size: 1.2rem;">
                                     <span class="col s12">
-                                        <span style="font-weight: 600;">@{{ product.product_type | capitalize }} - @{{ product.product_breed }}</span>
+                                        <span>@{{ product.product_type | capitalize }} - @{{ product.product_breed }}</span>
                                         <br>
                                         Breeder: @{{ product.breeder }}
                                     </span>
@@ -401,6 +401,7 @@
                                         <span class="col s6">
                                             Quantity:
                                         </span>
+                                        
                                         <span class="col s6">
 
                                             {{-- minus button--}}
@@ -456,8 +457,8 @@
                                         style="font-weight: 700; font-size: 2vh;"
                                     >
                                         Expected to arrive on: @{{ product.delivery_date }}
-                                    </span>
-                                </p>
+                                    </p>
+                                </span>
 
                             </div>
                             <div class="card-action">
