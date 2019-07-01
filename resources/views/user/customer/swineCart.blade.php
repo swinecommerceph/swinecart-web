@@ -564,7 +564,11 @@
                 <div class="modal-content">
                     <h4>Request Product?</h4>
                     <p class="grey-text text-darken-2">    
-                        Requesting @{{ productRequest.name }} sends a request to the breeder for buying the product.
+                        Requesting
+                          <span class="grey-text text-darken-4">
+                            <b>@{{ productRequest.name }}</b>
+                          </span>
+                        sends a request to the breeder for buying the product.
                         <blockquote style="background-color:#ffcdd2; border-left: 3px solid red;" class="info" v-if="productRequest.type === 'semen'">
                             Once requested, request quantity can never be changed. Also, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
                         </blockquote>
