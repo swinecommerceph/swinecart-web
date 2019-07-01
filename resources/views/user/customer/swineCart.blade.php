@@ -580,8 +580,19 @@
                                 <custom-date-select v-model="productRequest.dateNeeded" @date-select="dateChange"></custom-date-select>
                             </div>
                             <div class="input-field col s12">
-                                <textarea id="special-request" class="materialize-textarea" v-model="productRequest.specialRequest"></textarea>
-                                <label for="special-request">Message / Special Request</label>
+                                <textarea 
+                                  id="special-request"
+                                  class="materialize-textarea"
+                                  v-model="productRequest.specialRequest"
+                                  style="max-height: 2vh; overflow-y: auto;"
+                                >
+                                </textarea>
+                                <label 
+                                  for="special-request"
+                                  style="padding-bottom: 5px; margin-top: 5px;"  
+                                >
+                                  Message / Special Request
+                                </label>
                             </div>
                         </div>
                     </div>
