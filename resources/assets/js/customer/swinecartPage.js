@@ -155,7 +155,7 @@ Vue.component('quantity-input',{
 Vue.component('custom-date-select', {
     template: '\
         <div> \
-            <input type="date" id="date-needed" name="date-needed" class="datepicker" ref="select" :value="value"/> \
+            <input type="date" id="date-needed" name="date-needed" class="datepicker remove-borders" ref="select" :value="value"/> \
             <label for="date-needed">Date Needed</label> \
         </div> \
     ',

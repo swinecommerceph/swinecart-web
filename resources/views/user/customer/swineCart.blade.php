@@ -574,7 +574,7 @@
                     </p>
                     <div class="row">
                         <div class="col s6">
-                            <div class="input-field col s10"
+                            <div class="input-field col s4"
                                 v-show="productRequest.type === 'semen'"
                             >
                                 <custom-date-select v-model="productRequest.dateNeeded" @date-select="dateChange"></custom-date-select>
