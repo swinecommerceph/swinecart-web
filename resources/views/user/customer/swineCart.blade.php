@@ -604,8 +604,7 @@
                 <div class="modal-footer"
                   style="
                     padding-right: 1vw;
-                    margin-bottom: 1vh;
-                    background-color: hsl(220, 12%, 95%);
+                    background-color: hsl(0, 0%, 96%);
                   ">
                   <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons"
                   style="color: #37474f; font-weight: 700;"
