@@ -465,22 +465,22 @@
                                     {{-- Product Status icons --}}
 
                                     {{-- Not yet Requested --}}
-                                    <div class="row">
+                                    <div class="right-align">
                                         <template v-if="!product.request_status">
-                                            <a class="btn blue"
-                                                href="#!"
-                                                style="font-weight: 700;" 
-                                                @click.prevent="confirmRequest(product.item_id)"
+                                          <a href="#!"
+                                            @click.prevent="confirmRemoval(product.item_id)"
+                                            class="blue-grey lighten-5"
+                                            style="color: #37474f; font-weight: 700; padding-left: 2vw;"
                                             >
-                                                Request
-                                            </a>
-                                            <a href="#!"
-                                                @click.prevent="confirmRemoval(product.item_id)"
-                                                class="blue-grey lighten-5"
-                                                style="color: #37474f; font-weight: 700; padding-left: 2vw;"
-                                            >
-                                                Remove
-                                            </a>
+                                            Remove
+                                          </a>
+                                          <a class="btn blue"
+                                              href="#!"
+                                              style="font-weight: 700;" 
+                                              @click.prevent="confirmRequest(product.item_id)"
+                                          >
+                                              Request
+                                          </a>
                                         </template>
                                     </div>
 
