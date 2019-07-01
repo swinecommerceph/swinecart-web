@@ -602,15 +602,15 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn blue request-product-buttons"
-                        @click.prevent="requestProduct($event)"
-                        style="text-transform: none;  font-weight: 700;"
-                    >
-                        Yes, Confirm Request Product
-                    </a>
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat grey-text request-product-buttons"
-                        style="text-transform: none; font-weight: 700;"
-                    >Cancel</a>
+                  <a class="modal-action modal-close waves-effect waves-green btn-flat grey-text request-product-buttons"
+                  style="text-transform: none; font-weight: 700;"
+                  >Cancel</a>
+                  <a class="modal-action waves-effect waves-green btn blue request-product-buttons"
+                      @click.prevent="requestProduct($event)"
+                      style="text-transform: none;  font-weight: 700;"
+                  >
+                      Yes, Confirm Request Product
+                  </a>
                 </div>
             </div>
 
