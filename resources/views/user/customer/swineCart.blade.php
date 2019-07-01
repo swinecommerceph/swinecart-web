@@ -602,8 +602,8 @@
                     </div>
                 </div>
                 <div class="modal-footer">
-                  <a class="modal-action modal-close waves-effect waves-green btn-flat grey-text request-product-buttons"
-                  style="text-transform: none; font-weight: 700;"
+                  <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons"
+                  style="color: #37474f; font-weight: 700;"
                   >Cancel</a>
                   <a class="modal-action waves-effect waves-green btn blue request-product-buttons"
                       @click.prevent="requestProduct($event)"
