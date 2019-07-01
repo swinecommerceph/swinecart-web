@@ -601,7 +601,8 @@
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer"
+                  style="padding-right: 1vw; margin-bottom: 1vh;">
                   <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons"
                   style="color: #37474f; font-weight: 700;"
                   >Cancel</a>
