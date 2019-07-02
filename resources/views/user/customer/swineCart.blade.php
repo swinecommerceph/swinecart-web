@@ -591,7 +591,8 @@
                                   style="max-height: 2vh; overflow-y: auto;"
                                 >
                                 </textarea>
-                                <label 
+                                <label
+                                  class="grey-text text-darken-3"
                                   for="special-request"
                                   style="padding-bottom: 5px; margin-top: 5px;"  
                                 >

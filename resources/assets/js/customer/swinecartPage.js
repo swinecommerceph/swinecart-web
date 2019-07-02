@@ -156,7 +156,7 @@ Vue.component('custom-date-select', {
     template: '\
         <div> \
             <input type="date" id="date-needed" name="date-needed" class="datepicker remove-borders" ref="select" :value="value"/> \
-            <label for="date-needed">Date Needed</label> \
+            <label for="date-needed" class="grey-text text-darken-3">Date Needed</label> \
         </div> \
     ',
     props:['value'],
