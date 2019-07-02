@@ -20,6 +20,7 @@
     <div id="swinecart-breadcrumb">
       <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
       <a href="#!" class="breadcrumb">Swine Cart</a>
+      <a href="#!" class="breadcrumb">Orders</a>
     </div>
 @endsection
 
