@@ -839,7 +839,7 @@
     <script type="text/javascript">
         // Variables
         var rawProducts = {!! $products !!};
-        console.log(rawProducts);
+        
     </script>
     <script src="{{ elixir('/js/customer/swinecartPage.js') }}"></script>
 @endsection

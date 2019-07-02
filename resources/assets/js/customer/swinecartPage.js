@@ -682,6 +682,7 @@ var vm = new Vue({
                 }
             );
 
+            console.table(this);
         }
     },
     filters: {
