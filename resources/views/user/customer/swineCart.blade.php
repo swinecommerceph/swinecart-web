@@ -464,7 +464,7 @@
                                             @click.prevent="viewRequestDetails(product.item_id)"
                                             style="font-weight: 600; text-decoration: underline;" 
                                         >
-                                            Request Details
+                                            View Request Details
                                         </a>
                                     </span>
 
