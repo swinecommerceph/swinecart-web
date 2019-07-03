@@ -20,7 +20,7 @@
     <div id="swinecart-breadcrumb">
       <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
       <a href="#!" class="breadcrumb">Swine Cart</a>
-      <a href="#!" class="breadcrumb">Orders</a>
+      <a href="#!" id="active-tab" class="breadcrumb">Orders</a>
     </div>
 @endsection
 
@@ -200,8 +200,22 @@
 
         {{-- Tabs --}}
         <ul class="tabs tabs-fixed-width">
-          <li class="tab col s6"><a href="#swine-cart">Orders</a></li>
-          <li class="tab col s6 teal-text"><a href="#transaction-history" @click="getTransactionHistory({{ $customerId }})">Transaction History</a></li>
+          <li class="tab col s6" :class="(selectedOrdersTab) ? 'selected-swinecart-tab' : ''">
+            
+            <a id="orders-tab" href="#swine-cart"
+              @click="changeBreadCrumbs()"
+            >
+              Orders
+            </a>
+          </li>
+          
+          <li class="tab col s6 teal-text" :class="(selectedOrdersTab) ? '' : 'selected-swinecart-tab'">
+            <a id="transaction-history-tab" href="#transaction-history"
+              @click="getTransactionHistory({{ $customerId }}); changeBreadCrumbs();"
+            >
+              Transaction History
+            </a>
+          </li>
         </ul>
 
         <order-details :products="products"

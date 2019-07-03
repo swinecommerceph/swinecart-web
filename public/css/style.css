@@ -467,6 +467,10 @@ span.caret {
   background-color: transparent !important;
 }
 
+.selected-swinecart-tab {
+  pointer-events: none;
+}
+
 /* Blockquote styles */
 blockquote{
 	padding: 1rem 1rem 1rem;

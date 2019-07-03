@@ -597,6 +597,7 @@ var vm = new Vue({
         topic: window.pubsubTopic,
         products: rawProducts,
         history: [],
+        selectedOrdersTab: true,
         productInfoModal:{
             imgPath: '',
             name: '',
@@ -681,8 +682,19 @@ var vm = new Vue({
                     console.log(response.statusText);
                 }
             );
+        },
 
-            console.table(this);
+        changeBreadCrumbs: function () {
+          // Change the value of final breadcrumbs
+          const bc = document.querySelector('#swinecart-breadcrumb #active-tab');
+          if (this.selectedOrdersTab) {
+            bc.innerHTML = 'Transaction History';
+            this.selectedOrdersTab = false;
+          }
+          else {
+            bc.innerHTML = 'Orders';
+            this.selectedOrdersTab = true;
+          }
         }
     },
     filters: {
