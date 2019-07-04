@@ -506,9 +506,16 @@
                                     <div style="margin-top: 4px;">
                                       <template v-if="product.request_status && product.status === 'requested'">
                                           <span class="status-label">Status:</span>
-                                          {{-- <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
-                                          <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Reserved">save</i>
-                                          <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i> --}}
+                                          <span class="status-value tooltipped"
+                                            data-position="top"
+                                            data-delay="50"
+                                            :data-tooltip="product
+                                              .status_transactions
+                                              .requested |
+                                                transformToDetailedDate('Requested')"
+                                          >
+                                            Requested
+                                          </span>
                                       </template>                                        
                                     </div>
 

@@ -345,7 +345,14 @@ span.caret {
 .status-label {
   font-size: 1.25rem;
   color: #f5f5f5;
+  font-weight: 400;
+}
+
+.status-value {
+  font-size: 1.25rem;
+  color: #f5f5f5;
   font-weight: 700;
+  cursor: default;
 }
 
 /* Swine Cart styles */
