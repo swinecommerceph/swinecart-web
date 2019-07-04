@@ -341,6 +341,13 @@ span.caret {
 	/*color:#000;*/
 }
 
+/* Status Label */
+.status-label {
+  font-size: 1.25rem;
+  color: #f5f5f5;
+  font-weight: 700;
+}
+
 /* Swine Cart styles */
 #cart-icon i.left, #notification-icon i.left, #message-icon i.left{
 	margin-right: 0px;

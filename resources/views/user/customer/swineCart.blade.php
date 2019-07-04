@@ -478,7 +478,7 @@
                                 </span>
 
                             </div>
-                            <div class="card-action">
+                            <div class="card-action" style="height: 7vh;">
                                 <span class="status-icons-container">
                                     {{-- Product Status icons --}}
 
@@ -503,12 +503,13 @@
                                     </div>
 
                                     {{-- Requested --}}
-                                    <div class="row">
-                                    <template v-if="product.request_status && product.status === 'requested'">
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Reserved">save</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
-                                    </template>                                        
+                                    <div style="margin-top: 4px;">
+                                      <template v-if="product.request_status && product.status === 'requested'">
+                                          <span class="status-label">Status:</span>
+                                          {{-- <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
+                                          <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet Reserved">save</i>
+                                          <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i> --}}
+                                      </template>                                        
                                     </div>
 
                                     {{-- Reserved --}}
