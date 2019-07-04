@@ -369,7 +369,13 @@
                                 <img class="activator" :src="product.img_path">
 
                                 {{-- Show FAB for specific actions --}}
-                                <a class="btn-floating btn-large halfway-fab waves-effect waves-light red tooltipped"
+                                <a class="btn-floating
+                                      btn-large
+                                      halfway-fab
+                                      waves-effect
+                                      waves-light
+                                      green
+                                      tooltipped"
                                     data-position="top"
                                     data-delay="50"
                                     data-tooltip="Send message to Breeder"
