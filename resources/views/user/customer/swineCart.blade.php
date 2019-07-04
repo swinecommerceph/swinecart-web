@@ -516,25 +516,28 @@
                                           >
                                             Requested
                                           </span>
-                                      </template>                                        
-                                    </div>
+                                      </template>
 
-                                    {{-- Reserved --}}
-                                    <div class="row">
-                                    <template v-if="product.status === 'reserved'">
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
-                                        <i class="material-icons tooltipped grey-text text-lighten-1" data-position="top" data-delay="50" data-tooltip="Not yet On Delivery">local_shipping</i>
-                                    </template>
+                                      {{-- Reserved --}}
+                                      <template v-if="product.status === 'reserved'">
+                                        <span class="status-label">Status:</span>
+                                        <span class="status-value tooltipped"
+                                          data-position="top"
+                                          data-delay="50"
+                                          :data-tooltip="product
+                                            .status_transactions
+                                            .reserved |
+                                              transformToDetailedDate('Reserved')"
+                                        >
+                                          Reserved
+                                        </span>
+                                      </template>  
+                                    
                                     </div>
 
                                     {{-- On Delivery --}}
                                     <div class="row">
-                                    <template v-if="product.status === 'on_delivery'">
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.on_delivery | transformToDetailedDate('On Delivery')">local_shipping</i>
-                                    </template>
+                                    
                                     </div>
 
                                     {{-- Sold --}}
