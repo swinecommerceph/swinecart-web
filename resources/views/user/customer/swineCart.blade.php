@@ -379,7 +379,7 @@
                                     <i class="material-icons">message</i>
                                 </a>
 
-                                <a class="btn-floating btn-large halfway-fab waves-effect waves-light red tooltipped"
+                                {{-- <a class="btn-floating btn-large halfway-fab waves-effect waves-light red tooltipped"
                                     data-position="top"
                                     data-delay="50"
                                     data-tooltip="Rate Breeder"
@@ -387,22 +387,45 @@
                                     @click.prevent="showRateModal(product.item_id)"
                                 >
                                     <i class="material-icons">grade</i>
-                                </a>
+                                </a> --}}
 
                             </div>
                             {{-- Product Card --}}
                             <div style="height: 30vh !important;" class="card-content" :class="(product.request_status) ? 'white-text' : 'blue-grey-text text-darken-4'">
                                 {{-- Title --}}
-                                  <span class="card-title">
-                                    <a href="#"
-                                        class="anchor-title"
-                                        :class="(product.request_status) ? 'white-text' : 'grey-text text-darken-4'"
-                                        @click.prevent="viewProductModalFromCart(product.item_id)"
-                                        style="font-weight: 700;"
+                                <div class="row">
+                                  <div class="col s6">
+                                    <span class="card-title">
+                                      <a href="#"
+                                          class="anchor-title"
+                                          :class="(product.request_status) ? 'white-text' : 'grey-text text-darken-4'"
+                                          @click.prevent="viewProductModalFromCart(product.item_id)"
+                                          style="font-weight: 700;"
+                                      >
+                                          @{{ product.product_name }}
+                                      </a>
+                                    </span>
+                                  </div>
+
+                                  <div class="col s6" v-if="product.status === 'sold'">
+                                    <a class="btn
+                                          waves-effect
+                                          waves-light
+                                          blue darken-1
+                                          white-text
+                                          bold-font
+                                          tooltipped
+                                          rate-breeder-button
+                                          "
+                                        data-position="top"
+                                        data-delay="50"
+                                        data-tooltip="Give feedback to breeder"
+                                        @click.prevent="showRateModal(product.item_id)"
                                     >
-                                        @{{ product.product_name }}
+                                      Rate Seller
                                     </a>
-                                  </span>
+                                  </div>
+                                </div>
 
                                 {{-- Product Info --}}
                                 <span class="row" style="min-height:100px; font-size: 1.2rem;">

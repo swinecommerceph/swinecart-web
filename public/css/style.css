@@ -6,6 +6,10 @@ body {
   background: #fafafa;
 }
 
+.bold-font {
+  font-weight: 700;
+}
+
 /* Navigation dropdown styles */
 #nav-dropdown{
 	/*display:block;*/
@@ -281,6 +285,10 @@ body {
 
 #rate-button:hover {
 	background-color: rgba(230, 119, 100, 0.9);
+}
+
+.rate-breeder-button {
+  border-radius: 17px;
 }
 
 /* Caption styles */
