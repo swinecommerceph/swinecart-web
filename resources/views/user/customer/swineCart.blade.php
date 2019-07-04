@@ -547,13 +547,20 @@
                                             On Delivery
                                           </span>
                                       </template>
-                                    </div>
 
-                                    {{-- Sold --}}
-                                    <div class="row">
-                                    <template v-if="product.status === 'sold'">
-                                        <i class="medium material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.sold | transformToDetailedDate('Sold')">local_offer</i>
-                                    </template>
+                                      <template v-if="product.status === 'sold'">
+                                          <span class="status-label">Status:</span>
+                                          <span class="status-value tooltipped"
+                                            data-position="top"
+                                            data-delay="50"
+                                            :data-tooltip="product
+                                              .status_transactions
+                                              .sold |
+                                                transformToDetailedDate('Sold')"
+                                          >
+                                            Sold
+                                          </span>
+                                      </template>
                                     </div>
                                 </span>
                             </div>
