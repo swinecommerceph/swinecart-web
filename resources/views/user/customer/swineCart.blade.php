@@ -713,7 +713,18 @@
                     </table>
                 </div>
                 <div class="modal-footer">
-                    <a class="modal-action modal-close waves-effect waves-green btn-flat ">Ok</a>
+                    <a class="modal-action
+                        modal-close
+                        waves-effect
+                        waves-green
+                        btn
+                        blue
+                        white-text
+                        bold-font
+                        "
+                    >
+                      OK
+                    </a>
                 </div>
             </div>
 
