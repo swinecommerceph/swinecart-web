@@ -533,16 +533,20 @@
                                           </span>
                                       </template>
                                       
-                                      
-                                    </div>
-
-                                    {{-- On Delivery --}}
-                                    <div class="row">
-                                    <template v-if="product.status === 'on_delivery'">
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.requested | transformToDetailedDate('Requested')">queue</i>
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.reserved | transformToDetailedDate('Reserved')">save</i>
-                                        <i class="material-icons tooltipped white-text" data-position="top" data-delay="50" :data-tooltip="product.status_transactions.on_delivery | transformToDetailedDate('On Delivery')">local_shipping</i>
-                                    </template>
+                                      {{-- On Delivery --}}
+                                      <template v-if="product.status === 'on_delivery'">
+                                          <span class="status-label">Status:</span>
+                                          <span class="status-value tooltipped"
+                                            data-position="top"
+                                            data-delay="50"
+                                            :data-tooltip="product
+                                              .status_transactions
+                                              .on_delivery |
+                                                transformToDetailedDate('On Delivery')"
+                                          >
+                                            On Delivery
+                                          </span>
+                                      </template>
                                     </div>
 
                                     {{-- Sold --}}
