@@ -417,7 +417,7 @@
                                     <a class="btn
                                           waves-effect
                                           waves-light
-                                          blue darken-1
+                                          green
                                           white-text
                                           bold-font
                                           tooltipped
