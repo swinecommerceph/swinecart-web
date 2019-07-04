@@ -696,7 +696,7 @@
             <div id="product-request-details-modal" class="modal">
                 <div class="modal-content">
                     <h4 class="grey-text text-darken-2">@{{ requestDetails.name }} Request Details</h4>
-                    <table class="grey-text">
+                    <table class="grey-text text-darken-3">
                         <thead>
                             <tr> </tr>
                         </thead>
