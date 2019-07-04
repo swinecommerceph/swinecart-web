@@ -445,7 +445,7 @@
                                     <span class="col s12 input-quantity-container" v-if="product.product_type === 'semen' && !product.request_status">
                                         {{-- Request Quantity for semen --}}
                                         <span class="col s6">
-                                            Quantity:
+                                            Quantity (in bottles):
                                         </span>
                                         
                                         <span class="col s6">
