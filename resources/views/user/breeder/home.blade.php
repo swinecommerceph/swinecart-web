@@ -136,11 +136,11 @@
 
 @section('content')
     <div class="row">
-      <div id="sidenav-container" class="col s2 teal darken-4">
+      <div id="sidenav-container" class="col s2 primary">
      
         <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
         <a class="sidenav-main-element" href="{{ route('home_path') }}">
-          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0;" class="btn-large teal darken-4 side-nav-btn-large">
+          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0;" class="btn-large primary primary-hover side-nav-btn-large">
             <i class="material-icons left">assessment</i>
             <span style="font-weight: 500; font-size: 1.4rem;">Dashboard</span>
           </div>
@@ -149,7 +149,7 @@
         <div class="sidenav-sub-element-container">
           <li class="sidenav-sub-element">
             <a href="#">
-              <div class="btn teal darken-4 side-nav-btn">
+              <div class="btn primary primary-hover side-nav-btn">
                 Orders
               </div>
             </a>
@@ -157,7 +157,7 @@
         
           <li class="sidenav-sub-element">
             <a href="{{ route('dashboard.productStatus') }}"">
-              <div class="btn teal darken-4 side-nav-btn">
+              <div class="btn primary primary-hover side-nav-btn">
                 Product Inventory
               </div>
             </a>
@@ -165,7 +165,7 @@
 
           <li class="sidenav-sub-element">
               <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}">
-                <div class="btn teal darken-4 side-nav-btn">
+                <div class="btn primary primary-hover side-nav-btn">
                   Product Management
                 </div>
               </a>
@@ -173,7 +173,7 @@
 
           <li class="sidenav-sub-element">
             <a href="{{ route('dashboard.reviews') }}"">
-              <div class="btn teal darken-4 side-nav-btn">
+              <div class="btn primary primary-hover side-nav-btn">
                 Your Reviews
               </div>
             </a>
@@ -181,7 +181,7 @@
 
           <li class="sidenav-sub-element">
             <a href="{{ route('products.create') }}">
-              <div class="btn teal darken-4 side-nav-btn">
+              <div class="btn primary primary-hover side-nav-btn">
                 Add Product
               </div>
             </a>
@@ -189,7 +189,7 @@
           
           {{-- <li class="sidenav-sub-element">
             <a href="{{ route('dashboard.reports') }}">
-              <div class="btn teal darken-4">
+              <div class="btn primary primary-hover">
                 Reporting
               </div>
             </a>
@@ -198,7 +198,7 @@
       
         <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
         <a class="sidenav-main-element" href="{{ route('breeder.messages') }}">
-          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0" class="btn-large teal darken-4 side-nav-btn-large">
+          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0" class="btn-large primary primary-hover side-nav-btn-large">
             <div v-cloak id="message-main-container">
               <i class="material-icons left">message</i>
               <span style="font-weight: 500; font-size: 1.4rem;">
@@ -222,7 +222,7 @@
       
       
         <a class="sidenav-main-element" href="{{ route('breeder.edit') }}">
-          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0" class="btn-large teal darken-4 side-nav-btn-large">
+          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0" class="btn-large primary primary-hover side-nav-btn-large">
             <i class="material-icons left">settings</i>
             <span style="font-weight: 500; font-size: 1.4rem;">
               Account Settings
