@@ -24,8 +24,8 @@
     					{{-- Name --}}
     					<div class="row">
     						<div class="input-field col s12">
-    							<input class="validate" type="text" id="name" name="name" value="{{ old('name') }}" autofocus>
-    							<label for="name">Name</label>
+    							<input class="validate" id="name" name="name" value="{{ old('name') }}" autofocus>
+    							<label for="email">Name</label>
     						</div>
     					</div>
 
