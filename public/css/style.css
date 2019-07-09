@@ -7,6 +7,39 @@ body {
   background: #fafafa;
 }
 
+/* Color Themes */
+.primary {
+  background-color: #00695C;
+}
+
+.primary:hover {
+  background-color: #00473F;
+}
+
+.secondary {
+  background-color: #838F89;
+}
+
+.secondary:hover {
+  background-color: #6E7773;
+}
+
+.error {
+  background-color: #BA2D0B;
+}
+
+.error:hover {
+  background-color: #962509
+}
+
+.accent {
+  background-color: #EAC435;
+}
+
+.accent:hover {
+  background-color: #FFD43A;
+}
+
 .bold-font {
   font-weight: 700;
 }
