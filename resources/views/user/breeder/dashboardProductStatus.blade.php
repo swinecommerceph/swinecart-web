@@ -14,14 +14,13 @@
 
 @section('breadcrumbTitle')
     <div class="breadcrumb-container">    
-      Product Inventory & Status
+      Orders
     </div>
 @endsection
 
 @section('breadcrumb')
     <div class="breadcrumb-container">
         <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-        <a href="#!" class="breadcrumb">Product Inventory & Status</a>
     </div>
 @endsection
 
