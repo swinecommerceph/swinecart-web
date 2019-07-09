@@ -205,15 +205,32 @@
             {{-- Frequencies --}}
             <div class="col s2">
               <div class="">
-                <input class="with-gap" name="frequency" type="radio" id="frequency-monthly" value="monthly" v-model="chosenFrequency" @change="valueChange" />
+                <input class="with-gap"
+                  name="frequency"
+                  type="radio"
+                  id="frequency-monthly"
+                  value="monthly"
+                  v-model="chosenFrequency" @change="valueChange" />
                 <label for="frequency-monthly">Monthly</label>
               </div>
+
               <div class="">
-                <input class="with-gap" name="frequency" type="radio" id="frequency-weekly" value="weekly" v-model="chosenFrequency" @change="valueChange" />
+                <input class="with-gap"
+                  name="frequency"
+                  type="radio"
+                  id="frequency-weekly"
+                  value="weekly"
+                  v-model="chosenFrequency" @change="valueChange" />
                 <label for="frequency-weekly">Weekly</label>
               </div>
+
               <div class="">
-                <input class="with-gap" name="frequency" type="radio" id="frequency-daily" value="daily" v-model="chosenFrequency" @change="valueChange" />
+                <input class="with-gap"
+                  name="frequency"
+                  type="radio"
+                  id="frequency-daily"
+                  value="daily"
+                  v-model="chosenFrequency" @change="valueChange" />
                 <label for="frequency-daily">Daily</label>
               </div>
             </div>
