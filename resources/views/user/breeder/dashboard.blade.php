@@ -201,63 +201,75 @@
           <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select range:</p>
           
           {{-- Charts --}}
-          <div id="charts-container" class="">
-            {{-- Frequencies --}}
-            <div class="col s2">
-              {{-- Monthly --}}
-              <input class="with-gap"
-                name="frequency"
-                type="radio"
-                id="frequency-monthly"
-                value="monthly"
-                v-model="chosenFrequency" @change="valueChange" />
-              <label for="frequency-monthly">Monthly</label>
-           
-              {{-- Weekly --}}
-              <input class="with-gap"
-                name="frequency"
-                type="radio"
-                id="frequency-weekly"
-                value="weekly"
-                v-model="chosenFrequency" @change="valueChange" />
-              <label for="frequency-weekly">Weekly</label>
-            
-              {{-- Daily --}}
-              <input class="with-gap"
-                name="frequency"
-                type="radio"
-                id="frequency-daily"
-                value="daily"
-                v-model="chosenFrequency" @change="valueChange" />
-              <label for="frequency-daily">Daily</label>
+          <div id="charts-container" class="row">
+            <div class="row">
+              {{-- Frequencies --}}
+              <div class="col s2">
+                {{-- Monthly --}}
+                <input class="with-gap"
+                  name="frequency"
+                  type="radio"
+                  id="frequency-monthly"
+                  value="monthly"
+                  v-model="chosenFrequency" @change="valueChange" />
+                <label for="frequency-monthly">Monthly</label>
+             
+                {{-- Weekly --}}
+                <input class="with-gap"
+                  name="frequency"
+                  type="radio"
+                  id="frequency-weekly"
+                  value="weekly"
+                  v-model="chosenFrequency" @change="valueChange" />
+                <label for="frequency-weekly">Weekly</label>
+              
+                {{-- Daily --}}
+                <input class="with-gap"
+                  name="frequency"
+                  type="radio"
+                  id="frequency-daily"
+                  value="daily"
+                  v-model="chosenFrequency" @change="valueChange" />
+                <label for="frequency-daily">Daily</label>
+              </div>
+  
+              {{-- Dates --}}
+              <div class="col s10">
+                <div class="row">
+                  {{-- Date from --}}
+                  <div class="input-field col s4">
+                    <custom-date-from-select v-model="dateFromInput"
+                        :date-accreditation="latestAccreditation"
+                        @date-from-select="dateFromChange"
+                    >
+                    </custom-date-from-select>
+                  </div>
+    
+                  {{-- Date to --}}
+                  <div class="input-field col s4">
+                    <custom-date-to-select v-model="dateToInput"
+                        @date-to-select="dateToChange"
+                        v-show="chosenFrequency !== 'weekly'">
+                    </custom-date-to-select>
+                  </div>
+                </div>
+              </div>
             </div>
 
-            {{-- Dates --}}
-            <div class="col s8">
-              <div class="input-field col s4">
-                <custom-date-from-select v-model="dateFromInput"
-                    :date-accreditation="latestAccreditation"
-                    @date-from-select="dateFromChange"
-                >
-                </custom-date-from-select>
+            {{-- View Sales Button --}}
+            <div class="row">
+              <div class="col s2">
+                <a class="btn primary primary-hover" @click.prevent="retrieveSoldProducts">
+                  <b>View Sales</b>
+                </a>
+              </div>
+
             </div>
-            <div class="input-field col s4">
-              <custom-date-to-select v-model="dateToInput"
-                  @date-to-select="dateToChange"
-                  v-show="chosenFrequency !== 'weekly'">
-              </custom-date-to-select>
-            </div>
-            <div class="" style="margin-top:1rem;">
-              <a class="btn primary primary-hover" @click.prevent="retrieveSoldProducts">
-                <b>View Sales</b>
-              </a>
-            </div>
-          </div>
         
-          {{-- Bar Chart--}}
-          <div class="col s12">
-              <canvas id="barChart"></canvas>
-          </div>
+            {{-- Bar Chart--}}
+            <div class="col s12">
+                <canvas id="barChart"></canvas>
+            </div>
         </div>
         
         <div class="row"></div>
