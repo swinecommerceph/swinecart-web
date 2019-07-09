@@ -234,8 +234,8 @@
               </custom-date-to-select>
             </div>
             <div class="" style="margin-top:1rem;">
-              <a class="btn teal darken-3" @click.prevent="retrieveSoldProducts">
-                <b>Graph</b>
+              <a class="btn primary" @click.prevent="retrieveSoldProducts">
+                <b>View Sales</b>
               </a>
             </div>
           </div>
