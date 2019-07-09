@@ -234,7 +234,7 @@
               </custom-date-to-select>
             </div>
             <div class="" style="margin-top:1rem;">
-              <a class="btn primary" @click.prevent="retrieveSoldProducts">
+              <a class="btn primary primary-hover" @click.prevent="retrieveSoldProducts">
                 <b>View Sales</b>
               </a>
             </div>
