@@ -177,10 +177,10 @@
         <div class="row"></div>
         <div class="row"></div>
         <div class="row"></div>
-        {{-- Overall Performance --}}
+        {{-- Sales Overview --}}
         <div class="row">
           <h4 class="left-align" style="font-weight: 500; margin-left: 1vw;">
-            Overall Performance
+            Sales Overview
           </h4> <br>
 
           {{-- Selecting which farm to graph --}}
