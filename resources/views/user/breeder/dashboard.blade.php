@@ -184,7 +184,7 @@
           </h4> <br>
 
           {{-- Selecting which farm to graph --}}
-          <div class="col s4">
+          <div class="col s12 m5 l4 xl3">
             <div style="margin-bottom: 4vh; margin-left: 0.5vw;" class="input-field">
               <select v-model="chosenFarm">
                 <option value="" disabled selected>Choose farm</option>
