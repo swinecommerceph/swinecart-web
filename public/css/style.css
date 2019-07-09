@@ -13,7 +13,7 @@ body {
 }
 
 .primary-hover:hover {
-  background-color: #00473F;
+  background-color: #004941;
 }
 
 .secondary {
@@ -1602,10 +1602,6 @@ input[type=text]:not(.browser-default).valid {
 /* Buttons */
 .btn, .btn-large {
   text-transform: none !important;
-}
-
-.side-nav-btn:hover, .side-nav-btn-large:hover {
-  background-color: #003831 !important;
 }
 
 .btn-large.green:hover {
