@@ -56,7 +56,7 @@
     					{{-- Register Button --}}
     					<div class="row">
     						<div class="">
-    							<button type="submit" class="btn waves-effect waves-light col s5 push-s7"> Register
+    							<button type="submit" class="btn primary primary-hover col s5 push-s7"> Register
     								<i class="material-icons right">send</i>
     							</button>
     						</div>
