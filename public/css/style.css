@@ -12,7 +12,7 @@ body {
   background-color: #00695C;
 }
 
-.primary:hover {
+.primary-hover:hover {
   background-color: #00473F;
 }
 
@@ -20,7 +20,7 @@ body {
   background-color: #838F89;
 }
 
-.secondary:hover {
+.secondary-hover:hover {
   background-color: #6E7773;
 }
 
@@ -28,7 +28,7 @@ body {
   background-color: #BA2D0B;
 }
 
-.error:hover {
+.error-hover:hover {
   background-color: #962509
 }
 
@@ -36,7 +36,7 @@ body {
   background-color: #EAC435;
 }
 
-.accent:hover {
+.accent-hover:hover {
   background-color: #FFD43A;
 }
 
