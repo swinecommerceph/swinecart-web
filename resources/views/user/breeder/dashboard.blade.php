@@ -193,7 +193,7 @@
                 @endforeach
                 <option value="all-farms">All farms</option>
               </select>
-              <label style="font-size: 1rem; color:hsl(0, 0%, 30%);">Select which farm to graph:</label>
+              <label style="font-size: 1rem; color:hsl(0, 0%, 30%);">Select farm:</label>
             </div>
           </div> <br><br><br><br>
 
