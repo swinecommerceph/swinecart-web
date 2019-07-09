@@ -73,9 +73,9 @@
 								<li><a href="{{ route('register') }}"> Register </a></li>
 							@else
 								@if(!Request::is('login'))
-									<li><a href="{{ route('login') }}" class="waves-effect waves-light btn">Login</a></li>
+									<li><a href="{{ route('login') }}">Login</a></li>
 								@elseif(!Request::is('register'))
-									<li><a href="{{ url('register') }}" class="waves-effect waves-light btn">Register</a></li>
+									<li><a href="{{ url('register') }}">Register</a></li>
 								@endif
 							@endif
 						
