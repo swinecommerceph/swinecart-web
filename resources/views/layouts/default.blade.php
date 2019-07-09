@@ -52,7 +52,7 @@
 <body @yield('pageId')>
 	{{-- Navbar --}}
 	<div class="navbar-fixed">
-		<nav class="teal darken-3">
+		<nav class="primary">
 		    <div class="nav-wrapper navbar-container">
 		     	{{-- If user is a guest--}}
 		     	@if (Auth::guest())
