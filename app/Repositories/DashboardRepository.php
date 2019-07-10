@@ -196,7 +196,7 @@ class DashboardRepository
                 $diff = ($monthFromInt <= $monthToInt) ? $monthToInt - $monthFromInt : ($monthToInt + 12) - $monthFromInt;
                 $currentDate = $dateFrom;
 
-                $soldData['title'] = 'No. of Products Sold Monthly from ' . $dateFrom->format('F Y') . ' - ' . $dateTo->format('F Y');
+                $soldData['title'] = 'Sales Performance for the month of ' . $dateFrom->format('F Y') . ' - ' . $dateTo->format('F Y');
 
                 for ($i = 0; $i < $diff + 1; $i++) {
 

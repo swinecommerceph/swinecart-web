@@ -329,12 +329,12 @@
     {{-- Customer Mapping Container--}}
     <div class="row">
         {{-- Location --}}
-        <div class="col s14">
+        <div class="col s12 center-align">
             <a href="{{route('map.customers')}}" >
                 <div class="waves-effect waves-light card hoverable teal darken-3" style="border-radius: 7px !important;">
                     <div class="card-content center-align">
                         <span class="card-title" style="font-weight: 600; color: #fafafa;">
-                            See the locations of your customers!
+                            See the locations of your customers
                         </span>
                     </div>
                 </div>
@@ -350,7 +350,6 @@
         var rawLatestAccreditation = "{{ $latestAccreditation }}";
         var rawServerDateNow = "{{ $serverDateNow }}";
         var rawChartTitle = "{!! $soldData['title'] !!}";
-
         var rawLabels = {!! json_encode($soldData['labels'])!!};
         var rawDataBoar = {{ json_encode($soldData['dataSets'][0]) }};
         var rawDataSow = {{ json_encode($soldData['dataSets'][1]) }};
