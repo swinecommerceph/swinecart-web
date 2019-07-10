@@ -34,7 +34,7 @@
 
             {{-- Reviews with their respective ratings --}}
             <ul v-cloak id="reviews-and-ratings-collection" class="collection with-header">
-                <li class="collection-header">
+                <li class="collection-header center-align">
                     <h5> Overall Average Rating </h5>
                     <average-star-rating :rating="{{ $overallRating }}"></average-star-rating> <br>
                     <span class="">
