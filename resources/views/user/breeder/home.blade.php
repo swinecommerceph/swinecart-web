@@ -135,12 +135,99 @@
 @endsection
 
 @section('content')
-    <div class="row">
-      <div id="sidenav-container" class="col s2 primary">
-     
-        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
+    <d class="row">
+      <div class="col l2 primary hide-on-med-and-down"
+        style="height: 100vh;
+          position: fixed;
+          top: 1px;
+          padding: 0;
+          border-bottom: solid 1px red;
+        "
+      >
+      
+        <div style="margin-top: 4rem;" class="teal accent-3 divider"></div>
+        
+        <div style="border-style: none;" class="collection">
+          <a href="{{ route('home_path') }}" style="border-style: none; font-weight: 700;"
+            class="primary primary-hover collection-item white-text"
+          >
+            <i style="padding: 2px;" class="material-icons left">assessment</i>
+            <span style="font-size: 1.375rem;">Dashboard</span>
+          </a>
+
+          <a href="{{ route('dashboard.productStatus') }}" style="border-style: none; padding-left: 4rem; font-size: 1.125rem; font-weight: 600;"
+            class="primary primary-hover collection-item white-text"
+          >
+            Orders
+          </a>
+          <a href="{{route('products',['type' => 'all-type', 'status' => 'all-status', 'sort' => 'none'])}}" style="border-style: none; padding-left: 4rem; font-size: 1.125rem; font-weight: 600;"
+            class="primary primary-hover collection-item white-text"
+          >
+            Product Management
+          </a>
+          <a href="{{ route('dashboard.reviews') }}" style="border-style: none; padding-left: 4rem; font-size: 1.125rem; font-weight: 600;"
+            class="primary primary-hover collection-item white-text"
+          >
+            Your Reviews
+          </a>
+          <a href="{{ route('products.create') }}" style="border-style: none; padding-left: 4rem; font-size: 1.125rem; font-weight: 600;"
+            class="primary primary-hover collection-item white-text"
+          >
+            Add Product
+          </a>
+          
+          <div class="teal accent-3 divider"></div>
+          
+          <a href="{{ route('breeder.messages') }}" style="border-style: none; font-weight: 700;"
+            class="primary primary-hover collection-item white-text"
+          >
+            <i style="padding: 2px; " class="material-icons left">message</i>
+            <span style="font-size: 1.375rem;">Messages</span>
+          </a>
+
+          <div class="teal accent-3 divider"></div>
+
+          <a href="{{ route('breeder.edit') }}" style="border-style: none; font-weight: 700;"
+            class="primary primary-hover collection-item white-text"
+          >
+            <i style="padding: 2px; " class="material-icons left">settings</i>
+            <span style="font-size: 1.375rem;">Account Settings</span>
+          </a>
+
+          <div class="teal accent-3 divider"></div>
+          
+        </div>
+        
+        {{-- <div style="border-style: none !important;" class="collection">
+          <a href="#"
+            style="padding: 0 !important;"
+            class="primary primary-hover
+              sidenav-main-element
+              collection-item"
+          >
+            <i style="padding: 5px; padding-right: 0;" class="material-icons left">assessment</i>
+            <p style="font-weight: 700; padding: 20px; padding-left: 0; margin: 0; font-size: 1.2rem;">
+              Dashboard
+            </p>
+          </a>
+          <br>
+          <a href="#"
+            style="padding: 0 !important;"
+            class="primary primary-hover
+              sidenav-main-element
+              collection-item"
+          >
+            <i style="padding: 5px; padding-right: 0;" class="material-icons left">assessment</i>
+            <p style="font-weight: 700; padding: 20px; padding-left: 0; margin: 0; font-size: 1.2rem;">
+              Dashboard
+            </p>
+          </a>
+
+
+        </div> --}}
+        {{-- 
         <a class="sidenav-main-element" href="{{ route('home_path') }}">
-          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0;" class="btn-large primary primary-hover side-nav-btn-large">
+          <div style="box-shadow: none; text-align: left; width: 15.9vw; padding-left: 0;" class="btn-large primary primary-hover side-nav-btn-large">  
             <i class="material-icons left">assessment</i>
             <span style="font-weight: 500; font-size: 1.4rem;">Dashboard</span>
           </div>
@@ -216,10 +303,10 @@
           </div>
         </a>
 
-        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div>
+        <div style="width: 15.9vw; margin-left: 0;" class="teal accent-3 divider"></div> --}}
       </div>
-      <div class="col s2"></div>
-      <div class="col s9">
+      {{-- <div class="col s2"></div> --}}
+      <div class="col s12 l10 offset-l2">
         @yield('breeder-content')
       </div>
     </div>

@@ -9,35 +9,35 @@ body {
 
 /* Color Themes */
 .primary {
-  background-color: #00695C;
+  background-color: #00695C !important;
 }
 
 .primary-hover:hover {
-  background-color: #004941;
+  background-color: #004941 !important;
 }
 
 .secondary {
-  background-color: #838F89;
+  background-color: #838F89 !important;
 }
 
 .secondary-hover:hover {
-  background-color: #6E7773;
+  background-color: #6E7773 !important;
 }
 
 .error {
-  background-color: #BA2D0B;
+  background-color: #BA2D0B !important;
 }
 
 .error-hover:hover {
-  background-color: #962509
+  background-color: #962509 !important;
 }
 
 .accent {
-  background-color: #EAC435;
+  background-color: #EAC435 !important;
 }
 
 .accent-hover:hover {
-  background-color: #FFD43A;
+  background-color: #FFD43A !important;
 }
 
 .bold-font {
@@ -91,11 +91,7 @@ body {
 }
 
 .sidenav-main-element {
-  color: white;
-  font-weight: 500;
-  text-transform:none !important;
-  text-align: left;
-  font-size: 1.4rem;
+  color: white !important;
 }
 
 .sidenav-main-element i {

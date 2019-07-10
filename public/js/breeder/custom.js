@@ -51,7 +51,6 @@ f&&!this.lineHeight&&(this.lineHeight=13)}function m(a,b,c,d){function e(a,b){fo
 $(document).ready(function(){
 
     $('select').material_select();
-
     // For Breeder Dashboard slider
     $('#review-slider').slider({
         fullWidth: true,
