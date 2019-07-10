@@ -179,7 +179,7 @@
         <div class="row"></div>
         
         {{-- Sales Overview --}}
-        <div class="row">
+        <div class="row hide-on-small-only">
           <h4 class="left-align" style="font-weight: 500; margin-left: 1vw;">
             Sales Overview
           </h4> <br>
