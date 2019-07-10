@@ -50,7 +50,7 @@
                             <span class="grey-text"> ( @{{ review.customerProvince }} ) </span>
                         </span><br><br>
 
-                        <span class="grey-text">
+                        <span class="grey-text text-darken-3">
                             "@{{ review.comment }}"
                         </span>
 
