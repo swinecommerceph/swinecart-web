@@ -177,6 +177,7 @@
         <div class="row"></div>
         <div class="row"></div>
         <div class="row"></div>
+        
         {{-- Sales Overview --}}
         <div class="row">
           <h4 class="left-align" style="font-weight: 500; margin-left: 1vw;">
@@ -314,7 +315,7 @@
                     <div id="review-slider" class="slider">
                         <ul class="slides" style="background:hsl(0, 0%, 97%);">
                             <li v-for="review in (dashboardStats.ratings.reviews).slice(0,3)">
-                                <div class="caption right-align">
+                                <div class="caption truncate right-align">
                                     <h5 class="center-align" style="margin:0; color:hsl(0, 0%, 29%);">"@{{ review.comment }}"</h5>
                                     <h6 class="center-align" style="color:hsl(0, 0%, 45%);">- @{{ review.customerName }}</h6>
                                 </div>
