@@ -62,14 +62,18 @@
                     </span>
 
                     {{-- View Ratings icon --}}
-                    <span class="col s12 right-align">
-                        <i class="material-icons"
+                    <span class="col s12 right-align"
+                        style="cursor:pointer"
+                        @click.prevent="toggleDetailedRatings(index)"
+                        >
+                        @{{ (review.showDetailedRatings) ? 'See Less' : 'See More' }}
+                        {{-- <i class="material-icons"
                             style="cursor:pointer"
                             @click.prevent="toggleDetailedRatings(index)"
                         >
                             @{{ (review.showDetailedRatings) ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
 
-                        </i>
+                        </i> --}}
                     </span>
 
                     {{-- Detailed ratings --}}
