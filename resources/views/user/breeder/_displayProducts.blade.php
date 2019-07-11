@@ -39,7 +39,7 @@
         <div class="row">
             <div id="sort-select" class="input-field col right">
                 <select>
-                    <option value="none">Relevance</option>
+                    <option value="none" style="color: grey !important;">Relevance</option>
                     <option value="birthdate-asc" @if(!empty($filters['birthdate-asc'])) {{ $filters['birthdate-asc'] }} @endif>Age: High to Low</option>
                     <option value="birthdate-desc" @if(!empty($filters['birthdate-desc'])) {{ $filters['birthdate-desc'] }} @endif>Age: Low to High</option>
                     <option value="adg-desc" @if(!empty($filters['adg-desc'])) {{ $filters['adg-desc'] }} @endif>Average Daily Gain</option>
