@@ -241,8 +241,8 @@
                                 color: hsl(0, 0%, 29%);"
                     >
                         @{{ productRequest.productName }}
+                        (@{{ productRequest.type | capitalize }} - @{{ productRequest.breed }})
                     </span>
-                    <span style="font-size: 1.4rem;">(@{{ productRequest.type | capitalize }} - @{{ productRequest.breed }})</span>
                     <br><br>
                     <table class="responsive-table bordered highlight">
                         <thead>
