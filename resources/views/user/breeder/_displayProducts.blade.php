@@ -199,12 +199,12 @@
                                 <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}"
                                     class="waves-effect waves-light"
                                     style="
-                                        border: 2px solid #bbdefb;
+                                        border: 2px solid #006B5E;
                                         background-color: white;
                                         padding: 8px 18px;
                                         font-size: 16px;
                                         cursor: pointer;
-                                        color: #2196f3;
+                                        color: #00695C;
                                         font-weight: 700;
                                         border-radius: 5px;
                                     "
