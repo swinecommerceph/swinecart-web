@@ -212,7 +212,7 @@
                                 @if($product->type !== 'Semen')
                                   <tr>
                                     <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Quantity: </td>
-                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
+                                    <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->quantity }} </td>
                                   </tr>
                                 @endif
                                 <tr>
