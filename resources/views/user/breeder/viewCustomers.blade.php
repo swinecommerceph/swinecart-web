@@ -78,12 +78,20 @@
             }
 
             @foreach($customers as $customer)
+                var content_value =
+                  `
+                    <ul>
+                        <li style="font-weight: 600";>{{ $customer->users()->first()->name }} </li>
+                        <li style="color: #212121;">{{ $customer->address_province }}, Philippines </li>
+                    </ul>
+                  `
                 geocode({
                     address : '{{ $customer->address_province }}, Philippines',
-                    content : '{{ $customer->users()->first()->name }}',
-                    id : '{{ $customer->id }}'
+                    content : content_value
+                    /* id : '{{ $customer->id }}' */
                 });
             @endforeach
         }(window, google, window.Mapster || (window.Mapster = {})))
+
     </script>
 @endsection
