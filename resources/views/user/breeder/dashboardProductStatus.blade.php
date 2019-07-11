@@ -356,7 +356,7 @@
                 <br><br><br><br><br><br><br><br><br><br>
                 <div class="modal-footer" style="background: hsl(0, 0%, 97%);">
                     <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat delivery-product-buttons">Close</a>
-                    <a class="modal-action waves-effect waves-green btn blue delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes, deliver the product</a>
+                    <a class="modal-action waves-effect waves-green btn primary delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes, deliver the product</a>
                 </div>
             </div>
 
