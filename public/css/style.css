@@ -1602,7 +1602,7 @@ input[type=text]:not(.browser-default).valid {
 
 /* Dropdown related */
 .dropdown-content li>span {
-  color: #00705E;
+  color: #212121;
 }
 
 /* Radio Button */
