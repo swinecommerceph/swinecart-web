@@ -1585,6 +1585,7 @@ label {
 input[type=text]:not(.browser-default) {
   border: solid 1px #9e9e9e;
   border-radius: 3px;
+  padding-left: 10px;
 }
 
 .remove-borders {
