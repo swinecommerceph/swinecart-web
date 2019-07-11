@@ -285,7 +285,7 @@
                                         <b>Reserve</b>
                                     </a> <br>
                                     <a v-bind:href="'{{ route('breeder.messages') }}/' + customer.userId"
-                                        class="tooltipped blue-text"
+                                        class="btn tooltipped primary white-text"
                                         style="width: 10vw;"
                                         data-position="top"
                                         data-delay="50"
