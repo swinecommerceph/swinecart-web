@@ -114,7 +114,7 @@
                             @endif
                         
                             @if($product->is_unique === 1)
-                              <span class="badge blue white-text right-align"><b>UNIQUE</b></span>
+                              <span class="badge accent white-text right-align"><b>UNIQUE</b></span>
                             @else
                               @if($product->quantity !== -1)
                               <span class="badge pink accent-1 white-text right-align"><b>Quantity: {{ $product->quantity }}</b></span>
