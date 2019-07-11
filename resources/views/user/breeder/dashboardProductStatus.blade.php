@@ -249,7 +249,7 @@
                             <tr>
                                 <td style="color: hsl(0, 0%, 60%);"> Name </td>
                                 <td style="color: hsl(0, 0%, 60%);"> Province </td>
-                                <td style="color: hsl(0, 0%, 60%);"> Special Request </td>
+                                <td style="color: hsl(0, 0%, 60%);"> Other Request </td>
                                 <td style="color: hsl(0, 0%, 60%);" class="right-align"> Quantity </td>
                                 <td style="color: hsl(0, 0%, 60%);" class="right-align" v-show="productRequest.type === 'semen'"> Date Needed </td>
                                 <td style="color: hsl(0, 0%, 60%);" class="center-align"> Actions </td>
