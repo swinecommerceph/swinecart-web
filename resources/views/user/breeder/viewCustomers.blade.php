@@ -62,7 +62,7 @@
                         map.addMarker({
                             lat : result.geometry.location.lat(),
                             lng : result.geometry.location.lng(),
-                            draggable : true,
+                            draggable : false,
                             content: opts.content,
                             icon: '/images/maps/customer.png',
                             //link: '/breeder/view-customer/'+opts.id
