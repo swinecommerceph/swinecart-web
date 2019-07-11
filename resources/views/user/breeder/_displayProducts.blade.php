@@ -116,7 +116,10 @@
                             @if($product->is_unique === 1)
                               <span class="badge blue white-text right-align"><b>UNIQUE</b></span>
                             @else
-                              <span class="badge pink accent-1 white-text right-align"><b>MULTIPLIER</b></span>
+                              @if($product->quantity !== -1)
+                              <span class="badge pink accent-1 white-text right-align"><b>Quantity: {{ $product->quantity }}</b></span>
+                              @endif
+
                               @if($product->quantity === 0)
                               <span class="badge orange darken-4 white-text right-align"><b>OUT OF STOCK</b></span>
                               @endif
