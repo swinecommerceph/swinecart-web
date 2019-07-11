@@ -170,7 +170,7 @@
 
                             {{-- If product's status is reserved --}}
                             <template v-if="product.status == 'reserved'">
-                                <a class="waves-effect waves-light btn blue tooltipped"
+                                <a class="waves-effect waves-light btn primary tooltipped"
                                     data-position="right"
                                     data-tooltip="Send for delivery"
                                     style="margin-bottom:1rem; width: 13vw;"
