@@ -634,6 +634,14 @@ input#search{
  * Device-specific styles
  */
 
+/* Small Screen */
+@media only screen and (max-width: 600px) {
+  #page-customer-swine-cart #card-container .card .card-image img,
+	#page-breeder-manage-products .card .card-image img{
+		height: 12rem;
+	}
+}
+
 /* Medium Screen */
 @media only screen and (min-width: 601px){
 	#general-container .pinned{
