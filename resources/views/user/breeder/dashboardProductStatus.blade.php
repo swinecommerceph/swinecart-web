@@ -41,7 +41,13 @@
             <form class="col s4 right">
                 <div class="input-field col s12">
                     <i class="material-icons prefix" style="padding-top: 2vh;">search</i>
-                    <input type="text" name="search" v-model="searchQuery" placeholder="Search for a product" autocomplete="off">
+                    <input type="text"
+                      style="padding-left: 10px;"
+                      name="search"
+                      v-model="searchQuery"
+                      placeholder="Search for a product"
+                      autocomplete="off"
+                    >
                 </div>
 
             </form>
