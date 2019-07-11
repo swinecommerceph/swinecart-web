@@ -12,6 +12,10 @@ body {
   background-color: #00695C !important;
 }
 
+.primary-text {
+  color: #00695C !important;
+}
+
 .primary-hover:hover {
   background-color: #004941 !important;
 }
@@ -20,12 +24,20 @@ body {
   background-color: #838F89 !important;
 }
 
+.secondary-text {
+  color: #838F89 !important;
+}
+
 .secondary-hover:hover {
   background-color: #6E7773 !important;
 }
 
 .error {
   background-color: #BA2D0B !important;
+}
+
+.error-text {
+  color: #BA2D0B !important;
 }
 
 .error-hover:hover {
