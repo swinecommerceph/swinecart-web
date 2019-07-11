@@ -174,15 +174,33 @@
                                     @endif
                                     <tr>
                                         <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
-                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
+                                        @if($product->adg === 0)
+                                          <td style="color: hsl(0, 0%, 29%);">
+                                            <i class="text-grey">Not Indicated</i>
+                                          </td>
+                                        @else
+                                          <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
+                                        @endif
                                     </tr>
                                     <tr>
                                         <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio: </td>
-                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->fcr }} </td>
+                                        @if($product->fcr === 0.0)
+                                          <td style="color: hsl(0, 0%, 29%);">
+                                            <i class="text-grey">Not Indicated</i>
+                                          </td>
+                                        @else
+                                          <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->fcr }} </td>
+                                        @endif
                                     </tr>
                                     <tr>
                                         <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm): </td>
-                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->backfat_thickness }} </td>
+                                        @if($product->backfat_thickness === 0.0)
+                                          <td style="color: hsl(0, 0%, 29%);">
+                                            <i class="text-grey">Not Indicated</i>
+                                          </td>
+                                        @else
+                                          <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->backfat_thickness }} </td>
+                                        @endif
                                     </tr>
                                 </tbody>
                             </table>
