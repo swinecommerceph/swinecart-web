@@ -15,7 +15,10 @@ $(document).ready(function () {
     maxFiles: 1,
     maxFilesize: 5,
     acceptedFiles: "image/png, image/jpeg, image/jpg",
-    dictDefaultMessage: "<h5 style='font-weight: 300;'> Drop image here to upload logo</h5>",
+    dictDefaultMessage:
+      `<h5 style='font-weight: 300;'> Drop an image here to upload </h5>
+      <i class='material-icons'>insert_photo</i>
+      <br> <h5 style='font-weight: 300;'> Or just click anywhere in this container to choose file </h5>`,
     previewTemplate: document.getElementById('custom-preview').innerHTML,
     init: function () {
 
