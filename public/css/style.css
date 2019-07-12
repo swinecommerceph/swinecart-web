@@ -1391,6 +1391,7 @@ input#search{
 /* Form Validation */
 label {
    width: 100%;
+   padding-bottom: 3px;
 }
 
 @-o-keyframes fadeIt {
