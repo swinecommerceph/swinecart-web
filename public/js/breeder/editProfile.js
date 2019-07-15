@@ -426,9 +426,8 @@ $(document).ready(function () {
     /* Return to original state/values if cancelled */
     
     // get the initial values
-    
-    /* delete data_values.id;
-    delete data_values._token; */
+    delete profile.data_values.id;
+    delete profile.data_values._token;
     console.table(profile.data_values);
 
     profile.cancel(parent_form, edit_button, cancel_button);
