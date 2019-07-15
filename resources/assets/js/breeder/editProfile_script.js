@@ -120,11 +120,12 @@ $(document).ready(function () {
 
   // Cancel on Editing a Personal/Farm Information
   $('.cancel-button').click(function (e) {
+    console.log()
     e.preventDefault();
     var cancel_button = $(this);
     var edit_button = cancel_button.parents('.content-section').find('.edit-button');
     var parent_form = cancel_button.parents('form');
-
+    
     profile.cancel(parent_form, edit_button, cancel_button);
   });
 

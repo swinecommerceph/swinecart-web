@@ -80,10 +80,11 @@ var validateFunction = function(){
         // Edit on Personal/Farm Information
         $('.edit-button').click(function(e){
             e.preventDefault();
+            
             var edit_button = $(this);
             var cancel_button = edit_button.parents('.content-section').find('.cancel-button');
             var parent_form = edit_button.parents('form');
-
+            
             edit_button.tooltip('remove');
 
             // If button is for editing the fields

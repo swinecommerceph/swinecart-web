@@ -23,47 +23,55 @@ var profile = {
 
     },
 
+    get_data_values: function(parent_form) {
+      var data_values;
+
+      // Determine if form is of personal or farm information
+      if (parent_form.attr('data-personal-id')) {
+        data_values = {
+          "id": parent_form.attr('data-personal-id'),
+          "officeAddress_addressLine1": parent_form.find('input[name=officeAddress_addressLine1]').val(),
+          "officeAddress_addressLine2": parent_form.find('input[name=officeAddress_addressLine2]').val(),
+          "officeAddress_province": parent_form.find('select[name=officeAddress_province] option:checked').val(),
+          "officeAddress_zipCode": parent_form.find('input[name=officeAddress_zipCode]').val(),
+          "office_landline": parent_form.find('input[name=office_landline]').val(),
+          "office_mobile": parent_form.find('input[name=office_mobile]').val(),
+          "contactPerson_name": parent_form.find('input[name=contactPerson_name]').val(),
+          "contactPerson_mobile": parent_form.find('input[name=contactPerson_mobile]').val(),
+          "website": parent_form.find('input[name=website]').val(),
+          "produce": parent_form.find('input[name=produce]').val(),
+          "_token": parent_form.find('input[name=_token]').val()
+        };
+      }
+      else if (parent_form.attr('data-farm-id')) {
+        var farm_address = [];
+        var details = {
+          "addressLine1": parent_form.find('input[name=addressLine1]').val(),
+          "addressLine2": parent_form.find('input[name=addressLine2]').val(),
+          "province": parent_form.find('input[class=select-dropdown]').val(),
+          "zipCode": parent_form.find('input[name=zipCode]').val(),
+          "farmType": parent_form.find('input[name=farmType]').val(),
+          "landline": parent_form.find('input[name=landline]').val(),
+          "mobile": parent_form.find('input[name=mobile]').val(),
+        };
+        farm_address.push({});
+        farm_address.push(details);
+
+        data_values = {
+          "id": parent_form.attr('data-farm-id'),
+          "_token": parent_form.find('input[name=_token]').val()
+        };
+        data_values["farmAddress"] = farm_address;
+      }
+      
+      return data_values;
+
+    },
+
     update: function(parent_form, edit_button, cancel_button){
         config.preloader_progress.fadeIn();
-        var data_values;
-
-        // Determine if form is of personal or farm information
-        if(parent_form.attr('data-personal-id')){
-            data_values = {
-                "id": parent_form.attr('data-personal-id'),
-                "officeAddress_addressLine1": parent_form.find('input[name=officeAddress_addressLine1]').val(),
-                "officeAddress_addressLine2": parent_form.find('input[name=officeAddress_addressLine2]').val(),
-                "officeAddress_province": parent_form.find('select[name=officeAddress_province] option:checked').val(),
-                "officeAddress_zipCode": parent_form.find('input[name=officeAddress_zipCode]').val(),
-                "office_landline": parent_form.find('input[name=office_landline]').val(),
-                "office_mobile": parent_form.find('input[name=office_mobile]').val(),
-                "contactPerson_name": parent_form.find('input[name=contactPerson_name]').val(),
-                "contactPerson_mobile": parent_form.find('input[name=contactPerson_mobile]').val(),
-                "website": parent_form.find('input[name=website]').val(),
-                "produce": parent_form.find('input[name=produce]').val(),
-                "_token": parent_form.find('input[name=_token]').val()
-            };
-        }
-        else if (parent_form.attr('data-farm-id')) {
-            var farm_address = [];
-            var details = {
-                "addressLine1": parent_form.find('input[name=addressLine1]').val(),
-                "addressLine2": parent_form.find('input[name=addressLine2]').val(),
-                "province": parent_form.find('input[class=select-dropdown]').val(),
-                "zipCode": parent_form.find('input[name=zipCode]').val(),
-                "farmType": parent_form.find('input[name=farmType]').val(),
-                "landline": parent_form.find('input[name=landline]').val(),
-                "mobile": parent_form.find('input[name=mobile]').val(),
-            };
-            farm_address.push({});
-            farm_address.push(details);
-
-            data_values = {
-                    "id": parent_form.attr('data-farm-id'),
-                "_token": parent_form.find('input[name=_token]').val()
-            };
-            data_values["farmAddress"] = farm_address;
-        }
+      
+      var data_values = this.get_data_values(parent_form)
 
         // Do AJAX
         $.ajax({
