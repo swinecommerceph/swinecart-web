@@ -61,7 +61,7 @@
 			<div class="row">
 			<!-- Address: Province -->
 				<div class="input-field col s5 push-s1">
-					{!! Form::select('officeAddress_province', $provinces, null, ['id' => 'office_provinces', 'disabled' => 'disabled']); !!}
+					{!! Form::select('officeAddress_province', $provinces, null, ['disabled' => 'disabled', 'id' => 'office_provinces']); !!}
 					<label>Province*</label>
 				</div>
 

@@ -130,7 +130,37 @@ $(document).ready(function () {
     // get the initial values
     delete profile.data_values.id;
     delete profile.data_values._token;
-    console.table(profile.data_values);
+
+    // return to original state
+    document.querySelector('#officeAddress_addressLine1').value 
+      = profile.data_values.officeAddress_addressLine1;
+
+    document.querySelector('#officeAddress_addressLine2').value
+      = profile.data_values.officeAddress_addressLine2;
+
+    document.querySelector('input.select-dropdown').value
+      = profile.data_values.officeAddress_province;
+
+    document.querySelector('#officeAddress_zipCode').value
+      = profile.data_values.officeAddress_zipCode;
+
+    document.querySelector('#office_landline').value
+      = profile.data_values.office_landline;
+
+    document.querySelector('#office_mobile').value
+      = profile.data_values.office_mobile;
+
+    document.querySelector('#contactPerson_name').value
+      = profile.data_values.contactPerson_name;
+
+    document.querySelector('#contactPerson_mobile').value
+      = profile.data_values.contactPerson_mobile;
+
+    document.querySelector('#website').value
+      = profile.data_values.website;
+
+    document.querySelector('#produce').value
+      = profile.data_values.produce;
 
     profile.cancel(parent_form, edit_button, cancel_button);
   });
