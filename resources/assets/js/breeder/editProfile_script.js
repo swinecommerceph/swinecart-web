@@ -125,6 +125,14 @@ $(document).ready(function () {
     var edit_button = cancel_button.parents('.content-section').find('.edit-button');
     var parent_form = cancel_button.parents('form');
 
+    /* Return to original state/values if cancelled */
+    
+    // get the initial values
+    
+    /* delete data_values.id;
+    delete data_values._token; */
+    console.table(profile.data_values);
+
     profile.cancel(parent_form, edit_button, cancel_button);
   });
 

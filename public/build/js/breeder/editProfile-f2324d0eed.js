@@ -2,6 +2,7 @@
 
 var profile = {
     edit_farm_name: '',
+    data_values: {},
 
     edit: function(parent_form, edit_button, cancel_button){
 
@@ -422,6 +423,14 @@ $(document).ready(function () {
     var edit_button = cancel_button.parents('.content-section').find('.edit-button');
     var parent_form = cancel_button.parents('form');
 
+    /* Return to original state/values if cancelled */
+    
+    // get the initial values
+    
+    /* delete data_values.id;
+    delete data_values._token; */
+    console.table(profile.data_values);
+
     profile.cancel(parent_form, edit_button, cancel_button);
   });
 
@@ -670,11 +679,12 @@ var validateFunction = function(){
         // Edit on Personal/Farm Information
         $('.edit-button').click(function(e){
             e.preventDefault();
-            
             var edit_button = $(this);
             var cancel_button = edit_button.parents('.content-section').find('.cancel-button');
             var parent_form = edit_button.parents('form');
             
+            profile.data_values = profile.get_data_values(parent_form);
+          
             edit_button.tooltip('remove');
 
             // If button is for editing the fields

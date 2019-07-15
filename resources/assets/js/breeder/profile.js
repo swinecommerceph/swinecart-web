@@ -2,6 +2,7 @@
 
 var profile = {
     edit_farm_name: '',
+    data_values: {},
 
     edit: function(parent_form, edit_button, cancel_button){
 
