@@ -738,9 +738,9 @@ var product = {
 
         if (data.birthdate === "November 30, -0001") {
           var item_birthdate =
-            'Born on: <i class="grey-text">Not indicated</i>';
+            'Birthdate: <i class="grey-text">Not indicated</i>';
         } else {
-          var item_birthdate = "Born on: " + data.birthdate
+          var item_birthdate = "Birthdate: " + data.birthdate
         }
         $("#product-summary-birthdate").html(
           item_birthdate
