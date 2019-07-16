@@ -517,7 +517,7 @@
                                           <a href="#!"
                                             @click.prevent="confirmRemoval(product.item_id)"
                                             class="blue-grey lighten-5"
-                                            style="color: #37474f; font-weight: 700; padding-left: 2vw;"
+                                            style="color: #37474f; font-weight: 700; padding-left: 2vw; text-transform: none;"
                                             >
                                             Remove
                                           </a>
