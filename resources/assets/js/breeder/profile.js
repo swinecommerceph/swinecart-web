@@ -15,7 +15,7 @@ var profile = {
             // Edit tooltip animation to Done
             edit_button.attr('data-tooltip','Done');
             edit_button.attr('data-position','top');
-            edit_button.html('<i class="material-icons">done</i>');
+            edit_button.html('Update');
             $(".tooltipped").tooltip({delay:50});
             edit_button.prop('disabled', false);
             cancel_button.toggle();
@@ -117,7 +117,7 @@ var profile = {
                 // Done tooltip animation to Edit
                 edit_button.attr('data-tooltip',profile.edit_farm_name);
                 edit_button.attr('data-position','left');
-                edit_button.html('<i class="material-icons">mode_edit</i>');
+                edit_button.html('Edit');
                 $(".tooltipped").tooltip({delay:50});
                 $('.edit-button').removeClass('disabled');
                 $('.cancel-button').removeClass('disabled');
@@ -144,7 +144,7 @@ var profile = {
             // Done tooltip animation to Edit
             edit_button.attr('data-tooltip',profile.edit_farm_name);
             edit_button.attr('data-position','left');
-            edit_button.html('<i class="material-icons">mode_edit</i>');
+            edit_button.html('Edit');
             $(".tooltipped").tooltip({delay:50});
             cancel_button.toggle();
             config.preloader_progress.fadeOut();

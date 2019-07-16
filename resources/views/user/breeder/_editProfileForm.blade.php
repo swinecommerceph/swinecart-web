@@ -40,6 +40,21 @@
 		{!! Form::model($breeder,['route' => 'breeder.updatePersonal', 'method' => 'PUT', 'data-personal-id' => $breeder->id]) !!}
 		<div id="personal-information" class="card-panel">
 
+      <div class="row">
+			  <div class="col s10 offset-s1 content-section">
+				  <div class="col right">
+					  <button  id="" class="btn btn-medium waves-effect waves-light primary primary-hover tooltipped edit-button" data-position="left" data-delay="50" data-tooltip="Edit Office Information">
+						  Edit
+					  </button>
+				  </div>
+				  <div class="col right">
+					  <a href="#!" id="" class="btn-floating btn-medium waves-effect waves-light red lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
+						  <i class="material-icons">clear</i>
+					  </a>
+				  </div>
+			  </div>
+			</div>
+
 			<div class="row">
 			<!-- Address: Address Line 1 -->
 				<div class="input-field col s10 push-s1">
@@ -126,20 +141,6 @@
 				</div>
 			</div>
 
-			<div class="row">
-			  <div class="col s10 offset-s1 content-section">
-				  <div class="col right">
-					  <button  id="" class="btn-floating btn-medium waves-effect waves-light teal darken-1 tooltipped edit-button" data-position="left" data-delay="50" data-tooltip="Edit">
-						  <i class="material-icons">mode_edit</i>
-					  </button>
-				  </div>
-				  <div class="col right">
-					  <a href="#!" id="" class="btn-floating btn-medium waves-effect waves-light red lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
-						  <i class="material-icons">clear</i>
-					  </a>
-				  </div>
-			  </div>
-			</div>
 		</div>
 		{!! Form::close() !!}
 
