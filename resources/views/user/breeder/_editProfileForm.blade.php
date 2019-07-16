@@ -150,9 +150,27 @@
 				@foreach($farmAddresses as $farmAddress)
 					<div class="row add-farm">
 						<div class="col s10 offset-s1">
+            
             <div id="{{ $farmAddress->name }}" class="card-panel hoverable">
+              
 								{!! Form::open(['route' => 'breeder.updateFarm', 'method' => 'PUT', 'class' => 'edit-farm', 'data-farm-id' => $farmAddress->id, 'data-farm-order' => $loop->iteration]) !!}
-								<h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
+              
+                <div class="row">
+                  <div class="col s10 offset-s1 content-section">
+                    <div class="col right">
+                      <button  class="btn btn-medium waves-effect waves-light primary primary-hover tooltipped edit-button" data-position="left" data-delay="50" data-tooltip="Edit {{$farmAddress->name}}">
+                        Edit
+                      </button>
+                    </div>
+                    <div class="col right">
+                      <a href="#!" class="btn btn-medium waves-effect waves-light error error-hover tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
+                        Cancel
+                      </a>
+                    </div>
+                  </div>
+                </div>
+              
+                <h5 class="center-align farm-title"> {{ $farmAddress->name }} </h5>
 								<div class="row">
 									<div class="col s6 offset-s3">
 										<table>
@@ -235,21 +253,6 @@
 										{!! Form::label('mobile', 'Farm Mobile*') !!}
 									</div>
 								</div>
-
-								<div class="row">
-								  <div class="col s10 offset-s1 content-section">
-									  <div class="col right">
-										  <button  class="btn-floating btn-medium waves-effect waves-light teal darken-1 tooltipped edit-button" data-position="left" data-delay="50" data-tooltip="Edit {{$farmAddress->name}}">
-											  <i class="material-icons">mode_edit</i>
-										  </button>
-									  </div>
-									  <div class="col right">
-										  <a href="#!" class="btn-floating btn-medium waves-effect waves-light red lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
-											  <i class="material-icons">clear</i>
-										  </a>
-									  </div>
-								  </div>
-							  	</div>
 
 								{!! Form::close() !!}
 
