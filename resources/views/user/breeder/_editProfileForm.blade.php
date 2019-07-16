@@ -253,7 +253,7 @@
 
 								{!! Form::close() !!}
 
-								{!! Form::open(['route' => 'breeder.deleteFarm', 'method' => 'DELETE', 'class' => 'delete-farm', 'data-farm-id' => $farmAddress->id]) !!}
+								{{-- {!! Form::open(['route' => 'breeder.deleteFarm', 'method' => 'DELETE', 'class' => 'delete-farm', 'data-farm-id' => $farmAddress->id]) !!}
 									<div class="row ">
 										<div class="col offset-s10 remove-button-field">
 											<a href="#!" class="btn-floating btn-medium waves-effect waves-light grey tooltipped remove-farm" data-position="left" data-delay="50" data-tooltip="Remove {{$farmAddress->name}}">
@@ -261,7 +261,7 @@
 											</a>
 										</div>
 									</div>
-								{!! Form::close() !!}
+								{!! Form::close() !!} --}}
 
 
 							</div>
