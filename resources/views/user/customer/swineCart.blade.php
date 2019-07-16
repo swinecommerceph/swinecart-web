@@ -397,7 +397,7 @@
 
                             </div>
                             {{-- Product Card --}}
-                            <div style="height: 30vh !important;" class="card-content" :class="(product.request_status) ? 'white-text' : 'blue-grey-text text-darken-4'">
+                            <div style="height: 30vh !important;" class="card-content" :class="(product.request_status) ? 'white-text' : 'grey-text text-darken-4'">
                                 {{-- Title --}}
                                 <div class="row">
                                   <div class="col s6">
