@@ -453,7 +453,7 @@
                                             {{-- minus button--}}
                                             <span class="col s4 center-align">
                                                 <a href="#"
-                                                    class="btn col s12" 
+                                                    class="btn col s12 primary primary-hover" 
                                                     style="padding:0; width: 2vw;"
                                                     @click.prevent="subtractQuantity(product.item_id)"
                                                 >
@@ -469,7 +469,7 @@
                                             {{-- plus button--}}
                                             <span class="col s4 center-align">
                                                 <a href="#"
-                                                    class="btn col s12"
+                                                    class="btn col s12 primary primary-hover"
                                                     style="padding:0; width: 2vw;"
                                                     @click.prevent="addQuantity(product.item_id)"
                                                 >
