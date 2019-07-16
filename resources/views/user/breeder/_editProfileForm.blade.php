@@ -48,7 +48,7 @@
 					  </button>
 				  </div>
 				  <div class="col right">
-					  <a href="#!" id="" class="btn btn-medium waves-effect waves-light error error-hover tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
+					  <a href="#!" id="" class="btn btn-medium waves-effect waves-light secondary secondary-hover tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
 						  Cancel
 					  </a>
 				  </div>
@@ -163,7 +163,7 @@
                       </button>
                     </div>
                     <div class="col right">
-                      <a href="#!" class="btn btn-medium waves-effect waves-light error error-hover tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
+                      <a href="#!" class="btn btn-medium waves-effect waves-light secondary secondary-hover tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
                         Cancel
                       </a>
                     </div>
