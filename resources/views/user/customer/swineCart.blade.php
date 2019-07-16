@@ -363,7 +363,7 @@
 
                     {{-- Card --}}
                     <div class="col m4" v-for="(product, index) in sortedProducts">
-                        <div class="card hoverable sticky-action" :class="(product.request_status) ? 'teal darken-2' : 'blue-grey lighten-5'">
+                        <div class="card hoverable sticky-action" :class="(product.request_status) ? 'primary' : 'blue-grey lighten-5'">
                             {{-- Product Image --}}
                             <div class="card-image">
                                 <img class="activator" :src="product.img_path">
