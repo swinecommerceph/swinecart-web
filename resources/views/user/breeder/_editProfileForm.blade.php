@@ -48,8 +48,8 @@
 					  </button>
 				  </div>
 				  <div class="col right">
-					  <a href="#!" id="" class="btn-floating btn-medium waves-effect waves-light red lighten-1 tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
-						  <i class="material-icons">clear</i>
+					  <a href="#!" id="" class="btn btn-medium waves-effect waves-light error error-hover tooltipped cancel-button" style="display:none;" data-position="top" data-delay="50" data-tooltip="Cancel">
+						  Cancel
 					  </a>
 				  </div>
 			  </div>
