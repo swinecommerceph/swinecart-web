@@ -108,20 +108,26 @@
 					</ul>
 
 					<div class="row">
-						<div class="col s11">
+            <div
+              class="col s1 center-align"
+              style="margin-top: 1vh; cursor: pointer;"
+            >
+              <i class="small material-icons primary-text">photo</i>
+            </div>
+
+						<div class="col s10 center-align">
 							<input placeholder="Enter your message here."
 						 		style="display:table-cell; width: 100%;"
 							   type="text"
 							   v-model="newMessage"
 							   @keyup.enter="sendMessage">
-						</div>
+            </div>
+            
 						<div 
 					    @click="sendMessage" 
-							class="col s1"
+							class="col s1 center-align"
 							style="margin-top: 1vh; cursor: pointer;">
-							<i class="material-icons teal-text">
-								send
-							</i>
+							<i class="small material-icons primary-text">send</i>
 						</div>
 					</div>
 				</div>
