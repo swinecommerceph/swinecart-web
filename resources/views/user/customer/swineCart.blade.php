@@ -521,7 +521,7 @@
                                             >
                                             Remove
                                           </a>
-                                          <a class="btn blue"
+                                          <a class="btn primary primary-hover"
                                               href="#!"
                                               style="font-weight: 700;" 
                                               @click.prevent="confirmRequest(product.item_id)"
@@ -643,10 +643,10 @@
                           </span>
                         sends a request to the breeder for buying the product.
                         <blockquote style="background-color:#ffcdd2; border-left: 3px solid red;" class="info" v-if="productRequest.type === 'semen'">
-                            Once requested, request quantity can never be changed. Also, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
+                            Once requested, request quantity can never be changed. Also, this product cannot be removed from the SwineCart unless it will be reserved to another customer.
                         </blockquote>
                         <blockquote style="background-color:#ffcdd2; border-left: 3px solid red;" class="info" v-else>
-                            Once requested, this product cannot be removed from the Swine Cart unless it will be reserved to another customer.
+                            Once requested, this product cannot be removed from the SwineCart unless it will be reserved to another customer.
                         </blockquote>
                     </p>
                     <div class="row">
