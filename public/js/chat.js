@@ -159,7 +159,10 @@ $(document).ready(function(){
 			},
 			focusMe : function(event) {
 				event.target.select();
-			}
+      },
+      uploadMedia: function() {
+        console.log('Upload Media!');
+      }
 		}
 	});
 
