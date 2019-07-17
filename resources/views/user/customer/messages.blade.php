@@ -109,9 +109,9 @@
 
 					<div class="row">
             <div
+              @click="sendMedia"
               class="col s1 center-align"
               style="margin-top: 1vh; cursor: pointer;"
-              @click="uploadMedia"
             >
               <i class="small material-icons primary-text">photo</i>
             </div>
@@ -121,7 +121,7 @@
 						 		style="display:table-cell; width: 100%;"
 							   type="text"
 							   v-model="newMessage"
-							   @keyup.enter="sendMessage">
+							   @keyup.enter="sendM">
             </div>
             
 						<div 

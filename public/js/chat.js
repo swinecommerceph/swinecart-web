@@ -132,7 +132,6 @@ $(document).ready(function(){
 				chatMessages.scrollTop = 1000000;
 			},
 			sendMessage : function() {
-
 				if (!this.newMessage.length || threadid == '')
 					return;
 
@@ -160,8 +159,8 @@ $(document).ready(function(){
 			focusMe : function(event) {
 				event.target.select();
       },
-      uploadMedia: function() {
-        console.log('Upload Media!');
+      sendMedia: function() {
+        console.log('haha');
       }
 		}
 	});
