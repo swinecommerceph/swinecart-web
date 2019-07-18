@@ -465,7 +465,6 @@ class ProductController extends Controller
                     else return response()->json('Move file failed', 500);
                 }
                 else {
-                  $dd("hello");
                   return response()->json('Upload failed', 500);
                 }
             }

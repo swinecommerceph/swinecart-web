@@ -111,7 +111,7 @@ elixir(function (mix) {
       'validation/registration_validation.js'
     ], 'public/js/register.js')
     .scripts([
-      'vendor/vue-upload-component.js',
+      'vendor/dropzone.min.js',
       'chat.js'
     ], 'public/js/chat.js');
 

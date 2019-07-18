@@ -1,5 +1,6 @@
 $(document).ready(function(){
-
+  
+  Vue.component('file-upload', VueUploadComponent)
 
 	var vue = new Vue({
 		el: '#chat',
