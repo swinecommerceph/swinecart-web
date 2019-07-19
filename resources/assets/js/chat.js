@@ -1,6 +1,4 @@
 $(document).ready(function(){
-  
-  Vue.component('file-upload', VueUploadComponent)
 
 	var vue = new Vue({
 		el: '#chat',
@@ -161,7 +159,7 @@ $(document).ready(function(){
 				event.target.select();
       },
       sendMedia: function() {
-        console.log('haha');
+        $('.modal').modal();
       }
 		}
 	});

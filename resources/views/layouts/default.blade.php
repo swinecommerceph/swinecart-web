@@ -25,7 +25,7 @@
   </script>
 
 
-
+ 
 	<title>SwineCart @yield('title') </title>
 
 	{{-- <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet" type="text/css"> --}}

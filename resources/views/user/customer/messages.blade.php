@@ -108,20 +108,22 @@
 					</ul>
 
 					<div class="row">
-            <div
+            <a
+              href="#upload-media-modal"
               @click="sendMedia"
+              id="modal-trigger"
               class="col s1 center-align"
               style="margin-top: 1vh; cursor: pointer;"
             >
               <i class="small material-icons primary-text">photo</i>
-            </div>
+            </a>
 
 						<div class="col s10 center-align">
 							<input placeholder="Enter your message here."
 						 		style="display:table-cell; width: 100%;"
 							   type="text"
 							   v-model="newMessage"
-							   @keyup.enter="sendM">
+							   @keyup.enter="sendMessage">
             </div>
             
 						<div 
@@ -130,7 +132,52 @@
 							style="margin-top: 1vh; cursor: pointer;">
 							<i class="small material-icons primary-text">send</i>
 						</div>
-					</div>
+          </div>
+          
+
+          {{-- Upload Media Modal --}}
+          <div id="upload-media-modal" class="modal modal-fixed-footer">
+            <div class="modal-content">
+              <h4>Upload Media</h4>
+              <div class="row">
+                {{-- {!! Form::open([
+                    'route' => 'products.mediaUpload',
+                    'class' => 's12 dropzone',
+                    'id' => 'media-dropzone',
+                    'enctype' => 'multipart/form-data'
+                  ]) 
+                !!}
+                  <div class="fallback">
+                    <input type="file"
+                      name="media[]"
+                      accept="image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov"
+                      multiple
+                    >
+                  </div>
+                {!! Form::close() !!} --}}
+                
+                {{-- <form action="/file-upload" class="dropzone">
+                  <div class="fallback">
+                    <input name="file" type="file" multiple />
+                  </div>
+                </form> --}}
+              </div>
+
+              
+            </div>
+            <div class="modal-footer">
+              <button type="submit"
+                      class="btn waves-effect
+                            waves-light
+                            modal-action
+                            primary
+                            primary-hover"
+              >
+                Send
+              </button>
+            </div>
+          </div>
+
 				</div>
 			</div>
 		</div>

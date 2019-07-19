@@ -27,8 +27,6 @@
 if(i===r.replace(/\/.*$/,""))return!0}else if(n===r)return!0;return!1},"undefined"!=typeof jQuery&&null!==jQuery&&(jQuery.fn.dropzone=function(t){return this.each(function(){return new e(this,t)})}),"undefined"!=typeof module&&null!==module?module.exports=e:window.Dropzone=e,e.ADDED="added",e.QUEUED="queued",e.ACCEPTED=e.QUEUED,e.UPLOADING="uploading",e.PROCESSING=e.UPLOADING,e.CANCELED="canceled",e.ERROR="error",e.SUCCESS="success",r=function(e){var t,i,n,r,s,o,l,a,u,p;for(l=e.naturalWidth,o=e.naturalHeight,i=document.createElement("canvas"),i.width=1,i.height=o,n=i.getContext("2d"),n.drawImage(e,0,0),r=n.getImageData(0,0,1,o).data,p=0,s=o,a=o;a>p;)t=r[4*(a-1)+3],0===t?s=a:p=a,a=s+p>>1;return u=a/o,0===u?1:u},s=function(e,t,i,n,s,o,l,a,u,p){var d;return d=r(t),e.drawImage(t,i,n,s,o,l,a,u,p/d)},n=function(e,t){var i,n,r,s,o,l,a,u,p;if(r=!1,p=!0,n=e.document,u=n.documentElement,i=n.addEventListener?"addEventListener":"attachEvent",a=n.addEventListener?"removeEventListener":"detachEvent",l=n.addEventListener?"":"on",s=function(i){if("readystatechange"!==i.type||"complete"===n.readyState)return("load"===i.type?e:n)[a](l+i.type,s,!1),!r&&(r=!0)?t.call(e,i.type||i):void 0},o=function(){var e;try{u.doScroll("left")}catch(t){return e=t,void setTimeout(o,50)}return s("poll")},"complete"!==n.readyState){if(n.createEventObject&&u.doScroll){try{p=!e.frameElement}catch(d){}p&&o()}return n[i](l+"DOMContentLoaded",s,!1),n[i](l+"readystatechange",s,!1),e[i](l+"load",s,!1)}},e._autoDiscoverFunction=function(){if(e.autoDiscover)return e.discover()},n(window,e._autoDiscoverFunction)}).call(this);
 
 $(document).ready(function(){
-  
-  Vue.component('file-upload', VueUploadComponent)
 
 	var vue = new Vue({
 		el: '#chat',
@@ -189,7 +187,7 @@ $(document).ready(function(){
 				event.target.select();
       },
       sendMedia: function() {
-        console.log('haha');
+        $('.modal').modal();
       }
 		}
 	});
