@@ -188,6 +188,33 @@ $(document).ready(function(){
       },
       sendMedia: function() {
         $('.modal').modal();
+
+        console.log('Send media function...')
+        /* Initialize Dropzone */
+        Dropzone.options.mediaDropzone = {
+          paramName: "media",
+          parallelUploads: 1,
+          maxFiles: 6,
+          maxFilesize: 50,
+          acceptedFiles:
+            "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
+          dictDefaultMessage:
+            `
+              <h5 style="font-weight: 300;">Drop images/videos here to upload</h5>
+                <i class="material-icons">insert_photo</i>
+                <i class="material-icons">movie</i>
+              <br>
+              <h5 style="font-weight: 300;">Or just click anywhere in this container to choose file</h5>
+            `,
+          previewTemplate: document.getElementById("custom-preview").innerHTML,
+          init: function () {
+
+            this.on('addedfile', function(file) {
+              console.log('Added file');
+            })
+
+          }
+        }
       }
 		}
 	});

@@ -140,7 +140,7 @@
             <div class="modal-content">
               <h4>Upload Media</h4>
               <div class="row">
-                {{-- {!! Form::open([
+                {!! Form::open([
                     'route' => 'products.mediaUpload',
                     'class' => 's12 dropzone',
                     'id' => 'media-dropzone',
@@ -154,30 +154,42 @@
                       multiple
                     >
                   </div>
-                {!! Form::close() !!} --}}
-                
-                {{-- <form action="/file-upload" class="dropzone">
-                  <div class="fallback">
-                    <input name="file" type="file" multiple />
-                  </div>
-                </form> --}}
+                {!! Form::close() !!}
               </div>
-
-              
             </div>
+            
             <div class="modal-footer">
-              <button type="submit"
-                      class="btn waves-effect
-                            waves-light
-                            modal-action
-                            primary
-                            primary-hover"
+              <button 
+                type="submit"
+                class="btn waves-effect
+                  waves-light
+                  modal-action
+                  primary
+                  primary-hover"
               >
                 Send
               </button>
             </div>
           </div>
 
+          {{--  Custom preview for dropzone --}}
+          <div id="custom-preview" style="display:none;">
+            <div class="dz-preview dz-file-preview">
+              <div class="dz-image">
+                <img data-dz-thumbnail alt="" src=""/>
+              </div>
+              <div class="dz-details">
+                <div class="dz-filename"><span data-dz-name></span></div>
+                <div class="dz-size" data-dz-size></div>
+              </div>
+              <div class="dz-progress progress red lighten-4"><div class="determinate green" style="width:0%" data-dz-uploadprogress></div></div>
+              <div class="dz-success-mark"><span><i class='medium material-icons green-text'>check_circle</i></span></div>
+              <div class="dz-error-mark"><span><i class='medium material-icons orange-text text-lighten-1'>error</i></span></div>
+              <div class="dz-error-message"><span data-dz-errormessage></span></div>
+              <a><i class="dz-remove material-icons red-text text-lighten-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Remove this media" data-dz-remove>cancel</i></a>
+            </div>
+          </div>
+          
 				</div>
 			</div>
 		</div>
