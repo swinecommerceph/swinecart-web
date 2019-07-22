@@ -10,6 +10,7 @@ use App\Models\Message;
 use App\Models\User;
 
 use Auth;
+use Storage;
 
 class MessageController extends Controller
 {
@@ -122,6 +123,8 @@ class MessageController extends Controller
     }
 
   }
+
+  public function uploadMedia(Request $request) {}
 
 	public function getBreederMessagesAdmin($threadId = ''){
 		$chatPort = 9090;
