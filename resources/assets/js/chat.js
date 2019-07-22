@@ -164,9 +164,9 @@ $(document).ready(function(){
         console.log('Send media function...')
         /* Initialize Dropzone */
         Dropzone.options.mediaDropzone = {
-          paramName: "media",
-          parallelUploads: 1,
-          maxFiles: 6,
+          paramName: "medium",
+          parallelUploads: 1     ,
+          maxFiles: 1,
           maxFilesize: 50,
           acceptedFiles:
             "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",

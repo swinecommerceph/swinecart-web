@@ -149,7 +149,7 @@
                 !!}
                   <div class="fallback">
                     <input type="file"
-                      name="media[]"
+                      name="medium"
                       accept="image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov"
                       multiple
                     >
