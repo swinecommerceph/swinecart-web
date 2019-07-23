@@ -4,10 +4,12 @@ namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Redirect;
+use Illuminate\Support\Facades\Log;
 
 use App\Http\Requests;
 use App\Models\Message;
 use App\Models\User;
+use App\Http\Controllers\Controller;
 
 use Auth;
 use Storage;
@@ -124,7 +126,18 @@ class MessageController extends Controller
 
   }
 
-  public function uploadMedia(Request $request) {}
+  public function uploadMedia(Request $request) {
+    Log::info($request);
+    Log::info($request->hasFile('medium'));
+    if  ($request->hasFile('medium')) {
+      return response()->json('Yey!', 200);
+      //$file = $request->file('medium');
+    }
+    else {
+      //Log::info($request);
+      return response()->json('No files detected', 500);
+    }
+  }
 
 	public function getBreederMessagesAdmin($threadId = ''){
 		$chatPort = 9090;

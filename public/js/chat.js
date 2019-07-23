@@ -27,7 +27,7 @@
 if(i===r.replace(/\/.*$/,""))return!0}else if(n===r)return!0;return!1},"undefined"!=typeof jQuery&&null!==jQuery&&(jQuery.fn.dropzone=function(t){return this.each(function(){return new e(this,t)})}),"undefined"!=typeof module&&null!==module?module.exports=e:window.Dropzone=e,e.ADDED="added",e.QUEUED="queued",e.ACCEPTED=e.QUEUED,e.UPLOADING="uploading",e.PROCESSING=e.UPLOADING,e.CANCELED="canceled",e.ERROR="error",e.SUCCESS="success",r=function(e){var t,i,n,r,s,o,l,a,u,p;for(l=e.naturalWidth,o=e.naturalHeight,i=document.createElement("canvas"),i.width=1,i.height=o,n=i.getContext("2d"),n.drawImage(e,0,0),r=n.getImageData(0,0,1,o).data,p=0,s=o,a=o;a>p;)t=r[4*(a-1)+3],0===t?s=a:p=a,a=s+p>>1;return u=a/o,0===u?1:u},s=function(e,t,i,n,s,o,l,a,u,p){var d;return d=r(t),e.drawImage(t,i,n,s,o,l,a,u,p/d)},n=function(e,t){var i,n,r,s,o,l,a,u,p;if(r=!1,p=!0,n=e.document,u=n.documentElement,i=n.addEventListener?"addEventListener":"attachEvent",a=n.addEventListener?"removeEventListener":"detachEvent",l=n.addEventListener?"":"on",s=function(i){if("readystatechange"!==i.type||"complete"===n.readyState)return("load"===i.type?e:n)[a](l+i.type,s,!1),!r&&(r=!0)?t.call(e,i.type||i):void 0},o=function(){var e;try{u.doScroll("left")}catch(t){return e=t,void setTimeout(o,50)}return s("poll")},"complete"!==n.readyState){if(n.createEventObject&&u.doScroll){try{p=!e.frameElement}catch(d){}p&&o()}return n[i](l+"DOMContentLoaded",s,!1),n[i](l+"readystatechange",s,!1),e[i](l+"load",s,!1)}},e._autoDiscoverFunction=function(){if(e.autoDiscover)return e.discover()},n(window,e._autoDiscoverFunction)}).call(this);
 
 $(document).ready(function(){
-
+  Dropzone.options.mediaDropzone = false; // disabling the auto detect of dropzone js
 	var vue = new Vue({
 		el: '#chat',
 		data : {
@@ -187,34 +187,23 @@ $(document).ready(function(){
 				event.target.select();
       },
       sendMedia: function() {
-        $('.modal').modal();
+        $('.modal').modal(); // opens modal for uploading picture
 
-        console.log('Send media function...')
         /* Initialize Dropzone */
-        Dropzone.options.mediaDropzone = {
+        var mediaDropzone = new Dropzone('#media-dropzone', {
           paramName: "medium",
-          parallelUploads: 1     ,
+          parallelUploads: 1,
           maxFiles: 1,
           maxFilesize: 50,
           acceptedFiles:
             "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
-          dictDefaultMessage:
-            `
-              <h5 style="font-weight: 300;">Drop images/videos here to upload</h5>
-                <i class="material-icons">insert_photo</i>
-                <i class="material-icons">movie</i>
-              <br>
-              <h5 style="font-weight: 300;">Or just click anywhere in this container to choose file</h5>
-            `,
-          previewTemplate: document.getElementById("custom-preview").innerHTML,
           init: function () {
-
-            this.on('addedfile', function(file) {
+            this.on('addedfile', function (file) {
               console.log('Added file');
             })
-
           }
-        }
+        });
+        
       }
 		}
 	});

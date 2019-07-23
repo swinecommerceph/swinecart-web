@@ -141,7 +141,7 @@
               <h4>Upload Media</h4>
               <div class="row">
                 {!! Form::open([
-                    'route' => 'products.mediaUpload',
+                    'route' => 'messages.uploadMedia',
                     'class' => 's12 dropzone',
                     'id' => 'media-dropzone',
                     'enctype' => 'multipart/form-data'
@@ -151,7 +151,6 @@
                     <input type="file"
                       name="medium"
                       accept="image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov"
-                      multiple
                     >
                   </div>
                 {!! Form::close() !!}
