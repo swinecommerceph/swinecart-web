@@ -1,5 +1,7 @@
+Dropzone.options.mediaDropzone = false; // disabling the auto detect of dropzone js
+
 $(document).ready(function(){
-  Dropzone.options.mediaDropzone = false; // disabling the auto detect of dropzone js
+  //Dropzone.autoDiscover = false;
 	var vue = new Vue({
 		el: '#chat',
 		data : {
@@ -11,8 +13,9 @@ $(document).ready(function(){
 			conn: false,
 			user: "",
 			mine: "",
-		},
+    },
 		mounted : function(){
+      
 			// default port
 			this.port = this.port.length == 0 ? '9090' : this.port;
 

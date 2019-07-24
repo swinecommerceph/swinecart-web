@@ -97,9 +97,21 @@
 					@{{ message.msg }}
 				</div>
 			</li>
-		</ul>
+    </ul>
+    
+
 		<div class="row">
-			<div class="col s11">
+      <a
+        href="#upload-media-modal"
+        @click="sendMedia"
+        id="modal-trigger"
+        class="col s1 center-align"
+        style="margin-top: 1vh; cursor: pointer;"
+      >
+        <i class="small material-icons primary-text">photo</i>
+      </a>
+
+			<div class="col s10 center-align">
 				<input placeholder="Enter your message here."
 			 		style="display:table-cell; width: 100%;"
 				   type="text"
@@ -113,8 +125,64 @@
 				<i class="material-icons teal-text">
 					send
 				</i>
-			</div>
-		</div>
+      </div>    
+    </div>
+    
+    {{-- Upload Media Modal --}}
+    <div id="upload-media-modal" class="modal modal-fixed-footer">
+      <div class="modal-content">
+        <h4>Upload Media</h4>
+        <div class="row">
+          {!! Form::open([
+              'route' => 'messages.uploadMedia',
+              'class' => 's12 dropzone',
+              'id' => 'media-dropzone',
+              'enctype' => 'multipart/form-data'
+            ]) 
+          !!}
+            <div class="fallback">
+              <input type="file"
+                name="medium"
+                accept="image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov"
+              >
+            </div>
+          {!! Form::close() !!}
+        </div>
+      </div>
+      
+      <div class="modal-footer">
+        <button 
+          type="submit"
+          class="btn waves-effect
+            waves-light
+            modal-action
+            primary
+            primary-hover"
+        >
+          Send
+        </button>
+      </div>
+      
+    </div>
+
+    {{--  Custom preview for dropzone --}}
+    <div id="custom-preview" style="display:none;">
+      <div class="dz-preview dz-file-preview">
+        <div class="dz-image">
+          <img data-dz-thumbnail alt="" src=""/>
+        </div>
+        <div class="dz-details">
+          <div class="dz-filename"><span data-dz-name></span></div>
+          <div class="dz-size" data-dz-size></div>
+        </div>
+        <div class="dz-progress progress red lighten-4"><div class="determinate green" style="width:0%" data-dz-uploadprogress></div></div>
+        <div class="dz-success-mark"><span><i class='medium material-icons green-text'>check_circle</i></span></div>
+        <div class="dz-error-mark"><span><i class='medium material-icons orange-text text-lighten-1'>error</i></span></div>
+        <div class="dz-error-message"><span data-dz-errormessage></span></div>
+        <a><i class="dz-remove material-icons red-text text-lighten-1 tooltipped" data-position="bottom" data-delay="50" data-tooltip="Remove this media" data-dz-remove>cancel</i></a>
+      </div>
+    </div>
+
 	</div>
 
 </div>
@@ -124,10 +192,12 @@
 
 @section('customScript')
 <script>
+Dropzone.options.mediaDropzone = false; // disabling the auto detect of dropzone js
 $(document).ready(function(){
 	$('.message').show(0);
 });
 
+  // Dropzone.autoDiscover = false;
 	var username = "{{ $userName }}";
 	var userid = "{{ $userId }}";
 	var usertype = "{{ $userType }}";

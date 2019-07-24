@@ -76,11 +76,7 @@
 		<div>
 
 			<div class="panel panel-default">
-
-				
-
 				<div class="panel-body" id="chat">
-
 					<ul id="chatMessages" style="border: 1px solid #ddd;">
 
 						@foreach($messages as $message)
@@ -201,10 +197,10 @@
 
 @section('customScript')
 <script>
-$(document).ready(function(){
-	$('.message').show(0);
-});
-
+  $(document).ready(function(){
+    $('.message').show(0);
+  });
+  
 	var username = "{{ $userName }}";
 	var userid = "{{ $userId }}";
 	var usertype = "{{ $userType }}";
