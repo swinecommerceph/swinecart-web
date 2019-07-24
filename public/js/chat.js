@@ -205,12 +205,7 @@ $(document).ready(function(){
               <br>
               <h5 style="font-weight: 300;">Or just click anywhere in this container to choose file</h5>
             `,
-          previewTemplate: document.getElementById("custom-preview").innerHTML,
-          init: function () {
-            this.on('addedfile', function (file) {
-              console.log('Added file');
-            })
-          }
+          previewTemplate: document.getElementById("custom-preview").innerHTML
         });
         
       }

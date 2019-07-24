@@ -9,6 +9,7 @@ use Illuminate\Support\Facades\Log;
 use App\Http\Requests;
 use App\Models\Message;
 use App\Models\User;
+use App\Models\Image;
 use App\Http\Controllers\Controller;
 
 use Auth;
@@ -127,11 +128,36 @@ class MessageController extends Controller
   }
 
   public function uploadMedia(Request $request) {
-    Log::info($request);
-    Log::info($request->hasFile('medium'));
+    //Log::info($request);
+    //Log::info($request->hasFile('medium'));
     if  ($request->hasFile('medium')) {
-      return response()->json('Yey!', 200);
-      //$file = $request->file('medium');
+      $file = $request->file('medium');
+
+      // check if the file had a problem in uploading
+      if ($file->isValid()) {
+        $fileExtension = $file->getClientOriginalExtension();
+
+        // Log::info('file is valid');
+        if($this->isImage($fileExtension)) {
+          // Log::info('is image');
+          $imageInfo = $this->createImageInfo($fileExtension);
+        }
+        else {
+          // Log::info('NOT image');
+          return response()->json('Invalid file extension', 500);
+        } 
+
+        Storage::disk('public')->put(
+          $imageInfo['directoryPath'].$imageInfo['filename'], file_get_contents($file)
+        );
+      }
+      else {
+        //Log::info('file is invalid');
+        return response()->json('Upload failed', 500);
+      }
+
+      // return response()->json(collect($imageDetails)->toJson(), 200);
+
     }
     else {
       //Log::info($request);
@@ -265,5 +291,37 @@ class MessageController extends Controller
 
     return sizeof($count);
   }
+
+  /**
+     * Get appropriate image info depending on extension
+     *
+     * @param  String           $extension
+     * @return AssociativeArray $imageInfo
+     */
+    private function createImageInfo($extension)
+    {
+        $imageInfo = [];
+
+        $imageInfo['filename'] = '_message_'
+          . md5(time())
+          . '_'
+          . $extension;
+
+        $imageInfo['directoryPath'] = '/images/message/';
+        $imageInfo['type'] = new Image;
+
+        return $imageInfo;
+    }
+
+    /**
+     * Check if media is Image depending on extension
+     *
+     * @param  String   $extension
+     * @return Boolean
+     */
+    private function isImage($extension)
+    {
+        return ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') ? true : false;
+    }
 
 }
