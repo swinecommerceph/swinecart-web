@@ -10,6 +10,7 @@ use App\Http\Requests;
 use App\Models\Message;
 use App\Models\User;
 use App\Models\Image;
+use App\Models\Video;
 use App\Http\Controllers\Controller;
 
 use Auth;
@@ -138,17 +139,19 @@ class MessageController extends Controller
         $fileExtension = $file->getClientOriginalExtension();
 
         // Log::info('file is valid');
-        if($this->isImage($fileExtension)) {
-          // Log::info('is image');
-          $imageInfo = $this->createImageInfo($fileExtension);
+        if($this->isImage($fileExtension) || $this->isVideo($fileExtension)) {
+          // Log::info('is image'); 
+          $mediaInfo = $this->createMediaInfo($fileExtension);
         }
         else {
-          // Log::info('NOT image');
+          // Log::info('NOT image nor video');
           return response()->json('Invalid file extension', 500);
         } 
 
+
+        Log::info($mediaInfo['directoryPath'].$mediaInfo['filename']);
         Storage::disk('public')->put(
-          $imageInfo['directoryPath'].$imageInfo['filename'], file_get_contents($file)
+          $mediaInfo['directoryPath'].$mediaInfo['filename'], file_get_contents($file)
         );
       }
       else {
@@ -293,24 +296,31 @@ class MessageController extends Controller
   }
 
   /**
-     * Get appropriate image info depending on extension
+     * Get appropriate media info depending on extension
      *
      * @param  String           $extension
-     * @return AssociativeArray $imageInfo
+     * @return AssociativeArray $mediaInfo
      */
-    private function createImageInfo($extension)
+    private function createMediaInfo($extension)
     {
-        $imageInfo = [];
+        $mediaInfo = [];
 
-        $imageInfo['filename'] = '_message_'
+        $mediaInfo['filename'] = '/_message_'
           . md5(time())
           . '_'
           . $extension;
 
-        $imageInfo['directoryPath'] = '/images/message/';
-        $imageInfo['type'] = new Image;
+        if ($this->isImage($extension)) {
+          $mediaInfo['directoryPath'] = '/images/message/';
+          $mediaInfo['type'] = new Image;
+        }
+        else if ($this->isVideo($extension)) {
+          // Log::info('video here');
+          $mediaInfo['directoryPath'] = '/videos/message';
+          $mediaInfo['type'] = new Video;
+        }
 
-        return $imageInfo;
+        return $mediaInfo;
     }
 
     /**
@@ -322,6 +332,17 @@ class MessageController extends Controller
     private function isImage($extension)
     {
         return ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') ? true : false;
+    }
+
+    /**
+     * Check if media is Video depending on extension
+     *
+     * @param  String   $extension
+     * @return Boolean
+     */
+    private function isVideo($extension)
+    {
+        return ($extension == 'mp4' || $extension == 'mkv' || $extension == 'avi' || $extension == 'flv') ? true : false;
     }
 
 }
