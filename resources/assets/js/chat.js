@@ -1,7 +1,29 @@
-Dropzone.options.mediaDropzone = false; // disabling the auto detect of dropzone js
 
 $(document).ready(function(){
-  //Dropzone.autoDiscover = false;
+  
+  Dropzone.options.mediaDropzone = false; // disabling the auto detect of dropzone js
+  setTimeout(() => {
+    /* Initialize Dropzone */
+    var mediaDropzone = new Dropzone('#media-dropzone', {
+      paramName: "medium",
+      parallelUploads: 1,
+      maxFiles: 1,
+      maxFilesize: 50,
+      acceptedFiles:
+        "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
+      dictDefaultMessage:
+        `
+          <h5 style="font-weight: 300;">Drop images/videos here to upload</h5>
+            <i class="material-icons">insert_photo</i>
+            <i class="material-icons">movie</i>
+          <br>
+          <h5 style="font-weight: 300;">Or just click anywhere in this container to choose file</h5>
+        `,
+      previewTemplate: document.getElementById("custom-preview").innerHTML
+    });
+  }, 0)
+  
+ 
 	var vue = new Vue({
 		el: '#chat',
 		data : {
@@ -162,27 +184,7 @@ $(document).ready(function(){
 				event.target.select();
       },
       sendMedia: function() {
-        $('.modal').modal(); // opens modal for uploading picture
-
-        /* Initialize Dropzone */
-        var mediaDropzone = new Dropzone('#media-dropzone', {
-          paramName: "medium",
-          parallelUploads: 1,
-          maxFiles: 1,
-          maxFilesize: 50,
-          acceptedFiles:
-            "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
-          dictDefaultMessage:
-            `
-              <h5 style="font-weight: 300;">Drop images/videos here to upload</h5>
-                <i class="material-icons">insert_photo</i>
-                <i class="material-icons">movie</i>
-              <br>
-              <h5 style="font-weight: 300;">Or just click anywhere in this container to choose file</h5>
-            `,
-          previewTemplate: document.getElementById("custom-preview").innerHTML
-        });
-        
+        $('#upload-media-modal').modal('open'); // opens modal for uploading picture
       }
 		}
 	});
