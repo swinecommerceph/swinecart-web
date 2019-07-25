@@ -113,7 +113,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages', ['as' => 'breeder.messages', 'uses'=> 'MessageController@getMessages']);
         Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
         Route::get('messages/{customer}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
-
+        Route::post('messages', ['as' => 'messages.uploadMedia', 'uses' => 'MessageController@uploadMedia']);
+        
         Route::get('customers', ['as' => 'map.customers', 'uses'=> 'BreederController@viewCustomers']);
         Route::post('customers', ['as' => 'map.customersChange', 'uses'=> 'BreederController@viewCustomersChange']);
 
