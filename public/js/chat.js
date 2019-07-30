@@ -197,33 +197,35 @@ $(document).ready(function(){
         
         if (threadid == '') return;
         
-        if (this.mediaUrl) {
-          console.log('Detected a media!')
+        // send only when there is a message or there is a media to be sent
+        if (this.newMessage.length || this.mediaUrl) {
+          // can send
+          
+          // TODO: handle sending message OR media
+
+          // create the message object to be send in Chat.php
+          var message = {};
+          message.from = userid;
+          message.to = threadid;
+          message.message = this.newMessage;
+
+          // identify who is the sender
+          if (usertype == 'Customer') message.direction = 0;
+          else if (usertype == 'Breeder') message.direction = 1;
+          else message.direction = 2;
+          
+          // message.direction = (usertype == 'Customer')?0:1;
+
+          var msgToSend = JSON.stringify(message);
+
+          this.conn.send(msgToSend); // send to user
+
+          this.addMeAmessage(msgToSend); // send dto self
+
+          this.newMessage = ""; // clear the message area after sending
+          this.mediaUrl = null; // clear the media url after sending
         }
-        else {
-          console.log('No media detected')
-        }
-
-				/* var message = {};
-				message.from = userid;
-				message.to = threadid;
-				message.message = this.newMessage;
-				if(usertype == 'Customer'){
-					message.direction = 0;
-				}else if(usertype == 'Breeder'){
-					message.direction = 1;
-				}else{
-					message.direction = 2;
-				}
-				// message.direction = (usertype == 'Customer')?0:1;
-
-				var msgToSend = JSON.stringify(message);
-
-				this.conn.send(msgToSend);
-
-				this.addMeAmessage(msgToSend); */
-
-				this.newMessage = "";
+        else return;
 			},
 			focusMe : function(event) {
 				event.target.select();
