@@ -201,13 +201,21 @@ $(document).ready(function(){
         if (this.newMessage.length || this.mediaUrl) {
           // can send
           
-          // TODO: handle sending message OR media
-
           // create the message object to be send in Chat.php
           var message = {};
           message.from = userid;
           message.to = threadid;
-          message.message = this.newMessage;
+
+          // assign what time of message to send
+          if (this.newMessage) {
+            // if message is text not media
+            message.message = this.newMessage;
+          }
+          else if (this.mediaUrl) {
+            // if message is media and not text
+            message.message = '';
+            message.media_url = 'media url'
+          }
 
           // identify who is the sender
           if (usertype == 'Customer') message.direction = 0;

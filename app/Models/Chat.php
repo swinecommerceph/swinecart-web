@@ -36,7 +36,8 @@ class Chat implements MessageComponentInterface {
             return;
         }
         else{
-            Log::info('mina message: ' . $msg->message);
+            // TODO: catch when the media_url is null or not
+            
             //$test = "";
             if($msg->direction == 0){
                 Message::create([
