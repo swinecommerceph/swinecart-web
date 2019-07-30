@@ -19,6 +19,8 @@ class CreateMessagesTable extends Migration
             $table->integer('breeder_id')->unsigned();
             $table->integer('admin_id')->unsigned();
             $table->mediumText('message');
+            $table->string('media_url')->nullable();
+            $table->enum('media_type', [NULL, 'photo', 'video'])->default(NULL);
             $table->boolean('direction')->default(0); //0 from customer | 1 from breeder | 2 from admin
             $table->datetime('read_at')->nullable();
             $table->timestamps();
