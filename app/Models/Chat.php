@@ -2,7 +2,8 @@
 namespace App\Models;
 
 use Ratchet\MessageComponentInterface;
-use Ratchet\ConnectionInterface;
+use Ratchet\ConnectionInterface;    
+use Illuminate\Support\Facades\Log;                
 
 
 
@@ -23,6 +24,7 @@ class Chat implements MessageComponentInterface {
     }
 
     public function onMessage(ConnectionInterface $from, $msg) {
+        
         $numRecv = count($this->clients) - 1;
         echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
             , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
@@ -34,6 +36,7 @@ class Chat implements MessageComponentInterface {
             return;
         }
         else{
+            Log::info('mina message: ' . $msg->message);
             //$test = "";
             if($msg->direction == 0){
                 Message::create([

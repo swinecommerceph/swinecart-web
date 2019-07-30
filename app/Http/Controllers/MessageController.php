@@ -129,11 +129,10 @@ class MessageController extends Controller
   }
 
   public function uploadMedia(Request $request) {
-    //Log::info($request);
     //Log::info($request->hasFile('medium'));
     if  ($request->hasFile('medium')) {
       $file = $request->file('medium');
-
+    
       // check if the file had a problem in uploading
       if ($file->isValid()) {
         $fileExtension = $file->getClientOriginalExtension();
@@ -148,11 +147,17 @@ class MessageController extends Controller
           return response()->json('Invalid file extension', 500);
         } 
 
-
-        Log::info($mediaInfo['directoryPath'].$mediaInfo['filename']);
+        //Log::info($mediaInfo['directoryPath'].$mediaInfo['filename']);
         Storage::disk('public')->put(
           $mediaInfo['directoryPath'].$mediaInfo['filename'], file_get_contents($file)
         );
+
+        // return a json object URL
+        Log::info('Media URL: ' . $mediaInfo['directoryPath']);
+        
+        //return response()->json('Returning a URL...', 200);
+        // the URL is the relative path of to the image
+        // this URL will be passed in the message object
       }
       else {
         //Log::info('file is invalid');

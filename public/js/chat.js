@@ -29,29 +29,6 @@ if(i===r.replace(/\/.*$/,""))return!0}else if(n===r)return!0;return!1},"undefine
 
 $(document).ready(function(){
   
-  Dropzone.options.mediaDropzone = false; // disabling the auto detect of dropzone js
-  setTimeout(() => {
-    /* Initialize Dropzone */
-    var mediaDropzone = new Dropzone('#media-dropzone', {
-      paramName: "medium",
-      parallelUploads: 1,
-      maxFiles: 1,
-      maxFilesize: 50,
-      acceptedFiles:
-        "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
-      dictDefaultMessage:
-        `
-          <h5 style="font-weight: 300;">Drop images/videos here to upload</h5>
-            <i class="material-icons">insert_photo</i>
-            <i class="material-icons">movie</i>
-          <br>
-          <h5 style="font-weight: 300;">Or just click anywhere in this container to choose file</h5>
-        `,
-      previewTemplate: document.getElementById("custom-preview").innerHTML
-    });
-  }, 0)
-  
- 
 	var vue = new Vue({
 		el: '#chat',
 		data : {
@@ -62,9 +39,40 @@ $(document).ready(function(){
 			uri: url,
 			conn: false,
 			user: "",
-			mine: "",
+      mine: "",
+      mediaUrl: null
     },
 		mounted : function(){
+
+      const vueVm = this;
+
+      Dropzone.options.mediaDropzone = false; // disabling the auto detect of dropzone js
+      setTimeout(() => {
+        /* Initialize Dropzone */
+        var mediaDropzone = new Dropzone('#media-dropzone', {
+          paramName: "medium",
+          parallelUploads: 1,
+          maxFiles: 1,
+          maxFilesize: 50,
+          acceptedFiles:
+            "image/png, image/jpeg, image/jpg, video/avi, video/mp4, video/flv, video/mov",
+          dictDefaultMessage:
+            `
+          <h5 style="font-weight: 300;">Drop images/videos here to upload</h5>
+            <i class="material-icons">insert_photo</i>
+            <i class="material-icons">movie</i>
+          <br>
+          <h5 style="font-weight: 300;">Or just click anywhere in this container to choose file</h5>
+        `,
+          previewTemplate: document.getElementById("custom-preview").innerHTML,
+          init: function () {
+            const dropzoneVm = this;
+            dropzoneVm.on('success', (file, response) => {
+              vueVm.mediaUrl = 'some media url';
+            })
+          }
+        });
+      }, 0)
       
 			// default port
 			this.port = this.port.length == 0 ? '9090' : this.port;
@@ -184,10 +192,19 @@ $(document).ready(function(){
 				chatMessages.scrollTop = 1000000;
 			},
 			sendMessage : function() {
-				if (!this.newMessage.length || threadid == '')
-					return;
+        // if (!this.newMessage.length || threadid == '')
+        // 	return;
+        
+        if (threadid == '') return;
+        
+        if (this.mediaUrl) {
+          console.log('Detected a media!')
+        }
+        else {
+          console.log('No media detected')
+        }
 
-				var message = {};
+				/* var message = {};
 				message.from = userid;
 				message.to = threadid;
 				message.message = this.newMessage;
@@ -204,14 +221,14 @@ $(document).ready(function(){
 
 				this.conn.send(msgToSend);
 
-				this.addMeAmessage(msgToSend);
+				this.addMeAmessage(msgToSend); */
 
 				this.newMessage = "";
 			},
 			focusMe : function(event) {
 				event.target.select();
       },
-      sendMedia: function() {
+      uploadMedia: function() {
         $('#upload-media-modal').modal('open'); // opens modal for uploading picture
       }
 		}

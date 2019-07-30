@@ -103,7 +103,7 @@
 		<div class="row">
       <a
         href="#upload-media-modal"
-        @click="sendMedia"
+        @click="uploadMedia"
         id="modal-trigger"
         class="col s1 center-align"
         style="margin-top: 1vh; cursor: pointer;"
