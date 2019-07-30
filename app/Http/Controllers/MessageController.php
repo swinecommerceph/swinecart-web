@@ -153,7 +153,7 @@ class MessageController extends Controller
         );
 
         // return a json object URL
-        Log::info('Media URL: '. $mediaInfo['directoryPath'] . $mediaInfo['filename']);
+        // Log::info('Media URL: '. $mediaInfo['directoryPath'] . $mediaInfo['filename']);
         return response()->json([
           'media_url' => $mediaInfo['directoryPath'] . $mediaInfo['filename']
         ]);

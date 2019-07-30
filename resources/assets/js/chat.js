@@ -40,7 +40,10 @@ $(document).ready(function(){
           init: function () {
             const dropzoneVm = this;
             dropzoneVm.on('success', (file, response) => {
-              vueVm.mediaUrl = 'some media url';
+              
+              // get the returned json from the back end
+              const mediaObject = response;
+              vueVm.mediaUrl = mediaObject.media_url;
             })
           }
         });
@@ -186,7 +189,8 @@ $(document).ready(function(){
           else if (this.mediaUrl) {
             // if message is media and not text
             message.message = '';
-            message.media_url = 'media url'
+            console.log(this.mediaUrl);
+            message.media_url = this.mediaUrl;
           }
 
           // identify who is the sender
