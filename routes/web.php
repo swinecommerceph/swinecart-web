@@ -66,7 +66,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['prefix' => 'breeder'], function(){
 
     	Route::get('home',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
-
+      
         // profile-related
     	Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
     	Route::patch('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);

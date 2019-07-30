@@ -153,9 +153,11 @@ class MessageController extends Controller
         );
 
         // return a json object URL
-        Log::info('Media URL: ' . $mediaInfo['directoryPath']);
-        
-        //return response()->json('Returning a URL...', 200);
+        Log::info('Media URL: '. $mediaInfo['directoryPath'] . $mediaInfo['filename']);
+        return response()->json([
+          'media_url' => $mediaInfo['directoryPath'] . $mediaInfo['filename']
+        ]);
+
         // the URL is the relative path of to the image
         // this URL will be passed in the message object
       }
