@@ -152,7 +152,7 @@
       
       <div class="modal-footer">
         <button 
-          type="submit"
+          @click="sendMessage"
           class="btn waves-effect
             waves-light
             modal-action
