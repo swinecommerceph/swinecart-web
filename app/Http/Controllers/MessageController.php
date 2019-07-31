@@ -138,9 +138,14 @@ class MessageController extends Controller
         $fileExtension = $file->getClientOriginalExtension();
 
         // Log::info('file is valid');
-        if($this->isImage($fileExtension) || $this->isVideo($fileExtension)) {
+        if($this->isImage($fileExtension)) {
           // Log::info('is image'); 
           $mediaInfo = $this->createMediaInfo($fileExtension);
+          $mediaInfo['mediaType'] = 'image';
+        }
+        else if ($this->isVideo($fileExtension)) {
+          $mediaInfo = $this->createMediaInfo($fileExtension);
+          $mediaInfo['mediaType'] = 'video';
         }
         else {
           // Log::info('NOT image nor video');
@@ -155,6 +160,7 @@ class MessageController extends Controller
         // return a json object URL
         // Log::info('Media URL: '. $mediaInfo['directoryPath'] . $mediaInfo['filename']);
         return response()->json([
+          'media_type' => $mediaInfo['mediaType'],
           'media_url' => $mediaInfo['directoryPath'] . $mediaInfo['filename']
         ]);
 
