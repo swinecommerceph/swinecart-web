@@ -40,7 +40,8 @@ $(document).ready(function(){
 			conn: false,
 			user: "",
       mine: "",
-      mediaUrl: null
+      mediaUrl: null,
+      mediaType: null
     },
 		mounted : function(){
 
