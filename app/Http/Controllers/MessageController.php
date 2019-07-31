@@ -312,7 +312,7 @@ class MessageController extends Controller
     {
         $mediaInfo = [];
 
-        $mediaInfo['filename'] = '/_message_'
+        $mediaInfo['filename'] = '_message_'
           . md5(time())
           . '_'
           . $extension;
@@ -323,7 +323,7 @@ class MessageController extends Controller
         }
         else if ($this->isVideo($extension)) {
           // Log::info('video here');
-          $mediaInfo['directoryPath'] = '/videos/message';
+          $mediaInfo['directoryPath'] = '/videos/message/';
           $mediaInfo['type'] = new Video;
         }
 
