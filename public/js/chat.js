@@ -72,6 +72,7 @@ $(document).ready(function(){
               
               // get the returned json from the back end
               const mediaObject = response;
+              vueVm.mediaType = mediaObject.media_type;
               vueVm.mediaUrl = mediaObject.media_url;
             })
           }
@@ -218,7 +219,6 @@ $(document).ready(function(){
           else if (this.mediaUrl) {
             // if message is media and not text
             message.message = '';
-            console.log(this.mediaUrl);
             message.media_url = this.mediaUrl;
           }
 
