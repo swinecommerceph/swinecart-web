@@ -38,12 +38,25 @@ class Chat implements MessageComponentInterface {
         else{
             // TODO: catch when the media_url is null or not
             
-            //$test = "";
+            // if message is text
+            if ($msg->media_url) {
+              // Log::info('message is media');
+
+            }
+
+            // if message is media
+            else {
+              // Log::info('message is text');
+            }
+
             if($msg->direction == 0){
+              
                 Message::create([
                     'customer_id' => $msg->from,
                     'breeder_id' => $msg->to,
                     'message' => $msg->message,
+                    /* 'media_url' => $msg->media_url,
+                    'media_type' => $msg->media_type, */
                     'direction' => 0,
                 ]);
             }else{
@@ -51,6 +64,8 @@ class Chat implements MessageComponentInterface {
                     'customer_id' => $msg->to,
                     'breeder_id' => $msg->from,
                     'message' => $msg->message,
+                    /* 'media_url' => $msg->media_url,
+                    'media_type' => $msg->media_type, */
                     'direction' => 1,
                 ]);
             }

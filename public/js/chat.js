@@ -205,7 +205,7 @@ $(document).ready(function(){
         // send only when there is a message or there is a media to be sent
         if (this.newMessage.length || this.mediaUrl) {
           // can send
-          
+
           // create the message object to be send in Chat.php
           var message = {};
           message.from = userid;
@@ -216,7 +216,7 @@ $(document).ready(function(){
             // if message is text not media
             message.message = this.newMessage;
             message.media_url = null;
-            message.mediaType = null;
+            message.media_type = null;
           }
           else if (this.mediaUrl) {
             // if message is media and not text
@@ -231,7 +231,8 @@ $(document).ready(function(){
           else message.direction = 2;
           
           // message.direction = (usertype == 'Customer')?0:1;
-
+          
+          console.table(message);
           var msgToSend = JSON.stringify(message);
 
           this.conn.send(msgToSend); // send to user
