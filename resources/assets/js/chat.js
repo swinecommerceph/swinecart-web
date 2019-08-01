@@ -187,11 +187,14 @@ $(document).ready(function(){
           if (this.newMessage) {
             // if message is text not media
             message.message = this.newMessage;
+            message.media_url = null;
+            message.mediaType = null;
           }
           else if (this.mediaUrl) {
             // if message is media and not text
             message.message = '';
             message.media_url = this.mediaUrl;
+            message.media_type = this.mediaType;
           }
 
           // identify who is the sender
