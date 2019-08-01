@@ -36,37 +36,43 @@ class Chat implements MessageComponentInterface {
             return;
         }
         else{
-            // TODO: catch when the media_url is null or not
-            
-            // if message is text
-            if ($msg->media_url) {
-              // Log::info('message is media');
-
-            }
+            $mediaUrlToSave = '';
+            $mediaTypeToSave = '';  
 
             // if message is media
-            else {
-              // Log::info('message is text');
+            if ($msg->media_url) {
+              $mediaUrlToSave = $msg->media_url;
+              $mediaTypeToSave = $msg->media_type;
             }
+
+            // if message is text
+            else {
+              $mediaTypeToSave = null;
+              $mediaTypeToSave = '';
+            }
+
+            Log::info('media url to save: ' . $mediaUrlToSave);
+            Log::info('media type to save: ' . $mediaTypeToSave);
 
             if($msg->direction == 0){
               
                 Message::create([
-                    'customer_id' => $msg->from,
-                    'breeder_id' => $msg->to,
-                    'message' => $msg->message,
-                    /* 'media_url' => $msg->media_url,
-                    'media_type' => $msg->media_type, */
-                    'direction' => 0,
+                    'customer_id' =>  $msg->from,
+                    'breeder_id'  =>  $msg->to,
+                    'message'     =>  $msg->message,
+                    'media_url'   =>  $mediaUrlToSave,
+                    'media_type'  =>  $mediaTypeToSave,
+                    'direction'   =>  0
                 ]);
-            }else{
+            }
+            else {
                  Message::create([
-                    'customer_id' => $msg->to,
-                    'breeder_id' => $msg->from,
-                    'message' => $msg->message,
-                    /* 'media_url' => $msg->media_url,
-                    'media_type' => $msg->media_type, */
-                    'direction' => 1,
+                    'customer_id' =>  $msg->to,
+                    'breeder_id'  =>  $msg->from,
+                    'message'     =>  $msg->message,
+                    'media_url'   =>  $mediaUrlToSave,
+                    'media_type'  =>  $mediaTypeToSave,
+                    'direction'   =>  1
                 ]);
             }
             
