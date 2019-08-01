@@ -197,8 +197,6 @@ $(document).ready(function(){
 				chatMessages.scrollTop = 1000000;
 			},
 			sendMessage : function() {
-        // if (!this.newMessage.length || threadid == '')
-        // 	return;
         
         if (threadid == '') return;
         
@@ -229,10 +227,7 @@ $(document).ready(function(){
           if (usertype == 'Customer') message.direction = 0;
           else if (usertype == 'Breeder') message.direction = 1;
           else message.direction = 2;
-          
-          // message.direction = (usertype == 'Customer')?0:1;
-          
-          console.table(message);
+        
           var msgToSend = JSON.stringify(message);
 
           this.conn.send(msgToSend); // send to user

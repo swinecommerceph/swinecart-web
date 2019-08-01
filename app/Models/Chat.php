@@ -51,9 +51,6 @@ class Chat implements MessageComponentInterface {
               $mediaTypeToSave = '';
             }
 
-            Log::info('media url to save: ' . $mediaUrlToSave);
-            Log::info('media type to save: ' . $mediaTypeToSave);
-
             if($msg->direction == 0){
               
                 Message::create([
@@ -77,25 +74,10 @@ class Chat implements MessageComponentInterface {
             }
             
             if(array_key_exists($msg->to, $this->maps)){
-                //$msg->created_at = $test->created_at;
                 $msg->from = User::where('id', $msg->from)->first()->name;
                 $this->maps[$msg->to]->send(json_encode($msg));
-            }
-            
-
-
-            /*
-            foreach ($this->clients as $client) {
-                if($client != $from){
-                    $client->send(json_encode($msg));
-                }
-
-            }
-            */
-
+            } 
         }
-
-
     }
 
     public function onClose(ConnectionInterface $conn) {
