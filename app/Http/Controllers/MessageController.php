@@ -128,8 +128,15 @@ class MessageController extends Controller
 
   }
 
-  public function uploadMedia(Request $request) {
-    //Log::info($request->hasFile('medium'));
+  /**
+   * Upload one media for a product and store it in the storage folder (not in DB yet)
+   *
+   * @param  Request $request
+   * @return JSON
+   */
+  public function uploadMedia(Request $request)
+  {
+
     if  ($request->hasFile('medium')) {
       $file = $request->file('medium');
     
@@ -137,9 +144,8 @@ class MessageController extends Controller
       if ($file->isValid()) {
         $fileExtension = $file->getClientOriginalExtension();
 
-        // Log::info('file is valid');
+        // create media info object based on media type
         if($this->isImage($fileExtension)) {
-          // Log::info('is image'); 
           $mediaInfo = $this->createMediaInfo($fileExtension);
           $mediaInfo['mediaType'] = 'image';
         }
@@ -148,35 +154,25 @@ class MessageController extends Controller
           $mediaInfo['mediaType'] = 'video';
         }
         else {
-          // Log::info('NOT image nor video');
           return response()->json('Invalid file extension', 500);
         } 
 
-        //Log::info($mediaInfo['directoryPath'].$mediaInfo['filename']);
+        // store the media in the directory based on Media Info
         Storage::disk('public')->put(
           $mediaInfo['directoryPath'].$mediaInfo['filename'], file_get_contents($file)
         );
 
-        // return a json object URL
-        // Log::info('Media URL: '. $mediaInfo['directoryPath'] . $mediaInfo['filename']);
+        // return a json in chat.js
         return response()->json([
           'media_type' => $mediaInfo['mediaType'],
           'media_url' => $mediaInfo['directoryPath'] . $mediaInfo['filename']
         ]);
-
-        // the URL is the relative path of to the image
-        // this URL will be passed in the message object
       }
       else {
-        //Log::info('file is invalid');
         return response()->json('Upload failed', 500);
       }
-
-      // return response()->json(collect($imageDetails)->toJson(), 200);
-
     }
     else {
-      //Log::info($request);
       return response()->json('No files detected', 500);
     }
   }
