@@ -277,32 +277,36 @@ class MessageController extends Controller
 		return view('user.admin.messages', compact("chatPort", "userName", "userId", "userType", "threads", "threadId", "messages", "otherName"));
 	}
 
-
-  public function countUnread() {
+  /**
+   * Count unread messages depending on the user type
+   * @return Integer sizeof($count)
+   */ 
+  public function countUnread()
+  {
     $userId = Auth::user()->id;
-    if(Auth::user()->userable_type == 'App\Models\Customer'){
+    if (Auth::user()->userable_type == 'App\Models\Customer') {
       $count = Message::where('customer_id', '=', $userId)
-      ->where('read_at', NULL)
-      ->where('direction', 1) //from breeder to customer
-        ->orderBy('created_at', 'ASC')
-        ->groupBy('breeder_id')
-        ->get();
+              ->where('read_at', NULL)
+              ->where('direction', 1) //from breeder to customer
+                ->orderBy('created_at', 'ASC')
+                ->groupBy('breeder_id')
+                ->get();
     }
-    else if(Auth::user()->userable_type == 'App\Models\Breeder'){
+    else if (Auth::user()->userable_type == 'App\Models\Breeder') {
       $count = Message::where('breeder_id', '=', $userId)
-        ->where('read_at', NULL)
-        ->where('direction', 0) //from customer to breeder
-        ->orderBy('created_at', 'ASC')
-        ->groupBy('customer_id')
-        ->get();
-
-    } else {
+              ->where('read_at', NULL)
+              ->where('direction', 0) //from customer to breeder
+              ->orderBy('created_at', 'ASC')
+              ->groupBy('customer_id')
+              ->get();
+    }
+    else {
       $count = Message::where('admin_id', '=', $userId)
-        ->where('read_at', NULL)
-        ->where('direction', 0) //from customer to breeder
-        ->orderBy('created_at', 'ASC')
-        ->groupBy('customer_id')
-        ->get();
+              ->where('read_at', NULL)
+              ->where('direction', 0) //from customer to breeder
+              ->orderBy('created_at', 'ASC')
+              ->groupBy('customer_id')
+              ->get();
     }
 
     return sizeof($count);
