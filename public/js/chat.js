@@ -235,7 +235,10 @@ $(document).ready(function(){
           this.addMeAmessage(msgToSend); // send dto self
 
           this.newMessage = ""; // clear the message area after sending
-          this.mediaUrl = null; // clear the media url after sending
+
+          // clear the media url and media type after sending
+          this.mediaUrl = null; 
+          this.mediaType = null;
         }
         else return;
 			},
