@@ -29,103 +29,129 @@ class MessageController extends Controller
 
 		Todo:
 			Run chat server on php artisan serve
-	*/
-
-
-	public function getMessages($threadId = '') {
+  */
+  
+  /**
+   * Get the messages to show to the front emd
+   *
+   * @param  Thread $threadid
+   * @return View
+   */
+  public function getMessages($threadId = '')
+  {
     $chatPort = 9090;
     $userName = Auth::user()->name;
-    $userId = Auth::user()->id;
+    $userId   = Auth::user()->id;
 
-    if(Auth::user()->userable_type == 'App\Models\Customer') {
-      $userType = 'Customer';
-      $otherName = '';
+    // Customer
+    if (Auth::user()->userable_type == 'App\Models\Customer') {
+      $userType   = 'Customer';
+      $otherName  = '';
 
       $threads = Message::where('customer_id', '=', $userId)
-        ->orderBy('created_at', 'DESC')
-        //->groupBy('breeder_id')
-        ->get()
-        ->unique('breeder_id');
+                ->orderBy('created_at', 'DESC')
+                ->get()
+                ->unique('breeder_id');
 
       $tampered = false;
-      if($threadId == '' && isset($threads[0])) {
+      if ($threadId == '' && isset($threads[0])) {
         $tampered = true;
         $threadId = $threads[0]->breeder_id;
       }
 
       $messages = Message::where('customer_id', '=', $userId)
-        ->where('breeder_id',  $threadId)
-        ->orderBy('created_at', 'ASC')
-        ->get();
+                ->where('breeder_id',  $threadId)
+                ->orderBy('created_at', 'ASC')
+                ->get();
 
+      foreach($messages as $message) {
+          if ($message->read_at == NULL) {
+            $message->read_at = date('Y-m-d H:i:s');
+            $message->save();
+          }
+      }
 
-    foreach($messages as $message) {
-        if($message->read_at == NULL){
-          $message->read_at = date('Y-m-d H:i:s');
-          $message->save();
-        }
-    }
-
-
-
-      if(!$tampered && sizeof($messages) <= 0 && sizeof($threads) > 0){
+      if (!$tampered && sizeof($messages) <= 0 && sizeof($threads) > 0) {
         $user = User::where('id', $threadId)->first();
-        if(!isset($user) || $user->userable_type != 'App\Models\Breeder')
+        if (!isset($user) || $user->userable_type != 'App\Models\Breeder')
           return Redirect::route('messages');
         $otherName = $user->name;
-      }else if($threadId != ''){
+      }
+      else if ($threadId != '') {
         $user = User::where('id', $threadId)->first();
         $otherName = $user->name;
       }
 
-
-
-
-    return view('user.customer.messages', compact("chatPort", "userName", "userId", "userType", "threads", "threadId", "messages", "otherName"));
+      return view(
+        'user.customer.messages',
+        compact(
+          "chatPort",
+          "userName",
+          "userId",
+          "userType",
+          "threads",
+          "threadId",
+          "messages",
+          "otherName"
+        )
+      );
     }
+
+    // Breeder
     elseif (Auth::user()->userable_type == 'App\Models\Breeder') {
-      $userType = 'Breeder';
-      $otherName = '';
+      $userType   = 'Breeder';
+      $otherName  = '';
 
       $threads = Message::where('breeder_id', '=', $userId)
-        ->orderBy('created_at', 'DESC')
-        //->groupBy('customer_id')
-        ->get()
-        ->unique('customer_id');
+                ->orderBy('created_at', 'DESC')
+                ->get()
+                ->unique('customer_id');
 
       $tampered = false;
-      if($threadId == '' && isset($threads[0])){	// no message selected
+      if ($threadId == '' && isset($threads[0])) {	// no message selected
         $tampered = true;
         $threadId = $threads[0]->customer_id;	// get the 1st customer's id
       }
 
-    // get the breeder's messages
+      // get the breeder's messages
       $messages = Message::where('breeder_id', '=', $userId)
-        ->where('customer_id',  $threadId)
-        ->orderBy('created_at', 'ASC')
-        ->get();
+                  ->where('customer_id',  $threadId)
+                  ->orderBy('created_at', 'ASC')
+                  ->get();
 
-      foreach($messages as $message){
-        if($message->read_at == NULL){
+      foreach ($messages as $message) {
+        if ($message->read_at == NULL) {
           $message->read_at = date('Y-m-d H:i:s');
           $message->save();
         }
       }
 
 
-      if(!$tampered && sizeof($messages) <= 0 && sizeof($threads) > 0){
-      $user = User::where('id', $threadId)->first();
-      if(!isset($user) || $user->userable_type == 'App\Models\Customer')
+      if (!$tampered && sizeof($messages) <= 0 && sizeof($threads) > 0) {
+        $user = User::where('id', $threadId)->first();
+        if (!isset($user) || $user->userable_type == 'App\Models\Customer')
           return Redirect::route('messages');
         $otherName = $user->name;
-      }else if($threadId != ''){
+      }
+      else if ($threadId != '') {
         $user = User::where('id', $threadId)->first();
         $otherName = $user->name;
       }
 
-    return view('user.breeder.messages', compact("chatPort", "userName", "userId", "userType", "threads", "threadId", "messages", "otherName"));
+      return view(
+        'user.breeder.messages',
+        compact(
+          "chatPort",
+          "userName",
+          "userId",
+          "userType",
+          "threads",
+          "threadId",
+          "messages",
+          "otherName"
+        )
+      );
     }
-
   }
 
   /**
