@@ -79,19 +79,44 @@
 				<div class="panel-body" id="chat">
 					<ul id="chatMessages" style="border: 1px solid #ddd;">
 
-						@foreach($messages as $message)
+            @foreach($messages as $message)
+            
+              {{-- Sender --}}
 							@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
-								<li class="message" :class="mine" style="clear:both">
-									<div class="chat-bubble out">
-										{{ $message->message }}
-									</div>
-								</li>
-							@else
-								<li class="message" :class="user" style="clear:both">
-									<div class="chat-bubble in">
-										{{ $message->message }}
-									</div>
-								</li>
+                
+                {{-- if message has a media_url --}}
+                @if($message->media_url)
+                  <li class="message" :class="mine" style="clear:both">
+                    <div class="chat-bubble out">
+                      {{ $message->media_url }}
+                    </div>
+                  </li>
+                {{-- if message is a text --}}
+                @else
+                  <li class="message" :class="mine" style="clear:both">
+                    <div class="chat-bubble out">
+                      {{ $message->message }}
+                    </div>
+                  </li>
+                @endif
+                
+              {{-- Receiver --}}
+              @else
+                {{-- if message has a media_url --}}
+                @if($message->media_url)
+                  <li class="message" :class="user" style="clear:both">
+                    <div class="chat-bubble in">
+                      {{ $message->media_url }}
+                    </div>
+                  </li>
+                {{-- if message is a text --}}
+                @else
+                  <li class="message" :class="user" style="clear:both">
+                    <div class="chat-bubble in">
+                      {{ $message->message }}
+                    </div>
+                  </li>
+                @endif
 							@endif
 						@endforeach
 
@@ -208,8 +233,8 @@
 	var chatport = "{{ $chatPort }}";
 	var url = "{{ explode(':', str_replace('http://', '', str_replace('https://', '', App::make('url')->to('/'))))[0] }}";
     var threadid = "{{ $threadId }}";
-	var otherparty;
-
+  var otherparty;
+  
 </script>
 <script src="{{ elixir('/js/chat.js') }}"></script>
 @endsection
