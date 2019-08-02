@@ -43,11 +43,12 @@ class MessageController extends Controller
     $userName = Auth::user()->name;
     $userId   = Auth::user()->id;
 
+    $otherName  = '';
+
     // Customer
     if (Auth::user()->userable_type == 'App\Models\Customer') {
       $userType   = 'Customer';
-      $otherName  = '';
-
+      
       $threads = Message::where('customer_id', '=', $userId)
                 ->orderBy('created_at', 'DESC')
                 ->get()
@@ -59,6 +60,7 @@ class MessageController extends Controller
         $threadId = $threads[0]->breeder_id;
       }
 
+      // get the customer's messages
       $messages = Message::where('customer_id', '=', $userId)
                 ->where('breeder_id',  $threadId)
                 ->orderBy('created_at', 'ASC')
@@ -73,7 +75,7 @@ class MessageController extends Controller
 
       if (!$tampered && sizeof($messages) <= 0 && sizeof($threads) > 0) {
         $user = User::where('id', $threadId)->first();
-        if (!isset($user) || $user->userable_type != 'App\Models\Breeder')
+        if (!isset($user) || $user->userable_type == 'App\Models\Breeder')
           return Redirect::route('messages');
         $otherName = $user->name;
       }
@@ -100,7 +102,6 @@ class MessageController extends Controller
     // Breeder
     elseif (Auth::user()->userable_type == 'App\Models\Breeder') {
       $userType   = 'Breeder';
-      $otherName  = '';
 
       $threads = Message::where('breeder_id', '=', $userId)
                 ->orderBy('created_at', 'DESC')
