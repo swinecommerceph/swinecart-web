@@ -337,26 +337,35 @@ class MessageController extends Controller
     return $mediaInfo;
   }
 
-    /**
-     * Check if media is Image depending on extension
-     *
-     * @param  String   $extension
-     * @return Boolean
-     */
-    private function isImage($extension)
-    {
-        return ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') ? true : false;
-    }
+  /**
+   * Check if media is Image depending on extension
+   *
+   * @param  String   $extension
+   * @return Boolean
+   */
+  private function isImage($extension)
+  {
+      return (
+        $extension == 'jpg'   ||
+        $extension == 'jpeg'  ||
+        $extension == 'png'
+      ) ? true : false;
+  }
 
-    /**
-     * Check if media is Video depending on extension
-     *
-     * @param  String   $extension
-     * @return Boolean
-     */
-    private function isVideo($extension)
-    {
-        return ($extension == 'mp4' || $extension == 'mkv' || $extension == 'avi' || $extension == 'flv') ? true : false;
-    }
+  /**
+   * Check if media is Video depending on extension
+   *
+   * @param  String   $extension
+   * @return Boolean
+   */
+  private function isVideo($extension)
+  {
+      return (
+        $extension == 'mp4' ||
+        $extension == 'mkv' ||
+        $extension == 'avi' ||
+        $extension == 'flv'
+      ) ? true : false;
+  }
 
 }
