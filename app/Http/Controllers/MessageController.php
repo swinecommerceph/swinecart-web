@@ -314,27 +314,28 @@ class MessageController extends Controller
      * @param  String           $extension
      * @return AssociativeArray $mediaInfo
      */
-    private function createMediaInfo($extension)
-    {
-        $mediaInfo = [];
+  private function createMediaInfo($extension)
+  {
+    $mediaInfo = [];
 
-        $mediaInfo['filename'] = '_message_'
-          . md5(time())
-          . '_'
-          . $extension;
+    /* change the file name for better security */
+    $mediaInfo['filename'] = '_message_'
+      . md5(time())
+      . '_'
+      . $extension;
 
-        if ($this->isImage($extension)) {
-          $mediaInfo['directoryPath'] = '/images/message/';
-          $mediaInfo['type'] = new Image;
-        }
-        else if ($this->isVideo($extension)) {
-          // Log::info('video here');
-          $mediaInfo['directoryPath'] = '/videos/message/';
-          $mediaInfo['type'] = new Video;
-        }
-
-        return $mediaInfo;
+    /* create mediaInfo object based on media type */
+    if ($this->isImage($extension)) {
+      $mediaInfo['directoryPath'] = '/images/message/';
+      $mediaInfo['type'] = new Image;
     }
+    else if ($this->isVideo($extension)) {
+      $mediaInfo['directoryPath'] = '/videos/message/';
+      $mediaInfo['type'] = new Video;
+    }
+
+    return $mediaInfo;
+  }
 
     /**
      * Check if media is Image depending on extension
