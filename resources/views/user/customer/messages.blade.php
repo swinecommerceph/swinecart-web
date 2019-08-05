@@ -79,7 +79,7 @@
 		<div>
 
 			<div class="panel panel-default">
-				<div class="panel-body" id="chat">
+				<div class="panel-body" id="chat" v-cloak>
 					<ul id="chatMessages" style="border: 1px solid #ddd;">
 
             <div v-for="item in items">
