@@ -13,7 +13,8 @@ $(document).ready(function(){
 			user: "",
       mine: "",
       mediaUrl: null,
-      mediaType: null
+      mediaType: null,
+      mediaDropzone: ''
     },
 		mounted : function(){
 
@@ -22,7 +23,7 @@ $(document).ready(function(){
       Dropzone.options.mediaDropzone = false; // disabling the auto detect of dropzone js
       setTimeout(() => {
         /* Initialize Dropzone */
-        var mediaDropzone = new Dropzone('#media-dropzone', {
+        vueVm.mediaDropzone = new Dropzone('#media-dropzone', {
           paramName: "medium",
           parallelUploads: 1,
           maxFiles: 1,
@@ -211,6 +212,29 @@ $(document).ready(function(){
           // clear the media url and media type after sending
           this.mediaUrl = null; 
           this.mediaType = null;
+
+          
+
+          if ((this.mediaDropzone.files).length) {
+            
+            /* 
+              clear dropzone preview file(s)
+              so that when the user clicks send, the files will be emptied
+            */
+            const dropzoneFiles = this.mediaDropzone.files;
+            dropzoneFiles.forEach(element => {
+              if (element.previewElement) {
+                const _ref = element.previewElement;
+                _ref.parentNode.removeChild(element.previewElement);
+              }
+            });
+
+            // return the media dropzone to its original state
+            this.mediaDropzone.emit('reset');
+
+            // close modal after clicking the send button
+            $('#upload-media-modal').modal('close');
+          }
         }
         else return;
 			},
