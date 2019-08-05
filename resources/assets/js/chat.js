@@ -147,12 +147,23 @@ $(document).ready(function(){
 			addMeAmessage : function(message){
 				message = JSON.parse(message);
 
-				this.addMessage({
-					"msg" 	: message.message,
-					"class"	: "mine",
-					"who"	: "",
-					"dir"	: "out",
-				});
+        if (this.mediaUrl) {
+          this.addMessage({
+            "msg" 	: message.media_url,
+            "class"	: "mine",
+            "who"	: "",
+            "dir"	: "out",
+          });
+        }
+        else {
+          this.addMessage({
+            "msg": message.message,
+            "class": "mine",
+            "who": "",
+            "dir": "out",
+          });
+        }
+
 			},
 			addMessage : function(message) {
 				this.messages.push(message);
