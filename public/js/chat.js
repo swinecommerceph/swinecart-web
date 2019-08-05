@@ -42,10 +42,10 @@ $(document).ready(function(){
       mine: "",
       mediaUrl: null,
       mediaType: null,
-      mediaDropzone: ''
+      mediaDropzone: '',
+      items: allMessages
     },
-		mounted : function(){
-
+    created : function () {
       const vueVm = this;
 
       Dropzone.options.mediaDropzone = false; // disabling the auto detect of dropzone js
@@ -70,7 +70,7 @@ $(document).ready(function(){
           init: function () {
             const dropzoneVm = this;
             dropzoneVm.on('success', (file, response) => {
-              
+
               // get the returned json from the back end
               const mediaObject = response;
               vueVm.mediaType = mediaObject.media_type;
@@ -79,6 +79,9 @@ $(document).ready(function(){
           }
         });
       }, 0)
+    },
+    
+		mounted : function(){
       
 			// default port
 			this.port = this.port.length == 0 ? '9090' : this.port;
@@ -245,17 +248,11 @@ $(document).ready(function(){
         
           var msgToSend = JSON.stringify(message);
 
-          this.conn.send(msgToSend); // send to user
+          this.conn.send(msgToSend); // send to user 
 
           this.addMeAmessage(msgToSend); // send dto self
 
           this.newMessage = ""; // clear the message area after sending
-
-          // clear the media url and media type after sending
-          this.mediaUrl = null; 
-          this.mediaType = null;
-
-          
 
           if ((this.mediaDropzone.files).length) {
             
