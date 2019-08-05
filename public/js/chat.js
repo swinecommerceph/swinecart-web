@@ -175,6 +175,9 @@ $(document).ready(function(){
 			addMeAmessage : function(message){
 				message = JSON.parse(message);
 
+        /* 
+          Add the send message to sender (in UI form)
+        */
         if (this.mediaUrl) {
           this.addMessage({
             "msg" 	: message.media_url,
