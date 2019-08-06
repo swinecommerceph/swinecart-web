@@ -43,7 +43,8 @@ $(document).ready(function(){
       mediaUrl: null,
       mediaType: null,
       mediaDropzone: '',
-      items: allMessages
+      items: allMessages,
+      testData: []
     },
     created : function () {
       const vueVm = this;
@@ -185,7 +186,7 @@ $(document).ready(function(){
         */
         if (this.mediaUrl) {
           this.addMessage({
-            "msg" 	: message.media_url,
+            "msg": '',
             "class"	: "mine",
             "who"	: "",
             "dir"	: "out",

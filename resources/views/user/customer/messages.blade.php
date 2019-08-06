@@ -142,10 +142,19 @@
               </div>
             </div>
 
-						<li v-for="message in messages" class="message" :class="message.class" style="display:none;clear:both;">
+            <li
+              v-for="message in messages"
+              class="message"
+              :class="message.class"
+              style="display:none;clear:both;"
+            >
 							<div class="chat-bubble" v-bind:class="message.dir">
-								@{{ message.msg }}
-							</div>
+                <img v-if="mediaUrl" :src="mediaUrl">
+
+                <div v-else>
+                  @{{ message.msg }}
+                </div>
+                
 						</li>
 
 					</ul>
