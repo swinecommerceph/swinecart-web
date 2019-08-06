@@ -54,7 +54,6 @@ $(document).ready(function(){
     },
     
 		mounted : function(){
-      
 			// default port
 			this.port = this.port.length == 0 ? '9090' : this.port;
 
@@ -128,6 +127,7 @@ $(document).ready(function(){
 			  	me.addServerMessage(event.data);
       };
       
+      $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
 		},
 		methods : {
 			addSystemMessage : function(message){
@@ -186,7 +186,7 @@ $(document).ready(function(){
 			scrollMessagesDown : function(){
 				var chatMessages = document.getElementById('chatMessages');
 				chatMessages.scrollTop = chatMessages.scrollHeight;
-			},
+      },
 			sendMessage : function() {
         
         if (threadid == '') return;

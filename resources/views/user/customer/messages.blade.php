@@ -150,7 +150,7 @@
 
 					</ul>
 
-					<div class="row">
+					<div id="belowChatBox" class="row">
             <a
               href="#upload-media-modal"
               @click="uploadMedia"
