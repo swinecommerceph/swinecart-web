@@ -154,7 +154,8 @@ $(document).ready(function(){
 
 			this.conn.onmessage = function(event) {
 			  	me.addServerMessage(event.data);
-			};
+      };
+      
 		},
 		methods : {
 			addSystemMessage : function(message){
@@ -176,7 +177,7 @@ $(document).ready(function(){
 				});
 			},
 			addMeAmessage : function(message){
-				message = JSON.parse(message);
+        message = JSON.parse(message);
 
         /* 
           Add the send message to sender (in UI form)
@@ -203,8 +204,8 @@ $(document).ready(function(){
 				this.messages.push(message);
 
 				if($('#thread-'+threadid).length)
-					$('#thread-collection').prepend($('#thread-'+threadid));
-
+          $('#thread-collection').prepend($('#thread-'+threadid));
+        
 				// allow the DOM to get updated
 				Vue.nextTick(function () {
 					this.scrollMessagesDown();
@@ -212,12 +213,12 @@ $(document).ready(function(){
 			},
 			scrollMessagesDown : function(){
 				var chatMessages = document.getElementById('chatMessages');
-				chatMessages.scrollTop = 1000000;
+				chatMessages.scrollTop = chatMessages.scrollHeight;
 			},
 			sendMessage : function() {
         
         if (threadid == '') return;
-        
+
         // send only when there is a message or there is a media to be sent
         if (this.newMessage.length || this.mediaUrl) {
           // can send
@@ -251,7 +252,7 @@ $(document).ready(function(){
           this.conn.send(msgToSend); // send to user 
 
           this.addMeAmessage(msgToSend); // send dto self
-
+        
           this.newMessage = ""; // clear the message area after sending
 
           if ((this.mediaDropzone.files).length) {

@@ -91,10 +91,10 @@
               >
                 {{-- if message has a media_url --}}
                 <li
-                 v-if="item.media_url"
-                 class="message"
-                 :class="mine"
-                 style="clear:both;"
+                  v-if="item.media_url"
+                  class="message"
+                  :class="mine" 
+                  style="clear:both;"
                 >
                   <div class="chat-bubble-media">
                     <img class="chat-media-bubble" :src="item.media_url">
