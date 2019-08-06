@@ -28,6 +28,8 @@
  	.chat-bubble { border-radius: 10px; padding:10px; max-width: 30vw;}
  	.chat-bubble.in { float:left; background-color: #e0e0e0; color: #424242;}
  	.chat-bubble.out { float:right; background-color: #0071FF; color: white;}
+  .chat-media-bubble { float:right; width: 100%; height: 100%; }
+  .chat-bubble-media { float:right; border-radius: 5px; padding: 0px; max-width: 30vw; }
 </style>
 
 <div class="row" style="padding-left: 0.5vw;">
@@ -76,27 +78,80 @@
 	<!-- Right column for actual chat box -->
 	<div class="col m9" id="chat">
 		<ul id="chatMessages" style="border: 1px solid #ddd;">
-			@foreach($messages as $message)
-				@if (($message->direction == 0 && $userType == 'Customer') || ($message->direction == 1 && $userType == 'Breeder'))
-					<li class="message" :class="mine" style="clear:both">
-						<div class="chat-bubble out">
-							{{ $message->message }}
+			<div v-for="item in items">
+        {{-- Sender --}}
+        <div v-if="
+            (item.direction == 0 && usertype == 'Customer') ||
+            (item.direction == 1 && usertype == 'Breeder')
+          "
+        >
+          {{-- if message has a media_url --}}
+          <li
+            v-if="item.media_url"
+            class="message"
+            :class="mine" 
+            style="clear:both;"
+          >
+            <div class="chat-bubble-media">
+              <img class="chat-media-bubble" :src="item.media_url">
             </div>
-					</li>
-				@else
-					<li class="message" :class="user" style="clear:both">
-						<div class="chat-bubble in">
-							{{ $message->message }}
-						</div>
-					</li>
-				@endif
-			@endforeach
+          </li>
 
-			<li v-for="message in messages" class="message" :class="message.class" style="display:none;clear:both;">
-				<div class="chat-bubble" v-bind:class="message.dir">
-					@{{ message.msg }}
-				</div>
-			</li>
+          {{-- if message is a text --}}
+          <li
+            v-else
+            class="message"
+            :class="mine"
+            style="clear:both;"
+          >
+            <div class="chat-bubble out">
+              @{{ item.message }}
+            </div>
+          </li>
+        </div>
+
+        {{-- Receiver --}}
+        <div v-else>
+          {{-- if message has a media url --}}
+          <li
+            v-if="item.media_url"
+            class="message"
+            :class="user"
+            style="clear:both"
+          >
+            <div class="chat-bubble in">
+              <img class="chat-media-bubble" :src="item.media_url">
+            </div>
+          </li>
+
+          {{-- if message is a text --}}
+          <li
+            v-else
+            class="message"
+            :class="user"
+            style="clear:both;"
+          >
+            <div class="chat-bubble in">
+              @{{ item.message }}
+            </div>
+          </li>
+        </div>
+      </div>
+
+      <li
+        v-for="message in messages"
+        class="message"
+        :class="message.class"
+        style="display:none;clear:both;"
+      >
+        <div class="chat-bubble" v-bind:class="message.dir">
+          <img v-if="mediaUrl" :src="mediaUrl">
+
+          <div v-else>
+            @{{ message.msg }}
+          </div>
+          
+      </li>
     </ul>
     
 
@@ -205,7 +260,8 @@ $(document).ready(function(){
 	var chatport = "{{ $chatPort }}";
 	var url = "{{ explode(':', str_replace('http://', '', str_replace('https://', '', App::make('url')->to('/'))))[0] }}";
 	var threadid = "{{ $threadId }}";
-	var otherparty;
+  var otherparty;
+  var allMessages = {!! $messages !!};
 
 </script>
 <script src="{{ elixir('/js/chat.js') }}"></script>
