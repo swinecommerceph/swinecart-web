@@ -44,7 +44,6 @@ $(document).ready(function(){
       mediaType: null,
       mediaDropzone: '',
       items: allMessages,
-      testData: []
     },
     created : function () {
       const vueVm = this;
