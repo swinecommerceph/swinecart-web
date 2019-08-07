@@ -13,6 +13,7 @@ $(document).ready(function(){
 			user: "",
       mine: "",
       mediaUrl: null,
+      mediaUrlFromDropzone: null,
       mediaType: null,
       mediaDropzone: '',
       items: allMessages,
@@ -46,7 +47,7 @@ $(document).ready(function(){
               // get the returned json from the back end
               const mediaObject = response;
               vueVm.mediaType = mediaObject.media_type;
-              vueVm.mediaUrl = mediaObject.media_url;
+              vueVm.mediaUrlFromDropzone = mediaObject.media_url;
             })
           }
         });
@@ -193,7 +194,7 @@ $(document).ready(function(){
         if (threadid == '') return;
 
         // send only when there is a message or there is a media to be sent
-        if (this.newMessage.length || this.mediaUrl) {
+        if (this.newMessage.length || this.mediaUrlFromDropzone) {
           // can send
 
           // create the message object to be send in Chat.php
@@ -208,7 +209,9 @@ $(document).ready(function(){
             message.media_url = null;
             message.media_type = null;
           }
-          else if (this.mediaUrl) {
+          else if (this.mediaUrlFromDropzone) {
+            this.mediaUrl = this.mediaUrlFromDropzone;
+
             // if message is media and not text
             message.message = '';
             message.media_url = this.mediaUrl;
