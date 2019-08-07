@@ -12,9 +12,9 @@ $(document).ready(function(){
 			conn: false,
 			user: "",
       mine: "",
-      mediaUrl: null,
+      mediaUrl: '',
       mediaUrlFromDropzone: null,
-      mediaType: null,
+      mediaType: '',
       mediaDropzone: '',
       items: allMessages,
     },
@@ -42,15 +42,14 @@ $(document).ready(function(){
           previewTemplate: document.getElementById("custom-preview").innerHTML,
           init: function () {
             const dropzoneVm = this;
+
             dropzoneVm.on('success', (file, response) => {
 
               // get the returned json from the back end
               const mediaObject = response;
               vueVm.mediaType = mediaObject.media_type;
-              if (vue.mediaUrlFromDropzone) {
-                vue.mediaUrlFromDropzone = null;
-              }
               vueVm.mediaUrlFromDropzone = mediaObject.media_url;
+
             })
           }
         });
@@ -210,8 +209,8 @@ $(document).ready(function(){
           if (this.newMessage) {
             // if message is text not media
             message.message = this.newMessage;
-            message.media_url = null;
-            message.media_type = null;
+            message.media_url = '';
+            message.media_type = '';
           }
           else if (this.mediaUrlFromDropzone) {
             /*
@@ -223,8 +222,8 @@ $(document).ready(function(){
             */
 
             if (this.mediaUrl) {
-              this.mediaUrl = null;
-              this.mediaType = null;
+              this.mediaUrl = '';
+              this.mediaType = '';
             }
             this.mediaUrl = this.mediaUrlFromDropzone;
 
@@ -253,16 +252,10 @@ $(document).ready(function(){
               clear dropzone preview file(s)
               so that when the user clicks send, the files will be emptied
             */
-            const dropzoneFiles = this.mediaDropzone.files;
-            dropzoneFiles.forEach(element => {
-              if (element.previewElement) {
-                const _ref = element.previewElement;
-                _ref.parentNode.removeChild(element.previewElement);
-              }
-            });
-
-            // return the media dropzone to its original state
-            this.mediaDropzone.emit('reset');
+            this.mediaUrlFromDropzone = null;
+            this.mediaType = '';
+            this.mediaUrl = '';
+            this.mediaDropzone.removeAllFiles(true);
 
             // close modal after clicking the send button
             $('#upload-media-modal').modal('close'); 
