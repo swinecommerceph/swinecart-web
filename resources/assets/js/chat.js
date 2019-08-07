@@ -131,7 +131,9 @@ $(document).ready(function(){
       };
       
       // scroll down at the bottom of chat upon mounted
-      $('#chatMessages').scrollTop($('#chatMessages')[0].scrollHeight);
+      setTimeout(() => {
+        this.scrollMessagesDown();
+      }, 0);
 		},
 		methods : {
 			addSystemMessage : function(message){
@@ -184,13 +186,15 @@ $(document).ready(function(){
           $('#thread-collection').prepend($('#thread-'+threadid));
         
 				// allow the DOM to get updated
-				Vue.nextTick(function () {
-					this.scrollMessagesDown();
-				}.bind(this));
+        setTimeout(() => {
+          Vue.nextTick(function () {
+            this.scrollMessagesDown();
+          }.bind(this));
+        }, 0)
 			},
 			scrollMessagesDown : function(){
 				var chatMessages = document.getElementById('chatMessages');
-				chatMessages.scrollTop = chatMessages.scrollHeight;
+        chatMessages.scrollTop = chatMessages.scrollHeight;
       },
 			sendMessage : function() {
         
