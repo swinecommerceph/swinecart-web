@@ -133,7 +133,7 @@ $(document).ready(function(){
       setTimeout(() => {
         var chatMessages = document.getElementById('chatMessages');
         chatMessages.scrollTop = chatMessages.scrollHeight;
-      }, 0);
+      }, 100);
 		},
 		methods : {
 			addSystemMessage : function(message){
