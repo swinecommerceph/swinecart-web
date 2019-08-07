@@ -210,6 +210,13 @@ $(document).ready(function(){
             message.media_type = null;
           }
           else if (this.mediaUrlFromDropzone) {
+            /*
+              Upon uploading, the image url will be bind to a temporary
+              variable, and then later bind in the actual variable that is
+              seen in the html.
+
+              This is to avoid early binding/showing of image in the browser
+            */
             this.mediaUrl = this.mediaUrlFromDropzone;
 
             // if message is media and not text
