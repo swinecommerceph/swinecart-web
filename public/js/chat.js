@@ -158,9 +158,9 @@ $(document).ready(function(){
 			  	me.addServerMessage(event.data);
       };
       
-      // scroll down at the bottom of chat upon mounted
       setTimeout(() => {
-        this.scrollMessagesDown();
+        var chatMessages = document.getElementById('chatMessages');
+        chatMessages.scrollTop = chatMessages.scrollHeight;
       }, 0);
 		},
 		methods : {
