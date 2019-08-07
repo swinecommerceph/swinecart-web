@@ -72,7 +72,6 @@ $(document).ready(function(){
             const dropzoneVm = this;
 
             dropzoneVm.on('success', (file, response) => {
-              console.table(response);
               // get the returned json from the back end
               const mediaObject = response;
               vueVm.media_type = mediaObject.media_type;
