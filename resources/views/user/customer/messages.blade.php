@@ -98,7 +98,20 @@
                   style="clear:both;"
                 >
                   <div class="chat-bubble-media">
-                    <img class="chat-media-bubble" :src="item.media_url">
+                    <img 
+                      v-if="item.media_type === 'image'"
+                      class="chat-media-bubble"
+                      :src="item.media_url"
+                    >
+
+                    <video
+                      v-if="item.media_type === 'video'"
+                      class="chat-media-bubble"
+                      :src="item.media_url"
+                      controls
+                    >
+                      Sorry, your browser doesn't support embedded videos.
+                    </video>
                   </div>
                 </li>
 
@@ -151,7 +164,20 @@
               style="display:none;clear:both;"
             >
 							<div v-if="message.mediaUrl" class="chat-bubble-media">
-                <img class="chat-media-bubble" :src="message.mediaUrl">
+                <img 
+                  v-if="message.mediaType === 'image'"
+                  class="chat-media-bubble"
+                  :src="message.mediaUrl"
+                >
+
+                <video
+                  v-if="message.mediaType === 'video'"
+                  class="chat-media-bubble"
+                  :src="message.mediaUrl"
+                  controls
+                >
+                  Sorry, your browser doesn't support embedded videos.
+                </video>
 							</div>
 
               <div
