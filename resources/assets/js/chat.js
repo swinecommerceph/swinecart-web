@@ -12,9 +12,9 @@ $(document).ready(function(){
 			conn: false,
 			user: "",
       mine: "",
-      mediaUrl: '',
-      mediaUrlFromDropzone: null,
-      mediaType: '',
+      media_url: '',
+      temp_media_url: '',
+      media_type: '',
       mediaDropzone: '',
       items: allMessages,
     },
@@ -44,11 +44,11 @@ $(document).ready(function(){
             const dropzoneVm = this;
 
             dropzoneVm.on('success', (file, response) => {
-
+              console.table(response);
               // get the returned json from the back end
               const mediaObject = response;
-              vueVm.mediaType = mediaObject.media_type;
-              vueVm.mediaUrlFromDropzone = mediaObject.media_url;
+              vueVm.media_type = mediaObject.media_type;
+              vueVm.temp_media_url = mediaObject.media_url;
 
             })
           }
@@ -154,8 +154,8 @@ $(document).ready(function(){
           console.log('this add system: media');
           this.addMessage({
             "msg": '',
-            "mediaUrl": this.mediaUrl,
-            "mediaType": this.mediaType,
+            "media_url": this.media_url,
+            "media_type": this.media_type,
             "class": "mine",
             "who": "",
             "dir": "out",
@@ -177,11 +177,11 @@ $(document).ready(function(){
         /* 
           Add the send message to sender (in UI form)
         */
-        if (this.mediaUrl) {
+        if (this.media_url) {
           this.addMessage({
             "msg": '',
-            "mediaUrl": this.mediaUrl,
-            "mediaType": this.mediaType,
+            "media_url": this.media_url,
+            "media_type": this.media_type,
             "class"	: "mine",
             "who"	: "",
             "dir"	: "out",
@@ -218,7 +218,7 @@ $(document).ready(function(){
         if (threadid == '') return;
 
         // send only when there is a message or there is a media to be sent
-        if (this.newMessage.length || this.mediaUrlFromDropzone) {
+        if (this.newMessage.length || this.temp_media_url) {
           // can send
 
           // create the message object to be send in Chat.php
@@ -233,7 +233,7 @@ $(document).ready(function(){
             message.media_url = '';
             message.media_type = '';
           }
-          else if (this.mediaUrlFromDropzone) {
+          else if (this.temp_media_url) {
             /*
               Upon uploading, the image url will be bind to a temporary
               variable, and then later bind in the actual variable that is
@@ -242,16 +242,17 @@ $(document).ready(function(){
               This is to avoid early binding/showing of image in the browser
             */
 
-            if (this.mediaUrl) {
-              this.mediaUrl = '';
-              this.mediaType = '';
+            if (this.media_url) {
+              this.media_url = '';
+              this.media_type = '';
             }
-            this.mediaUrl = this.mediaUrlFromDropzone;
+            
+            this.media_url = this.temp_media_url;
 
             // if message is media and not text
             message.message = '';
-            message.media_url = this.mediaUrl;
-            message.media_type = this.mediaType;
+            message.media_url = this.media_url;
+            message.media_type = this.media_type;
           }
 
           // identify who is the sender
@@ -273,9 +274,9 @@ $(document).ready(function(){
               clear dropzone preview file(s)
               so that when the user clicks send, the files will be emptied
             */
-            this.mediaUrlFromDropzone = null;
-            this.mediaType = '';
-            this.mediaUrl = '';
+            this.media_url = null;
+            this.media_type = '';
+            this.media_url = '';
             this.mediaDropzone.removeAllFiles(true);
 
             // close modal after clicking the send button

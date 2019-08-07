@@ -177,17 +177,17 @@
               :class="mine"
               style="display:none;clear:both;"
             >
-							<div v-if="message.mediaUrl" class="chat-bubble-media">
+							<div v-if="message.media_url" class="chat-bubble-media">
                 <img 
-                  v-if="message.mediaType === 'image'"
+                  v-if="message.media_type === 'image'"
                   class="chat-media-bubble"
-                  :src="message.mediaUrl"
+                  :src="message.media_url"
                 >
 
                 <video
-                  v-if="message.mediaType === 'video'"
+                  v-if="message.media_type === 'video'"
                   class="chat-media-bubble"
-                  :src="message.mediaUrl"
+                  :src="message.media_url"
                   controls
                 >
                   Sorry, your browser doesn't support embedded videos.
