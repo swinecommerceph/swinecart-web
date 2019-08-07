@@ -137,13 +137,13 @@
           >
             <div class="chat-bubble in">
               <img
-                v-if="item.mediaType === 'image'"
+                v-if="item.media_type === 'image'"
                 class="chat-media-bubble"
                 :src="item.media_url"
               >
               
               <video
-                v-if="item.mediaType === 'video'"
+                v-if="item.media_type === 'video'"
                 class="chat-media-bubble"
                 :src="item.media_url"
                 controls
@@ -174,17 +174,17 @@
         :class="mine"
         style="display:none;clear:both;"
       >
-        <div v-if="message.mediaType" class="chat-bubble-media">
+        <div v-if="message.media_type" class="chat-bubble-media">
           <img 
-            v-if="message.mediaType === 'image'"
+            v-if="message.media_type === 'image'"
             class="chat-media-bubble"
-            :src="message.mediaUrl"
+            :src="message.media_url"
           >
 
           <video
-            v-if="message.mediaType === 'video'"
+            v-if="message.media_type === 'video'"
             class="chat-media-bubble"
-            :src="message.mediaUrl"
+            :src="message.media_url"
             controls
           >
             Sorry, your browser doesn't support embedded videos.
