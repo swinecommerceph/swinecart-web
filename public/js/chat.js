@@ -205,7 +205,6 @@ $(document).ready(function(){
             "dir": "out",
           });
         }
-
 			},
 			addMessage : function(message) {
 				this.messages.push(message);
@@ -237,7 +236,6 @@ $(document).ready(function(){
 
           // assign what time of message to send
           if (this.newMessage) {
-            console.log('media is text');
             // if message is text not media
             message.message = this.newMessage;
             message.media_url = null;
@@ -251,7 +249,6 @@ $(document).ready(function(){
 
               This is to avoid early binding/showing of image in the browser
             */
-            console.log('media is media');
 
             if (this.mediaUrl) {
               this.mediaUrl = null;
@@ -296,11 +293,8 @@ $(document).ready(function(){
             this.mediaDropzone.emit('reset');
 
             // close modal after clicking the send button
-            $('#upload-media-modal').modal('close');
-
-            
+            $('#upload-media-modal').modal('close'); 
           }
-          console.log(this.messages);
         }
         else return;
 			},
