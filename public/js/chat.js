@@ -155,7 +155,8 @@ $(document).ready(function(){
 			}.bind(this);
 
 			this.conn.onmessage = function(event) {
-			  	me.addServerMessage(event.data);
+          me.addServerMessage(event.data);
+          //console.log(JSON.parse(event.data));
       };
       
       setTimeout(() => {
@@ -173,14 +174,30 @@ $(document).ready(function(){
 				});
 			},
 			addServerMessage : function(message){
-				message = JSON.parse(message);
-				
-				this.addMessage({
-					"msg" 	: message.message,
-					"class"	: "user",
-					"who"	: message.from,
-					"dir"	: "in",
-				});
+        message = JSON.parse(message);
+        
+        console.log(message);
+        
+        if (message.media_type) {
+          console.log('this add system: media');
+          this.addMessage({
+            "msg": '',
+            "mediaUrl": this.mediaUrl,
+            "mediaType": this.mediaType,
+            "class": "mine",
+            "who": "",
+            "dir": "out",
+          });
+        }
+        else {
+          console.log('this add system: text');
+          this.addMessage({
+            "msg": message.message,
+            "class": "system",
+            "who": "System",
+            "dir": "in",
+          });
+        }
 			},
 			addMeAmessage : function(message){
         message = JSON.parse(message);

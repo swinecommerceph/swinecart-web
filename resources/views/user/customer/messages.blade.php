@@ -98,12 +98,13 @@
                   style="clear:both;"
                 >
                   <div class="chat-bubble-media">
-                    <img 
+                    
+                    <img
                       v-if="item.media_type === 'image'"
                       class="chat-media-bubble"
                       :src="item.media_url"
                     >
-
+                    
                     <video
                       v-if="item.media_type === 'video'"
                       class="chat-media-bubble"
@@ -132,13 +133,26 @@
               <div v-else>
                 {{-- if message has a media url --}}
                 <li
-                  v-if="item.media_url"
+                  v-if="item.media_type"
                   class="message"
                   :class="user"
                   style="clear:both"
                 >
                   <div class="chat-bubble in">
-                    <img class="chat-media-bubble" :src="item.media_url">
+                    <img
+                      v-if="item.media_type === 'image'"
+                      class="chat-media-bubble"
+                      :src="item.media_url"
+                    >
+                    
+                    <video
+                      v-if="item.media_type === 'video'"
+                      class="chat-media-bubble"
+                      :src="item.media_url"
+                      controls
+                    >
+                      Sorry, your browser doesn't support embedded videos.
+                    </video>
                   </div>
                 </li>
 

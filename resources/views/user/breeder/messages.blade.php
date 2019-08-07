@@ -79,6 +79,8 @@
 	<div class="col m9" id="chat">
 		<ul id="chatMessages" style="border: 1px solid #ddd;">
 			<div v-for="item in items">
+        {{-- Page Reloaded Messages --}}
+      <div v-for="item in items">
         {{-- Sender --}}
         <div v-if="
             (item.direction == 0 && usertype == 'Customer') ||
@@ -93,7 +95,21 @@
             style="clear:both;"
           >
             <div class="chat-bubble-media">
-              <img class="chat-media-bubble" :src="item.media_url">
+              
+              <img
+                v-if="item.media_type === 'image'"
+                class="chat-media-bubble"
+                :src="item.media_url"
+              >
+              
+              <video
+                v-if="item.media_type === 'video'"
+                class="chat-media-bubble"
+                :src="item.media_url"
+                controls
+              >
+                Sorry, your browser doesn't support embedded videos.
+              </video>
             </div>
           </li>
 
@@ -114,13 +130,26 @@
         <div v-else>
           {{-- if message has a media url --}}
           <li
-            v-if="item.media_url"
+            v-if="item.media_type"
             class="message"
             :class="user"
             style="clear:both"
           >
             <div class="chat-bubble in">
-              <img class="chat-media-bubble" :src="item.media_url">
+              <img
+                v-if="item.mediaType === 'image'"
+                class="chat-media-bubble"
+                :src="item.media_url"
+              >
+              
+              <video
+                v-if="item.mediaType === 'video'"
+                class="chat-media-bubble"
+                :src="item.media_url"
+                controls
+              >
+                Sorry, your browser doesn't support embedded videos.
+              </video>
             </div>
           </li>
 
@@ -138,18 +167,37 @@
         </div>
       </div>
 
+      {{-- Real Time Messages --}}
       <li
         v-for="message in messages"
         class="message"
-        :class="message.class"
+        :class="mine"
         style="display:none;clear:both;"
       >
-        <div class="chat-bubble" v-bind:class="message.dir">
-          <img v-if="mediaUrl" :src="mediaUrl">
+        <div v-if="message.mediaType" class="chat-bubble-media">
+          <img 
+            v-if="message.mediaType === 'image'"
+            class="chat-media-bubble"
+            :src="message.mediaUrl"
+          >
 
-          <div v-else>
-            @{{ message.msg }}
-          </div>
+          <video
+            v-if="message.mediaType === 'video'"
+            class="chat-media-bubble"
+            :src="message.mediaUrl"
+            controls
+          >
+            Sorry, your browser doesn't support embedded videos.
+          </video>
+        </div>
+
+        <div
+          v-else
+          class="chat-bubble"
+          :class="message.dir"
+        >
+          @{{ message.msg }}
+        </div>
           
       </li>
     </ul>
