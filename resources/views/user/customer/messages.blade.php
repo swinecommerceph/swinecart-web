@@ -82,6 +82,7 @@
 				<div class="panel-body" id="chat" v-cloak>
 					<ul id="chatMessages" style="border: 1px solid #ddd;">
 
+            {{-- Page Reloaded Messages --}}
             <div v-for="item in items">
               {{-- Sender --}}
               <div v-if="
@@ -142,18 +143,24 @@
               </div>
             </div>
 
+            {{-- Real Time Messages --}}
             <li
               v-for="message in messages"
               class="message"
-              :class="message.class"
+              :class="mine"
               style="display:none;clear:both;"
             >
-							<div class="chat-bubble" v-bind:class="message.dir">
-                <img v-if="mediaUrl" :src="mediaUrl">
+							<div v-if="message.mediaUrl" class="chat-bubble-media">
+                <img class="chat-media-bubble" :src="message.mediaUrl">
+							</div>
 
-                <div v-else>
-                  @{{ message.msg }}
-                </div>
+              <div
+                v-else
+                class="chat-bubble"
+                :class="message.dir"
+              >
+                @{{ message.msg }}
+              </div>
                 
 						</li>
 

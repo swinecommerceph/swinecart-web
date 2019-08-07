@@ -75,6 +75,9 @@ $(document).ready(function(){
               // get the returned json from the back end
               const mediaObject = response;
               vueVm.mediaType = mediaObject.media_type;
+              if (vue.mediaUrlFromDropzone) {
+                vue.mediaUrlFromDropzone = null;
+              }
               vueVm.mediaUrlFromDropzone = mediaObject.media_url;
             })
           }
@@ -187,6 +190,8 @@ $(document).ready(function(){
         if (this.mediaUrl) {
           this.addMessage({
             "msg": '',
+            "mediaUrl": this.mediaUrl,
+            "mediaType": this.mediaType,
             "class"	: "mine",
             "who"	: "",
             "dir"	: "out",
@@ -232,6 +237,7 @@ $(document).ready(function(){
 
           // assign what time of message to send
           if (this.newMessage) {
+            console.log('media is text');
             // if message is text not media
             message.message = this.newMessage;
             message.media_url = null;
@@ -245,6 +251,12 @@ $(document).ready(function(){
 
               This is to avoid early binding/showing of image in the browser
             */
+            console.log('media is media');
+
+            if (this.mediaUrl) {
+              this.mediaUrl = null;
+              this.mediaType = null;
+            }
             this.mediaUrl = this.mediaUrlFromDropzone;
 
             // if message is media and not text
@@ -285,7 +297,10 @@ $(document).ready(function(){
 
             // close modal after clicking the send button
             $('#upload-media-modal').modal('close');
+
+            
           }
+          console.log(this.messages);
         }
         else return;
 			},
