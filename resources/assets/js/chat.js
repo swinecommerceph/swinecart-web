@@ -146,22 +146,18 @@ $(document).ready(function(){
 			},
 			addServerMessage : function(message){
         message = JSON.parse(message);
-        
-        console.log(message);
-        
+      
         if (message.media_type) {
-          console.log('this add system: media');
           this.addMessage({
             "msg": '',
-            "media_url": this.media_url,
-            "media_type": this.media_type,
+            "media_url": message.media_url,
+            "media_type": message.media_type,
             "class": "mine",
             "who": "",
             "dir": "out",
           });
         }
         else {
-          console.log('this add system: text');
           this.addMessage({
             "msg": message.message,
             "class": "system",
