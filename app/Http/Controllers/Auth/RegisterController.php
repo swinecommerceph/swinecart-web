@@ -123,6 +123,16 @@ class RegisterController extends Controller
         return view('user.customer.getPrivacyPolicy');
     }
 
+    /**
+     * Show Page for Breeder to Privacy Policy
+     *
+     * @return View
+     */
+    public function getBreederPrivacyPolicy()
+    {
+        return view('user.breeder.getPrivacyPolicy');
+    }
+
     
 
 }
