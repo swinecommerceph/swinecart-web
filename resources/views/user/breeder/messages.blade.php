@@ -25,11 +25,13 @@
  	#chatMessages li { width: 100%; padding: 10px;}
  	#thread-collection{ height: 60vh; overflow-y: auto; }
 
- 	.chat-bubble { border-radius: 10px; padding:10px; max-width: 30vw;}
+ 	.chat-bubble { border-radius: 10px; padding: 7px; max-width: 30vw;}
  	.chat-bubble.in { float:left; background-color: #e0e0e0; color: #424242;}
- 	.chat-bubble.out { float:right; background-color: #0071FF; color: white;}
+  .chat-bubble.out { float:right; background-color: #0071FF; color: white;}
   .chat-media-bubble { float:right; width: 100%; height: 100%; }
   .chat-bubble-media { float:right; border-radius: 5px; padding: 0px; max-width: 30vw; }
+  .chat-media-bubble.in { float:left; width: 30vw; height: 100%; }
+  .chat-media-bubble.out { float:right; width: 30vw; height: 100%; }
 </style>
 
 <div class="row" style="padding-left: 0.5vw;">
@@ -78,8 +80,8 @@
 	<!-- Right column for actual chat box -->
 	<div class="col m9" id="chat">
 		<ul id="chatMessages" style="border: 1px solid #ddd;">
-			<div v-for="item in items">
-        {{-- Page Reloaded Messages --}}
+
+      {{-- Page Reloaded Messages --}}
       <div v-for="item in items">
         {{-- Sender --}}
         <div v-if="
@@ -135,7 +137,7 @@
             :class="user"
             style="clear:both"
           >
-            <div class="chat-bubble in">
+            <div class="chat-media-bubble in">
               <img
                 v-if="item.media_type === 'image'"
                 class="chat-media-bubble"
@@ -174,7 +176,11 @@
         :class="mine"
         style="display:none;clear:both;"
       >
-        <div v-if="message.media_type" class="chat-bubble-media">
+        <div 
+          v-if="message.media_url"
+          class="chat-media-bubble"
+          :class="message.dir"
+        >
           <img 
             v-if="message.media_type === 'image'"
             class="chat-media-bubble"
@@ -200,6 +206,7 @@
         </div>
           
       </li>
+
     </ul>
     
 

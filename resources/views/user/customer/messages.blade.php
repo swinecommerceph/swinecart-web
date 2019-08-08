@@ -198,7 +198,7 @@
                 >
                   Sorry, your browser doesn't support embedded videos.
                 </video>
-							</div>
+              </div>
 
               <div
                 v-else
@@ -208,7 +208,7 @@
                 @{{ message.msg }}
               </div>
                 
-						</li>
+            </li>
 
 					</ul>
 
