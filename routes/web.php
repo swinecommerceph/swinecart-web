@@ -15,6 +15,8 @@ Route::get('/public-products', function () {
     return view('products');
 });
 
+Route::get('/privacy-policy', ['as' => 'customer.privacyPolicy', 'uses' => 'Auth\RegisterController@getPrivacyPolicy']);
+
 Route::get('/',['as' => 'index_path', function () {
     return view('home');
 }])->middleware('guest');

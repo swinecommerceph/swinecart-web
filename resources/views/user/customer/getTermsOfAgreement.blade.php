@@ -6,7 +6,7 @@
 
 @section('content')
   
-  <div class="container">
+  <div class="container"
     <h1>Terms of Agreement for Customers</h1>
     
     <p>

@@ -394,6 +394,16 @@ span.caret {
 #page-customer-view-products #collapsible-container label{
 	/*color:#000;*/
 }
+.terms-and-policy-container {
+  margin-bottom: 5px;
+}
+
+/* Terms and Policy Label */
+.terms-and-policy {
+  text-align: right !important;
+  font-size: 0.8rem;
+  color: #757575;
+}
 
 /* Status Label */
 .status-label {

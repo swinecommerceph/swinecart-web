@@ -113,4 +113,14 @@ class RegisterController extends Controller
 
     }
 
+    /**
+     * Show Page for Customer to Terms of Agreement
+     *
+     * @return View
+     */
+    public function getPrivacyPolicy()
+    {
+        return view('user.customer.getPrivacyPolicy');
+    }
+
 }

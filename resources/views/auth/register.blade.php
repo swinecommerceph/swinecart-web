@@ -53,6 +53,16 @@
     						</div>
     					</div>
 
+              {{-- For Terms and Policy --}}
+              <div class="terms-and-policy-container">
+                <p class="terms-and-policy">
+                  By clicking Register, you agree to our
+                  <a href="#">Terms</a>
+                  and
+                  <a href="{{ route('customer.privacyPolicy') }}" target="_blank">Data Policy</a>.
+                </p>
+              </div>
+
     					{{-- Register Button --}}
     					<div class="row">
     						<div class="">
