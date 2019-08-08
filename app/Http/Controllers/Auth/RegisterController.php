@@ -114,7 +114,7 @@ class RegisterController extends Controller
     }
 
     /**
-     * Show Page for Customer to Terms of Agreement
+     * Show Page for Customer to Privacy Policy
      *
      * @return View
      */
@@ -122,5 +122,7 @@ class RegisterController extends Controller
     {
         return view('user.customer.getPrivacyPolicy');
     }
+
+    
 
 }
