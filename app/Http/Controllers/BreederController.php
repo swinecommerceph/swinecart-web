@@ -133,6 +133,16 @@ class BreederController extends Controller
     }
 
     /**
+     * Show Page for Customer to Terms of Agreement
+     *
+     * @return View
+     */
+    public function getTermsOfAgreement()
+    {
+        return view('user.breeder.getTermsOfAgreement');
+    }
+
+    /**
      * Show Page for Breeder to update profile
      *
      * @param  Request $request

@@ -68,6 +68,7 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
       
         // profile-related
+        Route::get('terms-of-agreement', ['as' => 'breeder.getTermsOfAgreement', 'uses' => 'BreederController@getTermsOfAgreement']);
     	Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
     	Route::patch('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
         Route::put('edit-profile/personal/edit',['as' => 'breeder.updatePersonal', 'uses' => 'BreederController@updatePersonal']);

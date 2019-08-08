@@ -89,7 +89,7 @@
 								</a>
 								<ul id="nav-dropdown" class="dropdown-content">
 					        @yield('navbarDropdown')
-					        <li class="divider"></li>
+                  <li class="divider"></li>
 					        <li><a href="{{ url('logout') }}">Logout</a></li>
 						    </ul>
               </li>

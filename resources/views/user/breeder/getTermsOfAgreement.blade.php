@@ -1,13 +1,13 @@
 @extends('layouts.default')
 
 @section('title')
-    | Customer - Terms of Agreement
+    | Breeder - Terms of Agreement
 @endsection
 
 @section('content')
   
   <div class="container">
-    <h1>Terms of Agreement for Customers</h1>
+    <h1>Terms of Agreement for Breeders</h1>
     
     <p>
       Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc sit amet semper orci. Aenean ipsum odio, efficitur in orci eget, vehicula suscipit orci. Morbi vulputate libero at leo ultricies, ac convallis sem lobortis. In eleifend nisl eu libero scelerisque lobortis. Nam in urna nunc. Phasellus cursus, turpis eu sodales pulvinar, massa eros vehicula lacus, quis aliquam elit odio ut nisl. Fusce condimentum pretium nunc ac tristique. Etiam elementum vel felis quis viverra. Donec ut sagittis ex, quis blandit diam. Nunc semper vulputate dui eu ultrices. Etiam nec condimentum elit. Suspendisse venenatis facilisis nulla, sed aliquam elit consectetur eu. Nullam vulputate purus nec molestie lobortis.
