@@ -118,7 +118,7 @@ class RegisterController extends Controller
      *
      * @return View
      */
-    public function getPrivacyPolicy()
+    public function getCustomerPrivacyPolicy()
     {
         return view('user.customer.getPrivacyPolicy');
     }

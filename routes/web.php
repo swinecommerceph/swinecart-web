@@ -15,7 +15,7 @@ Route::get('/public-products', function () {
     return view('products');
 });
 
-Route::get('/privacy-policy', ['as' => 'customer.privacyPolicy', 'uses' => 'Auth\RegisterController@getPrivacyPolicy']);
+Route::get('/customer-privacy-policy', ['as' => 'customer.privacyPolicy', 'uses' => 'Auth\RegisterController@getCustomerPrivacyPolicy']);
 Route::get('/breeder-privacy-policy', ['as' => 'breeder.privacyPolicy', 'uses' => 'Auth\RegisterController@getBreederPrivacyPolicy']);
 
 Route::get('/',['as' => 'index_path', function () {
