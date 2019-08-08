@@ -85,6 +85,16 @@ class CustomerController extends Controller
     }
 
     /**
+     * Show Page for Customer to Terms of Agreement
+     *
+     * @return View
+     */
+    public function getTermsOfAgreement()
+    {
+        return view('user.customer.getTermsOfAgreement');
+    }
+
+    /**
      * Create and store Customer profile data to database and
      * Associate User to Customer user type as well
      *

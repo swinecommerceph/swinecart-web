@@ -128,6 +128,7 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
 
         // profile-related
+        Route::get('terms-of-agreement', ['as' => 'customer.getTermsOfAgreement', 'uses' => 'CustomerController@getTermsOfAgreement']);
       	Route::get('edit-profile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
       	Route::post('edit-profile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
       	Route::put('edit-profile/personal/edit',['as' => 'customer.updatePersonal', 'uses' => 'CustomerController@updatePersonal']);

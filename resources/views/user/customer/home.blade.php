@@ -206,7 +206,14 @@
 
 @section('navbarDropdown')
     @if(!Auth::user()->update_profile)
-        <li><a href="{{ route('customer.edit') }}"> <i class="material-icons left">people</i> Update Profile</a></li>
+        <li>
+          <a href="{{ route('customer.edit') }}">
+            <i class="material-icons left">people</i> Update Profile
+          </a>
+          <a href="{{ route('customer.getTermsOfAgreement') }}" target="_blank">
+            <i class="material-icons left">description</i> Terms of Agreement
+          </a>
+        </li>
     @endif
 @endsection
 
