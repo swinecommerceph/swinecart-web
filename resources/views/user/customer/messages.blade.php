@@ -28,6 +28,8 @@
   .chat-bubble.out { float:right; background-color: #0071FF; color: white;}
   .chat-media-bubble { float:right; width: 100%; height: 100%; }
   .chat-bubble-media { float:right; border-radius: 5px; padding: 0px; max-width: 30vw; }
+  .chat-media-bubble.in { float:left; width: 30vw; height: 100%; }
+  .chat-media-bubble.out { float:right; width: 30vw; height: 100%; }
 
 </style>
 
@@ -138,7 +140,7 @@
                   :class="user"
                   style="clear:both"
                 >
-                  <div class="chat-bubble in">
+                  <div class="chat-media-bubble in">
                     <img
                       v-if="item.media_type === 'image'"
                       class="chat-media-bubble"
@@ -177,7 +179,11 @@
               :class="mine"
               style="display:none;clear:both;"
             >
-							<div v-if="message.media_url" class="chat-bubble-media">
+              <div 
+                v-if="message.media_url"
+                class="chat-media-bubble"
+                :class="message.dir"
+              >
                 <img 
                   v-if="message.media_type === 'image'"
                   class="chat-media-bubble"

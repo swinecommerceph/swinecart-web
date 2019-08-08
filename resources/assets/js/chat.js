@@ -154,7 +154,7 @@ $(document).ready(function(){
             "media_type": message.media_type,
             "class": "mine",
             "who": "",
-            "dir": "out",
+            "dir": "in",
           });
         }
         else {
