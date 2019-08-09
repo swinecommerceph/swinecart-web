@@ -1673,3 +1673,21 @@ a.google {
   border-radius: 5px;
   font-weight: 600;
 }
+
+.terms-of-agreement-list-container {
+  padding-left: 30px !important;
+}
+
+.terms-of-agreement-main-header {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.terms-of-agreement-sub-header {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.terms-of-agreement-list {
+  list-style-type: disc !important;
+}

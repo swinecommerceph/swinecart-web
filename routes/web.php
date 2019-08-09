@@ -17,6 +17,7 @@ Route::get('/public-products', function () {
 
 Route::get('/customer-privacy-policy', ['as' => 'customer.privacyPolicy', 'uses' => 'Auth\RegisterController@getCustomerPrivacyPolicy']);
 Route::get('/breeder-privacy-policy', ['as' => 'breeder.privacyPolicy', 'uses' => 'Auth\RegisterController@getBreederPrivacyPolicy']);
+Route::get('/terms-of-agreement', ['as' => 'termsOfAgreement', 'uses' => 'Auth\RegisterController@getTermsOfAgreement']);
 
 Route::get('/',['as' => 'index_path', function () {
     return view('home');
@@ -132,7 +133,7 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
 
         // profile-related
-        Route::get('terms-of-agreement', ['as' => 'customer.getTermsOfAgreement', 'uses' => 'CustomerController@getTermsOfAgreement']);
+        // Route::get('terms-of-agreement', ['as' => 'customer.getTermsOfAgreement', 'uses' => 'CustomerController@getTermsOfAgreement']);
       	Route::get('edit-profile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
       	Route::post('edit-profile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
       	Route::put('edit-profile/personal/edit',['as' => 'customer.updatePersonal', 'uses' => 'CustomerController@updatePersonal']);

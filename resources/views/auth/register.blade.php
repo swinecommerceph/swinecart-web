@@ -57,7 +57,7 @@
               <div class="terms-and-policy-container">
                 <p class="terms-and-policy">
                   By clicking Register, you agree to our
-                  <a href="#">Terms</a>
+                <a href="{{ route('termsOfAgreement') }}" target="_blank">Terms</a>
                   and
                   <a href="{{ route('customer.privacyPolicy') }}" target="_blank">Data Policy</a>.
                 </p>

@@ -133,6 +133,16 @@ class RegisterController extends Controller
         return view('user.breeder.getPrivacyPolicy');
     }
 
+    /**
+     * Show Page for User to Terms of Agreement
+     *
+     * @return View
+     */
+    public function getTermsOfAgreement()
+    {
+        return view('auth.termsOfAgreement');
+    }
+
     
 
 }
