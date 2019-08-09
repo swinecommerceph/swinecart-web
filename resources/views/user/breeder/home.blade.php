@@ -129,11 +129,8 @@
 @endsection
 
 @section('navbarDropdown')
-  <li>
-    <a href="{{ route('breeder.getTermsOfAgreement') }}" target="_blank">
-      <i class="material-icons left">description</i> Terms of Agreement
-    </a>
-  </li>
+  @if(!Auth::user()->update_profile)
+  @endif
 @endsection
 
 @section('content')

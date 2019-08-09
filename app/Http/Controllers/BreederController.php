@@ -34,7 +34,7 @@ class BreederController extends Controller
     public function __construct()
     {
         $this->middleware('role:breeder');
-        $this->middleware('updateProfile:breeder',['except' => ['index','storeProfile']]);
+        $this->middleware('updateProfile:breeder',['except' => ['index','storeProfile', 'getTermsOfAgreement', 'getPrivacyPolicy']]);
         $this->middleware(function($request, $next){
             $this->user = Auth::user();
             return $next($request);
@@ -133,13 +133,23 @@ class BreederController extends Controller
     }
 
     /**
-     * Show Page for Customer to Terms of Agreement
+     * Show Page for User to Terms of Agreement
      *
      * @return View
      */
     public function getTermsOfAgreement()
     {
-        return view('user.breeder.getTermsOfAgreement');
+        return view('auth.termsOfAgreement');
+    }
+
+    /**
+     * Show Page for Breeder to Privacy Policy
+     *
+     * @return View
+     */
+    public function getPrivacyPolicy()
+    {
+        return view('user.breeder.getPrivacyPolicy');
     }
 
     /**
