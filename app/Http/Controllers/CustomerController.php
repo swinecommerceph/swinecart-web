@@ -85,13 +85,23 @@ class CustomerController extends Controller
     }
 
     /**
-     * Show Page for Customer to Terms of Agreement
+     * Show Page for User to Terms of Agreement
      *
      * @return View
      */
     public function getTermsOfAgreement()
     {
-        return view('user.customer.getTermsOfAgreement');
+        return view('auth.termsOfAgreement');
+    }
+
+    /**
+     * Show Page for Customer to Privacy Policy
+     *
+     * @return View
+     */
+    public function getPrivacyPolicy()
+    {
+        return view('user.customer.getPrivacyPolicy');
     }
 
     /**

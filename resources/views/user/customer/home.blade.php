@@ -211,9 +211,6 @@
         <i class="material-icons left">people</i> Update Profile
       </a>
     @endif
-    <a href="{{ route('customer.getTermsOfAgreement') }}" target="_blank">
-      <i class="material-icons left">description</i> Terms of Agreement
-    </a>
   </li>
 @endsection
 
@@ -584,8 +581,25 @@
                 <div class="row">
                     <div class="col s12">
                         <p>
-                            Copyright All Rights Resevered © 2018
+                          Copyright All Rights Resevered © 2018
+                          <span class="terms-and-privacy-in-footer">
+                            <a 
+                              href="{{ route('customer.getTermsOfAgreement') }}"
+                              target="_blank"
+                            >
+                              Terms
+                            </a>
+                          </span>
+                          <span class="terms-and-privacy-in-footer">
+                            <a 
+                              href="{{ route('customer.privacyPolicy') }}"
+                              target="_blank"
+                            >
+                              Privacy Policy
+                            </a>
+                          </span>  
                         </p>
+                        
                     </div>
                 </div>
             </div>

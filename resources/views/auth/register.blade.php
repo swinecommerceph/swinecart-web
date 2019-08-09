@@ -59,7 +59,7 @@
                   By clicking Register, you agree to our
                 <a href="{{ route('termsOfAgreement') }}" target="_blank">Terms</a>
                   and
-                  <a href="{{ route('customer.privacyPolicy') }}" target="_blank">Data Policy</a>.
+                  <a href="{{ route('customerPrivacyPolicy') }}" target="_blank">Data Policy</a>.
                 </p>
               </div>
 

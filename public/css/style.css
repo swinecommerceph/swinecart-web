@@ -1691,3 +1691,11 @@ a.google {
 .terms-of-agreement-list {
   list-style-type: disc !important;
 }
+
+/* Footer */
+.terms-and-privacy-in-footer {
+  font-size: 0.8rem;
+  margin-left: 10px;
+}
+
+

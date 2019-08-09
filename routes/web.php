@@ -15,8 +15,8 @@ Route::get('/public-products', function () {
     return view('products');
 });
 
-Route::get('/customer-privacy-policy', ['as' => 'customer.privacyPolicy', 'uses' => 'Auth\RegisterController@getCustomerPrivacyPolicy']);
-Route::get('/breeder-privacy-policy', ['as' => 'breeder.privacyPolicy', 'uses' => 'Auth\RegisterController@getBreederPrivacyPolicy']);
+Route::get('/customer-privacy-policy', ['as' => 'customerPrivacyPolicy', 'uses' => 'Auth\RegisterController@getCustomerPrivacyPolicy']);
+Route::get('/breeder-privacy-policy', ['as' => 'breederPrivacyPolicy', 'uses' => 'Auth\RegisterController@getBreederPrivacyPolicy']);
 Route::get('/terms-of-agreement', ['as' => 'termsOfAgreement', 'uses' => 'Auth\RegisterController@getTermsOfAgreement']);
 
 Route::get('/',['as' => 'index_path', function () {
@@ -72,7 +72,7 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
       
         // profile-related
-        Route::get('terms-of-agreement', ['as' => 'breeder.getTermsOfAgreement', 'uses' => 'BreederController@getTermsOfAgreement']);
+        //Route::get('terms-of-agreement', ['as' => 'breeder.getTermsOfAgreement', 'uses' => 'BreederController@getTermsOfAgreement']);
     	Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
     	Route::patch('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
         Route::put('edit-profile/personal/edit',['as' => 'breeder.updatePersonal', 'uses' => 'BreederController@updatePersonal']);
@@ -133,7 +133,8 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
 
         // profile-related
-        // Route::get('terms-of-agreement', ['as' => 'customer.getTermsOfAgreement', 'uses' => 'CustomerController@getTermsOfAgreement']);
+        Route::get('terms-of-agreement', ['as' => 'customer.getTermsOfAgreement', 'uses' => 'CustomerController@getTermsOfAgreement']);
+        Route::get('privacy-policy', ['as' => 'customer.privacyPolicy', 'uses' => 'CustomerController@getPrivacyPolicy']);
       	Route::get('edit-profile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
       	Route::post('edit-profile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
       	Route::put('edit-profile/personal/edit',['as' => 'customer.updatePersonal', 'uses' => 'CustomerController@updatePersonal']);
