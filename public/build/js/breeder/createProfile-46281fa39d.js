@@ -20,7 +20,7 @@ $(document).ready(function(){
         return selectElement;
     };
 
-    // $('#create-profile #farm-tab').addClass('disabled');
+    $('#create-profile #farm-tab').addClass('disabled');
 
     // Next and previous buttons
     $('#create-profile #next').click(function(e){
