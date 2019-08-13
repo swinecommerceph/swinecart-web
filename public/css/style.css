@@ -405,6 +405,20 @@ span.caret {
   color: #757575;
 }
 
+.terms-and-policy-breeder-container {
+  position: fixed;
+  bottom: 0;
+}
+
+.terms-and-policy-breeder {
+  font-size: 1rem;
+  color: #e0e0e0;
+  margin-left: 10px;
+}
+.terms-and-policy-breeder:hover {
+  text-decoration: underline;
+}
+
 /* Status Label */
 .status-label {
   font-size: 1.25rem;

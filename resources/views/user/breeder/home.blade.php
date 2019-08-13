@@ -195,6 +195,27 @@
 
           <div class="teal accent-3 divider"></div>
           
+          {{-- Terms and Policy --}}
+          <div class="row terms-and-policy-breeder-container">
+            <span>
+              <a 
+                href="{{ route('breeder.getTermsOfAgreement') }}"
+                class="terms-and-policy-breeder"
+                target="_blank"
+              >
+                Terms
+              </a>
+            </span>
+            <span>
+              <a 
+                href="{{ route('breeder.privacyPolicy') }}"
+                class="terms-and-policy-breeder"
+                target="_blank" 
+              >
+                Privacy Policy
+              </a>
+            </span>
+          </div>
         </div>
         
         {{-- <div style="border-style: none !important;" class="collection">
