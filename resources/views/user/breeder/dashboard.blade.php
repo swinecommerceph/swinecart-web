@@ -177,14 +177,15 @@
         <div class="row"></div>
         <div class="row"></div>
         <div class="row"></div>
-        {{-- Overall Performance --}}
-        <div class="row">
+        
+        {{-- Sales Overview --}}
+        <div class="row hide-on-small-only">
           <h4 class="left-align" style="font-weight: 500; margin-left: 1vw;">
-            Overall Performance
+            Sales Overview
           </h4> <br>
 
           {{-- Selecting which farm to graph --}}
-          <div class="col s4">
+          <div class="col s12 m5 l4 xl3">
             <div style="margin-bottom: 4vh; margin-left: 0.5vw;" class="input-field">
               <select v-model="chosenFarm">
                 <option value="" disabled selected>Choose farm</option>
@@ -193,57 +194,83 @@
                 @endforeach
                 <option value="all-farms">All farms</option>
               </select>
-              <label style="font-size: 1rem; color:hsl(0, 0%, 30%);">Select which farm to graph:</label>
+              <label style="font-size: 1rem; color:hsl(0, 0%, 30%);">Select farm:</label>
             </div>
           </div> <br><br><br><br>
 
           {{-- Guide text --}}
-          <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select a frequency to graph to see your performance:</p>
+          <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select range:</p>
           
           {{-- Charts --}}
-          <div id="charts-container" class="">
-            {{-- Frequencies --}}
-            <div class="col s2">
-              <div class="">
-                <input class="with-gap" name="frequency" type="radio" id="frequency-monthly" value="monthly" v-model="chosenFrequency" @change="valueChange" />
+          <div id="charts-container" class="row">
+            <div class="row">
+              {{-- Frequencies --}}
+              <div class="col s2">
+                {{-- Monthly --}}
+                <input class="with-gap"
+                  name="frequency"
+                  type="radio"
+                  id="frequency-monthly"
+                  value="monthly"
+                  v-model="chosenFrequency" @change="valueChange" />
                 <label for="frequency-monthly">Monthly</label>
-              </div>
-              <div class="">
-                <input class="with-gap" name="frequency" type="radio" id="frequency-weekly" value="weekly" v-model="chosenFrequency" @change="valueChange" />
+             
+                {{-- Weekly --}}
+                <input class="with-gap"
+                  name="frequency"
+                  type="radio"
+                  id="frequency-weekly"
+                  value="weekly"
+                  v-model="chosenFrequency" @change="valueChange" />
                 <label for="frequency-weekly">Weekly</label>
-              </div>
-              <div class="">
-                <input class="with-gap" name="frequency" type="radio" id="frequency-daily" value="daily" v-model="chosenFrequency" @change="valueChange" />
+              
+                {{-- Daily --}}
+                <input class="with-gap"
+                  name="frequency"
+                  type="radio"
+                  id="frequency-daily"
+                  value="daily"
+                  v-model="chosenFrequency" @change="valueChange" />
                 <label for="frequency-daily">Daily</label>
+              </div>
+  
+              {{-- Dates --}}
+              <div class="col s10">
+                <div class="row">
+                  {{-- Date from --}}
+                  <div class="input-field col s4">
+                    <custom-date-from-select v-model="dateFromInput"
+                        :date-accreditation="latestAccreditation"
+                        @date-from-select="dateFromChange"
+                    >
+                    </custom-date-from-select>
+                  </div>
+    
+                  {{-- Date to --}}
+                  <div class="input-field col s4">
+                    <custom-date-to-select v-model="dateToInput"
+                        @date-to-select="dateToChange"
+                        v-show="chosenFrequency !== 'weekly'">
+                    </custom-date-to-select>
+                  </div>
+                </div>
               </div>
             </div>
 
-            {{-- Dates --}}
-            <div class="col s8">
-              <div class="input-field col s4">
-                <custom-date-from-select v-model="dateFromInput"
-                    :date-accreditation="latestAccreditation"
-                    @date-from-select="dateFromChange"
-                >
-                </custom-date-from-select>
+            {{-- View Sales Button --}}
+            <div class="row">
+              <div class="col s2">
+                <a class="btn primary primary-hover" @click.prevent="retrieveSoldProducts">
+                  <b>View Sales</b>
+                </a>
+              </div>
+
             </div>
-            <div class="input-field col s4">
-              <custom-date-to-select v-model="dateToInput"
-                  @date-to-select="dateToChange"
-                  v-show="chosenFrequency !== 'weekly'">
-              </custom-date-to-select>
-            </div>
-            <div class="" style="margin-top:1rem;">
-              <a class="btn teal darken-3" @click.prevent="retrieveSoldProducts">
-                <b>Graph</b>
-              </a>
-            </div>
-          </div>
         
-          {{-- Bar Chart--}}
-          <div class="col s12">
-              <canvas id="barChart"></canvas>
-          </div>
+            {{-- Bar Chart--}}
+            <div class="col s12">
+                <canvas id="barChart"></canvas>
+            </div>
         </div>
         
         <div class="row"></div>
@@ -288,7 +315,7 @@
                     <div id="review-slider" class="slider">
                         <ul class="slides" style="background:hsl(0, 0%, 97%);">
                             <li v-for="review in (dashboardStats.ratings.reviews).slice(0,3)">
-                                <div class="caption right-align">
+                                <div class="caption truncate right-align">
                                     <h5 class="center-align" style="margin:0; color:hsl(0, 0%, 29%);">"@{{ review.comment }}"</h5>
                                     <h6 class="center-align" style="color:hsl(0, 0%, 45%);">- @{{ review.customerName }}</h6>
                                 </div>
@@ -303,12 +330,12 @@
     {{-- Customer Mapping Container--}}
     <div class="row">
         {{-- Location --}}
-        <div class="col s14">
+        <div class="col s12 center-align">
             <a href="{{route('map.customers')}}" >
                 <div class="waves-effect waves-light card hoverable teal darken-3" style="border-radius: 7px !important;">
                     <div class="card-content center-align">
                         <span class="card-title" style="font-weight: 600; color: #fafafa;">
-                            See the locations of your customers!
+                            See the locations of your customers
                         </span>
                     </div>
                 </div>
@@ -324,7 +351,6 @@
         var rawLatestAccreditation = "{{ $latestAccreditation }}";
         var rawServerDateNow = "{{ $serverDateNow }}";
         var rawChartTitle = "{!! $soldData['title'] !!}";
-
         var rawLabels = {!! json_encode($soldData['labels'])!!};
         var rawDataBoar = {{ json_encode($soldData['dataSets'][0]) }};
         var rawDataSow = {{ json_encode($soldData['dataSets'][1]) }};

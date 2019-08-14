@@ -2,6 +2,7 @@
 
 var profile = {
     edit_farm_name: '',
+    data_values: {},
 
     edit: function(parent_form, edit_button, cancel_button){
 
@@ -14,7 +15,7 @@ var profile = {
             // Edit tooltip animation to Done
             edit_button.attr('data-tooltip','Done');
             edit_button.attr('data-position','top');
-            edit_button.html('<i class="material-icons">done</i>');
+            edit_button.html('Update');
             $(".tooltipped").tooltip({delay:50});
             edit_button.prop('disabled', false);
             cancel_button.toggle();
@@ -23,47 +24,55 @@ var profile = {
 
     },
 
+    get_data_values: function(parent_form) {
+      var data_values;
+
+      // Determine if form is of personal or farm information
+      if (parent_form.attr('data-personal-id')) {
+        data_values = {
+          "id": parent_form.attr('data-personal-id'),
+          "officeAddress_addressLine1": parent_form.find('input[name=officeAddress_addressLine1]').val(),
+          "officeAddress_addressLine2": parent_form.find('input[name=officeAddress_addressLine2]').val(),
+          "officeAddress_province": parent_form.find('select[name=officeAddress_province] option:checked').val(),
+          "officeAddress_zipCode": parent_form.find('input[name=officeAddress_zipCode]').val(),
+          "office_landline": parent_form.find('input[name=office_landline]').val(),
+          "office_mobile": parent_form.find('input[name=office_mobile]').val(),
+          "contactPerson_name": parent_form.find('input[name=contactPerson_name]').val(),
+          "contactPerson_mobile": parent_form.find('input[name=contactPerson_mobile]').val(),
+          "website": parent_form.find('input[name=website]').val(),
+          "produce": parent_form.find('input[name=produce]').val(),
+          "_token": parent_form.find('input[name=_token]').val()
+        };
+      }
+      else if (parent_form.attr('data-farm-id')) {
+        var farm_address = [];
+        var details = {
+          "addressLine1": parent_form.find('input[name=addressLine1]').val(),
+          "addressLine2": parent_form.find('input[name=addressLine2]').val(),
+          "province": parent_form.find('input[class=select-dropdown]').val(),
+          "zipCode": parent_form.find('input[name=zipCode]').val(),
+          "farmType": parent_form.find('input[name=farmType]').val(),
+          "landline": parent_form.find('input[name=landline]').val(),
+          "mobile": parent_form.find('input[name=mobile]').val(),
+        };
+        farm_address.push({});
+        farm_address.push(details);
+
+        data_values = {
+          "id": parent_form.attr('data-farm-id'),
+          "_token": parent_form.find('input[name=_token]').val()
+        };
+        data_values["farmAddress"] = farm_address;
+      }
+      
+      return data_values;
+
+    },
+
     update: function(parent_form, edit_button, cancel_button){
         config.preloader_progress.fadeIn();
-        var data_values;
-
-        // Determine if form is of personal or farm information
-        if(parent_form.attr('data-personal-id')){
-            data_values = {
-                "id": parent_form.attr('data-personal-id'),
-                "officeAddress_addressLine1": parent_form.find('input[name=officeAddress_addressLine1]').val(),
-                "officeAddress_addressLine2": parent_form.find('input[name=officeAddress_addressLine2]').val(),
-                "officeAddress_province": parent_form.find('select[name=officeAddress_province] option:checked').val(),
-                "officeAddress_zipCode": parent_form.find('input[name=officeAddress_zipCode]').val(),
-                "office_landline": parent_form.find('input[name=office_landline]').val(),
-                "office_mobile": parent_form.find('input[name=office_mobile]').val(),
-                "contactPerson_name": parent_form.find('input[name=contactPerson_name]').val(),
-                "contactPerson_mobile": parent_form.find('input[name=contactPerson_mobile]').val(),
-                "website": parent_form.find('input[name=website]').val(),
-                "produce": parent_form.find('input[name=produce]').val(),
-                "_token": parent_form.find('input[name=_token]').val()
-            };
-        }
-        else if (parent_form.attr('data-farm-id')) {
-            var farm_address = [];
-            var details = {
-                "addressLine1": parent_form.find('input[name=addressLine1]').val(),
-                "addressLine2": parent_form.find('input[name=addressLine2]').val(),
-                "province": parent_form.find('input[class=select-dropdown]').val(),
-                "zipCode": parent_form.find('input[name=zipCode]').val(),
-                "farmType": parent_form.find('input[name=farmType]').val(),
-                "landline": parent_form.find('input[name=landline]').val(),
-                "mobile": parent_form.find('input[name=mobile]').val(),
-            };
-            farm_address.push({});
-            farm_address.push(details);
-
-            data_values = {
-                    "id": parent_form.attr('data-farm-id'),
-                "_token": parent_form.find('input[name=_token]').val()
-            };
-            data_values["farmAddress"] = farm_address;
-        }
+      
+      var data_values = this.get_data_values(parent_form)
 
         // Do AJAX
         $.ajax({
@@ -108,7 +117,7 @@ var profile = {
                 // Done tooltip animation to Edit
                 edit_button.attr('data-tooltip',profile.edit_farm_name);
                 edit_button.attr('data-position','left');
-                edit_button.html('<i class="material-icons">mode_edit</i>');
+                edit_button.html('Edit');
                 $(".tooltipped").tooltip({delay:50});
                 $('.edit-button').removeClass('disabled');
                 $('.cancel-button').removeClass('disabled');
@@ -135,7 +144,7 @@ var profile = {
             // Done tooltip animation to Edit
             edit_button.attr('data-tooltip',profile.edit_farm_name);
             edit_button.attr('data-position','left');
-            edit_button.html('<i class="material-icons">mode_edit</i>');
+            edit_button.html('Edit');
             $(".tooltipped").tooltip({delay:50});
             cancel_button.toggle();
             config.preloader_progress.fadeOut();
@@ -304,7 +313,10 @@ $(document).ready(function () {
     maxFiles: 1,
     maxFilesize: 5,
     acceptedFiles: "image/png, image/jpeg, image/jpg",
-    dictDefaultMessage: "<h5 style='font-weight: 300;'> Drop image here to upload logo</h5>",
+    dictDefaultMessage:
+      `<h5 style='font-weight: 300;'> Drop an image here to upload </h5>
+      <i class='material-icons'>insert_photo</i>
+      <br> <h5 style='font-weight: 300;'> Or just click anywhere in this container to choose file </h5>`,
     previewTemplate: document.getElementById('custom-preview').innerHTML,
     init: function () {
 
@@ -411,6 +423,43 @@ $(document).ready(function () {
     var edit_button = cancel_button.parents('.content-section').find('.edit-button');
     var parent_form = cancel_button.parents('form');
 
+    /* Return to original state/values if cancelled */
+    
+    // get the initial values
+    delete profile.data_values.id;
+    delete profile.data_values._token;
+
+    // return to original state
+    document.querySelector('#officeAddress_addressLine1').value 
+      = profile.data_values.officeAddress_addressLine1;
+
+    document.querySelector('#officeAddress_addressLine2').value
+      = profile.data_values.officeAddress_addressLine2;
+
+    document.querySelector('input.select-dropdown').value
+      = profile.data_values.officeAddress_province;
+
+    document.querySelector('#officeAddress_zipCode').value
+      = profile.data_values.officeAddress_zipCode;
+
+    document.querySelector('#office_landline').value
+      = profile.data_values.office_landline;
+
+    document.querySelector('#office_mobile').value
+      = profile.data_values.office_mobile;
+
+    document.querySelector('#contactPerson_name').value
+      = profile.data_values.contactPerson_name;
+
+    document.querySelector('#contactPerson_mobile').value
+      = profile.data_values.contactPerson_mobile;
+
+    document.querySelector('#website').value
+      = profile.data_values.website;
+
+    document.querySelector('#produce').value
+      = profile.data_values.produce;
+
     profile.cancel(parent_form, edit_button, cancel_button);
   });
 
@@ -438,7 +487,7 @@ $(document).ready(function () {
 "use strict";
 
 // Place error on specific HTML input
-var placeError = function(inputElement, errorMsg) {
+var placeError = function (inputElement, errorMsg) {
   // Parse id of element if it contains '-' for the special
   // case of finding the input's respective
   // label on editProfile pages
@@ -452,7 +501,7 @@ var placeError = function(inputElement, errorMsg) {
     .find("label[for='" + inputId + "']")
     .attr("data-error", errorMsg);
 
-  setTimeout(function() {
+  setTimeout(function () {
     if (inputElement.id.includes("select")) {
       // For select input, find first its respective input text
       // then add the 'invalid' class
@@ -484,13 +533,13 @@ var placeError = function(inputElement, errorMsg) {
 };
 
 // Place success from specific HTML input
-var placeSuccess = function(inputElement) {
+var placeSuccess = function (inputElement) {
   // For select input, find first its respective input text
   // then add the needed classes
   var inputTextFromSelect = inputElement.id.includes("select")
     ? $(inputElement)
-        .parents(".select-wrapper")
-        .find("input.select-dropdown")
+      .parents(".select-wrapper")
+      .find("input.select-dropdown")
     : "";
 
   // Check first if it is invalid
@@ -503,7 +552,7 @@ var placeSuccess = function(inputElement) {
       .find("label[for='" + inputElement.id + "']")
       .attr("data-error", false);
 
-    setTimeout(function() {
+    setTimeout(function () {
       if (inputElement.id.includes("select"))
         inputTextFromSelect.removeClass("invalid").addClass("valid");
       else
@@ -520,14 +569,18 @@ var placeSuccess = function(inputElement) {
 
 var validationMethods = {
   // functions must return either true or the errorMsg only
-  required: function(inputElement) {
+  required: function (inputElement) {
     var errorMsg;
     if (inputElement.name === "name") errorMsg = "Please enter product name";
     else errorMsg = "This field is required";
 
     return inputElement.value ? true : errorMsg;
   },
-  requiredIfRadio: function(inputElement, radioId) {
+  requiredUserName: function (inputElement) {
+    var errorMsg = "This field is required";
+    return inputElement.value ? true : errorMsg;
+  },
+  requiredIfRadio: function (inputElement, radioId) {
     var errorMsg;
     if (
       inputElement.name === "breed" ||
@@ -541,30 +594,30 @@ var validationMethods = {
     if (radioInputElement.checked) return inputElement.value ? true : errorMsg;
     else return true;
   },
-  requiredDropdown: function(inputElement) {
+  requiredDropdown: function (inputElement) {
     var errorMsg = "This field is required";
     return inputElement.value ? true : errorMsg;
   },
-  email: function(inputElement) {
+  email: function (inputElement) {
     var errorMsg = "Please enter a valid email address";
     return /\S+@\S+\.\S+/.test(inputElement.value) ? true : errorMsg;
   },
-  minLength: function(inputElement, min) {
+  minLength: function (inputElement, min) {
     var errorMsg = "Please enter " + min + " or more characters";
     return inputElement.value.length >= min ? true : errorMsg;
   },
-  equalTo: function(inputElement, compareInputElementId) {
+  equalTo: function (inputElement, compareInputElementId) {
     var errorMsg = "Please enter the same value";
     var compareInputElement = document.getElementById(compareInputElementId);
     return inputElement.value === compareInputElement.value ? true : errorMsg;
   },
-  zipCodePh: function(inputElement) {
+  zipCodePh: function (inputElement) {
     var errorMsg = "Please enter zipcode of 4 number characters";
     return /\d{4}/.test(inputElement.value) && inputElement.value.length === 4
       ? true
       : errorMsg;
   },
-  phoneNumber: function(inputElement) {
+  phoneNumber: function (inputElement) {
     var errorMsg = "Please enter 11-digit phone number starting with 09";
     return /^09\d{9}/.test(inputElement.value) &&
       inputElement.value.length === 11
@@ -658,7 +711,9 @@ var validateFunction = function(){
             var edit_button = $(this);
             var cancel_button = edit_button.parents('.content-section').find('.cancel-button');
             var parent_form = edit_button.parents('form');
-
+            
+            profile.data_values = profile.get_data_values(parent_form);
+          
             edit_button.tooltip('remove');
 
             // If button is for editing the fields

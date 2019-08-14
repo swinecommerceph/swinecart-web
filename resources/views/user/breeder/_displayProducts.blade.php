@@ -6,7 +6,7 @@
 
 {{-- General Actions container --}}
 <div class="row">
-    <div class="col s4 left">
+    <div class="col s12 m4 left">
         {!! Form::open(['route' => 'products.updateSelected', 'id' => 'manage-selected-form']) !!}
             {{-- Add Button --}}
             {{-- <a href="#!" class="btn-floating btn-large waves-effect waves-light blue tooltipped add-product-button" data-position="top" data-delay="50" data-tooltip="Add Product">
@@ -35,9 +35,9 @@
     </div>
 
     {{-- Dropdown container --}}
-    <div id="dropdown-container" class="col s8 right">
+    <div id="dropdown-container" class="col s12 m8 right">
         <div class="row">
-            <div id="sort-select" class="input-field col right">
+            <div id="sort-select" class="input-field col s12 m4 l3 right">
                 <select>
                     <option value="none">Relevance</option>
                     <option value="birthdate-asc" @if(!empty($filters['birthdate-asc'])) {{ $filters['birthdate-asc'] }} @endif>Age: High to Low</option>
@@ -48,7 +48,7 @@
                 </select>
                 <label>Sort By</label>
             </div>
-            <div id="status-select" class="input-field col s3 right">
+            <div id="status-select" class="input-field col s12 m4 l3 right">
                 <select>
                     <option value="all-status" selected>All</option>
                     <option value="displayed" @if(!empty($filters['displayed'])) {{ $filters['displayed'] }} @endif>Displayed</option>
@@ -57,7 +57,7 @@
                 </select>
                 <label>Status</label>
             </div>
-            <div id="type-select" class="input-field col s3 right">
+            <div id="type-select" class="input-field col s12 m4 l3 right">
                 <select>
                     <option value="all-type" selected>All</option>
                     <option value="boar" @if(!empty($filters['boar'])) {{ $filters['boar'] }} @endif>Boar</option>
@@ -114,9 +114,12 @@
                             @endif
                         
                             @if($product->is_unique === 1)
-                              <span class="badge blue white-text right-align"><b>UNIQUE</b></span>
+                              <span class="badge accent white-text right-align"><b>UNIQUE</b></span>
                             @else
-                              <span class="badge pink accent-1 white-text right-align"><b>MULTIPLIER</b></span>
+                              @if($product->quantity !== -1)
+                              <span class="badge pink accent-1 white-text right-align"><b>Quantity: {{ $product->quantity }}</b></span>
+                              @endif
+
                               @if($product->quantity === 0)
                               <span class="badge orange darken-4 white-text right-align"><b>OUT OF STOCK</b></span>
                               @endif
@@ -132,17 +135,17 @@
                             <div class="col right">
                                 {{-- Edit Button --}}
                                 <a href="{{ route('products.editProduct', ['product' => $product->id]) }}" class="tooltipped edit-product-button" data-position="top" data-delay="50" data-tooltip="Edit '{{$product->name}}'" data-product-id="{{$product->id}}">
-                                    <i class="material-icons teal-text text-darken-3" style="font-size:30px">edit</i>
+                                    <i class="material-icons primary-text" style="font-size:30px">edit</i>
                                 </a>
                                 @if(!empty($filters['hidden']) || $product->status == 'hidden')
                                     {{-- Display Button --}}
                                     <a href="#!" class="tooltipped display-product-button" data-position="top" data-delay="50" data-tooltip="Display '{{$product->name}}'" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
-                                        <i class="material-icons teal-text text-darken-3" style="font-size:30px">visibility</i>
+                                        <i class="material-icons primary-text" style="font-size:30px">visibility</i>
                                     </a>
                                 @elseif(!empty($filters['displayed']) || $product->status == 'displayed')
                                     {{-- Hide Button --}}
                                     <a href="#!" class="tooltipped hide-product-button" data-position="top" data-delay="50" data-tooltip="Hide '{{$product->name}}'" data-product-id="{{$product->id}}" data-product-name="{{$product->name}}">
-                                        <i class="material-icons teal-text text-darken-3" style="font-size:30px">visibility_off</i>
+                                        <i class="material-icons primary-text" style="font-size:30px">visibility_off</i>
                                     </a>
                                 @endif
                                 {{-- Delete Button --}}
@@ -174,15 +177,33 @@
                                     @endif
                                     <tr>
                                         <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Average Daily Gain (g): </td>
-                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
+                                        @if($product->adg === 0)
+                                          <td style="color: hsl(0, 0%, 29%);">
+                                            <i class="text-grey">Not Indicated</i>
+                                          </td>
+                                        @else
+                                          <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->adg }} </td>
+                                        @endif
                                     </tr>
                                     <tr>
                                         <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Feed Conversion Ratio: </td>
-                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->fcr }} </td>
+                                        @if($product->fcr === 0.0)
+                                          <td style="color: hsl(0, 0%, 29%);">
+                                            <i class="text-grey">Not Indicated</i>
+                                          </td>
+                                        @else
+                                          <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->fcr }} </td>
+                                        @endif
                                     </tr>
                                     <tr>
                                         <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> Backfat Thickness (mm): </td>
-                                        <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->backfat_thickness }} </td>
+                                        @if($product->backfat_thickness === 0.0)
+                                          <td style="color: hsl(0, 0%, 29%);">
+                                            <i class="text-grey">Not Indicated</i>
+                                          </td>
+                                        @else
+                                          <td style="color: hsl(0, 0%, 13%); font-weight: 550;"> {{ $product->backfat_thickness }} </td>
+                                        @endif
                                     </tr>
                                 </tbody>
                             </table>
@@ -199,12 +220,12 @@
                                 <a href="{{ route('products.bViewDetail', ['product' => $product->id]) }}"
                                     class="waves-effect waves-light"
                                     style="
-                                        border: 2px solid #bbdefb;
+                                        border: 2px solid #006B5E;
                                         background-color: white;
                                         padding: 8px 18px;
                                         font-size: 16px;
                                         cursor: pointer;
-                                        color: #2196f3;
+                                        color: #00695C;
                                         font-weight: 700;
                                         border-radius: 5px;
                                     "

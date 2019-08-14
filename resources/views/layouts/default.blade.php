@@ -25,7 +25,7 @@
   </script>
 
 
-
+ 
 	<title>SwineCart @yield('title') </title>
 
 	{{-- <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet" type="text/css"> --}}
@@ -52,7 +52,7 @@
 <body @yield('pageId')>
 	{{-- Navbar --}}
 	<div class="navbar-fixed">
-		<nav class="teal darken-3">
+		<nav class="primary">
 		    <div class="nav-wrapper navbar-container">
 		     	{{-- If user is a guest--}}
 		     	@if (Auth::guest())
@@ -73,9 +73,9 @@
 								<li><a href="{{ route('register') }}"> Register </a></li>
 							@else
 								@if(!Request::is('login'))
-									<li><a href="{{ route('login') }}" class="waves-effect waves-light btn">Login</a></li>
+									<li><a href="{{ route('login') }}">Login</a></li>
 								@elseif(!Request::is('register'))
-									<li><a href="{{ url('register') }}" class="waves-effect waves-light btn">Register</a></li>
+									<li><a href="{{ url('register') }}">Register</a></li>
 								@endif
 							@endif
 						
@@ -89,7 +89,7 @@
 								</a>
 								<ul id="nav-dropdown" class="dropdown-content">
 					        @yield('navbarDropdown')
-					        <li class="divider"></li>
+                  <li class="divider"></li>
 					        <li><a href="{{ url('logout') }}">Logout</a></li>
 						    </ul>
               </li>

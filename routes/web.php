@@ -15,6 +15,10 @@ Route::get('/public-products', function () {
     return view('products');
 });
 
+Route::get('/customer-privacy-policy', ['as' => 'customerPrivacyPolicy', 'uses' => 'Auth\RegisterController@getCustomerPrivacyPolicy']);
+Route::get('/breeder-privacy-policy', ['as' => 'breederPrivacyPolicy', 'uses' => 'Auth\RegisterController@getBreederPrivacyPolicy']);
+Route::get('/terms-of-agreement', ['as' => 'termsOfAgreement', 'uses' => 'Auth\RegisterController@getTermsOfAgreement']);
+
 Route::get('/',['as' => 'index_path', function () {
     return view('home');
 }])->middleware('guest');
@@ -66,10 +70,12 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['prefix' => 'breeder'], function(){
 
     	Route::get('home',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
-
+      
         // profile-related
-    	Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
-    	Route::patch('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
+        Route::get('terms-of-agreement', ['as' => 'breeder.getTermsOfAgreement', 'uses' => 'BreederController@getTermsOfAgreement']);
+        Route::get('privacy-policy', ['as' => 'breeder.privacyPolicy', 'uses' => 'BreederController@getPrivacyPolicy']);
+        Route::get('edit-profile',['as' => 'breeder.edit', 'uses' => 'BreederController@editProfile']);
+        Route::patch('edit-profile',['as' => 'breeder.store', 'uses' => 'BreederController@storeProfile']);
         Route::put('edit-profile/personal/edit',['as' => 'breeder.updatePersonal', 'uses' => 'BreederController@updatePersonal']);
         Route::put('edit-profile/farm/edit',['as' => 'breeder.updateFarm', 'uses' => 'BreederController@updateFarm']);
         Route::delete('edit-profile/farm/delete',['as' => 'breeder.deleteFarm', 'uses' => 'BreederController@deleteFarm']);
@@ -90,13 +96,13 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('products/product-summary',['as' => 'products.summary', 'uses' => 'ProductController@productSummary']);
         Route::post('products/set-primary-picture',['as' => 'products.setPrimaryPicture', 'uses' => 'ProductController@setPrimaryPicture']);
         Route::post('products/display-product',['as' => 'products.display', 'uses' => 'ProductController@displayProduct']);
-      Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
+        Route::post('products/media/upload',['as' => 'products.mediaUpload', 'uses' => 'ProductController@uploadMedia']);
         Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'ProductController@deleteMedium']);
 
         // dashboard-related
         Route::get('dashboard',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
         Route::get('dashboard/customer-info',['as' => 'dashboard.customerInfo', 'uses' => 'DashboardController@getCustomerInfo']);
-        Route::get('dashboard/product-status',['as' => 'dashboard.productStatus', 'uses' => 'DashboardController@showProductStatus']);
+        Route::get('dashboard/orders',['as' => 'dashboard.productStatus', 'uses' => 'DashboardController@showProductStatus']);
         Route::get('dashboard/product-status/retrieve-product-requests',['as' => 'dashboard.productRequests', 'uses' => 'DashboardController@retrieveProductRequests']);
         Route::get('dashboard/sold-products',['as' => 'dashboard.soldProducts', 'uses' => 'DashboardController@retrieveSoldProducts']);
         Route::get('dashboard/reviews-and-ratings',['as' => 'dashboard.reviews', 'uses' => 'DashboardController@showReviewsAndRatings']);
@@ -113,7 +119,8 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages', ['as' => 'breeder.messages', 'uses'=> 'MessageController@getMessages']);
         Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
         Route::get('messages/{customer}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
-
+        Route::post('messages', ['as' => 'messages.uploadMedia', 'uses' => 'MessageController@uploadMedia']);
+        
         Route::get('customers', ['as' => 'map.customers', 'uses'=> 'BreederController@viewCustomers']);
         Route::post('customers', ['as' => 'map.customersChange', 'uses'=> 'BreederController@viewCustomersChange']);
 
@@ -127,6 +134,8 @@ Route::group(['middleware' => ['web']], function () {
     	Route::get('home',['as' => 'customer_path', 'uses' => 'CustomerController@index']);
 
         // profile-related
+        Route::get('terms-of-agreement', ['as' => 'customer.getTermsOfAgreement', 'uses' => 'CustomerController@getTermsOfAgreement']);
+        Route::get('privacy-policy', ['as' => 'customer.privacyPolicy', 'uses' => 'CustomerController@getPrivacyPolicy']);
       	Route::get('edit-profile',['as' => 'customer.edit', 'uses' => 'CustomerController@editProfile']);
       	Route::post('edit-profile',['as' => 'customer.store', 'uses' => 'CustomerController@storeProfile']);
       	Route::put('edit-profile/personal/edit',['as' => 'customer.updatePersonal', 'uses' => 'CustomerController@updatePersonal']);
@@ -159,7 +168,9 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages', ['as' => 'customer.messages', 'uses'=> 'MessageController@getMessages']);
         Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
         Route::get('messages/{breeder}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
+        Route::post('messages', ['as' => 'messages.uploadMedia', 'uses' => 'MessageController@uploadMedia']);
 
+        
         Route::get('breeders', ['as' => 'map.breeders', 'uses'=> 'CustomerController@viewBreeders']);
         Route::post('breeders', ['as' => 'map.breedersChange', 'uses'=> 'CustomerController@viewBreedersChange']);
 

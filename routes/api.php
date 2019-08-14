@@ -18,6 +18,7 @@ header('Access-Control-Allow-Origin: *');
 header("Access-Control-Allow-Headers: Accept-Encoding, Content-Type, Accept, Access-Control-Request-Method, Authorization");
 header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, PATCH, DELETE");
 
+
 Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function() {
         Route::post('/register', 'RegisterController@register');
@@ -36,7 +37,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/farms/{id}', 'EditProfileController@getFarm');
             Route::put('/farms/{id}', 'EditProfileController@updateFarm');
             Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
-            
+         
             // Route::post('/upload-logo', 'EditProfileController@uploadLogo');
             // Route::delete('/delete-logo', 'EditProfileController@deleteLogo');
             // Route::post('/set-logo', 'EditProfileController@setLogo');
@@ -56,6 +57,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::patch('/{id}/status', 'ProductController@toggleProductStatus');
 
             // Route::post('/set-primary-picture', 'ProductController@setPrimaryPicture');
+
             // Route::delete('/media/delete', 'ProductController@deleteMedium');
 
         });

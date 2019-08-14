@@ -10,6 +10,7 @@ use App\Models\Message;
 use App\Models\User;
 use App\Models\Customer;
 
+
 use JWTAuth;
 use Auth;
 
@@ -24,6 +25,7 @@ class MessageController extends Controller
             return $next($request);
         });
     }
+
 
     public function getMessages(Request $request, $customer_id)
     {   

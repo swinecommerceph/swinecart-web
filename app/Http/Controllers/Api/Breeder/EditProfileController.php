@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Carbon\Carbon;
-
-
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\BreederPersonalProfileRequest;
+
 
 use App\Models\Image;
 use App\Models\User;
@@ -69,6 +68,7 @@ class EditProfileController extends Controller
             'message' => 'Get Profile successful!',
             'data' => [
                 'profile' => $profile,
+
             ]
         ], 200);
     }
@@ -133,6 +133,7 @@ class EditProfileController extends Controller
                 'data' => [
                     'farm' => $farm
                 ]
+
             ], 200);
         }
         else return response()->json([
@@ -212,7 +213,6 @@ class EditProfileController extends Controller
         else return response()->json([
             'error' => 'Farm does not exist!',
         ], 404);
-
     }
 
     public function changePassword(Request $request) 

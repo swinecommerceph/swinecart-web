@@ -99,9 +99,7 @@ return [
     | systems in place to revoke the token if necessary.
     |
     */
-
     'ttl' => 4 * 60,
-
     /*
     |--------------------------------------------------------------------------
     | Refresh time to live

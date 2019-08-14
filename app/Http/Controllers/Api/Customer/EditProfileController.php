@@ -111,7 +111,6 @@ class EditProfileController extends Controller
     public function updatePersonal(CustomerPersonalProfileRequest $request)
     {
         $customer = $this->user->userable;
-
         $data = $request->only([
             'address_addressLine1',
             'address_addressLine2',
@@ -174,7 +173,6 @@ class EditProfileController extends Controller
         }
 
         else {
-
             $farmAddress = new FarmAddress;
             $farmAddress->name = $farm['name'];
             $farmAddress->addressLine1 = $farm['addressLine1'];
@@ -199,7 +197,6 @@ class EditProfileController extends Controller
     {
         $customer = $this->user->userable;
         $farmAddress = $customer->farmAddresses()->find($farm_id);
-
         $data = $request->only([
             'name',
             'addressLine1',

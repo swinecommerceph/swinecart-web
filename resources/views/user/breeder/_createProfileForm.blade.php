@@ -242,7 +242,21 @@
 
 			{{-- Submit Button --}}
 			<div class="row">
-			  <button type="submit" class="btn waves-effect waves-light col s3 push-s8"> Submit
+        {{-- For Terms and Policy --}}
+        <div class="terms-and-policy-container">
+          <p class="terms-and-policy">
+            By clicking Submit, you agree to our
+            <a href="{{ route('breeder.getTermsOfAgreement') }}" target="_blank">Terms</a>
+            and
+            <a href="{{ route('breeder.privacyPolicy') }}" target="_blank">Data Policy</a>.
+          </p>
+        </div>
+
+        <button 
+          type="submit"
+          class="btn waves-effect waves-light col s3 push-s9"
+        > 
+          Submit
 				  <i class="material-icons right">send</i>
 			  </button>
 			</div>

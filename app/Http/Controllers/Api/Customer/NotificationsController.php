@@ -33,7 +33,6 @@ class NotificationsController extends Controller
 
     public function getNotifications(Request $request)
     {
-
         $notifications = $this->user->notifications();
 
         $notifications = $notifications

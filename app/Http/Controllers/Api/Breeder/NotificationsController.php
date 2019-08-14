@@ -36,7 +36,6 @@ class NotificationsController extends Controller
 
     public function getNotifications(Request $request)
     {
-
         $notifications = $this->user->notifications();
 
         $notifications = $notifications
@@ -61,7 +60,6 @@ class NotificationsController extends Controller
                 'notifications' => $notifications
             ]
         ], 200);
-
     }
 
     public function seeNotification(Request $request, $notification_id)

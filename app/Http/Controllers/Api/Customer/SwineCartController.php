@@ -7,7 +7,6 @@ use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Carbon\Carbon;
 use Ramsey\Uuid\Uuid;
-
 use App\Jobs\AddToTransactionLog;
 use App\Jobs\NotifyUser;
 use App\Jobs\SendSMS;
@@ -34,6 +33,7 @@ use JWTAuth;
 use Mail;
 use Storage;
 use Config;
+
 use DB;
 
 class SwineCartController extends Controller
@@ -324,6 +324,7 @@ class SwineCartController extends Controller
     public function deleteItem(Request $request, $item_id)
     {
         $customer = $this->user->userable;
+
         $item = $customer
             ->swineCartItems()
             ->where('if_rated', 0)    
@@ -435,7 +436,6 @@ class SwineCartController extends Controller
         }
         else return response()->json([
             'error' => 'SwineCart Item does not exist!' 
-        ], 404);
-        
+        ], 404);   
     }
 }

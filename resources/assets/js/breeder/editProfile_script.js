@@ -15,7 +15,10 @@ $(document).ready(function () {
     maxFiles: 1,
     maxFilesize: 5,
     acceptedFiles: "image/png, image/jpeg, image/jpg",
-    dictDefaultMessage: "<h5 style='font-weight: 300;'> Drop image here to upload logo</h5>",
+    dictDefaultMessage:
+      `<h5 style='font-weight: 300;'> Drop an image here to upload </h5>
+      <i class='material-icons'>insert_photo</i>
+      <br> <h5 style='font-weight: 300;'> Or just click anywhere in this container to choose file </h5>`,
     previewTemplate: document.getElementById('custom-preview').innerHTML,
     init: function () {
 
@@ -121,6 +124,43 @@ $(document).ready(function () {
     var cancel_button = $(this);
     var edit_button = cancel_button.parents('.content-section').find('.edit-button');
     var parent_form = cancel_button.parents('form');
+
+    /* Return to original state/values if cancelled */
+    
+    // get the initial values
+    delete profile.data_values.id;
+    delete profile.data_values._token;
+
+    // return to original state
+    document.querySelector('#officeAddress_addressLine1').value 
+      = profile.data_values.officeAddress_addressLine1;
+
+    document.querySelector('#officeAddress_addressLine2').value
+      = profile.data_values.officeAddress_addressLine2;
+
+    document.querySelector('input.select-dropdown').value
+      = profile.data_values.officeAddress_province;
+
+    document.querySelector('#officeAddress_zipCode').value
+      = profile.data_values.officeAddress_zipCode;
+
+    document.querySelector('#office_landline').value
+      = profile.data_values.office_landline;
+
+    document.querySelector('#office_mobile').value
+      = profile.data_values.office_mobile;
+
+    document.querySelector('#contactPerson_name').value
+      = profile.data_values.contactPerson_name;
+
+    document.querySelector('#contactPerson_mobile').value
+      = profile.data_values.contactPerson_mobile;
+
+    document.querySelector('#website').value
+      = profile.data_values.website;
+
+    document.querySelector('#produce').value
+      = profile.data_values.produce;
 
     profile.cancel(parent_form, edit_button, cancel_button);
   });

@@ -33,8 +33,8 @@
             </p>
 
             {{-- Reviews with their respective ratings --}}
-            <ul id="reviews-and-ratings-collection" class="collection with-header">
-                <li class="collection-header">
+            <ul v-cloak id="reviews-and-ratings-collection" class="collection with-header">
+                <li class="collection-header center-align">
                     <h5> Overall Average Rating </h5>
                     <average-star-rating :rating="{{ $overallRating }}"></average-star-rating> <br>
                     <span class="">
@@ -50,7 +50,7 @@
                             <span class="grey-text"> ( @{{ review.customerProvince }} ) </span>
                         </span><br><br>
 
-                        <span class="grey-text">
+                        <span class="grey-text text-darken-3">
                             "@{{ review.comment }}"
                         </span>
 
@@ -62,23 +62,20 @@
                     </span>
 
                     {{-- View Ratings icon --}}
-                    <span class="col s12 right-align">
-                        <i class="material-icons"
-                            style="cursor:pointer"
-                            @click.prevent="toggleDetailedRatings(index)"
+                    <span class="col s12 right-align"
+                        style="cursor:pointer"
+                        @click.prevent="toggleDetailedRatings(index)"
                         >
-                            @{{ (review.showDetailedRatings) ? 'keyboard_arrow_up' : 'keyboard_arrow_down' }}
-
-                        </i>
+                        @{{ (review.showDetailedRatings) ? 'See Less' : 'See More' }}
                     </span>
 
                     {{-- Detailed ratings --}}
                     <span v-show="review.showDetailedRatings" class="col s12">
                         {{-- Delivery Rating --}}
-                        <span class="col s3 right-align">
+                        <span class="col s12 m3 center-align">
                             <i>Delivery</i>
                         </span>
-                        <span class="col s9 left-align">
+                        <span class="col s12 m3 center-align">
                             <i class="material-icons yellow-text">
                                 @{{ (review.rating_delivery >= 1) ? 'star' : 'star_border' }}
                             </i>
@@ -94,13 +91,15 @@
                             <i class="material-icons yellow-text">
                                 @{{ (review.rating_delivery >= 5) ? 'star' : 'star_border' }}
                             </i>
-                        </span> <br>
+                        </span> 
+                        <span class="col m6 hide-on-small-only"></span>
+                        <br><br>
 
                         {{-- Transaction Rating --}}
-                        <span class="col s3 right-align">
+                        <span class="col s12 m3 center-align">
                             <i>Transaction</i>
                         </span>
-                        <span class="col s9 left-align">
+                        <span class="col s12 m3 center-align">
                             <i class="material-icons yellow-text">
                                 @{{ (review.rating_transaction >= 1) ? 'star' : 'star_border' }}
                             </i>
@@ -117,12 +116,14 @@
                                 @{{ (review.rating_transaction >= 5) ? 'star' : 'star_border' }}
                             </i>
                         </span>
+                        <span class="col m6 hide-on-small-only"></span>
+                        <br><br>
 
                         {{-- Product Quality Rating --}}
-                        <span class="col s3 right-align">
+                        <span class="col s12 m3 center-align">
                             <i>Product Quality</i>
                         </span>
-                        <span class="col s9 left-align">
+                        <span class="col s12 m3 center-align">
                             <i class="material-icons yellow-text">
                                 @{{ (review.rating_productQuality >= 1) ? 'star' : 'star_border' }}
                             </i>
@@ -139,6 +140,8 @@
                                 @{{ (review.rating_productQuality >= 5) ? 'star' : 'star_border' }}
                             </i>
                         </span>
+                        <span class="col m6 hide-on-small-only"></span>
+                        
                     </span>
                 </li>
             </ul>

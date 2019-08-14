@@ -14,14 +14,13 @@
 
 @section('breadcrumbTitle')
     <div class="breadcrumb-container">    
-      Product Inventory & Status
+      Orders
     </div>
 @endsection
 
 @section('breadcrumb')
     <div class="breadcrumb-container">
         <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
-        <a href="#!" class="breadcrumb">Product Inventory & Status</a>
     </div>
 @endsection
 
@@ -42,7 +41,13 @@
             <form class="col s4 right">
                 <div class="input-field col s12">
                     <i class="material-icons prefix" style="padding-top: 2vh;">search</i>
-                    <input type="text" name="search" v-model="searchQuery" placeholder="Search for a product" autocomplete="off">
+                    <input type="text"
+                      style="padding-left: 10px;"
+                      name="search"
+                      v-model="searchQuery"
+                      placeholder="Search for a product"
+                      autocomplete="off"
+                    >
                 </div>
 
             </form>
@@ -165,7 +170,7 @@
 
                             {{-- If product's status is reserved --}}
                             <template v-if="product.status == 'reserved'">
-                                <a class="waves-effect waves-light btn blue tooltipped"
+                                <a class="waves-effect waves-light btn primary tooltipped"
                                     data-position="right"
                                     data-tooltip="Send for delivery"
                                     style="margin-bottom:1rem; width: 13vw;"
@@ -236,15 +241,15 @@
                                 color: hsl(0, 0%, 29%);"
                     >
                         @{{ productRequest.productName }}
+                        (@{{ productRequest.type | capitalize }} - @{{ productRequest.breed }})
                     </span>
-                    <span style="font-size: 1.4rem;">(@{{ productRequest.type | capitalize }} - @{{ productRequest.breed }})</span>
                     <br><br>
                     <table class="responsive-table bordered highlight">
                         <thead>
                             <tr>
                                 <td style="color: hsl(0, 0%, 60%);"> Name </td>
                                 <td style="color: hsl(0, 0%, 60%);"> Province </td>
-                                <td style="color: hsl(0, 0%, 60%);"> Special Request </td>
+                                <td style="color: hsl(0, 0%, 60%);"> Other Request </td>
                                 <td style="color: hsl(0, 0%, 60%);" class="right-align"> Quantity </td>
                                 <td style="color: hsl(0, 0%, 60%);" class="right-align" v-show="productRequest.type === 'semen'"> Date Needed </td>
                                 <td style="color: hsl(0, 0%, 60%);" class="center-align"> Actions </td>
@@ -280,7 +285,7 @@
                                         <b>Reserve</b>
                                     </a> <br>
                                     <a v-bind:href="'{{ route('breeder.messages') }}/' + customer.userId"
-                                        class="tooltipped blue-text"
+                                        class="btn tooltipped primary white-text"
                                         style="width: 10vw;"
                                         data-position="top"
                                         data-delay="50"
@@ -351,7 +356,7 @@
                 <br><br><br><br><br><br><br><br><br><br>
                 <div class="modal-footer" style="background: hsl(0, 0%, 97%);">
                     <a style="text-transform: none;" class="modal-action modal-close waves-effect waves-green btn-flat delivery-product-buttons">Close</a>
-                    <a class="modal-action waves-effect waves-green btn blue delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes, deliver the product</a>
+                    <a class="modal-action waves-effect waves-green btn primary delivery-product-buttons" @click.prevent="productOnDelivery($event)">Yes, deliver the product</a>
                 </div>
             </div>
 

@@ -24,8 +24,8 @@
     					{{-- Name --}}
     					<div class="row">
     						<div class="input-field col s12">
-    							<input class="validate" type="text" id="name" name="name" value="{{ old('name') }}" autofocus>
-    							<label for="name">Name</label>
+    							<input class="validate" id="name" name="name" value="{{ old('name') }}" autofocus>
+    							<label for="email">Name</label>
     						</div>
     					</div>
 
@@ -53,10 +53,20 @@
     						</div>
     					</div>
 
+              {{-- For Terms and Policy --}}
+              <div class="terms-and-policy-container">
+                <p class="terms-and-policy">
+                  By clicking Register, you agree to our
+                <a href="{{ route('termsOfAgreement') }}" target="_blank">Terms</a>
+                  and
+                  <a href="{{ route('customerPrivacyPolicy') }}" target="_blank">Data Policy</a>.
+                </p>
+              </div>
+
     					{{-- Register Button --}}
     					<div class="row">
     						<div class="">
-    							<button type="submit" class="btn waves-effect waves-light col s5 push-s7"> Register
+    							<button type="submit" class="btn primary primary-hover col s5 push-s7"> Register
     								<i class="material-icons right">send</i>
     							</button>
     						</div>

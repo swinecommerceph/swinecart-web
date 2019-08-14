@@ -32,8 +32,6 @@ use Storage;
 use Config;
 
 class ProductController extends Controller
-{
-
     use CustomHelpers {
         transformBreedSyntax as private;
         transformDateSyntax as private;
@@ -120,6 +118,7 @@ class ProductController extends Controller
         $product->age = $this->computeAge($product->birthdate);
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
         $product->other_details = $product->other_details;
+
         return $product;
     }
 
@@ -196,7 +195,6 @@ class ProductController extends Controller
         $product = $this->getBreederProduct($breeder, $product_id);
 
         if($product) {
-            
             if($product->status === 'hidden') {
                 $product->status = 'displayed';
             }
@@ -371,7 +369,6 @@ class ProductController extends Controller
                     'product' => $p
                 ]
             ], 200);
-
         }
         else return response()->json([
             'error' => 'Product does not exist!'
@@ -415,7 +412,6 @@ class ProductController extends Controller
                     // 'videos' => $videos,
                 ]
             ], 200);
-
         }
         else return response()->json([
             'error' => 'Product does not exist!'

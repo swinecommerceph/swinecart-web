@@ -83,7 +83,9 @@ var validateFunction = function(){
             var edit_button = $(this);
             var cancel_button = edit_button.parents('.content-section').find('.cancel-button');
             var parent_form = edit_button.parents('form');
-
+            
+            profile.data_values = profile.get_data_values(parent_form);
+          
             edit_button.tooltip('remove');
 
             // If button is for editing the fields

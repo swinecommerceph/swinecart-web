@@ -113,4 +113,36 @@ class RegisterController extends Controller
 
     }
 
+    /**
+     * Show Page for Customer to Privacy Policy
+     *
+     * @return View
+     */
+    public function getCustomerPrivacyPolicy()
+    {
+        return view('user.customer.getPrivacyPolicy');
+    }
+
+    /**
+     * Show Page for Breeder to Privacy Policy
+     *
+     * @return View
+     */
+    public function getBreederPrivacyPolicy()
+    {
+        return view('user.breeder.getPrivacyPolicy');
+    }
+
+    /**
+     * Show Page for User to Terms of Agreement
+     *
+     * @return View
+     */
+    public function getTermsOfAgreement()
+    {
+        return view('auth.termsOfAgreement');
+    }
+
+    
+
 }

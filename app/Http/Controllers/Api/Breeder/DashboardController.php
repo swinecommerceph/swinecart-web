@@ -23,10 +23,12 @@ use Config;
 class DashboardController extends Controller
 {   
 
+
     use CustomHelpers {
         transformDateSyntax as private;
         computeAge as private;
     }
+
 
     protected $dashboard;
 
@@ -40,6 +42,8 @@ class DashboardController extends Controller
         });
         $this->dashboard = $dashboard;
     }
+
+
 
     public function getDashboardStats(Request $request) 
     {
@@ -59,6 +63,7 @@ class DashboardController extends Controller
             'data' => [
                 'stats' => $stats
             ]
+
         ], 200);
     }
 
@@ -73,10 +78,10 @@ class DashboardController extends Controller
     }
 
     public function getRatings(Request $request)
+
     {
         $breeder = $this->user->userable;
         $reviews = $breeder->reviews()->orderBy('created_at', 'desc')->get();
-
         $deliveryRating = $reviews->avg('rating_delivery');
         $transactionRating = $reviews->avg('rating_transaction');
         $productQualityRating = $reviews->avg('rating_productQuality');
@@ -106,7 +111,6 @@ class DashboardController extends Controller
             ->map(function ($item) {
                 $review = [];
                 $customer = Customer::find($item->customer_id);
-
                 $review['id'] = $item->id;
                 $review['comment'] = $item->comment;
                 $review['customer_name'] = $customer->users()->first()->name;

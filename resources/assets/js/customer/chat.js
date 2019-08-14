@@ -145,7 +145,7 @@ $(document).ready(function(){
 			},
 			focusMe : function(event) {
 				event.target.select();
-			}	
+      }
 		}
 	});
 });

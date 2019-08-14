@@ -40,6 +40,7 @@ class LoginController extends Controller
         $userLog->activity = 'login';
         $userLog->created_at = Carbon::now();
         $userLog->save();
+
         return response()->json([
             'message' => 'Normal Login successful!',
             'data' => [
@@ -48,13 +49,13 @@ class LoginController extends Controller
                 'expires_in' => JWTAuth::factory()->getTTL() * 60
              ]
         ], 200);
-
     }
 
     public function me(Request $request) 
     {
         $user = JWTAuth::parseToken()->authenticate();
         return response()->json([
+
             'message' => 'Get Me successful!',
             'data' => [
                 'user' => $user

@@ -395,7 +395,7 @@
             <div class="col s12">
                 <div id="images-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
                     <div class="card-content black-text">
-                        <span class="card-title">List of Images</span>
+                        <span class="card-title">Product Images</span>
               {!! Form::open(['route' => 'products.setPrimaryPicture', 'class' => 's12']) !!}
               <div class="image-contents"></div>
               {!! Form::close() !!}
@@ -408,7 +408,7 @@
             <div class="col s12">
                 <div id="videos-summary" class="card grey lighten-5" style="box-shadow: 0px 0px !important; border: none;">
                     <div class="card-content black-text">
-                        <span class="card-title">List of Videos</span>
+                        <span class="card-title">Product Videos</span>
                         <div class="video-contents"></div>
                     </div>
                 </div>

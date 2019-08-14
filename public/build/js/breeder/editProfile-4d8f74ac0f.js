@@ -2,53 +2,10 @@
 
 var profile = {
     edit_farm_name: '',
-
-    add: function(parent_form){
-        config.preloader_progress.fadeIn();
-        var farm_address = [];
-        var data_values = {
-            "_token" : parent_form.find('input[name=_token]').val()
-        };
-
-        farm_address.push({});
-        $(parent_form).find('.add-farm').map(function (index) {
-            var details = {
-                'name': $(this).find('input[name="farmAddress[' + (index+1) + '][name]"]').val(),
-                'addressLine1': $(this).find('input[name="farmAddress[' + (index+1) + '][addressLine1]"]').val(),
-                'addressLine2': $(this).find('input[name="farmAddress[' + (index+1) + '][addressLine2]"]').val(),
-                'province': $(this).find('select[name="farmAddress[' + (index+1) + '][province]"] option:checked').val(),
-                'zipCode': $(this).find('input[name="farmAddress[' + (index+1) + '][zipCode]"]').val(),
-                'farmType': $(this).find('input[name="farmAddress[' + (index+1) + '][farmType]"]').val(),
-                'landline': $(this).find('input[name="farmAddress[' + (index+1) + '][landline]"]').val(),
-                'mobile': $(this).find('input[name="farmAddress[' + (index+1) + '][mobile]"]').val()
-            };
-            farm_address.push(details);
-        });
-
-        data_values["farmAddress"] = farm_address;
-
-        // Do AJAX
-        $.ajax({
-            url: parent_form.attr('action'),
-            type: "POST",
-            cache: false,
-            data: data_values,
-            success: function(data){
-                var data = JSON.parse(data);
-                Materialize.toast('Profile updated Success!', 1500, 'green lighten-1');
-                window.setTimeout(function(){
-                    config.preloader_progress.fadeOut();
-                    location.reload(true);
-                }, 1500);
-            },
-            error: function(message){
-                console.log(message['responseText']);
-                config.preloader_progress.fadeOut();
-            }
-        });
-    },
+    data_values: {},
 
     edit: function(parent_form, edit_button, cancel_button){
+
         config.preloader_progress.fadeIn();
         $.when(
             parent_form.find('input, select').prop('disabled',false),
@@ -58,52 +15,64 @@ var profile = {
             // Edit tooltip animation to Done
             edit_button.attr('data-tooltip','Done');
             edit_button.attr('data-position','top');
-            edit_button.html('<i class="material-icons">done</i>');
+            edit_button.html('Update');
             $(".tooltipped").tooltip({delay:50});
             edit_button.prop('disabled', false);
             cancel_button.toggle();
             config.preloader_progress.fadeOut();
         });
+
+    },
+
+    get_data_values: function(parent_form) {
+      var data_values;
+
+      // Determine if form is of personal or farm information
+      if (parent_form.attr('data-personal-id')) {
+        data_values = {
+          "id": parent_form.attr('data-personal-id'),
+          "officeAddress_addressLine1": parent_form.find('input[name=officeAddress_addressLine1]').val(),
+          "officeAddress_addressLine2": parent_form.find('input[name=officeAddress_addressLine2]').val(),
+          "officeAddress_province": parent_form.find('select[name=officeAddress_province] option:checked').val(),
+          "officeAddress_zipCode": parent_form.find('input[name=officeAddress_zipCode]').val(),
+          "office_landline": parent_form.find('input[name=office_landline]').val(),
+          "office_mobile": parent_form.find('input[name=office_mobile]').val(),
+          "contactPerson_name": parent_form.find('input[name=contactPerson_name]').val(),
+          "contactPerson_mobile": parent_form.find('input[name=contactPerson_mobile]').val(),
+          "website": parent_form.find('input[name=website]').val(),
+          "produce": parent_form.find('input[name=produce]').val(),
+          "_token": parent_form.find('input[name=_token]').val()
+        };
+      }
+      else if (parent_form.attr('data-farm-id')) {
+        var farm_address = [];
+        var details = {
+          "addressLine1": parent_form.find('input[name=addressLine1]').val(),
+          "addressLine2": parent_form.find('input[name=addressLine2]').val(),
+          "province": parent_form.find('input[class=select-dropdown]').val(),
+          "zipCode": parent_form.find('input[name=zipCode]').val(),
+          "farmType": parent_form.find('input[name=farmType]').val(),
+          "landline": parent_form.find('input[name=landline]').val(),
+          "mobile": parent_form.find('input[name=mobile]').val(),
+        };
+        farm_address.push({});
+        farm_address.push(details);
+
+        data_values = {
+          "id": parent_form.attr('data-farm-id'),
+          "_token": parent_form.find('input[name=_token]').val()
+        };
+        data_values["farmAddress"] = farm_address;
+      }
+      
+      return data_values;
+
     },
 
     update: function(parent_form, edit_button, cancel_button){
         config.preloader_progress.fadeIn();
-        var data_values;
-
-        // Determine if form is of personal or farm information
-        if(parent_form.attr('data-personal-id')){
-            data_values = {
-                "id": parent_form.attr('data-personal-id'),
-                "address_addressLine1": parent_form.find('input[name=address_addressLine1]').val(),
-                "address_addressLine2": parent_form.find('input[name=address_addressLine2]').val(),
-                "address_province": parent_form.find('select[name=address_province] option:checked').val(),
-                "address_zipCode": parent_form.find('input[name=address_zipCode]').val(),
-                "landline": parent_form.find('input[name=landline]').val(),
-                "mobile": parent_form.find('input[name=mobile]').val(),
-                "_token": parent_form.find('input[name=_token]').val()
-            };
-        }
-        else if (parent_form.attr('data-farm-id')) {
-            var farm_address = [];
-            var details = {
-                "name": parent_form.find('input[name=name]').val(),
-                "addressLine1": parent_form.find('input[name=addressLine1]').val(),
-                "addressLine2": parent_form.find('input[name=addressLine2]').val(),
-                "province": parent_form.find('select[name=province] option:checked').val(),
-                "zipCode": parent_form.find('input[name=zipCode]').val(),
-                "farmType": parent_form.find('input[name=farmType]').val(),
-                "landline": parent_form.find('input[name=landline]').val(),
-                "mobile": parent_form.find('input[name=mobile]').val(),
-            };
-            farm_address.push({});
-            farm_address.push(details);
-
-            data_values = {
-                    "id": parent_form.attr('data-farm-id'),
-                "_token": parent_form.find('input[name=_token]').val()
-            };
-            data_values["farmAddress"] = farm_address;
-        }
+      
+      var data_values = this.get_data_values(parent_form)
 
         // Do AJAX
         $.ajax({
@@ -120,16 +89,19 @@ var profile = {
 
                 // Change the values of the input
                 if(parent_form.attr('data-personal-id')){
-                    parent_form.find('input[name=address_addressLine1]').val(data.address_addressLine1);
-                    parent_form.find('input[name=address_addressLine2]').val(data.address_addressLine2);
-                    parent_form.find('select[name=address_province]').val(data.address_province);
-                    parent_form.find('input[name=address_zipCode]').val(data.address_zipCode);
-                    parent_form.find('input[name=landline]').val(data.landline);
-                    parent_form.find('input[name=mobile]').val(data.mobile);
+                    parent_form.find('input[name=officeAddress_addressLine1]').val(data.officeAddress_addressLine1);
+                    parent_form.find('input[name=officeAddress_addressLine2]').val(data.officeAddress_addressLine2);
+                    parent_form.find('select[name=officeAddress_province]').val(data.officeAddress_province);
+                    parent_form.find('input[name=officeAddress_zipCode]').val(data.officeAddress_zipCode);
+                    parent_form.find('input[name=office_landline]').val(data.office_landline);
+                    parent_form.find('input[name=office_mobile]').val(data.office_mobile);
+                    parent_form.find('input[name=contactPerson_name]').val(data.contactPerson_name);
+                    parent_form.find('input[name=contactPerson_mobile]').val(data.contactPerson_mobile);
+                    parent_form.find('input[name=website]').val(data.website);
+                    parent_form.find('input[name=produce]').val(data.produce);
+
                 }
                 else if(parent_form.attr('data-farm-id')){
-                    parent_form.find('input[name=name]').val(data.name);
-                    parent_form.find('.farm-title').html(data.name);
                     parent_form.find('input[name=addressLine1]').val(data.addressLine1);
                     parent_form.find('input[name=addressLine2]').val(data.addressLine2);
                     parent_form.find('select[name=province]').val(data.province);
@@ -145,7 +117,7 @@ var profile = {
                 // Done tooltip animation to Edit
                 edit_button.attr('data-tooltip',profile.edit_farm_name);
                 edit_button.attr('data-position','left');
-                edit_button.html('<i class="material-icons">mode_edit</i>');
+                edit_button.html('Edit');
                 $(".tooltipped").tooltip({delay:50});
                 $('.edit-button').removeClass('disabled');
                 $('.cancel-button').removeClass('disabled');
@@ -172,7 +144,7 @@ var profile = {
             // Done tooltip animation to Edit
             edit_button.attr('data-tooltip',profile.edit_farm_name);
             edit_button.attr('data-position','left');
-            edit_button.html('<i class="material-icons">mode_edit</i>');
+            edit_button.html('Edit');
             $(".tooltipped").tooltip({delay:50});
             cancel_button.toggle();
             config.preloader_progress.fadeOut();
@@ -196,7 +168,7 @@ var profile = {
                     config.preloader_progress.fadeOut();
                     Materialize.toast('Farm information removed',2000);
                 }
-                else{
+                else {
                     config.preloader_progress.fadeOut();
                     Materialize.toast('Farm information removal unsuccessful', 2500, 'red');
                 }
@@ -206,11 +178,13 @@ var profile = {
                 config.preloader_progress.fadeOut();
             }
         });
+
     },
 
     change_password: function(parent_form){
         config.preloader_progress.fadeIn();
 
+        // Do AJAX
         $.ajax({
             url: parent_form.attr('action'),
             type: "PATCH",
@@ -261,6 +235,53 @@ var profile = {
 
     },
 
+    set_logo: function(parent_form, logo_dropzone){
+
+        // Check if there is image uploaded
+        if($('.dz-image-preview').first().attr('data-image-id')){
+
+            // Do AJAX
+            $.ajax({
+                url: config.breederLogo_url,
+                type: "PATCH",
+                cache: true,
+                data: {
+                    "_token": parent_form.find('input[name=_token]').val(),
+                    "imageId": $('.dz-image-preview').first().attr('data-image-id')
+                },
+                success: function(data){
+
+                    $('#logo-card .card-image img').attr('src', data);
+
+                    $('#change-logo-modal').modal('close');
+                    $('#confirm-change-logo').html('Set Logo');
+                    $('#confirm-change-logo').removeClass('disabled');
+
+                    // Clear the Dropzone
+                    var dropzoneFiles = logo_dropzone.files;
+                    for(var i = 0; i < dropzoneFiles.length; i++){
+                        if(dropzoneFiles[i].previewElement){
+                            var _ref = dropzoneFiles[i].previewElement;
+                            _ref.parentNode.removeChild(dropzoneFiles[i].previewElement);
+                        }
+                    }
+                    logo_dropzone.files = [];
+                    logo_dropzone.emit('reset');
+
+                    Materialize.toast('Logo updated', 2000, 'green lighten-1');
+                },
+                error: function(message){
+                    console.log(message['responseText']);
+                }
+            });
+        }
+        else{
+            $('#confirm-change-logo').html('Set Logo');
+            $('#confirm-change-logo').removeClass('disabled');
+        }
+
+    },
+
     select_province: function(farmOrder){
         // Dynamically produce select element with options based on provinces
         var selectElement = '<select name="farmAddress[' + farmOrder + '][province]">';
@@ -279,219 +300,194 @@ var profile = {
  * Profile-related scripts
  */
 
-$(document).ready(function(){
-    /*
-     *	Update Profile specific
-     */
+$(document).ready(function () {
+  /*
+   *	Update Profile specific
+   */
 
-    // Add another Farm Address
-    $("#add-farm").on('click',function(e){
-        e.preventDefault();
+  Dropzone.options.logoDropzone = false;
 
-        // Count how many current Farm Addresses are available
-        var i = $('#farm-address-body .add-farm').length+1;
+  var logoDropzone = new Dropzone('#logo-dropzone', {
+    paramName: 'logo',
+    uploadMultiple: false,
+    maxFiles: 1,
+    maxFilesize: 5,
+    acceptedFiles: "image/png, image/jpeg, image/jpg",
+    dictDefaultMessage:
+      `<h5 style='font-weight: 300;'> Drop an image here to upload </h5>
+      <i class='material-icons'>insert_photo</i>
+      <br> <h5 style='font-weight: 300;'> Or just click anywhere in this container to choose file </h5>`,
+    previewTemplate: document.getElementById('custom-preview').innerHTML,
+    init: function () {
 
-        // Count how many current Farm Addresses will be added
-        var j = $('#create-profile .add-farm').length+1;
+      // Inject attributes upon success of file upload
+      this.on('success', function (file, response) {
+        var response = JSON.parse(response);
+        var previewElement = file.previewElement;
 
-        // Check if there is a #submit-button button and remove it
-        if($('#create-profile').has('#submit-button')) $('#submit-button').remove().fadeOut('slow');
+        previewElement.setAttribute('data-image-id', response.id);
+        file.name = response.name;
+        $('.dz-filename span[data-dz-name]').html(response.name);
 
-        // Append inputs for another Farm Address in the Farm Information form
-        $('<div class="row add-farm" style="display:none;">'+
-         '<div class="col s10 offset-s1">'+
-             '<div id="farm-'+i+'" class="card-panel hoverable">'+
-                 '<h5 class="center-align"> New Farm '+i+' </h5>'+
+        $(".tooltipped").tooltip({ delay: 50 });
+      });
 
-                 '<div class="row">'+
-                 //  Farm Address: Name
-                     '<div class="input-field col s10 push-s1">'+
-                         '<input name="farmAddress['+j+'][name]" id="farmAddress['+j+'][name]" type="text">'+
-                         '<label for="farmAddress['+j+'][name]">Name</label>'+
-                     '</div>'+
-                 '</div>'+
+      // Remove file from file system and database records
+      this.on('removedfile', function (file) {
+        console.log(file.previewElement);
 
-                 '<div class="row">'+
-                 // Farm Address: Street Address
-                     '<div class="input-field col s10 push-s1">'+
-                         '<input name="farmAddress['+j+'][addressLine1]" id="farmAddress['+j+'][addressLine1]" type="text">'+
-                         '<label for="farmAddress['+j+'][addressLine1]">Address Line 1* : Street, Road, Subdivision</label>'+
-                     '</div>'+
-                 '</div>'+
+        if (file.previewElement.getAttribute('data-image-id')) {
+          // Do AJAX
+          $.ajax({
+            url: config.breederLogo_url,
+            type: "DELETE",
+            cache: false,
+            data: {
+              "_token": $('#logo-dropzone').find('input[name=_token]').val(),
+              "imageId": file.previewElement.getAttribute('data-image-id')
+            },
+            success: function (data) {
 
-                 '<div class="row">'+
-                 // Farm Address: Address Line 2
-                     '<div class="input-field col s10 push-s1">'+
-                         '<input name="farmAddress['+j+'][addressLine2]" id="farmAddress['+j+'][addressLine2]" type="text">'+
-                         '<label for="farmAddress['+j+'][addressLine2]">Address Line 2* : Barangay, Town, City</label>'+
-                     '</div>'+
-                 '</div>'+
-
-                 '<div class="row">'+
-                     // Farm Address: Province
-                     '<div class="input-field col s5 push-s1">'+
-                         profile.select_province(j) +
-                         '<label>Province*</label>'+
-                     '</div>'+
-
-                     // Farm Address: Zip Code
-                     '<div class="input-field col s5 push-s1">'+
-                         '<input name="farmAddress['+j+'][zipCode]" id="farmAddress['+j+'][zipCode]" type="text">'+
-                         '<label for="farmAddress['+j+'][zipCode]">Postal/ZIP Code*</label>'+
-                     '</div>'+
-                 '</div>'+
-
-
-                 '<div class="row">'+
-                     // Farm Type
-                     '<div class="input-field col s5 push-s1">'+
-                         '<input name="farmAddress['+j+'][farmType]" id="farmAddress['+j+'][farmType]" type="text">'+
-                         '<label for="farmAddress['+j+'][farmType]">Farm Type*</label>'+
-                     '</div>'+
-                 '</div>'+
-
-
-                 '<div class="row">'+
-                     // Farm Landline
-                     '<div class="input-field col s5 push-s1">'+
-                         '<input name="farmAddress['+j+'][landline]" id="farmAddress['+j+'][landline]" type="text">'+
-                         '<label for="farmAddress['+j+'][landline]">Landline</label>'+
-                     '</div>'+
-
-                     // Farm Mobile
-                     '<div class="input-field col s5 push-s1">'+
-                         '<input name="farmAddress['+j+'][mobile]" id="farmAddress['+j+'][mobile]" type="text">'+
-                         '<label for="farmAddress['+j+'][mobile]">Mobile*</label>'+
-                     '</div>'+
-                 '</div>'+
-
-                 '<div class="row">'+
-                   '<div class="col s10 offset-s1 content-section">'+
-                       '<div class="col right submit-button-field">'+
-                           '<button id="submit-button" class="btn-floating btn-medium waves-effect waves-light teal darken-1 tooltipped" data-position="left" data-delay="50" data-tooltip="Submit added farm/s">'+
-                               '<i class="material-icons">send</i>'+
-                           '</button>'+
-                       '</div>'+
-                   '</div>'+
-                 '</div>'+
-                 '<div class="row ">'+
-                     '<div class="col offset-s10">'+
-                         '<a href="#" class="btn-floating btn-medium waves-effect waves-light grey tooltipped remove-farm on-create-farm" data-position="left" data-delay="50" data-tooltip="Remove New Farm '+i+'">'+
-                             '<i class="material-icons">remove</i>'+
-                         '</a>'+
-                     '</div>'+
-                 '</div>'+
-             '</div>'+
-         '</div>'+
-        '</div>').appendTo('#create-profile').fadeIn('slow');
-
-        $('#create-profile select').material_select();
-        location.href = '#farm-'+i;
-        $(".remove-farm, #submit-button").tooltip({delay:50});
-        Materialize.toast('New Farm Information added', 2000);
-    });
-
-    // Cancel on Editing a Personal/Farm Information
-    $('.cancel-button').click(function(e){
-        e.preventDefault();
-        var cancel_button = $(this);
-        var edit_button = cancel_button.parents('.content-section').find('.edit-button');
-        var parent_form = cancel_button.parents('form');
-
-        profile.cancel(parent_form, edit_button, cancel_button);
-    });
-
-    // Remove an instance of the current farm information/s
-    $('.remove-farm').click(function(e){
-        e.preventDefault();
-        var remove_button = $(this);
-        var parent_form = remove_button.parents('form');
-        var row = remove_button.parents('.add-farm');
-
-        //  Check if there are more than 1 farm information to remove
-        if($('#farm-address-body').find('.delete-farm .remove-farm').length > 1){
-            $('#confirmation-modal').modal('open');
-            $('#confirm-remove').click(function(e){
-                e.preventDefault();
-                profile.remove(parent_form,row);
-            });
-            location.href = '#';
-        }
-        else Materialize.toast('At least 1 Farm information required', 2500, 'orange accent-2');
-    });
-
-    // Remove an instance of added farm information
-    $('body').on('click', '.remove-farm' ,function(e){
-        e.preventDefault();
-        var remove_button = $(this);
-        remove_button.tooltip('remove');
-
-        // Check if remove_button is on creating farm information
-        if(remove_button.hasClass('on-create-farm')){
-            var prev_farm, prev_submit_button_field;
-            var row = remove_button.parents('.add-farm');
-            var name = row.find('h5').html();
-
-            row.remove().done;
-            prev_farm = $('#farm-address-body').find('.add-farm').last();
-            prev_submit_button_field = prev_farm.find(".submit-button-field");
-
-            if (prev_submit_button_field){
-                $( '<button class="btn-floating btn-medium waves-effect waves-light teal darken-1 tooltipped submit-button" data-position="left" data-delay="50" data-tooltip="Submit added farms">'+
-                     '<i class="material-icons">send</i>'+
-                 '</button>').appendTo(prev_submit_button_field).fadeIn('slow');
-                $('.tooltipped').tooltip({delay:50});
+            },
+            error: function (message) {
+              console.log(message['responseText']);
             }
-
-            location.href = '#'+prev_farm.find('.card-panel').attr('id');
-            Materialize.toast(name+' Information removed', 2000);
+          });
         }
-    });
+      });
 
-    // for enabling select tags
-    $("select").material_select();
+    }
+  });
 
-    // Same address as office information feature
-    $(".same-address-checker").change(function (e) {
-      e.preventDefault();
+  
+  // for enabling select tags
+  $("select").material_select();
 
-      var farm_specific = $(this).attr('class').split(' ')[1];
-      farm_specific = "#" + farm_specific;
+  // Same address as office information feature
+  $(".same-address-checker").change(function (e) {
+    e.preventDefault();
 
-      var address_address1 = $("#address_addressLine1").val();
-      var address_address2 = $("#address_addressLine2").val();
-      var address_province = $("#address_province").val();
-      var address_postal_zip_code = $("#address_zipCode").val();
-      var address_landline = $("#landline").val();
-      var address_mobile = $("#mobile").val();
+    var farm_specific = $(this).attr('class').split(' ')[1];
+    farm_specific = "#" + farm_specific;
 
-      if ($(this).is(":checked")) {
+    var office_address1 = $("#officeAddress_addressLine1").val();
+    var office_address2 = $("#officeAddress_addressLine2").val();
+    var office_province = $("#office_provinces").val();
+    var office_postal_zip_code = $("#officeAddress_zipCode").val();
+    var office_landline = $("#office_landline").val();
+    var office_mobile = $("#office_mobile").val();
 
-        // set values
-        $(farm_specific + "-addressLine1").val(address_address1).addClass('input-show-hide');
-        $(farm_specific + "-addressLine2").val(address_address2).addClass('input-show-hide');
-        $(farm_specific).find('input[class=select-dropdown]').val(address_province).addClass('input-show-hide');
-        $(farm_specific + "-zipCode").val(address_postal_zip_code).addClass('input-show-hide');
-        $(farm_specific + "-landline").val(address_landline).addClass('input-show-hide');
-        $(farm_specific + "-mobile").val(address_mobile).addClass('input-show-hide');
-      }
-      else {
-        $(farm_specific + "-addressLine1").val('').removeClass('input-show-hide');
-        $(farm_specific + "-addressLine2").val('').removeClass('input-show-hide');
-        // $(farm_specific).find('input[class=select-dropdown]').val('Abra').removeClass('input-show-hide');
-        $(farm_specific + "-zipCode").val('').removeClass('input-show-hide');
-        $(farm_specific + "-farmType").val('').removeClass('input-show-hide');
-        $(farm_specific + "-landline").val('').removeClass('input-show-hide');
-        $(farm_specific + "-mobile").val('').removeClass('input-show-hide');
-      }
-    });
+    if ($(this).is(":checked")) {
+
+      // set values
+      $(farm_specific + "-addressLine1").val(office_address1).addClass('input-show-hide');
+      $(farm_specific + "-addressLine2").val(office_address2).addClass('input-show-hide');
+      $(farm_specific).find('input[class=select-dropdown]').val(office_province).addClass('input-show-hide');
+      $(farm_specific + "-zipCode").val(office_postal_zip_code).addClass('input-show-hide');
+      $(farm_specific + "-landline").val(office_landline).addClass('input-show-hide');
+      $(farm_specific + "-mobile").val(office_mobile).addClass('input-show-hide');
+    }
+    else {
+      $(farm_specific + "-addressLine1").val('').removeClass('input-show-hide');
+      $(farm_specific + "-addressLine2").val('').removeClass('input-show-hide');
+      // $(farm_specific).find('input[class=select-dropdown]').val('Abra').removeClass('input-show-hide');
+      $(farm_specific + "-zipCode").val('').removeClass('input-show-hide');
+      $(farm_specific + "-farmType").val('').removeClass('input-show-hide');
+      $(farm_specific + "-landline").val('').removeClass('input-show-hide');
+      $(farm_specific + "-mobile").val('').removeClass('input-show-hide');
+    }
+  });
+
+  // Change Logo
+  $("#change-logo").on('click', function (e) {
+    e.preventDefault();
+
+    $("#change-logo-modal").modal({ dismissible: false });
+    $("#change-logo-modal").modal('open');
+  });
+
+  // Confirm Change Logo
+  $("#confirm-change-logo").on('click', function (e) {
+    e.preventDefault();
+
+    $(this).html("Setting Logo...");
+    $(this).addClass("disabled");
+
+    profile.set_logo($('#logo-dropzone'), logoDropzone);
+  });
+
+  // Cancel on Editing a Personal/Farm Information
+  $('.cancel-button').click(function (e) {
+    e.preventDefault();
+    var cancel_button = $(this);
+    var edit_button = cancel_button.parents('.content-section').find('.edit-button');
+    var parent_form = cancel_button.parents('form');
+
+    /* Return to original state/values if cancelled */
+    
+    // get the initial values
+    delete profile.data_values.id;
+    delete profile.data_values._token;
+
+    // return to original state
+    document.querySelector('#officeAddress_addressLine1').value 
+      = profile.data_values.officeAddress_addressLine1;
+
+    document.querySelector('#officeAddress_addressLine2').value
+      = profile.data_values.officeAddress_addressLine2;
+
+    document.querySelector('input.select-dropdown').value
+      = profile.data_values.officeAddress_province;
+
+    document.querySelector('#officeAddress_zipCode').value
+      = profile.data_values.officeAddress_zipCode;
+
+    document.querySelector('#office_landline').value
+      = profile.data_values.office_landline;
+
+    document.querySelector('#office_mobile').value
+      = profile.data_values.office_mobile;
+
+    document.querySelector('#contactPerson_name').value
+      = profile.data_values.contactPerson_name;
+
+    document.querySelector('#contactPerson_mobile').value
+      = profile.data_values.contactPerson_mobile;
+
+    document.querySelector('#website').value
+      = profile.data_values.website;
+
+    document.querySelector('#produce').value
+      = profile.data_values.produce;
+
+    profile.cancel(parent_form, edit_button, cancel_button);
+  });
+
+  // Remove an instance of the current farm information/s
+  $('.remove-farm').click(function (e) {
+    e.preventDefault();
+    var remove_button = $(this);
+    var parent_form = remove_button.parents('form');
+    var row = remove_button.parents('.add-farm');
+
+    //  Check if there are more than 1 farm information to remove
+    if ($('#farm-address-body').find('.delete-farm .remove-farm').length > 1) {
+      $('#confirmation-modal').modal('open');
+      $('#confirm-remove').click(function (e) {
+        e.preventDefault();
+        profile.remove(parent_form, row);
+      });
+      location.href = '#';
+    }
+    else Materialize.toast('At least 1 Farm information required', 2500, 'orange accent-2');
+  });
 
 });
 
 "use strict";
 
 // Place error on specific HTML input
-var placeError = function(inputElement, errorMsg) {
+var placeError = function (inputElement, errorMsg) {
   // Parse id of element if it contains '-' for the special
   // case of finding the input's respective
   // label on editProfile pages
@@ -505,7 +501,7 @@ var placeError = function(inputElement, errorMsg) {
     .find("label[for='" + inputId + "']")
     .attr("data-error", errorMsg);
 
-  setTimeout(function() {
+  setTimeout(function () {
     if (inputElement.id.includes("select")) {
       // For select input, find first its respective input text
       // then add the 'invalid' class
@@ -537,13 +533,13 @@ var placeError = function(inputElement, errorMsg) {
 };
 
 // Place success from specific HTML input
-var placeSuccess = function(inputElement) {
+var placeSuccess = function (inputElement) {
   // For select input, find first its respective input text
   // then add the needed classes
   var inputTextFromSelect = inputElement.id.includes("select")
     ? $(inputElement)
-        .parents(".select-wrapper")
-        .find("input.select-dropdown")
+      .parents(".select-wrapper")
+      .find("input.select-dropdown")
     : "";
 
   // Check first if it is invalid
@@ -556,7 +552,7 @@ var placeSuccess = function(inputElement) {
       .find("label[for='" + inputElement.id + "']")
       .attr("data-error", false);
 
-    setTimeout(function() {
+    setTimeout(function () {
       if (inputElement.id.includes("select"))
         inputTextFromSelect.removeClass("invalid").addClass("valid");
       else
@@ -573,14 +569,18 @@ var placeSuccess = function(inputElement) {
 
 var validationMethods = {
   // functions must return either true or the errorMsg only
-  required: function(inputElement) {
+  required: function (inputElement) {
     var errorMsg;
     if (inputElement.name === "name") errorMsg = "Please enter product name";
     else errorMsg = "This field is required";
 
     return inputElement.value ? true : errorMsg;
   },
-  requiredIfRadio: function(inputElement, radioId) {
+  requiredUserName: function (inputElement) {
+    var errorMsg = "This field is required";
+    return inputElement.value ? true : errorMsg;
+  },
+  requiredIfRadio: function (inputElement, radioId) {
     var errorMsg;
     if (
       inputElement.name === "breed" ||
@@ -594,30 +594,30 @@ var validationMethods = {
     if (radioInputElement.checked) return inputElement.value ? true : errorMsg;
     else return true;
   },
-  requiredDropdown: function(inputElement) {
+  requiredDropdown: function (inputElement) {
     var errorMsg = "This field is required";
     return inputElement.value ? true : errorMsg;
   },
-  email: function(inputElement) {
+  email: function (inputElement) {
     var errorMsg = "Please enter a valid email address";
     return /\S+@\S+\.\S+/.test(inputElement.value) ? true : errorMsg;
   },
-  minLength: function(inputElement, min) {
+  minLength: function (inputElement, min) {
     var errorMsg = "Please enter " + min + " or more characters";
     return inputElement.value.length >= min ? true : errorMsg;
   },
-  equalTo: function(inputElement, compareInputElementId) {
+  equalTo: function (inputElement, compareInputElementId) {
     var errorMsg = "Please enter the same value";
     var compareInputElement = document.getElementById(compareInputElementId);
     return inputElement.value === compareInputElement.value ? true : errorMsg;
   },
-  zipCodePh: function(inputElement) {
+  zipCodePh: function (inputElement) {
     var errorMsg = "Please enter zipcode of 4 number characters";
     return /\d{4}/.test(inputElement.value) && inputElement.value.length === 4
       ? true
       : errorMsg;
   },
-  phoneNumber: function(inputElement) {
+  phoneNumber: function (inputElement) {
     var errorMsg = "Please enter 11-digit phone number starting with 09";
     return /^09\d{9}/.test(inputElement.value) &&
       inputElement.value.length === 11
@@ -642,23 +642,18 @@ var validateFunction = function(){
 
             // Initialize needed validations
             var validations = {
-                address_addressLine1: ['required'],
-                address_addressLine2: ['required'],
-                address_zipCode: ['required', 'zipCodePh'],
+                officeAddress_addressLine1: ['required'],
+                officeAddress_addressLine2: ['required'],
+                officeAddress_zipCode: ['required', 'zipCodePh'],
                 // landline: ['landline'],
-                mobile: ['required', 'phoneNumber'],
-                ['farm-' + index + '-name']: ['required'],
+                office_mobile: ['required', 'phoneNumber'],
+                contactPerson_name: ['required'],
+                contactPerson_mobile: ['required', 'phoneNumber'],
                 ['farm-' + index + '-addressLine1']: ['required'],
                 ['farm-' + index + '-addressLine2']: ['required'],
                 ['farm-' + index + '-zipCode']: ['required', 'zipCodePh'],
                 ['farm-' + index + '-farmType']: ['required'],
                 ['farm-' + index + '-mobile']: ['required', 'phoneNumber'],
-                ['farmAddress[' + index + '][name]']: ['required'],
-                ['farmAddress[' + index + '][addressLine1]']: ['required'],
-                ['farmAddress[' + index + '][addressLine2]']: ['required'],
-                ['farmAddress[' + index + '][zipCode]']: ['required', 'zipCodePh'],
-                ['farmAddress[' + index + '][farmType]']: ['required'],
-                ['farmAddress[' + index + '][mobile]']: ['required', 'phoneNumber'],
                 'currentpassword': ['required'],
                 'newpassword': ['required', 'minLength:8'],
                 'newpasswordconfirm': ['required', 'equalTo:newpassword']
@@ -716,7 +711,9 @@ var validateFunction = function(){
             var edit_button = $(this);
             var cancel_button = edit_button.parents('.content-section').find('.cancel-button');
             var parent_form = edit_button.parents('form');
-
+            
+            profile.data_values = profile.get_data_values(parent_form);
+          
             edit_button.tooltip('remove');
 
             // If button is for editing the fields
@@ -729,13 +726,15 @@ var validateFunction = function(){
                 if (parent_form.attr('data-personal-id')) {
 
                     // Check if required fields are properly filled
-                    var address_addressLine1 = validateInput(document.getElementById('address_addressLine1'));
-                    var address_addressLine2 = validateInput(document.getElementById('address_addressLine2'));
-                    var address_zipCode = validateInput(document.getElementById('address_zipCode'));
-                    var mobile = validateInput(document.getElementById('mobile'));
+                    var officeAddress_addressLine1 = validateInput(document.getElementById('officeAddress_addressLine1'));
+                    var officeAddress_addressLine2 = validateInput(document.getElementById('officeAddress_addressLine2'));
+                    var officeAddress_zipCode = validateInput(document.getElementById('officeAddress_zipCode'));
+                    var office_mobile = validateInput(document.getElementById('office_mobile'));
+                    var contactPerson_name = validateInput(document.getElementById('contactPerson_name'));
+                    var contactPerson_mobile = validateInput(document.getElementById('contactPerson_mobile'));
 
                     // Submit if all validations are met
-                    if(address_addressLine1 && address_addressLine2 && address_zipCode){
+                    if(officeAddress_addressLine1 && officeAddress_addressLine2 && officeAddress_zipCode && contactPerson_name && contactPerson_mobile){
                         $('.edit-button').addClass('disabled');
                         $('.cancel-button').addClass('disabled');
                         profile.update(parent_form, edit_button, cancel_button);
@@ -749,14 +748,13 @@ var validateFunction = function(){
                     var farmNumber = parent_form.attr('data-farm-order');
                     var farmValid = true;
 
-                    var farm_name = validateInput(document.getElementById('farm-' + farmNumber + '-name'));
                     var farm_addressLine1 = validateInput(document.getElementById('farm-' + farmNumber + '-addressLine1'));
                     var farm_addressLine2 = validateInput(document.getElementById('farm-' + farmNumber + '-addressLine2'));
                     var farm_zipCode = validateInput(document.getElementById('farm-' + farmNumber + '-zipCode'));
                     var farmType = validateInput(document.getElementById('farm-' + farmNumber + '-farmType'));
                     var farm_mobile = validateInput(document.getElementById('farm-' + farmNumber + '-mobile'));
 
-                    farmValid = farmValid && farm_name && farm_addressLine1 && farm_addressLine2 && farm_zipCode && farmType && farm_mobile;
+                    farmValid = farmValid && farm_addressLine1 && farm_addressLine2 && farm_zipCode && farmType && farm_mobile;
 
                     // Submit if all validations are met
                     if(farmValid){
@@ -767,35 +765,6 @@ var validateFunction = function(){
                     else Materialize.toast('Please properly fill all required fields.', 2500, 'orange accent-2');
                 }
             }
-
-        });
-
-        // Submit added farm information
-        $('body').on('click', '#submit-button' ,function(e){
-            e.preventDefault();
-
-            // Count how many current Farm Addresses are available
-            var farmNumber = $('#create-profile .add-farm').length+1;
-            var farmValid = true;
-
-            for (var i = 1; i < farmNumber; i++) {
-
-                var farm_name = validateInput(document.getElementById('farmAddress[' + i + '][name]'));
-                var farm_addressLine1 = validateInput(document.getElementById('farmAddress[' + i + '][addressLine1]'));
-                var farm_addressLine2 = validateInput(document.getElementById('farmAddress[' + i + '][addressLine2]'));
-                var farm_zipCode = validateInput(document.getElementById('farmAddress[' + i + '][zipCode]'));
-                var farmType = validateInput(document.getElementById('farmAddress[' + i + '][farmType]'));
-                var farm_mobile = validateInput(document.getElementById('farmAddress[' + i + '][mobile]'));
-
-                farmValid = farmValid && farm_name && farm_addressLine1 && farm_addressLine2 && farm_zipCode && farmType && farm_mobile;
-            }
-
-            // Submit if all validations are met
-            if(farmValid){
-                $(this).addClass('disabled');
-                profile.add($('#create-profile'));
-            }
-            else Materialize.toast('Please properly fill all required fields.', 2500, 'orange accent-2');
 
         });
 

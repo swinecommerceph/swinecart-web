@@ -738,9 +738,9 @@ var product = {
 
         if (data.birthdate === "November 30, -0001") {
           var item_birthdate =
-            'Born on: <i class="grey-text">Not indicated</i>';
+            'Birthdate: <i class="grey-text">Not indicated</i>';
         } else {
-          var item_birthdate = "Born on: " + data.birthdate
+          var item_birthdate = "Birthdate: " + data.birthdate
         }
         $("#product-summary-birthdate").html(
           item_birthdate
@@ -1549,7 +1549,7 @@ $(document).ready(function() {
 "use strict";
 
 // Place error on specific HTML input
-var placeError = function(inputElement, errorMsg) {
+var placeError = function (inputElement, errorMsg) {
   // Parse id of element if it contains '-' for the special
   // case of finding the input's respective
   // label on editProfile pages
@@ -1563,7 +1563,7 @@ var placeError = function(inputElement, errorMsg) {
     .find("label[for='" + inputId + "']")
     .attr("data-error", errorMsg);
 
-  setTimeout(function() {
+  setTimeout(function () {
     if (inputElement.id.includes("select")) {
       // For select input, find first its respective input text
       // then add the 'invalid' class
@@ -1595,13 +1595,13 @@ var placeError = function(inputElement, errorMsg) {
 };
 
 // Place success from specific HTML input
-var placeSuccess = function(inputElement) {
+var placeSuccess = function (inputElement) {
   // For select input, find first its respective input text
   // then add the needed classes
   var inputTextFromSelect = inputElement.id.includes("select")
     ? $(inputElement)
-        .parents(".select-wrapper")
-        .find("input.select-dropdown")
+      .parents(".select-wrapper")
+      .find("input.select-dropdown")
     : "";
 
   // Check first if it is invalid
@@ -1614,7 +1614,7 @@ var placeSuccess = function(inputElement) {
       .find("label[for='" + inputElement.id + "']")
       .attr("data-error", false);
 
-    setTimeout(function() {
+    setTimeout(function () {
       if (inputElement.id.includes("select"))
         inputTextFromSelect.removeClass("invalid").addClass("valid");
       else
@@ -1631,14 +1631,18 @@ var placeSuccess = function(inputElement) {
 
 var validationMethods = {
   // functions must return either true or the errorMsg only
-  required: function(inputElement) {
+  required: function (inputElement) {
     var errorMsg;
     if (inputElement.name === "name") errorMsg = "Please enter product name";
     else errorMsg = "This field is required";
 
     return inputElement.value ? true : errorMsg;
   },
-  requiredIfRadio: function(inputElement, radioId) {
+  requiredUserName: function (inputElement) {
+    var errorMsg = "This field is required";
+    return inputElement.value ? true : errorMsg;
+  },
+  requiredIfRadio: function (inputElement, radioId) {
     var errorMsg;
     if (
       inputElement.name === "breed" ||
@@ -1652,30 +1656,30 @@ var validationMethods = {
     if (radioInputElement.checked) return inputElement.value ? true : errorMsg;
     else return true;
   },
-  requiredDropdown: function(inputElement) {
+  requiredDropdown: function (inputElement) {
     var errorMsg = "This field is required";
     return inputElement.value ? true : errorMsg;
   },
-  email: function(inputElement) {
+  email: function (inputElement) {
     var errorMsg = "Please enter a valid email address";
     return /\S+@\S+\.\S+/.test(inputElement.value) ? true : errorMsg;
   },
-  minLength: function(inputElement, min) {
+  minLength: function (inputElement, min) {
     var errorMsg = "Please enter " + min + " or more characters";
     return inputElement.value.length >= min ? true : errorMsg;
   },
-  equalTo: function(inputElement, compareInputElementId) {
+  equalTo: function (inputElement, compareInputElementId) {
     var errorMsg = "Please enter the same value";
     var compareInputElement = document.getElementById(compareInputElementId);
     return inputElement.value === compareInputElement.value ? true : errorMsg;
   },
-  zipCodePh: function(inputElement) {
+  zipCodePh: function (inputElement) {
     var errorMsg = "Please enter zipcode of 4 number characters";
     return /\d{4}/.test(inputElement.value) && inputElement.value.length === 4
       ? true
       : errorMsg;
   },
-  phoneNumber: function(inputElement) {
+  phoneNumber: function (inputElement) {
     var errorMsg = "Please enter 11-digit phone number starting with 09";
     return /^09\d{9}/.test(inputElement.value) &&
       inputElement.value.length === 11

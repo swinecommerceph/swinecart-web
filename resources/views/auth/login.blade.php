@@ -46,7 +46,7 @@
 
 						{{-- Login Button --}}
 						<div class="row">
-                <button type="submit" class="btn waves-effect waves-light col s12 teal darken-3">Login with Email</button>
+                <button type="submit" class="btn col s12 primary primary-hover">Login with Email</button>
             </div>
 
 					</form>

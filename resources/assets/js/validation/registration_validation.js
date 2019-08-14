@@ -6,7 +6,7 @@ var validateFunction = function(){
         var validateInput = function(inputElement){
             // Initialize needed validations
             var validations = {
-                name: ['required'],
+                name: ['requiredUserName'],
                 email: ['required', 'email'],
                 password: ['required', 'minLength:8'],
                 password_confirmation: ['required', 'equalTo:password']

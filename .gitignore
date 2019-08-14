@@ -6,3 +6,4 @@ Homestead.json
 .env.backup
 /public/images/
 /public/videos/
+.vscode

@@ -1,9 +1,59 @@
 html{
-	font-family: Source Sans Prt-size:1rem;
+  font-family: Source Sans Pro;
+  font-size:1rem;
 }
 
 body {
   background: #fafafa;
+}
+
+/* Color Themes */
+.primary {
+  background-color: #00695C !important;
+}
+
+.primary-text {
+  color: #00695C !important;
+}
+
+.primary-hover:hover {
+  background-color: #004941 !important;
+}
+
+.secondary {
+  background-color: #838F89 !important;
+}
+
+.secondary-text {
+  color: #838F89 !important;
+}
+
+.secondary-hover:hover {
+  background-color: #6E7773 !important;
+}
+
+.error {
+  background-color: #BA2D0B !important;
+}
+
+.error-text {
+  color: #BA2D0B !important;
+}
+
+.error-hover:hover {
+  background-color: #962509 !important;
+}
+
+.accent {
+  background-color: #EAC435 !important;
+}
+
+.accent-hover:hover {
+  background-color: #FFD43A !important;
+}
+
+.bold-font {
+  font-weight: 700;
 }
 
 /* Navigation dropdown styles */
@@ -53,11 +103,7 @@ body {
 }
 
 .sidenav-main-element {
-  color: white;
-  font-weight: 500;
-  text-transform:none !important;
-  text-align: left;
-  font-size: 1.4rem;
+  color: white !important;
 }
 
 .sidenav-main-element i {
@@ -283,6 +329,10 @@ body {
 	background-color: rgba(230, 119, 100, 0.9);
 }
 
+.rate-breeder-button {
+  border-radius: 17px;
+}
+
 /* Caption styles */
 .caption {
 	font-size: 1.25rem;
@@ -303,6 +353,10 @@ body {
 /* Select styles */
 .select{
 	display:block;
+}
+
+.select-dropdown {
+  color:#424242;
 }
 
 .select-wrapper input.select-dropdown {
@@ -339,6 +393,44 @@ span.caret {
 /* For labels */
 #page-customer-view-products #collapsible-container label{
 	/*color:#000;*/
+}
+.terms-and-policy-container {
+  margin-bottom: 5px;
+}
+
+/* Terms and Policy Label */
+.terms-and-policy {
+  text-align: right !important;
+  font-size: 0.8rem;
+  color: #757575;
+}
+
+.terms-and-policy-breeder-container {
+  position: fixed;
+  bottom: 0;
+}
+
+.terms-and-policy-breeder {
+  font-size: 1rem;
+  color: #e0e0e0;
+  margin-left: 10px;
+}
+.terms-and-policy-breeder:hover {
+  text-decoration: underline;
+}
+
+/* Status Label */
+.status-label {
+  font-size: 1.25rem;
+  color: #f5f5f5;
+  font-weight: 400;
+}
+
+.status-value {
+  font-size: 1.25rem;
+  color: #f5f5f5;
+  font-weight: 700;
+  cursor: default;
 }
 
 /* Swine Cart styles */
@@ -467,6 +559,10 @@ span.caret {
   background-color: transparent !important;
 }
 
+.selected-swinecart-tab {
+  pointer-events: none;
+}
+
 /* Blockquote styles */
 blockquote{
 	padding: 1rem 1rem 1rem;
@@ -561,6 +657,14 @@ input#search{
 /*
  * Device-specific styles
  */
+
+/* Small Screen */
+@media only screen and (max-width: 600px) {
+  #page-customer-swine-cart #card-container .card .card-image img,
+	#page-breeder-manage-products .card .card-image img{
+		height: 12rem;
+	}
+}
 
 /* Medium Screen */
 @media only screen and (min-width: 601px){
@@ -1311,6 +1415,7 @@ input#search{
 /* Form Validation */
 label {
    width: 100%;
+   padding-bottom: 3px;
 }
 
 @-o-keyframes fadeIt {
@@ -1505,6 +1610,13 @@ label {
 input[type=text]:not(.browser-default) {
   border: solid 1px #9e9e9e;
   border-radius: 3px;
+  padding-left: 10px;
+}
+
+.remove-borders {
+  border: none !important;
+  border-radius: 0px !important;
+  border-bottom: solid 1px #9e9e9e !important;
 }
 
 input[type=text]:not(.browser-default).valid {
@@ -1524,7 +1636,7 @@ input[type=text]:not(.browser-default).valid {
 
 /* Dropdown related */
 .dropdown-content li>span {
-  color: #00705E;
+  color: #212121;
 }
 
 /* Radio Button */
@@ -1536,10 +1648,6 @@ input[type=text]:not(.browser-default).valid {
 /* Buttons */
 .btn, .btn-large {
   text-transform: none !important;
-}
-
-.side-nav-btn:hover, .side-nav-btn-large:hover {
-  background-color: #003831 !important;
 }
 
 .btn-large.green:hover {
@@ -1579,3 +1687,29 @@ a.google {
   border-radius: 5px;
   font-weight: 600;
 }
+
+.terms-of-agreement-list-container {
+  padding-left: 30px !important;
+}
+
+.terms-of-agreement-main-header {
+  font-size: 1.6rem;
+  font-weight: 700;
+}
+
+.terms-of-agreement-sub-header {
+  font-size: 1.1rem;
+  font-weight: 700;
+}
+
+.terms-of-agreement-list {
+  list-style-type: disc !important;
+}
+
+/* Footer */
+.terms-and-privacy-in-footer {
+  font-size: 0.8rem;
+  margin-left: 10px;
+}
+
+

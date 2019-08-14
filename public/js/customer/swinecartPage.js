@@ -108,7 +108,7 @@ Vue.component('quantity-input',{
         <span class="col s12" style="padding:0;"> \
             <input type="text" \
                 ref="input" \
-                class="center-align" \
+                class="center-align remove-borders" \
                 style="margin:0;" \
                 :value="value" \
                 @input="updateValue($event.target.value)" \
@@ -155,8 +155,8 @@ Vue.component('quantity-input',{
 Vue.component('custom-date-select', {
     template: '\
         <div> \
-            <input type="date" id="date-needed" name="date-needed" class="datepicker" ref="select" :value="value"/> \
-            <label for="date-needed">Date Needed</label> \
+            <input type="date" id="date-needed" name="date-needed" class="datepicker remove-borders" ref="select" :value="value"/> \
+            <label for="date-needed" class="grey-text text-darken-3">Date Needed</label> \
         </div> \
     ',
     props:['value'],
@@ -597,6 +597,7 @@ var vm = new Vue({
         topic: window.pubsubTopic,
         products: rawProducts,
         history: [],
+        selectedOrdersTab: true,
         productInfoModal:{
             imgPath: '',
             name: '',
@@ -681,7 +682,19 @@ var vm = new Vue({
                     console.log(response.statusText);
                 }
             );
+        },
 
+        changeBreadCrumbs: function () {
+          // Change the value of final breadcrumbs
+          const bc = document.querySelector('#swinecart-breadcrumb #active-tab');
+          if (this.selectedOrdersTab) {
+            bc.innerHTML = 'Transaction History';
+            this.selectedOrdersTab = false;
+          }
+          else {
+            bc.innerHTML = 'Orders';
+            this.selectedOrdersTab = true;
+          }
         }
     },
     filters: {

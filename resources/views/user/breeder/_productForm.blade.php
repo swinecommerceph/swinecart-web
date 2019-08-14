@@ -473,8 +473,10 @@
 {{-- Confirmation Modal --}}
 <div id="confirmation-modal" class="modal">
 	<div class="modal-content">
-    <h5>Delete product/s?</h5>
-    <p style="font-size: 1.2rem; color: hsl(0, 0%, 45%)">Warning: Deleted products will no longer be in your inventory.</p>
+    <h5>Are you sure you want to delete product/s?</h5>
+    <p style="font-size: 1.2rem; color: hsl(0, 0%, 45%)">
+      Once you delete product/s, it will no longer be available in your inventory.
+    </p>
 	</div>
 	<div class="modal-footer">
     
