@@ -33,33 +33,31 @@ class NotificationsController extends Controller
 
     public function getNotifications(Request $request)
     {
-        $notifications = [];
+        $notifications = $this->user->notifications();
 
-        foreach ($this->user->notifications as $notification) {
-            $notificationInstance = [];
-            $notificationInstance['id'] = $notification->id;
-            $notificationInstance['data'] = $notification->data;
-            $notificationInstance['read_at'] = $notification->read_at;
-            array_push($notifications, $notificationInstance);
-        }
+        $notifications = $notifications
+            ->paginate($request->limit)
+            ->map(function ($item) {
+                $notification = [];
+                $type = explode('\\', $item->type);
 
-        
+                $notification['id'] = $item->id;
+                $notification['type'] = end($type);
+                $notification['message'] = strip_tags($item->data['description']);
+                $notification['created_at'] = $item->created_at->toDateTimeString();
+                $notification['read_at'] = $item->read_at ? $item->read_at->toDateTimeString() : null;
+
+                return $notification;
+            });
+
         return response()->json([
             'message' => 'Get Notifications successful!',
-            'data' => $notifications
+            'data' => [
+                'count' => $notifications->count(),
+                'notifications' => $notifications
+            ]
         ], 200);
 
-    }
-
-    public function getNotificationsCount(Request $request)
-    {
-        $notifications = $this->user->unreadNotifications->count();
-
-        return response()->json([
-            'message' => 'Get Notifications Count successful!',
-            'data' => $notifications
-        ]);
-        
     }
 
     public function seeNotification(Request $request, $notification_id)
@@ -68,13 +66,24 @@ class NotificationsController extends Controller
         $notification = $this->user->notifications()->where('id', $notification_id)->get()->first();
 
         if($notification) {
-            $notification->markAsRead();
-            return response()->json([
-                'message' => 'See Notifications successful!',
-            ]);
+            if($notification->read_at) {
+                return response()->json([
+                    'error' => 'Notification already seen!',
+                ], 409);
+            }
+            else {
+                $notification->markAsRead();
+
+                return response()->json([
+                    'message' => 'See Notification successful!',
+                    'data' => [
+                        'read_at' => $notification->read_at->toDateTimeString()
+                    ]
+                ]);
+            }
         }
         else return response()->json([
             'error' => 'Notification does not exist!',
-        ]);
+        ], 404);
     }
 }

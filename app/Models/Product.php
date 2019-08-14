@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use App\Models\Breeder;
+use App\Models\Breed;
 use App\Models\FarmAddress;
 use App\Models\Image;
 use App\Models\Video;
@@ -65,6 +66,12 @@ class Product extends Model
      * @var array
      */
     protected $hidden = ['deleted_at'];
+
+
+    public function breed()
+    {
+        return $this->belongsTo(Breed::class);
+    }
 
     /**
      * Get the breeder that owns this product

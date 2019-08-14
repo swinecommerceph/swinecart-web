@@ -35,123 +35,208 @@ class EditProfileController extends Controller
         });
     }
 
-    public function me(Request $request)
+    public function getProfile(Request $request)
     {
         $customer = $this->user->userable;
 
-        if($customer) {
-            return response()->json([
-                'message' => 'Customer Me successful!',
-                'data' => $customer
-            ], 200);
-        }
-        else return response()->json([
-            'error' => 'Customer does not exist!',
-        ], 404);
+        return response()->json([
+            'message' => 'Customer Me successful!',
+            'data' => [
+                'profile' => $customer
+            ]
+        ], 200);
     }
 
-    public function getFarmAddresses(Request $request)
-    {
-        $farmAddresses = $customer->farmAddresses;
+    public function getFarms(Request $request)
+    {   
+        $customer = $this->user->userable;
+        $farms = $customer
+            ->farmAddresses()
+            ->paginate($request->limit)
+            ->map(function ($item) {
+                $farm = [];
 
-        if($farmAddresses) {
+                $farm['id'] = $item->id;
+                $farm['name'] = ucfirst($item->name);
+                $farm['province'] = $item->province;
+                // $farm['addressLine1'] = $item->addressLine1;
+                // $farm['addressLine2'] = $item->addressLine2;
+                // $farm['zipCode'] = $item->zipCode;
+                // $farm['farmType'] = $item->farmType;
+                // $farm['landline'] = $item->landline;
+                // $farm['mobile'] = $item->mobile;
+
+                return $farm;
+            });
+
+        return response()->json([
+            'message' => 'Get Farms successful!',
+            'data' => [
+                'count' => $farms->count(),
+                'farms' => $farms,
+            ]
+        ], 200);
+    }
+
+    public function getFarm(Request $request, $farm_id)
+    {   
+        $customer = $this->user->userable;
+        $item = $customer->farmAddresses()->find($farm_id);
+
+        if($item) {
+            $farm = [];
+
+            $farm['id'] = $item->id;
+            $farm['name'] = ucfirst($item->name);
+            $farm['province'] = $item->province;
+            $farm['addressLine1'] = $item->addressLine1;
+            $farm['addressLine2'] = $item->addressLine2;
+            $farm['zipCode'] = $item->zipCode;
+            $farm['farmType'] = ucfirst($item->farmType);
+            $farm['landline'] = $item->landline;
+            $farm['mobile'] = $item->mobile;
+
             return response()->json([
-                'message' => 'Get Farm Addresses successful!',
-                'data' => $farmAddresses
+                'message' => 'Get Farm successful!',
+                'data' => [
+                    'farm' => $farm
+                ]
             ], 200);
         }
         else return response()->json([
-            'error' => 'Farm Addresses does not exist!',
+            'error' => 'Farm does not exist!',
         ], 404);
-
     }
 
     public function updatePersonal(CustomerPersonalProfileRequest $request)
     {
         $customer = $this->user->userable;
-
-        $customer->fill($request->only([
+        $data = $request->only([
             'address_addressLine1',
             'address_addressLine2',
             'address_province',
             'address_zipCode',
             'landline',
             'mobile'
-        ]))->save();
+        ]);
 
-        return response()->json([
-            'message' => 'Update Personal successful!',
-            'data' => $customer
-        ], 200);
+        $validator = Validator::make($data, [
+            'address_addressLine1' => 'required',
+            'address_addressLine2' => 'required',
+            'address_province' => 'required',
+            'address_zipCode' => 'required|digits:4',
+            'mobile' => 'required|digits:11|regex:/^09/',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 422);
+        }
+        else {
+            $customer->fill($data)->save();
+
+            return response()->json([
+                'message' => 'Update Personal successful!'
+            ], 200);
+        }
     }
 
     public function addFarm(Request $request)
     {
         $customer = $this->user->userable;
-        $farms = $request->farms;
+        $farm = $request->only([
+            'name',
+            'addressLine1',
+            'addressLine2',
+            'province',
+            'zipCode',
+            'landline',
+            'farmType',
+            'mobile'
+        ]);
 
-        $validator = Validator::make($farms, [
-            '*.name' => 'required',
-            '*.addressLine1' => 'required',
-            '*.addressLine2' => 'required',
-            '*.province' => 'required',
-            '*.zipCode' => 'required|digits:4',
-            '*.farmType' => 'required',
-            '*.mobile' => 'required|digits:11|regex:/^09/',
+        $validator = Validator::make($farm, [
+            'name' => 'required',
+            'addressLine1' => 'required',
+            'addressLine2' => 'required',
+            'province' => 'required',
+            'zipCode' => 'required|digits:4',
+            'farmType' => 'required',
+            'mobile' => 'required|digits:11|regex:/^09/',
         ]);
         
         if ($validator->fails()) {
             return response()->json([
-                'message' => 'Error in Add Farm!',
-                'data' => $validator->errors()
-            ], 500);
+                'error' => $validator->errors()
+            ], 422);
         }
 
         else {
+            $farmAddress = new FarmAddress;
+            $farmAddress->name = $farm['name'];
+            $farmAddress->addressLine1 = $farm['addressLine1'];
+            $farmAddress->addressLine2 = $farm['addressLine2'];
+            $farmAddress->province = $farm['province'];
+            $farmAddress->zipCode = $farm['zipCode'];
+            $farmAddress->farmType = $farm['farmType'];
+            $farmAddress->landline = $farm['landline'];
+            $farmAddress->mobile = $farm['mobile'];
 
-            $farms = array_map(function($farm) {
-                $farmAddress = new FarmAddress;
-                $farmAddress->name = $farm['name'];
-                $farmAddress->addressLine1 = $farm['addressLine1'];
-                $farmAddress->addressLine2 = $farm['addressLine2'];
-                $farmAddress->province = $farm['province'];
-                $farmAddress->zipCode = $farm['zipCode'];
-                $farmAddress->farmType = $farm['farmType'];
-                $farmAddress->landline = $farm['landline'];
-                $farmAddress->mobile = $farm['mobile'];
-                return $farmAddress;
-            }, $farms);
-
-            $customer->farmAddresses()->saveMany($farms);
+            $customer->farmAddresses()->save($farmAddress);
 
             return response()->json([
-                'message' => 'Add Farm successful!',
-                'data' => $farms
+                'message' => 'Add Farm successful!'
             ], 200);
             
         }
 
     }
 
-    public function updateFarm(CustomerFarmProfileRequest $request, $farm_id)
+    public function updateFarm(Request $request, $farm_id)
     {
         $customer = $this->user->userable;
         $farmAddress = $customer->farmAddresses()->find($farm_id);
+        $data = $request->only([
+            'name',
+            'addressLine1',
+            'addressLine2',
+            'province',
+            'zipCode',
+            'landline',
+            'farmType',
+            'mobile'
+        ]);
+
+        $validator = Validator::make($data, [
+            'name' => 'required',
+            'addressLine1' => 'required',
+            'addressLine2' => 'required',
+            'province' => 'required',
+            'zipCode' => 'required|digits:4',
+            'farmType' => 'required',
+            'mobile' => 'required|digits:11|regex:/^09/',
+        ]);
+        
+        if ($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors()
+            ], 422);
+        }
 
         if($farmAddress) {
-            $farmAddress->name = $request['name'];
-            $farmAddress->addressLine1 = $request['addressLine1'];
-            $farmAddress->addressLine2 = $request['addressLine2'];
-            $farmAddress->province = $request['province'];
-            $farmAddress->zipCode = $request['zipCode'];
-            $farmAddress->farmType = $request['farmType'];
-            $farmAddress->landline = $request['landline'];
-            $farmAddress->mobile = $request['mobile'];
+            $farmAddress->name = $data['name'];
+            $farmAddress->addressLine1 = $data['addressLine1'];
+            $farmAddress->addressLine2 = $data['addressLine2'];
+            $farmAddress->province = $data['province'];
+            $farmAddress->zipCode = $data['zipCode'];
+            $farmAddress->farmType = $data['farmType'];
+            $farmAddress->landline = $data['landline'];
+            $farmAddress->mobile = $data['mobile'];
             $farmAddress->save();
 
             return response()->json([
-                'message' => 'Update Farm Info successful!',
-                'data' => $farmAddress
+                'message' => 'Update Farm Info successful!'
             ], 200);
         }
         else return response()->json([
@@ -162,10 +247,10 @@ class EditProfileController extends Controller
     public function deleteFarm(Request $request, $farm_id)
     {
         $customer = $this->user->userable;
-        $farmAddress = $customer->farmAddresses()->find($farm_id);
+        $farm = $customer->farmAddresses()->find($farm_id);
 
-        if($farmAddress) {
-            $farmAddress->delete();
+        if($farm) {
+            $farm->delete();
             return response()->json([
                 'message' => 'Delete Farm successful!'
             ], 200);
@@ -175,27 +260,32 @@ class EditProfileController extends Controller
         ], 404);
     }
 
-
-    public function changePassword(ChangePasswordRequest $request) 
+    public function changePassword(Request $request) 
     {
-        $this->user->password = bcrypt($request->new_password);
-        $this->user->save();
+        $data = $request->only([
+            'current_password',
+            'new_password',
+            'new_password_confirmation'
+        ]);
+        
+        $validator = Validator::make($data, [
+            'current_password' => 'required|is_current_password',
+            'new_password' => 'required|confirmed|min:8'
+        ]);
 
-        return response()->json([
-            'message' => 'Change Password successful!',
-        ], 200);
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 422);
+        }
+        else {
+            $this->user->password = bcrypt($request->new_password);
+            $this->user->save();
 
-    }
-
-    public function getBreeders(Request $request)
-    {
-        $breeders = Breeder::all();
-
-        return response()->json([
-            'message' => 'Get Breeders successful!',
-            'data' => $breeders
-        ], 200);
-
+            return response()->json([
+                'message' => 'Change Password successful!',
+            ], 200);
+        }
     }
 
     private function getProvinces()

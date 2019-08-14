@@ -14,129 +14,125 @@ use Illuminate\Http\Request;
 */
 
 /* Setup CORS */
-// header('Access-Control-Allow-Origin: *');
-// header("Access-Control-Allow-Headers: X-API-KEY, Origin, X-Requested-With, Content-Type, Accept, Access-Control-Request-Method, Authorization");
-// header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, DELETE");
+header('Access-Control-Allow-Origin: *');
+header("Access-Control-Allow-Headers: Accept-Encoding, Content-Type, Accept, Access-Control-Request-Method, Authorization");
+header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, PATCH, DELETE");
+
 
 Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function() {
         Route::post('/register', 'RegisterController@register');
         Route::post('/login', 'LoginController@normalLogin');
-        Route::post('/me', 'LoginController@me');
+        Route::get('/me', 'LoginController@me');
         Route::post('/logout', 'LogoutController@logout');
-    });
+    });    
 
     Route::group(['namespace' => 'Breeder', 'prefix' => 'breeder'], function() {
-        Route::group(['prefix' => 'edit-profile'], function() {
-            Route::get('/get', 'EditProfileController@getProfile');
+        Route::group(['prefix' => 'profile'], function() {
+            Route::get('/', 'EditProfileController@getProfile');
+            Route::put('/', 'EditProfileController@updatePersonal');
+            Route::patch('/password', 'EditProfileController@changePassword');
 
-            Route::post('/change-password', 'EditProfileController@changePassword');
-            Route::post('/update-personal', 'EditProfileController@updatePersonal');
-            
-            Route::post('/farm/update/{id}', 'EditProfileController@updateFarm');
-            Route::delete('/farm/delete/{id}', 'EditProfileController@deleteFarm');
-
+            Route::get('/farms', 'EditProfileController@getFarms');
+            Route::get('/farms/{id}', 'EditProfileController@getFarm');
+            Route::put('/farms/{id}', 'EditProfileController@updateFarm');
+            Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
+         
             // Route::post('/upload-logo', 'EditProfileController@uploadLogo');
             // Route::delete('/delete-logo', 'EditProfileController@deleteLogo');
             // Route::post('/set-logo', 'EditProfileController@setLogo');
         });
 
         Route::group(['prefix' => 'products'], function() {
-            Route::get('/get', 'ProductController@getProducts');
-            Route::post('/get', 'ProductController@filterProducts');
-            Route::get('/get-farms', 'ProductController@getFarms');
+            Route::get('/', 'ProductController@getProducts');
+            Route::delete('/', 'ProductController@deleteProducts');
+            Route::patch('/', 'ProductController@updateSelected');
 
-            Route::post('/product/display/{id}', 'ProductController@displayProduct');
-            Route::post('/product/update/{id}', 'ProductController@updateProduct');
-            Route::post('/product/store', 'ProductController@storeProduct');
-            Route::post('/product/update-selected', 'ProductController@updateSelected');
-            Route::post('/product/delete-selected', 'ProductController@deleteSelected');
-            Route::post('/set-primary-picture', 'ProductController@setPrimaryPicture');
-            Route::get('/product/summary/{id}', 'ProductController@getProductSummary');
-            Route::get('/product/detail/{id}', 'ProductController@getProductDetail');
-            
+            Route::get('/{id}', 'ProductController@getProduct');
+            Route::get('/{id}/details', 'ProductController@getProductDetails');
+            Route::get('/{id}/media', 'ProductController@getProductMedia');
+
+            Route::post('/', 'ProductController@addProduct');
+            Route::put('/{id}', 'ProductController@updateProduct');
+            Route::patch('/{id}/status', 'ProductController@toggleProductStatus');
+
+            // Route::post('/set-primary-picture', 'ProductController@setPrimaryPicture');
+
             // Route::delete('/media/delete', 'ProductController@deleteMedium');
 
         });
 
         Route::group(['prefix' => 'dashboard'], function() {
             Route::get('/stats', 'DashboardController@getDashBoardStats');
-            Route::get('/latest-accre', 'DashboardController@getLatestAccre');
             Route::get('/server-date', 'DashboardController@getServerDate');
-            Route::get('/sold-data', 'DashboardController@getSoldData');
+            Route::get('/ratings', 'DashboardController@getRatings');
+            Route::get('/reviews', 'DashboardController@getReviews');
+        });
 
-            Route::get('/product-status', 'DashboardController@getProductStatus');
-            Route::get('/review-ratings', 'DashboardController@getReviewAndRatings');
-            
-            Route::get('/product-requests/{id}', 'DashboardController@getProductRequests');
-            Route::post('/sold-products', 'DashboardController@getSoldProducts');
+        Route::group(['prefix' => 'inventory'], function() {
+            Route::get('/products/{status}', 'InventoryController@getProducts');
+            Route::get('/products/{id}/requests', 'InventoryController@getProductRequests');
+            Route::post('/products/{id}/order-status', 'InventoryController@updateOrderStatus');
+            Route::delete('/products/{id}/order-status', 'InventoryController@cancelTransaction');
 
-            Route::post('/product-status/{id}', 'DashboardController@updateProductStatus');
-
-            Route::get('/customer-info/{id}', 'DashboardController@getCustomerInfo');
-
-            Route::get('/customers', 'DashboardController@getCustomers');
+            Route::get('/customers/{id}', 'InventoryController@getCustomer');
         });
 
         Route::group(['prefix' => 'notifications'], function() {
-            Route::get('/get', 'NotificationsController@getNotifications');
-            Route::get('/count', 'NotificationsController@getNotificationsCount');
-            Route::post('/see/{id}', 'NotificationsController@SeeNotification');
+            Route::get('/', 'NotificationsController@getNotifications');
+            Route::patch('/{id}', 'NotificationsController@SeeNotification');
         });
 
-        Route::group(['prefix' => 'messages'], function() {
-            Route::get('/threads', 'MessageController@getThreads');
-            Route::get('/unread/count', 'MessageController@unreadCount');
+        Route::group(['prefix' => 'chats'], function() {
+            Route::get('/', 'MessageController@getThreads');
             Route::get('/{id}', 'MessageController@getMessages');
+            Route::patch('/{id}/{messageId}', 'MessageController@seeMessage');
         });
     });
-    
-    
-    
+ 
     Route::group(['namespace' => 'Customer', 'prefix' => 'customer'], function() {
-        Route::group(['prefix' => 'edit-profile'], function() {
-            Route::get('/me', 'EditProfileController@me');
-            Route::get('/farm-addresses', 'EditProfileController@getFarmAddresses');
-            Route::get('/provinces', 'EditProfileController@getProvinces');
+        Route::group(['prefix' => 'profile'], function() {
+            Route::get('/', 'EditProfileController@getProfile');
+            Route::put('/', 'EditProfileController@updatePersonal');
+            Route::patch('/password', 'EditProfileController@changePassword');
 
-            Route::post('/change-password', 'EditProfileController@changePassword');
-            Route::post('/update-personal', 'EditProfileController@updatePersonal');
-
-            Route::post('/farm/add', 'EditProfileController@addFarm');
-            Route::post('/farm/update/{id}', 'EditProfileController@updateFarm');
-            Route::delete('/farm/delete/{id}', 'EditProfileController@deleteFarm');
-
-            Route::get('/breeders', 'EditProfileController@getBreeders');
+            Route::get('/farms', 'EditProfileController@getFarms');
+            Route::get('/farms/{id}', 'EditProfileController@getFarm');
+            Route::post('/farms', 'EditProfileController@addFarm');
+            Route::put('/farms/{id}', 'EditProfileController@updateFarm');
+            Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
         });
 
         Route::group(['prefix' => 'products'], function() {
-            Route::post('/', 'ProductController@getProducts');
-            Route::post('/filter', 'ProductController@filterProducts');
-            Route::get('/product/detail/{id}', 'ProductController@getProductDetail');
-            Route::get('/breeder/{id}', 'ProductController@getBreederProfile');
+            Route::get('/', 'ProductController@getProducts');
+            Route::get('/breeders', 'ProductController@getBreeders');
             Route::get('/breeds', 'ProductController@getBreeds');
         });
 
-        Route::group(['prefix' => 'swine-cart'], function() {
+        Route::group(['prefix' => 'swinecart'], function() {
             Route::get('/items', 'SwineCartController@getItems');
             Route::get('/items/count', 'SwineCartController@getItemCount');
-            Route::post('/items/add/{id}', 'SwineCartController@addItem');
-            Route::delete('/items/delete/{id}', 'SwineCartController@deleteItem');
-            Route::post('/items/request/{id}', 'SwineCartController@requestItem');
-            Route::get('/transactions/{id}', 'SwineCartController@getTransactionHistory');
-            Route::post('/rate-breeder/{id}', 'SwineCartController@rateBreeder');
+            Route::get('/items/{id}', 'SwineCartController@getItem');
+            Route::post('/items/{id}', 'SwineCartController@addItem');
+            Route::delete('/items/{id}', 'SwineCartController@deleteItem');
+            Route::put('/items/{id}', 'SwineCartController@requestItem');
+        });
+
+        Route::group(['prefix' => 'transactions'], function() {
+            Route::get('/', 'TransactionsController@getTransactionHistory');
+
+            Route::post('/reviews/{id}', 'TransactionsController@reviewBreeder');
         });
 
         Route::group(['prefix' => 'notifications'], function() {
-            Route::get('/get', 'NotificationsController@getNotifications');
-            Route::get('/count', 'NotificationsController@getNotificationsCount');
-            Route::post('/see/{id}', 'NotificationsController@SeeNotification');
+            Route::get('/', 'NotificationsController@getNotifications');
+            Route::patch('/{id}', 'NotificationsController@SeeNotification');
         });
 
-        Route::group(['prefix' => 'messages'], function() {
-            Route::get('/threads', 'MessageController@getThreads');
-            Route::get('/unread/count', 'MessageController@unreadCount');
+        Route::group(['prefix' => 'chats'], function() {
+            Route::get('/', 'MessageController@getThreads');
             Route::get('/{id}', 'MessageController@getMessages');
+            Route::patch('/{id}/{messageId}', 'MessageController@seeMessage');
         });
     });
     

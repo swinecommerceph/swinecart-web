@@ -6,10 +6,9 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Tymon\JWTAuth\Exceptions\JWTException;
 use Carbon\Carbon;
-
 use App\Http\Requests\ChangePasswordRequest;
 use App\Http\Requests\BreederPersonalProfileRequest;
-use App\Http\Requests\BreederFarmProfileRequest;
+
 
 use App\Models\Image;
 use App\Models\User;
@@ -37,80 +36,218 @@ class EditProfileController extends Controller
         });
     }
 
+    private function getBreederFarms($breeder) {
+        $farms = FarmAddress::where('addressable_id', $breeder->id)
+            ->where('accreditation_status', 'active');
+        return $farms;
+    }
+
     public function getProfile(Request $request) 
     {
         $breeder = $this->user->userable;
         $breeder->logoImage = ($breeder->logo_img_id) 
             ? '/images/breeder/'.Image::find($breeder->logo_img_id)->name 
             : '/images/default_logo.png' ;
-        $farmAddresses = $breeder->farmAddresses;
-        $provinces = $this->getProvinces();
+        
+        $profile = [];
+
+        $profile['id'] = $breeder->id;
+        $profile['officeAddress_addressLine1'] = $breeder->officeAddress_addressLine1;
+        $profile['officeAddress_addressLine2'] = $breeder->officeAddress_addressLine2;
+        $profile['officeAddress_province'] = $breeder->officeAddress_province;
+        $profile['officeAddress_zipCode'] = $breeder->officeAddress_zipCode;
+        $profile['office_landline'] = $breeder->office_landline;
+        $profile['office_mobile'] = $breeder->office_mobile;
+        $profile['website'] = $breeder->website;
+        $profile['produce'] = $breeder->produce;
+        $profile['contactPerson_name'] = $breeder->contactPerson_name;
+        $profile['contactPerson_mobile'] = $breeder->contactPerson_mobile;
+        $profile['img_path'] = $breeder->logoImage;
+
         return response()->json([
             'message' => 'Get Profile successful!',
             'data' => [
-                'breeder' => $breeder,
-                'farmAddresses' => $farmAddresses,
-                'provinces' => $provinces
+                'profile' => $profile,
+
             ]
         ], 200);
     }
 
-    public function updateFarm(BreederFarmProfileRequest $request, $farm_id) 
-    {
-        $farmAddress = FarmAddress::find($id);
-
-        if($farmAddress) {
-            $farmAddress->addressLine1 = $request['addressLine1'];
-            $farmAddress->addressLine2 = $request['addressLine2'];
-            $farmAddress->province = $request['province'];
-            $farmAddress->zipCode = $request['zipCode'];
-            $farmAddress->farmType = $request['farmType'];
-            $farmAddress->landline = $request['landline'];
-            $farmAddress->mobile = $request['mobile'];
-            $farmAddress->save();
-
-            return response()->json([
-                'message' => 'Update Farm Info successful!',
-                'data' => $farmAddress
-            ], 200);
-        }
-        else return response()->json([
-            'error' => 'Farm does not exist!',
-        ], 500);
-
-    }
-
-    public function deleteFarm(Request $request, $id) 
-    {
-        $farmAddress = FarmAddress::find($id);
-
-        if($farmAddress) {
-            $farmAddress->delete();
-            return response()->json([
-                'message' => 'Delete Farm successful!'
-            ], 200);
-        }
-        else return response()->json([
-            'error' => 'Farm does not exist!',
-        ], 500);
-
-    }
-
-    public function changePassword(ChangePasswordRequest $request) 
-    {
-        $this->user->password = bcrypt($request->new_password);
-        $this->user->save();
-
-        return response()->json([
-            'message' => 'Change Password successful!',
-        ], 200);
-
-    }
-
-    public function updatePersonal(BreederPersonalProfileRequest $request) 
+    public function getFarms(Request $request)
     {
         $breeder = $this->user->userable;
-        $breeder->fill($request->only([
+
+        $farms = $this
+            ->getBreederFarms($breeder)
+            ->paginate($request->limit)
+            ->map(function ($item) {
+                $farm = [];
+
+                $farm['id'] = $item->id;
+                $farm['name'] = ucfirst($item->name);
+                $farm['province'] = $item->province;
+                // $farm['addressLine1'] = $item->addressLine1;
+                // $farm['addressLine2'] = $item->addressLine2;
+                // $farm['zipCode'] = $item->zipCode;
+                // $farm['farmType'] = $item->farmType;
+                // $farm['landline'] = $item->landline;
+                // $farm['mobile'] = $item->mobile;
+
+                return $farm;
+            });
+
+        return response()->json([
+            'message' => 'Get Farms successful!',
+            'data' => [
+                'count' => $farms->count(),
+                'farms' => $farms,
+            ]
+        ], 200);
+    }
+
+    public function getFarm(Request $request, $farm_id) 
+    {
+        $breeder = $this->user->userable;
+        $farms = $this->getBreederFarms($breeder);
+
+        $item = $farms->find($farm_id);
+
+        if($item) {
+            $farm = [];
+
+            $farm['id'] = $item->id;
+            $farm['name'] = ucfirst($item->name);
+            $farm['province'] = $item->province;
+            $farm['addressLine1'] = $item->addressLine1;
+            $farm['addressLine2'] = $item->addressLine2;
+            $farm['zipCode'] = $item->zipCode;
+            $farm['farmType'] = ucfirst($item->farmType);
+            $farm['landline'] = $item->landline;
+            $farm['mobile'] = $item->mobile;
+            $farm['accreditation_no'] = $item->accreditation_no;
+            $farm['accreditation_date'] = $item->accreditation_date;
+            $farm['accreditation_expiry'] = $item->accreditation_expiry;
+
+            return response()->json([
+                'message' => 'Get Farm successful!',
+                'data' => [
+                    'farm' => $farm
+                ]
+
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Farm does not exist!',
+        ], 404);
+
+    }
+
+    public function updateFarm(Request $request, $farm_id) 
+    {
+        $breeder = $this->user->userable;
+        $farms = $this->getBreederFarms($breeder);
+        $item = $farms->find($farm_id);
+
+        if($item) {
+
+            $validator = Validator::make($request->all(), [
+                'addressLine1' => 'required',
+                'addressLine2' => 'required',
+                'province' => 'required',
+                'zipCode' => 'required|digits:4',
+                'farmType' => 'required',
+                'mobile' => 'required|digits:11|regex:/^09/',
+            ]);
+
+            if($validator->fails()) {
+                return response()->json([
+                    'error' => $validator->errors()
+                ], 422);
+            }
+            else {
+                $item->addressLine1 = $request->addressLine1;
+                $item->addressLine2 = $request->addressLine2;
+                $item->province = $request->province;
+                $item->zipCode = $request->zipCode;
+                $item->farmType = $request->farmType;
+                $item->landline = $request->landline;
+                $item->mobile = $request->mobile;
+                $item->save();
+
+                $farm = [];
+
+                $farm['addressLine1'] = $item->addressLine1;
+                $farm['addressLine2'] = $item->addressLine2;
+                $farm['province'] = $item->province;
+                $farm['zipCode'] = $item->zipCode;
+                $farm['farmType'] = $item->farmType;
+                $farm['landline'] = $item->landline;
+                $farm['mobile'] = $item->mobile;
+
+                return response()->json([
+                    'message' => 'Update Farm Info successful!',
+                    'data' => [
+                        'farm' => $farm
+                    ]
+                ], 200);
+            }
+        }
+        else return response()->json([
+            'error' => 'Farm does not exist!',
+        ], 404);
+
+    }
+
+    public function deleteFarm(Request $request, $farm_id) 
+    {
+        $breeder = $this->user->userable;
+        $farms = $this->getBreederFarms($breeder);
+        $farm = $farms->find($farm_id);
+
+        if($farm) {
+            $farm->delete();
+            return response()->json([
+                'message' => 'Delete Farm successful!',
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Farm does not exist!',
+        ], 404);
+    }
+
+    public function changePassword(Request $request) 
+    {   
+        $data = $request->only([
+            'current_password',
+            'new_password',
+            'new_password_confirmation'
+        ]);
+        
+        $validator = Validator::make($data, [
+            'current_password' => 'required|is_current_password',
+            'new_password' => 'required|confirmed|min:8'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 422);
+        }
+        else {
+            $this->user->password = bcrypt($request->new_password);
+            $this->user->save();
+
+            return response()->json([
+                'message' => 'Change Password successful!',
+            ], 200);
+        }
+    }
+
+    public function updatePersonal(Request $request) 
+    {
+        $breeder = $this->user->userable;
+
+        $data = $request->only([
             'officeAddress_addressLine1',
             'officeAddress_addressLine2',
             'officeAddress_province',
@@ -121,12 +258,30 @@ class EditProfileController extends Controller
             'produce',
             'contactPerson_name',
             'contactPerson_mobile'
-        ]))->save();
+        ]);
 
-        return response()->json([
-            'message' => 'Update Personal successful!',
-            'data' => $breeder
-        ], 200);
+        $validator = Validator::make($data, [
+            'officeAddress_addressLine1' => 'required',
+            'officeAddress_addressLine2' => 'required',
+            'officeAddress_province' => 'required',
+            'officeAddress_zipCode' => 'required|digits:4',
+            'office_mobile' => 'required|digits:11|regex:/^09/',
+            'contactPerson_name' => 'required',
+            'contactPerson_mobile' => 'required|digits:11|regex:/^09/',
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 422);
+        }
+        else {
+            $breeder->fill($data)->save();
+
+            return response()->json([
+                'message' => 'Update Personal successful!'
+            ], 200);
+        }
     }
 
     public function uploadLogo(Request $request) 

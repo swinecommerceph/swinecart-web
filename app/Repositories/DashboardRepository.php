@@ -101,7 +101,9 @@ class DashboardRepository
             $itemDetail['fcr'] = $product->fcr;
             $itemDetail['bft'] = $product->backfat_thickness;
             $itemDetail['status'] = $reservation->order_status;
-            $itemDetail['status_time'] = $reservation->transactionLogs->where('status', $reservation->order_status)->first()->created_at;
+            $itemDetail['status_time'] = $reservation->transactionLogs->
+                where('status', $reservation->order_status)->
+                sortByDesc('created_at')->first()->created_at;
             $itemDetail['customer_id'] = $reservation->customer_id;
             $itemDetail['customer_name'] = Customer::find($reservation->customer_id)->users()->first();
             $itemDetail['customer_name'] = $itemDetail['customer_name']['name'];

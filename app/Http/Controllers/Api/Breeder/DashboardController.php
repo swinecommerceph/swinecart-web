@@ -10,6 +10,7 @@ use App\Http\Requests;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Repositories\DashboardRepository;
+use App\Repositories\CustomHelpers;
 
 use Auth;
 use Response;
@@ -21,6 +22,13 @@ use Config;
 
 class DashboardController extends Controller
 {   
+
+
+    use CustomHelpers {
+        transformDateSyntax as private;
+        computeAge as private;
+    }
+
 
     protected $dashboard;
 
@@ -35,178 +43,92 @@ class DashboardController extends Controller
         $this->dashboard = $dashboard;
     }
 
-    private function getBreederProduct($breeder, $product_id)
-    {
-        $breeder_id = $breeder->id;
-        return Product::where([
-            ['breeder_id', '=', $breeder_id],
-            ['id', '=', $product_id]
-        ])->first();
-    }
+
 
     public function getDashboardStats(Request $request) 
     {
         $breeder = $this->user->userable;
 
-        $dashboardStats = [];
+        $stats = [];
         
-        $dashboardStats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
-        $dashboardStats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
-        $dashboardStats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
-        $dashboardStats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
-        $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
-        $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
+        $stats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
+        $stats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
+        $stats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
+        $stats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
+        $stats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
+        $stats['sold'] = $this->dashboard->getProductNumberStatus($breeder,'sold');
 
         return response()->json([
             'message' => 'Get Dashboard Stats successful!',
-            'data' => $dashboardStats
-        ], 200);
-    }
+            'data' => [
+                'stats' => $stats
+            ]
 
-    public function getLatestAccre(Request $request) 
-    {
-        $latestAccreditation = $this->user->userable->latest_accreditation;
-
-        return response()->json([
-            'message' => 'Get Latest Accrediation successful!',
-            'data' => $latestAccreditation
         ], 200);
     }
 
     public function getServerDate(Request $request)
     {
-        $serverDateNow = Carbon::now();
-
         return response()->json([
             'message' => 'Get Server Date successful!',
-            'data' => $serverDateNow
+            'data' => [
+                'server_date' => Carbon::now()
+            ]
         ], 200);
     }
 
-    public function getSoldData(Request $request)
-    {   
-        $breeder = $this->user->userable;
-        $serverDateNow = Carbon::now();
+    public function getRatings(Request $request)
 
-        $soldData = $this->dashboard->getSoldProducts(
-            (object) [
-                'dateFrom' => $serverDateNow->copy()->subMonths(2)->format('Y-m-d'),
-                'dateTo' => $serverDateNow->format('Y-m-d'),
-                'frequency' => 'monthly'
-            ], $breeder);
-
-        return response()->json([
-            'message' => 'Get Sold Data successful!',
-            'data' => $soldData
-        ], 200);
-    }
-
-    public function getProductStatus(Request $request)
-    {
-        $breeder = $this->user->userable;
-        $products = $this->dashboard->forBreeder($breeder);
-        
-        return response()->json([
-            'message' => 'Get Product Status successful!',
-            'data' => json_decode($products)
-        ]);
-    }
-
-    public function getReviewAndRatings(Request $request)
     {
         $breeder = $this->user->userable;
         $reviews = $breeder->reviews()->orderBy('created_at', 'desc')->get();
-
-        foreach ($reviews as $review) {
-            $review->date = Carbon::createFromFormat('Y-m-d H:i:s', $review->created_at)->toFormattedDateString();
-            $customer = Customer::find($review->customer_id);
-            $review->customerName = $customer->users()->first()->name;
-            $review->customerProvince = $customer->address_province;
-            $review->showDetailedRatings = false;
-        }
-
         $deliveryRating = $reviews->avg('rating_delivery');
         $transactionRating = $reviews->avg('rating_transaction');
         $productQualityRating = $reviews->avg('rating_productQuality');
         $overallRating = round(($deliveryRating + $transactionRating + $productQualityRating)/3, 2);
 
         return response()->json([
-            'message' => 'Get Product Status successful!',
+            'message' => 'Get Ratings successful!',
             'data' => [
-                'reviews' => $reviews,
-                'ratings' => $overallRating
+                'ratings' => [
+                    'delivery' => $deliveryRating,
+                    'transaction' => $transactionRating,
+                    'productQuality' => $productQualityRating,
+                    'overall' => $overallRating
+                ]
             ]
-        ]);
-    }
-
-    public function getProductRequests(Request $request, $product_id)
-    {
-        $productRequests = $this->dashboard->getProductRequests($product_id);
-
-        return response()->json([
-            'message' => 'Get Product Requests successful!',
-            'data' => $productRequests
-        ]);
-    }
-
-    public function getSoldProducts(Request $request)
-    {
-        $breeder = $this->user->userable;
-        
-        $soldProducts = $this->dashboard->getSoldProducts($request, $breeder);
-
-        return response()->json([
-            'message' => 'Get Sold Products successful!',
-            'data' => $soldProducts
-        ]);
-    }
-
-    public function updateProductStatus(Request $request, $product_id)
-    {
-        $breeder = $this->user->userable;
-        $product = $this->getBreederProduct($breeder, $product_id);
-
-        if($product) {
-            $result = $this->dashboard->updateStatus($request, $product);
-        }
-        
-        else return response()->json([
-            'error' => 'Product does not exist!'
         ], 200);
     }
 
-    public function getCustomerInfo(Request $request, $customer_id)
-    {
-        $customer = Customer::find($customer_id);
-
-        if($customer) {
-            return response()->json([
-                'message' => 'Get Customer Info successful!',
-                'data' => $customer
-            ]);
-        }
-
-        else return response()->json([
-            'error' => 'Customer does not exist!'
-        ], 200); 
-    }
-
-    public function getCustomers(Request $request)
+    public function getReviews(Request $request)
     {
         $breeder = $this->user->userable;
 
-        // $customers = $breeder->transactionLogs()->get();
-        $customers = $breeder->transactionLogs()->where('status', '!=', 'cancel_transaction')->get();
+        $reviews = $breeder
+            ->reviews()
+            ->orderBy('created_at', 'desc')
+            ->paginate($request->limit)
+            ->map(function ($item) {
+                $review = [];
+                $customer = Customer::find($item->customer_id);
+                $review['id'] = $item->id;
+                $review['comment'] = $item->comment;
+                $review['customer_name'] = $customer->users()->first()->name;
+                $review['customer_province'] = $customer->address_province;
+                $review['created_at'] = $this->transformDateSyntax($item->created_at, 3);
+                $review['rating']['delivery'] = $item->rating_delivery;
+                $review['rating']['transaction'] = $item->rating_transaction;
+                $review['rating']['productQuality'] = $item->rating_productQuality;
 
-        $customers = $customers->map(function ($log) {
-            $log->customer = $log->customer()->first();
-            return $log;
-        });
-
+                return $review;
+            });
 
         return response()->json([
-            'message' => 'Get Customers successful!',
-            'data' => $customers
-        ]);
+            'message' => 'Get Reviews successful!',
+            'data' => [
+                'count' => $reviews->count(),
+                'reviews' => $reviews
+            ]
+        ], 200);
     }
 }

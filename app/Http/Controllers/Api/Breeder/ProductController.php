@@ -32,8 +32,6 @@ use Storage;
 use Config;
 
 class ProductController extends Controller
-{   
-
     use CustomHelpers {
         transformBreedSyntax as private;
         transformDateSyntax as private;
@@ -63,12 +61,18 @@ class ProductController extends Controller
 
     public function __construct() 
     {
-        $this->middleware('jwt:auth');
-        $this->middleware('jwt.role:breeder');
+        $this->middleware('jwt:auth', ['except' => [
+            'getProductDetails', 'getProductMedia'
+        ]]);
+        $this->middleware('jwt.role:breeder', ['except' => [
+            'getProductDetails', 'getProductMedia'
+        ]]);
         $this->middleware(function($request, $next) {
             $this->user = JWTAuth::user();
             return $next($request);
-        });
+        }, ['except' => [
+            'getProductDetails', 'getProductMedia'
+        ]]);
     }
     /**
      * ---------------------------------------
@@ -113,7 +117,8 @@ class ProductController extends Controller
         $product->birthdate = $this->transformDateSyntax($product->birthdate);
         $product->age = $this->computeAge($product->birthdate);
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-        $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+        $product->other_details = $product->other_details;
+
         return $product;
     }
 
@@ -136,205 +141,457 @@ class ProductController extends Controller
     {
         $breeder = $this->user->userable;
         $products = $this->getBreederProducts($breeder);
-        $products = $products->orderBy('id', 'desc')->paginate(self::RESULTS_PER_PAGE);
         
-        foreach ($products as $product) {
-            $product = $this->transformProduct($product);
+        // Check for Filtering and Sorting
+        if($request->input('type')) {
+            $products = $products->where('type', $request->input('type'));
         }
+
+        if($request->input('status')) {
+            $products = $products->where('status', $request->input('status'));
+        }
+
+        if($request->input('sort')) {
+            $part = explode('-', $request->input('sort'));
+            $products = $products->orderBy($part[0], $part[1]);
+        }
+        else {
+            $products = $products->orderBy('id', 'desc');
+        }
+
+        // Paginate and Transform Product
+        $products = $products
+            ->paginate($request->limit)
+            ->map(function ($item) {
+                $p = $this->transformProduct($item);
+                $product = [];
+
+                $product['id'] = $p->id;
+                $product['name'] = $p->name;
+                $product['type'] = $p->type;
+                $product['breed'] = $p->breed;
+                $product['status'] = $p->status;
+                $product['age'] = $p->age;
+                $product['adg'] = $p->adg;
+                $product['fcr'] = $p->fcr;
+                $product['bft'] = $p->backfat_thickness;
+                $product['img_path'] = $p->img_path;
+
+                return $product;
+            });
 
         return response()->json([
             'message' => 'Get Products successful',
-            'data' => $products
+            'data' => [
+                'count' => $products->count(),
+                'products' => $products
+            ]
         ], 200);
     }
 
-    public function getFarms(Request $request)
-    {
-        $breeder = $this->user->userable;
-        $farms = $breeder->farmAddresses;
-
-        return response()->json([
-            'message' => 'Get Farm Addresses successful',
-            'data' => $farms
-        ], 200);
-    }
-
-    public function filterProducts(Request $request) 
-    {
-        $breeder = $this->user->userable;
-        $products = $this->getBreederProducts($breeder);
-
-        $request->type  = $request->type ?? 'all';
-        $request->status  = $request->status ?? 'all';
-        $request->sort  = $request->sort ?? 'none';
-
-        if($request->type != 'all') {
-            $products = $products->where('type', $request->type)->paginate(self::RESULTS_PER_PAGE);
-        }
-        if($request->status != 'all') {
-            $products = $products->where('status', $request->status)->paginate(self::RESULTS_PER_PAGE);
-        }
-        if($request->sort != 'none') {
-            $part = explode('-', $request->sort);
-            // $part[0] is the field (birthdate, adg, fcr, backfat_thickness)
-            // $part[1] is the order (asc, desc)
-            $products = $products->orderBy($part[0], $part[1])->paginate(self::RESULTS_PER_PAGE);
-        }
-
-        if($request->type == 'all' && $request->status == 'all' && $request->sort == 'none') {
-            $products = $products->orderBy('id', 'desc')->paginate(self::RESULTS_PER_PAGE);
-        } 
-
-        foreach ($products as $product) {
-            $product = $this->transformProduct($product);
-        }
-
-        return response()->json([
-            'message' => 'Get Products successful',
-            'data' => $products
-        ], 200);
-    }
-
-    public function displayProduct(Request $request, $product_id)
+    public function toggleProductStatus(Request $request, $product_id)
     {   
         $breeder = $this->user->userable;
         $product = $this->getBreederProduct($breeder, $product_id);
 
         if($product) {
-            $product->status = 'displayed';
+            if($product->status === 'hidden') {
+                $product->status = 'displayed';
+            }
+            else if($product->status === 'displayed') {
+                $product->status = 'hidden';
+            }
+
             $product->save();
 
             return response()->json([
-                'message' => 'Display Product successful!'
+                'message' => 'Toggle Product Status successful!',
+                'data' => [
+                    'id' => $product->id,
+                    'status' => $product->status
+                ]
             ], 200);
         }
         else return response()->json([
             'error' => 'Product does not exist!'
-        ], 200);
-    }
-
-    public function getProductSummary(Request $request, $product_id)
-    {
-        $breeder = $this->user->userable;
-        $product = $this->getBreederProduct($breeder, $product_id);
-
-        if($product) {
-            $product = $this->transformProduct($product);
-            return response()->json([
-                'message' => 'Get Product Summary succesful!',
-                'data' => $product
-            ]);
-        }
-        else return response()->json([
-            'error' => 'Product does not exist!'
-        ], 200);
-    }
-
-    public function updateProduct(ProductRequest $request, $product_id)
-    {
-        $breeder = $this->user->userable;
-        $product = $this->getBreederProduct($breeder, $product_id);
-
-        if($product) {
-            $product->farm_from_id = $request->farm_from_id;
-            $product->name = $request->name;
-            $product->type = $request->type;
-            $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
-            $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-            $product->price = $request->price;
-            $product->adg = $request->adg;
-            $product->fcr = $request->fcr;
-            $product->backfat_thickness = $request->backfat_thickness;
-            $product->other_details = $request->other_details;
-            $product->save();
-
-            return response()->json([
-                'message' => 'Update Product succesful!',
-                'data' => $product
-            ]);
-        }
-        else return response()->json([
-            'error' => 'Product does not exist!'
         ], 404);
     }
 
-    public function getProductDetail(Request $request, $product_id) 
+    public function getProduct(Request $request, $product_id)
     {
         $breeder = $this->user->userable;
         $product = $this->getBreederProduct($breeder, $product_id);
 
         if($product) {
-            $product->img_path = route('serveImage', ['size' => 'large', 'filename' => Image::find($product->primary_img_id)->name]);
-            $product->def_img_path = route('serveImage', ['size' => 'default', 'filename' => Image::find($product->primary_img_id)->name]);
-            $product->breeder = Breeder::find($product->breeder_id)->users->first()->name;
-            $product->type = ucfirst($product->type);
-            $product->birthdate = $this->transformDateSyntax($product->birthdate);
-            $product->age = $this->computeAge($product->birthdate);
-            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-            $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-            $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
-            $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
-            $product->videoCollection = $product->videos;
+            $p = $this->transformProduct($product);
 
-            $reviews = Breeder::find($product->breeder_id)->reviews;
-        
-            $breederRatings = [
-                'deliveryRating' => $reviews->avg('rating_delivery') ?? 0,
-                'transactionRating' => $reviews->avg('rating_transaction') ?? 0,
-                'productQualityRating' => $reviews->avg('rating_productQuality') ?? 0
-            ];
+            $product = [];
+
+            $product['id'] = $p->id;
+            $product['breeder_id'] = $p->breeder_id;
+            $product['farm_from_id'] = $p->farm_from_id;
+            $product['name'] = $p->name;
+            $product['type'] = $p->type;
+            $product['birthdate'] = $p->birthdate;
+            $product['breed'] = $p->breed;
+            $product['breed_id'] = $p->breed_id;
+            $product['price'] = $p->price;
+            $product['status'] = $p->status;
+            $product['quantity'] = $p->quantity;
+            $product['age'] = $p->age;
+            $product['adg'] = $p->adg;
+            $product['fcr'] = $p->fcr;
+            $product['bft'] = $p->backfat_thickness;
+            $product['other_details'] = $p->other_details;
+            $product['img_path'] = $p->img_path;
 
             return response()->json([
-                'message' => 'Update Product succesful!',
+                'message' => 'Get Product successful!',
                 'data' => [
-                    'product' => $product,
-                    'breederRatings' => $breederRatings  
+                    'product' => $product
                 ]
-            ]);
-
+            ], 200);
         }
         else return response()->json([
             'error' => 'Product does not exist!'
         ], 404);
     }
 
-    public function storeProduct(ProductRequest $request) 
+    public function updateProduct(Request $request, $product_id)
     {
         $breeder = $this->user->userable;
+        $product = $this->getBreederProduct($breeder, $product_id);
 
-        $product = new Product;
-        $productDetail= [];
+        $farms = $breeder->farmAddresses;
 
-        if($request->type == 'boar') $image = Image::firstOrCreate(['name' => 'boar_default.jpg']);
-        else if($request->type == 'sow') $image = Image::firstOrCreate(['name' => 'sow_default.jpg']);
-        else if($request->type == 'gilt') $image = Image::firstOrCreate(['name' => 'gilt_default.jpg']);
-        else $image = Image::firstOrCreate(['name' => 'semen_default.jpg']);
+        $data = $request->only([
+            'farm_from_id',
+            'name',
+            'type',
+            'quantity',
+            'is_unique',
+            'breed',
+            'birthdate',
+            'price',
+            'adg',
+            'fcr',
+            'bft',
+            'other_details'
+        ]);
 
-        $product->farm_from_id = $request->farm_from_id;
-        $product->primary_img_id = $image->id;
-        $product->name = $request->name;
-        $product->type = $request->type;
-        $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
-        $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-        $product->price = $request->price;
-        $product->quantity = ($request->type == 'semen') ? -1 : 1;
-        $product->adg = $request->adg;
-        $product->fcr = $request->fcr;
-        $product->backfat_thickness = $request->backfat_thickness;
-        $product->other_details = $request->other_details;
-        $breeder->products()->save($product);
+        $validator = Validator::make($data, [
+            'name' => 'required',
+            'type' => 'required',
+            'farm_from_id' => 'required',
+            'breed' => 'required'
+        ]);
+        
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 422);
+        }
+        else {
+            if($product) {
+                $farm = $farms->find($request->farm_from_id);
+                if($farm) {
+                    $product->farm_from_id = $farm->id;
+                    $product->name = $data['name'];
+                    $product->type = strtolower($data['type']);
+                    $product->breed_id = $this->findOrCreateBreed(strtolower($data['breed']));
+                    $product->birthdate = date_format(date_create($data['birthdate']), 'Y-n-j');
+                    $product->price = $data['price'];
+                    $product->adg = $data['adg'];
+                    $product->quantity = $data['quantity'];
+                    $product->is_unique = $data['is_unique'];
+                    $product->fcr = $data['fcr'];
+                    $product->backfat_thickness = $data['bft'];
+                    $product->other_details = $data['other_details'];
+                    $product->save();
 
-        $productDetail['product_id'] = $product->id;
-        $productDetail['name'] = $product->name;
-        $productDetail['type'] = ucfirst($request->type);
-        $productDetail['breed'] = $request->breed;
+                    return response()->json([
+                        'message' => 'Update Product successful!'
+                    ], 200);
+                }
+                else return response()->json([
+                    'error' => 'Farm does not exist!'
+                ], 404);
+            }
+            else return response()->json([
+                'error' => 'Product does not exist!'
+            ], 404);
+        }
+        
+    }
+
+    public function getProductDetails(Request $request, $product_id) 
+    {
+        $product = Product::find($product_id);
+
+        if($product) {
+
+            $primaryImg = Image::find($product->primary_img_id);
+            $breeder = Breeder::find($product->breeder_id);
+            $user = $breeder->users->first();
+
+            $p = [];
+
+            $p['id'] = $product->id;
+            $p['breeder_id'] = $product->breeder_id;
+            // $p['farm_from_id'] = $product->farm_from_id;
+            // $p['primary_img_id'] = $product->primary_img_id;
+            $p['name'] = $product->name;
+            $p['type'] = ucfirst($product->type);
+            $p['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $p['birth_date'] = $this->transformDateSyntax($product->birthdate);
+            $p['quantity'] = $product->quantity;
+            $p['adg'] = $product->adg;
+            $p['fcr'] = $product->fcr;
+            $p['bft'] = $product->backfat_thickness;
+            $p['lsba'] = $product->lsba;
+            $p['house_type'] = $product->house_type;
+            $p['min_price'] = $product->min_price;
+            $p['max_price'] = $product->max_price;
+            $p['left_teats'] = $product->left_teats;
+            $p['right_teats'] = $product->right_teats;
+            $p['birth_weight'] = $product->birthweight;
+            $p['age'] = $this->computeAge($product->birthdate);
+            $p['other_details'] = strip_tags($product->other_details);
+            $p['user_id'] = $user->id;
+            $p['breeder'] = $user->name;
+            $p['farm_name'] = FarmAddress::find($product->farm_from_id)->name;
+            $p['farm_from_id'] = $product->farm_from_id;
+            $p['img_path'] = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
+
+            return response()->json([
+                'message' => 'Get Product Details successful!',
+                'data' => [
+                    'product' => $p
+                ]
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Product does not exist!'
+        ], 404);
+    }
+
+    public function getProductMedia(Request $request, $product_id)
+    {
+        $product = Product::find($product_id);
+
+        if($product) {
+
+            $images = $product->images->map(function ($item) {
+                $image = [];
+
+                $image['id'] = $item->id;
+                $image['link'] = route('serveImage', [
+                    'size' => 'large', 
+                    'filename' => $item->name
+                ]);
+
+                return $image;
+            });
+
+            $videos = $product->videos->map(function ($item) {
+                $video = [];
+
+                $video['id'] = $item->id;
+                $video['link'] = route('serveImage', [
+                    'size' => 'large', 
+                    'filename' => $item->name
+                ]);
+
+                return $video;
+            });
+
+            return response()->json([
+                'message' => 'Get Product Media successful!',
+                'data' => [
+                    'images' => $images,
+                    // 'videos' => $videos,
+                ]
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Product does not exist!'
+        ], 404);
+    }
+
+    public function addProduct(Request $request)
+    {
+        $breeder = $this->user->userable;
+        $farms = $breeder->farmAddresses;
+
+        $farm = $farms->find($request->farm_from_id);
+
+        $data = $request->only([
+            'farm_from_id',
+            'name',
+            'type',
+            'quantity',
+            'is_unique',
+            'breed',
+            'birthdate',
+            'adg',
+            'fcr',
+            'bft',
+            'lsba',
+            'house_type',
+            'birth_weight',
+            'min_price',
+            'max_price',
+            'left_teats',
+            'right_teats',
+            'other_details'
+        ]);
+
+        $validator = Validator::make($data, [
+            'name' => 'required',
+            'type' => 'required',
+            'farm_from_id' => 'required',
+            'breed' => 'required'
+        ]);
+
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 422);
+        }
+        else {
+            if ($farm) {
+                $product = new Product;
+
+                if($request->type == 'boar') $image = Image::firstOrCreate(['name' => 'boar_default.jpg']);
+                else if($request->type == 'sow') $image = Image::firstOrCreate(['name' => 'sow_default.jpg']);
+                else if($request->type == 'gilt') $image = Image::firstOrCreate(['name' => 'gilt_default.jpg']);
+                else $image = Image::firstOrCreate(['name' => 'semen_default.jpg']);
+
+                $product->farm_from_id = $request->farm_from_id;
+                $product->primary_img_id = $image->id;
+                $product->name = $request->name;
+                $product->type = $request->type;
+                $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+                $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
+                $product->min_price = $request->min_price;
+                $product->max_price = $request->max_price;
+                $product->left_teats = $request->left_teats;
+                $product->right_teats = $request->right_teats;
+                $product->birthweight = $request->birth_weight;
+                $product->house_type = $request->house_type;
+                $product->quantity = $request->quantity;
+                $product->is_unique = $request->is_unique;
+                $product->adg = $request->adg;
+                $product->fcr = $request->fcr;
+                $product->lsba = $request->lsba;
+                $product->backfat_thickness = $request->bft;
+                $product->other_details = $request->other_details;
+                $breeder->products()->save($product);
+
+                $p = Product::find($product->id);
+                $p = $this->transformProduct($p);
+
+                $product = [];
+
+                $product['id'] = $p->id;
+                $product['name'] = $p->name;
+                $product['quantity'] = $p->quantity;
+                $product['is_unique'] = $p->is_unique;
+                $product['type'] = $p->type;
+                $product['breed'] = $p->breed;
+                $product['status'] = $p->status;
+                $product['age'] = $p->age;
+                $product['adg'] = $p->adg;
+                $product['fcr'] = $p->fcr;
+                $product['bft'] = $p->backfat_thickness;
+                $product['img_path'] = $p->img_path;
+
+                return response()->json([
+                    'message' => 'Add Product successful!',
+                    'data' => [
+                        'product' => $product
+                    ]
+                ], 200);
+            }
+            else return response()->json([
+                'error' => 'Farm does not exist!'
+            ], 404);
+        }
+    }
+
+    public function toggleProductStatuses(Request $request)
+    {
+        $breeder = $this->user->userable;
+        $products = [];
+        $ids = $request->ids;
+
+        foreach (explode(',', $ids) as $id) {
+            $product = $this->getBreederProduct($breeder, $id);
+            
+            if($product) {
+                if($product->status === 'hidden') {
+                    $product->status = 'displayed';
+                }
+                else if($product->status === 'displayed') {
+                    $product->status = 'hidden';
+                }
+                $product->save();
+                array_push($products, [
+                    'id' => $id,
+                    'status' => $product->status
+                ]);
+            }
+        }
 
         return response()->json([
-            'message' => 'Store Product succesful!',
-            'data' => [
-                'product' => $product,
-                'productDetail' => $productDetail
-            ]
+            'message' => 'Toggle Product Statuses successful!',
+        ], 200);
+    }
+    
+    public function deleteProducts(Request $request)
+    {
+        $breeder = $this->user->userable;
+        $ids = $request->ids;
+
+        foreach (explode(',', $ids) as $id) {
+            $product = $this->getBreederProduct($breeder, $id);
+
+            if($product) {
+                foreach ($product->images as $image) {
+                    $fullFilePath = self::PRODUCT_IMG_PATH.$image->name;
+                    $sFullFilePath = self::PRODUCT_SIMG_PATH.$image->name;
+                    $mFullFilePath = self::PRODUCT_MIMG_PATH.$image->name;
+                    $lFullFilePath = self::PRODUCT_LIMG_PATH.$image->name;
+
+                    if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+                    if(Storage::disk('public')->exists($sFullFilePath)) Storage::disk('public')->delete($sFullFilePath);
+                    if(Storage::disk('public')->exists($mFullFilePath)) Storage::disk('public')->delete($mFullFilePath);
+                    if(Storage::disk('public')->exists($lFullFilePath)) Storage::disk('public')->delete($lFullFilePath);
+
+                    $image->delete();
+                }
+
+                foreach ($product->videos as $video) {
+                    $fullFilePath = self::PRODUCT_VID_PATH.$video->name;
+
+                    if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+
+                    $video->delete();
+                }
+
+                $breedId = $product->breed_id;
+                $product->delete();
+
+                $breedInstance = Product::where('breed_id', $breedId)->get()->first();
+                if(!$breedInstance){
+                    $breed = Breed::find($breedId);
+                    $breed->delete();
+                }
+            }
+        }
+
+        return response()->json([
+            'message' => 'Delete Products successful!'
         ], 200);
     }
 
@@ -386,63 +643,6 @@ class ProductController extends Controller
 
         return response()->json([
             'message' => 'Delete Medium succesful!',
-        ], 200);
-    }
-
-    public function updateSelected(Request $request)
-    {
-        foreach ($request->product_ids as $id) {
-            $product = Product::find($id);
-            $product->status = $request->updateTo_status == 'hide' 
-                ? 'hidden'
-                : 'displayed';
-            $product->save();
-        }
-
-        return response()->json([
-            'message' => 'Update Selected succesful!',
-        ], 200);
-    }
-    
-    public function deleteSelected(Request $request)
-    {
-        foreach ($request->product_ids as $id) {
-            $product = Product::find($id);
-
-            foreach ($product->images as $image) {
-                $fullFilePath = self::PRODUCT_IMG_PATH.$image->name;
-                $sFullFilePath = self::PRODUCT_SIMG_PATH.$image->name;
-                $mFullFilePath = self::PRODUCT_MIMG_PATH.$image->name;
-                $lFullFilePath = self::PRODUCT_LIMG_PATH.$image->name;
-
-                if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
-                if(Storage::disk('public')->exists($sFullFilePath)) Storage::disk('public')->delete($sFullFilePath);
-                if(Storage::disk('public')->exists($mFullFilePath)) Storage::disk('public')->delete($mFullFilePath);
-                if(Storage::disk('public')->exists($lFullFilePath)) Storage::disk('public')->delete($lFullFilePath);
-
-                $image->delete();
-            }
-
-            foreach ($product->videos as $video) {
-                $fullFilePath = self::PRODUCT_VID_PATH.$video->name;
-
-                if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
-
-                $video->delete();
-            }
-
-            $breedId = $product->breed_id;
-            $product->delete();
-
-            $breedInstance = Product::where('breed_id', $breedId)->get()->first();
-            if(!$breedInstance){
-                $breed = Breed::find($breedId);
-                $breed->delete();
-            }
-        }
-
-        return response()->json([
-            'message' => 'Delete Selected succesful!',
         ], 200);
     }
 }

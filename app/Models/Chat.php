@@ -36,47 +36,30 @@ class Chat implements MessageComponentInterface {
             return;
         }
         else{
-            $mediaUrlToSave = '';
-            $mediaTypeToSave = '';  
+            $new_message = Message::create([
+                'customer_id' => $msg->direction == 0 ? $msg->from : $msg->to,
+                'breeder_id' => $msg->direction == 0 ? $msg->to : $msg->from,
+                'message' => $msg->message,
+                'direction' => $msg->direction,
+            ]);
 
-            // if message is media
-            if ($msg->media_url) {
-              $mediaUrlToSave = $msg->media_url;
-              $mediaTypeToSave = $msg->media_type;
-            }
-
-            // if message is text
-            else {
-              $mediaTypeToSave = null;
-              $mediaTypeToSave = '';
-            }
-
-            if($msg->direction == 0){
-              
-                Message::create([
-                    'customer_id' =>  $msg->from,
-                    'breeder_id'  =>  $msg->to,
-                    'message'     =>  $msg->message,
-                    'media_url'   =>  $mediaUrlToSave,
-                    'media_type'  =>  $mediaTypeToSave,
-                    'direction'   =>  0
-                ]);
-            }
-            else {
-                 Message::create([
-                    'customer_id' =>  $msg->to,
-                    'breeder_id'  =>  $msg->from,
-                    'message'     =>  $msg->message,
-                    'media_url'   =>  $mediaUrlToSave,
-                    'media_type'  =>  $mediaTypeToSave,
-                    'direction'   =>  1
-                ]);
-            }
-            
             if(array_key_exists($msg->to, $this->maps)){
+                $msg->from_id = $msg->from;
+                $msg->read_at = $new_message->read_at;
+                $msg->id = $new_message->id;
+                $msg->created_at = $new_message->created_at->toDateTimeString();
                 $msg->from = User::where('id', $msg->from)->first()->name;
                 $this->maps[$msg->to]->send(json_encode($msg));
-            } 
+            }
+            
+
+            // foreach ($this->clients as $client) {
+            //     if($client != $from){
+            //         $client->send(json_encode($msg));
+            //     }
+
+            // }
+
         }
     }
 
