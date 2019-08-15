@@ -136,11 +136,15 @@
                           </div>
                         </li>
                         <li id="filter-location">
-                            <div class="collapsible-header"><i class="material-icons teal-text">place</i>Breeder Locations</div>
-                            <div class="collapsible-body">
-                                <p>
-                                    <a href="{{ route('map.breeders') }}">Check locations</a>
-                                </p>
+                            <div 
+                              class="collapsible-header">
+                              <i class="material-icons teal-text">place</i>
+                              <a 
+                                href="{{ route('map.breeders') }}"
+                                class="grey-text text-darken-4"
+                              >
+                                Breeder Locations
+                              </a>
                             </div>
                         </li>
                 </ul>
