@@ -44,32 +44,32 @@ class InventoryController extends Controller
     }
 
     private function transformReservedProduct($reservation)
-    {
-        $product = [];
+    {   
+        $order = [];
 
-        $status_time = $reservation->transactionLogs->where('status', $reservation->order_status)->sortByDesc('created_at')->first()->created_at;
-        $user = Customer::find($reservation->customer_id)->users()->first();
+        $status_time = $reservation->transactionLogs->first()->created_at;
+        $user = $reservation->customer->users()->first();
 
-        $product['id'] = $reservation->product->id;
-        $product['name'] = $reservation->product->name;
-        $product['type'] = ucfirst($reservation->product->type);
-        $product['breed'] = $this->transformBreedSyntax(Breed::find($reservation->product->breed_id)->name);
-        $product['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($reservation->product->primary_img_id)->name]);
-        $product['status'] = $reservation->product->status;
-        
-        $product['reservation'] = null;
-        $product['reservation']['id'] = $reservation->id;
-        $product['reservation']['quantity'] = $reservation->quantity;
-        $product['reservation']['order_status'] = $reservation->order_status;
-        $product['reservation']['status_time'] = $this->transformDateSyntax($status_time, 3);
-        $product['reservation']['date_needed'] = $this->transformDateSyntax($reservation->date_needed);
-        $product['reservation']['delivery_date'] = $this->transformDateSyntax($reservation->delivery_date);
-        $product['reservation']['special_request'] = $reservation->special_request;
-        $product['reservation']['customer_id'] = $reservation->customer_id;
-        $product['reservation']['customer_name'] = $user->name;
-        $product['reservation']['user_id'] = $user->id;
+        $order['status'] = $reservation->order_status;
 
-        return $product;
+        $order['product']['id'] = $reservation->product->id;
+        $order['product']['name'] = $reservation->product->name;
+        $order['product']['type'] = $reservation->product->type;
+        $order['product']['breed'] = $this->transformBreedSyntax($reservation->product->breed->name);
+        $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $reservation->product->primaryImage->name]);
+    
+        $order['reservation'] = null;
+        $order['reservation']['id'] = $reservation->id;
+        $order['reservation']['quantity'] = $reservation->quantity;
+        $order['reservation']['status_time'] = $status_time;
+        $order['reservation']['date_needed'] = $reservation->date_needed;
+        $order['reservation']['delivery_date'] = $reservation->delivery_date;
+        $order['reservation']['special_request'] = $reservation->special_request;
+        $order['reservation']['customer_id'] = $reservation->customer_id;
+        $order['reservation']['customer_name'] = $user->name;
+        $order['reservation']['user_id'] = $user->id;
+
+        return $order;
     }
 
     private function getBreederProduct($breeder, $product_id)
@@ -97,21 +97,24 @@ class InventoryController extends Controller
         if ($request->status === 'requested') {
             $limit = $request->limit;
 
-            $products = $breeder
+            $orders = $breeder
                 ->products()
+                ->with('breed', 'primaryImage')
                 ->where('status','requested')
                 ->where('quantity','<>', 0)
                 ->paginate($limit)
                 ->map(function ($item) {
-                    $product = [];
-
-                    $product['id'] = $item->id;
-                    $product['name'] = $item->name;
-                    $product['type'] = ucfirst($item->type);
-                    $product['breed'] = $this->transformBreedSyntax(Breed::find($item->breed_id)->name);
-                    $product['img_path'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($item->primary_img_id)->name]);
-                    $product['status'] = $item->status;
+                    $order = [];
                     
+                    $order['status'] = $item->status;
+                    $order['request_count'] = $this->getRequests($item->id)->count();
+
+                    $order['product']['id'] = $item->id;
+                    $order['product']['name'] = $item->name;
+                    $order['product']['type'] = $item->type;
+                    $order['product']['breed'] = $this->transformBreedSyntax($item->breed->name);
+                    $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $item->primaryImage->name]);
+
                     // $product['reservation'] = null;
                     // $product['reservation']['id'] = null;
                     // $product['reservation']['quantity'] = null;
@@ -123,15 +126,13 @@ class InventoryController extends Controller
                     // $product['reservation']['customer_id'] = null;
                     // $product['reservation']['customer_name'] = null;
 
-                    return $product;
+                    return $order;
                 });
 
             return response()->json([
                 'message' => 'Get Inventory Products successful!',
                 'data' => [
-                    'count' => $products->count(),
-                    'products' => $products
-
+                    'orders' => $orders
                 ]
             ], 200);
         }
@@ -140,9 +141,12 @@ class InventoryController extends Controller
             $order_status = $request->status;
             $limit = $request->limit;
 
-            $products = $breeder
+            $orders = $breeder
                 ->reservations()
-                ->with('product')
+                ->with(['transactionLogs' => function ($query) use ($order_status) {
+                    $query->where('status', $order_status)->orderBy('created_at', 'desc');
+                }])
+                ->with('product.breed', 'product.primaryImage', 'customer') 
                 ->where('order_status', $order_status)
                 ->paginate($limit)
                 ->map(function ($item) {
@@ -152,38 +156,43 @@ class InventoryController extends Controller
             return response()->json([
                 'message' => 'Get Inventory Products successful!',
                 'data' => [
-                    'count' => $products->count(),
-                    'products' => $products
+                    'orders' => $orders
 
                 ]
             ], 200);
         }
     }
 
+    private function getRequests($product_id)
+    {
+        return SwineCartItem::where('product_id', $product_id)
+            ->with('customer.users')
+            ->where('if_requested', 1)
+            ->where('reservation_id', 0);
+    }
+
     public function getProductRequests(Request $request, $product_id)
     {
         $limit = $request->limit;
 
-        $requests = SwineCartItem::where('product_id', $product_id)
-            ->where('if_requested', 1)
-            ->where('reservation_id', 0)
+        $requests = $this->getRequests($product_id)
             ->paginate($limit)
             ->map(function ($item) {
-                $customer = Customer::find($item->customer_id);
-                $user = $customer->users()->first();
                 $request = [];
 
+                $customer = $item->customer;
+                $user = $customer->users[0];
+
                 $request['product_id'] = $item->product_id;
-                $request['customer_id'] = $item->customer_id;
+                $request['customer_id'] = $item->customer->id;
                 $request['swinecart_id'] = $item->id;
                 $request['request_quantity'] = $item->quantity;
-                $request['date_needed'] = $item->date_needed == '0000-00-00' ? null : $this->transformDateSyntax($item->date_needed);
+                $request['date_needed'] = $item->date_needed == '0000-00-00' ? null : $item->date_needed;
                 $request['special_request'] = $item->special_request;
 
                 $request['customer_name'] = $user->name;
-                $request['user_id'] = $user->id;
-
                 $request['customer_province'] = $customer->address_province;
+                $request['user_id'] = $user->id;
 
                 return $request;
             });
@@ -191,7 +200,6 @@ class InventoryController extends Controller
         return response()->json([
             'message' => 'Get Product Requests successful!',
             'data' => [
-                'count' => $requests->count(),
                 'requests' => $requests,
             ]
         ], 200);

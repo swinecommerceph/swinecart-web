@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 
+use App\Models\Product;
+
 class Image extends Model
 {
     public $timestamps = false;
@@ -28,5 +30,10 @@ class Image extends Model
     public function imageable()
     {
         return $this->morphTo();
+    }
+
+    public function productPrimaryImage()
+    {
+        return $this->belongsTo(Product::class, 'primary_img_id');
     }
 }

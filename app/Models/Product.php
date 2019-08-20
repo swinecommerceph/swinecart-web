@@ -120,4 +120,10 @@ class Product extends Model
     {
         return $this->hasOne(TransactionLog::class);
     }
+
+    public function primaryImage()
+    {
+        return $this->hasOne(Image::class, 'id');
+    }
+
 }
