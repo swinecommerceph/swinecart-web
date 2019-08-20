@@ -1,0 +1,30 @@
+Starting chat web socket server on port 9090
+New connection! (273)
+Connection 273 sending message "{"from":"3","to":null,"message":"Connection established.","direction":null}" to 0 other connections
+Starting publish-subscribe websocket server on port 8080
+New connection! (321)
+Connection 321 sending message "{"from":"11","to":null,"message":"Connection established.","direction":null}" to 0 other connections
+Connection 321 sending message "{"from":"11","to":"3","message":"hello","media_url":"","media_type":"","direction":1}" to 0 other connections
+New connection! (363)
+Connection 363 sending message "{"from":"3","to":null,"message":"Connection established.","direction":null}" to 1 other connection
+Connection 363 sending message "{"from":"3","to":"11","message":"hello","media_url":"","media_type":"","direction":0}" to 1 other connection
+New connection! (368)
+Connection 368 sending message "{"from":"11","to":null,"message":"Connection established.","direction":null}" to 1 other connection
+New connection! (373)
+Connection 373 sending message "{"from":"3","to":null,"message":"Connection established.","direction":null}" to 1 other connection
+New connection! (378)
+Connection 378 sending message "{"from":"3","to":null,"message":"Connection established.","direction":null}" to 0 other connections
+New connection! (383)
+Connection 383 sending message "{"from":"5","to":null,"message":"Connection established.","direction":null}" to 0 other connections
+Connection 383 sending message "{"from":"5","to":"3","message":"Hello Mr. Colton","media_url":"","media_type":"","direction":1}" to 0 other connections
+New connection! (388)
+Connection 388 sending message "{"from":"3","to":null,"message":"Connection established.","direction":null}" to 1 other connection
+Connection 388 sending message "{"from":"3","to":"5","message":"Hello!","media_url":"","media_type":"","direction":0}" to 1 other connection
+Connection 388 sending message "{"from":"3","to":"5","message":"Can you send some pictures of your pigs?","media_url":"","media_type":"","direction":0}" to 1 other connection
+Connection 383 sending message "{"from":"5","to":"3","message":"Sure","media_url":"","media_type":"","direction":1}" to 1 other connection
+New connection! (393)
+Connection 393 sending message "{"from":"3","to":null,"message":"Connection established.","direction":null}" to 0 other connections
+New connection! (398)
+Connection 398 sending message "{"from":"5","to":null,"message":"Connection established.","direction":null}" to 1 other connection
+Connection 398 sending message "{"from":"5","to":"3","message":"","media_url":"/images/message/_message_d06d73ba8b1d21a6f249bce8ca7f41b9_jpg","media_type":"image","direction":1}" to 1 other connection
+Connection 393 sending message "{"from":"3","to":"5","message":"Oh wow! Thanks!","media_url":"","media_type":"","direction":0}" to 1 other connection
