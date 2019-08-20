@@ -15,17 +15,15 @@
   {{-- Google Analytics here --}}
 	
 	<!-- Global site tag (gtag.js) - Google Analytics -->
-  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-131910879-1"></script>
+  <script async src="https://www.googletagmanager.com/gtag/js?id=UA-146041556-1"></script>
   <script>
     window.dataLayer = window.dataLayer || [];
     function gtag(){dataLayer.push(arguments);}
     gtag('js', new Date());
 
-    gtag('config', 'UA-131910879-1');
+    gtag('config', 'UA-146041556-1');
   </script>
 
-
- 
 	<title>SwineCart @yield('title') </title>
 
 	{{-- <link href="https://fonts.googleapis.com/css?family=Raleway:300,400,500,700" rel="stylesheet" type="text/css"> --}}
