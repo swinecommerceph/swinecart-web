@@ -44,9 +44,7 @@ class LoginController extends Controller
         return response()->json([
             'message' => 'Normal Login successful!',
             'data' => [
-                'access_token' => $token,
-                'token_type' => 'bearer',
-                'expires_in' => JWTAuth::factory()->getTTL() * 60
+                'token' => $token,
              ]
         ], 200);
     }

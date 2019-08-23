@@ -4,7 +4,7 @@ Homestead.yaml
 Homestead.json
 .env
 .env.backup
-/public/images/
-/public/videos/
+public/images/
+public/videos/
 .vscode
 nohup.out

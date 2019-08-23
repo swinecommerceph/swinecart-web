@@ -100,26 +100,63 @@ class ProductController extends Controller {
 
     private function getBreederProducts($breeder) 
     {
-        return $breeder->products()->whereIn('status', [
-            'hidden',
-            'displayed',
-            'requested'
-        ])->where('quantity','<>', 0);
+        return $breeder->products()
+            ->with('breed', 'primaryImage')
+            ->whereIn('status', ['hidden', 'displayed', 'requested'])
+            ->where('quantity','<>', 0)
+            ->orWhere([
+                ['is_unique', '=', '0'],
+                ['quantity', '=', '0']
+            ]);
     }
     
     private function transformProduct($product) 
-    {   
-        $product->img_path = route('serveImage', [
-            'size' => 'medium', 
-            'filename' => Image::find($product->primary_img_id)->name
-        ]);
-        $product->type = ucfirst($product->type);
-        $product->birthdate = $this->transformDateSyntax($product->birthdate);
-        $product->age = $this->computeAge($product->birthdate);
-        $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-        $product->other_details = $product->other_details;
+    {
+        $transFormedProduct = [];
 
-        return $product;
+        $breeder = $product->breeder;
+        $farmFrom = $product->farmFrom;
+        $user = $breeder->users->first();
+
+        $transFormedProduct['product_info'] = [
+            'id' => $product->id,
+            'name' => $product->name,
+            'type' => $product->type,
+            'breed' => $this->transformBreedSyntax($product->breed->name),
+            'age' => $this->computeAge($product->birthdate),
+            'birthdate' => $product->birthdate,
+            'is_unique' => $product->is_unique,
+            'quantity' => $product->quantity,
+            'primary_image' => route('serveImage', ['size' => 'default', 'filename' => $product->primaryImage->name]),
+        ];
+
+        $transFormedProduct['swine_info'] = [
+            'adg' => $product->adg,
+            'fcr' => $product->fcr,
+            'bft' => $product->backfat_thickness,
+            'lsba' => $product->lsba,
+            'house_type' => $product->house_type,
+            'min_price' => $product->min_price,
+            'max_price' => $product->max_price,
+            'left_teats' => $product->left_teats,
+            'right_teats' => $product->right_teats,
+            'birth_weight' => $product->birthweight,
+        ];
+
+        $transFormedProduct['breeder'] = [
+            'id' => $product->breeder_id,
+            'name' => $user->name,
+        ];
+
+        $transFormedProduct['farm'] = [
+            'id' => $farmFrom->id,
+            'name' => $farmFrom->name,
+            'province' => $farmFrom->province,
+        ];
+
+        $transFormedProduct['other_details'] = strip_tags($product->other_details);
+
+        return $transFormedProduct;
     }
 
     private function getBreederProduct($breeder, $product_id)
@@ -163,25 +200,23 @@ class ProductController extends Controller {
         $products = $products
             ->paginate($request->limit)
             ->map(function ($item) {
-                $p = $this->transformProduct($item);
                 $product = [];
 
-                $product['id'] = $p->id;
-                $product['name'] = $p->name;
-                $product['type'] = $p->type;
-                $product['breed'] = $p->breed;
-                $product['status'] = $p->status;
-                // $product['age'] = $p->age;
-                // $product['adg'] = $p->adg;
-                // $product['fcr'] = $p->fcr;
-                // $product['bft'] = $p->backfat_thickness;
-                $product['img_path'] = $p->img_path;
+                $product['id'] = $item->id;
+                $product['name'] = $item->name;
+                $product['type'] = $item->type;
+                $product['breed'] = $this->transformBreedSyntax($item->breed->name);
+                $product['status'] = $item->status;
+                $product['age'] = $this->computeAge($item->birthdate);
+                $product['image'] = route('serveImage', [
+                    'size' => 'medium', 
+                    'filename' => $item->primaryImage->name
+                ]);
 
                 return $product;
             });
 
         return response()->json([
-            'message' => 'Get Products successful',
             'data' => [
                 'count' => $products->count(),
                 'products' => $products
@@ -219,42 +254,7 @@ class ProductController extends Controller {
 
     public function getProduct(Request $request, $product_id)
     {
-        $breeder = $this->user->userable;
-        $product = $this->getBreederProduct($breeder, $product_id);
-
-        if($product) {
-            $p = $this->transformProduct($product);
-
-            $product = [];
-
-            $product['id'] = $p->id;
-            $product['breeder_id'] = $p->breeder_id;
-            $product['farm_from_id'] = $p->farm_from_id;
-            $product['name'] = $p->name;
-            $product['type'] = $p->type;
-            $product['birthdate'] = $p->birthdate;
-            $product['breed'] = $p->breed;
-            $product['breed_id'] = $p->breed_id;
-            $product['price'] = $p->price;
-            $product['status'] = $p->status;
-            $product['quantity'] = $p->quantity;
-            $product['age'] = $p->age;
-            $product['adg'] = $p->adg;
-            $product['fcr'] = $p->fcr;
-            $product['bft'] = $p->backfat_thickness;
-            $product['other_details'] = $p->other_details;
-            $product['img_path'] = $p->img_path;
-
-            return response()->json([
-                'message' => 'Get Product successful!',
-                'data' => [
-                    'product' => $product
-                ]
-            ], 200);
-        }
-        else return response()->json([
-            'error' => 'Product does not exist!'
-        ], 404);
+        
     }
 
     public function updateProduct(Request $request, $product_id)
@@ -326,47 +326,13 @@ class ProductController extends Controller {
 
     public function getProductDetails(Request $request, $product_id) 
     {
-        $product = Product::find($product_id);
+        $product = Product::with('breed', 'primaryImage', 'farmFrom', 'breeder.users')
+            ->find($product_id);
 
-        if($product) {
-
-            $primaryImg = Image::find($product->primary_img_id);
-            $breeder = Breeder::find($product->breeder_id);
-            $user = $breeder->users->first();
-
-            $p = [];
-
-            $p['id'] = $product->id;
-            $p['breeder_id'] = $product->breeder_id;
-            // $p['farm_from_id'] = $product->farm_from_id;
-            // $p['primary_img_id'] = $product->primary_img_id;
-            $p['name'] = $product->name;
-            $p['type'] = ucfirst($product->type);
-            $p['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
-            $p['birth_date'] = $this->transformDateSyntax($product->birthdate);
-            $p['quantity'] = $product->quantity;
-            $p['adg'] = $product->adg;
-            $p['fcr'] = $product->fcr;
-            $p['bft'] = $product->backfat_thickness;
-            $p['lsba'] = $product->lsba;
-            $p['house_type'] = $product->house_type;
-            $p['min_price'] = $product->min_price;
-            $p['max_price'] = $product->max_price;
-            $p['left_teats'] = $product->left_teats;
-            $p['right_teats'] = $product->right_teats;
-            $p['birth_weight'] = $product->birthweight;
-            $p['age'] = $thi s->computeAge($product->birthdate);
-            $p['other_details'] = strip_tags($product->other_details);
-            $p['user_id'] = $user->id;
-            $p['breeder'] = $user->name;
-            $p['farm_name'] = FarmAddress::find($product->farm_from_id)->name;
-            $p['farm_from_id'] = $product->farm_from_id;
-            $p['img_path'] = route('serveImage', ['size' => 'default', 'filename' => $primaryImg->name]);
-
+        if($product) {   
             return response()->json([
-                'message' => 'Get Product Details successful!',
                 'data' => [
-                    'product' => $p
+                    'product' => $this->transformProduct($product)
                 ]
             ], 200);
         }
@@ -488,28 +454,10 @@ class ProductController extends Controller {
                 $product->other_details = $request->other_details;
                 $breeder->products()->save($product);
 
-                $p = Product::find($product->id);
-                $p = $this->transformProduct($p);
-
-                $product = [];
-
-                $product['id'] = $p->id;
-                $product['name'] = $p->name;
-                $product['quantity'] = $p->quantity;
-                $product['is_unique'] = $p->is_unique;
-                $product['type'] = $p->type;
-                $product['breed'] = $p->breed;
-                $product['status'] = $p->status;
-                $product['age'] = $p->age;
-                $product['adg'] = $p->adg;
-                $product['fcr'] = $p->fcr;
-                $product['bft'] = $p->backfat_thickness;
-                $product['img_path'] = $p->img_path;
-
                 return response()->json([
-                    'message' => 'Add Product successful!',
+                    // 'message' => 'Add Product successful!',
                     'data' => [
-                        'product' => $product
+                        // 'product' => $product
                     ]
                 ], 200);
             }
