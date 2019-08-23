@@ -171,10 +171,10 @@ class ProductController extends Controller {
                 $product['type'] = $p->type;
                 $product['breed'] = $p->breed;
                 $product['status'] = $p->status;
-                $product['age'] = $p->age;
-                $product['adg'] = $p->adg;
-                $product['fcr'] = $p->fcr;
-                $product['bft'] = $p->backfat_thickness;
+                // $product['age'] = $p->age;
+                // $product['adg'] = $p->adg;
+                // $product['fcr'] = $p->fcr;
+                // $product['bft'] = $p->backfat_thickness;
                 $product['img_path'] = $p->img_path;
 
                 return $product;
@@ -355,7 +355,7 @@ class ProductController extends Controller {
             $p['left_teats'] = $product->left_teats;
             $p['right_teats'] = $product->right_teats;
             $p['birth_weight'] = $product->birthweight;
-            $p['age'] = $this->computeAge($product->birthdate);
+            $p['age'] = $thi s->computeAge($product->birthdate);
             $p['other_details'] = strip_tags($product->other_details);
             $p['user_id'] = $user->id;
             $p['breeder'] = $user->name;
