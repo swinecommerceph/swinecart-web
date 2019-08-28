@@ -15,7 +15,7 @@
 
     <p>
       These terms and conditions outline the rules and regulations for the use of SwineCart, located at
-      <span style="color: red;"><i>swinecart.cf</i></span>.
+      <i>swinecart.pcaarrd.dost.gov.ph</i>
     </p>
 
     <p>
