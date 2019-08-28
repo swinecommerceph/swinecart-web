@@ -1153,6 +1153,14 @@ input#search{
 	margin: 0 0 0 -25px;
 }
 
+/* Birthdate Icon in Add/Edit Product */
+.birthdate-icon {
+  font-size: 3rem;
+  z-index: -1 !important;
+  right: 0;
+  position: absolute;
+}
+
 /* Media Queries */
 @media screen and (max-width: 65.375em) {
 
