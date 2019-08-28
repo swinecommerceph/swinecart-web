@@ -337,7 +337,7 @@
 
             {{-- Product Delivery Confirmation Modal --}}
             <div id="product-delivery-confirmation-modal" class="modal"
-                 style="height: 50% !important; overflow-y: hidden; max-height: 90%;">
+                 style="overflow-y: hidden; max-height: 90%;">
                 <div class="modal-content">
                     <h4>Deliver <b>@{{ productInfoModal.productName }}</b> to @{{ productInfoModal.customerName }}?</h4>
                     <div>
