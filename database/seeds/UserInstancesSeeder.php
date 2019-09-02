@@ -95,11 +95,11 @@ class UserInstancesSeeder extends Seeder
 
             // Create products as well
             // Initialization
-            /* $rand = random_int(10,13);
+            $rand = random_int(10,13);
             $types = ['sow', 'gilt', 'boar', 'semen']; // 4
             $housetypes = ['opensided', 'tunnelventilated']; // 2
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
-            for ($i = 0; $i < $rand; $i++) {
+            for ($i = 0; $i < 100; $i++) {
                 $randType = $types[random_int(0,3)];
                 $randHouseType = $housetypes[random_int(0,1)];
                 $randBreed = $breeds[random_int(0,6)];
@@ -175,7 +175,7 @@ class UserInstancesSeeder extends Seeder
                 else $product->images()->save($image);
                 $product->videos()->save($video);
                 
-            } */
+            }
 
         });
 
