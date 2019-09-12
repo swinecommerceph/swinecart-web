@@ -322,7 +322,7 @@
                             height: auto;
                             width: 100%
                         "
-                        src="/images/ics-logo.jpg">
+                        src="/images/ics-logo.png">
                 </div>
                 <div class="col s1">
                     {{-- UP logo --}}
