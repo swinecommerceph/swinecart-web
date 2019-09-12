@@ -346,13 +346,47 @@
                 </div>
             </div>
             
-            {{-- Copyrights --}}
             <div class="row">
-                <div class="col s12">
-                    <p>
-                        Copyright All Rights Resevered © 2018
-                    </p>
-                </div>
+              {{-- Copyrights --}}
+              <div class="col s12 m6 left-align">
+                <p>
+                  Copyright All Rights Resevered © 2018
+                </p>
+              </div>
+
+              {{-- External Links --}}
+              <div class="col s12 m6 right-align">
+                <p>
+                  <span>
+                    <a 
+                      href="{{ route('termsOfAgreement') }}"
+                      target="_blank" 
+                    >
+                      Terms
+                    </a>
+                  </span>
+
+                  <span class="external-home-links">
+                    <a 
+                      href="{{ route('customerPrivacyPolicy') }}"
+                      target="_blank"
+                    >
+                      Customer Policy
+                    </a>
+                  </span>
+
+                  <span class="external-home-links">
+                    <a 
+                      href="{{ route('breederPrivacyPolicy') }}"
+                      target="_blank" 
+                    >
+                      Breeder Policy
+                    </a>
+                  </span>
+
+                </p>
+              </div>
+
             </div>
         </div>
     </div>
