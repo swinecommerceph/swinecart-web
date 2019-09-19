@@ -135,6 +135,27 @@
 
                           </div>
                         </li>
+                        {{-- <li id="filter-breeder">
+                            <div class="collapsible-header">
+                              <i class="material-icons teal-text">person</i>
+                              Breeder
+                            </div>
+                            <div class="collapsible-body">
+                              <p class="range-field">
+
+                                @foreach($breeders as $breeder)
+                                  <input 
+                                    type="checkbox"
+                                    class="filled-in filter-breeder"
+                                    id="check-{{ $breeder->name }}"
+                                    data-breeder="{{ $breeder->name }}"
+                                  >
+                                  <label for="check-{{ $breeder->name }}">{{ $breeder->name }}</label>
+                                  <br>
+                                @endforeach
+                              </p>
+                            </div>
+                        </li> --}}
                         <li id="filter-location">
                             <div 
                               class="collapsible-header">
