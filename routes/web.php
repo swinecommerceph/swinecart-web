@@ -15,6 +15,9 @@ Route::get('/public-products', function () {
     return view('products');
 });
 
+Route::get('/customerRegister', ['as' => 'customerRegister', 'uses' => 'Auth\RegisterController@customerRegister']);
+Route::get('/breederRegister', ['as' => 'breederRegister', 'uses' => 'Auth\RegisterController@breederRegister']);
+
 Route::get('/customer-privacy-policy', ['as' => 'customerPrivacyPolicy', 'uses' => 'Auth\RegisterController@getCustomerPrivacyPolicy']);
 Route::get('/breeder-privacy-policy', ['as' => 'breederPrivacyPolicy', 'uses' => 'Auth\RegisterController@getBreederPrivacyPolicy']);
 Route::get('/terms-of-agreement', ['as' => 'termsOfAgreement', 'uses' => 'Auth\RegisterController@getTermsOfAgreement']);
