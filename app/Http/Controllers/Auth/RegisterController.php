@@ -152,14 +152,4 @@ class RegisterController extends Controller
     {
         return view('auth.customerRegister');
     }
-
-    /**
-     * Show Registration Page for Breeder
-     *
-     * @return View
-     */
-    public function breederRegister()
-    {
-        return view('auth.breederRegister');
-    }
 }

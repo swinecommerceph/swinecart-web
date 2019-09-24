@@ -33,8 +33,8 @@ class BreederController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('role:breeder');
-        $this->middleware('updateProfile:breeder',['except' => ['index','storeProfile', 'getTermsOfAgreement', 'getPrivacyPolicy']]);
+        $this->middleware('role:breeder', ['except' => ['breederRegister']]);
+        $this->middleware('updateProfile:breeder',['except' => ['index','storeProfile', 'getTermsOfAgreement', 'getPrivacyPolicy', 'breederRegister']]);
         $this->middleware(function($request, $next){
             $this->user = Auth::user();
             return $next($request);
@@ -409,6 +409,17 @@ class BreederController extends Controller
 
             return response()->json('Logo deleted', 200);
         }
+    }
+
+    /**
+     * Show Registration Page for Breeder
+     *
+     * @return View
+     */
+    public function breederRegister()
+    {
+        $provinces = $this->getProvinces();
+        return view('auth.breederRegister', compact('provinces'));
     }
 
     /**
