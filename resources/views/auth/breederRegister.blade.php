@@ -34,12 +34,27 @@
       <div class="col s12">
         <div id="personal-information" class="card-panel">
           
+          <div class="row">
+            <!-- Name -->
+            <div class="input-field col s5 push-s1">
+              {!! Form::text('breederName', null, ['autofocus' => 'autofocus', 'id' => 'breederName']) !!}
+              {!! Form::label('breederName', 'Name*')!!}
+            </div>
+
+            <!-- Email -->
+            <div class="input-field col s5 push-s1">
+              {!! Form::text('email', null, ['id' => 'email']) !!}
+              {!! Form::label('email', 'Email*')!!}
+            </div>
+
+          </div>
+
           <!-- Office Address 1 -->
           <div class="row">
             <div class="input-field col s10 push-s1">
               {!! 
                 Form::text('officeAddress_addressLine1', null, [
-                  'autofocus' => 'autofocus', 'id' => 'officeAddress_addressLine1'
+                  'id' => 'officeAddress_addressLine1'
                 ]) 
               !!}
               {!! Form::label(
