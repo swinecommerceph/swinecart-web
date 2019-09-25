@@ -72,6 +72,7 @@ class UserInstancesSeeder extends Seeder
             $user->assignRole('breeder');
             $user->update_profile = 0;
             $user->email_verified = 1;
+            $user->is_admin_approved = 1;
             $user->created_at = $faker->dateTimeBetween($startDate = '-5 years', $endDate = 'now');
             $user->approved_at = $faker->dateTimeBetween($startDate = '-5 years', $endDate = 'now');
 

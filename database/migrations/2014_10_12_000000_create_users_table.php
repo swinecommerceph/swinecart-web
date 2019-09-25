@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->string('block_reason')->nullable();
             $table->integer('block_frequency')->unsigned();
             $table->boolean('update_profile')->default('1');
+            $table->boolean('is_admin_approved')->default('0');
             $table->string('verification_code');
             $table->boolean('email_verified')->default('0');
             $table->dateTime('blocked_at')->nullable();
