@@ -74,6 +74,8 @@ Route::group(['middleware' => ['web']], function () {
 
     	Route::get('home',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
       
+        Route::post('breederRegister', ['as' => 'breeder.register', 'uses' => 'BreederController@registerBreeder']);
+
         // profile-related
         Route::get('terms-of-agreement', ['as' => 'breeder.getTermsOfAgreement', 'uses' => 'BreederController@getTermsOfAgreement']);
         Route::get('privacy-policy', ['as' => 'breeder.privacyPolicy', 'uses' => 'BreederController@getPrivacyPolicy']);

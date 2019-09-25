@@ -33,8 +33,15 @@ class BreederController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('role:breeder', ['except' => ['breederRegister']]);
-        $this->middleware('updateProfile:breeder',['except' => ['index','storeProfile', 'getTermsOfAgreement', 'getPrivacyPolicy', 'breederRegister']]);
+        $this->middleware('role:breeder', ['except' => ['breederRegister', 'registerBreeder']]);
+        $this->middleware('updateProfile:breeder',['except' => [
+          'index',
+          'registerBreeder',
+          'storeProfile',
+          'getTermsOfAgreement',
+          'getPrivacyPolicy',
+          'breederRegister'
+        ]]);
         $this->middleware(function($request, $next){
             $this->user = Auth::user();
             return $next($request);
@@ -87,6 +94,16 @@ class BreederController extends Controller
         $provinces = $this->getProvinces();
 
         return view('user.breeder.createProfile', compact('provinces'));
+    }
+
+    /**
+     * Register breeder then wait for the admin approval
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function registerBreeder(Request $request) {
+      return 'Registered!';
     }
 
     /**

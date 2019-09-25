@@ -11,8 +11,8 @@
 @section('content')
   <br>
   {!! Form::open([
-    //'route' => 'breeder.store',
-    //'method' => 'PATCH',
+    'route' => 'breeder.register',
+    'method' => 'POST',
     'class' => 's12',
     'id' => 'breeder-register'
   ]) !!}

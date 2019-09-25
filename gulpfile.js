@@ -112,8 +112,6 @@ elixir(function (mix) {
     ], 'public/js/register.js')
     .scripts([
       'breeder/register.js',
-      'validation/formValidationMethods.js',
-      'validation/registration_validation.js'
     ], 'public/js/breeder/breederRegister.js')
     .scripts([
       'vendor/dropzone.min.js',
