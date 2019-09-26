@@ -182,6 +182,16 @@
         <!-- Farm Information -->
         <div id="farm-information" class="card-panel">
 
+          <!-- Farm Name -->
+          <div class="row">
+            <div class="input-field col s5 push-s1">
+              {!! Form::text('farm_name', null, [
+                'id' => 'farm_name'
+              ])!!}
+              {!! Form::label('farm_name', 'Farm Name*') !!}
+            </div>
+          </div>
+
           <!-- Accreditation Information Header -->
           <div class="row">
             <div class="col s10 offset-s1">
