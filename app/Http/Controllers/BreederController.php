@@ -167,7 +167,7 @@ class BreederController extends Controller
       
       $breeder->farmAddresses()->save($farm);
       
-      return 'Registered!';
+      return view('emails.breederMessage');
     }
 
     /**
