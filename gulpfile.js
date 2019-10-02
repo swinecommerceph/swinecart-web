@@ -111,6 +111,9 @@ elixir(function (mix) {
       'validation/registration_validation.js'
     ], 'public/js/register.js')
     .scripts([
+      'breeder/register.js',
+    ], 'public/js/breeder/breederRegister.js')
+    .scripts([
       'vendor/dropzone.min.js',
       'chat.js'
     ], 'public/js/chat.js');

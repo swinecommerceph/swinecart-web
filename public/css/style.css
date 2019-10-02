@@ -1724,4 +1724,8 @@ a.google {
   margin-left: 10px;
 }
 
+/* Register Buttons */
+.register-button {
+  width: 20rem;
+}
 

@@ -5,10 +5,12 @@ var filter = {
         // URL search syntax: ?q=value&type=value[+value]*&breed=value[+value]&sort=value*
         var types = [];
         var breeds = [];
+        var breeders = [];
         var filter_parameters = '?';
         var search_query = document.getElementById('search').value;
         var type_url = '';
         var breed_url = '';
+        var breeder_url = '';
 
         // Get all checked checkboxes regarding type of product
         $('.filter-type:checked').each(function(){
@@ -19,6 +21,12 @@ var filter = {
         $('.filter-breed:checked').each(function(){
             breeds.push($(this).attr('data-breed'));
         });
+
+        // Get all checked checkboxes regarding breeders
+        $('.filter-breeder:checked').each(function(){
+            breeders.push($(this).attr('data-breeder'));
+        });
+
 
         // Check if there is search query
         if(search_query){
@@ -39,6 +47,15 @@ var filter = {
             breed_url += breeds.join('+');
             filter_parameters += (filter_parameters.length > 1) ? '&'+breed_url : breed_url;
         }
+
+        // Join breeder filter values by '+' adn append to filter_parameters
+        if (breeders.length > 0){
+          breeder_url = 'breeder=';
+          breeder_url += breeders.join('+');
+          filter_parameters += (filter_parameters.length > 1) ? '&'+breeder_url : breeder_url;
+        }
+
+        console.log('filter_parameters: ' + filter_parameters);
 
         // Append sort parameters to filter_parameters
         if($('select option:selected').val() == ""){

@@ -15,6 +15,9 @@ Route::get('/public-products', function () {
     return view('products');
 });
 
+Route::get('/customerRegister', ['as' => 'customerRegister', 'uses' => 'Auth\RegisterController@customerRegister']);
+Route::get('/breederRegister', ['as' => 'breederRegister', 'uses' => 'BreederController@breederRegister']);
+
 Route::get('/customer-privacy-policy', ['as' => 'customerPrivacyPolicy', 'uses' => 'Auth\RegisterController@getCustomerPrivacyPolicy']);
 Route::get('/breeder-privacy-policy', ['as' => 'breederPrivacyPolicy', 'uses' => 'Auth\RegisterController@getBreederPrivacyPolicy']);
 Route::get('/terms-of-agreement', ['as' => 'termsOfAgreement', 'uses' => 'Auth\RegisterController@getTermsOfAgreement']);
@@ -71,6 +74,8 @@ Route::group(['middleware' => ['web']], function () {
 
     	Route::get('home',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
       
+        Route::post('breederRegister', ['as' => 'breeder.register', 'uses' => 'BreederController@registerBreeder']);
+
         // profile-related
         Route::get('terms-of-agreement', ['as' => 'breeder.getTermsOfAgreement', 'uses' => 'BreederController@getTermsOfAgreement']);
         Route::get('privacy-policy', ['as' => 'breeder.privacyPolicy', 'uses' => 'BreederController@getPrivacyPolicy']);
@@ -205,6 +210,9 @@ Route::group(['middleware' => ['web']], function () {
         // Route for statistics pages
         Route::get('home/statistics/dashboard',['as'=>'admin.statistics.dashboard', 'uses'=>'AdminController@showStatisticsDashboard']);
 
+        // breeder related
+        Route::patch('home/pending/users/{id}',['as' => 'selfRegisteredBreeder.update', 'uses' => 'AdminController@updateSelfRegisteredBreeder']);
+        
         //  Breeder statistics
         Route::get('home/statistics/breeder/active', ['as' => 'admin.statistics.breeder.active', 'uses'=> 'AdminController@showStatisticsActiveBreeder']);
         Route::get('home/statistics/breeder/active-year', ['as' => 'admin.statistics.breeder.active-year', 'uses'=> 'AdminController@showStatisticsActiveBreederYear']);

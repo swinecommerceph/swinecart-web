@@ -400,12 +400,77 @@ class AdminController extends Controller
      * @return array of pending users
      */
     public function displayPendingUsers(){
-        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
-                    ->where('role_id','=',2)
-                    ->where('update_profile','=',1)
-                    ->whereNull('deleted_at')
-                    ->paginate(10);
-        return view('user.admin._pendingUsers',compact('users'));
+
+      // Breeders Registered by Admin
+      $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+        ->join('roles', 'role_user.role_id','=','roles.id')
+        ->where('role_id','=',2)
+        ->where('update_profile','=',1)
+        ->whereNull('deleted_at')
+        ->paginate(10);
+        
+      // Self-Registered Breeders
+      /* $selfRegisteredBreeders = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+        ->join('roles', 'role_user.role_id','=','roles.id')
+        ->where('role_id','=',2)
+        ->where('is_admin_approved','=',0)
+        ->whereNull('deleted_at')
+        ->paginate(10); */
+
+      $selfRegisteredBreeders = DB::table('users')->where('is_admin_approved','=',0)
+        ->where('userable_type','=','App\Models\Breeder')->get();
+
+        return view('user.admin._pendingUsers',compact('users', 'selfRegisteredBreeders'));
+    }
+
+    /**
+     * Update details of a Product
+     * AJAX
+     *
+     * @param  Request $request
+     * @return String
+     */
+    public function updateSelfRegisteredBreeder(Request $request, $id) {
+      
+      $selfRegisteredBreeder = User::find($id);
+      $selfRegisteredBreeder->update_profile = 0;
+      $selfRegisteredBreeder->is_admin_approved = 1;
+      $selfRegisteredBreeder->email_verified = 1;
+    
+      // send email to breeder
+
+      /*
+      // data to be passed in the email
+      $data = [
+          'email' => $request->input('email'),
+          'password' => $password
+      ];
+
+      $adminID = Auth::user()->id;
+      $adminName = Auth::user()->name;
+      // create a log entry for the action done
+       if($request->type == 0){
+          AdministratorLog::create([
+              'admin_id' => $adminID,
+              'admin_name' => $adminName,
+              'user' => $data['email'],
+              'category' => 'Create',
+              'action' => 'Created breeder account for '.$data['email'],
+          ]);
+          $type = 0;
+          Mail::to($user->email)
+              ->queue(new SwineCartBreederCredentials($user->email, $password, $request->type)); */
+      Mail::to($selfRegisteredBreeder->email)
+            ->queue(new SwineCartBreederCredentials(
+                $selfRegisteredBreeder->email,
+                $selfRegisteredBreeder->password,
+                0
+            ));
+
+      $selfRegisteredBreeder->password = bcrypt($selfRegisteredBreeder->password);
+      $selfRegisteredBreeder->save();
+
+      return Redirect::back()->withMessage('Breeder Approved!');
     }
 
     /**

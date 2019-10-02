@@ -143,6 +143,13 @@ class RegisterController extends Controller
         return view('auth.termsOfAgreement');
     }
 
-    
-
+    /**
+     * Show Registration Page for Customer
+     *
+     * @return View
+     */
+    public function customerRegister()
+    {
+        return view('auth.customerRegister');
+    }
 }

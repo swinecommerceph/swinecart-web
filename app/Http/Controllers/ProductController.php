@@ -10,6 +10,7 @@ use App\Http\Requests;
 use App\Http\Requests\ProductRequest;
 use App\Jobs\ResizeUploadedImage;
 use App\Models\Breeder;
+use App\Models\User;
 use App\Models\FarmAddress;
 use App\Models\Product;
 use App\Models\Image;
@@ -582,7 +583,6 @@ class ProductController extends Controller
      */
     public function viewProducts(Request $request, ProductRepository $repository)
     {   
-        //dd($request->query());
         // Check if from a search query
         $products = ($request->q) ? $repository->search($request->q): Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0);
         $scores = ($request->q && isset($products->scores)) ? $products->scores : [];
@@ -614,6 +614,8 @@ class ProductController extends Controller
             $product->score = ($request->q && count($scores) > 0) ? $scores[$product->id] : 0;
         }
 
+        
+
         // Sort according to score if from a search query
         if($request->q) $products = $products->sortByDesc('score');
 
@@ -631,17 +633,27 @@ class ProductController extends Controller
 
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
+        
+        $breeders = Breeder::with('users')
+                      ->get()
+                      ->map(function($breeder) {
+                        $breeder->name = $breeder->users->first()->name; 
+                        return $breeder; 
+                      });
         //$breedFilters = str_replace(' ', '-', $breedFilters); 
         //dd($breedFilters);
         $urlFilters = [
-            'q' => $request->q,
-            'type' => $request->type,
-            'breed' => $request->breed,
-            'sort' => $request->sort,
-            'page' => $products->currentPage()
+          'q' => $request->q,
+          'type' => $request->type,
+          'breed' => $request->breed,
+          'sort' => $request->sort,
+          'page' => $products->currentPage()
         ];
 
-        return view('user.customer.viewProducts', compact('products', 'filters', 'breedFilters', 'urlFilters'));
+        return view(
+          'user.customer.viewProducts',
+          compact('products', 'breeders', 'filters', 'breedFilters', 'urlFilters')
+        );
     }
 
     /**

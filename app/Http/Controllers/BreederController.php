@@ -18,9 +18,11 @@ use App\Models\Product;
 use App\Models\Sessions;
 use App\Models\User;
 
+use DB;
 use Auth;
 use Mail;
 use App\Models\Image;
+use DateTime;
 
 use Storage;
 
@@ -33,8 +35,15 @@ class BreederController extends Controller
      */
     public function __construct()
     {
-        $this->middleware('role:breeder');
-        $this->middleware('updateProfile:breeder',['except' => ['index','storeProfile', 'getTermsOfAgreement', 'getPrivacyPolicy']]);
+        $this->middleware('role:breeder', ['except' => ['breederRegister', 'registerBreeder']]);
+        $this->middleware('updateProfile:breeder',['except' => [
+          'index',
+          'registerBreeder',
+          'storeProfile',
+          'getTermsOfAgreement',
+          'getPrivacyPolicy',
+          'breederRegister'
+        ]]);
         $this->middleware(function($request, $next){
             $this->user = Auth::user();
             return $next($request);
@@ -87,6 +96,77 @@ class BreederController extends Controller
         $provinces = $this->getProvinces();
 
         return view('user.breeder.createProfile', compact('provinces'));
+    }
+
+    /**
+     * Register breeder then wait for the admin approval
+     *
+     * @param Request $request
+     * @return View
+     */
+    public function registerBreeder(Request $request) {
+
+      $verCode = str_random('10');
+      $password = str_random(10);
+
+      // create a user instance
+      $user = new User;
+      $user->name = $request->input('breederName');
+      $user->email = $request->input('email');
+      $user->verification_code = $verCode;
+      $user->password = 'secret12';
+      $user->remember_token = str_random(10);
+      $user->is_admin_approved = 0;
+
+      $user->save();
+      
+      // assign breeder role to user
+      $user->assignRole('breeder');
+
+      $breeder = new Breeder;
+      $breeder->officeAddress_addressLine1 = $request->input('officeAddress_addressLine1');
+      $breeder->officeAddress_addressLine2 = $request->input('officeAddress_addressLine2');
+      $breeder->officeAddress_province = $request->input('officeAddress_province');
+      $breeder->officeAddress_zipCode = $request->input('officeAddress_zipCode');
+      $breeder->office_landline = $request->input('office_landline');
+      $breeder->office_mobile = $request->input('office_mobile');
+      $breeder->website = $request->input('website');
+      $breeder->produce = $request->input('produce');
+      $breeder->contactPerson_name = $request->input('contactPerson_name');
+      $breeder->contactPerson_mobile = $request->input('contactPerson_mobile');
+      $breeder->logo_img_id = 0;
+      $breeder->status_instance = 'active';
+      
+      $breeder->save();
+    
+      // create a breeder instance for that user
+      $breeder->users()->save($user);
+
+      // creating the farm connected to the breeder
+      $farm = new FarmAddress;
+      $farm->name = $request->input('farm_name');
+      $farm->addressLine1 = $request->input('farmAddress[1][addressLine1]');
+      $farm->addressLine2 = $request->input('farmAddress[1][addressLine2]');
+      $farm->province = $request->input('farmAddress[1][province]');
+      $farm->zipCode = $request->input('farmAddress[1][zipCode]');
+      $farm->farmType = $request->input('farmAddress[1][farmType]');
+      $farm->landline = $request->input('farmAddress[1][landline]');
+      $farm->mobile = $request->input('farmAddress[1][mobile]');
+
+      $farm->accreditation_no = $request->input('farm_accreditation_number');
+      $farm->accreditation_date = date_format(
+        date_create($request->input('acc-date-evaluated')),
+        'Y-m-d'
+      );
+      $farm->accreditation_expiry = date_format(
+        date_create($request->input('acc-expiry-date')),
+        'Y-m-d'
+      );
+      $farm->accreditation_status = 'active';
+
+      $breeder->farmAddresses()->save($farm);
+      
+      return view('emails.breederMessage');
     }
 
     /**
@@ -409,6 +489,17 @@ class BreederController extends Controller
 
             return response()->json('Logo deleted', 200);
         }
+    }
+
+    /**
+     * Show Registration Page for Breeder
+     *
+     * @return View
+     */
+    public function breederRegister()
+    {
+        $provinces = $this->getProvinces();
+        return view('auth.breederRegister', compact('provinces'));
     }
 
     /**

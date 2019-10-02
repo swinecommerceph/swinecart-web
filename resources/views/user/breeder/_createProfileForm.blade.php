@@ -40,7 +40,6 @@
 				</div>
 			</div>
 
-
 			<div class="row">
 			{{-- Office Address: Address Line 2 --}}
 				<div class="input-field col s10 push-s1">
