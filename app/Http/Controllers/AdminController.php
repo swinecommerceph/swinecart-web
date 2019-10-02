@@ -400,12 +400,24 @@ class AdminController extends Controller
      * @return array of pending users
      */
     public function displayPendingUsers(){
-        $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')->join('roles', 'role_user.role_id','=','roles.id')
-                    ->where('role_id','=',2)
-                    ->where('update_profile','=',1)
-                    ->whereNull('deleted_at')
-                    ->paginate(10);
-        return view('user.admin._pendingUsers',compact('users'));
+
+      // Breeders Registered by Admin
+      $users = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+        ->join('roles', 'role_user.role_id','=','roles.id')
+        ->where('role_id','=',2)
+        ->where('update_profile','=',1)
+        ->whereNull('deleted_at')
+        ->paginate(10);
+        
+      // Self-Registered Breeders
+      $selfRegisteredBreeders = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+        ->join('roles', 'role_user.role_id','=','roles.id')
+        ->where('role_id','=',2)
+        ->where('is_admin_approved','=',0)
+        ->whereNull('deleted_at')
+        ->paginate(10);
+
+        return view('user.admin._pendingUsers',compact('users', 'selfRegisteredBreeders'));
     }
 
     /**
