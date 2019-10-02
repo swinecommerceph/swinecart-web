@@ -77,6 +77,7 @@
             <th data-field="name">Email</th>
           <th data-field="type">Account Type</th>
           <th data-field="action">Date Created</th>
+          <th data-field="action">Action</th>
       </tr>
     </thead>
 
@@ -87,9 +88,17 @@
             <a href="#self-registered-breeder">{{$selfRegisteredBreeder->name}}</a>
           </td>
           <td>{{$selfRegisteredBreeder->email}}</td>
-          <td>{{ucfirst($selfRegisteredBreeder->title)}}</td>
+          <td>{{ucfirst($selfRegisteredBreeder->userable_type)}}</td>
           <td>
               {{$selfRegisteredBreeder->created_at}}
+          </td>
+          <td>
+            {!! Form::open([
+              'action' => ['AdminController@updateSelfRegisteredBreeder', $selfRegisteredBreeder->id],
+              'method' => 'PATCH'
+            ]) !!}
+              <button type="submit" class="waves-effect waves-light btn">Approve Breeder</button>
+            {!! Form::close() !!}
           </td>
         </tr>
 
@@ -115,7 +124,6 @@
       @endforelse
     </tbody>
   </table>
-  <div class="pagination center"> {{ $selfRegisteredBreeders->links() }} </div>
 
 @endsection
 

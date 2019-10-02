@@ -410,14 +410,34 @@ class AdminController extends Controller
         ->paginate(10);
         
       // Self-Registered Breeders
-      $selfRegisteredBreeders = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
+      /* $selfRegisteredBreeders = DB::table('users')->join('role_user', 'users.id', '=' , 'role_user.user_id')
         ->join('roles', 'role_user.role_id','=','roles.id')
         ->where('role_id','=',2)
         ->where('is_admin_approved','=',0)
         ->whereNull('deleted_at')
-        ->paginate(10);
+        ->paginate(10); */
+
+      $selfRegisteredBreeders = DB::table('users')->where('is_admin_approved','=',0)
+        ->where('userable_type','=','App\Models\Breeder')->get();
 
         return view('user.admin._pendingUsers',compact('users', 'selfRegisteredBreeders'));
+    }
+
+    /**
+     * Update details of a Product
+     * AJAX
+     *
+     * @param  Request $request
+     * @return String
+     */
+    public function updateSelfRegisteredBreeder(Request $request, $id) {
+      
+      $selfRegisteredBreeder = User::find($id);
+      $selfRegisteredBreeder->update_profile = 0;
+      $selfRegisteredBreeder->is_admin_approved = 1;
+      $selfRegisteredBreeder->save();
+
+      return Redirect::back()->withMessage('Breeder Approved!');
     }
 
     /**

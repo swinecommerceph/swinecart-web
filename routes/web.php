@@ -210,6 +210,9 @@ Route::group(['middleware' => ['web']], function () {
         // Route for statistics pages
         Route::get('home/statistics/dashboard',['as'=>'admin.statistics.dashboard', 'uses'=>'AdminController@showStatisticsDashboard']);
 
+        // breeder related
+        Route::patch('home/pending/users/{id}',['as' => 'selfRegisteredBreeder.update', 'uses' => 'AdminController@updateSelfRegisteredBreeder']);
+        
         //  Breeder statistics
         Route::get('home/statistics/breeder/active', ['as' => 'admin.statistics.breeder.active', 'uses'=> 'AdminController@showStatisticsActiveBreeder']);
         Route::get('home/statistics/breeder/active-year', ['as' => 'admin.statistics.breeder.active-year', 'uses'=> 'AdminController@showStatisticsActiveBreederYear']);
