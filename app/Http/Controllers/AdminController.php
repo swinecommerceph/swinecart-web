@@ -435,6 +435,39 @@ class AdminController extends Controller
       $selfRegisteredBreeder = User::find($id);
       $selfRegisteredBreeder->update_profile = 0;
       $selfRegisteredBreeder->is_admin_approved = 1;
+      $selfRegisteredBreeder->email_verified = 1;
+    
+      // send email to breeder
+
+      /*
+      // data to be passed in the email
+      $data = [
+          'email' => $request->input('email'),
+          'password' => $password
+      ];
+
+      $adminID = Auth::user()->id;
+      $adminName = Auth::user()->name;
+      // create a log entry for the action done
+       if($request->type == 0){
+          AdministratorLog::create([
+              'admin_id' => $adminID,
+              'admin_name' => $adminName,
+              'user' => $data['email'],
+              'category' => 'Create',
+              'action' => 'Created breeder account for '.$data['email'],
+          ]);
+          $type = 0;
+          Mail::to($user->email)
+              ->queue(new SwineCartBreederCredentials($user->email, $password, $request->type)); */
+      Mail::to($selfRegisteredBreeder->email)
+            ->queue(new SwineCartBreederCredentials(
+                $selfRegisteredBreeder->email,
+                $selfRegisteredBreeder->password,
+                0
+            ));
+
+      $selfRegisteredBreeder->password = bcrypt($selfRegisteredBreeder->password);
       $selfRegisteredBreeder->save();
 
       return Redirect::back()->withMessage('Breeder Approved!');

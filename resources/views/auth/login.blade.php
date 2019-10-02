@@ -16,7 +16,7 @@
 				<div class="row s12">
 					<p class="left-align" style="font-size: 1.125rem; line-height: 1.2; color: hsl(0, 0%, 45%);"> Login to your account</p>
 					{{-- Display Validation Errors --}}
-					
+					@include('common._errors')
 
 					{{-- Login Form --}}
 					<form action="{{ url('login') }}" method="POST" class="col s12">

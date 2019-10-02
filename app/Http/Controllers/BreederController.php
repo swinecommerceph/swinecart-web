@@ -114,7 +114,8 @@ class BreederController extends Controller
       $user->name = $request->input('breederName');
       $user->email = $request->input('email');
       $user->verification_code = $verCode;
-      $user->password = $password;
+      $user->password = 'secret12';
+      $user->remember_token = str_random(10);
       $user->is_admin_approved = 0;
 
       $user->save();
@@ -163,8 +164,6 @@ class BreederController extends Controller
       );
       $farm->accreditation_status = 'active';
 
-      $farm->save();
-      
       $breeder->farmAddresses()->save($farm);
       
       return view('emails.breederMessage');
