@@ -81,30 +81,41 @@
     </thead>
 
     <tbody>
-        @forelse($selfRegisteredBreeders as $selfRegisteredBreeder)
-      <tr>
-        <td>
-          <a href="#">{{$selfRegisteredBreeder->name}}</a>
-        </td>
-        <td>{{$selfRegisteredBreeder->email}}</td>
-        <td>{{ucfirst($selfRegisteredBreeder->title)}}</td>
-        <td>
-            {{$selfRegisteredBreeder->created_at}}
-        </td>
-      </tr>
-      @empty
-            <tr>
-                <td></td>
-                <td class="right-align">No users found</td>
-                <td></td>
-                <td></td>
-            </tr>
-    @endforelse
+      @forelse($selfRegisteredBreeders as $selfRegisteredBreeder)
+        <tr>
+          <td>
+            <a href="#self-registered-breeder">{{$selfRegisteredBreeder->name}}</a>
+          </td>
+          <td>{{$selfRegisteredBreeder->email}}</td>
+          <td>{{ucfirst($selfRegisteredBreeder->title)}}</td>
+          <td>
+              {{$selfRegisteredBreeder->created_at}}
+          </td>
+        </tr>
+
+        <div id="self-registered-breeder" class="modal">
+          <div class="modal-content">
+            <h5>Pending Self-Registered Breeder:</h5>
+            <p>Name: {{ $selfRegisteredBreeder->name }}</p>
+            <p>Other Details to follow...</p>
+          </div>
+
+          <div class="modal-footer">
+            <a href="#" class="modal-close waves-effect waves-green btn-flat">Close</a>
+          </div>
+        </div>
+
+        @empty
+          <tr>
+            <td></td>
+            <td class="right-align">No users found</td>
+            <td></td>
+            <td></td>
+          </tr>
+      @endforelse
     </tbody>
   </table>
   <div class="pagination center"> {{ $selfRegisteredBreeders->links() }} </div>
-
-
 
 @endsection
 

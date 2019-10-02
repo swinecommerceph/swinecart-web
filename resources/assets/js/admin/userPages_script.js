@@ -141,5 +141,4 @@ $(document).ready(function(){
     $('#testing-facilities-wrapper').append('<input placeholder="Testing Facility" type="text" class="validate">');
     });
 
-
 });
