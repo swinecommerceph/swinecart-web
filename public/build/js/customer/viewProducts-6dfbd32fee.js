@@ -74,9 +74,9 @@ $(document).ready(function(){
     var chips = '';
 
     // Setup Elasticsearch
-    var client = new $.es.Client({
+    /* var client = new $.es.Client({
         hosts: window.elasticsearchHost
-    });
+    }); */
 
     $('#search-results').width($('#search-field').width());
 
@@ -106,7 +106,7 @@ $(document).ready(function(){
 
     // For Filter Container Pushpin
     $('#filter-container #collapsible-container').pushpin({
-        top: $('#filter-container').offset().top,
+        // top: $('#filter-container').offset().top,
         offset: 135
     });
 
@@ -118,7 +118,7 @@ $(document).ready(function(){
             e.preventDefault();
             filter.apply();
         }
-        else{
+        /* else{
             setTimeout(function(){
                 var searchPhrase = $('input#search').val();
 
@@ -174,7 +174,7 @@ $(document).ready(function(){
 
             }, 0);
 
-        }
+        } */
     });
 
     // Redirect to designated link upon checkbox and select value change

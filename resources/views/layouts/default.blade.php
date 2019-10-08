@@ -63,7 +63,8 @@
 
 	      	<ul id="nav-mobile" class="right hide-on-med-and-down">
 	      		{{-- If user is a guest --}}
-		        @if(Auth::guest())
+            @if(Auth::guest())
+              <li><a href="{{ route('public.products') }}"> Outside Customer Public Products </a></li>
 							<li><a href="/public-products"> Products </a></li>
 							<li><a target="_blank" href="http://www.bai.da.gov.ph/index.php/regulatory/item/356-accreditation-of-swine-breeder-farm"> SBFAP </a></li>
 							@if(Request::is('/'))
@@ -119,17 +120,27 @@
 	{{-- Breadcrumbs --}}
 	@if(Auth::check() && !Request::is('*/home'))
 		<div class="grey lighten-3">
-	        <div class="container">
-	            <div class="row">
-	                <div class="col s12">
-	                    <h4 class="breadcrumb-title"> @yield('breadcrumbTitle') </h4>
-	                </div>
-	                <div id="breadcrumb" class="col s12">
-	                    @yield('breadcrumb')
-	                </div>
-	            </div>
-	        </div>
-	    </div>
+      <div class="container">
+          <div class="row">
+              <div class="col s12">
+                  <h4 class="breadcrumb-title"> @yield('breadcrumbTitle') </h4>
+              </div>
+              <div id="breadcrumb" class="col s12">
+                  @yield('breadcrumb')
+              </div>
+          </div>
+      </div>
+    </div>
+  @else
+    <div class="grey lighten-3">
+      <div class="container">
+        <div class="row">
+          <div class="col s12">
+              <h4 class="breadcrumb-title"> @yield('publicProductsBreadcrumbTitle') </h4>
+          </div>
+        </div>
+      </div>
+    </div>
 	@endif
 
 	{{-- For static elements such as add product and back to top --}}
