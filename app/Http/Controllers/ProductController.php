@@ -76,8 +76,8 @@ class ProductController extends Controller
             'productSummary',
             'setPrimaryPicture',
             'displayProduct']]);
-        $this->middleware('role:customer',['only' => ['viewProducts','customerViewProductDetail','viewBreederProfile']]);
-        $this->middleware('updateProfile:customer',['only' => ['viewProducts','customerViewProductDetail','viewBreederProfile']]);
+        $this->middleware('role:customer',['only' => ['customerViewProductDetail','viewBreederProfile']]);
+        $this->middleware('updateProfile:customer',['only' => ['customerViewProductDetail','viewBreederProfile']]);
         $this->middleware(function($request, $next){
             $this->user = Auth::user();
 
@@ -637,7 +637,8 @@ class ProductController extends Controller
         $breeders = Breeder::with('users')
                       ->get()
                       ->map(function($breeder) {
-                        $breeder->name = $breeder->users->first()->name; 
+                        $temp_breeder = $breeder->users->first();
+                        $breeder = $temp_breeder['name']; 
                         return $breeder; 
                       });
         //$breedFilters = str_replace(' ', '-', $breedFilters); 
@@ -650,10 +651,11 @@ class ProductController extends Controller
           'page' => $products->currentPage()
         ];
 
-        return view(
+        /* return view(
           'user.customer.viewProducts',
           compact('products', 'breeders', 'filters', 'breedFilters', 'urlFilters')
-        );
+        ); */
+        return view('products');
     }
 
     /**
