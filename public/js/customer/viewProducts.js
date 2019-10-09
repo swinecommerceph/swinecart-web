@@ -106,7 +106,7 @@ $(document).ready(function(){
 
     // For Filter Container Pushpin
     $('#filter-container #collapsible-container').pushpin({
-        // top: $('#filter-container').offset().top,
+        top: $('#filter-container').offset().top,
         offset: 135
     });
 
