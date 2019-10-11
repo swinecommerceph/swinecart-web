@@ -1,11 +1,19 @@
 $(document).ready(function(){
 
+    $('select').material_select();
+  
+    // prevent the dropdown from instantly closing upon clicking
+    // Materialize bug?
+    $('#sort-by').on('click', function (event) {
+      event.stopPropagation();
+    });
+
     var chips = '';
 
     // Setup Elasticsearch
-    var client = new $.es.Client({
+    /* var client = new $.es.Client({
         hosts: window.elasticsearchHost
-    });
+    }); */
 
     $('#search-results').width($('#search-field').width());
 
@@ -30,7 +38,6 @@ $(document).ready(function(){
     });
 
     // Append chip to #chip-container
-    console.log(chips);
     $('#chip-container').append(chips);
 
     // For Filter Container Pushpin
@@ -47,7 +54,7 @@ $(document).ready(function(){
             e.preventDefault();
             filter.apply();
         }
-        else{
+        /* else{
             setTimeout(function(){
                 var searchPhrase = $('input#search').val();
 
@@ -103,7 +110,7 @@ $(document).ready(function(){
 
             }, 0);
 
-        }
+        } */
     });
 
     // Redirect to designated link upon checkbox and select value change

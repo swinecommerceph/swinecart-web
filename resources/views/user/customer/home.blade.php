@@ -26,7 +26,7 @@
 
 @section('navbarHead')
     @if(!Auth::user()->update_profile)
-        <li><a href="{{ route('products.view') }}"> Products </a></li>
+        <li><a href="{{ route('public.products') }}">Products</a></li>
 
         {{-- Messaging --}}
         <li id="message-main-container"
@@ -553,7 +553,7 @@
                                 height: auto;
                                 width: 100%
                             "
-                            src="/images/ics-logo.jpg">
+                            src="/images/ics-logo.png">
                     </div>
                     <div class="col s1">
                         {{-- UP logo --}}

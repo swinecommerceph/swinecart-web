@@ -55,8 +55,6 @@ var filter = {
           filter_parameters += (filter_parameters.length > 1) ? '&'+breeder_url : breeder_url;
         }
 
-        console.log('filter_parameters: ' + filter_parameters);
-
         // Append sort parameters to filter_parameters
         if($('select option:selected').val() == ""){
             filter_parameters += (filter_parameters.length > 1) ? '&sort=none' : 'sort=none';
@@ -64,19 +62,27 @@ var filter = {
         else {
             filter_parameters += (filter_parameters.length > 1) ? '&sort='+$('select option:selected').val() : 'sort='+$('select option:selected').val();
         }
-        window.location = config.viewProducts_url+filter_parameters;
+        window.location = config.viewPublicProducts+filter_parameters;
 
     }
 };
 
 $(document).ready(function(){
 
+    $('select').material_select();
+  
+    // prevent the dropdown from instantly closing upon clicking
+    // Materialize bug?
+    $('#sort-by').on('click', function (event) {
+      event.stopPropagation();
+    });
+
     var chips = '';
 
     // Setup Elasticsearch
-    var client = new $.es.Client({
+    /* var client = new $.es.Client({
         hosts: window.elasticsearchHost
-    });
+    }); */
 
     $('#search-results').width($('#search-field').width());
 
@@ -101,7 +107,6 @@ $(document).ready(function(){
     });
 
     // Append chip to #chip-container
-    console.log(chips);
     $('#chip-container').append(chips);
 
     // For Filter Container Pushpin
@@ -118,7 +123,7 @@ $(document).ready(function(){
             e.preventDefault();
             filter.apply();
         }
-        else{
+        /* else{
             setTimeout(function(){
                 var searchPhrase = $('input#search').val();
 
@@ -174,7 +179,7 @@ $(document).ready(function(){
 
             }, 0);
 
-        }
+        } */
     });
 
     // Redirect to designated link upon checkbox and select value change
