@@ -1,5 +1,13 @@
 $(document).ready(function(){
 
+    $('select').material_select();
+  
+    // prevent the dropdown from instantly closing upon clicking
+    // Materialize bug?
+    $('#sort-by').on('click', function (event) {
+      event.stopPropagation();
+    });
+
     var chips = '';
 
     // Setup Elasticsearch
@@ -30,7 +38,6 @@ $(document).ready(function(){
     });
 
     // Append chip to #chip-container
-    console.log(chips);
     $('#chip-container').append(chips);
 
     // For Filter Container Pushpin

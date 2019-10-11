@@ -11,7 +11,7 @@
 |
 */
 
-Route::get('/public-products', ['as' => 'public.products', 'uses' => 'ProductController@viewProducts']);
+Route::get('/customer/public-products', ['as' => 'public.products', 'uses' => 'ProductController@viewProducts']);
 
 Route::get('/customerRegister', ['as' => 'customerRegister', 'uses' => 'Auth\RegisterController@customerRegister']);
 Route::get('/breederRegister', ['as' => 'breederRegister', 'uses' => 'BreederController@breederRegister']);

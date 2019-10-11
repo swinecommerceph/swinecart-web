@@ -8,6 +8,7 @@ var config = {
     customerNotifications_url: '/customer/notifications',
     breederNotifications_url: '/breeder/notifications',
     viewProducts_url: '/customer/view-products',
+    viewPublicProducts: '/customer/public-products',
     manageProducts_url: '/breeder/products',
     swineCart_url: '/customer/swine-cart',
     breederLogo_url: '/breeder/edit-profile/logo-upload',

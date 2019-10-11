@@ -26,8 +26,7 @@
 
 @section('navbarHead')
     @if(!Auth::user()->update_profile)
-        <li><a href="{{ route('public.products') }}"> Inside Customer Public Products </a></li>
-        <li><a href="{{ route('products.view') }}"> Products </a></li>
+        <li><a href="{{ route('public.products') }}">Products</a></li>
 
         {{-- Messaging --}}
         <li id="message-main-container"

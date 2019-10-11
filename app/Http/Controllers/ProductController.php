@@ -653,7 +653,7 @@ class ProductController extends Controller
 
         /* return view(
           'user.customer.viewProducts',
-          compact('products', 'breeders', 'filters', 'breedFilters', 'urlFilters')+
+          compact('products', 'breeders', 'filters', 'breedFilters', 'urlFilters')
         ); */
         return view(
           'products',
