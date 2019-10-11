@@ -77,16 +77,14 @@
             <th data-field="name">Email</th>
           <th data-field="type">Account Type</th>
           <th data-field="action">Date Created</th>
-          <th data-field="action">Action</th>
+          <th colspan="2" data-field="action" class="center-align">Action</th>
       </tr>
     </thead>
 
     <tbody>
       @forelse($selfRegisteredBreeders as $selfRegisteredBreeder)
         <tr>
-          <td>
-            <a href="#self-registered-breeder">{{$selfRegisteredBreeder->name}}</a>
-          </td>
+          <td>{{$selfRegisteredBreeder->name}}</td>
           <td>{{$selfRegisteredBreeder->email}}</td>
           <td>{{ucfirst($selfRegisteredBreeder->userable_type)}}</td>
           <td>
@@ -97,8 +95,20 @@
               'action' => ['AdminController@updateSelfRegisteredBreeder', $selfRegisteredBreeder->id],
               'method' => 'PATCH'
             ]) !!}
-              <button type="submit" class="waves-effect waves-light btn">Approve Breeder</button>
+              <button 
+                type="submit"
+                style="width: 7.5rem;"
+                class="waves-effect waves-light btn"
+                >Approve</button>
             {!! Form::close() !!}
+          </td>
+          <td>
+            <a 
+              href="#self-registered-breeder"
+              style="width: 7.5rem;"
+              class="waves-effect waves-light btn">
+              View
+            </a>
           </td>
         </tr>
 
