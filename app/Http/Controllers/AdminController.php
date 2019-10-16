@@ -2441,56 +2441,61 @@ class AdminController extends Controller
     public function sendBroadcastMessage(Request $request){
         $path = [];
         if ($request->hasFile('attachment')) {
-            $files = Input::file('attachment');
-            foreach ($files as $file) {
-                $filename = $file->getClientOriginalName().'-'.date('d-m-y-H-i-s',time());
-                $filename = str_replace(' ', '_', $filename);
-                $upload_success = $file->move(public_path('/announcements'), $filename);
-                $pathfile = '/announcements'.'/'.$filename;
-                $data = new Attachments;
-                $data->name = $filename;
-                $data->path = $pathfile;
-                $data->save();
-                $path[] = $data;
-            }
-        }else{
-            $path = NULL;
+          $files = Input::file('attachment');
+          foreach ($files as $file) {
+            $filename = $file->getClientOriginalName().'-'.date('d-m-y-H-i-s',time());
+            $filename = str_replace(' ', '_', $filename);
+            $upload_success = $file->move(public_path('/announcements'), $filename);
+            $pathfile = '/announcements'.'/'.$filename;
+            $data = new Attachments;
+            $data->name = $filename;
+            $data->path = $pathfile;
+            $data->save();
+            $path[] = $data;
+          }
+        } else {
+          $path = NULL;
         }
 
-        if($request->sendto == 0){
-            $users = User::where('userable_type', 'App\Models\Breeder')->orWhere('userable_type', 'App\Models\Customer')->whereNull('deleted_at')->get();
-            // $users = User::where('userable_type', 'App\Models\Breeder')->orWhere('userable_type', 'App\Models\Customer')->whereNull('deleted_at')->pluck('email');
-            // $users = ['snretuerma@gmail.com', 'shannonfrancisretuerma@gmail.com', 'snretuerma@up.edu.ph'];
-            // $others =  array_slice($users,1);
-            // $email = Mail::to($users[0]);
-            // foreach ($others as $otherUsers) {
-            //     $email->bcc($otherUsers)
-            //     ->queue(new SwineCartAnnouncement($request->announcement, $path));
-            //
-            // }
+        if ($request->sendto == 0) {
+          $users = User::where('userable_type', 'App\Models\Breeder')
+            ->orWhere('userable_type', 'App\Models\Customer')
+            ->whereNull('deleted_at')
+            ->get();
+          
+            foreach ($users as $user) {
+              Mail::to($user->email)
+                ->queue(new SwineCartAnnouncement($request->announcement, $path));
+          }
+        }
+        else if ($request->sendto == 1) {
+          $users = User::where('userable_type', 'App\Models\Breeder')
+            ->whereNull('deleted_at')
+            ->get();
+          
+            foreach ($users as $user) {
+              Mail::to($user->email)
+                ->queue(new SwineCartAnnouncement($request->announcement, $path));
+          }
+        }
+        else if ($request->sendto == 2) {
+          $users = User::where('userable_type', 'App\Models\Customer')
+            ->whereNull('deleted_at')
+            ->get();
+          
+            foreach ($users as $user) {
+              Mail::to($user->email)
+                ->queue(new SwineCartAnnouncement($request->announcement, $path));
+          }
+        }
 
-            // foreach ($users as $user) {
-            //     Mail::to($user)
-            //         ->queue(new SwineCartAnnouncement($request->announcement, $path));
-            // }
-            foreach ($users as $user) {
-                Mail::to($user->email)
-                    ->queue(new SwineCartAnnouncement($request->announcement, $path));
-            }
-        }
-        else if($request->sendto == 1){
-            $users = User::where('userable_type', 'App\Models\Breeder')->whereNull('deleted_at')->get();
-            foreach ($users as $user) {
-                Mail::to($user->email)
-                    ->queue(new SwineCartAnnouncement($request->announcement, $path));
-            }
-        }
-        else{
-            $users = User::where('userable_type', 'App\Models\Customer')->whereNull('deleted_at')->get();
-            foreach ($users as $user) {
-                Mail::to($user->email)
-                    ->queue(new SwineCartAnnouncement($request->announcement, $path));
-            }
+        else if ($request->sendto == 3) {
+          $users = $request->input('emails');
+          
+          foreach ($users as $user) {
+            Mail::to($user)
+              ->queue(new SwineCartAnnouncement($request->announcement, $path));
+          }
         }
 
         return Redirect::back()->with('message','Sending');
