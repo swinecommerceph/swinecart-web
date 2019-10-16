@@ -614,8 +614,6 @@ class ProductController extends Controller
             $product->score = ($request->q && count($scores) > 0) ? $scores[$product->id] : 0;
         }
 
-        
-
         // Sort according to score if from a search query
         if($request->q) $products = $products->sortByDesc('score');
 
@@ -641,8 +639,7 @@ class ProductController extends Controller
                         $breeder = $temp_breeder['name']; 
                         return $breeder; 
                       });
-        //$breedFilters = str_replace(' ', '-', $breedFilters); 
-        //dd($breedFilters);
+
         $urlFilters = [
           'q' => $request->q,
           'type' => $request->type,
@@ -655,6 +652,7 @@ class ProductController extends Controller
           'user.customer.viewProducts',
           compact('products', 'breeders', 'filters', 'breedFilters', 'urlFilters')
         ); */
+
         return view(
           'products',
           compact('products', 'breeders', 'filters', 'breedFilters', 'urlFilters')

@@ -148,7 +148,7 @@
 
                           </div>
                         </li>
-                        {{-- <li id="filter-breeder">
+                        <li id="filter-breeder">
                             <div class="collapsible-header">
                               <i class="material-icons teal-text">person</i>
                               Breeder
@@ -160,15 +160,15 @@
                                   <input 
                                     type="checkbox"
                                     class="filled-in filter-breeder"
-                                    id="check-{{ $breeder->name }}"
-                                    data-breeder="{{ $breeder->name }}"
+                                    id="check-{{ $breeder }}"
+                                    data-breeder="{{ $breeder }}"
                                   >
-                                  <label for="check-{{ $breeder->name }}">{{ $breeder->name }}</label>
+                                  <label for="check-{{ $breeder }}">{{ $breeder }}</label>
                                   <br>
                                 @endforeach
                               </p>
                             </div>
-                        </li> --}}
+                        </li>
                         <li id="filter-breeder-rating">
                           <div class="collapsible-header">
                             <i class="material-icons teal-text">grade</i>
