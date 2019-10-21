@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Log;
 use Illuminate\Pagination\LengthAwarePaginator;
 use Carbon\Carbon;
 
@@ -587,12 +588,30 @@ class ProductController extends Controller
         $products = ($request->q) ? $repository->search($request->q): Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0);
         $scores = ($request->q && isset($products->scores)) ? $products->scores : [];
 
+        // return breeders with user name and the breeder_id table
+        $breeders = $this->getBreeders();
+        
+        
+        $separatedBreeders = explode(' ', $request->breeder);
+        
+        // only get the requested breeders in all the breeders based on the breeder_id
+        $parsedBreederIds = [];
+        foreach($separatedBreeders as $requestBreeder) {
+          foreach($breeders as $breeder) {
+            $breederName = str_replace('-', ' ', $requestBreeder);
+            if ($breederName === $breeder['user']->name) array_push($parsedBreederIds, $breeder['breeder']->id);
+          }
+        }
+
         $parsedTypes = ($request->type) ? explode(' ',$request->type) : '';
         $parsedBreedIds = ($request->breed) ? $this->getBreedIds($request->breed) : '';
+        
         $parsedSort = ($request->sort && $request->sort != 'none') ? explode('-',$request->sort) : ['id', 'desc'];
 
         if($parsedTypes) $products = $products->whereIn('type', $parsedTypes);
         if($parsedBreedIds) $products = $products->whereIn('breed_id', $parsedBreedIds);
+        if($parsedBreederIds) $products = $products->whereIn('breeder_id', $parsedBreederIds);
+
         $products = ($request->q) ? $products->get() : $products->orderBy($parsedSort[0], $parsedSort[1])->get();
 
         foreach ($products as $key => $product) {
@@ -629,21 +648,14 @@ class ProductController extends Controller
                 ['path' => $request->url(), 'query' => $request->query()]
             );
 
-        $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->sort);
+        $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->breeder, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
         
-        $breeders = Breeder::with('users')
-                      ->get()
-                      ->map(function($breeder) {
-                        $temp_breeder = $breeder->users->first();
-                        $breeder = $temp_breeder['name']; 
-                        return $breeder; 
-                      });
-
         $urlFilters = [
           'q' => $request->q,
           'type' => $request->type,
           'breed' => $request->breed,
+          'breeder' => $request->breeder,
           'sort' => $request->sort,
           'page' => $products->currentPage()
         ];
@@ -802,7 +814,7 @@ class ProductController extends Controller
      * @param   String          $sortParameter
      * @return  AssocativeArray
      */
-    private function parseThenJoinFilters($typeParameter, $breedParameter, $sortParameter)
+    private function parseThenJoinFilters($typeParameter, $breedParameter, $breederParameter, $sortParameter)
     {
         $tempFilters = [];
 
@@ -820,6 +832,15 @@ class ProductController extends Controller
             foreach ($breeds as $breed) {
                 $tempFilters[$breed] = 'checked';
             }
+        }
+
+        if($breederParameter){
+          // Parse if there is more than one breeder filter value
+          $breeders = explode(' ', $breederParameter);
+          foreach ($breeders as $breeder) {
+            $breeder = str_replace('-', ' ', $breeder);
+            $tempFilters[$breeder] = 'checked';
+          }
         }
 
         $tempFilters[$sortParameter] = 'selected';
@@ -849,8 +870,27 @@ class ProductController extends Controller
             else $breedInstance = Breed::where('name',$breedName)->get()->first()->id;
             array_push($tempBreedIds, $breedInstance);
         }
-
+       
         return $tempBreedIds;
+    }
+
+    /**
+     * Get breeders
+     *
+     * @param   NULL
+     * @return  Array of Breeders
+     */
+    private function getBreeders() {
+      // return breeders with user name and the breeder_id table
+      $breeders = Breeder::with('users')->get()->map(function($breeder) {
+        $user = $breeder->users->first();
+        return [
+          'user' => $user,
+          'breeder' => $breeder,
+        ]; 
+      });
+
+      return $breeders;
     }
 
 }

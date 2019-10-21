@@ -129,12 +129,19 @@
                                 {{-- Breed --}}
                                 @foreach($breedFilters as $breedFilter)
 
-                                    <input type="checkbox" class="filled-in filter-breed" id="check-{{$breedFilter->name}}" data-breed="{{$breedFilter->name}}" @if(!empty($filters[$breedFilter->name]))
-                                        {{$filters[$breedFilter->name]}}
+                                  <input 
+                                    type="checkbox"
+                                    class="filled-in filter-breed"
+                                    id="check-{{$breedFilter->name}}"
+                                    data-breed="{{$breedFilter->name}}"
+                                    @if(!empty($filters[$breedFilter->name])) {{$filters[$breedFilter->name]}}
                                     @endif/>
-                                    <label for="check-{{$breedFilter->name}}" @if(!empty($filters[$breedFilter->name]))
-                                        style="font-weight:500; color:#000;"
-                                    @endif>{{ucfirst($breedFilter->name)}}</label><br>
+                                  <label 
+                                    for="check-{{$breedFilter->name}}"
+                                    @if(!empty($filters[$breedFilter->name])) style="font-weight:500; color:#000;"
+                                    @endif>
+                                    {{ucfirst($breedFilter->name)}}
+                                  </label><br>
 
                                 @endforeach
 
@@ -160,10 +167,17 @@
                                   <input 
                                     type="checkbox"
                                     class="filled-in filter-breeder"
-                                    id="check-{{ $breeder }}"
-                                    data-breeder="{{ $breeder }}"
-                                  >
-                                  <label for="check-{{ $breeder }}">{{ $breeder }}</label>
+                                    id="check-{{ $breeder['user']->name }}"
+                                    data-breeder="{{ $breeder['user']->name }}"
+                                    @if (!empty($filters[$breeder['user']->name])) {{ $filters[$breeder['user']->name] }}
+                                    @endif/>
+
+                                  <label 
+                                    for="check-{{$breeder['user']->name}}"
+                                    @if (!empty($filters[$breeder['user']->name]))
+                                    @endif>
+                                    {{ $breeder['user']->name }}
+                                  </label>
                                   <br>
                                 @endforeach
                               </p>
