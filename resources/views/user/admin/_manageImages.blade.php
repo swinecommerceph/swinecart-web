@@ -145,33 +145,36 @@
 
 {{-- Modal to get input data --}}
 <div id="getInputModal" class="modal">
-   <div class="modal-content">
-     <h4>Add Content</h4>
-     {!!Form::open(['route'=>'admin.manage.addcontent', 'method'=>'POST', 'class'=>'addcontentform' , 'files'=>true])!!}
-        <div class="row">
-            <div class="col s12">
-                 <input type="file" name="image" />
-            </div>
-        </div>
+  {!!Form::open(['route'=>'admin.manage.addcontent', 'method'=>'POST', 'class'=>'addcontentform' , 'files'=>true])!!}
+    <div class="modal-content">
+      <h4>Add Content</h4>
+      <div class="row">
+          <div class="col s12">
+                <input type="file" name="image" />
+          </div>
+      </div>
 
-        <div class="row">
-            <div class="input-field col s12">
-                <input id="input_title" type="text" length="20" name="title">
-                <label for="input_title">Title</label>
-            </div>
-        </div>
+      <div class="row">
+          <div class="input-field col s12">
+              <input id="input_title" type="text" length="20" name="title">
+              <label for="input_title">Title</label>
+          </div>
+      </div>
 
-        <div class="row">
-            <div class="input-field col s12">
-              <textarea id="input_text" class="materialize-textarea" length="120" name='textContent'></textarea>
-              <label for="input_text">Content text</label>
-            </div>
-        </div>
-        <button id = "add-image-submit" class="btn waves-effect waves-light right" type="submit">Add
-          <i class="material-icons right">send</i>
-        </button>
-     {!!Form::close()!!}
-   </div>
+      <div class="row">
+          <div class="input-field col s12">
+            <textarea id="input_text" class="materialize-textarea" length="120" name='textContent'></textarea>
+            <label for="input_text">Content text</label>
+          </div>
+      </div>
+    </div>
+    <div class="modal-footer">
+      <button id = "add-image-submit" class="btn waves-effect waves-light right" type="submit">Add
+        <i class="material-icons right">send</i>
+      </button>
+      <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat">Close</a>
+    </div>
+  {!!Form::close()!!}
  </div>
 
 
