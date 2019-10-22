@@ -37,6 +37,7 @@
           <div class="slider home-slider">
               <ul class="slides">
                 @foreach($homeContent as $content)
+                  @if($content->content_type === 'image')
                     <li>
                       <img src= {{$content->path.$content->name}}>
                       <div class="caption center-align">
@@ -44,19 +45,12 @@
                         <h5 class="light grey-text text-lighten-3 content-text">{{$content->text}}</h5>
                       </div>
                     </li>
+                  @else
+                    <li>
+                      <iframe src={{ $content->link }}></iframe>
+                    </li>
+                  @endif
                 @endforeach
-                {{-- <li>
-                  <iframe 
-                    width=400
-                    src="https://www.youtube.com/embed/kOHB85vDuow">
-                  </iframe>
-                </li>
-                <li>
-                  <iframe 
-                    width=400
-                    src="https://www.youtube.com/embed/rRzxEiBLQCA">
-                  </iframe>
-                </li> --}}
                 
               </ul>
           </div>
@@ -116,21 +110,52 @@
             @foreach($homeContent as $content)
                 <div class="col s12">
                     <div class="card medium sticky-action">
-                      <div class="card-image waves-effect waves-block waves-light">
-                        <img class="activator" src= {{$content->path.$content->name}}>
-                      </div>
-                      <div class="card-content">
-                        <span class="card-title activator grey-text text-darken-4">{{$content->title}}<i class="material-icons right">more_vert</i></span>
-                        <p class="truncate">{{$content->text}}</p>
-                      </div>
-                      <div class="card-action">
-                          <a class="right modal-trigger delete-content-trigger" href="#deleteConfirmation" data= {{$content->id}}>Delete</a>
-                          <a class="right modal-trigger edit-content-trigger" href="#edit-modal" data= {{$content->id}}>Edit</a>
-                      </div>
-                      <div class="card-reveal">
-                        <span class="card-title grey-text text-darken-4">{{$content->title}}<i class="material-icons right">close</i></span>
-                        <p>{{$content->text}}</p>
-                      </div>
+                      @if($content->content_type === 'image')
+                        <div class="card-image waves-effect waves-block waves-light">
+                          <img class="activator" src= {{$content->path.$content->name}}>
+                        </div>
+                        <div class="card-content">
+                          <span class="card-title activator grey-text text-darken-4">{{$content->title}}<i class="material-icons right">more_vert</i></span>
+                          <p class="truncate">{{$content->text}}</p>
+                        </div>
+                        <div class="card-action">
+                            <a 
+                              class="right modal-trigger delete-content-trigger"
+                              href="#deleteConfirmation"
+                              data= {{$content->id}}>
+                              Delete
+                            </a>
+                            <a 
+                              class="right modal-trigger edit-content-trigger"
+                              href="#edit-modal"
+                              data= {{$content->id}}>
+                              Edit
+                            </a>
+                        </div>
+                        <div class="card-reveal">
+                          <span class="card-title grey-text text-darken-4">{{$content->title}}<i class="material-icons right">close</i></span>
+                          <p>{{$content->text}}</p>
+                        </div>
+                      @else
+                        <div class="card-content video-link-content">
+                          <iframe src={{ $content->link }}></iframe>
+                        </div>
+                        <div class="card-action">
+                            <a 
+                              class="right modal-trigger delete-content-trigger"
+                              href="#deleteConfirmation"
+                              data= {{$content->id}}>
+                              Delete
+                            </a>
+                            <a 
+                              class="right modal-trigger edit-content-trigger"
+                              href="#edit-modal"
+                              data= {{$content->id}}>
+                              Edit
+                            </a>
+                        </div>
+                      @endif
+                      
                     </div>
                 </div>
             @endforeach
