@@ -15,10 +15,12 @@ class CreateHomeImagesTable extends Migration
     {
         Schema::create('home_images', function (Blueprint $table) {
             $table->increments('id');
-            $table->string('name');
+            $table->string('name')->nullable();
             $table->string('title')->nullable();
             $table->text('text')->nullable();
-            $table->string('path');
+            $table->string('path')->nullable();
+            $table->string('link')->nullable();
+            $table->string('content_type')->nullable();
             $table->timestamps();
         });
     }
