@@ -1729,3 +1729,8 @@ a.google {
   width: 20rem;
 }
 
+.slider .slides li iframe {
+  height: 100%;
+  width: 100%;
+}
+
