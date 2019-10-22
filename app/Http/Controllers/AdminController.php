@@ -955,10 +955,12 @@ class AdminController extends Controller
             $filename = date('d-m-y-H-i-s',time()).'-'.Input::file('image')->getClientOriginalName();
             Input::file('image')->move(public_path('/images/homeimages/'), $filename);
             $content = new HomeImage;
-            $content->text = $request->textContent;
             $content->title = $request->title;
+            $content->text = $request->textContent;
             $content->name = $filename;
             $content->path = '/images/homeimages/';
+            $content->link = NULL;
+            $content->content_type = 'image';
             $content->save();
             return Redirect::back()->with('message','Image Added');
         } else {
