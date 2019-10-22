@@ -204,7 +204,7 @@
                 placeholder="Example: https://www.youtube.com/watch?v=aqz-KE-bpKQ"
                 type="text"
                 length="100"
-                name="video-link">
+                name="video_link">
               <label for="video-link">Video Link</label>
           </div>
       </div>
