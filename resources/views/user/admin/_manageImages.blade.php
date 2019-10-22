@@ -147,12 +147,21 @@
                               data= {{$content->id}}>
                               Delete
                             </a>
-                            <a 
-                              class="right modal-trigger edit-content-trigger"
-                              href="#edit-modal"
-                              data= {{$content->id}}>
-                              Edit
-                            </a>
+                            @if($content->content_type === 'image')
+                              <a 
+                                class="right modal-trigger edit-content-trigger"
+                                href="#edit-modal"
+                                data= {{$content->id}}>
+                                Edit
+                              </a>
+                            @else
+                              <a 
+                                class="right modal-trigger edit-content-trigger"
+                                href="#edit-video-link-modal"
+                                data= {{$content->id}}>
+                                Edit
+                              </a>
+                            @endif
                         </div>
                       @endif
                       
@@ -282,6 +291,37 @@
      {!!Form::close()!!}
    </div>
  </div>
+
+{{-- Modal for edit video link --}}
+<div id="edit-video-link-modal" class="modal">
+  <div class="modal-content">
+    <h4>Edit Video Link</h4>
+    {{-- {!!Form::open(['route'=>'admin.manage.editcontent', 'method'=>'PUT', 'class'=>'editcontentform' , 'files'=>true])!!} --}}
+
+    <div class="row">
+      <div class="input-field col s12">
+        <input 
+          id="edit-video-link"
+          placeholder="Example: https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+          type="text"
+          length="100"
+          name="edit_video_link">
+        <label for="edit-video-link">Video Link</label>
+      </div>
+    </div>
+      
+    <div class="modal-footer">
+        <div class="right">
+          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+        <button id = "add-image-submit" class="btn-flat waves-effect waves-light right" type="submit">Edit
+          <i class="material-icons right">send</i>
+        </button>
+    </div>
+
+   {{--  {!!Form::close()!!} --}}
+  </div>
+</div>
 
 {{-- Confirmation modal for delete --}}
     <div id="deleteConfirmation" class="modal">
