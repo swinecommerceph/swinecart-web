@@ -159,9 +159,9 @@
 
 {{-- Modal to get input data --}}
 <div id="getImageInputModal" class="modal">
-  {!!Form::open(['route'=>'admin.manage.addcontent', 'method'=>'POST', 'class'=>'addcontentform' , 'files'=>true])!!}
+  {!!Form::open(['route'=>'admin.manage.addImageContent', 'method'=>'POST', 'class'=>'addcontentform' , 'files'=>true])!!}
     <div class="modal-content">
-      <h4>Add Content</h4>
+      <h4>Add Image Content</h4>
       <div class="row">
           <div class="col s12">
                 <input type="file" name="image" />
@@ -183,7 +183,7 @@
       </div>
     </div>
     <div class="modal-footer">
-      <button id = "add-image-submit" class="btn waves-effect waves-light right" type="submit">Add
+      <button id = "add-image-submit" class="btn waves-effect waves-light right" type="submit">Add Image
         <i class="material-icons right">send</i>
       </button>
       <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat">Close</a>
@@ -193,7 +193,7 @@
 
 {{-- Modal to get video link data --}}
 <div id="getVideoInputModal" class="modal">
-  {{-- {!!Form::open(['route' => '', 'method'=>'POST', 'class'=>'addcontentform'])!!} --}}
+  {!!Form::open(['route' => 'admin.manage.addVideoContent', 'method'=>'POST', 'class'=>'addcontentform'])!!}
     <div class="modal-content">
       <h4>Add Video Link</h4>
     
@@ -216,7 +216,7 @@
       </button>
       <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat">Close</a>
     </div>
-  {{-- {!!Form::close()!!} --}}
+  {!!Form::close()!!}
 </div>
 
 
