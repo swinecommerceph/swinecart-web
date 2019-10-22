@@ -45,6 +45,19 @@
                       </div>
                     </li>
                 @endforeach
+                {{-- <li>
+                  <iframe 
+                    width=400
+                    src="https://www.youtube.com/embed/kOHB85vDuow">
+                  </iframe>
+                </li>
+                <li>
+                  <iframe 
+                    width=400
+                    src="https://www.youtube.com/embed/rRzxEiBLQCA">
+                  </iframe>
+                </li> --}}
+                
               </ul>
           </div>
 
@@ -124,16 +137,17 @@
 
             {{-- for adding new images and text in the homepage slider --}}
             <div class="col s12">
-                <div class="card small hoverable">
-                    <div class="col s12 ">
-                        {{-- <div class="row "><i class="material-icons">library add</i></div> --}}
-                        <div class="add-content">
-                            {{-- <a class="waves-effect waves-light btn" href="#add-content-modal">Add Content</a> --}}
-                            <a class="btn waves-effect waves-light modal-trigger" href="#getInputModal">Add +</a>
-
-                        </div>
-                    </div>
+              <div class="card small hoverable">
+                <div class="col s12 ">
+                  <div class="add-content">
+                    <a 
+                      style="margin-right: 10px;"
+                      class="btn waves-effect waves-light modal-trigger"
+                      href="#getImageInputModal">Add Image</a>
+                    <a class="btn waves-effect waves-light modal-trigger" href="#getVideoInputModal">Add Video link</a>  
+                  </div>
                 </div>
+              </div>
             </div>
 
         </div>
@@ -144,7 +158,7 @@
 </div>
 
 {{-- Modal to get input data --}}
-<div id="getInputModal" class="modal">
+<div id="getImageInputModal" class="modal">
   {!!Form::open(['route'=>'admin.manage.addcontent', 'method'=>'POST', 'class'=>'addcontentform' , 'files'=>true])!!}
     <div class="modal-content">
       <h4>Add Content</h4>
@@ -175,7 +189,35 @@
       <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat">Close</a>
     </div>
   {!!Form::close()!!}
- </div>
+</div>
+
+{{-- Modal to get video link data --}}
+<div id="getVideoInputModal" class="modal">
+  {{-- {!!Form::open(['route' => '', 'method'=>'POST', 'class'=>'addcontentform'])!!} --}}
+    <div class="modal-content">
+      <h4>Add Video Link</h4>
+    
+      <div class="row">
+          <div class="input-field col s12">
+              <input 
+                id="video-link"
+                placeholder="Example: https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+                type="text"
+                length="100"
+                name="video-link">
+              <label for="video-link">Video Link</label>
+          </div>
+      </div>
+
+    </div>
+    <div class="modal-footer">
+      <button id = "add-image-submit" class="btn waves-effect waves-light right" type="submit">Add Video link
+        <i class="material-icons right">send</i>
+      </button>
+      <a href="#!" class="modal-action modal-close waves-effect waves-teal btn-flat">Close</a>
+    </div>
+  {{-- {!!Form::close()!!} --}}
+</div>
 
 
 {{-- Modal for edit edit image and content --}}
