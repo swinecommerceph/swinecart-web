@@ -950,7 +950,7 @@ class AdminController extends Controller
       * @return String
       * @todo Error detection
       */
-     public function addHomeImage(Request $request){
+     public function addImageContent(Request $request){
          if (Input::hasFile('image')) {
             $filename = date('d-m-y-H-i-s',time()).'-'.Input::file('image')->getClientOriginalName();
             Input::file('image')->move(public_path('/images/homeimages/'), $filename);
