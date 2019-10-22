@@ -284,7 +284,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/manage/homepage', ['as'=>'admin.manage.homepage', 'uses' => 'AdminController@manageHomePage']);
         Route::get('home/manage/homepage/fetchimages', ['as'=>'admin.manage.fetchimages', 'uses'=>'AdminController@getHomeImages']);
         Route::post('home/manage/homepage/addImageContent', ['as'=>'admin.manage.addImageContent', 'uses'=>'AdminController@addImageContent']);
-        Route::post('home/manage/homepage/addVideoContent', ['as'=>'admin.manage.addVideoContent', 'uses'=>'AdminController@addHomeVideo']);
+        Route::post('home/manage/homepage/addVideoContent', ['as'=>'admin.manage.addVideoContent', 'uses'=>'AdminController@addVideoContent']);
         Route::delete('home/manage/homepage/deletecontent', ['as'=>'admin.manage.deletecontent', 'uses'=>'AdminController@deleteContent']);
         Route::put('home/manage/homepage/editcontent', ['as'=>'admin.manage.editcontent', 'uses'=>'AdminController@editContent']);
         Route::get('home/manage/return/userlist', ['as' => 'admin.return.userlist', 'uses'=> 'AdminController@goToUserlist']);

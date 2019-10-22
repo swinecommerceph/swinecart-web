@@ -968,6 +968,28 @@ class AdminController extends Controller
         }
      }
 
+    /**
+      * Add an link to he home page slider
+      *
+      * @param form request
+      * @return String
+      * @todo Error detection
+      */
+    public function addVideoContent(Request $request){
+
+      $content = new HomeImage;
+      $content->name = NULL;
+      $content->title = NULL;
+      $content->text = NULL;
+      $content->path = NULL;
+      $content->link = $this->changeVideoLinkToEmbedType($request->video_link);
+      $content->content_type = 'video';
+      $content->save();
+
+      return Redirect::back()->with('message', 'Video link Added');
+    }
+    
+
      /**
       * Delete image and text in the home page
       *
@@ -2698,4 +2720,14 @@ class AdminController extends Controller
         return $farms;
     }
 
+    /**
+     * Change the video link to embed type
+     *
+     * @param   String  $videoLink
+     * @return  String
+     */
+    private function changeVideoLinkToEmbedType($videoLink) {
+      $embedVideoLink = str_replace('watch?v=', 'embed/', $videoLink);
+      return $embedVideoLink;
+    }
 }
