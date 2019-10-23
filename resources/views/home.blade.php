@@ -17,13 +17,19 @@
             <div id="homepage-slider" class="slider">
                 <ul class="slides">
                     @forelse($homeContent as $content)
+                      @if($content->content_type === 'image')
                         <li>
-                            <img src= {{$content->path.$content->name}}>
-                            <div class="caption center-align">
-                                <h3>{{$content->title}}</h3>
-                                <h5 class="light grey-text text-lighten-3 content-text">{{$content->text}}</h5>
-                            </div>
+                          <img src= {{$content->path.$content->name}}>
+                          <div class="caption center-align">
+                            <h3>{{$content->title}}</h3>
+                            <h5 class="light grey-text text-lighten-3 content-text">{{$content->text}}</h5>
+                          </div>
                         </li>
+                      @else
+                        <li>
+                          <iframe src={{ $content->link }}></iframe>
+                        </li>
+                      @endif
                     @empty
                         <li>
                             <img src="/images/demo/home1.jpg"> <!-- random image -->

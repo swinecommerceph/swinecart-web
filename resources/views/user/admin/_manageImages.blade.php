@@ -37,6 +37,7 @@
           <div class="slider home-slider">
               <ul class="slides">
                 @foreach($homeContent as $content)
+                  @if($content->content_type === 'image')
                     <li>
                       <img src= {{$content->path.$content->name}}>
                       <div class="caption center-align">
@@ -44,19 +45,12 @@
                         <h5 class="light grey-text text-lighten-3 content-text">{{$content->text}}</h5>
                       </div>
                     </li>
+                  @else
+                    <li>
+                      <iframe src={{ $content->link }}></iframe>
+                    </li>
+                  @endif
                 @endforeach
-                {{-- <li>
-                  <iframe 
-                    width=400
-                    src="https://www.youtube.com/embed/kOHB85vDuow">
-                  </iframe>
-                </li>
-                <li>
-                  <iframe 
-                    width=400
-                    src="https://www.youtube.com/embed/rRzxEiBLQCA">
-                  </iframe>
-                </li> --}}
                 
               </ul>
           </div>
@@ -116,21 +110,61 @@
             @foreach($homeContent as $content)
                 <div class="col s12">
                     <div class="card medium sticky-action">
-                      <div class="card-image waves-effect waves-block waves-light">
-                        <img class="activator" src= {{$content->path.$content->name}}>
-                      </div>
-                      <div class="card-content">
-                        <span class="card-title activator grey-text text-darken-4">{{$content->title}}<i class="material-icons right">more_vert</i></span>
-                        <p class="truncate">{{$content->text}}</p>
-                      </div>
-                      <div class="card-action">
-                          <a class="right modal-trigger delete-content-trigger" href="#deleteConfirmation" data= {{$content->id}}>Delete</a>
-                          <a class="right modal-trigger edit-content-trigger" href="#edit-modal" data= {{$content->id}}>Edit</a>
-                      </div>
-                      <div class="card-reveal">
-                        <span class="card-title grey-text text-darken-4">{{$content->title}}<i class="material-icons right">close</i></span>
-                        <p>{{$content->text}}</p>
-                      </div>
+                      @if($content->content_type === 'image')
+                        <div class="card-image waves-effect waves-block waves-light">
+                          <img class="activator" src= {{$content->path.$content->name}}>
+                        </div>
+                        <div class="card-content">
+                          <span class="card-title activator grey-text text-darken-4">{{$content->title}}<i class="material-icons right">more_vert</i></span>
+                          <p class="truncate">{{$content->text}}</p>
+                        </div>
+                        <div class="card-action">
+                            <a 
+                              class="right modal-trigger delete-content-trigger"
+                              href="#deleteConfirmation"
+                              data= {{$content->id}}>
+                              Delete
+                            </a>
+                            <a 
+                              class="right modal-trigger edit-content-trigger"
+                              href="#edit-modal"
+                              data= {{$content->id}}>
+                              Edit
+                            </a>
+                        </div>
+                        <div class="card-reveal">
+                          <span class="card-title grey-text text-darken-4">{{$content->title}}<i class="material-icons right">close</i></span>
+                          <p>{{$content->text}}</p>
+                        </div>
+                      @else
+                        <div class="card-content video-link-content">
+                          <iframe src={{ $content->link }}></iframe>
+                        </div>
+                        <div class="card-action">
+                            <a 
+                              class="right modal-trigger delete-content-trigger"
+                              href="#deleteConfirmation"
+                              data= {{$content->id}}>
+                              Delete
+                            </a>
+                            @if($content->content_type === 'image')
+                              <a 
+                                class="right modal-trigger edit-content-trigger"
+                                href="#edit-modal"
+                                data= {{$content->id}}>
+                                Edit
+                              </a>
+                            @else
+                              <a 
+                                class="right modal-trigger edit-content-trigger"
+                                href="#edit-video-link-modal"
+                                data= {{$content->id}}>
+                                Edit
+                              </a>
+                            @endif
+                        </div>
+                      @endif
+                      
                     </div>
                 </div>
             @endforeach
@@ -204,7 +238,7 @@
                 placeholder="Example: https://www.youtube.com/watch?v=aqz-KE-bpKQ"
                 type="text"
                 length="100"
-                name="video-link">
+                name="video_link">
               <label for="video-link">Video Link</label>
           </div>
       </div>
@@ -258,22 +292,61 @@
    </div>
  </div>
 
-{{-- Confirmation modal for delete --}}
-    <div id="deleteConfirmation" class="modal">
-        <div class="modal-content">
-            <h4>Delete</h4>
-            <div class="divider"></div>
-            <p>Are you sure you want to permanently delete homepage content? </p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-            {!!Form::open(['route'=>'admin.manage.deletecontent', 'method'=>'DELETE', 'id'=>'delete-content-form'] )!!}
-            {{-- <input id="delete-content-token" name="_token" type="hidden" value=""> --}}
-            <input id="delete-content-id" name="content_id" type="hidden" value="">
-            <button class=" modal-action modal-close waves-effect waves-green btn-flat" type="submit">Yes</button>
-            {!!Form::close()!!}
-        </div>
+{{-- Modal for edit video link --}}
+<div id="edit-video-link-modal" class="modal">
+  <div class="modal-content">
+    <h4>Edit Video Link</h4>
+    {{-- {!!Form::open(['route'=>'admin.manage.editcontent', 'method'=>'PUT', 'class'=>'editcontentform' , 'files'=>true])!!} --}}
+
+    <div class="row">
+      <div class="input-field col s12">
+        <input 
+          id="edit-video-link"
+          placeholder="Example: https://www.youtube.com/watch?v=aqz-KE-bpKQ"
+          type="text"
+          length="100"
+          name="edit_video_link">
+        <label for="edit-video-link">Video Link</label>
+      </div>
     </div>
+      
+    <div class="modal-footer">
+        <div class="right">
+          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
+        </div>
+        <button id = "add-image-submit" class="btn-flat waves-effect waves-light right" type="submit">Edit
+          <i class="material-icons right">send</i>
+        </button>
+    </div>
+
+   {{--  {!!Form::close()!!} --}}
+  </div>
+</div>
+
+{{-- Confirmation modal for delete --}}
+<div id="deleteConfirmation" class="modal" style="overflow-y: hidden;">
+  <div class="modal-content">
+    <h5>Are you sure you want to delete homepage content?</h5>
+    <div class="divider"></div>
+    <p>Deleting this media will affect the content of the slider in the Home Page</p>
+  </div>
+  <div class="modal-footer">
+    
+    <div class="right">
+      {!!Form::open([
+        'route'=>'admin.manage.deletecontent',
+        'method'=>'DELETE',
+        'id'=>'delete-content-form'
+      ])!!}
+      <input id="delete-content-id" name="content_id" type="hidden" value="">
+      <button class=" modal-action modal-close waves-effect waves-green btn error error-hover" type="submit">Yes, Delete it</button>
+      {!!Form::close()!!}
+    </div>
+
+    <a href="#!" class=" modal-action modal-close btn-flat">Cancel</a>
+    
+  </div>
+</div>
 
 
 

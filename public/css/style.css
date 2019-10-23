@@ -1734,3 +1734,8 @@ a.google {
   width: 100%;
 }
 
+.video-link-content iframe {
+  height: 100%;
+  width: 100%;
+}
+
