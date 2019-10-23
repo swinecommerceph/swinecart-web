@@ -1013,10 +1013,10 @@ class AdminController extends Controller
       * @return String
       * @todo Error detection
       */
-     public function editContent(Request $request){
+     public function editImageContent(Request $request){
          $content = HomeImage::find($request->content_id);
          if (Input::hasFile('image')) {
-            unlink(public_path($content->path.$content->name));
+            if ($content->path  !== NULL) unlink(public_path($content->path.$content->name));
             $filename = date('d-m-y-H-i-s',time()).'-'.Input::file('image')->getClientOriginalName();
             Input::file('image')->move(public_path('/images/homeimages/'), $filename);
             $content->name = $filename;
@@ -1030,9 +1030,34 @@ class AdminController extends Controller
         if(!empty($request->textContent)){
             $content->text = $request->textContent;
         }
+
+        $content->link = NULL;
+        $content->content_type = 'image';
+
         $content->save();
         return Redirect::back()->with('message','Content Edited');
      }
+
+     /**
+      * Edit youtube link in the home page
+      *
+      * @param form request
+      * @return String
+      * @todo Error detection
+      */
+      public function editVideoContent(Request $request)
+      {
+        $content = HomeImage::find($request->content_id);
+        if ($content->path  !== NULL) unlink(public_path($content->path.$content->name));
+        $content->name = NULL;
+        $content->title = NULL;
+        $content->text = NULL;
+        $content->path = NULL;
+        $content->content_type = 'video';
+        $content->link = $this->changeVideoLinkToEmbedType($request->edit_video_link);
+        $content->save();
+        return Redirect::back()->with('message','Content Edited');
+      }
 
      public function goToUserlist(){
          return redirect()->route('home/userlist');

@@ -1,6 +1,5 @@
 $(document).ready(function(){
 
-
     $('.delete-content-trigger').click(function(e){
         e.preventDefault();
         // console.log($('#delete-content-form > input').attr('name','_token').attr('value'));
