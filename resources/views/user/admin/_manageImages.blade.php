@@ -324,21 +324,29 @@
 </div>
 
 {{-- Confirmation modal for delete --}}
-    <div id="deleteConfirmation" class="modal">
-        <div class="modal-content">
-            <h4>Delete</h4>
-            <div class="divider"></div>
-            <p>Are you sure you want to permanently delete homepage content? </p>
-        </div>
-        <div class="modal-footer">
-            <a href="#!" class=" modal-action modal-close waves-effect waves-green btn-flat">Cancel</a>
-            {!!Form::open(['route'=>'admin.manage.deletecontent', 'method'=>'DELETE', 'id'=>'delete-content-form'] )!!}
-            {{-- <input id="delete-content-token" name="_token" type="hidden" value=""> --}}
-            <input id="delete-content-id" name="content_id" type="hidden" value="">
-            <button class=" modal-action modal-close waves-effect waves-green btn-flat" type="submit">Yes</button>
-            {!!Form::close()!!}
-        </div>
+<div id="deleteConfirmation" class="modal" style="overflow-y: hidden;">
+  <div class="modal-content">
+    <h5>Are you sure you want to delete homepage content?</h5>
+    <div class="divider"></div>
+    <p>Deleting this media will affect the content of the slider in the Home Page</p>
+  </div>
+  <div class="modal-footer">
+    
+    <div class="right">
+      {!!Form::open([
+        'route'=>'admin.manage.deletecontent',
+        'method'=>'DELETE',
+        'id'=>'delete-content-form'
+      ])!!}
+      <input id="delete-content-id" name="content_id" type="hidden" value="">
+      <button class=" modal-action modal-close waves-effect waves-green btn error error-hover" type="submit">Yes, Delete it</button>
+      {!!Form::close()!!}
     </div>
+
+    <a href="#!" class=" modal-action modal-close btn-flat">Cancel</a>
+    
+  </div>
+</div>
 
 
 
