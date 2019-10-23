@@ -999,9 +999,7 @@ class AdminController extends Controller
       */
      public function deleteContent(Request $request){
          $content = HomeImage::find($request->content_id);
-         //File::delete($content->path.$content->name);
-         unlink(public_path($content->path.$content->name));
-         //dd($content->path.$content->name);
+         if ($content->path  !== NULL) unlink(public_path($content->path.$content->name));
          $content->delete();
          return Redirect::back()->with('message','Image Deleted');
      }
