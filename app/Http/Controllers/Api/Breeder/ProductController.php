@@ -208,6 +208,8 @@ class ProductController extends Controller {
                 $product['breed'] = $this->transformBreedSyntax($item->breed->name);
                 $product['status'] = $item->status;
                 $product['age'] = $this->computeAge($item->birthdate);
+                $product['quantity'] = $item->quantity;
+                $product['is_unique'] = $item->is_unique;
                 $product['image'] = route('serveImage', [
                     'size' => 'medium', 
                     'filename' => $item->primaryImage->name
@@ -218,7 +220,6 @@ class ProductController extends Controller {
 
         return response()->json([
             'data' => [
-                'count' => $products->count(),
                 'products' => $products
             ]
         ], 200);

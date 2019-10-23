@@ -8,6 +8,7 @@ use App\Models\FarmAddress;
 use App\Models\Image;
 use App\Models\Video;
 use App\Models\TransactionLog;
+use App\Models\SwineCartItem;
 use App\Models\ProductReservation;
 use App\Observers\Searchable;
 use Illuminate\Database\Eloquent\Model;
@@ -124,6 +125,11 @@ class Product extends Model
     public function primaryImage()
     {
         return $this->hasOne(Image::class, 'id');
+    }
+
+    public function swineCartItem()
+    {
+        return $this->hasMany(SwineCartItem::class, 'product_id');
     }
 
 }

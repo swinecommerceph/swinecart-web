@@ -42,7 +42,6 @@ class LoginController extends Controller
         $userLog->save();
 
         return response()->json([
-            'message' => 'Normal Login successful!',
             'data' => [
                 'token' => $token,
              ]
@@ -53,8 +52,6 @@ class LoginController extends Controller
     {
         $user = JWTAuth::parseToken()->authenticate();
         return response()->json([
-
-            'message' => 'Get Me successful!',
             'data' => [
                 'user' => $user
              ]

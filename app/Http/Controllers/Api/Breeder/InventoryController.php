@@ -62,7 +62,7 @@ class InventoryController extends Controller
         $order['reservation']['id'] = $reservation->id;
         $order['reservation']['quantity'] = $reservation->quantity;
         $order['reservation']['status_time'] = $status_time;
-        $order['reservation']['date_needed'] = $reservation->date_needed;
+        $order['reservation']['date_needed'] = $reservation->product->type == 'semen' ? $reservation->date_needed == '0000-00-00' ? null : $reservation->date_needed : null;
         $order['reservation']['delivery_date'] = $reservation->delivery_date;
         $order['reservation']['special_request'] = $reservation->special_request;
         $order['reservation']['customer_id'] = $reservation->customer_id;
@@ -93,13 +93,17 @@ class InventoryController extends Controller
     public function getProducts(Request $request)
     {
         $breeder = $this->user->userable;
+        $limit = $request->limit;
 
         if ($request->status === 'requested') {
-            $limit = $request->limit;
 
             $orders = $breeder
                 ->products()
                 ->with('breed', 'primaryImage')
+                ->withCount(['swineCartItem' => function ($query) {
+                    return $query->where('if_requested', 1)
+                                ->where('reservation_id', 0);
+                }])
                 ->where('status','requested')
                 ->where('quantity','<>', 0)
                 ->paginate($limit)
@@ -107,7 +111,7 @@ class InventoryController extends Controller
                     $order = [];
                     
                     $order['status'] = $item->status;
-                    $order['request_count'] = $this->getRequests($item->id)->count();
+                    $order['request_count'] = $item->swine_cart_item_count;
 
                     $order['product']['id'] = $item->id;
                     $order['product']['name'] = $item->name;
@@ -115,22 +119,10 @@ class InventoryController extends Controller
                     $order['product']['breed'] = $this->transformBreedSyntax($item->breed->name);
                     $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $item->primaryImage->name]);
 
-                    // $product['reservation'] = null;
-                    // $product['reservation']['id'] = null;
-                    // $product['reservation']['quantity'] = null;
-                    // $product['reservation']['status'] = null;
-                    // $product['reservation']['status_time'] = null;
-                    // $product['reservation']['date_needed'] = null;
-                    // $product['reservation']['delivery_date'] = null;
-                    // $product['reservation']['special_request'] = null;
-                    // $product['reservation']['customer_id'] = null;
-                    // $product['reservation']['customer_name'] = null;
-
                     return $order;
                 });
 
             return response()->json([
-                'message' => 'Get Inventory Products successful!',
                 'data' => [
                     'orders' => $orders
                 ]
@@ -139,55 +131,51 @@ class InventoryController extends Controller
         else {
 
             $order_status = $request->status;
-            $limit = $request->limit;
 
             $orders = $breeder
                 ->reservations()
                 ->with(['transactionLogs' => function ($query) use ($order_status) {
-                    $query->where('status', $order_status)->orderBy('created_at', 'desc');
+                    return $query->where('status', $order_status);
                 }])
                 ->with('product.breed', 'product.primaryImage', 'customer') 
                 ->where('order_status', $order_status)
                 ->paginate($limit)
                 ->map(function ($item) {
                     return $this->transformReservedProduct($item);
-                });
+                })
+                ->sortByDesc('reservation.status_time')
+                ->values()
+                ->all();
 
             return response()->json([
-                'message' => 'Get Inventory Products successful!',
                 'data' => [
                     'orders' => $orders
-
                 ]
             ], 200);
         }
-    }
-
-    private function getRequests($product_id)
-    {
-        return SwineCartItem::where('product_id', $product_id)
-            ->with('customer.users')
-            ->where('if_requested', 1)
-            ->where('reservation_id', 0);
     }
 
     public function getProductRequests(Request $request, $product_id)
     {
         $limit = $request->limit;
 
-        $requests = $this->getRequests($product_id)
+        $requests = SwineCartItem::where('product_id', $product_id)
+            ->with('product', 'customer.users')
+            ->where('if_requested', 1)
+            ->where('reservation_id', 0)
             ->paginate($limit)
             ->map(function ($item) {
                 $request = [];
 
                 $customer = $item->customer;
+                $product_type = $item->product->type;
                 $user = $customer->users[0];
 
                 $request['product_id'] = $item->product_id;
                 $request['customer_id'] = $item->customer->id;
                 $request['swinecart_id'] = $item->id;
                 $request['request_quantity'] = $item->quantity;
-                $request['date_needed'] = $item->date_needed == '0000-00-00' ? null : $item->date_needed;
+                $request['date_needed'] = $product_type == 'semen' ? $item->date_needed == '0000-00-00' ? null : $item->date_needed : null;
                 $request['special_request'] = $item->special_request;
 
                 $request['customer_name'] = $user->name;
@@ -198,7 +186,6 @@ class InventoryController extends Controller
             });
 
         return response()->json([
-            'message' => 'Get Product Requests successful!',
             'data' => [
                 'requests' => $requests,
             ]
@@ -318,9 +305,7 @@ class InventoryController extends Controller
         $c['province'] = $customer->address_province;
         $c['mobile'] = $customer->mobile;
 
-
         return response()->json([
-            'message' => 'Get Customer successful!',
             'data' => [
                 'customer' => $c
             ]

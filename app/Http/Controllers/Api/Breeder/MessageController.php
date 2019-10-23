@@ -53,12 +53,12 @@ class MessageController extends Controller
                     $message['to_id'] = $item->direction === 1 ? $item->customer_id : $item->breeder_id;
 
                     return $message;
-                });
+                })
+                ->values()
+                ->all();
 
         return response()->json([
-            'message' => 'Get Messages successful!',
             'data' => [
-                'count' => $messages->count(),
                 'messages' => $messages
             ]
         ], 200);
@@ -96,12 +96,12 @@ class MessageController extends Controller
                     ];
 
                     return $thread;
-                });
+                })
+                ->values()
+                ->all();
 
         return response()->json([
-            'message' => 'Get Threads successful!',
             'data' => [
-                'count' => $threads->count(),
                 'threads' => $threads,
             ]
         ], 200);

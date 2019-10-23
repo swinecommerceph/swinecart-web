@@ -31,6 +31,7 @@ class Chat implements MessageComponentInterface {
         
 
         $msg = json_decode($msg);
+
         if($msg->to == null && $msg->direction == null && $msg->message == 'Connection established.' ){
             $this->maps[$msg->from] = $from;
             return;
@@ -44,11 +45,16 @@ class Chat implements MessageComponentInterface {
             ]);
 
             if(array_key_exists($msg->to, $this->maps)){
-                $msg->from_id = $msg->from;
-                $msg->read_at = $new_message->read_at;
+
                 $msg->id = $new_message->id;
+                $msg->from_id = $msg->from;
+                $msg->to_id = $msg->to;
+                $msg->read_at = $new_message->read_at;
                 $msg->created_at = $new_message->created_at->toDateTimeString();
                 $msg->from = User::where('id', $msg->from)->first()->name;
+
+                echo sprintf('Sending %s to %d' . "\n"  , json_encode($msg), $msg->to);
+
                 $this->maps[$msg->to]->send(json_encode($msg));
             }
             
