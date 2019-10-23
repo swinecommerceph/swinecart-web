@@ -119,18 +119,18 @@
                           <p class="truncate">{{$content->text}}</p>
                         </div>
                         <div class="card-action">
-                            <a 
-                              class="right modal-trigger delete-content-trigger"
-                              href="#deleteConfirmation"
-                              data= {{$content->id}}>
-                              Delete
-                            </a>
-                            <a 
-                              class="right modal-trigger edit-content-trigger"
-                              href="#edit-modal"
-                              data= {{$content->id}}>
-                              Edit
-                            </a>
+                          <a 
+                            class="btn right modal-trigger edit-content-trigger primary primary-hover"
+                            href="#edit-modal"
+                            data= {{$content->id}}>
+                            Edit
+                          </a>
+                          <a 
+                            class="btn-flat right modal-trigger delete-content-trigger grey-text text-darken-3"
+                            href="#deleteConfirmation"
+                            data= {{$content->id}}>
+                            Delete
+                          </a>
                         </div>
                         <div class="card-reveal">
                           <span class="card-title grey-text text-darken-4">{{$content->title}}<i class="material-icons right">close</i></span>
@@ -141,27 +141,21 @@
                           <iframe src={{ $content->link }}></iframe>
                         </div>
                         <div class="card-action">
-                            <a 
-                              class="right modal-trigger delete-content-trigger"
-                              href="#deleteConfirmation"
-                              data= {{$content->id}}>
-                              Delete
-                            </a>
-                            @if($content->content_type === 'image')
-                              <a 
-                                class="right modal-trigger edit-content-trigger"
-                                href="#edit-modal"
-                                data= {{$content->id}}>
-                                Edit
-                              </a>
-                            @else
-                              <a 
-                                class="right modal-trigger edit-content-trigger"
-                                href="#edit-video-link-modal"
-                                data= {{$content->id}}>
-                                Edit
-                              </a>
-                            @endif
+                            
+                          <a 
+                            class="btn right modal-trigger edit-content-trigger primary primary-hover"
+                            href="#edit-video-link-modal"
+                            data= {{$content->id}}>
+                            Edit
+                          </a>
+
+                          <a 
+                            class="btn-flat right modal-trigger delete-content-trigger grey-text text-darken-3"
+                            href="#deleteConfirmation"
+                            data= {{$content->id}}>
+                            Delete
+                          </a>
+                            
                         </div>
                       @endif
                       
