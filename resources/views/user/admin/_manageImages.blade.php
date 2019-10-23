@@ -123,7 +123,14 @@
                             class="btn right modal-trigger edit-content-trigger primary primary-hover"
                             href="#edit-modal"
                             data= {{$content->id}}>
-                            Edit
+                            Edit Image
+                          </a>
+                          <a 
+                            style="margin-right: 10px;"
+                            class="btn right modal-trigger edit-video-content-trigger primary primary-hover"
+                            href="#edit-video-link-modal"
+                            data= {{$content->id}}>
+                            Change to Video Link
                           </a>
                           <a 
                             class="btn-flat right modal-trigger delete-content-trigger grey-text text-darken-3"
@@ -141,12 +148,20 @@
                           <iframe src={{ $content->link }}></iframe>
                         </div>
                         <div class="card-action">
-                            
+
                           <a 
-                            class="btn right modal-trigger edit-content-trigger primary primary-hover"
+                            class="btn right modal-trigger edit-video-content-trigger primary primary-hover"
                             href="#edit-video-link-modal"
                             data= {{$content->id}}>
-                            Edit
+                            Edit Video Link
+                          </a>
+
+                          <a 
+                            style="margin-right: 10px;"
+                            class="btn right modal-trigger edit-content-trigger primary primary-hover"
+                            href="#edit-modal"
+                            data= {{$content->id}}>
+                            Change to Image
                           </a>
 
                           <a 
@@ -252,7 +267,7 @@
 <div id="edit-modal" class="modal">
    <div class="modal-content">
      <h4>Edit Image Content</h4>
-     {!!Form::open(['route'=>'admin.manage.editcontent', 'method'=>'PUT', 'class'=>'editcontentform' , 'files'=>true])!!}
+     {!!Form::open(['route'=>'admin.manage.editImagecontent', 'method'=>'PUT', 'class'=>'editcontentform' , 'files'=>true])!!}
         <input id="edit-content-id" name="content_id" type="hidden" value="">
         <div class="row file-field input field">
             <div class="btn">
@@ -303,9 +318,14 @@
 {{-- Modal for edit video link --}}
 <div id="edit-video-link-modal" class="modal">
   <div class="modal-content">
-    <h4>Edit Video Content</h4>
-    {{-- {!!Form::open(['route'=>'admin.manage.editcontent', 'method'=>'PUT', 'class'=>'editcontentform' , 'files'=>true])!!} --}}
+    <h4>Edit Video Link</h4>
+    {!!Form::open([
+      'route'   => 'admin.manage.editVideoContent',
+      'method'  => 'PUT',
+      'class'   => 'editcontentform'
+    ])!!}
 
+    <input id="edit-video-content-id" name="content_id" type="hidden" value="123">
     <div class="row">
       <div class="input-field col s12">
         <input 
@@ -333,7 +353,7 @@
       <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
     </div>
 
-   {{--  {!!Form::close()!!} --}}
+    {!!Form::close()!!}
   </div>
 </div>
 
@@ -365,6 +385,16 @@
 
 
 @section('initScript')
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('.edit-video-content-trigger').click(function (e) {
+          e.preventDefault();
+          console.log($(this).attr('data'));
+          $('#edit-video-content-id').attr('value', $(this).attr('data'));
+        });
+      });
+    </script>    
+
     {{-- <script type="text/javascript" src="/js/admin/admin_custom.js"></script> --}}
     <script type="text/javascript" src="/js/admin/users.js"></script>
     <script type="text/javascript" src="/js/admin/manageUsers_script.js"></script>
