@@ -303,12 +303,13 @@
 {{-- Modal for edit video link --}}
 <div id="edit-video-link-modal" class="modal">
   <div class="modal-content">
-    <h4>Edit Video Link</h4>
+    <h4>Edit Video Content</h4>
     {{-- {!!Form::open(['route'=>'admin.manage.editcontent', 'method'=>'PUT', 'class'=>'editcontentform' , 'files'=>true])!!} --}}
 
     <div class="row">
       <div class="input-field col s12">
         <input 
+          style="border: none !important; border-radius: 0 !important; border-bottom: 1px solid #9e9e9e !important;"
           id="edit-video-link"
           placeholder="Example: https://www.youtube.com/watch?v=aqz-KE-bpKQ"
           type="text"
@@ -319,12 +320,17 @@
     </div>
       
     <div class="modal-footer">
-        <div class="right">
-          <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-        </div>
-        <button id = "add-image-submit" class="btn-flat waves-effect waves-light right" type="submit">Edit
-          <i class="material-icons right">send</i>
+        
+      <div class="right">
+        <button
+          id = "add-image-submit"
+          class="btn waves-effect waves-light right"
+          type="submit">
+          Edit Content
         </button>
+      </div>
+
+      <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
     </div>
 
    {{--  {!!Form::close()!!} --}}
