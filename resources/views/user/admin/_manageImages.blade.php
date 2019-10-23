@@ -257,18 +257,30 @@
 {{-- Modal for edit edit image and content --}}
 <div id="edit-modal" class="modal">
    <div class="modal-content">
-     <h4>Edit Content</h4>
+     <h4>Edit Image Content</h4>
      {!!Form::open(['route'=>'admin.manage.editcontent', 'method'=>'PUT', 'class'=>'editcontentform' , 'files'=>true])!!}
         <input id="edit-content-id" name="content_id" type="hidden" value="">
-        <div class="row">
-            <div class="col s12">
-                 <input type="file" name="image" />
+        <div class="row file-field input field">
+            <div class="btn">
+              <span>Image File</span>   
+              <input type="file" name="image" />
+            </div>
+            <div class="col s5 file-path-wrapper">
+              <input 
+                style="border: none !important; border-radius: 0 !important;"
+                class="file-path validate"
+                type="text">
             </div>
         </div>
 
         <div class="row">
             <div class="input-field col s12">
-                <input id="input_title" type="text" length="20" name="title">
+                <input 
+                  style="border: none !important; border-radius: 0 !important; border-bottom: 1px solid #9e9e9e !important;"
+                  id="input_title"
+                  type="text"
+                  length="20"
+                  name="title">
                 <label for="input_title">Title</label>
             </div>
         </div>
@@ -280,12 +292,14 @@
             </div>
         </div>
         <div class="row">
-            <div class="right">
-              <a href="#!" class="modal-action modal-close waves-effect waves-green btn-flat">Close</a>
-            </div>
-            <button id = "add-image-submit" class="btn-flat waves-effect waves-light right" type="submit">Add
-              <i class="material-icons right">send</i>
-            </button>
+            
+          <div class="right">
+            <button id = "add-image-submit" class="waves-effect waves-light btn" type="submit">Edit Content
+            </button>  
+          </div>
+
+          <a href="#!" class="modal-action modal-close btn-flat right">Close</a>
+            
         </div>
 
      {!!Form::close()!!}
