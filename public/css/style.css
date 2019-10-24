@@ -580,6 +580,11 @@ blockquote.warning{
 	background-color: #ffcdd2;
 }
 
+blockquote.warning2{
+	border-left: 5px solid #e65100;
+	background-color: #ffcc80;
+}
+
 blockquote.info{
 	border-left: 5px solid #009688;
 	background-color: #e7f5f4;
