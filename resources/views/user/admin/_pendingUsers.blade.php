@@ -91,16 +91,11 @@
               {{$selfRegisteredBreeder->created_at}}
           </td>
           <td>
-            {!! Form::open([
-              'action' => ['AdminController@updateSelfRegisteredBreeder', $selfRegisteredBreeder->id],
-              'method' => 'PATCH'
-            ]) !!}
-              <button 
-                type="submit"
+              <a 
+                href="#confirmation-approve-breeder-modal"
                 style="width: 7.5rem;"
                 class="waves-effect waves-light btn"
-                >Approve</button>
-            {!! Form::close() !!}
+                >Approve</a>
           </td>
           <td>
             <a 
@@ -122,6 +117,33 @@
           <div class="modal-footer">
             <a href="#" class="modal-close waves-effect waves-green btn-flat">Close</a>
           </div>
+        </div>
+
+        <!-- Confirmation Approve Modal -->
+        <div id="confirmation-approve-breeder-modal" class="modal">
+          {!! Form::open([
+            'action' => ['AdminController@updateSelfRegisteredBreeder', $selfRegisteredBreeder->id],
+            'method' => 'PATCH'
+          ]) !!}
+          <div class="modal-content">
+            <h4>Approve '<b>{{ $selfRegisteredBreeder->name }}</b>'?</h4>
+            <blockquote class="warning2" style="font-size: 1.2rem;">
+              Only accredited breeders are allowed to register.
+            </blockquote>
+            <p style="font-size: 1.2rem;">
+              Approving this user as a breeder means that this breeder can now sell
+              products in the system as a registered accredited breeder.
+            </p>
+          </div>
+
+          <div class="modal-footer">
+            <a href="#" class="modal-close btn-flat">Cancel</a>
+            
+            <div class="right">
+              <button type="submit" class="waves-effect waves-green btn">Yes, approve it</button>
+            </div>
+          </div>
+          {!! Form::close() !!}
         </div>
 
         @empty
