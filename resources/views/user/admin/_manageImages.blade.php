@@ -120,14 +120,14 @@
                         </div>
                         <div class="card-action">
                           <a 
-                            class="btn right modal-trigger edit-content-trigger primary primary-hover"
+                            class="btn right modal-trigger edit-content-trigger"
                             href="#edit-modal"
                             data= {{$content->id}}>
                             Edit Image
                           </a>
                           <a 
                             style="margin-right: 10px;"
-                            class="btn right modal-trigger edit-video-content-trigger primary primary-hover"
+                            class="btn right modal-trigger edit-video-content-trigger"
                             href="#edit-video-link-modal"
                             data= {{$content->id}}>
                             Change to Video Link
@@ -150,7 +150,7 @@
                         <div class="card-action">
 
                           <a 
-                            class="btn right modal-trigger edit-video-content-trigger primary primary-hover"
+                            class="btn right modal-trigger edit-video-content-trigger"
                             href="#edit-video-link-modal"
                             data= {{$content->id}}>
                             Edit Video Link
@@ -158,7 +158,7 @@
 
                           <a 
                             style="margin-right: 10px;"
-                            class="btn right modal-trigger edit-content-trigger primary primary-hover"
+                            class="btn right modal-trigger edit-content-trigger"
                             href="#edit-modal"
                             data= {{$content->id}}>
                             Change to Image
@@ -205,24 +205,36 @@
   {!!Form::open(['route'=>'admin.manage.addImageContent', 'method'=>'POST', 'class'=>'addcontentform' , 'files'=>true])!!}
     <div class="modal-content">
       <h4>Add Image Content</h4>
-      <div class="row">
-          <div class="col s12">
-                <input type="file" name="image" />
-          </div>
+      <div class="row file-field input field">
+        <div class="btn">
+          <span>Image File</span>   
+          <input type="file" name="image" />
+        </div>
+        <div class="col s5 file-path-wrapper">
+          <input 
+            style="border: none !important; border-radius: 0 !important;"
+            class="file-path validate"
+            type="text">
+        </div>
       </div>
 
       <div class="row">
-          <div class="input-field col s12">
-              <input id="input_title" type="text" length="20" name="title">
-              <label for="input_title">Title</label>
-          </div>
+        <div class="input-field col s12">
+          <input 
+            style="border: none !important; border-radius: 0 !important; border-bottom: 1px solid #9e9e9e !important;"
+            id="input_title"
+            type="text"
+            length="20"
+            name="title">
+          <label for="input_title">Title</label>
+        </div>
       </div>
 
       <div class="row">
-          <div class="input-field col s12">
-            <textarea id="input_text" class="materialize-textarea" length="120" name='textContent'></textarea>
-            <label for="input_text">Content text</label>
-          </div>
+        <div class="input-field col s12">
+          <textarea id="input_text" class="materialize-textarea" length="120" name='textContent'></textarea>
+          <label for="input_text">Content text</label>
+        </div>
       </div>
     </div>
     <div class="modal-footer">
@@ -243,6 +255,7 @@
       <div class="row">
           <div class="input-field col s12">
               <input 
+                style="border: none !important; border-radius: 0 !important; border-bottom: 1px solid #9e9e9e !important;"
                 id="video-link"
                 placeholder="Example: https://www.youtube.com/watch?v=aqz-KE-bpKQ"
                 type="text"
