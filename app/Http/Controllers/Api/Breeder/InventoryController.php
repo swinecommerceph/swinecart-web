@@ -81,7 +81,7 @@ class InventoryController extends Controller
         ])->first();
     }
 
-    private function getReservation($reservation_id)
+    private function getReservation($reservation_id, $order_status)
     {
         $breeder = $this->user->userable;
         $reservation = $breeder
@@ -225,7 +225,7 @@ class InventoryController extends Controller
                         return response()->json([
                             'message' => 'Update Order Status successful!',
                             'data' => [
-                                'product' => $this->getReservation($result[2])
+                                'product' => $this->getReservation($result[2], $status)
                             ]
                         ], 200);
                     }
@@ -235,7 +235,7 @@ class InventoryController extends Controller
                         return response()->json([
                             'message' => 'Update Order Status successful!',
                             'data' => [
-                                'product' => $this->getReservation($request->reservation_id)
+                                'product' => $this->getReservation($request->reservation_id, $status)
                             ]
                         ], 200);
                     }
@@ -245,7 +245,7 @@ class InventoryController extends Controller
                         return response()->json([
                             'message' => 'Update Order Status successful!',
                             'data' => [
-                                'product' => $this->getReservation($request->reservation_id)
+                                'product' => $this->getReservation($request->reservation_id, $status)
                             ]
                         ], 200);
                     }
