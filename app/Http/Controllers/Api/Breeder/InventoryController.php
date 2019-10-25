@@ -84,7 +84,13 @@ class InventoryController extends Controller
     private function getReservation($reservation_id)
     {
         $breeder = $this->user->userable;
-        $reservation = $breeder->reservations()->with('product')->find($reservation_id);
+        $reservation = $breeder
+            ->reservations()
+            ->with(['transactionLogs' => function ($query) use ($order_status) {
+                    return $query->where('status', $order_status);
+                }])
+            ->with('product.breed', 'product.primaryImage', 'customer') 
+            ->find($reservation_id);
 
         // return $reservation;
         return $this->transformReservedProduct($reservation);
