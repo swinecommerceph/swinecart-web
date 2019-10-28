@@ -79,7 +79,7 @@ class EditProfileController extends Controller
 
         $farms = $this
             ->getBreederFarms($breeder)
-            ->paginate($request->limit)
+            ->get()
             ->map(function ($item) {
                 $farm = [];
 
@@ -97,9 +97,7 @@ class EditProfileController extends Controller
             });
 
         return response()->json([
-            'message' => 'Get Farms successful!',
             'data' => [
-                'count' => $farms->count(),
                 'farms' => $farms,
             ]
         ], 200);

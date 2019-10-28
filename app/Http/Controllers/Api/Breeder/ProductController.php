@@ -101,7 +101,7 @@ class ProductController extends Controller {
     private function getBreederProducts($breeder) 
     {
         return $breeder->products()
-            ->with('breed', 'primaryImage')
+            ->with('breed')
             ->whereIn('status', ['hidden', 'displayed', 'requested'])
             ->where('quantity','<>', 0)
             ->orWhere([
@@ -123,7 +123,7 @@ class ProductController extends Controller {
             'name' => $product->name,
             'type' => $product->type,
             'breed' => $this->transformBreedSyntax($product->breed->name),
-            'age' => $this->computeAge($product->birthdate),
+            'age' => $product->birthdate === '0000-00-00' ? null : $this->computeAge($product->birthdate),
             'birthdate' => $product->birthdate,
             'is_unique' => $product->is_unique,
             'quantity' => $product->quantity,
@@ -207,12 +207,12 @@ class ProductController extends Controller {
                 $product['type'] = $item->type;
                 $product['breed'] = $this->transformBreedSyntax($item->breed->name);
                 $product['status'] = $item->status;
-                $product['age'] = $this->computeAge($item->birthdate);
+                $product['age'] = $item->birthdate === '0000-00-00' ? null : $this->computeAge($item->birthdate);
                 $product['quantity'] = $item->quantity;
                 $product['is_unique'] = $item->is_unique;
                 $product['image'] = route('serveImage', [
                     'size' => 'medium', 
-                    'filename' => $item->primaryImage->name
+                    'filename' => Image::find($item->primary_img_id)->name
                 ]);
 
                 return $product;
@@ -253,9 +253,26 @@ class ProductController extends Controller {
         ], 404);
     }
 
-    public function getProduct(Request $request, $product_id)
+    public function getProduct($product_id)
     {
-        
+        $breeder = $this->user->userable;
+        $product = $this->getBreederProduct($breeder, $product_id);
+
+        return [
+            'id' => $product->id,
+            'name' => $product->name,
+            'type' => $product->type,
+            'breed' => $this->transformBreedSyntax($product->breed->name),
+            'status' => $product->status,
+            'age' => $product->birthdate === '0000-00-00' ? null : $this->computeAge($product->birthdate),
+            'quantity' => $product->quantity,
+            'is_unique' => $product->is_unique,
+            'image' => route('serveImage', [
+                'size' => 'medium', 
+                'filename' => Image::find($product->primary_img_id)->name
+            ]),
+        ];
+
     }
 
     public function updateProduct(Request $request, $product_id)
@@ -416,6 +433,7 @@ class ProductController extends Controller {
         $validator = Validator::make($data, [
             'name' => 'required',
             'type' => 'required',
+            'is_unique' => 'required',
             'farm_from_id' => 'required',
             'breed' => 'required'
         ]);
@@ -438,7 +456,7 @@ class ProductController extends Controller {
                 $product->primary_img_id = $image->id;
                 $product->name = $request->name;
                 $product->type = $request->type;
-                $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
+                $product->birthdate = $request->birthdate == '' ? '' : date_format(date_create($request->birthdate), 'Y-n-j');
                 $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
                 $product->min_price = $request->min_price;
                 $product->max_price = $request->max_price;
@@ -446,8 +464,8 @@ class ProductController extends Controller {
                 $product->right_teats = $request->right_teats;
                 $product->birthweight = $request->birth_weight;
                 $product->house_type = $request->house_type;
-                $product->quantity = $request->quantity;
                 $product->is_unique = $request->is_unique;
+                $product->quantity = $request->is_unique == 1 ? 1 : $request->quantity;
                 $product->adg = $request->adg;
                 $product->fcr = $request->fcr;
                 $product->lsba = $request->lsba;
@@ -456,9 +474,8 @@ class ProductController extends Controller {
                 $breeder->products()->save($product);
 
                 return response()->json([
-                    // 'message' => 'Add Product successful!',
                     'data' => [
-                        // 'product' => $product
+                        'product' => $this->getProduct($product->id),
                     ]
                 ], 200);
             }

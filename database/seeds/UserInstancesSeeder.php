@@ -17,25 +17,25 @@ class UserInstancesSeeder extends Seeder
             'John and Piolo Farms',
             'PICC',
             'PorKed',
-            'McJolly Farms',
-            'Low Pigs Co.',
-            'PCAARRD Farms',
-            'Great Pig Inc.',
-            'Sharoen Fokfun',
-            'Wellize Farms',
-            'Great Pigs Dutchman',
-            'General Pigs Co.',
-            'Pork n Pork',
-            'Slow Roast Piggery',
-            'Master Piggery',
-            'Pigz em Piggery',
-            'Pig Masters',
-            'Piggery1',
-            'Piggery2',
-            'PigPigPigging',
-            'PigCARD',
-            'PigPigPag',
-            'PigPagPig'
+            // 'McJolly Farms',
+            // 'Low Pigs Co.',
+            // 'PCAARRD Farms',
+            // 'Great Pig Inc.',
+            // 'Sharoen Fokfun',
+            // 'Wellize Farms',
+            // 'Great Pigs Dutchman',
+            // 'General Pigs Co.',
+            // 'Pork n Pork',
+            // 'Slow Roast Piggery',
+            // 'Master Piggery',
+            // 'Pigz em Piggery',
+            // 'Pig Masters',
+            // 'Piggery1',
+            // 'Piggery2',
+            // 'PigPigPigging',
+            // 'PigCARD',
+            // 'PigPigPag',
+            // 'PigPagPig'
         ];
         // For Administrator
         factory(App\Models\User::class, 2)->create()->each(function($user){
@@ -60,7 +60,7 @@ class UserInstancesSeeder extends Seeder
             $customer->users()->save($user);
 
             // Create Farm Address
-            for ($i = 0; $i < 10; $i++) {
+            for ($i = 0; $i < 5; $i++) {
                 $farm = factory(App\Models\FarmAddress::class)->create();
                 $customer->farmAddresses()->save($farm);
             }
@@ -79,7 +79,7 @@ class UserInstancesSeeder extends Seeder
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address. Override accreditation default values
-            for ($i = 0; $i < 1; $i++) {
+            for ($i = 0; $i < 20; $i++) {
                 $farm = factory(App\Models\FarmAddress::class)->create([
                     'accreditation_no' => random_int(500,1000),
                     'accreditation_status' => 'active',
@@ -100,7 +100,7 @@ class UserInstancesSeeder extends Seeder
             $types = ['sow', 'gilt', 'boar', 'semen']; // 4
             $housetypes = ['opensided', 'tunnelventilated']; // 2
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
-            for ($i = 0; $i < 10; $i++) {
+            for ($i = 0; $i < 5; $i++) {
                 $randType = $types[random_int(0,3)];
                 $randHouseType = $housetypes[random_int(0,1)];
                 $randBreed = $breeds[random_int(0,6)];
@@ -181,11 +181,11 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Spectator
-        factory(App\Models\User::class, 2)->create()->each(function($user){
-            $user->assignRole('spectator');
-            // Create Spectator Profile
-            $spectator = factory(App\Models\Spectator::class)->create();
-            $spectator->users()->save($user);
-        });
+        // factory(App\Models\User::class, 2)->create()->each(function($user){
+        //     $user->assignRole('spectator');
+        //     // Create Spectator Profile
+        //     $spectator = factory(App\Models\Spectator::class)->create();
+        //     $spectator->users()->save($user);
+        // });
     }
 }
