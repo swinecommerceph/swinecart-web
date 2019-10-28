@@ -127,7 +127,7 @@ class ProductController extends Controller {
             'birthdate' => $product->birthdate,
             'is_unique' => $product->is_unique,
             'quantity' => $product->quantity,
-            'primary_image' => route('serveImage', ['size' => 'default', 'filename' => $product->primaryImage->name]),
+            'primary_image' => route('serveImage', ['size' => 'default', 'filename' => Image::find($product->primary_img_id)->name]),
         ];
 
         $transFormedProduct['swine_info'] = [
