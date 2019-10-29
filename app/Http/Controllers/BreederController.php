@@ -106,6 +106,27 @@ class BreederController extends Controller
      */
     public function registerBreeder(Request $request) {
 
+      /* $this->validate($request, [
+        'name' => 'required',
+        'email' => 'required',
+        'officeAddress_addressLine1' => 'required',
+        'officeAddress_addressLine2' => 'required',
+        // 'officeAddress_province' => 'required',
+        'officeAddress_zipCode' => 'required',
+        'office_mobile' => 'required',
+        'contactPerson_name' => 'required',
+        'contactPerson_mobile' => 'required',
+        'accreditation_no' => 'required',
+        // 'accreditation_date' => 'required',
+        // 'accreditation_expiry' => 'required',
+        'addressLine1' => 'required',
+        'addressLine2' => 'required',
+        // 'province' => 'required',
+        'zipCode' => 'required',
+        'farmType' => 'required',
+        'mobile' => 'required',
+      ]); */ 
+
       $verCode = str_random('10');
       $password = str_random(10);
 
@@ -145,21 +166,20 @@ class BreederController extends Controller
       // creating the farm connected to the breeder
       $farm = new FarmAddress;
       $farm->name = $request->input('farm_name');
-      $farm->addressLine1 = $request->input('farmAddress[1][addressLine1]');
-      $farm->addressLine2 = $request->input('farmAddress[1][addressLine2]');
-      $farm->province = $request->input('farmAddress[1][province]');
-      $farm->zipCode = $request->input('farmAddress[1][zipCode]');
-      $farm->farmType = $request->input('farmAddress[1][farmType]');
-      $farm->landline = $request->input('farmAddress[1][landline]');
-      $farm->mobile = $request->input('farmAddress[1][mobile]');
-
+      $farm->addressLine1 = $request->input('farmAddress_1_addressLine1');
+      $farm->addressLine2 = $request->input('farmAddress_1_addressLine2');
+      $farm->province = $request->input('farmAddress_1_province');
+      $farm->zipCode = $request->input('farmAddress_1_zipCode');
+      $farm->farmType = $request->input('farmAddress_1_farmType');
+      $farm->landline = $request->input('farmAddress_1_landline');
+      $farm->mobile = $request->input('farmAddress_1_mobile');
       $farm->accreditation_no = $request->input('farm_accreditation_number');
       $farm->accreditation_date = date_format(
-        date_create($request->input('acc-date-evaluated')),
+        date_create($request->input('acc_date_evaluated')),
         'Y-m-d'
       );
       $farm->accreditation_expiry = date_format(
-        date_create($request->input('acc-expiry-date')),
+        date_create($request->input('acc_expiry_date')),
         'Y-m-d'
       );
       $farm->accreditation_status = 'active';

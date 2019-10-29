@@ -111,6 +111,8 @@ elixir(function (mix) {
       'validation/registration_validation.js'
     ], 'public/js/register.js')
     .scripts([
+      'validation/formValidationMethods.js',
+      'validation/breeder/breederRegister_validation.js',
       'breeder/register.js',
     ], 'public/js/breeder/breederRegister.js')
     .scripts([
