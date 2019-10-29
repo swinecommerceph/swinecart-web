@@ -56,7 +56,7 @@ class InventoryController extends Controller
         $order['product']['name'] = $reservation->product->name;
         $order['product']['type'] = $reservation->product->type;
         $order['product']['breed'] = $this->transformBreedSyntax($reservation->product->breed->name);
-        $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $reservation->product->primaryImage->name]);
+        $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($reservation->$product->primary_img_id)->name]);
     
         $order['reservation'] = null;
         $order['reservation']['id'] = $reservation->id;
@@ -123,7 +123,7 @@ class InventoryController extends Controller
                     $order['product']['name'] = $item->name;
                     $order['product']['type'] = $item->type;
                     $order['product']['breed'] = $this->transformBreedSyntax($item->breed->name);
-                    $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $item->primaryImage->name]);
+                    $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($item->primary_img_id)->name]);
 
                     return $order;
                 });
