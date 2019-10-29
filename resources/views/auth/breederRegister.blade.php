@@ -216,10 +216,10 @@
               <input 
                 style="cursor: pointer;"
                 type="date"
-                id="acc-date-evaluated"
-                name="acc-date-evaluated"
+                id="acc_date_evaluated"
+                name="acc_date_evaluated"
                 class="datepicker"/>
-              <label for="acc-date-evaluated">Date evaluated*</label>
+              <label for="acc_date_evaluated">Date evaluated*</label>
             </div>
 
             <!-- End -->
@@ -227,10 +227,10 @@
               <input 
                 style="cursor: pointer;" 
                 type="date"
-                id="acc-expiry-date"
-                name="acc-expiry-date"
+                id="acc_expiry_date"
+                name="acc_expiry_date"
                 class="datepicker" />
-              <label for="acc-expiry-date">Expiry date*</label>
+              <label for="acc_expiry_date">Expiry date*</label>
             </div>
           </div>
 
@@ -244,12 +244,12 @@
           <!-- Farm Address 1 -->
           <div class="row">
             <div class="input-field col s10 push-s1">
-              {!! Form::text('farmAddress[1][addressLine1]', null, [
-                'id' => 'farmAddress[1][addressLine1]',
+              {!! Form::text('farmAddress_1_addressLine1', null, [
+                'id' => 'farmAddress_1_addressLine1',
                 'class' => 'farm-1-addressLine1'
               ])!!}
               {!! Form::label(
-                'farmAddress[1][addressLine1]',
+                'farmAddress_1_addressLine1',
                 'Address Line 1* : Street, Road, Subdivision'
               ) !!}
             </div>
@@ -258,12 +258,12 @@
           <!-- Farm Address 2 -->
           <div class="row">
             <div class="input-field col s10 push-s1">
-              {!! Form::text('farmAddress[1][addressLine2]', null, [
-                'id' => 'farmAddress[1][addressLine2]',
+              {!! Form::text('farmAddress_1_addressLine2', null, [
+                'id' => 'farmAddress_1_addressLine2',
                 'class' => 'farm-1-addressLine2'
               ])!!}
               {!! Form::label(
-                'farmAddress[1][addressLine2]',
+                'farmAddress_1_addressLine2',
                 'Address Line 2* : Barangay, Town, City'
               ) !!}
             </div>
@@ -272,47 +272,47 @@
           <div class="row">
             <!-- Farm Address: Province -->
             <div class="input-field col s5 push-s1">
-              {!! Form::select('farmAddress[1][province]', $provinces, null); !!}
+              {!! Form::select('farmAddress_1_province', $provinces, null); !!}
               <label>Province*</label>
             </div>
 
             <!-- Farm Address: Zip Code -->
             <div class="input-field col s5 push-s1">
-              {!! Form::text('farmAddress[1][zipCode]', null, [
-                'id' => 'farmAddress[1][zipCode]',
+              {!! Form::text('farmAddress_1_zipCode', null, [
+                'id' => 'farmAddress_1_zipCode',
                 'class' => 'farm-1-zipCode'
               ])!!}
-              {!! Form::label('farmAddress[1][zipCode]', 'Postal/ZIP Code*') !!}
+              {!! Form::label('farmAddress_1_zipCode', 'Postal/ZIP Code*') !!}
             </div>
           </div>
 
           <!-- Farm Type -->
           <div class="row">
             <div class="input-field col s5 push-s1">
-              {!! Form::text('farmAddress[1][farmType]', null, [
-                'id' => 'farmAddress[1][farmType]'
+              {!! Form::text('farmAddress_1_farmType', null, [
+                'id' => 'farmAddress_1_farmType'
               ])!!}
-              {!! Form::label('farmAddress[1][farmType]', 'Farm Type*') !!}
+              {!! Form::label('farmAddress_1_farmType', 'Farm Type*') !!}
             </div>
           </div>
 
           <div class="row">
             <!-- Farm Landline -->
             <div class="input-field col s5 push-s1">
-              {!! Form::text('farmAddress[1][landline]', null, [
-                'id' => 'farmAddress[1][landline]',
+              {!! Form::text('farmAddress_1_landline', null, [
+                'id' => 'farmAddress_1_landline',
                 'class' => 'farm-1-landline'
               ])!!}
-              {!! Form::label('farmAddress[1][landline]', 'Farm Landline') !!}
+              {!! Form::label('farmAddress_1_landline', 'Farm Landline') !!}
             </div>
 
             <!-- Farm Mobile -->
             <div class="input-field col s5 push-s1">
-              {!! Form::text('farmAddress[1][mobile]', null, [
-                'id' => 'farmAddress[1][mobile]',
+              {!! Form::text('farmAddress_1_mobile', null, [
+                'id' => 'farmAddress_1_mobile',
                 'class' => 'farm-1-mobile'
               ])!!}
-              {!! Form::label('farmAddress[1][mobile]', 'Farm Mobile*') !!}
+              {!! Form::label('farmAddress_1_mobile', 'Farm Mobile*') !!}
             </div>
           </div>
 
@@ -340,7 +340,9 @@
             </div>
 
             <button 
+              id="submit-button"
               type="submit"
+              disabled
               class="primary btn waves-effect waves-light col s3 push-s9"> 
               Submit
               <i class="material-icons right">send</i>
