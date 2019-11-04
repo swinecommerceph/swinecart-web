@@ -183,12 +183,6 @@
                               </p>
                             </div>
                         </li>
-                        <li id="filter-breeder-rating">
-                          <div class="collapsible-header">
-                            <i class="material-icons teal-text">grade</i>
-                            <a href="#" class="grey-text text-darken-4">Breeder Ratings</a>
-                          </div>
-                        </li>
                         <li id="filter-location">
                             <div 
                               class="collapsible-header">
