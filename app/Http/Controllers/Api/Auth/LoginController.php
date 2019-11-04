@@ -8,6 +8,7 @@ use Response;
 use \Illuminate\Http\Response as Res;
 use Validator;
 use JWTAuth;
+use Auth;
 use App\Models\User;
 use App\Models\UserLog;
 use Carbon\Carbon;
@@ -50,10 +51,14 @@ class LoginController extends Controller
 
     public function me(Request $request) 
     {
-        $user = JWTAuth::parseToken()->authenticate();
+        $user = Auth::user();
+
+        $topic = crypt($user->email, md5($user->email));
+
         return response()->json([
             'data' => [
-                'user' => $user
+                'user' => $user,
+                'topic' => $topic,
              ]
         ], 200);
     }
