@@ -71,6 +71,7 @@
               <option value="backfat_thickness-asc" @if(!empty($filters['backfat_thickness-asc'])) {{ $filters['backfat_thickness-asc'] }} @endif >Backfat Thickness</option>
               <option value="fcr-asc" @if(!empty($filters['fcr-asc'])) {{ $filters['fcr-asc'] }} @endif >Feed Conversion Ratio</option>
               <option value="adg-desc" @if(!empty($filters['adg-desc'])) {{ $filters['adg-desc'] }} @endif >Average Daily Gain</option>
+              <option value="breederrating-asc" @if(!empty($filters['breederrating-asc'])) {{ $filters['breederrating-asc'] }} @endif >Breeder Rating: High to Low</option>
           </select>
           <label> Sort By</label>
         </div>
