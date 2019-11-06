@@ -107,8 +107,7 @@ class InventoryController extends Controller
                 ->products()
                 ->with('breed', 'primaryImage')
                 ->withCount(['swineCartItem' => function ($query) {
-                    return $query->where('if_requested', 1)
-                                ->where('reservation_id', 0);
+                    return $query->where('if_requested', 1)->where('reservation_id', 0);
                 }])
                 ->where('status','requested')
                 ->where('quantity','<>', 0)
@@ -223,7 +222,6 @@ class InventoryController extends Controller
                     }
                     else {
                         return response()->json([
-                            'message' => 'Update Order Status successful!',
                             'data' => [
                                 'product' => $this->getReservation($result[2], $status)
                             ]
@@ -233,7 +231,6 @@ class InventoryController extends Controller
                 else if($status == 'on_delivery') {
                     if($result[0] == 'OK') {
                         return response()->json([
-                            'message' => 'Update Order Status successful!',
                             'data' => [
                                 'product' => $this->getReservation($request->reservation_id, $status)
                             ]
@@ -243,7 +240,6 @@ class InventoryController extends Controller
                 else if($status == 'sold') {
                     if($result[0] == 'OK') {
                         return response()->json([
-                            'message' => 'Update Order Status successful!',
                             'data' => [
                                 'product' => $this->getReservation($request->reservation_id, $status)
                             ]
@@ -253,7 +249,7 @@ class InventoryController extends Controller
             }
 
         }
-        
+
         else return response()->json([
             'error' => 'Product does not exist!'
         ], 404);
@@ -299,21 +295,18 @@ class InventoryController extends Controller
 
     public function getCustomer(Request $request, $customer_id)
     {
-        $customer = Customer::find($customer_id);
-        $user = $customer->users()->first();
-
-        $c = [];
-
-        // $c['id'] = $customer->id;
-        $c['name'] = $user->name;
-        $c['addressLine1'] = $customer->address_addressLine1;
-        $c['addressLine2'] = $customer->address_addressLine2;
-        $c['province'] = $customer->address_province;
-        $c['mobile'] = $customer->mobile;
-
+        $customer = Customer::find($customer_id)->with('user')->first();
+        $user = $customer->user->first();
+    
         return response()->json([
             'data' => [
-                'customer' => $c
+                'customer' => [
+                    'name' => $user->name,
+                    'addressLine1' => $customer->address_addressLine1,
+                    'addressLine2' => $customer->address_addressLine2,
+                    'province' => $customer->address_province,
+                    'mobile' => $customer->mobile,
+                ]
             ]
         ], 200);
     }

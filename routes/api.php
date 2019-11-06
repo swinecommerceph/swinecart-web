@@ -64,9 +64,9 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'dashboard'], function() {
             Route::get('/stats', 'DashboardController@getDashBoardStats');
-            Route::get('/server-date', 'DashboardController@getServerDate');
             Route::get('/ratings', 'DashboardController@getRatings');
             Route::get('/reviews', 'DashboardController@getReviews');
+            Route::get('/reviews/count', 'DashboardController@getReviewCount');
         });
 
         Route::group(['prefix' => 'inventory'], function() {

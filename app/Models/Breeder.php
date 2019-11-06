@@ -95,7 +95,7 @@ class Breeder extends Model
      */
     public function reservations()
     {
-        return $this->hasManyThrough(ProductReservation::class,Product::class);
+        return $this->hasManyThrough(ProductReservation::class, Product::class);
     }
 
     /**

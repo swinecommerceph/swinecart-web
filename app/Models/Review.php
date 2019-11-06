@@ -2,6 +2,8 @@
 
 namespace App\Models;
 
+use App\Models\Customer;
+
 use Illuminate\Database\Eloquent\Model;
 
 class Review extends Model
@@ -19,5 +21,10 @@ class Review extends Model
     public function breeder()
     {
         return $this->belongsTo(Breeder::class);
+    }
+
+    public function customer()
+    {
+        return $this->belongsTo(Customer::class);
     }
 }

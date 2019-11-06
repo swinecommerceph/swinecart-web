@@ -32,6 +32,7 @@ use Storage;
 use Config;
 
 class ProductController extends Controller {
+
     use CustomHelpers {
         transformBreedSyntax as private;
         transformDateSyntax as private;

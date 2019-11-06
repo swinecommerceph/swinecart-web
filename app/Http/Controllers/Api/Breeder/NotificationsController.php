@@ -54,9 +54,7 @@ class NotificationsController extends Controller
             });
 
         return response()->json([
-            'message' => 'Get Notifications successful!',
             'data' => [
-                'count' => $notifications->count(),
                 'notifications' => $notifications
             ]
         ], 200);
@@ -77,7 +75,6 @@ class NotificationsController extends Controller
                 $notification->markAsRead();
 
                 return response()->json([
-                    'message' => 'See Notification successful!',
                     'data' => [
                         'read_at' => $notification->read_at->toDateTimeString()
                     ]

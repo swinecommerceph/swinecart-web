@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\FarmAddress;
+use App\Models\Review;
 use App\Models\SwineCart;
 use App\Models\TransactionLog;
 use Illuminate\Database\Eloquent\Model;
@@ -40,6 +41,11 @@ class Customer extends Model
         return $this->morphMany(User::class, 'userable');
     }
 
+    public function user()
+    {
+        return $this->morphMany(User::class, 'userable')->limit(1);
+    }
+
     /**
      * Get all of the Customer's farm address/es
      */
@@ -62,5 +68,10 @@ class Customer extends Model
     public function transactionLogs()
     {
         return $this->hasMany(TransactionLog::class);
+    }
+
+    public function reviews()
+    {
+        return $this->hasMany(Review::class);
     }
 }
