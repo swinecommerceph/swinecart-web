@@ -20,6 +20,7 @@ use App\Models\Breed;
 use App\Models\SwineCartItem;
 use App\Repositories\ProductRepository;
 use App\Repositories\CustomHelpers;
+use App\Repositories\DashboardRepository;
 
 use Auth;
 use ImageManipulator;
@@ -46,12 +47,13 @@ class ProductController extends Controller
     const PRODUCT_MIMG_PATH = '/images/product/resize/medium/';
     const PRODUCT_LIMG_PATH = '/images/product/resize/large/';
 
+    protected $dashboard;
     protected $user;
 
 	/**
      * Create new BreederController instance
      */
-    public function __construct()
+    public function __construct(DashboardRepository $dashboard)
     {
         $this->middleware('role:breeder',
         ['only' => ['showProducts',
@@ -81,9 +83,9 @@ class ProductController extends Controller
         $this->middleware('updateProfile:customer',['only' => ['customerViewProductDetail','viewBreederProfile']]);
         $this->middleware(function($request, $next){
             $this->user = Auth::user();
-
             return $next($request);
         });
+        $this->dashboard = $dashboard;
     }
 
     /**
@@ -591,7 +593,6 @@ class ProductController extends Controller
         // return breeders with user name and the breeder_id table
         $breeders = $this->getBreeders();
         
-        
         $separatedBreeders = explode(' ', $request->breeder);
         
         // only get the requested breeders in all the breeders based on the breeder_id
@@ -607,12 +608,30 @@ class ProductController extends Controller
         $parsedBreedIds = ($request->breed) ? $this->getBreedIds($request->breed) : '';
         
         $parsedSort = ($request->sort && $request->sort != 'none') ? explode('-',$request->sort) : ['id', 'desc'];
-
+      
         if($parsedTypes) $products = $products->whereIn('type', $parsedTypes);
         if($parsedBreedIds) $products = $products->whereIn('breed_id', $parsedBreedIds);
         if($parsedBreederIds) $products = $products->whereIn('breeder_id', $parsedBreederIds);
 
-        $products = ($request->q) ? $products->get() : $products->orderBy($parsedSort[0], $parsedSort[1])->get();
+        $products;
+        if ($request->q) {
+          $products = $products->get();
+        } else if ($request->sort && $request->sort === 'breederrating-asc') {
+
+          // get the products and its breeder, then the breeder rating overall
+          $products = Product::with('breeder')->get()->map(function($product) {  
+            $breederOfProduct = Breeder::where('id', $product->breeder_id)->first();
+            $breederSummaryReviewsAndRatings = $this->dashboard->getSummaryReviewsAndRatings($breederOfProduct);  
+            $product->breeder_rating = $breederSummaryReviewsAndRatings['overall'];
+            return $product;
+          });
+
+          $products = $products->sortByDesc('breeder_rating');
+          $products->values()->all(); // laravel thingy
+
+        } else {
+          $products = $products->orderBy($parsedSort[0], $parsedSort[1])->get();
+        }
 
         foreach ($products as $key => $product) {
             // Check if the farm where the product is is still accredited

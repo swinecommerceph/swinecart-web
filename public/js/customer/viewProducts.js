@@ -58,9 +58,11 @@ var filter = {
 
     // Append sort parameters to filter_parameters
     if($('select option:selected').val() == ""){
+      console.log('sort by with filters');
       filter_parameters += (filter_parameters.length > 1) ? '&sort=none' : 'sort=none';
     }
     else {
+      console.log('sort by without filters');
       filter_parameters += (filter_parameters.length > 1) ? '&sort='+$('select option:selected').val() : 'sort='+$('select option:selected').val();
     }
 
@@ -92,11 +94,8 @@ $(document).ready(function(){
     if($('input:checked').length > 0) chips += 'Filtered by: ';
     
     $('input:checked').each(function(){
-        console.log('something checked');
-        console.log($(this));
 
         if ($(this).attr('data-type')) {
-          console.log('checked: type')
           chips += `
               <div class="chip" style="text-transform:capitalize;">
                 Type: ${ $(this).attr('data-type') }
@@ -105,7 +104,6 @@ $(document).ready(function(){
             `
         }
         else if ($(this).attr('data-breed')) {
-          console.log('checked: breed')
           chips += `
               <div class="chip" style="text-transform:capitalize;">
                 Type: ${ $(this).attr('data-breed') }
@@ -114,7 +112,6 @@ $(document).ready(function(){
             `
         }
         else if ($(this).attr('data-breeder')) {
-          console.log('checked: breeder')
           chips += `
               <div class="chip" style="text-transform:capitalize;">
                 Type: ${ $(this).attr('data-breeder') }
@@ -203,7 +200,6 @@ $(document).ready(function(){
 
     // Redirect to designated link upon checkbox and select value change
     $("#filter-container input[type=checkbox], select").change(function(){
-        console.log('something checked');
         filter.apply();
     });
 
