@@ -36,13 +36,13 @@
           
           <div class="row">
             <!-- Name -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('breederName', null, ['autofocus' => 'autofocus', 'id' => 'breederName']) !!}
               {!! Form::label('breederName', 'Name*')!!}
             </div>
 
             <!-- Email -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('email', null, ['id' => 'email']) !!}
               {!! Form::label('email', 'Email*')!!}
             </div>
@@ -51,7 +51,7 @@
 
           <!-- Office Address 1 -->
           <div class="row">
-            <div class="input-field col s10 push-s1">
+            <div class="input-field col s12 m10 push-m1">
               {!! 
                 Form::text('officeAddress_addressLine1', null, [
                   'id' => 'officeAddress_addressLine1'
@@ -68,7 +68,7 @@
 
           <!-- Office Address 2 -->
           <div class="row">
-            <div class="input-field col s10 push-s1">
+            <div class="input-field col s12 m10 push-m1">
               {!! Form::text('officeAddress_addressLine2', null, [
                 'id' => 'officeAddress_addressLine2'
               ])!!}
@@ -84,7 +84,7 @@
           <div class="row">
 
             <!-- Office Province -->
-            <div id="select-province" class="input-field col s5 push-s1">
+            <div id="select-province" class="input-field col s12 m5 push-m1">
               {!! Form::select('officeAddress_province', $provinces, null, [
                 'id' => 'office_provinces'
               ]) !!}
@@ -92,7 +92,7 @@
             </div>
             
             <!-- Office Postal/Zip Code -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('officeAddress_zipCode', null, ['id' => 'officeAddress_zipCode'])!!}
               {!! Form::label('officeAddress_zipCode', 'Postal/ZIP Code*') !!}
             </div>
@@ -102,13 +102,13 @@
           <div class="row">
 
             <!-- Office Landline Number -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('office_landline', null, ['id' => 'office_landline'])!!}
               {!! Form::label('office_landline', 'Landline') !!}
             </div>
 
             <!-- Office Mobile Number -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('office_mobile', null, ['id' => 'office_mobile'])!!}
               {!! Form::label('office_mobile', 'Mobile*') !!}
             </div>
@@ -117,7 +117,7 @@
 
           <!-- Contact Person Header -->
           <div class="row">
-            <div class="col s10 offset-s1">
+            <div class="col s12 m10 offset-m1">
               <h5 class="center-align">Contact Person Details</h5>
             </div>
           </div>
@@ -125,13 +125,13 @@
           <div class="row">
 
             <!-- Contact Person Name -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('contactPerson_name', null, ['id' => 'contactPerson_name'])!!}
               {!! Form::label('contactPerson_name', 'Name*') !!}
             </div>
 
             <!-- Contact Person's Mobile Number -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('contactPerson_mobile', null, ['id' => 'contactPerson_mobile'])!!}
               {!! Form::label('contactPerson_mobile', 'Mobile*') !!}
             </div>
@@ -140,7 +140,7 @@
 
           <!-- Other Information Header -->
           <div class="row">
-            <div class="col s10 offset-s1">
+            <div class="col s12 m10 offset-m1">
               <h5 class="center-align">Other information</h5>
             </div>
           </div>
@@ -148,13 +148,13 @@
           <div class="row">
 
             <!-- Office Website -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('website', null, ['id' => 'website'])!!}
               {!! Form::label('website', 'Website') !!}
             </div>
 
             <!-- What the Office Produce -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('produce', null, ['id' => 'produce'])!!}
               {!! Form::label('produce', 'Produce') !!}
             </div>
@@ -184,7 +184,7 @@
 
           <!-- Farm Name -->
           <div class="row">
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('farm_name', null, [
                 'id' => 'farm_name'
               ])!!}
@@ -194,14 +194,14 @@
 
           <!-- Accreditation Information Header -->
           <div class="row">
-            <div class="col s10 offset-s1">
+            <div class="col s12 m10 offset-m1">
               <h5 class="center-align">Accreditation Information</h5>
             </div>
           </div>
 
           <!-- Accreditation Number -->
           <div class="row">
-            <div class="input-field col s10 push-s1">
+            <div class="input-field col s12 m10 push-m1">
               {!! Form::text('farm_accreditation_number', null, [
                 'id' => 'farm_accreditation_number'
               ])!!}
@@ -212,7 +212,7 @@
           <!-- Accreditation Dates -->
           <div class="row">
             <!-- Date evaludated -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               <input 
                 style="cursor: pointer;"
                 type="date"
@@ -223,7 +223,7 @@
             </div>
 
             <!-- End -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               <input 
                 style="cursor: pointer;" 
                 type="date"
@@ -236,14 +236,14 @@
 
           <!-- Farm Information Header -->
           <div class="row">
-            <div class="col s10 offset-s1">
+            <div class="col s12 m10 offset-m1">
               <h5 class="center-align">Farm Information</h5>
             </div>
           </div>
 
           <!-- Farm Address 1 -->
           <div class="row">
-            <div class="input-field col s10 push-s1">
+            <div class="input-field col s12 m10 push-m1">
               {!! Form::text('farmAddress_1_addressLine1', null, [
                 'id' => 'farmAddress_1_addressLine1',
                 'class' => 'farm-1-addressLine1'
@@ -257,7 +257,7 @@
 
           <!-- Farm Address 2 -->
           <div class="row">
-            <div class="input-field col s10 push-s1">
+            <div class="input-field col s12 m10 push-m1">
               {!! Form::text('farmAddress_1_addressLine2', null, [
                 'id' => 'farmAddress_1_addressLine2',
                 'class' => 'farm-1-addressLine2'
@@ -271,13 +271,13 @@
 
           <div class="row">
             <!-- Farm Address: Province -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::select('farmAddress_1_province', $provinces, null); !!}
               <label>Province*</label>
             </div>
 
             <!-- Farm Address: Zip Code -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('farmAddress_1_zipCode', null, [
                 'id' => 'farmAddress_1_zipCode',
                 'class' => 'farm-1-zipCode'
@@ -288,7 +288,7 @@
 
           <!-- Farm Type -->
           <div class="row">
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('farmAddress_1_farmType', null, [
                 'id' => 'farmAddress_1_farmType'
               ])!!}
@@ -298,7 +298,7 @@
 
           <div class="row">
             <!-- Farm Landline -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('farmAddress_1_landline', null, [
                 'id' => 'farmAddress_1_landline',
                 'class' => 'farm-1-landline'
@@ -307,7 +307,7 @@
             </div>
 
             <!-- Farm Mobile -->
-            <div class="input-field col s5 push-s1">
+            <div class="input-field col s12 m5 push-m1">
               {!! Form::text('farmAddress_1_mobile', null, [
                 'id' => 'farmAddress_1_mobile',
                 'class' => 'farm-1-mobile'
