@@ -127,7 +127,7 @@ class BreederController extends Controller
         'mobile' => 'required',
       ]); */ 
 
-      $verCode = str_random('10');
+      $verCode = str_random(10);
       $password = str_random(10);
 
       // create a user instance
@@ -135,8 +135,8 @@ class BreederController extends Controller
       $user->name = $request->input('breederName');
       $user->email = $request->input('email');
       $user->verification_code = $verCode;
-      $user->password = 'secret12';
-      $user->remember_token = str_random(10);
+      $user->password = str_random(10);
+      $user->remember_token = $password;
       $user->is_admin_approved = 0;
 
       $user->save();
