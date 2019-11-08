@@ -41,13 +41,12 @@
     </div>
 
     <div class="row">
-      <div class="input-field col s3">
+      <div class="input-field col s5">
           <input 
             style="border: none !important; border-radius: 0 !important; border-bottom: 1px solid #9e9e9e !important;"
             id="email_subject"
             placeholder="Example: SwineCart Announcement"
             type="text"
-            length="20"
             name="email_subject">
           <label for="email_subject">Email Subject</label>
       </div>
