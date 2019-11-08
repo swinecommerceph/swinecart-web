@@ -49,7 +49,7 @@ class SwineCartAnnouncement extends Mailable implements ShouldQueue
                         'outroLines' => [],
                         'announcement'=>$this->announcement])
                         ->subject($this->emailSubject);
-            foreach ($attachment as $file) {
+            foreach ($this->attachment as $file) {
                 $email->attach(public_path().$file->path);
             }
             return $email;
