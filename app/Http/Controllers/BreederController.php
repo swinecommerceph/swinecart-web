@@ -128,15 +128,15 @@ class BreederController extends Controller
       ]); */ 
 
       $verCode = str_random(10);
-      $password = str_random(10);
+      // $password = str_random(10);
 
       // create a user instance
       $user = new User;
       $user->name = $request->input('breederName');
       $user->email = $request->input('email');
       $user->verification_code = $verCode;
-      $user->password = str_random(10);
-      $user->remember_token = $password;
+      // $user->password = str_random(10);
+      // $user->remember_token = $password;
       $user->is_admin_approved = 0;
 
       $user->save();

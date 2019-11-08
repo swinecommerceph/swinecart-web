@@ -433,7 +433,17 @@ class AdminController extends Controller
     public function updateSelfRegisteredBreeder(Request $request, $id) {
       
       $selfRegisteredBreeder = User::find($id);
+
+      $password = str_random(10);
+
+      // data to be passed in the email
+      $data = [
+          'email' => $selfRegisteredBreeder->email,
+          'password' => $password
+      ];
+      
       $selfRegisteredBreeder->update_profile = 0;
+      $selfRegisteredBreeder->password = bcrypt($password);
       $selfRegisteredBreeder->is_admin_approved = 1;
       $selfRegisteredBreeder->email_verified = 1;
     
@@ -463,11 +473,11 @@ class AdminController extends Controller
       Mail::to($selfRegisteredBreeder->email)
             ->queue(new SwineCartBreederCredentials(
                 $selfRegisteredBreeder->email,
-                $selfRegisteredBreeder->password,
+                $password,
                 0
             ));
 
-      $selfRegisteredBreeder->password = bcrypt($selfRegisteredBreeder->password);
+      
       $selfRegisteredBreeder->save();
 
       return Redirect::back()->withMessage('Breeder Approved!');
