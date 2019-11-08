@@ -2486,66 +2486,69 @@ class AdminController extends Controller
      *
      */
     public function sendBroadcastMessage(Request $request){
-        $path = [];
-        if ($request->hasFile('attachment')) {
-          $files = Input::file('attachment');
-          foreach ($files as $file) {
-            $filename = $file->getClientOriginalName().'-'.date('d-m-y-H-i-s',time());
-            $filename = str_replace(' ', '_', $filename);
-            $upload_success = $file->move(public_path('/announcements'), $filename);
-            $pathfile = '/announcements'.'/'.$filename;
-            $data = new Attachments;
-            $data->name = $filename;
-            $data->path = $pathfile;
-            $data->save();
-            $path[] = $data;
-          }
-        } else {
-          $path = NULL;
-        }
+      
+      $path = [];
+      $emailSubject = ($request->email_subject) ? $request->email_subject : 'SwineCart Announcement';
 
-        if ($request->sendto == 0) {
-          $users = User::where('userable_type', 'App\Models\Breeder')
-            ->orWhere('userable_type', 'App\Models\Customer')
-            ->whereNull('deleted_at')
-            ->get();
-          
-            foreach ($users as $user) {
-              Mail::to($user->email)
-                ->queue(new SwineCartAnnouncement($request->announcement, $path));
-          }
+      if ($request->hasFile('attachment')) {
+        $files = Input::file('attachment');
+        foreach ($files as $file) {
+          $filename = $file->getClientOriginalName().'-'.date('d-m-y-H-i-s',time());
+          $filename = str_replace(' ', '_', $filename);
+          $upload_success = $file->move(public_path('/announcements'), $filename);
+          $pathfile = '/announcements'.'/'.$filename;
+          $data = new Attachments;
+          $data->name = $filename;
+          $data->path = $pathfile;
+          $data->save();
+          $path[] = $data;
         }
-        else if ($request->sendto == 1) {
-          $users = User::where('userable_type', 'App\Models\Breeder')
-            ->whereNull('deleted_at')
-            ->get();
-          
-            foreach ($users as $user) {
-              Mail::to($user->email)
-                ->queue(new SwineCartAnnouncement($request->announcement, $path));
-          }
-        }
-        else if ($request->sendto == 2) {
-          $users = User::where('userable_type', 'App\Models\Customer')
-            ->whereNull('deleted_at')
-            ->get();
-          
-            foreach ($users as $user) {
-              Mail::to($user->email)
-                ->queue(new SwineCartAnnouncement($request->announcement, $path));
-          }
-        }
+      } else {
+        $path = NULL;
+      }
 
-        else if ($request->sendto == 3) {
-          $users = $request->input('emails');
-          
+      if ($request->sendto == 0) {
+        $users = User::where('userable_type', 'App\Models\Breeder')
+          ->orWhere('userable_type', 'App\Models\Customer')
+          ->whereNull('deleted_at')
+          ->get();
+        
           foreach ($users as $user) {
-            Mail::to($user)
-              ->queue(new SwineCartAnnouncement($request->announcement, $path));
-          }
+            Mail::to($user->email)
+              ->queue(new SwineCartAnnouncement($request->announcement, $emailSubject, $path));
         }
+      }
+      else if ($request->sendto == 1) {
+        $users = User::where('userable_type', 'App\Models\Breeder')
+          ->whereNull('deleted_at')
+          ->get();
+        
+          foreach ($users as $user) {
+            Mail::to($user->email)
+              ->queue(new SwineCartAnnouncement($request->announcement, $emailSubject, $path));
+        }
+      }
+      else if ($request->sendto == 2) {
+        $users = User::where('userable_type', 'App\Models\Customer')
+          ->whereNull('deleted_at')
+          ->get();
+        
+          foreach ($users as $user) {
+            Mail::to($user->email)
+              ->queue(new SwineCartAnnouncement($request->announcement, $emailSubject, $path));
+        }
+      }
 
-        return Redirect::back()->with('message','Sending');
+      else if ($request->sendto == 3) {
+        $users = $request->input('emails');
+        
+        foreach ($users as $user) {
+          Mail::to($user)
+            ->queue(new SwineCartAnnouncement($request->announcement, $emailSubject, $path));
+        }
+      }
+
+      return Redirect::back()->with('message','Sending');
     }
 
 
