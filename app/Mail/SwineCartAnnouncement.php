@@ -11,15 +11,17 @@ class SwineCartAnnouncement extends Mailable implements ShouldQueue
 {
     use Queueable, SerializesModels;
     protected $announcement;
+    public $emailSubject;
     public $attachment;
     /**
      * Create a new message instance.
      *
      * @return void
      */
-    public function __construct($announcement, $attachment)
+    public function __construct($announcement, $emailSubject, $attachment)
     {
         $this->announcement = $announcement;
+        $this->emailSubject = $emailSubject;
         $this->attachment = $attachment;
     }
 
@@ -33,7 +35,7 @@ class SwineCartAnnouncement extends Mailable implements ShouldQueue
 
         if($this->attachment==NULL){
             return $this->view('emails.announcement')
-                        ->subject('SwineCart Announcement')
+                        ->subject($this->emailSubject)
                         ->with([
                             'level' => 'success',
                             'introLines' => [],
@@ -46,7 +48,7 @@ class SwineCartAnnouncement extends Mailable implements ShouldQueue
                         'introLines' => [],
                         'outroLines' => [],
                         'announcement'=>$this->announcement])
-                        ->subject('SwineCart Announcement');
+                        ->subject($this->emailSubject);
             foreach ($attachment as $file) {
                 $email->attach(public_path().$file->path);
             }
