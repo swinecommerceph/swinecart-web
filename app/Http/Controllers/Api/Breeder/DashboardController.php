@@ -92,9 +92,10 @@ class DashboardController extends Controller
     public function getReviews(Request $request)
     {
         $breeder = $this->user->userable;
+        $reviews = $breeder->reviews();
+        $review_count = $reviews->count();
 
-        $reviews = $breeder
-            ->reviews()
+        $reviews = $reviews
             ->with('customer.user')
             ->orderBy('created_at', 'desc')
             ->paginate($request->limit)
@@ -105,9 +106,9 @@ class DashboardController extends Controller
 
                 $review['id'] = $item->id;
                 $review['comment'] = $item->comment;
-                $review['customer_name'] = $customer->users()->first()->name;
-                $review['customer_province'] = $customer->address_province;
-                $review['created_at'] = $item->created_at->toDateTimeString();
+                $review['customerName'] = $customer->users()->first()->name;
+                $review['customerProvince'] = $customer->address_province;
+                $review['createdAt'] = $item->created_at->toDateTimeString();
                 $review['rating']['delivery'] = $item->rating_delivery;
                 $review['rating']['transaction'] = $item->rating_transaction;
                 $review['rating']['productQuality'] = $item->rating_productQuality;
@@ -117,6 +118,7 @@ class DashboardController extends Controller
 
         return response()->json([
             'data' => [
+                'totalCount' => $review_count,
                 'reviews' => $reviews
             ]
         ], 200);
