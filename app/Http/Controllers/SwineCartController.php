@@ -158,7 +158,7 @@ class SwineCartController extends Controller
                     'status' => $product->status,
                     'status_time' => '',
                     'customer_id' => 0,
-                    'customer_name' => '',
+                    'customer_name' => $this->user->name,
                     'date_needed' => '',
                     'special_request' => '',
                     'delivery_date' => ''
