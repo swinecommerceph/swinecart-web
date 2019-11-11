@@ -333,9 +333,9 @@
             <div class="terms-and-policy-container">
               <p class="terms-and-policy">
                 By clicking Submit, you agree to our
-                <a href="{{ route('breeder.getTermsOfAgreement') }}" target="_blank">Terms</a>
+                <a href="{{ route('termsOfAgreement') }}" target="_blank">Terms</a>
                 and
-                <a href="{{ route('breeder.privacyPolicy') }}" target="_blank">Data Policy</a>.
+                <a href="{{ route('breederPrivacyPolicy') }}" target="_blank">Data Policy</a>.
               </p>
             </div>
 
