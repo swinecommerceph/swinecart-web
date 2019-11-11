@@ -342,7 +342,6 @@
             <button 
               id="submit-button"
               type="submit"
-              disabled
               class="primary btn waves-effect waves-light col s3 push-s9"> 
               Submit
               <i class="material-icons right">send</i>
