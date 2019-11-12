@@ -73,8 +73,8 @@ $style = [
                     <tr>
                       <td style="background-color: #FFF;">
                         <img 
-                          style="margin: auto; display: block; width: 50%; height: 25%; background-color: transparent;"
-                          src="http://swinecart.pcaarrd.dost.gov.ph/images/header-email-announcement.jpg" alt="">
+                          style="margin: auto; display: block; width: auto; height: 25%; background-color: transparent;"
+                          src="http://swinecart.pcaarrd.dost.gov.ph/images/mast-head.jpg" alt="">
                       </td>
                     </tr>
                     
