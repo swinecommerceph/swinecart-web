@@ -71,13 +71,13 @@ $style = [
                 <table width="100%" cellpadding="0" cellspacing="0">
                     <!-- Logo -->
                     <tr>
-                        <td style="{{ $style['email-masthead'] }}">
-                            <a style="{{ $fontFamily }} {{ $style['email-masthead_name'] }}" href="{{ url('/') }}" target="_blank">
-                                {{ config('app.name') }}
-                            </a>
-                        </td>
+                      <td style="background-color: #FFF;">
+                        <img 
+                          style="margin: auto; display: block; width: 50%; height: 25%; background-color: transparent;"
+                          src="http://swinecart.pcaarrd.dost.gov.ph/images/header-email-announcement.jpg" alt="">
+                      </td>
                     </tr>
-
+                    
                     <!-- Email Body -->
                     <tr>
                         <td style="{{ $style['email-body'] }}" width="100%">
