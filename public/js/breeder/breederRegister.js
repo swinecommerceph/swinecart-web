@@ -202,9 +202,7 @@ let validateFunction = function() {
           placeSuccess(inputElement);
           return true;
         }
-
       }
-
     }
 
     /* onfocusout and keyup events on
@@ -212,20 +210,11 @@ let validateFunction = function() {
     farm-information
     input only */
 
-    let validated_counter = 0;
-    const VALIDATION_PROPER_COUNT = 14;
-
     $('body').on(
       'focusout keyup',
       '#personal-information input, #farm-information input',
       function () {
         validateInput(this);
-
-        /* if (validated_counter === VALIDATION_PROPER_COUNT) $('#submit-button').removeAttr('disabled');
-        else {
-          console.log('cannot submit yet. counter: ', validated_counter); 
-          $('#submit-button').attr('disabled', 'disabled');
-        } */
     });
 
     $("button[type='submit']").click(function (e) {
@@ -265,163 +254,8 @@ let validateFunction = function() {
         $(this).parents('form').submit();
       }
       else Materialize.toast('Please properly fill all required fields.', 2500, 'orange accent-2');
-
-
     });
-
-    /* $('#breederName').change(function () {
-      const result = validateInput(document.querySelector('#breederName'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#email').change(function () {
-      const result = validateInput(document.querySelector('#email'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#officeAddress_addressLine1').change(function () {
-      const result = validateInput(document.querySelector('#officeAddress_addressLine1'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#officeAddress_addressLine2').change(function () {
-      const result = validateInput(document.querySelector('#officeAddress_addressLine2'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-    
-    $('#officeAddress_zipCode').change(function () {
-      const result = validateInput(document.querySelector('#officeAddress_zipCode'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#contactPerson_name').change(function () {
-      const result = validateInput(document.querySelector('#contactPerson_name'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#contactPerson_mobile').change(function () {
-      const result = validateInput(document.querySelector('#contactPerson_mobile'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#farm_name').change(function () {
-      const result = validateInput(document.querySelector('#farm_name'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#farm_accreditation_number').change(function () {
-      const result = validateInput(document.querySelector('#farm_accreditation_number'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#farmAddress_1_addressLine1').change(function () {
-      const result = validateInput(document.querySelector('#farmAddress_1_addressLine1'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#farmAddress_1_addressLine2').change(function () {
-      const result = validateInput(document.querySelector('#farmAddress_1_addressLine2'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#farmAddress_1_zipCode').change(function () {
-      const result = validateInput(document.querySelector('#farmAddress_1_zipCode'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#farmAddress_1_farmType').change(function () {
-      const result = validateInput(document.querySelector('#farmAddress_1_farmType'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    });
-
-    $('#farmAddress_1_mobile').change(function () {
-      const result = validateInput(document.querySelector('#farmAddress_1_mobile'));
-      if (result) validated_counter += 1;
-      else if (validated_counter > 0) validated_counter -= 1;
-    }); */
-
-
-
-   /*  $('#personal-information input, #farm-information input').change(function(e) {
-      e.preventDefault();
-      const breeder_name = validateInput(document.querySelector('#breederName'));
-      const email = validateInput(document.querySelector('#email'));
-      const officeAddress_addressLine1 = validateInput(document.querySelector('#officeAddress_addressLine1'));
-      const officeAddress_addressLine2 = validateInput(document.querySelector('#officeAddress_addressLine2'));
-      const officeAddress_zipCode = validateInput(document.querySelector('#officeAddress_zipCode'));
-      const office_mobile = validateInput(document.querySelector('#office_mobile'));
-      const contactPerson_name = validateInput(document.querySelector('#contactPerson_name'));
-      const contactPerson_mobile = validateInput(document.querySelector('#contactPerson_mobile'));
-      const farm_name = validateInput(document.querySelector('#farm_name'));
-      const farm_accreditation_number = validateInput(document.querySelector('#farm_accreditation_number'));
-      // const acc_date_evaluated = validateInput(document.querySelector('#acc_date_evaluated'));
-      // const acc_expiry_date = validateInput(document.querySelector('#acc_expiry_date'));
-      const farmAddress_1_addressLine1 = validateInput(document.querySelector('#farmAddress_1_addressLine1'));
-      const farmAddress_1_addressLine2 = validateInput(document.querySelector('#farmAddress_1_addressLine2'));
-      const farmAddress_1_zipCode = validateInput(document.querySelector('#farmAddress_1_zipCode'));
-      const farmAddress_1_farmType = validateInput(document.querySelector('#farmAddress_1_farmType'));
-      const farmAddress_1_mobile = validateInput(document.querySelector('#farmAddress_1_mobile'));
-
-      // console.log(breeder_name);
-      // console.log(email);
-      // console.log(officeAddress_addressLine1);
-      // console.log(officeAddress_addressLine2);
-      // console.log(officeAddress_zipCode);
-      // console.log(office_mobile);
-      // console.log(contactPerson_name);
-      // console.log(contactPerson_mobile);
-      // console.log(farm_name);
-      // console.log(farm_accreditation_number);
-      // console.log(acc_date_evaluated);
-      // console.log(acc_expiry_date);
-      // console.log(farmAddress_1_addressLine1);
-      // console.log(farmAddress_1_addressLine2);
-      // console.log(farmAddress_1_zipCode);
-      // console.log(farmAddress_1_farmType);
-      // console.log(farmAddress_1_mobile);
-
-      if (
-        breeder_name                &&
-        email                       &&
-        officeAddress_addressLine1  &&
-        officeAddress_addressLine2  &&
-        officeAddress_zipCode       &&
-        office_mobile               &&
-        contactPerson_name          &&
-        contactPerson_mobile        &&
-        farm_name                   &&
-        farm_accreditation_number   &&
-        // acc_date_evaluated          &&
-        // acc_expiry_date             &&
-        farmAddress_1_addressLine1  &&
-        farmAddress_1_addressLine2  &&
-        farmAddress_1_zipCode       &&
-        farmAddress_1_farmType      &&
-        farmAddress_1_mobile
-      ) {
-        $('#submit-button').removeAttr('disabled');
-      }
-      else {
-        console.log('cannot submit yet');
-      }
-    }); */
-    
-
   }
-
 }
 
 $(document).ready(validateFunction());
