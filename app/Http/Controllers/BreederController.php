@@ -106,8 +106,10 @@ class BreederController extends Controller
      */
     public function registerBreeder(Request $request) {
 
-      /* $this->validate($request, [
-        'name' => 'required',
+      $this->validate($request, [
+        
+        // office tab
+        'breederName' => 'required',
         'email' => 'required',
         'officeAddress_addressLine1' => 'required',
         'officeAddress_addressLine2' => 'required',
@@ -116,16 +118,19 @@ class BreederController extends Controller
         'office_mobile' => 'required',
         'contactPerson_name' => 'required',
         'contactPerson_mobile' => 'required',
-        'accreditation_no' => 'required',
-        // 'accreditation_date' => 'required',
-        // 'accreditation_expiry' => 'required',
-        'addressLine1' => 'required',
-        'addressLine2' => 'required',
+
+        // farm tab
+        'farm_name' => 'required',
+        'farm_accreditation_number' => 'required',
+        'acc_date_evaluated' => 'required',
+        'acc_expiry_date' => 'required',
+        'farmAddress_1_addressLine1' => 'required',
+        'farmAddress_1_addressLine2' => 'required',
         // 'province' => 'required',
-        'zipCode' => 'required',
-        'farmType' => 'required',
-        'mobile' => 'required',
-      ]); */ 
+        'farmAddress_1_zipCode' => 'required',
+        'farmAddress_1_farmType' => 'required',
+        'farmAddress_1_mobile' => 'required',
+      ]); 
 
       $verCode = str_random(10);
       // $password = str_random(10);
