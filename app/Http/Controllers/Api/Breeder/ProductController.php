@@ -13,6 +13,7 @@ use App\Http\Requests\BreederFarmProfileRequest;
 use App\Http\Requests\ProductRequest;
 
 use App\Models\Image;
+use App\Models\Video;
 use App\Models\User;
 use App\Models\Breeder;
 use App\Models\Breed;
@@ -22,6 +23,8 @@ use App\Models\Product;
 
 use App\Repositories\ProductRepository;
 use App\Repositories\CustomHelpers;
+
+use App\Jobs\ResizeUploadedImage;
 
 use Auth;
 use Response;
@@ -81,7 +84,54 @@ class ProductController extends Controller {
      * ---------------------------------------
      */
 
-    
+    private function createMediaInfo($filename, $extension, $productId, $type, $breed)
+    {
+        $mediaInfo = [];
+        if(str_contains($breed,'+')){
+            $part = explode("+", $breed);
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
+        }
+        else {
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
+        }
+        
+        if($this->isImage($extension)){
+            $mediaInfo['directoryPath'] = self::PRODUCT_IMG_PATH;
+            $mediaInfo['type'] = new Image;
+        }
+
+        else if($this->isVideo($extension)){
+            $mediaInfo['directoryPath'] = self::PRODUCT_VID_PATH;
+            $mediaInfo['type'] = new Video;
+        }
+
+        return $mediaInfo;
+
+    }
+
+    /**
+     * Check if media is Image depending on extension
+     *
+     * @param  String   $extension
+     * @return Boolean
+     */
+    private function isImage($extension)
+    {
+        return ($extension == 'jpg' || $extension == 'jpeg' || $extension == 'png') ? true : false;
+    }
+
+    /**
+     * Check if media is Video depending on extension
+     *
+     * @param  String   $extension
+     * @return Boolean
+     */
+    private function isVideo($extension)
+    {
+        return ($extension == 'mp4' || $extension == 'mkv' || $extension == 'avi' || $extension == 'flv') ? true : false;
+    }
+
+
      /**
      * Find breed_id through breed name ($breed)
      * or create another breed if not found
@@ -562,13 +612,13 @@ class ProductController extends Controller {
         ], 200);
     }
 
-    public function setPrimaryPicture(Request $request) 
+    public function setPrimaryPicture(Request $request, $product_id) 
     {
         $breeder = $this->user->userable;
         $product = $this->getBreederProduct($breeder, $product_id);
 
         if($product) {
-            $product->primary_img_id = $request->img_id;
+            $product->primary_img_id = $request->imageId;
             $product->save();
 
             return response()->json([
@@ -581,35 +631,75 @@ class ProductController extends Controller {
         
     }
 
-    public function deleteMedium(Request $request)
+    public function addMedia(Request $request, $product_id)
     {
-        if($request->mediaType == 'image'){
-            $image = Image::find($request->mediaId);
-            $fullFilePath = self::PRODUCT_IMG_PATH.$image->name;
-            $sFullFilePath = self::PRODUCT_SIMG_PATH.$image->name;
-            $mFullFilePath = self::PRODUCT_MIMG_PATH.$image->name;
-            $lFullFilePath = self::PRODUCT_LIMG_PATH.$image->name;
 
-            // Check if file exists in the storage
-            if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
-            if(Storage::disk('public')->exists($sFullFilePath)) Storage::disk('public')->delete($sFullFilePath);
-            if(Storage::disk('public')->exists($mFullFilePath)) Storage::disk('public')->delete($mFullFilePath);
-            if(Storage::disk('public')->exists($lFullFilePath)) Storage::disk('public')->delete($lFullFilePath);
+        $file = $request->file('image');
 
-            $image->delete();
+        if($file->isValid()){
+            $fileExtension = $file->getClientOriginalExtension();
+            $fileName = $file->getClientOriginalName();
+
+            // Get media (Image/Video) info according to extension
+            //if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($file);
+            //else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($file);
+            if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileName, $fileExtension, $product_id, $request->type, $request->breed);
+            else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileName, $fileExtension, $product_id, $request->type, $request->breed);
+            else return response()->json('Invalid file extension', 500);
+
+            Storage::disk('public')->put($mediaInfo['directoryPath'].$mediaInfo['filename'], file_get_contents($file));
+
+            // Check if file is successfully moved to desired path
+            if($file){
+                $product = Product::find($product_id);
+
+                // Make Image/Video instance
+                $media = $mediaInfo['type'];
+                $media->name = $mediaInfo['filename'];
+
+                if($this->isImage($fileExtension)){
+                    $product->images()->save($media);
+
+                    // Resize images
+                    dispatch(new ResizeUploadedImage($media->name));
+                }
+                else if($this->isVideo($fileExtension)) $product->videos()->save($media);
+            }
+            else return response()->json([
+                'error' => 'Upload Failed' 
+            ], 500);
         }
-        else if($request->mediaType = 'video'){
-            $video = Video::find($request->mediaId);
-            $fullFilePath = self::PRODUCT_VID_PATH.$video->name;
-
-            // Check if file exists in the storage
-            if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
-
-            $video->delete();
-        }
+        else return response()->json([
+            'error' => 'Upload Failed' 
+        ], 500);
 
         return response()->json([
-            'message' => 'Delete Medium succesful!',
+            'data' => [
+                'file' => $media->id
+            ]
         ], 200);
+    }
+
+    public function deleteMedia(Request $request, $product_id)
+    {
+        $image = Image::find($request->mediaId);
+        $fullFilePath = self::PRODUCT_IMG_PATH.$image->name;
+        $sFullFilePath = self::PRODUCT_SIMG_PATH.$image->name;
+        $mFullFilePath = self::PRODUCT_MIMG_PATH.$image->name;
+        $lFullFilePath = self::PRODUCT_LIMG_PATH.$image->name;
+
+        // Check if file exists in the storage
+        if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+        if(Storage::disk('public')->exists($sFullFilePath)) Storage::disk('public')->delete($sFullFilePath);
+        if(Storage::disk('public')->exists($mFullFilePath)) Storage::disk('public')->delete($mFullFilePath);
+        if(Storage::disk('public')->exists($lFullFilePath)) Storage::disk('public')->delete($lFullFilePath);
+
+        $image->delete();
+
+        return response()->json([
+            'message' => 'Delete Medium successful!',
+        ], 200);
+
+        
     }
 }
