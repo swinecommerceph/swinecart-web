@@ -44,7 +44,7 @@
           </div>
 
           {{-- Type --}}
-          <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
+          <div id="edit-select-type-wrapper" style="margin-bottom: 2vh; width: 10vw;" class="input-field">
             <select id="edit-select-type" data-form="add">
               <option value="" disabled selected>Choose Type</option>
               <option value="boar">Boar</option>
@@ -206,7 +206,7 @@
           <div class="row">
             <div class="col s6" style="padding-left: 0px !important">
               {{-- Farm From --}}
-              <div style="margin-bottom: 4vh; width: 20vw;" class="input-field">
+              <div id="edit-select-farm-wrapper" style="margin-bottom: 4vh; width: 20vw;" class="input-field">
                 <select id="edit-select-farm">
                     <option value="" disabled selected>Choose Farm</option>
                     @foreach($farms as $farm)
@@ -219,7 +219,7 @@
           </div>
 
             {{-- House type --}}
-            <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
+            <div id="edit-select-housetype-wrapper" style="margin-bottom: 8vh; width: 12vw;" class="input-field">
               <select id="edit-select-housetype">
                 <option value="" disabled selected>Choose house type</option>
                 <option value="tunnelventilated">Tunnel ventilated</option>
