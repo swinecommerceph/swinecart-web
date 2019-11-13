@@ -1033,6 +1033,18 @@ $(document).ready(function() {
     format: "mmmm d, yyyy"
   });
 
+  // prevent the date picker from instatly closing upon clicking
+  // Materialize bug? 
+  $('.datepicker').on('mousedown', function (event) {
+    event.preventDefault();
+  });
+
+  // prevent the dropdown from instantly closing upon clicking
+  // Materialize bug?
+  $('#edit-select-type-wrapper, #edit-select-farm-wrapper, #edit-select-housetype-wrapper').on('click', function (event) {
+    event.stopPropagation();
+  });
+
   /**
    *  Used for filling the input fields of the product with the initial data from the database
    */

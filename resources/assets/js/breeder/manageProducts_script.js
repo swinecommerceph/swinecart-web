@@ -16,6 +16,20 @@ $(document).ready(function() {
     format: "mmmm d, yyyy"
   });
 
+  // prevent the date picker from instatly closing upon clicking
+  // Materialize bug? 
+  $('.datepicker').on('mousedown', function (event) {
+    event.preventDefault();
+  });
+
+  // prevent the dropdown from instantly closing upon clicking
+  // Materialize bug?
+  $('#select-type-wrapper, #select-farm-wrapper, #select-housetype-wrapper').on('click', function (event) {
+    event.stopPropagation();
+  });
+
+
+
   /* ----------- Manage Products page general functionalities ----------- */
   // Always showing FAB
   $("#action-button").show();
