@@ -44,7 +44,7 @@
             {{-- Type --}}
             <div class="row">
                 <div class="col s4.5" style="padding-left: 0px !important">
-                  <div style="margin-bottom: 2vh; width: 10vw;" class="input-field">
+                  <div id="select-type-wrapper" style="margin-bottom: 2vh; width: 10vw;" class="input-field">
                     <select id="select-type" data-form="add">
                       <option value="" disabled selected>Choose Type</option>
                       <option value="boar" >Boar</option>
@@ -217,7 +217,7 @@
             {{-- Farm From --}}
             <div class="row">
               <div class="col s6" style="padding-left: 0px !important">
-                <div style="margin-bottom: 4vh; width: 15vw;" class="input-field">
+                <div id="select-farm-wrapper" style="margin-bottom: 4vh; width: 15vw;" class="input-field">
                   <select id="select-farm">
                     <option value="" disabled selected>Choose farm</option>
                     
@@ -242,7 +242,7 @@
             </div>
 
             {{-- House type --}}
-            <div style="margin-bottom: 8vh; width: 12vw;" class="input-field">
+            <div id="select-housetype-wrapper" style="margin-bottom: 8vh; width: 12vw;" class="input-field">
               <select id="select-housetype">
                 <option value="" disabled selected>Choose house type</option>
                 <option value="tunnelventilated">Tunnel ventilated</option>
