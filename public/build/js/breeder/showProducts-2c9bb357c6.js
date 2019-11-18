@@ -970,7 +970,11 @@ $(document).ready(function() {
     event.stopPropagation();
   });
 
-
+  // prevent the dropdown from instantly closing upon clicking
+  // Materialize bug?
+  $('#sort-select, #status-select, #type-select').on('click', function (event) {
+    event.stopPropagation();
+  });
 
   /* ----------- Manage Products page general functionalities ----------- */
   // Always showing FAB
