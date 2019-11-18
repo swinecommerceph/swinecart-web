@@ -8,7 +8,7 @@ function submitEditedProduct(parent_form, update_button) {
     "max_price": parent_form.find('input[name=edit-max_price]').val(),
 
     "farm_from_id": parent_form.find('#edit-select-farm').val(),
-    "birthdate": parent_form.find("input[name='edit-birthdate']").val(),
+    "birthdate": parent_form.find("input[name='edit_birthdate']").val(),
     "birthweight": parent_form.find('input[name=edit-birthweight]').val(),
 
     "house_type": parent_form.find('#edit-select-housetype').val(),
