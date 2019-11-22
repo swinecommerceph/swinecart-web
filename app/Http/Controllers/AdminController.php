@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 use Illuminate\Support\Collection;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Log;
 use App\Http\Requests\BreederProfileRequest;
 use App\Http\Requests\BreederPersonalProfileRequest;
 use App\Http\Requests\BreederFarmProfileRequest;
@@ -417,10 +418,28 @@ class AdminController extends Controller
         ->whereNull('deleted_at')
         ->paginate(10); */
 
-      $selfRegisteredBreeders = DB::table('users')->where('is_admin_approved','=',0)
-        ->where('userable_type','=','App\Models\Breeder')->get();
+      /* $selfRegisteredBreeders = DB::table('users')
+                                ->where('is_admin_approved','=',0)
+                                ->where('userable_type','=','App\Models\Breeder')
+                                ->get(); */
 
-        return view('user.admin._pendingUsers',compact('users', 'selfRegisteredBreeders'));
+      $selfRegisteredBreeders = Breeder::with('users')->get()
+                                ->map(function ($breeder) {
+                                  $user = $breeder->users->first();
+                                  return [
+                                    'user' => $user,
+                                    'breeder' => $breeder,
+                                    'farmAddresses' => $breeder->farmAddresses->first()
+                                  ];
+                                });
+
+      $selfRegisteredBreeders = $selfRegisteredBreeders->filter(function ($selfRegisteredBreeder, $key) {
+        return $selfRegisteredBreeder['user']->is_admin_approved == 0;
+      });
+
+      $selfRegisteredBreeders = $selfRegisteredBreeders->all();
+
+      return view('user.admin._pendingUsers',compact('users', 'selfRegisteredBreeders'));
     }
 
     /**
@@ -430,9 +449,9 @@ class AdminController extends Controller
      * @param  Request $request
      * @return String
      */
-    public function updateSelfRegisteredBreeder(Request $request, $id) {
+    public function updateSelfRegisteredBreeder(Request $request) {
       
-      $selfRegisteredBreeder = User::find($id);
+      $selfRegisteredBreeder = User::find($request->selfBreederId);
 
       $password = str_random(10);
 

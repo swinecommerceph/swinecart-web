@@ -209,7 +209,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('home/statistics/dashboard',['as'=>'admin.statistics.dashboard', 'uses'=>'AdminController@showStatisticsDashboard']);
 
         // breeder related
-        Route::patch('home/pending/users/{id}',['as' => 'selfRegisteredBreeder.update', 'uses' => 'AdminController@updateSelfRegisteredBreeder']);
+        Route::patch('home/pending/users/self-register-breeder-update',['as' => 'selfRegisteredBreeder.update', 'uses' => 'AdminController@updateSelfRegisteredBreeder']);
         
         //  Breeder statistics
         Route::get('home/statistics/breeder/active', ['as' => 'admin.statistics.breeder.active', 'uses'=> 'AdminController@showStatisticsActiveBreeder']);
