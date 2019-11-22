@@ -84,82 +84,119 @@
     <tbody>
       @forelse($selfRegisteredBreeders as $selfRegisteredBreeder)
         <tr>
-          <td>{{$selfRegisteredBreeder->name}}</td>
-          <td>{{$selfRegisteredBreeder->email}}</td>
-          <td>{{ucfirst($selfRegisteredBreeder->userable_type)}}</td>
-          <td>
-              {{$selfRegisteredBreeder->created_at}}
-          </td>
-          <td>
-              <a 
-                href="#confirmation-approve-breeder-modal"
-                style="width: 7.5rem;"
-                class="waves-effect waves-light btn"
-                >Approve</a>
-          </td>
+          <td>{{ $selfRegisteredBreeder['user']->name }}</td>
+          <td>{{ $selfRegisteredBreeder['user']->email }}</td>
+          <td>Breeder</td>
+          <td>{{ $selfRegisteredBreeder['user']->created_at }}</td>
           <td>
             <a 
+              href="#confirmation-approve-breeder-modal"
+              style="width: 7.5rem;"
+              class="approve-breeder-modal-trigger waves-effect waves-light btn"
+              data-id={{ $selfRegisteredBreeder['user']->id }}
+              data-name={{ $selfRegisteredBreeder['user']->name }}
+            >
+              Approve
+            </a>
+          </td>
+          <td>
+            <a
               href="#self-registered-breeder"
               style="width: 7.5rem;"
-              class="waves-effect waves-light btn">
+              class="view-breeder-modal-trigger waves-effect waves-light btn"
+              data-name={{ $selfRegisteredBreeder['user']->name }}
+              data-email={{ $selfRegisteredBreeder['user']->email }}
+              data-acc-no={{ $selfRegisteredBreeder['farmAddresses']->accreditation_no }}
+            >
               View
             </a>
           </td>
         </tr>
-
-        <div id="self-registered-breeder" class="modal">
-          <div class="modal-content">
-            <h5>Pending Self-Registered Breeder:</h5>
-            <p>Name: {{ $selfRegisteredBreeder->name }}</p>
-            <p>Other Details to follow...</p>
-          </div>
-
-          <div class="modal-footer">
-            <a href="#" class="modal-close waves-effect waves-green btn-flat">Close</a>
-          </div>
-        </div>
-
-        <!-- Confirmation Approve Modal -->
-        <div id="confirmation-approve-breeder-modal" class="modal">
-          {!! Form::open([
-            'action' => ['AdminController@updateSelfRegisteredBreeder', $selfRegisteredBreeder->id],
-            'method' => 'PATCH'
-          ]) !!}
-          <div class="modal-content">
-            <h4>Approve '<b>{{ $selfRegisteredBreeder->name }}</b>'?</h4>
-            <blockquote class="warning2" style="font-size: 1.2rem;">
-              Only accredited breeders are allowed to register.
-            </blockquote>
-            <p style="font-size: 1.2rem;">
-              Approving this user as a breeder means that this breeder can now sell
-              products in the system as a registered accredited breeder.
-            </p>
-          </div>
-
-          <div class="modal-footer">
-            <a href="#" class="modal-close btn-flat">Cancel</a>
-            
-            <div class="right">
-              <button type="submit" class="waves-effect waves-green btn">Yes, approve it</button>
-            </div>
-          </div>
-          {!! Form::close() !!}
-        </div>
-
-        @empty
-          <tr>
-            <td></td>
-            <td class="right-align">No users found</td>
-            <td></td>
-            <td></td>
-          </tr>
+      @empty
+        <tr>
+          <td></td>
+          <td class="right-align">No users found</td>
+          <td></td>
+          <td></td>
+        </tr>
       @endforelse
     </tbody>
   </table>
 
+  <div id="self-registered-breeder" class="modal">
+    <div class="modal-content">
+      {{-- <input id="self-registered-breeder-modal-id" name="content_id" type="hidden" value=""> --}}
+      <h5>Pending Self-Registered Breeder:</h5>
+      <p id="self-registered-breeder-name"></p>
+      <p id="self-registered-breeder-email"></p>
+      <p id="self-registered-breeder-acc-no"></p>
+    </div>
+
+    <div class="modal-footer">
+      <a href="#" class="modal-close waves-effect waves-green btn-flat">Close</a>
+    </div>
+  </div>
+
+  <!-- Confirmation Approve Modal -->
+  <div id="confirmation-approve-breeder-modal" class="modal">
+    {!! Form::open([
+      'route' => 'selfRegisteredBreeder.update',
+      'method' => 'PATCH',
+    ]) !!}
+    <input id="selfBreederId" name="selfBreederId" type="hidden">
+    <div class="modal-content">
+      <h4 id="approve-modal-prompt"></h4>
+      <blockquote class="warning2" style="font-size: 1.2rem;">
+        Only accredited breeders are allowed to register.
+      </blockquote>
+      <p style="font-size: 1.2rem;">
+        Approving this user as a breeder means that this breeder can now sell
+        products in the system as a registered accredited breeder.
+      </p>
+    </div>
+
+    <div class="modal-footer">
+      <a href="#" class="modal-close btn-flat">Cancel</a>
+      
+      <div class="right">
+        <button type="submit" class="waves-effect waves-green btn">Yes, approve it</button>
+      </div>
+    </div>
+    {!! Form::close() !!}
+  </div>
+
 @endsection
 
 @section('initScript')
+    <script type="text/javascript">
+      $(document).ready(function () {
+        $('.view-breeder-modal-trigger').click(function (e) {
+          e.preventDefault();
+          
+          const vm = $(this);
+          const name = vm.attr('data-name');
+          const email = vm.attr('data-email');
+          const acc_no = vm.attr('data-acc-no');
+
+          $('#self-registered-breeder-name').text(`Name: ${name}`);
+          $('#self-registered-breeder-email').text(`Email: ${email}`);
+          $('#self-registered-breeder-acc-no').text(`Accreditation number: ${acc_no}`);
+
+        });
+
+        $('.approve-breeder-modal-trigger').click(function (e) {
+          e.preventDefault();
+
+          const vm = $(this);
+          const id = vm.attr('data-id');
+          const name = vm.attr('data-name');
+
+          $('#approve-modal-prompt').text(`Approve: ${name}?`);
+          $('#selfBreederId').attr('value', id);
+        });
+      });
+    </script>
+
     {{-- <script type="text/javascript" src="/js/admin/admin_custom.js"></script> --}}
     <script type="text/javascript" src="/js/admin/users.js"></script>
     <script type="text/javascript" src="/js/admin/userPages_script.js"></script>
