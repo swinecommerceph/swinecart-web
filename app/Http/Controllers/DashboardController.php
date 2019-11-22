@@ -68,7 +68,7 @@ class DashboardController extends Controller
               'frequency' => 'monthly'
           ], $breeder);
         
-
+        dd($soldData);
         return view('user.breeder.dashboard', compact('farmAddresses', 'dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
     }
 
