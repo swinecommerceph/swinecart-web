@@ -186,7 +186,7 @@
 
           {{-- Selecting which farm to graph --}}
           <div class="col s12 m5 l4 xl3">
-            <div style="margin-bottom: 4vh; margin-left: 0.5vw;" class="input-field">
+            <div id="farm-wrapper" style="margin-bottom: 4vh; margin-left: 0.5vw;" class="input-field">
               <select v-model="chosenFarm">
                 <option value="" disabled selected>Choose farm</option>
                 @foreach($farmAddresses as $farm)
@@ -346,6 +346,12 @@
 
 @section('customScript')
     <script type="text/javascript">
+        $(document).ready(function () {
+          $('#farm-wrapper').on('click', function (event) {
+            event.stopPropagation();
+          });
+        });
+
         // Get the data from the Dashboard Controller and transfer it to Vue
         
         var rawLatestAccreditation = "{{ $latestAccreditation }}";

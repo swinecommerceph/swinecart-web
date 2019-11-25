@@ -102,6 +102,7 @@ class ProductController extends Controller
      */
     public function showProducts(Request $request)
     {
+        // dd($request->all());
         $breeder = $this->user->userable;
         /*   
           getting the breeder's products that are:
