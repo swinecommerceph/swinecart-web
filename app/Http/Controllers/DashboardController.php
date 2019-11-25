@@ -41,35 +41,51 @@ class DashboardController extends Controller
      */
     public function showDashboard(Request $request)
     {
-        $breeder = $this->user->userable;
-        $farmAddresses = $breeder->farmAddresses;
-        
-        if($request->user()->updateProfileNeeded()){
-          $provinces = $this->getProvinces();
-          return view('user.breeder.createProfile', compact('breeder', 'farmAddresses', 'provinces'));
-        }
+      //dd($request->all());
+      $breeder = $this->user->userable;
+      $farmAddresses = $breeder->farmAddresses;
+      
+      //dd($farmAddresses);
 
-        $dashboardStats = [];
-        // $breeder = $this->user->userable;
+      if($request->user()->updateProfileNeeded()){
+        $provinces = $this->getProvinces();
+        return view('user.breeder.createProfile', compact('breeder', 'farmAddresses', 'provinces'));
+      }
 
-        $dashboardStats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
-        $dashboardStats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
-        $dashboardStats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
-        $dashboardStats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
-        $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
-        $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
+      $dashboardStats = [];
+      // $breeder = $this->user->userable;
 
-        $serverDateNow = Carbon::now();
-        $latestAccreditation = $this->user->userable->latest_accreditation;
-        $soldData = $this->dashboard->getSoldProducts(
-          (object) [
-              'dateFrom' => $serverDateNow->copy()->subMonths(2)->format('Y-m-d'),
-              'dateTo' => $serverDateNow->format('Y-m-d'),
-              'frequency' => 'monthly'
-          ], $breeder);
-        
-        dd($soldData);
-        return view('user.breeder.dashboard', compact('farmAddresses', 'dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
+     /*  $products = $breeder->products();
+        // : $breeder->products()->where('farm_from_id', $farm_id);
+
+      $products = $products
+        ->get()
+        ->groupBy('status')
+        ->map(function ($status) {
+            return $status->groupBy('type')->map(function ($type) {
+              return $type->count();
+            });
+          });
+
+      dd($products); */
+
+      $dashboardStats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
+      $dashboardStats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
+      $dashboardStats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
+      $dashboardStats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
+      $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
+      $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
+
+      $serverDateNow = Carbon::now();
+      $latestAccreditation = $this->user->userable->latest_accreditation;
+      $soldData = $this->dashboard->getSoldProducts(
+        (object) [
+            'dateFrom' => $serverDateNow->copy()->subMonths(2)->format('Y-m-d'),
+            'dateTo' => $serverDateNow->format('Y-m-d'),
+            'frequency' => 'monthly'
+        ], $breeder);
+      
+      return view('user.breeder.dashboard', compact('farmAddresses', 'dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
     }
 
     /**
