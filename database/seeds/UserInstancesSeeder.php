@@ -79,7 +79,7 @@ class UserInstancesSeeder extends Seeder
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address. Override accreditation default values
-            for ($i = 0; $i < 20; $i++) {
+            for ($i = 0; $i < 3; $i++) {
                 $farm = factory(App\Models\FarmAddress::class)->create([
                     'accreditation_no' => random_int(500,1000),
                     'accreditation_status' => 'active',
@@ -100,7 +100,7 @@ class UserInstancesSeeder extends Seeder
             $types = ['sow', 'gilt', 'boar', 'semen']; // 4
             $housetypes = ['opensided', 'tunnelventilated']; // 2
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
-            for ($i = 0; $i < 5; $i++) {
+            for ($i = 0; $i < 15; $i++) {
                 $randType = $types[random_int(0,3)];
                 $randHouseType = $housetypes[random_int(0,1)];
                 $randBreed = $breeds[random_int(0,6)];
