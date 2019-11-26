@@ -43,6 +43,9 @@ elixir(function (mix) {
       'customer/swinecartPage.js'
     ], 'public/js/customer/swinecartPage.js')
     .scripts([
+      'customer/viewBreederProfile.js'
+    ], 'public/js/customer/viewBreederProfile.js')
+    .scripts([
       'customer/createProfile_script.js',
       'validation/formValidationMethods.js',
       'validation/customer/createProfile_validation.js'
