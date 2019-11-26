@@ -60,7 +60,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::patch('/{id}/media', 'ProductController@setPrimaryPicture');
             Route::delete('/{id}/media', 'ProductController@deleteMedia');
 
-
         });
 
         Route::group(['prefix' => 'dashboard'], function() {
