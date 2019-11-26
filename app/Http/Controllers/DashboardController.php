@@ -41,7 +41,7 @@ class DashboardController extends Controller
      */
     public function showDashboard(Request $request)
     {
-      //dd($request->all());
+      // dd($request->all());
       $breeder = $this->user->userable;
       $farmAddresses = $breeder->farmAddresses;
       
@@ -55,9 +55,12 @@ class DashboardController extends Controller
       $dashboardStats = [];
       // $breeder = $this->user->userable;
 
-     /*  $products = $breeder->products();
-        // : $breeder->products()->where('farm_from_id', $farm_id);
 
+      /* $products = ($request->farm_address === 'all-farms') 
+                    ? 
+                    $breeder->products() : 
+                    $breeder->products()->where('farm_from_id', $request->farm_address);
+      
       $products = $products
         ->get()
         ->groupBy('status')
