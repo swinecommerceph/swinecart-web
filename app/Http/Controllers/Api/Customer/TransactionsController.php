@@ -149,9 +149,7 @@ class TransactionsController extends Controller
             ->forPage($request->page, $request->limit);
 
         return response()->json([
-            'message' => 'Get Transaction History successful',
             'data' => [
-                'count' => $history->count(),
                 'history' => $history,
             ]
         ]);

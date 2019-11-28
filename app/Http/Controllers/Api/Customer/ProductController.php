@@ -116,10 +116,10 @@ class ProductController extends Controller
                 if($product->farmFrom->accreditation_status == 'active') {
                     $p = [];
                     $p['id'] = $product->id;
-                    $p['breeder'] = Breeder::find($product->breeder_id)->users()->first()->name;
+                    $p['breederName'] = Breeder::find($product->breeder_id)->users()->first()->name;
                     // $p['farm_from_id'] = $product->farm_from_id;
                     // $p['primary_img_id'] = $product->primary_img_id;
-                    $p['img_path'] = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
+                    $p['imageUrl'] = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
                     $p['name'] = $product->name;
                     $p['age'] = $this->computeAge($product->birthdate);
                     $p['type'] = ucfirst($product->type);
@@ -132,9 +132,7 @@ class ProductController extends Controller
             }, collect([]));
     
         return response()->json([
-            'message' => 'Get Products successful',
             'data' => [
-                'count' => $products->count(),
                 'products' => $products,
             ]
         ], 200);
@@ -154,7 +152,6 @@ class ProductController extends Controller
             });
 
         return response()->json([
-            'message' => 'Get Breeds successful',
             'data' => [
                 'breeds' => $breeds
             ]
@@ -172,7 +169,6 @@ class ProductController extends Controller
             });
 
         return response()->json([
-            'message' => 'Get Breeders successful',
             'data' => [
                 'breeders' => $breeders
             ]

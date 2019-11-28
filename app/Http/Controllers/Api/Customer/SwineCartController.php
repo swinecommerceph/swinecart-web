@@ -66,7 +66,6 @@ class SwineCartController extends Controller
 
         if ($item) {
             return response()->json([
-                'message' => 'Get Item successful!',
                 'data' => [
                     'item' => $item
                 ]
@@ -117,15 +116,14 @@ class SwineCartController extends Controller
                             'name' => $product->name,
                             'type' =>  ucfirst($product->type),
                             'breed' =>  $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
-                            'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                            'breeder_name' => $breeder->name
+                            'imageUrl' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
+                            'breederName' => $breeder->name
                         ];
 
                         return $item;
                     });
 
                 return response()->json([
-                    'message' => 'Get SwineCart items successful!',
                     'data' => [
                         'count' => $items->count(),
                         'items' => $items,
@@ -135,6 +133,7 @@ class SwineCartController extends Controller
             else if ($status == 'requested') {
                 $items = $customer
                     ->swineCartItems()
+                    ->with('product.breeder', 'product.breed')
                     ->where('if_rated', 0)
                     ->where('if_requested', 1)
                     ->doesntHave('productReservation')
@@ -142,41 +141,38 @@ class SwineCartController extends Controller
                     ->map(function ($data) {
                         $item = [];
 
-                        $product = Product::find($data->product_id);
-                        $breeder = Breeder::find($product->breeder_id)->users()->first();
+                        $product = $data->product;
+                        $breeder = $product->breeder->users()->first();
+                        $breed_name = $product->breed->name;
 
                         $item['id'] = $data->id;
                         $item['status'] = 'requested';
-                        $item['status_time'] = $this->transformDateSyntax(
-                            $data
+                        $item['status_time'] = $data
                                 ->transactionLogs()
                                 ->where('status', 'requested')
-                                ->latest()->first()->created_at
-                        , 2);
+                                ->latest()->first()->created_at;
 
                         $item['product'] = [
                             'id' =>  $data->product_id,
                             'name' => $product->name,
                             'type' =>  ucfirst($product->type),
-                            'breed' =>  $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
-                            'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                            'breeder' => $breeder->name,
-                            'breeder_id' => $product->breeder_id
+                            'breed' =>  $this->transformBreedSyntax($breed_name),
+                            'imageUrl' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
+                            'breederName' => $breeder->name,
+                            'breederId' => $product->breeder_id
                         ];
 
                         $item['request'] = [
-                            'special_request' => $data->special_request,
+                            'specialRequest' => $data->special_request,
                             'quantity' => $data->quantity,
-                            'date_needed' => ($data->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($data->date_needed),
+                            'dateNeeded' => ($data->date_needed == '0000-00-00') ? null : $data->date_needed
                         ];
 
                         return $item;
                     });
 
                 return response()->json([
-                    'message' => 'Get SwineCart items successful!',
                     'data' => [
-                        'count' => $items->count(),
                         'items' => $items,
                     ]
                 ]);
@@ -233,9 +229,7 @@ class SwineCartController extends Controller
                     });
 
                 return response()->json([
-                    'message' => 'Get SwineCart items successful!',
                     'data' => [
-                        'count' => $items->count(),
                         'items' => $items,
                     ]
                 ]);
@@ -309,7 +303,6 @@ class SwineCartController extends Controller
                 ];
 
                 return response()->json([
-                    'message' => 'Add to Cart successful!',
                     'data' => [
                         'item' => $item,
                     ]
