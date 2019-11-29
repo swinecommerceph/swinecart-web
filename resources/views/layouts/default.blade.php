@@ -136,6 +136,7 @@
         <div class="row">
           <div class="col s12">
               <h4 class="breadcrumb-title"> @yield('publicProductsBreadcrumbTitle') </h4>
+              <h4 class="breadcrumb-title"> @yield('publicViewBreederProfile') </h4>
           </div>
           <div id="breadcrumb" class="col s12">
               @yield('publicBreadcrumb')

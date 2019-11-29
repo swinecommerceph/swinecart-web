@@ -79,8 +79,8 @@ class ProductController extends Controller
             'productSummary',
             'setPrimaryPicture',
             'displayProduct']]);
-        $this->middleware('role:customer',['only' => ['customerViewProductDetail','viewBreederProfile']]);
-        $this->middleware('updateProfile:customer',['only' => ['customerViewProductDetail','viewBreederProfile']]);
+        $this->middleware('role:customer',['only' => ['customerViewProductDetail']]);
+        $this->middleware('updateProfile:customer',['only' => ['customerViewProductDetail']]);
         $this->middleware(function($request, $next){
             $this->user = Auth::user();
             return $next($request);
