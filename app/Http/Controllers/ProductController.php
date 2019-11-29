@@ -706,8 +706,13 @@ class ProductController extends Controller
     {
         $breeder->name = $breeder->users()->first()->name;
         $breeder->farms = $breeder->farmAddresses;
-        $breeder->logoImage = ($breeder->logo_img_id) ? self::BREEDER_IMG_PATH.Image::find($breeder->logo_img_id)->name : self::IMG_PATH.'default_logo.png' ;
-        return view('user.customer.viewBreederProfile', compact('breeder'));
+        $breeder->logoImage = 
+          ($breeder->logo_img_id) ? 
+            self::BREEDER_IMG_PATH.Image::find($breeder->logo_img_id)->name :
+            self::IMG_PATH.'default_logo.png' ;
+
+        $products = $breeder->products()->get();
+        return view('user.customer.viewBreederProfile', compact('breeder', 'products'));
     }
 
     /**
