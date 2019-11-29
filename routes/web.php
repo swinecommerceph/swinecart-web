@@ -12,6 +12,7 @@
 */
 
 Route::get('/customer/public-products', ['as' => 'public.products', 'uses' => 'ProductController@viewProducts']);
+Route::get('/customer/view-breeder/{breeder}',['as' => 'viewBProfile', 'uses' => 'ProductController@viewBreederProfile']);
 
 Route::get('/customerRegister', ['as' => 'customerRegister', 'uses' => 'Auth\RegisterController@customerRegister']);
 Route::get('/breederRegister', ['as' => 'breederRegister', 'uses' => 'BreederController@breederRegister']);
@@ -176,9 +177,6 @@ Route::group(['middleware' => ['web']], function () {
         
         Route::get('breeders', ['as' => 'map.breeders', 'uses'=> 'CustomerController@viewBreeders']);
         Route::post('breeders', ['as' => 'map.breedersChange', 'uses'=> 'CustomerController@viewBreedersChange']);
-
-        // breeder-related
-        Route::get('view-breeder/{breeder}',['as' => 'viewBProfile', 'uses' => 'ProductController@viewBreederProfile']);
 
     });
 
