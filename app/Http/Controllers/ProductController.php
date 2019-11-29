@@ -712,6 +712,23 @@ class ProductController extends Controller
             self::IMG_PATH.'default_logo.png' ;
 
         $products = $breeder->products()->get();
+
+        foreach ($products as $key => $product) {
+            // Check if the farm where the product is is still accredited
+            // Exclude it from the showcase of products if farm's
+            // accreditation status is not active
+            if($product->farmFrom->accreditation_status != 'active'){
+                unset($products[$key]);
+                continue;
+            }
+            $product->img_path = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
+            $product->type = ucfirst($product->type);
+            $product->birthdate = $this->transformDateSyntax($product->birthdate);
+            $product->age = $this->computeAge($product->birthdate);
+            $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+            $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
+        }
+
         return view('user.customer.viewBreederProfile', compact('breeder', 'products'));
     }
 
