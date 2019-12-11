@@ -266,9 +266,11 @@ class BreederController extends Controller
     public function editProfile(Request $request)
     {
         $breeder = $this->user->userable;
+        $breeder->identifier = $breeder->id; // change later to random string
         $breeder->logoImage = ($breeder->logo_img_id) ? '/images/breeder/'.Image::find($breeder->logo_img_id)->name : '/images/default_logo.png' ;
         $farmAddresses = $breeder->farmAddresses;
         $provinces = $this->getProvinces();
+
         return view('user.breeder.editProfile', compact('breeder', 'farmAddresses', 'provinces'));
     }
 
