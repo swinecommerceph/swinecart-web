@@ -92,15 +92,15 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
  
     Route::group(['namespace' => 'Customer', 'prefix' => 'customer'], function() {
         Route::group(['prefix' => 'profile'], function() {
-            Route::get('/', 'EditProfileController@getProfile');
-            Route::put('/', 'EditProfileController@updatePersonal');
-            Route::patch('/password', 'EditProfileController@changePassword');
+            Route::get('/', 'ProfileController@getProfile');
+            Route::put('/', 'ProfileController@updatePersonal');
+            Route::patch('/password', 'ProfileController@changePassword');
 
-            Route::get('/farms', 'EditProfileController@getFarms');
-            Route::get('/farms/{id}', 'EditProfileController@getFarm');
-            Route::post('/farms', 'EditProfileController@addFarm');
-            Route::put('/farms/{id}', 'EditProfileController@updateFarm');
-            Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
+            Route::get('/farms', 'ProfileController@getFarms');
+            Route::get('/farms/{id}', 'ProfileController@getFarm');
+            Route::post('/farms', 'ProfileController@addFarm');
+            Route::put('/farms/{id}', 'ProfileController@updateFarm');
+            Route::delete('/farms/{id}', 'ProfileController@deleteFarm');
         });
 
         Route::group(['prefix' => 'shop'], function() {

@@ -23,7 +23,7 @@ use DB;
 use JWTAuth;
 use Validator;
 
-class EditProfileController extends Controller
+class ProfileController extends Controller
 {
     public function __construct() 
     {
