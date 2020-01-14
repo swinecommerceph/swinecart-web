@@ -110,12 +110,12 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         });
 
         Route::group(['prefix' => 'swinecart'], function() {
-            Route::get('/items', 'SwineCartController@getItems');
-            Route::get('/items/count', 'SwineCartController@getItemCount');
-            Route::get('/items/{id}', 'SwineCartController@getItem');
-            Route::post('/items/{id}', 'SwineCartController@addItem');
-            Route::delete('/items/{id}', 'SwineCartController@deleteItem');
-            Route::put('/items/{id}', 'SwineCartController@requestItem');
+            Route::get('/items', 'CartController@getItems');
+            Route::get('/items/count', 'CartController@getItemCount');
+            Route::get('/items/{id}', 'CartController@getItem');
+            Route::post('/items/{id}', 'CartController@addItem');
+            Route::delete('/items/{id}', 'CartController@deleteItem');
+            Route::put('/items/{id}', 'CartController@requestItem');
         });
 
         Route::group(['prefix' => 'transactions'], function() {

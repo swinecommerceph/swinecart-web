@@ -36,7 +36,7 @@ use Config;
 
 use DB;
 
-class SwineCartController extends Controller
+class CartController extends Controller
 {
 
     use CustomHelpers {
