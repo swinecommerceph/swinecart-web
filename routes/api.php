@@ -103,10 +103,10 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
         });
 
-        Route::group(['prefix' => 'products'], function() {
-            Route::get('/', 'ProductController@getProducts');
-            Route::get('/breeders', 'ProductController@getBreeders');
-            Route::get('/breeds', 'ProductController@getBreeds');
+        Route::group(['prefix' => 'shop'], function() {
+            Route::get('/products', 'ShopController@getProducts');
+            Route::get('/breeders', 'ShopController@getBreeders');
+            Route::get('/breeds', 'ShopController@getBreeds');
         });
 
         Route::group(['prefix' => 'swinecart'], function() {

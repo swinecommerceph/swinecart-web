@@ -124,7 +124,7 @@ class Product extends Model
 
     public function primaryImage()
     {
-        return $this->hasOne(Image::class, 'id');
+        return $this->hasOne(Image::class, 'id', 'primary_img_id');
     }
 
     public function swineCartItem()
