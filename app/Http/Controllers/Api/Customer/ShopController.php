@@ -116,7 +116,6 @@ class ShopController extends Controller
             ->paginate($request->limit)
             ->reduce(function($array, $product) {
                 if($product->farmFrom->accreditation_status == 'active') {
-                    
                     $breeder = $product->breeder;
                     $breed = $product->breed;
 

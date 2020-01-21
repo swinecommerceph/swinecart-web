@@ -54,300 +54,177 @@ class CartController extends Controller
             return $next($request);
         });
     }
+    
+    private $defaultImages = [
+        'boar' => 'boar_default.jpg',
+        'sow' => 'sow_default.jpg',
+        'semen' => 'semen_default.jpg',
+        'gilt' => 'gilt_default.jpg',
+    ];
+
+    private function getCartItems()
+    {   
+        $customer = $this->user->userable;
+
+        return $customer
+            ->swineCartItems()
+            ->with(
+                'product', 
+                'product.breed', 
+                'product.breeder.users', 
+                'product.primaryImage'
+            )
+            ->where('if_rated', 0)
+            ->where('if_requested', 0);
+    }
+
+    private function findItem($item_id)
+    {   
+        return $cart_item = $this->getCartItems()
+            ->where('id', $item_id)
+            ->first();
+    }
+
+    private function formatCartItem($cart_item)
+    {
+
+        $product = $cart_item->product;
+        $breed = $product->breed;
+        $breeder = $product->breeder->users()->first();
+
+        $is_deleted = $product->trashed();
+
+        return [
+            'id' => $cart_item->id,
+            'product' => [
+                'id' =>  $product->id,
+                'name' => $product->name,
+                'type' => $product->type,
+                'breed' => $this->transformBreedSyntax($breed->name),
+                'imageUrl' => route('serveImage',
+                    [
+                        'size' => 'medium', 
+                        'filename' => $is_deleted 
+                            ? $this->defaultImages[$product->type]
+                            : $product->primaryImage->name
+                    ]
+                ),
+                'breederName' => $breeder->name,
+                'isDeleted' => $is_deleted
+            ]
+        ];
+    }
 
     public function getItem(Request $request, $item_id)
     {
-        $customer = $this->user->userable;
-        $item = $customer
-            ->swineCartItems()
-            ->where('if_rated', 0)
-            ->where('id', $item_id)
-            ->first();
+        $cart_item = $this->findItem($item_id);
 
-        if ($item) {
+        if ($cart_item) {
             return response()->json([
                 'data' => [
-                    'item' => $item
+                    'item' => $this->formatCartItem($cart_item),
                 ]
-            ]);
+            ], 200);
         }
-        else return response()->json([
-            'error' => 'SwineCart Item does not exist!' 
-        ], 404);
+        else {
+            return response()->json([
+                'data' => 'Cart Item not found!'
+            ], 404);
+        }
+
     }
 
     public function getItemCount(Request $request)
     {
-        $customer = $this->user->userable;
-        $items = $customer
-            ->swineCartItems()
-            ->where('if_rated', 0)
-            ->where('if_requested', 0)
-            ->get();
+        $count = $this->getCartItems()->count();
 
         return response()->json([
-            'message' => 'Get SwineCart items successful!',
             'data' => [
-                'itemCount' => $items->count(),
+                'itemCount' => $count
             ]
-        ]);
+        ], 200);
     }
 
     public function getItems(Request $request)
     {
-        $customer = $this->user->userable;
-        $status = $request->status;
-        
-        if ($status) {
-            if ($status == 'not_requested') {
-                $items = $customer
-                    ->swineCartItems()
-                    ->where('if_rated', 0)
-                    ->where('if_requested', 0)
-                    ->paginate($request->limit)
-                    ->map(function ($it) {
-                        $item = [];
-                        $product = Product::find($it->product_id);
-                        $breeder = Breeder::find($product->breeder_id)->users()->first();
+        $items = $this->getCartItems()
+            ->paginate($request->limit)
+            ->map(function ($element) {
+                return $this->formatCartItem($element);
+            });
 
-                        $item['id'] = $it->id;
-                        $item['product'] = [
-                            'id' =>  $it->product_id,
-                            'name' => $product->name,
-                            'type' =>  ucfirst($product->type),
-                            'breed' =>  $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
-                            'imageUrl' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                            'breederName' => $breeder->name
-                        ];
-
-                        return $item;
-                    });
-
-                return response()->json([
-                    'data' => [
-                        'count' => $items->count(),
-                        'items' => $items,
-                    ]
-                ]);
-            }
-            else if ($status == 'requested') {
-                $items = $customer
-                    ->swineCartItems()
-                    ->with('product.breeder', 'product.breed')
-                    ->where('if_rated', 0)
-                    ->where('if_requested', 1)
-                    ->doesntHave('productReservation')
-                    ->paginate($request->limit)
-                    ->map(function ($data) {
-                        $item = [];
-
-                        $product = $data->product;
-                        $breeder = $product->breeder->users()->first();
-                        $breed_name = $product->breed->name;
-
-                        $item['id'] = $data->id;
-                        $item['status'] = 'requested';
-                        $item['status_time'] = $data
-                                ->transactionLogs()
-                                ->where('status', 'requested')
-                                ->latest()->first()->created_at;
-
-                        $item['product'] = [
-                            'id' =>  $data->product_id,
-                            'name' => $product->name,
-                            'type' =>  ucfirst($product->type),
-                            'breed' =>  $this->transformBreedSyntax($breed_name),
-                            'imageUrl' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                            'breederName' => $breeder->name,
-                            'breederId' => $product->breeder_id
-                        ];
-
-                        $item['request'] = [
-                            'specialRequest' => $data->special_request,
-                            'quantity' => $data->quantity,
-                            'dateNeeded' => ($data->date_needed == '0000-00-00') ? null : $data->date_needed
-                        ];
-
-                        return $item;
-                    });
-
-                return response()->json([
-                    'data' => [
-                        'items' => $items,
-                    ]
-                ]);
-            }
-            else if ($status == 'reserved' || $status == 'on_delivery' || $status == 'sold') {
-                $items = $customer
-                    ->swineCartItems()
-                    ->where('if_rated', 0)
-                    ->where('if_requested', 1)
-                    ->whereHas('productReservation', function ($query) use ($status) {
-                        $query->where('order_status', $status);
-                    })
-                    ->with(
-                        'productReservation.product',
-                        'productReservation.product.breed',
-                        'productReservation.product.breeder.users'
-                    )
-                    ->paginate($request->limit)
-                    ->map(function ($data) use ($status) {
-                        $item = [];
-
-                        $reservation = $data->productReservation;
-                        $product = $data->productReservation->product;
-                        $breed = $data->productReservation->product->breed;
-                        $breeder = $data->productReservation->product->breeder->users->first();
-                        $logs = $data->transactionLogs();
-
-                        $item['id'] = $data->id;
-                        $item['status'] = $reservation->order_status;
-                        $item['status_time'] = $logs->where('status', $status)->latest()->first() 
-                                ? 
-                                    $this->transformDateSyntax($logs->where('status', $status)->latest()->first()->created_at, 2)
-                                :
-                                    '';
-                        $item['product'] = [
-                            'id' => $product->id,
-                            'name' => $product->name,
-                            'type' => ucwords($product->type),
-                            'breed' => $this->transformBreedSyntax($breed->name),
-                            'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                            'breeder_name' => $breeder->name,
-                            'user_id' => $breeder->id,
-                            'breeder_id' => $product->breeder_id
-                        ];
-
-                        $item['reservation'] = [
-                            'quantity' => $data->quantity,
-                            'special_request' => $data->special_request,
-                            'delivery_date' => $reservation->delivery_date ? $this->transformDateSyntax($reservation->delivery_date) : '',
-                            'date_needed' => ($data->date_needed == '0000-00-00') ? '' : $this->transformDateSyntax($data->date_needed)
-                        ];
-    
-                        return $item;
-                    });
-
-                return response()->json([
-                    'data' => [
-                        'items' => $items,
-                    ]
-                ]);
-            }
-            else return response()->json([
-                'error' => 'Invalid Status!' 
-            ], 400);
-        }
-        else return response()->json([
-            'error' => 'Invalid Status!' 
-        ], 400);
+        return response()->json([
+            'data' => [
+                'items' => $items,
+            ]
+        ]);
     }
 
     public function addItem(Request $request, $product_id)
     {
         $customer = $this->user->userable;
+
         $item = $customer
             ->swineCartItems()
             ->where('product_id', $product_id)
             ->where('reservation_id', 0)
             ->first();
 
-        $product = Product::find($product_id);
-
-        if($product) {
-            if($item) {
-                if($item->if_requested) {
-                    return response()->json([
-                        'error' => 'Product already requested!',
-                    ], 409);
-                }
-                else {
-                    return response()->json([
-                        'error' => 'Item already added!',
-                    ], 409); 
-                }
-            }
+        if($item) {
+            if($item->if_requested) {
+                return response()->json([
+                    'error' => 'Product already requested!',
+                ], 409);
+            } 
             else {
-                $new_item = new SwineCartItem;
-                $new_item->product_id = $product_id;
-                $new_item->quantity = $product->type == 'semen' ? 2 : 1;
+                return response()->json([
+                    'error' => 'Cart Item already added!',
+                ], 409); 
+            }
+        }
+        else {
+
+            $product = Product::withTrashed()->find($product_id);
+
+            $new_item = new SwineCartItem;
+            $new_item->product_id = $product_id;
+            $new_item->quantity = $product->type == 'semen' ? 2 : 1;
+
+            $is_inserted = $customer->swineCartItems()->save($new_item);
+
+            if ($is_inserted) {
                 
-                $customer->swineCartItems()->save($new_item);
-
-                $result = $items = $customer
-                    ->swineCartItems()
-                    ->with(
-                        'product.breeder.users',
-                        'product.breed',
-                        'product.images'
-                    )
-                    ->where('if_rated', 0)
-                    ->where('if_requested', 0)
-                    ->where('id', $new_item->id)
-                    ->first();
-
-                $item = [];
-                $product = $result->product;
-                $breed = $result->product->breed;
-                $image = $result->product->images->where('id', $product->primary_img_id)->first();
-                $breeder = $result->product->breeder->users->first();
-
-                $item['id'] = $result->id;
-                $item['product'] = [
-                    'id' =>  $result->product_id,
-                    'name' => $product->name,
-                    'type' =>  ucfirst($product->type),
-                    'breed' =>  $this->transformBreedSyntax($breed->name),
-                    'img_path' => route('serveImage', ['size' => 'small', 'filename' => $image->name]),
-                    'breeder_name' => $breeder->name
-                ];
-
+                $cart_item = $this->findItem($new_item->id);
+                
                 return response()->json([
                     'data' => [
-                        'item' => $item,
+                        'item' => $this->formatCartItem($cart_item)
                     ]
                 ], 200);
             }
+            else return response()->json([
+                'error' => 'Something went wrong!'
+            ], 500);
         }
-        else return response()->json([
-            'error' => 'Product does not exist!' 
-        ], 404);
     }
 
     public function deleteItem(Request $request, $item_id)
     {
-        $customer = $this->user->userable;
+        $cart_item = $this->findItem($item_id);
 
-        $item = $customer
-            ->swineCartItems()
-            ->where('if_rated', 0)    
-            ->where('id', $item_id)
-            ->first();
-
-        if($item) {
-            if(!$item->if_requested) {
-                $item->delete();
-
-                return response()->json([
-                    'message' => 'Delete SwineCart item successful!',
-                ], 200);
-            }
-            else return response()->json([
-                'error' => 'Product already requested!' 
-            ], 400);
+        if($cart_item) {
+            return response()->json([
+                'itemId' => $cart_item->id,
+            ], 200);
         }
         else return response()->json([
-            'error' => 'SwineCart Item does not exist!' 
+            'error' => 'Cart Item not found!' 
         ], 404);
     }
 
     public function requestItem(Request $request, $item_id)
     {
-        $customer = $this->user->userable;
-        $item = $customer
-            ->swineCartItems()
-            ->where('id', $item_id)
-            ->first();
+        $cart_item = $this->findItem($item_id);
 
         if($item) {
             if(!$item->if_requested) {
