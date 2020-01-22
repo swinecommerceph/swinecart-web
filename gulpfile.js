@@ -85,6 +85,7 @@ elixir(function (mix) {
     ], 'public/js/breeder/editProfile.js')
     .scripts([
       'vendor/chart.min.js',
+      'breeder/dashboardFilter.js',
       'breeder/dashboardPage.js'
     ], 'public/js/breeder/dashboard.js')
     .scripts([
