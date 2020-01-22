@@ -213,6 +213,7 @@ class CartController extends Controller
         $cart_item = $this->findItem($item_id);
 
         if($cart_item) {
+            $cart_item->delete();
             return response()->json([
                 'itemId' => $cart_item->id,
             ], 200);
