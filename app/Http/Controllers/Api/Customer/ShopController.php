@@ -32,7 +32,7 @@ use Mail;
 use Storage;
 use Config;
 
-class ProductController extends Controller
+class ShopController extends Controller
 {
     
     use CustomHelpers {
@@ -78,7 +78,9 @@ class ProductController extends Controller
 
     public function getProducts(Request $request, ProductRepository $repository)
     {   
-        $products = Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '<>', 0);
+        $products = Product::whereIn('status', ['displayed', 'requested'])
+            ->with('breed', 'breeder.users', 'primaryImage')
+            ->where('quantity', '<>', 0);
 
         // Search
         if($request->input('q')) {
@@ -114,16 +116,21 @@ class ProductController extends Controller
             ->paginate($request->limit)
             ->reduce(function($array, $product) {
                 if($product->farmFrom->accreditation_status == 'active') {
+                    $breeder = $product->breeder;
+                    $breed = $product->breed;
+
                     $p = [];
+
                     $p['id'] = $product->id;
-                    $p['breederName'] = Breeder::find($product->breeder_id)->users()->first()->name;
-                    // $p['farm_from_id'] = $product->farm_from_id;
-                    // $p['primary_img_id'] = $product->primary_img_id;
-                    $p['imageUrl'] = route('serveImage', ['size' => 'medium', 'filename' => Image::find($product->primary_img_id)->name]);
+                    $p['breederName'] = $breeder->users()->first()->name;
+                    $p['imageUrl'] = route('serveImage',
+                        ['size' => 'medium', 'filename' => $product->primaryImage->name]
+                    );
                     $p['name'] = $product->name;
                     $p['age'] = $this->computeAge($product->birthdate);
-                    $p['type'] = ucfirst($product->type);
-                    $p['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
+                    $p['type'] = $product->type;
+                    $p['breedName'] = $this->transformBreedSyntax($breed->name);
+                    $p['farmFromProvince'] = $product->farmFrom->province;
 
                     $array->push($p);
                 }
@@ -146,7 +153,7 @@ class ProductController extends Controller
             ->get()
             ->map(function ($item) {
                 $breed = [];
-                $breed['id'] = $item->id;   
+                $breed['id'] = $item->id;
                 $breed['name'] = ucwords($item->name);
                 return $breed;
             });

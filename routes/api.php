@@ -92,30 +92,30 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
  
     Route::group(['namespace' => 'Customer', 'prefix' => 'customer'], function() {
         Route::group(['prefix' => 'profile'], function() {
-            Route::get('/', 'EditProfileController@getProfile');
-            Route::put('/', 'EditProfileController@updatePersonal');
-            Route::patch('/password', 'EditProfileController@changePassword');
+            Route::get('/', 'ProfileController@getProfile');
+            Route::put('/', 'ProfileController@updatePersonal');
+            Route::patch('/password', 'ProfileController@changePassword');
 
-            Route::get('/farms', 'EditProfileController@getFarms');
-            Route::get('/farms/{id}', 'EditProfileController@getFarm');
-            Route::post('/farms', 'EditProfileController@addFarm');
-            Route::put('/farms/{id}', 'EditProfileController@updateFarm');
-            Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
+            Route::get('/farms', 'ProfileController@getFarms');
+            Route::get('/farms/{id}', 'ProfileController@getFarm');
+            Route::post('/farms', 'ProfileController@addFarm');
+            Route::put('/farms/{id}', 'ProfileController@updateFarm');
+            Route::delete('/farms/{id}', 'ProfileController@deleteFarm');
         });
 
-        Route::group(['prefix' => 'products'], function() {
-            Route::get('/', 'ProductController@getProducts');
-            Route::get('/breeders', 'ProductController@getBreeders');
-            Route::get('/breeds', 'ProductController@getBreeds');
+        Route::group(['prefix' => 'shop'], function() {
+            Route::get('/products', 'ShopController@getProducts');
+            Route::get('/breeders', 'ShopController@getBreeders');
+            Route::get('/breeds', 'ShopController@getBreeds');
         });
 
-        Route::group(['prefix' => 'swinecart'], function() {
-            Route::get('/items', 'SwineCartController@getItems');
-            Route::get('/items/count', 'SwineCartController@getItemCount');
-            Route::get('/items/{id}', 'SwineCartController@getItem');
-            Route::post('/items/{id}', 'SwineCartController@addItem');
-            Route::delete('/items/{id}', 'SwineCartController@deleteItem');
-            Route::put('/items/{id}', 'SwineCartController@requestItem');
+        Route::group(['prefix' => 'cart'], function() {
+            Route::get('/items', 'CartController@getItems');
+            Route::get('/items/count', 'CartController@getItemCount');
+            Route::get('/items/{id}', 'CartController@getItem');
+            Route::post('/items/{id}', 'CartController@addItem');
+            Route::delete('/items/{id}', 'CartController@deleteItem');
+            Route::put('/items/{id}', 'CartController@requestItem');
         });
 
         Route::group(['prefix' => 'transactions'], function() {
