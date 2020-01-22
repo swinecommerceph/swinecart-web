@@ -28,15 +28,47 @@
 @section('breeder-content')
     <div class="row">
         <div class="col s12 m10 offset-m1">
-            <p class="caption">Update your profile.</p>
+            
             <div class="row">
                 <div class="col s2 center-align">
-                    <div id="logo-card" class="card">
-                        <div class="card-image">
-                            <img src="{{ $breeder->logoImage }}" alt="" />
-                        </div>
+                  <p class="caption">Update your profile.</p>
+                  <div id="logo-card" class="card">
+                      <div class="card-image">
+                          <img src="{{ $breeder->logoImage }}" alt="" />
+                      </div>
+                  </div>
+                  <a id="change-logo" href="#">Change Logo</a>
+                </div>
+
+                <div class="col s8 offset-s1">
+                  <p class="caption">SwineCart Profile URL:</p>
+                  <p class="grey-text text-darken-2">
+                    Note: Share this link to your customers for them to view your products
+                  </p>
+
+                  <br>
+
+                  <div class="row">
+                    <div class="col s8 grey lighten-3">
+                      <input 
+                        id="breeder-link"
+                        style="border: none; font-size: 1.5rem;"
+                        type="text"
+                        readonly
+                        value="http://swinecart.test/customer/view-breeder/{{ $breeder->identifier }}" />
                     </div>
-                    <a id="change-logo" href="#">Change Logo</a>
+
+                    <div class="col s2" style="padding-top: 10px;">
+                      <button
+                        onclick="copyToClipBoard()"
+                        class="waves-effect waves-light btn primary tooltipped"
+                        data-position="right"
+                        data-tooltip="Copy your SwineCart link to your clipboard">
+                        COPY
+                      </button>
+                    </div>
+                  </div>
+            
                 </div>
             </div>
 
@@ -101,12 +133,22 @@
     @if(Session::has('message'))
         <script type="text/javascript">
             $(document).ready(function(){
+                $('.tooltipped').tooltip();
                 Materialize.toast('{{ Session::get('message') }}', 4000, 'green lighten-1');
             });
         </script>
     @endif
     <script type="text/javascript">
         var provinces = {!! $provinces !!};
+
+        function copyToClipBoard () {
+          const breederLink = document.getElementById('breeder-link');
+          breederLink.select();
+          breederLink.setSelectionRange(0, 99999);
+          document.execCommand("copy");
+
+          Materialize.toast('Copied to clipboard!', 4000, 'green lighten-1');
+        }
     </script>
     <script src="{{ elixir('/js/breeder/editProfile.js') }}"></script>
 @endsection

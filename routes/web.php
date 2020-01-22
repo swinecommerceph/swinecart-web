@@ -71,7 +71,7 @@ Route::group(['middleware' => ['web']], function () {
     // Breeder
     Route::group(['prefix' => 'breeder'], function(){
 
-    	Route::get('home',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
+    	// Route::get('home',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
       
         Route::post('breederRegister', ['as' => 'breeder.register', 'uses' => 'BreederController@registerBreeder']);
 
@@ -104,7 +104,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::delete('products/media/delete',['as' => 'products.mediaDelete', 'uses' => 'ProductController@deleteMedium']);
 
         // dashboard-related
-        Route::get('dashboard',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
+        Route::get('dashboard',['farm_address' => 'all-farms', 'as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
         Route::get('dashboard/customer-info',['as' => 'dashboard.customerInfo', 'uses' => 'DashboardController@getCustomerInfo']);
         Route::get('dashboard/orders',['as' => 'dashboard.productStatus', 'uses' => 'DashboardController@showProductStatus']);
         Route::get('dashboard/product-status/retrieve-product-requests',['as' => 'dashboard.productRequests', 'uses' => 'DashboardController@retrieveProductRequests']);
