@@ -24,6 +24,7 @@ use App\Models\TransactionLog;
 use App\Models\ProductReservation;
 use App\Repositories\CustomHelpers;
 
+use Validator;
 use Auth;
 
 class SwineCartController extends Controller
@@ -95,6 +96,11 @@ class SwineCartController extends Controller
     public function requestSwineCartItem(Request $request)
     {
         if ($request->ajax()) {
+
+            $this->validate($request, [
+              'dateNeeded' => 'required'
+            ]);
+
             $alreadyRequestedFlag = 0;
             $customer = $this->user->userable;
             $swineCartItems = $customer->swineCartItems();
@@ -178,6 +184,7 @@ class SwineCartController extends Controller
             if(!$alreadyRequestedFlag) dispatch(new SendToPubSubServer('db-requested', $breederUser->email, ['product_type' => $product->type]));
 
             return [$customer->swineCartItems()->where('if_requested',0)->count(), $transactionDetails['created_at']];
+
         }
     }
 
