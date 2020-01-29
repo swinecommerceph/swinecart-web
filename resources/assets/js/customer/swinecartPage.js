@@ -382,6 +382,7 @@ Vue.component('order-details',{
                     _token: this.token,
                     itemId: this.products[index].item_id,
                     productId: this.products[index].product_id,
+                    productType: this.products[index].product_type,
                     requestQuantity: this.products[index].request_quantity,
                     dateNeeded: this.productRequest.dateNeeded,
                     specialRequest: this.productRequest.specialRequest
