@@ -212,6 +212,10 @@ Vue.component('order-details',{
                 deliveryValue: 0,
                 transactionValue: 0,
                 productQualityValue: 0,
+                isDeliveryValueFilled: false,
+                isTransactionValueFilled: false,
+                isProductQualityValueFilled: false,
+                isValidToSubmitRate: false,
                 commentField: ''
             }
         };
@@ -522,16 +526,19 @@ Vue.component('order-details',{
         setDeliveryRating: function(value){
             // Listener to 'set-delivery-rating' from 'star-rating' component
             this.breederRate.deliveryValue = value;
+            this.breederRate.isDeliveryValueFilled = true;
         },
 
         setTransactionRating: function(value){
             // Listener to 'set-transaction-rating' from 'star-rating' component
             this.breederRate.transactionValue = value;
+            this.breederRate.isTransactionValueFilled = true;
         },
 
         setProductRating: function(value){
             // Listener to 'set-product-rating' from 'star-rating' component
             this.breederRate.productQualityValue = value;
+            this.breederRate.isProductQualityValueFilled = true;
         }
     }
 });

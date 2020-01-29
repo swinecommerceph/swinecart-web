@@ -373,7 +373,15 @@ class SwineCartController extends Controller
      * @param  Request $request
      */
     public function rateBreeder(Request $request){
+
         if($request->ajax()){
+
+            $this->validate($request, [
+              'delivery' => 'required | regex: /[1-5]/',
+              'transaction' => 'required | regex: /[1-5]/',
+              'productQuality' => 'required | regex: /[1-5]/'
+            ]);
+
             $customer = $this->user->userable;
             $reviews = Breeder::find($request->breederId)->reviews();
 
