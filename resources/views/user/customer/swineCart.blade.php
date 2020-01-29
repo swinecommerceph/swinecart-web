@@ -769,15 +769,20 @@
                     <div class="row">
                         <div id="comment-container" class="input-field col s12">
                             <textarea id="comment" class="materialize-textarea" v-model="breederRate.commentField"></textarea>
-                            <label for="comment">Comment</label>
+                            <label for="comment">Comment <i>- Optional</i></label>
                         </div>
                     </div>
                 </div>
               </div>
               <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn blue rate-breeder-buttons"
+                    <a id="submit-rate-button" class="modal-action waves-effect waves-green btn blue rate-breeder-buttons"
                         @click.prevent="rateAndRecord($event)"
                         style="font-weight: 700;"
+                        :disabled="
+                          !breederRate.isDeliveryValueFilled ||
+                          !breederRate.isTransactionValueFilled ||
+                          !breederRate.isProductQualityValueFilled
+                        "
                     >
                         Rate
                     </a>
