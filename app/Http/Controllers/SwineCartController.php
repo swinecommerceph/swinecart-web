@@ -24,6 +24,8 @@ use App\Models\TransactionLog;
 use App\Models\ProductReservation;
 use App\Repositories\CustomHelpers;
 
+use Illuminate\Support\Facades\Log;
+
 use Validator;
 use Auth;
 
@@ -96,10 +98,13 @@ class SwineCartController extends Controller
     public function requestSwineCartItem(Request $request)
     {
         if ($request->ajax()) {
+            Log::info($request->all());
 
-            $this->validate($request, [
-              'dateNeeded' => 'required'
-            ]);
+            if ($request->productType == "semen") {
+              $this->validate($request, [
+                'dateNeeded' => 'required'
+              ]);
+            }
 
             $alreadyRequestedFlag = 0;
             $customer = $this->user->userable;

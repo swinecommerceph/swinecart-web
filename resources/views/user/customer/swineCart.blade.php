@@ -687,7 +687,7 @@
                   <a id="confirm-request-product" class="modal-action waves-effect waves-green btn blue request-product-buttons"
                       @click.prevent="requestProduct($event)"
                       style="text-transform: none;  font-weight: 700;"
-                      disabled
+                      :disabled="productRequest.type === 'semen'"
                   >
                       Yes, Confirm Request Product
                   </a>
