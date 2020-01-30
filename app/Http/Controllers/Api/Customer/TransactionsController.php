@@ -331,7 +331,7 @@ class TransactionsController extends Controller
                             'breederId' => $product->breeder_id
                         ];
 
-                        $trimmed_special_request = trim($item->special_request);
+                        $trimmed_special_request = trim($data->special_request);
 
                         $item['reservationDetails'] = [
                             'quantity' => $data->quantity,
