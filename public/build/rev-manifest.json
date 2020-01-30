@@ -1,7 +1,7 @@
 {
   "js/breeder/createProfile.js": "js/breeder/createProfile-46281fa39d.js",
   "js/breeder/custom.js": "js/breeder/custom-9727991ab2.js",
-  "js/breeder/dashboard.js": "js/breeder/dashboard-c2350be9bc.js",
+  "js/breeder/dashboard.js": "js/breeder/dashboard-d86184936d.js",
   "js/breeder/editProfile.js": "js/breeder/editProfile-4d8f74ac0f.js",
   "js/breeder/notifications.js": "js/breeder/notifications-6ca6679407.js",
   "js/breeder/reviews.js": "js/breeder/reviews-deb708ce54.js",
@@ -11,7 +11,7 @@
   "js/customer/custom.js": "js/customer/custom-12ec5fceaf.js",
   "js/customer/editProfile.js": "js/customer/editProfile-6c0cb606be.js",
   "js/customer/notifications.js": "js/customer/notifications-bf93e0f765.js",
-  "js/customer/swinecartPage.js": "js/customer/swinecartPage-3090ca007d.js",
+  "js/customer/swinecartPage.js": "js/customer/swinecartPage-45d7a52aea.js",
   "js/customer/viewProductDetail.js": "js/customer/viewProductDetail-ef9a3f8a5e.js",
   "js/customer/viewProducts.js": "js/customer/viewProducts-3bf14049a8.js",
   "js/siteCustom.js": "js/siteCustom-c1b970bc34.js",

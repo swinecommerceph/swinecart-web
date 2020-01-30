@@ -24,6 +24,9 @@ use App\Models\TransactionLog;
 use App\Models\ProductReservation;
 use App\Repositories\CustomHelpers;
 
+use Illuminate\Support\Facades\Log;
+
+use Validator;
 use Auth;
 
 class SwineCartController extends Controller
@@ -95,6 +98,14 @@ class SwineCartController extends Controller
     public function requestSwineCartItem(Request $request)
     {
         if ($request->ajax()) {
+            Log::info($request->all());
+
+            if ($request->productType == "semen") {
+              $this->validate($request, [
+                'dateNeeded' => 'required'
+              ]);
+            }
+
             $alreadyRequestedFlag = 0;
             $customer = $this->user->userable;
             $swineCartItems = $customer->swineCartItems();
@@ -178,6 +189,7 @@ class SwineCartController extends Controller
             if(!$alreadyRequestedFlag) dispatch(new SendToPubSubServer('db-requested', $breederUser->email, ['product_type' => $product->type]));
 
             return [$customer->swineCartItems()->where('if_requested',0)->count(), $transactionDetails['created_at']];
+
         }
     }
 
@@ -366,7 +378,15 @@ class SwineCartController extends Controller
      * @param  Request $request
      */
     public function rateBreeder(Request $request){
+
         if($request->ajax()){
+
+            $this->validate($request, [
+              'delivery' => 'required | regex: /[1-5]/',
+              'transaction' => 'required | regex: /[1-5]/',
+              'productQuality' => 'required | regex: /[1-5]/'
+            ]);
+
             $customer = $this->user->userable;
             $reviews = Breeder::find($request->breederId)->reviews();
 

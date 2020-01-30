@@ -8,6 +8,7 @@ use Carbon\Carbon;
 use App\Http\Requests;
 use App\Models\Customer;
 use App\Models\Product;
+use App\Models\FarmAddress;
 use App\Repositories\DashboardRepository;
 
 use Auth;
@@ -41,43 +42,35 @@ class DashboardController extends Controller
      */
     public function showDashboard(Request $request)
     {
-      // dd($request->all());
       $breeder = $this->user->userable;
       $farmAddresses = $breeder->farmAddresses;
-      
-      //dd($farmAddresses);
 
       if($request->user()->updateProfileNeeded()){
         $provinces = $this->getProvinces();
         return view('user.breeder.createProfile', compact('breeder', 'farmAddresses', 'provinces'));
       }
 
+      $selectedFarm = ($request->farm_address === 'all-farms')
+                        ?
+                        'All Farms' :
+                        FarmAddress::find($request->farm_address)->name;
+
       $dashboardStats = [];
-      // $breeder = $this->user->userable;
 
+      // get count of products and group them by status and by type
+      $dashboardStats['hidden'] = $this->getProductsCountBasedOnStatus($breeder, $request->farm_address, 'hidden');
+      $dashboardStats['displayed'] = $this->getProductsCountBasedOnStatus($breeder, $request->farm_address, 'displayed');
+      $dashboardStats['requested'] = $this->getProductsCountBasedOnStatus($breeder, $request->farm_address, 'requested');
+      $dashboardStats['reserved'] = $this->getProductsCountBasedOnStatus($breeder, $request->farm_address, 'reserved');
+      $dashboardStats['on_delivery'] = $this->getProductsCountBasedOnStatus($breeder, $request->farm_address, 'on_delivery');
+      $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
 
-      /* $products = ($request->farm_address === 'all-farms') 
-                    ? 
-                    $breeder->products() : 
-                    $breeder->products()->where('farm_from_id', $request->farm_address);
-      
-      $products = $products
-        ->get()
-        ->groupBy('status')
-        ->map(function ($status) {
-            return $status->groupBy('type')->map(function ($type) {
-              return $type->count();
-            });
-          });
-
-      dd($products); */
-
-      $dashboardStats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
+     /*  $dashboardStats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
       $dashboardStats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
       $dashboardStats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
       $dashboardStats['reserved'] = $this->dashboard->getProductNumberStatus($breeder,'reserved');
       $dashboardStats['on_delivery'] = $this->dashboard->getProductNumberStatus($breeder,'on_delivery');
-      $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
+      $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder); */
 
       $serverDateNow = Carbon::now();
       $latestAccreditation = $this->user->userable->latest_accreditation;
@@ -87,8 +80,16 @@ class DashboardController extends Controller
             'dateTo' => $serverDateNow->format('Y-m-d'),
             'frequency' => 'monthly'
         ], $breeder);
-      
-      return view('user.breeder.dashboard', compact('farmAddresses', 'dashboardStats', 'latestAccreditation', 'serverDateNow', 'soldData'));
+
+      return view('user.breeder.dashboard',
+                  compact(
+                    'selectedFarm',
+                    'farmAddresses',
+                    'dashboardStats',
+                    'latestAccreditation',
+                    'serverDateNow',
+                    'soldData'
+                  ));
     }
 
     /**
@@ -97,7 +98,7 @@ class DashboardController extends Controller
      * @return View
      */
     public function showReports(Request $request)
-    {      
+    {
       return view('user.breeder.reports');
     }
 
@@ -304,5 +305,54 @@ class DashboardController extends Controller
             'Maguindanao' => 'Maguindanao',
             'Lanao del Sur' => 'Lanao del Sur'
         ])->sort();
+    }
+
+    /**
+     * Handle empty array for getting product count properly
+     *
+     * @return  Array
+     */
+    private function handleEmptyArrayForProductCount($array)
+    {
+
+      if (empty($array)) {
+        $handledArray = [];
+        $handledArray['boar'] = 0;
+        $handledArray['sow'] = 0;
+        $handledArray['gilt'] = 0;
+        $handledArray['semen'] = 0;
+
+        return $handledArray;
+      }
+
+      return $array;
+
+    }
+
+    /**
+     * Handle empty array for getting product count properly
+     *
+     * @return  Array
+     */
+    private function getProductsCountBasedOnStatus($breeder, $requestedFarmAddress, $status)
+    {
+
+      // TODO: fix the query proper. only did this because of the stupid bug
+
+      // get products per farm or all farms
+      $products = ($requestedFarmAddress === 'all-farms')
+                    ?
+                    $breeder->products() :
+                    $breeder->products()->where('farm_from_id', $requestedFarmAddress);
+
+      $productsArrayCount = $products
+                            ->where('status', $status)
+                            ->get()
+                            ->groupBy('type')
+                            ->map(function ($type) {
+                              return $type->count();
+                            });
+
+      return $this->handleEmptyArrayForProductCount($productsArrayCount->toArray());
     }
 }

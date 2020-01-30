@@ -168,6 +168,12 @@ Vue.component('custom-date-select', {
             format: 'mmmm d, yyyy'
         });
 
+        // prevent the date picker from instatly closing upon clicking
+        // Materialize bug
+        $('.datepicker').on('mousedown', function (event) {
+          event.preventDefault();
+        });
+
         var self = this;
         $('#date-needed').on('change', function(){
             self.$emit('date-select',self.$refs.select.value);
@@ -206,6 +212,10 @@ Vue.component('order-details',{
                 deliveryValue: 0,
                 transactionValue: 0,
                 productQualityValue: 0,
+                isDeliveryValueFilled: false,
+                isTransactionValueFilled: false,
+                isProductQualityValueFilled: false,
+                isValidToSubmitRate: false,
                 commentField: ''
             }
         };
@@ -247,6 +257,13 @@ Vue.component('order-details',{
         dateChange: function(value){
             // Event listener to reflect data change in date select to vue's data
             this.productRequest.dateNeeded = value;
+
+            // Enable confirm-request-product button if date needed exist
+            if (this.productRequest.dateNeeded) {
+              $('#confirm-request-product').removeAttr('disabled');
+            } else {
+              $('#confirm-request-product').attr('disabled', true);
+            }
         },
 
         viewProductModalFromCart: function(itemId){
@@ -365,6 +382,7 @@ Vue.component('order-details',{
                     _token: this.token,
                     itemId: this.products[index].item_id,
                     productId: this.products[index].product_id,
+                    productType: this.products[index].product_type,
                     requestQuantity: this.products[index].request_quantity,
                     dateNeeded: this.productRequest.dateNeeded,
                     specialRequest: this.productRequest.specialRequest
@@ -509,16 +527,19 @@ Vue.component('order-details',{
         setDeliveryRating: function(value){
             // Listener to 'set-delivery-rating' from 'star-rating' component
             this.breederRate.deliveryValue = value;
+            this.breederRate.isDeliveryValueFilled = true;
         },
 
         setTransactionRating: function(value){
             // Listener to 'set-transaction-rating' from 'star-rating' component
             this.breederRate.transactionValue = value;
+            this.breederRate.isTransactionValueFilled = true;
         },
 
         setProductRating: function(value){
             // Listener to 'set-product-rating' from 'star-rating' component
             this.breederRate.productQualityValue = value;
+            this.breederRate.isProductQualityValueFilled = true;
         }
     }
 });
@@ -710,7 +731,7 @@ var vm = new Vue({
     mounted: function(){
 
         var self = this;
-        
+
         // Determine if connection to websocket server must
         // be secure depending on the protocol
         var pubsubServer = (location.protocol === 'https:') ? config.pubsubWSSServer : config.pubsubWSServer;
@@ -737,7 +758,7 @@ var vm = new Vue({
                         self.products[index].status = 'on_delivery';
                         self.products[index].status_transactions.on_delivery = data.on_delivery;
 
-                        /* 
+                        /*
                             format the date to an abbreviated month so
                             the product cards will not overflow when the
                             size increase

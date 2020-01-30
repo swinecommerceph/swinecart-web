@@ -194,21 +194,21 @@
 @endsection
 
 @section('content')
-    
+
     {{-- Swinecart Container --}}
     <div class="container" id="swine-cart-container">
 
         {{-- Tabs --}}
         <ul class="tabs tabs-fixed-width">
           <li class="tab col s6" :class="(selectedOrdersTab) ? 'selected-swinecart-tab' : ''">
-            
+
             <a id="orders-tab" href="#swine-cart"
               @click="changeBreadCrumbs()"
             >
               Orders
             </a>
           </li>
-          
+
           <li class="tab col s6 teal-text" :class="(selectedOrdersTab) ? '' : 'selected-swinecart-tab'">
             <a id="transaction-history-tab" href="#transaction-history"
               @click="getTransactionHistory({{ $customerId }}); changeBreadCrumbs();"
@@ -275,7 +275,7 @@
                               <span class="blue-text" style="font-weight: 700;">
                                 @{{ productInfoModal.breeder }}
                               </span><br>
-                              Farm Province: 
+                              Farm Province:
                               <span>@{{ productInfoModal.province }}</span>
                             </div>
                         </div>
@@ -308,9 +308,9 @@
                                 Backfat Thickness: @{{ productInfoModal.bft }} mm
                             </td>
                         </tr>
-                    </table>                            
-                    
-                    <!-- 
+                    </table>
+
+                    <!--
                     <li class="collection-item product-type">{{--{{$product->type}} - {{$product->breed}} --}}
                         <span class="type"> @{{ capitalizedProductType }} </span> -
                         <span class="breed"> @{{ productInfoModal.breed }} </span>
@@ -328,7 +328,7 @@
                         Backfat Thickness: <span> @{{ productInfoModal.bft }} </span> mm
                     </li>
                     -->
-                    
+
                     {{-- Breeder Ratings --}}
                     <li class="row collection-item rating  grey lighten-4">
                         <span style="color: hsl(0, 0%, 13%); font-weight: 700;">Breeder Ratings</span>
@@ -447,13 +447,13 @@
                                         <span class="col s6">
                                             Quantity (in bottles):
                                         </span>
-                                        
+
                                         <span class="col s6">
 
                                             {{-- minus button--}}
                                             <span class="col s4 center-align">
                                                 <a href="#"
-                                                    class="btn col s12 primary primary-hover" 
+                                                    class="btn col s12 primary primary-hover"
                                                     style="padding:0; width: 2vw;"
                                                     @click.prevent="subtractQuantity(product.item_id)"
                                                 >
@@ -465,7 +465,7 @@
                                             <span class="col s4 center-align" style="padding:0;">
                                                 <quantity-input v-model="product.request_quantity"> </quantity-input>
                                             </span>
-                                            
+
                                             {{-- plus button--}}
                                             <span class="col s4 center-align">
                                                 <a href="#"
@@ -483,7 +483,7 @@
                                     <span class="col s6" v-else>
                                         Quantity: @{{ product.request_quantity }}
                                     </span>
-                                    
+
                                     {{-- Show Request Details if product is already requested --}}
                                     <span class="col s12"
                                         v-if="product.request_status && product.status === 'requested'"
@@ -491,7 +491,7 @@
                                         <a href="#"
                                             class="anchor-title white-text"
                                             @click.prevent="viewRequestDetails(product.item_id)"
-                                            style="font-weight: 600; text-decoration: underline;" 
+                                            style="font-weight: 600; text-decoration: underline;"
                                         >
                                             View Request Details
                                         </a>
@@ -523,7 +523,7 @@
                                           </a>
                                           <a class="btn primary primary-hover"
                                               href="#!"
-                                              style="font-weight: 700;" 
+                                              style="font-weight: 700;"
                                               @click.prevent="confirmRequest(product.item_id)"
                                           >
                                               Request
@@ -561,7 +561,7 @@
                                             Reserved
                                           </span>
                                       </template>
-                                      
+
                                       {{-- On Delivery --}}
                                       <template v-if="product.status === 'on_delivery'">
                                           <span class="status-label">Status:</span>
@@ -636,7 +636,7 @@
                 max-height: 100% !important;">
                 <div class="modal-content">
                     <h4>Request Product?</h4>
-                    <p class="grey-text text-darken-2">    
+                    <p class="grey-text text-darken-2">
                         Requesting
                           <span class="grey-text text-darken-4">
                             <b>@{{ productRequest.name }}</b>
@@ -657,7 +657,7 @@
                                 <custom-date-select v-model="productRequest.dateNeeded" @date-select="dateChange"></custom-date-select>
                             </div>
                             <div class="input-field col s12">
-                                <textarea 
+                                <textarea
                                   id="special-request"
                                   class="materialize-textarea"
                                   v-model="productRequest.specialRequest"
@@ -667,9 +667,10 @@
                                 <label
                                   class="grey-text text-darken-3"
                                   for="special-request"
-                                  style="padding-bottom: 5px; margin-top: 5px;"  
+                                  style="padding-bottom: 5px; margin-top: 5px;"
                                 >
                                   Message / Special Request
+                                  <span class="grey-text"><i>- Optional</i></span>
                                 </label>
                             </div>
                         </div>
@@ -683,9 +684,10 @@
                   <a class="modal-action modal-close waves-effect waves-green btn-flat request-product-buttons"
                   style="color: #37474f; font-weight: 700;"
                   >Cancel</a>
-                  <a class="modal-action waves-effect waves-green btn blue request-product-buttons"
+                  <a id="confirm-request-product" class="modal-action waves-effect waves-green btn blue request-product-buttons"
                       @click.prevent="requestProduct($event)"
                       style="text-transform: none;  font-weight: 700;"
+                      :disabled="productRequest.type === 'semen'"
                   >
                       Yes, Confirm Request Product
                   </a>
@@ -767,15 +769,20 @@
                     <div class="row">
                         <div id="comment-container" class="input-field col s12">
                             <textarea id="comment" class="materialize-textarea" v-model="breederRate.commentField"></textarea>
-                            <label for="comment">Comment</label>
+                            <label for="comment">Comment <i>- Optional</i></label>
                         </div>
                     </div>
                 </div>
               </div>
               <div class="modal-footer">
-                    <a class="modal-action waves-effect waves-green btn blue rate-breeder-buttons"
+                    <a id="submit-rate-button" class="modal-action waves-effect waves-green btn blue rate-breeder-buttons"
                         @click.prevent="rateAndRecord($event)"
                         style="font-weight: 700;"
+                        :disabled="
+                          !breederRate.isDeliveryValueFilled ||
+                          !breederRate.isTransactionValueFilled ||
+                          !breederRate.isProductQualityValueFilled
+                        "
                     >
                         Rate
                     </a>
@@ -920,7 +927,7 @@
     <script type="text/javascript">
         // Variables
         var rawProducts = {!! $products !!};
-        
+
     </script>
     <script src="{{ elixir('/js/customer/swinecartPage.js') }}"></script>
 @endsection

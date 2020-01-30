@@ -61,16 +61,16 @@ var vm = new Vue({
     barChart: '',
     barChartConfig: {},
     chosenFrequency: 'monthly',
-    chosenFarm: 'all-farms',
     dateFromInput: '',
     dateToInput: '',
     dateFromObject: {},
     dateToObject: {},
     dashboardStats: {},
+    farms: [],
     latestAccreditation: '',
     serverDateNow: '',
     pubsubTopic: window.pubsubTopic
-  },
+  },  
   computed: {
     overallOnDelivery: function () {
       var sum = this.dashboardStats.on_delivery.boar + this.dashboardStats.on_delivery.gilt + this.dashboardStats.on_delivery.semen + this.dashboardStats.on_delivery.sow;
@@ -110,6 +110,7 @@ var vm = new Vue({
     }
   },
   methods: {
+
     valueChange: function () {
       // Clear date objects
       this.dateFromObject.clear();
@@ -214,7 +215,7 @@ var vm = new Vue({
       // Get Sold Products data from server according to chosen frequency
       if ((this.dateFromObject.get() && this.dateToObject.get()) || this.chosenFrequency === 'weekly') {
 
-        console.log(this.chosenFarm);
+        
 
         // Do AJAX
         this.$http.get(
@@ -266,6 +267,7 @@ var vm = new Vue({
   created: function () {
 
     // Initialize local data
+    this.farms = farmAddresses;
 
     // object used for bar chart
     this.barChartConfig = {

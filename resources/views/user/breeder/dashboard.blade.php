@@ -23,6 +23,20 @@
 
     <div id="card-status" class="row" v-cloak>
 
+        {{-- Display current farm --}}
+        <h5>Currently displayed farm: {{ $selectedFarm }}  </h5>
+        <br><br>
+
+        <div class="col s12 m5 l4 xl3">
+          <div id="farm-wrapper" style="margin-bottom: 4vh; margin-left: 0.5vw;" class="input-field">
+            <select id="select-farm">
+              <option value="all-farms" selected>All farms</option>
+              <option v-for="farm in farms" v-bind:value="farm.id"> @{{ farm.name }} </option>
+            </select>
+            <label style="font-size: 1rem; color:hsl(0, 0%, 30%);">Selected farm:</label>
+          </div>
+        </div> <br><br><br><br>
+
         {{-- Product Status --}}
         <div id="card-product-status" class="col grey lighten-4">
             {{-- Product Status label --}}
@@ -183,21 +197,7 @@
           <h4 class="left-align" style="font-weight: 500; margin-left: 1vw;">
             Sales Overview
           </h4> <br>
-
-          {{-- Selecting which farm to graph --}}
-          <div class="col s12 m5 l4 xl3">
-            <div id="farm-wrapper" style="margin-bottom: 4vh; margin-left: 0.5vw;" class="input-field">
-              <select v-model="chosenFarm">
-                <option value="" disabled selected>Choose farm</option>
-                @foreach($farmAddresses as $farm)
-                  <option value="{{$farm->id}}">{{$farm->name}}, {{$farm->province}}</option>
-                @endforeach
-                <option value="all-farms">All farms</option>
-              </select>
-              <label style="font-size: 1rem; color:hsl(0, 0%, 30%);">Select farm:</label>
-            </div>
-          </div> <br><br><br><br>
-
+          
           {{-- Guide text --}}
           <p style="color:hsl(0, 0%, 30%); margin-left: 1vw;">Select range:</p>
           
@@ -363,6 +363,8 @@
         var rawDataGilt = {{ json_encode($soldData['dataSets'][2]) }};
         var rawDataSemen = {{ json_encode($soldData['dataSets'][3]) }};
         
+        var farmAddresses = {!! json_encode($farmAddresses) !!};
+
         var rawDashboardStats = {!! json_encode($dashboardStats) !!};
     </script>
     <script src="{{ elixir('/js/breeder/dashboard.js') }}"></script>

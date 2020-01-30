@@ -147,7 +147,7 @@
         <div style="margin-top: 4rem;" class="teal accent-3 divider"></div>
         
         <div style="border-style: none;" class="collection">
-          <a href="{{ route('home_path') }}" style="border-style: none; font-weight: 700;"
+          <a href="{{ route('dashboard', ['farm_address' => 'all-farms']) }}" style="border-style: none; font-weight: 700;"
             class="primary primary-hover collection-item white-text"
           >
             <i style="padding: 2px;" class="material-icons left">assessment</i>
