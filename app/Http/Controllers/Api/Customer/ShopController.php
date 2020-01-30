@@ -122,15 +122,18 @@ class ShopController extends Controller
                     $p = [];
 
                     $p['id'] = $product->id;
-                    $p['breederName'] = $breeder->users()->first()->name;
-                    $p['imageUrl'] = route('serveImage',
-                        ['size' => 'medium', 'filename' => $product->primaryImage->name]
-                    );
                     $p['name'] = $product->name;
-                    $p['age'] = $this->computeAge($product->birthdate);
                     $p['type'] = $product->type;
-                    $p['breedName'] = $this->transformBreedSyntax($breed->name);
-                    $p['farmFromProvince'] = $product->farmFrom->province;
+                    $p['age'] = $product->birthdate === '0000-00-00' ? null : $this->computeAge($product->birthdate);
+                    $p['breed'] = $this->transformBreedSyntax($breed->name);
+                    $p['breederName'] = $breeder->users()->first()->name;
+                    $p['farmLocation'] = $product->farmFrom->province;
+                    $p['imageUrl'] = route('serveImage',
+                        [
+                            'size' => 'medium', 
+                            'filename' => $product->primaryImage->name
+                        ]
+                    );
 
                     $array->push($p);
                 }
@@ -140,6 +143,7 @@ class ShopController extends Controller
     
         return response()->json([
             'data' => [
+                'count' => $products->count(),
                 'products' => $products,
             ]
         ], 200);

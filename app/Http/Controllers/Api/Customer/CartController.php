@@ -16,7 +16,7 @@ use App\Models\Customer;
 use App\Models\Breeder;
 use App\Models\FarmAddress;
 use App\Models\Breed;
-use App\Models\Image;
+use App\Models\Image;   
 use App\Models\SwineCartItem;
 use App\Models\Product;
 use App\Models\Review;
@@ -72,15 +72,17 @@ class CartController extends Controller
                 'product', 
                 'product.breed', 
                 'product.breeder.users', 
+
                 'product.primaryImage'
             )
             ->where('if_rated', 0)
-            ->where('if_requested', 0);
+            ->where('if_requested', 0)
+            ->orderBy('id', 'desc');
     }
 
     private function findItem($item_id)
     {   
-        return $cart_item = $this->getCartItems()
+        return $this->getCartItems()
             ->where('id', $item_id)
             ->first();
     }
@@ -100,16 +102,18 @@ class CartController extends Controller
                 'id' =>  $product->id,
                 'name' => $product->name,
                 'type' => $product->type,
+                'age' => $product->birthdate === '0000-00-00' ? null : $this->computeAge($product->birthdate),
                 'breed' => $this->transformBreedSyntax($breed->name),
+                'breederName' => $breeder->name,
+                'farmLocation' => $product->farmFrom->province,
                 'imageUrl' => route('serveImage',
                     [
                         'size' => 'medium', 
                         'filename' => $is_deleted 
-                            ? $this->defaultImages[$product->type]
-                            : $product->primaryImage->name
+                        ? $this->defaultImages[$product->type]
+                        : $product->primaryImage->name
                     ]
                 ),
-                'breederName' => $breeder->name,
                 'isDeleted' => $is_deleted
             ]
         ];
@@ -214,99 +218,15 @@ class CartController extends Controller
 
         if($cart_item) {
             $cart_item->delete();
+
             return response()->json([
-                'itemId' => $cart_item->id,
+                'data' => [
+                    'itemId' => $cart_item->id,
+                ]
             ], 200);
         }
         else return response()->json([
             'error' => 'Cart Item not found!' 
         ], 404);
-    }
-
-    public function requestItem(Request $request, $item_id)
-    {
-        $cart_item = $this->findItem($item_id);
-
-        if($item) {
-            if(!$item->if_requested) {
-                $item->if_requested = 1;
-                $item->quantity = $request->requestQuantity;
-                $item->date_needed = ($request->dateNeeded) ? date_format(date_create($request->dateNeeded), 'Y-n-j') : '';
-                $item->special_request = $request->specialRequest;
-                $item->save();
-
-                $product = Product::find($item->product_id);
-                $product->status = "requested";
-                $product->save();
-
-                $breeder = Breeder::find($product->breeder_id);
-
-                $transactionDetails = [
-                    'swineCart_id' => $item->id,
-                    'customer_id' => $item->customer_id,
-                    'breeder_id' => $product->breeder_id,
-                    'product_id' => $product->id,
-                    'status' => 'requested',
-                    'created_at' => Carbon::now()
-                ];
-
-                $notificationDetails = [
-                    'description' => '<b>' . $this->user->name . '</b> requested for Product <b>' . $product->name . '</b>.',
-                    'time' => $transactionDetails['created_at'],
-                    'url' => route('dashboard.productStatus')
-                ];
-
-                $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: ' . $this->user->name . ' requested for Product ' . $product->name . '.',
-                    'recipient' => $breeder->office_mobile
-                ];
-
-                $pubsubData = [
-                    'body' => [
-                        'uuid' => (string) Uuid::uuid4(),
-                        'id' => $product->id,
-                        'reservation_id' => 0,
-                        'img_path' => route('serveImage', ['size' => 'small', 'filename' => Image::find($product->primary_img_id)->name]),
-                        'breeder_id' => $product->breeder_id,
-                        'farm_province' => FarmAddress::find($product->farm_from_id)->province,
-                        'name' => $product->name,
-                        'type' => $product->type,
-                        'age' => $this->computeAge($product->birthdate),
-                        'breed' => $this->transformBreedSyntax(Breed::find($product->breed_id)->name),
-                        'quantity' => $product->quantity,
-                        'adg' => $product->adg,
-                        'fcr' => $product->fcr,
-                        'bft' => $product->backfat_thickness,
-                        'status' => $product->status,
-                        'status_time' => '',
-                        'customer_id' => 0,
-                        'customer_name' => '',
-                        'date_needed' => '',
-                        'special_request' => '',
-                        'delivery_date' => ''
-                    ]
-                ];
-
-                $breederUser = $breeder->users()->first();
-
-                $this->addToTransactionLog($transactionDetails);
-
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
-                dispatch(new NotifyUser('product-requested', $breederUser->id, $notificationDetails));
-                dispatch(new SendToPubSubServer('notification', $breederUser->email));
-                dispatch(new SendToPubSubServer('db-productRequest', $breederUser->email, $pubsubData));
-                dispatch(new SendToPubSubServer('db-requested', $breederUser->email, ['product_type' => $product->type]));
-
-                return response()->json([
-                    'message' => 'Request SwineCart Item successful'
-                ], 200);
-            }
-            else return response()->json([
-                'error' => 'SwineCart Item already requested!' 
-            ], 409);
-        }
-        else return response()->json([
-            'error' => 'SwineCart Item does not exist!' 
-        ], 404);   
     }
 }
