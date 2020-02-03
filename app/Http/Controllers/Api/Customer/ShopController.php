@@ -124,7 +124,9 @@ class ShopController extends Controller
                     $p['id'] = $product->id;
                     $p['name'] = $product->name;
                     $p['type'] = $product->type;
-                    $p['age'] = $product->birthdate === '0000-00-00' ? null : $this->computeAge($product->birthdate);
+                    $p['age'] = $product->birthdate === '0000-00-00'
+                        ? null
+                        : $this->computeAge($product->birthdate);
                     $p['breed'] = $this->transformBreedSyntax($breed->name);
                     $p['breederName'] = $breeder->users()->first()->name;
                     $p['farmLocation'] = $product->farmFrom->province;
@@ -140,10 +142,9 @@ class ShopController extends Controller
 
                 return $array;
             }, collect([]));
-    
+
         return response()->json([
             'data' => [
-                'count' => $products->count(),
                 'products' => $products,
             ]
         ], 200);
@@ -154,7 +155,7 @@ class ShopController extends Controller
         $breeds = Breed::where('name','not like', '%+%')
             ->where('name','not like', '')
             ->orderBy('name','asc')
-            ->get()
+            ->get(['id', 'name'])
             ->map(function ($item) {
                 $breed = [];
                 $breed['id'] = $item->id;
@@ -171,7 +172,8 @@ class ShopController extends Controller
 
     public function getBreeders(Request $request)
     {
-        $breeders = Breeder::all()
+        $breeders = Breeder::with('users')
+            ->get(['id'])
             ->map(function ($item) {
                 $breeder = [];
                 $breeder['id'] = $item->id;
