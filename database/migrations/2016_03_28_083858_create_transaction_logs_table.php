@@ -24,6 +24,8 @@ class CreateTransactionLogsTable extends Migration
                 'cancel_transaction'
                 ]);
             $table->dateTime('created_at');
+
+            $table->index('status');
         });
     }
 

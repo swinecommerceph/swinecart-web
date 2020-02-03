@@ -22,6 +22,9 @@ class CreateSwineCartItemsTable extends Migration
             $table->boolean('if_rated')->default('0');
             $table->date('date_needed')->nullable();
             $table->mediumText('special_request');
+
+            $table->index('product_id');
+            $table->index('reservation_id');
         });
     }
 

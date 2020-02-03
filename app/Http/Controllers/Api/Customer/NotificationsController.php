@@ -44,16 +44,14 @@ class NotificationsController extends Controller
                 $notification['id'] = $item->id;
                 $notification['type'] = end($type);
                 $notification['message'] = strip_tags($item->data['description']);
-                $notification['created_at'] = $item->created_at->toDateTimeString();
-                $notification['read_at'] = $item->read_at ? $item->read_at->toDateTimeString() : null;
+                $notification['createdAt'] = $item->created_at->toDateTimeString();
+                $notification['readAt'] = $item->read_at ? $item->read_at->toDateTimeString() : null;
 
                 return $notification;
             });
 
         return response()->json([
-            'message' => 'Get Notifications successful!',
             'data' => [
-                'count' => $notifications->count(),
                 'notifications' => $notifications
             ]
         ], 200);
@@ -75,7 +73,6 @@ class NotificationsController extends Controller
                 $notification->markAsRead();
 
                 return response()->json([
-                    'message' => 'See Notification successful!',
                     'data' => [
                         'read_at' => $notification->read_at->toDateTimeString()
                     ]

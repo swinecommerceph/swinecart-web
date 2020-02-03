@@ -15,6 +15,8 @@ class CreateBreedsTable extends Migration
         Schema::create('breeds', function (Blueprint $table) {
             $table->increments('id');
             $table->string('name')->unique();
+
+            $table->index('id');
         });
     }
 
