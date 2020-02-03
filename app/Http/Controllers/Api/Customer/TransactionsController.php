@@ -102,52 +102,63 @@ class TransactionsController extends Controller
         $customer = $this->user->userable;
 
         $history = $customer
-            ->transactionLogs()
+            ->swineCartItems()
+            ->whereHas('transactionLogs', function ($query) {
+                $query->where('status', 'rated');
+            })
+            ->with(['transactionLogs' => function ($query) {
+                $query->orderBy('created_at', 'DESC');
+            }])
             ->with(
-                'product.breed', 'swineCartItem', 'product.farmFrom',
-                'product.breeder.users'
+                // 'product.breed',
+                // 'product.farmFrom',
+                'product.breeder.user'
+                // 'product.primaryImage'
             )
-            ->orderBy('created_at', 'DESC')
-            ->get()
-            ->groupBy('swineCart_id')
-            ->reduce(function ($history, $item) {
+            ->paginate($request->limit)
+            ->map(function ($element) {
+                return $element;
+            });
 
-                $transaction = [];
+            // ->groupBy('swineCart_id')
+            // ->reduce(function ($history, $item) {
 
-                $product = $item[0]->product;
-                $swineCartItem = $item[0]->swineCartItem;
-                $province = $product->farmFrom->province;
-                $breed = $product->breed;
-                $breeder = $product->breeder->users()->first()->name;
+            //     $transaction = [];
 
-                $transaction['id'] = $item[0]->swineCart_id;
+            //     $product = $item[0]->product;
+            //     $swineCartItem = $item[0]->swineCartItem;
+            //     $province = $product->farmFrom->province;
+            //     $breed = $product->breed;
+            //     $breeder = $product->breeder->users()->first()->name;
 
-                $transaction['product'] = [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'breed' => $this->transformBreedSyntax($breed->name),
-                    'type' => $product->type,
-                    'farmLocation' => $province,
-                    'breederName' => $breeder,
-                ];
+            //     $transaction['id'] = $item[0]->swineCart_id;
 
-                $transaction['logs'] = $item->map(function ($item) {
-                    $log = [];
-                    $log['status'] = $item->status;
-                    $log['createdAt'] = $this->transformDateSyntax($item->created_at, 3);
-                    return $log;
-                });
+            //     $transaction['product'] = [
+            //         'id' => $product->id,
+            //         'name' => $product->name,
+            //         'breed' => $this->transformBreedSyntax($breed->name),
+            //         'type' => $product->type,
+            //         'farmLocation' => $province,
+            //         'breederName' => $breeder,
+            //     ];
 
-                $transaction['request'] = [
-                    'quantity' => $swineCartItem->quantity
-                ];
+            //     $transaction['logs'] = $item->map(function ($item) {
+            //         $log = [];
+            //         $log['status'] = $item->status;
+            //         $log['createdAt'] = $item->created_at;
+            //         return $log;
+            //     });
 
-                $history->push($transaction);
+            //     $transaction['request'] = [
+            //         'quantity' => $swineCartItem->quantity
+            //     ];
 
-                return $history;
+            //     $history->push($item);
 
-            }, collect([]))
-            ->forPage($request->page, $request->limit);
+            //     return $history;
+
+            // }, collect([]))
+            // ->forPage($request->page, $request->limit);
 
         return response()->json([
             'data' => [

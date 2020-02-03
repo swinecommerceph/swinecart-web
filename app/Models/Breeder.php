@@ -50,6 +50,11 @@ class Breeder extends Model
         return $this->morphMany(User::class, 'userable');
     }
 
+    public function user()
+    {
+        return $this->morphOne(User::class, 'userable');
+    }
+
     /**
      * Get all of the Breeder's farm address/es
      */

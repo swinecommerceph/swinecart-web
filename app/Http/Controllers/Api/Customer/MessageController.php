@@ -46,16 +46,16 @@ class MessageController extends Controller
                     $message['content'] = $item->message;
                     $message['read_at'] = $item->read_at; 
                     $message['created_at'] = $item->created_at->toDateTimeString();
-                    $message['from_id'] = $item->direction === 0 ? $item->customer_id : $item->breeder_id;
-                    $message['to_id'] = $item->direction === 0 ? $item->breeder_id : $item->customer_id;
+                    $message['from_id'] = $item->direction === 0 
+                        ? $item->customer_id : $item->breeder_id;
+                    $message['to_id'] = $item->direction === 0 
+                        ? $item->breeder_id : $item->customer_id;
 
                     return $message;
                 });
         
         return response()->json([
-            'message' => 'Get Messages successful!',
             'data' => [
-                'count' => $messages->count(),
                 'messages' => $messages
             ]
         ], 200);
@@ -87,17 +87,19 @@ class MessageController extends Controller
                         'direction' => $item->direction,
                         'content' => $item->message,
                         'read_at' => $item->read_at,
-                        'from_id' => $item->direction === 0 ? $item->customer_id : $item->breeder_id,
-                        'to_id' => $item->direction === 0 ? $item->breeder_id : $item->customer_id,
+                        'from_id' => $item->direction === 0
+                            ? $item->customer_id
+                            : $item->breeder_id,
+                        'to_id' => $item->direction === 0
+                            ? $item->breeder_id
+                            : $item->customer_id,
                     ];
 
                     return $thread;
                 });
 
         return response()->json([
-            'message' => 'Get Threads successful!',
             'data' => [
-                'count' => $threads->count(),
                 'threads' => $threads,
             ]
         ], 200);

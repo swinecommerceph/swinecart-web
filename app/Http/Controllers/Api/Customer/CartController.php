@@ -102,7 +102,9 @@ class CartController extends Controller
                 'id' =>  $product->id,
                 'name' => $product->name,
                 'type' => $product->type,
-                'age' => $product->birthdate === '0000-00-00' ? null : $this->computeAge($product->birthdate),
+                'age' => $product->birthdate === '0000-00-00' 
+                    ? null
+                    : $this->computeAge($product->birthdate),
                 'breed' => $this->transformBreedSyntax($breed->name),
                 'breederName' => $breeder->name,
                 'farmLocation' => $product->farmFrom->province,
