@@ -26,6 +26,7 @@ class CreateTransactionLogsTable extends Migration
             $table->dateTime('created_at');
 
             $table->index('status');
+            $table->index('swineCart_id');
         });
     }
 

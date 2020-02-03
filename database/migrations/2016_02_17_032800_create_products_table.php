@@ -72,7 +72,10 @@ class CreateProductsTable extends Migration
             $table->text('other_details')->nullable();
             $table->enum('status',
                 ['hidden', 'displayed', 'requested']
-                )->default('hidden');
+            )->default('hidden');
+
+            $table->index('primary_img_id');
+        
             $table->softDeletes();
         });
     }

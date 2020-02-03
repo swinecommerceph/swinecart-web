@@ -130,7 +130,7 @@ class ShopController extends Controller
                     $p['farmLocation'] = $product->farmFrom->province;
                     $p['imageUrl'] = route('serveImage',
                         [
-                            'size' => 'medium', 
+                            'size' => 'medium',
                             'filename' => $product->primaryImage->name
                         ]
                     );
@@ -174,7 +174,7 @@ class ShopController extends Controller
         $breeders = Breeder::all()
             ->map(function ($item) {
                 $breeder = [];
-                $breeder['id'] = $item->id;   
+                $breeder['id'] = $item->id;
                 $breeder['name'] = ucwords($item->users()->first()->name);
                 return $breeder;
             });
