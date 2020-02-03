@@ -79,7 +79,7 @@ class ShopController extends Controller
     public function getProducts(Request $request, ProductRepository $repository)
     {   
         $products = Product::whereIn('status', ['displayed', 'requested'])
-            ->with('breed', 'breeder.users', 'primaryImage')
+            ->with('breed', 'breeder.user', 'primaryImage')
             ->where('quantity', '<>', 0);
 
         // Search
@@ -128,7 +128,7 @@ class ShopController extends Controller
                         ? null
                         : $this->computeAge($product->birthdate);
                     $p['breed'] = $this->transformBreedSyntax($breed->name);
-                    $p['breederName'] = $breeder->users()->first()->name;
+                    $p['breederName'] = $breeder->user->name;
                     $p['farmLocation'] = $product->farmFrom->province;
                     $p['imageUrl'] = route('serveImage',
                         [

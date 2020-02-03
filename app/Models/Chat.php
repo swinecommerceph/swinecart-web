@@ -44,7 +44,7 @@ class Chat implements MessageComponentInterface {
                 'direction' => $msg->direction,
             ]);
 
-            if(array_key_exists($msg->to, $this->maps)){
+            if(array_key_exists($msg->to, $this->maps)) {
 
                 $msg->id = $new_message->id;
                 $msg->from_id = $msg->from;
@@ -53,7 +53,7 @@ class Chat implements MessageComponentInterface {
                 $msg->created_at = $new_message->created_at->toDateTimeString();
                 $msg->from = User::where('id', $msg->from)->first()->name;
 
-                echo sprintf('Sending %s to %d' . "\n"  , json_encode($msg), $msg->to);
+                // echo sprintf('Sending %s to %d' . "\n"  , json_encode($msg), $msg->to);
 
                 $this->maps[$msg->to]->send(json_encode($msg));
             }

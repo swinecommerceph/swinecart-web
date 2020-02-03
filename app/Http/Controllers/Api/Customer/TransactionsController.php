@@ -75,7 +75,7 @@ class TransactionsController extends Controller
             'review_customerName' => $this->user->name
         ];
 
-        $breederUser = $breeder->users()->first();
+        $breederUser = $breeder->user;
 
         // Add new Transaction Log
         $this->addToTransactionLog($transactionDetails);
@@ -231,7 +231,7 @@ class TransactionsController extends Controller
                 $items = $customer
                     ->swineCartItems()
                     ->with(
-                        'product.breeder',
+                        'product.breeder.user',
                         'product.breed',
                         'product.primaryImage'
                     )
@@ -243,7 +243,7 @@ class TransactionsController extends Controller
                         $item = [];
 
                         $product = $data->product;
-                        $breeder = $product->breeder->users()->first();
+                        $breeder = $product->breeder->user;
                         $breed_name = $product->breed->name;
 
                         $item['id'] = $data->id;
@@ -316,7 +316,7 @@ class TransactionsController extends Controller
                         $reservation = $data->productReservation;
                         $product = $data->productReservation->product;
                         $breed = $product->breed;
-                        $breeder = $product->breeder->users->first();
+                        $breeder = $product->breeder->user;
 
                         $item['id'] = $data->id;
                         $item['status'] = $reservation->order_status;
@@ -458,7 +458,7 @@ class TransactionsController extends Controller
                     ]
                 ];
 
-                $breederUser = $breeder->users()->first();
+                $breederUser = $breeder->user;
 
                 $this->addToTransactionLog($transactionDetails);
 
@@ -481,7 +481,7 @@ class TransactionsController extends Controller
                     ->find($item_id);
                 
                 $product = $item->product;
-                $breeder = $product->breeder->users()->first();
+                $breeder = $product->breeder->user;
                 $breed_name = $product->breed->name;
 
                 $formattedItem = [];

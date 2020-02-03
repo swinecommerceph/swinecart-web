@@ -24,9 +24,15 @@ class MessageController extends Controller
         });
     }
 
+    private function formatMessageElement($element)
+    {
+
+    }
+
     public function getMessages(Request $request, $breeder_id)
-    {   
+    {
         $user_id = $this->user->id;
+        $userable = explode('\\', $this->user->userable_type)[2];
 
         $messages = Message::where('customer_id', '=', $user_id)
                 ->where('breeder_id', $breeder_id)
@@ -34,29 +40,25 @@ class MessageController extends Controller
                 ->paginate($request->limit)
                 ->map(function ($item) {
 
-                    // if($item->read_at == NULL){
-                    //     $item->read_at = date('Y-m-d H:i:s');
-                    //     $item->save();
-                    // }
-
                     $message = [];
 
-                    $message['id'] = $item->id;
-                    $message['direction'] = $item->direction;
-                    $message['content'] = $item->message;
-                    $message['read_at'] = $item->read_at; 
-                    $message['created_at'] = $item->created_at->toDateTimeString();
-                    $message['from_id'] = $item->direction === 0 
-                        ? $item->customer_id : $item->breeder_id;
-                    $message['to_id'] = $item->direction === 0 
-                        ? $item->breeder_id : $item->customer_id;
+                    // $message['id'] = $item->id;
+                    // $message['direction'] = $item->direction;
+                    // $message['content'] = $item->message;
+                    // $message['read_at'] = $item->read_at; 
+                    // $message['created_at'] = $item->created_at->toDateTimeString();
+                    // $message['from_id'] = $item->direction === 0
+                    //     ? $item->customer_id : $item->breeder_id;
+                    // $message['to_id'] = $item->direction === 0
+                    //     ? $item->breeder_id : $item->customer_id;
 
-                    return $message;
+                    return $item;
                 });
         
         return response()->json([
             'data' => [
-                'messages' => $messages
+                'userable' => $userable,
+                'messages' => $messages,
             ]
         ], 200);
     }

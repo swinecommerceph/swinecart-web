@@ -70,9 +70,8 @@ class CartController extends Controller
             ->swineCartItems()
             ->with(
                 'product', 
-                'product.breed', 
-                'product.breeder.users', 
-
+                'product.breed',
+                'product.breeder.user',
                 'product.primaryImage'
             )
             ->where('if_rated', 0)
@@ -92,7 +91,7 @@ class CartController extends Controller
 
         $product = $cart_item->product;
         $breed = $product->breed;
-        $breeder = $product->breeder->users()->first();
+        $breeder = $product->breeder->user;
 
         $is_deleted = $product->trashed();
 

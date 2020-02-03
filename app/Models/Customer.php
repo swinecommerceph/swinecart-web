@@ -43,7 +43,7 @@ class Customer extends Model
 
     public function user()
     {
-        return $this->morphMany(User::class, 'userable')->limit(1);
+        return $this->morphOne(User::class, 'userable');
     }
 
     /**
