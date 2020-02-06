@@ -23,6 +23,7 @@ class CreateBreederUserTable extends Migration
             $table->string('office_mobile')->nullable();
             $table->string('website')->nullable();
             $table->string('produce')->nullable();
+            $table->string('breeder_handle');
             $table->string('contactPerson_name')->nullable();
             $table->string('contactPerson_mobile')->nullable();
             $table->string('status_instance')->default('active');
