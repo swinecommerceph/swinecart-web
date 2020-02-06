@@ -88,7 +88,7 @@ class UserInstancesSeeder extends Seeder
                 ]);
                 $breeder->farmAddresses()->save($farm);
             }
-            
+
             $breeder->users()->save($user);
             // Change name if Breeder
             $user->name = $companyNames[$breeder->id-1];
@@ -153,7 +153,7 @@ class UserInstancesSeeder extends Seeder
                 $product->birthdate = date('Y-m-d', time() - (15 * (7 * 24 * 60 * 60)));
                 $product->birthweight = random_int(1500,2300)/1.0;
                 $product->breed_id = App\Models\Breed::firstOrCreate(['name' => $randBreed])->id;
-                
+
                 //$product->price = random_int(35000,100000)/1.0;
 
                 $product->min_price = random_int(10000,35000)/1.0;
@@ -168,14 +168,14 @@ class UserInstancesSeeder extends Seeder
                 $product->right_teats = random_int(5,7);
                 $product->other_details = '';
                 $product->status = 'displayed';
-                
+
                 $breeder->products()->save($product);
 
                 // Check if there is a second image
                 if($image2->id) $product->images()->saveMany([$image, $image2]);
                 else $product->images()->save($image);
                 $product->videos()->save($video);
-                
+
             }
 
         });

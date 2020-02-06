@@ -13,7 +13,7 @@
 @endsection
 
 @section('breadcrumbTitle')
-    <div class="breadcrumb-container">    
+    <div class="breadcrumb-container">
       Update Profile
     </div>
 @endsection
@@ -28,7 +28,7 @@
 @section('breeder-content')
     <div class="row">
         <div class="col s12 m10 offset-m1">
-            
+
             <div class="row">
                 <div class="col s2 center-align">
                   <p class="caption">Update your profile.</p>
@@ -49,13 +49,14 @@
                   <br>
 
                   <div class="row">
-                    <div class="col s8 grey lighten-3">
-                      <input 
+                    <div class="col s9 grey lighten-3">
+                      <input
                         id="breeder-link"
                         style="border: none; font-size: 1.5rem;"
                         type="text"
                         readonly
-                        value="http://swinecart.test/customer/view-breeder/{{ $breeder->identifier }}" />
+                        value="http://swinecart.test/customer/view-breeder/{{ $breeder->breeder_handle }}" />
+                        {{-- value="http://swinecart.test/customer/view-breeder/{{ $breeder->identifier }}" /> --}}
                     </div>
 
                     <div class="col s2" style="padding-top: 10px;">
@@ -68,7 +69,7 @@
                       </button>
                     </div>
                   </div>
-            
+
                 </div>
             </div>
 

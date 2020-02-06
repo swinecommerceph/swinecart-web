@@ -35,6 +35,7 @@ class Breeder extends Model
         'office_mobile',
         'website',
         'produce',
+        'breeder_handle',
         'registration_number',
         'contactPerson_name',
         'contactPerson_mobile',

@@ -107,7 +107,7 @@ class BreederController extends Controller
     public function registerBreeder(Request $request) {
 
       $this->validate($request, [
-        
+
         // office tab
         'breederName' => 'required',
         'email' => 'required',
@@ -130,7 +130,7 @@ class BreederController extends Controller
         'farmAddress_1_zipCode' => 'required',
         'farmAddress_1_farmType' => 'required',
         'farmAddress_1_mobile' => 'required',
-      ]); 
+      ]);
 
       $verCode = str_random(10);
       // $password = str_random(10);
@@ -145,7 +145,7 @@ class BreederController extends Controller
       $user->is_admin_approved = 0;
 
       $user->save();
-      
+
       // assign breeder role to user
       $user->assignRole('breeder');
 
@@ -158,13 +158,14 @@ class BreederController extends Controller
       $breeder->office_mobile = $request->input('office_mobile');
       $breeder->website = $request->input('website');
       $breeder->produce = $request->input('produce');
+      $breeder->breeder_handle = str_random(7);
       $breeder->contactPerson_name = $request->input('contactPerson_name');
       $breeder->contactPerson_mobile = $request->input('contactPerson_mobile');
       $breeder->logo_img_id = 0;
       $breeder->status_instance = 'active';
-      
+
       $breeder->save();
-    
+
       // create a breeder instance for that user
       $breeder->users()->save($user);
 
@@ -190,7 +191,7 @@ class BreederController extends Controller
       $farm->accreditation_status = 'active';
 
       $breeder->farmAddresses()->save($farm);
-      
+
       return view('emails.breederMessage');
     }
 
@@ -213,6 +214,7 @@ class BreederController extends Controller
         $breeder->office_landline = $request->input('office_landline');
         $breeder->office_mobile = $request->input('office_mobile');
         $breeder->website = $request->input('website');
+        $breeder->produce = $request->input('produce');
         $breeder->produce = $request->input('produce');
         $breeder->contactPerson_name = $request->input('contactPerson_name');
         $breeder->contactPerson_mobile = $request->input('contactPerson_mobile');

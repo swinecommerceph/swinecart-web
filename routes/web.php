@@ -12,7 +12,7 @@
 */
 
 Route::get('/customer/public-products', ['as' => 'public.products', 'uses' => 'ProductController@viewProducts']);
-Route::get('/customer/view-breeder/{breeder}',['as' => 'viewBProfile', 'uses' => 'ProductController@viewBreederProfile']);
+Route::get('/customer/view-breeder/{breeder_handle}',['as' => 'viewBProfile', 'uses' => 'ProductController@viewBreederProfile']);
 
 Route::get('/customerRegister', ['as' => 'customerRegister', 'uses' => 'Auth\RegisterController@customerRegister']);
 Route::get('/breederRegister', ['as' => 'breederRegister', 'uses' => 'BreederController@breederRegister']);
@@ -72,7 +72,7 @@ Route::group(['middleware' => ['web']], function () {
     Route::group(['prefix' => 'breeder'], function(){
 
     	// Route::get('home',['as' => 'dashboard', 'uses' => 'DashboardController@showDashboard']);
-      
+
         Route::post('breederRegister', ['as' => 'breeder.register', 'uses' => 'BreederController@registerBreeder']);
 
         // profile-related
@@ -112,7 +112,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('dashboard/reviews-and-ratings',['as' => 'dashboard.reviews', 'uses' => 'DashboardController@showReviewsAndRatings']);
         Route::patch('dashboard/product-status/update-status',['as' => 'dashboard.reserveProduct', 'uses' => 'DashboardController@updateProductStatus']);
         Route::get('dashboard/reports', ['as' => 'dashboard.reports', 'uses' => 'DashboardController@showReports']);
-        
+
         // notification-related
         Route::get('notifications',['as' => 'bNotifs', 'uses' => 'BreederController@showNotificationsPage']);
         Route::get('notifications/get',['as' => 'bNotifs.get', 'uses' => 'BreederController@getNotifications']);
@@ -124,7 +124,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages/countUnread', ['as' => 'messages.countUnread', 'uses'=> 'MessageController@countUnread']);
         Route::get('messages/{customer}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
         Route::post('messages', ['as' => 'messages.uploadMedia', 'uses' => 'MessageController@uploadMedia']);
-        
+
         Route::get('customers', ['as' => 'map.customers', 'uses'=> 'BreederController@viewCustomers']);
         Route::post('customers', ['as' => 'map.customersChange', 'uses'=> 'BreederController@viewCustomersChange']);
 
@@ -174,7 +174,7 @@ Route::group(['middleware' => ['web']], function () {
         Route::get('messages/{breeder}', ['as' => 'messages.messages', 'uses'=> 'MessageController@getMessages']);
         Route::post('messages', ['as' => 'messages.uploadMedia', 'uses' => 'MessageController@uploadMedia']);
 
-        
+
         Route::get('breeders', ['as' => 'map.breeders', 'uses'=> 'CustomerController@viewBreeders']);
         Route::post('breeders', ['as' => 'map.breedersChange', 'uses'=> 'CustomerController@viewBreedersChange']);
 
@@ -208,7 +208,7 @@ Route::group(['middleware' => ['web']], function () {
 
         // breeder related
         Route::patch('home/pending/users/self-register-breeder-update',['as' => 'selfRegisteredBreeder.update', 'uses' => 'AdminController@updateSelfRegisteredBreeder']);
-        
+
         //  Breeder statistics
         Route::get('home/statistics/breeder/active', ['as' => 'admin.statistics.breeder.active', 'uses'=> 'AdminController@showStatisticsActiveBreeder']);
         Route::get('home/statistics/breeder/active-year', ['as' => 'admin.statistics.breeder.active-year', 'uses'=> 'AdminController@showStatisticsActiveBreederYear']);

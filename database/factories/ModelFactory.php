@@ -292,6 +292,7 @@ $factory->define(App\Models\Breeder::class, function (Faker\Generator $faker) {
         'office_mobile' => '09776749666',
         'website' => $faker->word.'.com',
         'produce' => $faker->word,
+        'breeder_handle' => str_random(7),
         'contactPerson_name' => $faker->name,
         'contactPerson_mobile' => $faker->regexify('09[0-9]{9}')
     ];
