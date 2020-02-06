@@ -104,7 +104,7 @@ class ProductController extends Controller
     {
         // dd($request->all());
         $breeder = $this->user->userable;
-        /*   
+        /*
           getting the breeder's products that are:
             quantity of non zero
             or
@@ -119,7 +119,7 @@ class ProductController extends Controller
                         ['quantity', '=', 0]
                       ]);
                     });
-                    
+
         // Check filters
         if($request->type && $request->type != 'all-type') {
           $products = $products->where('type', $request->type);
@@ -158,7 +158,7 @@ class ProductController extends Controller
             $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
         }
-        
+
         return view('user.breeder.showProducts', compact('products', 'farms', 'filters', 'urlFilters'));
     }
 
@@ -196,7 +196,7 @@ class ProductController extends Controller
      * Go to Add Product form for storing Product
      * @return View
     */
-    
+
     public function createProduct(Request $request)
     {
       $breeder = $this->user->userable;
@@ -266,14 +266,14 @@ class ProductController extends Controller
     }
     /**
      * Go to Edit Page of a Product
-     * 
+     *
      * @param Product $product
      * @return View
      *
      */
 
     public function editProduct(Product $product)
-    {       
+    {
       $breeder = $this->user->userable;
       $farms = $breeder->farmAddresses;
 
@@ -288,10 +288,10 @@ class ProductController extends Controller
       $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
       $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
       $product->videoCollection = $product->videos;
-      
+
       return view('user.breeder.editProduct', compact('product', 'farms'));
     }
-  
+
     /**
      * Update details of a Product
      * AJAX
@@ -312,13 +312,13 @@ class ProductController extends Controller
           else {
             $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
           }
-          
+
           $product->birthweight = $request->birthweight;
 
           $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-          
+
           $product->house_type = $request->house_type;
-          
+
           // $product->price = $request->price;
           $product->min_price = $request->min_price;
           $product->max_price = $request->max_price;
@@ -591,16 +591,16 @@ class ProductController extends Controller
      * @return View
      */
     public function viewProducts(Request $request, ProductRepository $repository)
-    {   
+    {
         // Check if from a search query
         $products = ($request->q) ? $repository->search($request->q): Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0);
         $scores = ($request->q && isset($products->scores)) ? $products->scores : [];
 
         // return breeders with user name and the breeder_id table
         $breeders = $this->getBreeders();
-        
+
         $separatedBreeders = explode(' ', $request->breeder);
-        
+
         // only get the requested breeders in all the breeders based on the breeder_id
         $parsedBreederIds = [];
         foreach($separatedBreeders as $requestBreeder) {
@@ -612,9 +612,9 @@ class ProductController extends Controller
 
         $parsedTypes = ($request->type) ? explode(' ',$request->type) : '';
         $parsedBreedIds = ($request->breed) ? $this->getBreedIds($request->breed) : '';
-        
+
         $parsedSort = ($request->sort && $request->sort != 'none') ? explode('-',$request->sort) : ['id', 'desc'];
-      
+
         if($parsedTypes) $products = $products->whereIn('type', $parsedTypes);
         if($parsedBreedIds) $products = $products->whereIn('breed_id', $parsedBreedIds);
         if($parsedBreederIds) $products = $products->whereIn('breeder_id', $parsedBreederIds);
@@ -625,9 +625,9 @@ class ProductController extends Controller
         } else if ($request->sort && $request->sort === 'breederrating-asc') {
 
           // get the products and its breeder, then the breeder rating overall
-          $products = Product::with('breeder')->get()->map(function($product) {  
+          $products = Product::with('breeder')->get()->map(function($product) {
             $breederOfProduct = Breeder::where('id', $product->breeder_id)->first();
-            $breederSummaryReviewsAndRatings = $this->dashboard->getSummaryReviewsAndRatings($breederOfProduct);  
+            $breederSummaryReviewsAndRatings = $this->dashboard->getSummaryReviewsAndRatings($breederOfProduct);
             $product->breeder_rating = $breederSummaryReviewsAndRatings['overall'];
             return $product;
           });
@@ -675,7 +675,7 @@ class ProductController extends Controller
 
         $filters = $this->parseThenJoinFilters($request->type, $request->breed, $request->breeder, $request->sort);
         $breedFilters = Breed::where('name','not like', '%+%')->where('name','not like', '')->orderBy('name','asc')->get();
-        
+
         $urlFilters = [
           'q' => $request->q,
           'type' => $request->type,
@@ -702,12 +702,14 @@ class ProductController extends Controller
      * @param  Breeder  $breeder
      * @return View
      */
-    public function viewBreederProfile(Breeder $breeder)
+    public function viewBreederProfile(Breeder $breeder, $breeder_handle)
     {
+        $breeder = Breeder::where('breeder_handle', $breeder_handle)->first();
+
         $breeder->name = $breeder->users()->first()->name;
         $breeder->farms = $breeder->farmAddresses;
-        $breeder->logoImage = 
-          ($breeder->logo_img_id) ? 
+        $breeder->logoImage =
+          ($breeder->logo_img_id) ?
             self::BREEDER_IMG_PATH.Image::find($breeder->logo_img_id)->name :
             self::IMG_PATH.'default_logo.png' ;
 
@@ -816,7 +818,7 @@ class ProductController extends Controller
         $mediaInfo['filename'] = md5_file($pathname . '/' . $filename) . '.' . $fileExtension; */
 
         //$mediaInfo['fileName'] = str_replace('/', '_', $mediaInfo['fileName']);
-        
+
         if($this->isImage($extension)){
             $mediaInfo['directoryPath'] = self::PRODUCT_IMG_PATH;
             $mediaInfo['type'] = new Image;
@@ -917,7 +919,7 @@ class ProductController extends Controller
             else $breedInstance = Breed::where('name',$breedName)->get()->first()->id;
             array_push($tempBreedIds, $breedInstance);
         }
-       
+
         return $tempBreedIds;
     }
 
@@ -934,7 +936,7 @@ class ProductController extends Controller
         return [
           'user' => $user,
           'breeder' => $breeder,
-        ]; 
+        ];
       });
 
       return $breeders;
