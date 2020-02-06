@@ -8,8 +8,13 @@
 
         <div class="card hoverable">
 
-          <div class="card-image" style="padding: 20px 20px;">
-            <img style="width: 25vw; height: 15vh;" class="activator" src="{{ $product->img_path }}">
+          <div
+            class="card-image"
+            style="padding: 20px 20x;">
+            <img
+              style="width: auto; height: 15vh; display: block; margin-left: auto; margin-right: auto;"
+              class="activator"
+              src="{{ $product->img_path }}">
           </div>
 
           <div class="card-content" style="background: hsl(0, 0%, 97%);">
@@ -38,12 +43,12 @@
                       Age: <i>Birthdate not included</i>
                     </span>
                   @else
-                    <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span> 
+                    <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span>
                   @endif
                 </div>
 
                 <div class="col right">
-                  <a 
+                  <a
                     href="{{ route('login') }}"
                     class="btn primary primary-hover tooltipped add-to-cart"
                     data-position="bottom"
@@ -62,10 +67,10 @@
           <div class="card-reveal">
             <div class="row">
               <div class="col s10">
-                  <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}</span>        
+                  <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}</span>
               </div>
               <div class="col s1">
-                <span><i class="card-title material-icons right" style="cursor: pointer;">close</i></span>  
+                <span><i class="card-title material-icons right" style="cursor: pointer;">close</i></span>
               </div>
             </div>
             <table class="col s10">
@@ -125,12 +130,12 @@
                 </tr>
               </tbody>
             </table>
-            
+
 
             <div class="row">
               <br>
               <div class="col right">
-                <a 
+                <a
                   href="{{ route('login') }}"
                   class="btn primary primary-hover tooltipped add-to-cart"
                   data-position="bottom"
