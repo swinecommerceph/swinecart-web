@@ -137,5 +137,5 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::patch('/{id}/{messageId}', 'MessageController@seeMessage');
         });
     });
-    
+
 });

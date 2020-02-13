@@ -110,55 +110,66 @@ class TransactionsController extends Controller
                 $query->orderBy('created_at', 'DESC');
             }])
             ->with(
-                // 'product.breed',
-                // 'product.farmFrom',
-                'product.breeder.user'
-                // 'product.primaryImage'
+                'product.breed',
+                'product.farmFrom',
+                'product.breeder.user',
+                'product.primaryImage',
+                'productReservation'
             )
             ->paginate($request->limit)
             ->map(function ($element) {
-                return $element;
-            });
 
-            // ->groupBy('swineCart_id')
-            // ->reduce(function ($history, $item) {
+                $transaction = [];
 
-            //     $transaction = [];
+                $product = $element->product;
+                $productReservation = $element->productReservation;
+                $province = $product->farmFrom->province;
+                $breed = $product->breed;
+                $breeder = $product->breeder->users()->first()->name;
 
-            //     $product = $item[0]->product;
-            //     $swineCartItem = $item[0]->swineCartItem;
-            //     $province = $product->farmFrom->province;
-            //     $breed = $product->breed;
-            //     $breeder = $product->breeder->users()->first()->name;
+                $transaction['id'] = $element->id;
 
-            //     $transaction['id'] = $item[0]->swineCart_id;
+                $transaction['product'] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'breed' => $this->transformBreedSyntax($breed->name),
+                    'type' => $product->type,
+                    'farmLocation' => $province,
+                    'breederName' => $breeder,
+                ];
 
-            //     $transaction['product'] = [
-            //         'id' => $product->id,
-            //         'name' => $product->name,
-            //         'breed' => $this->transformBreedSyntax($breed->name),
-            //         'type' => $product->type,
-            //         'farmLocation' => $province,
-            //         'breederName' => $breeder,
-            //     ];
+                $transaction['logs'] = $element->transactionLogs->map(function ($item) {
+                    $log = [];
+                    $log['status'] = $item->status;
+                    $log['createdAt'] = $item->created_at;
+                    return $log;
+                });
 
-            //     $transaction['logs'] = $item->map(function ($item) {
-            //         $log = [];
-            //         $log['status'] = $item->status;
-            //         $log['createdAt'] = $item->created_at;
-            //         return $log;
-            //     });
+                $trimmed_special_request = trim($productReservation->special_request);
 
-            //     $transaction['request'] = [
-            //         'quantity' => $swineCartItem->quantity
-            //     ];
+                $transaction['reservationDetails'] = [
+                    'quantity' => $productReservation->quantity,
+                    'specialRequest' => 
+                        $trimmed_special_request === ''
+                            ? null
+                            : $trimmed_special_request,
+                    'dateNeeded' => 
+                        ($productReservation->date_needed == '0000-00-00')
+                            ? null
+                            : $productReservation->date_needed,
+                    'deliveryDate' =>
+                        ($productReservation->delivery_date == '0000-00-00')
+                            ? null
+                            : $productReservation->delivery_date,
+                ];
 
-            //     $history->push($item);
+                $transaction['statusTime'] = $transaction['logs'][0]['createdAt'];
 
-            //     return $history;
-
-            // }, collect([]))
-            // ->forPage($request->page, $request->limit);
+                return $transaction;
+            })
+            ->sortByDesc('statusTime')
+            ->values()
+            ->all();
 
         return response()->json([
             'data' => [
@@ -351,7 +362,7 @@ class TransactionsController extends Controller
                                     ? null
                                     : $trimmed_special_request,
                             'deliveryDate' =>
-                                ($reservation->delivery_date == '0000-00-00') 
+                                ($reservation->delivery_date == '0000-00-00')
                                     ? null
                                     : $reservation->delivery_date,
                             'dateNeeded' =>
