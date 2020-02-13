@@ -140,7 +140,9 @@ class TransactionsController extends Controller
 
                 $transaction['logs'] = $element->transactionLogs->map(function ($item) {
                     $log = [];
-                    $log['status'] = $item->status;
+                    $log['status'] = $item->status === 'on_delivery'
+                        ? 'On Delivery'
+                        : ucwords($item->status);
                     $log['createdAt'] = $item->created_at;
                     return $log;
                 });
