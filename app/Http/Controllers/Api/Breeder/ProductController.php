@@ -667,7 +667,7 @@ class ProductController extends Controller {
                     return response()->json([
                         'data' => [
                             'id' => $media->id,
-                            'imageUrl' => route('serveImage', [
+                            'mediaUrl' => route('serveImage', [
                                 'size' => 'medium',
                                 'filename' => $media->name
                             ]),
@@ -679,10 +679,7 @@ class ProductController extends Controller {
                     return response()->json([
                         'data' => [
                             'id' => $media->id,
-                            'imageUrl' => route('serveImage', [
-                                'size' => 'medium',
-                                'filename' => $media->name
-                            ]),
+                            'mediaFileName' => $media->name
                         ]
                     ], 200);
                 }
