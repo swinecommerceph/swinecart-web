@@ -152,7 +152,7 @@ class ProductController extends Controller {
     private function getBreederProducts($breeder) 
     {
         return $breeder->products()
-            ->with('breed')
+            ->with('breed', 'primaryImage')
             ->whereIn('status', ['hidden', 'displayed', 'requested'])
             ->where('quantity','<>', 0)
             ->orWhere([
@@ -260,10 +260,10 @@ class ProductController extends Controller {
                 $product['status'] = $item->status;
                 $product['age'] = $item->birthdate === '0000-00-00' ? null : $this->computeAge($item->birthdate);
                 $product['quantity'] = $item->quantity;
-                $product['is_unique'] = $item->is_unique;
-                $product['image'] = route('serveImage', [
-                    'size' => 'medium', 
-                    'filename' => Image::find($item->primary_img_id)->name
+                $product['isUnique'] = $item->is_unique === 1;
+                $product['imageUrl'] = route('serveImage', [
+                    'size' => 'medium',
+                    'filename' => $item->primaryImage->name
                 ]);
 
                 return $product;
@@ -292,7 +292,6 @@ class ProductController extends Controller {
             $product->save();
 
             return response()->json([
-                'message' => 'Toggle Product Status successful!',
                 'data' => [
                     'id' => $product->id,
                     'status' => $product->status
@@ -634,36 +633,59 @@ class ProductController extends Controller {
     public function addMedia(Request $request, $product_id)
     {
 
-        $file = $request->file('image');
+        $file = $request->file('file');
 
-        if($file->isValid()){
+        if ($file->isValid()) {
             $fileExtension = $file->getClientOriginalExtension();
             $fileName = $file->getClientOriginalName();
 
-            // Get media (Image/Video) info according to extension
-            //if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($file);
-            //else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($file);
-            if($this->isImage($fileExtension)) $mediaInfo = $this->createMediaInfo($fileName, $fileExtension, $product_id, $request->type, $request->breed);
-            else if($this->isVideo($fileExtension)) $mediaInfo = $this->createMediaInfo($fileName, $fileExtension, $product_id, $request->type, $request->breed);
-            else return response()->json('Invalid file extension', 500);
+            if ($this->isImage($fileExtension) || $this->isVideo($fileExtension)) {
+                $mediaInfo = $this->createMediaInfo(
+                    $fileName, $fileExtension, $product_id, 
+                    $request->type, $request->breed
+                );
+            }
+            else return response()->json([
+                'error' => 'Invalid File Extension'
+            ], 500);
 
-            Storage::disk('public')->put($mediaInfo['directoryPath'].$mediaInfo['filename'], file_get_contents($file));
+            Storage::disk('public')->put(
+                $mediaInfo['directoryPath'].$mediaInfo['filename'],
+                file_get_contents($file)
+            );
 
-            // Check if file is successfully moved to desired path
-            if($file){
+            if ($file) {
                 $product = Product::find($product_id);
 
-                // Make Image/Video instance
                 $media = $mediaInfo['type'];
                 $media->name = $mediaInfo['filename'];
 
                 if($this->isImage($fileExtension)){
                     $product->images()->save($media);
-
-                    // Resize images
                     dispatch(new ResizeUploadedImage($media->name));
+                    
+                    return response()->json([
+                        'data' => [
+                            'id' => $media->id,
+                            'imageUrl' => route('serveImage', [
+                                'size' => 'medium',
+                                'filename' => $media->name
+                            ]),
+                        ]
+                    ], 200);
                 }
-                else if($this->isVideo($fileExtension)) $product->videos()->save($media);
+                else if ($this->isVideo($fileExtension)) {
+                    $product->videos()->save($media);
+                    return response()->json([
+                        'data' => [
+                            'id' => $media->id,
+                            'imageUrl' => route('serveImage', [
+                                'size' => 'medium',
+                                'filename' => $media->name
+                            ]),
+                        ]
+                    ], 200);
+                }
             }
             else return response()->json([
                 'error' => 'Upload Failed' 
@@ -672,12 +694,6 @@ class ProductController extends Controller {
         else return response()->json([
             'error' => 'Upload Failed' 
         ], 500);
-
-        return response()->json([
-            'data' => [
-                'file' => $media->id
-            ]
-        ], 200);
     }
 
     public function deleteMedia(Request $request, $product_id)
