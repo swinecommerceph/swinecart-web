@@ -68,6 +68,7 @@ class DashboardRepository
             $itemDetail['age'] = $this->computeAge($product->birthdate);
             $itemDetail['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $itemDetail['quantity'] = $product->quantity;
+            $itemDetail['is_unique'] = $product->is_unique;
             $itemDetail['adg'] = $product->adg;
             $itemDetail['fcr'] = $product->fcr;
             $itemDetail['bft'] = $product->backfat_thickness;
@@ -97,6 +98,7 @@ class DashboardRepository
             $itemDetail['age'] = $this->computeAge($product->birthdate);
             $itemDetail['breed'] = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
             $itemDetail['quantity'] = $reservation->quantity;
+            $itemDetail['is_unique'] = $product->is_unique;
             $itemDetail['adg'] = $product->adg;
             $itemDetail['fcr'] = $product->fcr;
             $itemDetail['bft'] = $product->backfat_thickness;
@@ -457,7 +459,8 @@ class DashboardRepository
                           $product->status = 'hidden';
                         }
                         else {
-                          $product->status = 'displayed'; // TODO: ask if multiplier is reserved to someone, is it still displayed? or reserved?
+                          // TODO: ask if multiplier is reserved to someone, is it still displayed? or reserved?
+                          //$product->status = 'displayed';
                           $product->quantity = $product->quantity - $request->request_quantity;
                         }
                         $product->save();
@@ -517,9 +520,7 @@ class DashboardRepository
                     // If product type is not semen remove other requests to this product
                     $productRequests = SwineCartItem::where('product_id', $product->id)->where('customer_id', '<>', $request->customer_id)->where('reservation_id',0);
 
-                    if($product->type != 'semen'){
-
-                        //TODO: do the the logic below only to is_unique = 1 products
+                    if($product->type != 'semen' && $product->is_unique == 1){
 
                         // Notify Customer users that the product has been reserved to another customer
                         foreach ($productRequests->get() as $productRequest) {
