@@ -16,7 +16,7 @@ class UserInstancesSeeder extends Seeder
         $companyNames = [
             'John and Piolo Farms',
             'PICC',
-            'PorKed',
+            //'PorKed',
             // 'McJolly Farms',
             // 'Low Pigs Co.',
             // 'PCAARRD Farms',
@@ -46,7 +46,7 @@ class UserInstancesSeeder extends Seeder
         });
 
     	// For Customers
-        factory(App\Models\User::class, 3)->create()->each(function($user){
+        factory(App\Models\User::class, 2)->create()->each(function($user){
             $faker = Faker\Factory::create();
             $user->assignRole('customer');
             $user->update_profile = 0;
@@ -67,7 +67,7 @@ class UserInstancesSeeder extends Seeder
         });
 
         // For Breeders
-        factory(App\Models\User::class, 3)->create()->each(function($user)use($companyNames){
+        factory(App\Models\User::class, 2)->create()->each(function($user)use($companyNames){
             $faker = Faker\Factory::create();
             $user->assignRole('breeder');
             $user->update_profile = 0;
@@ -79,7 +79,7 @@ class UserInstancesSeeder extends Seeder
             // Create Breeder Profile
             $breeder = factory(App\Models\Breeder::class)->create();
             // Create Farm Address. Override accreditation default values
-            for ($i = 0; $i < 3; $i++) {
+            for ($i = 0; $i < 1; $i++) {
                 $farm = factory(App\Models\FarmAddress::class)->create([
                     'accreditation_no' => random_int(500,1000),
                     'accreditation_status' => 'active',
@@ -100,7 +100,7 @@ class UserInstancesSeeder extends Seeder
             $types = ['sow', 'gilt', 'boar', 'semen']; // 4
             $housetypes = ['opensided', 'tunnelventilated']; // 2
             $breeds = ['largewhite', 'landrace', 'duroc', 'pietrain', 'landrace+duroc', 'largewhite+duroc', 'chesterwhite']; // 7
-            for ($i = 0; $i < 15; $i++) {
+            for ($i = 0; $i < 2; $i++) {
                 $randType = $types[random_int(0,3)];
                 $randHouseType = $housetypes[random_int(0,1)];
                 $randBreed = $breeds[random_int(0,6)];
