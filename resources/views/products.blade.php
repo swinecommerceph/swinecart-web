@@ -27,7 +27,7 @@
     <a href="{{ route('home_path') }}" class="breadcrumb">Home</a>
     <a href="#!" class="breadcrumb">Products</a>
   @endsection
-@else 
+@else
   @section('publicBreadcrumb')
     <a href="#!" class="breadcrumb">
       <span class="primary-text" style="font-weight: 600;">Note:</span>
@@ -130,14 +130,14 @@
                                 {{-- Breed --}}
                                 @foreach($breedFilters as $breedFilter)
 
-                                  <input 
+                                  <input
                                     type="checkbox"
                                     class="filled-in filter-breed"
                                     id="check-{{$breedFilter->name}}"
                                     data-breed="{{$breedFilter->name}}"
                                     @if(!empty($filters[$breedFilter->name])) {{$filters[$breedFilter->name]}}
                                     @endif/>
-                                  <label 
+                                  <label
                                     for="check-{{$breedFilter->name}}"
                                     @if(!empty($filters[$breedFilter->name])) style="font-weight:500; color:#000;"
                                     @endif>
@@ -165,7 +165,7 @@
                               <p class="range-field">
 
                                 @foreach($breeders as $breeder)
-                                  <input 
+                                  <input
                                     type="checkbox"
                                     class="filled-in filter-breeder"
                                     id="check-{{ $breeder['user']->name }}"
@@ -173,7 +173,7 @@
                                     @if (!empty($filters[$breeder['user']->name])) {{ $filters[$breeder['user']->name] }}
                                     @endif/>
 
-                                  <label 
+                                  <label
                                     for="check-{{$breeder['user']->name}}"
                                     @if (!empty($filters[$breeder['user']->name]))
                                     @endif>
@@ -185,10 +185,10 @@
                             </div>
                         </li>
                         <li id="filter-location">
-                            <div 
+                            <div
                               class="collapsible-header">
                               <i class="material-icons teal-text">place</i>
-                              <a 
+                              <a
                                 href="{{ route('map.breeders') }}"
                                 class="grey-text text-darken-4"
                               >
@@ -217,7 +217,7 @@
                   <div class="card-content" style="background: hsl(0, 0%, 97%);">
                     <div class="row">
                         <div class="col s10">
-                          <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}</span>        
+                          <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product->name}}</span>
                         </div>
                         <div class="col s1">
                             <span>
@@ -225,7 +225,7 @@
                             </span>
                         </div>
                     </div>
-                    
+
                     <div class="row">
                         <div class="col s9">
                             <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} - {{$product->breed}}</span> <br>
@@ -234,12 +234,18 @@
                                 Age: <i>Birthdate not included</i>
                               </span>
                             @else
-                              <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span> 
+                              <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span>
+                            @endif
+                            <br>
+                            @if($product->type == 'Semen')
+                              <span style="color: hsl(0, 0%, 45%);">Quantity: <i>not applicable</i></span>
+                            @else
+                              <span style="color: hsl(0, 0%, 45%);">Quantity: {{ $product->quantity }}</span>
                             @endif
                         </div>
                         <div class="col right">
                           @if(Auth::guest())
-                            <a 
+                            <a
                               href="{{ route('login') }}"
                               class="btn primary primary-hover tooltipped add-to-cart"
                               data-position="bottom"
@@ -252,7 +258,7 @@
                               'route' => 'cart.add',
                               'data-product-id' => $product->id,
                               'data-type' => $product->type]) !!}
-                              <a 
+                              <a
                                 href="#"
                                 class="btn primary primary-hover tooltipped add-to-cart"
                                 data-position="bottom"
@@ -270,10 +276,10 @@
                   <div class="card-reveal">
                       <div class="row">
                           <div class="col s10">
-                              <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}</span>        
+                              <span class="card-title truncate" style="color: hsl(0, 0%, 13%); font-weight: 700;">{{$product['name']}}</span>
                           </div>
                           <div class="col s1">
-                            <span><i class="card-title material-icons right" style="cursor: pointer;">close</i></span>  
+                            <span><i class="card-title material-icons right" style="cursor: pointer;">close</i></span>
                           </div>
                       </div>
                       <br>
@@ -339,7 +345,7 @@
                       <div class="row">
                           <br>
                           <div class="col">
-                            <a 
+                            <a
                               href="{{ route('products.cViewDetail', ['product' => $product->id]) }}"
                               class="waves-effect waves-light"
                               style="
@@ -356,7 +362,7 @@
                           </div>
                           <div class="col right">
                             @if(Auth::guest())
-                              <a 
+                              <a
                                 href="{{ route('login') }}"
                                 class="btn primary primary-hover tooltipped add-to-cart"
                                 data-position="bottom"
@@ -369,7 +375,7 @@
                                 'route' => 'cart.add',
                                 'data-product-id' => $product->id,
                                 'data-type' => $product->type]) !!}
-                                <a 
+                                <a
                                   href="#"
                                   class="btn primary primary-hover tooltipped add-to-cart"
                                   data-position="bottom"

@@ -78,7 +78,7 @@ class SwineCartController extends Controller
                 $item = new SwineCartItem;
                 $item->product_id = $request->productId;
                 if(Product::find($request->productId)->type == 'semen') $item->quantity = 2;
-                else $item->quantity = 1;
+                else $item->quantity = Product::find($request->productId)->quantity;
 
                 $swineCartItems->save($item);
 
@@ -97,6 +97,7 @@ class SwineCartController extends Controller
      */
     public function requestSwineCartItem(Request $request)
     {
+
         if ($request->ajax()) {
             Log::info($request->all());
 

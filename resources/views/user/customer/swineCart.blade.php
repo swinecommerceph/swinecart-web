@@ -480,9 +480,13 @@
                                     </span>
 
                                     {{-- product was requested --}}
-                                    <span class="col s6" v-else>
-                                        Quantity: @{{ product.request_quantity }}
+                                    <span class="col s12 input-quantity-container" v-else>
+                                        <span class="col s6" v-if="product.request_quantity > 1 && !product.request_status">
+                                          Quantity to buy: <multiplier-quantity-input v-model="product.request_quantity"> </multiplier-quantity-input>
+                                        </span>
                                     </span>
+
+
 
                                     {{-- Show Request Details if product is already requested --}}
                                     <span class="col s12"
@@ -833,7 +837,7 @@
                                         @{{ item.product_details.type | capitalize }} - @{{ item.product_details.breed }}
                                     </span>
 
-                                    {{-- Quanitity --}}
+                                    {{-- Quantity --}}
                                     <span class="col s12"
                                         v-if="item.product_details.type === 'semen' && item.product_details.quantity"
                                     >
