@@ -151,6 +151,55 @@ Vue.component('quantity-input',{
     }
 
 });
+Vue.component('multiplier-quantity-input', {
+  template:
+      `
+        <span class="col s12" style="padding:0;">
+          <input type="text"
+              ref="input"
+              class="center-align remove-borders"
+              :value="value"
+              style="margin:0;"
+              @focus="selectAll"
+              @input="updateValue($event.target.value)"
+              placeholder="Enter request quantity"
+          >
+        </span>
+      `,
+  props: {
+    value: {
+      type: Number
+    }
+  },
+  methods: {
+    updateValue: function (value) {
+      var resultValue = this.validateQuantity(value);
+      this.$refs.input.value = resultValue;
+      this.$emit('input', resultValue);
+    },
+
+    selectAll: function (event) {
+      setTimeout(function () {
+        event.target.select()
+      }, 0);
+    },
+
+    formatValue: function () {
+      this.$refs.input.value = this.validateQuantity(this.value);
+    },
+
+    validateQuantity: function (value) {
+      var parsedValue = _.toNumber(value);
+      if (_.isFinite(parsedValue) && parsedValue > 0) {
+        // If it is a number check if it is divisible by 2
+        if (parsedValue % 2 !== 0) return parsedValue + 1;
+        else return parsedValue;
+      }
+      else return 2;
+    }
+  }
+
+});
 
 Vue.component('custom-date-select', {
     template: '\

@@ -452,8 +452,14 @@ class DashboardRepository
 
                     // Update quantity of product
                     if($product->type != 'semen'){
-                        $product->status = 'hidden';
-                        $product->quantity = 0;
+                        if ($product->is_unique == 1) {
+                          $product->quantity = 0;
+                          $product->status = 'hidden';
+                        }
+                        else {
+                          $product->status = 'displayed'; // TODO: ask if multiplier is reserved to someone, is it still displayed? or reserved?
+                          $product->quantity = $product->quantity - $request->request_quantity;
+                        }
                         $product->save();
                     }
 
@@ -512,6 +518,8 @@ class DashboardRepository
                     $productRequests = SwineCartItem::where('product_id', $product->id)->where('customer_id', '<>', $request->customer_id)->where('reservation_id',0);
 
                     if($product->type != 'semen'){
+
+                        //TODO: do the the logic below only to is_unique = 1 products
 
                         // Notify Customer users that the product has been reserved to another customer
                         foreach ($productRequests->get() as $productRequest) {
