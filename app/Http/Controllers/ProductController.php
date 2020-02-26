@@ -593,7 +593,24 @@ class ProductController extends Controller
     public function viewProducts(Request $request, ProductRepository $repository)
     {
         // Check if from a search query
-        $products = ($request->q) ? $repository->search($request->q): Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0);
+        /* $products = ($request->q)
+                      ?
+                      $repository->search($request->q)
+                      :
+                      Product::whereIn('status', ['displayed', 'requested'])->where('quantity', '!=', 0); */
+
+        $products = ($request->q)
+                      ?
+                      $repository->search($request->q)
+                      :
+                      Product::whereIn('status', ['displayed','requested'])->where(function ($query) {
+                        $query->where('quantity', '<>', 0)
+                        ->orWhere([
+                          ['is_unique', '=', 0],
+                          ['quantity', '=', 0]
+                        ]);
+                      });
+
         $scores = ($request->q && isset($products->scores)) ? $products->scores : [];
 
         // return breeders with user name and the breeder_id table

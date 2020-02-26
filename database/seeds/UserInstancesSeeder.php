@@ -168,6 +168,7 @@ class UserInstancesSeeder extends Seeder
                 $product->right_teats = random_int(5,7);
                 $product->other_details = '';
                 $product->status = 'displayed';
+                $product->is_unique = random_int(0, 1);
 
                 $breeder->products()->save($product);
 
