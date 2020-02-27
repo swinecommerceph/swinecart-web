@@ -225,8 +225,12 @@ Browse Products
                     <br>
                     @if($product->type == 'Semen')
                     <span style="color: hsl(0, 0%, 45%);">Quantity: <i>not applicable</i></span>
-                    @else
+                    @elseif($product->type != 'Semen' && $product->is_unique == 0)
                     <span style="color: hsl(0, 0%, 45%);">Quantity: {{ $product->quantity }}</span>
+                    @else
+                    <span style="color: hsl(0, 0%, 45%);">
+                      Quantity: {{ $product->quantity }} | <i>Can only be bought once</i>
+                    </span>
                     @endif
                 </div>
                 <div class="col right">
