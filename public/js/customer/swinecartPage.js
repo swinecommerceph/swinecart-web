@@ -768,7 +768,7 @@ var vm = new Vue({
         .then(
           function(response) {
             // Store fetched data in local component data
-            this.history = JSON.parse(response.body);
+            this.history = response.body.data.history;
           },
           function(response) {
             console.log(response.statusText);
