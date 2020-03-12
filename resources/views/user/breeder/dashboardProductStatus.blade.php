@@ -392,7 +392,12 @@ id="page-breeder-product-status"
 @section('customScript')
 <script type="text/javascript">
   // Variables
-        var rawProducts = {!! $products !!};
+  var rawProducts = {!! $products !!};
+  $(document).ready(function () {
+    $('#status-select').on('click', function (event) {
+      event.stopPropagation();
+    });
+  });
 </script>
 <script src="{{ elixir('/js/breeder/dashboardProductStatus.js') }}"></script>
 @endsection
