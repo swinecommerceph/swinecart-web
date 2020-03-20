@@ -70,7 +70,7 @@ var product = {
       quantity: $(".product-quantity").val(),
       _token: parent_form.find("input[name=_token]").val()
     };
-  
+
     /* Check if the checkbox for product uniqueness is checked or not */
     if ($(".product-unique-checker").is(":checked"))
       data_values["is_unique"] = 1;
@@ -102,7 +102,7 @@ var product = {
         .val()
         .toLowerCase()
         .trim();
-        
+
     // Do AJAX
     $.ajax({
       url: parent_form.attr("action"),
@@ -277,7 +277,7 @@ var product = {
         var videos = data.videoCollection;
         var image_list = "";
         var video_list = "";
-    
+
         var hidden_inputs =
           '<input name="productId" type="hidden" value="' +
           data.id +
@@ -363,7 +363,6 @@ var product = {
               '<p class="grey-text">(No uploaded images)</p>'
             );
           } else {
-
             images.forEach(function(element) {
               var anchor_tag_html = "Set";
               var delete_anchor_tag_html = "Delete";
@@ -412,17 +411,16 @@ var product = {
                 "</div>" +
                 "</div>";
             });
-            
-            $(
-              "#edit-images-summary .card-content .edit-image-contents"
-            ).html(image_list);
-          }
 
+            $("#edit-images-summary .card-content .edit-image-contents").html(
+              image_list
+            );
+          }
 
           // Set-up Videos in Edit Media Modal
           var videos_length = videos.length;
           if (videos_length === 0) {
-            console.log('here video');
+            console.log("here video");
             $(".edit-video-contents").html(
               '<p class="grey-text">(No uploaded videos)</p>'
             );
@@ -450,11 +448,10 @@ var product = {
                 "</div>";
             });
 
-            $(
-              "#edit-videos-summary .card-content .edit-video-contents"
-            ).html(video_list);
+            $("#edit-videos-summary .card-content .edit-video-contents").html(
+              video_list
+            );
           }
-          
         }
       },
       error: function(message) {
@@ -532,65 +529,60 @@ var product = {
 
         // General Info
         /* Catching the unfilled input fields */
-        
+
         // ADG
-        if (data.adg === 0 ) {
+        if (data.adg === 0) {
           var item_adg =
             '<li class="collection-item">Average Daily Gain: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var item_adg =
             '<li class="collection-item">Average Daily Gain: ' +
             data.adg +
-            ' g</li>'
+            " g</li>";
         }
 
         // FCR
         if (data.fcr === 0.0) {
           var item_fcr =
             '<li class="collection-item">Feed Conversion Ratio: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var item_fcr =
             '<li class="collection-item">Feed Conversion Ratio: ' +
             data.fcr +
-            '</li>'
+            "</li>";
         }
 
         // Backfat Thickness
         if (data.backfat_thickness === 0.0) {
           var item_backfat_thickness =
             '<li class="collection-item">Backfat Thickness: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var item_backfat_thickness =
             '<li class="collection-item">Backfat Thickness: ' +
             data.backfat_thickness +
-            'mm </li>'
+            "mm </li>";
         }
-        
+
         // Backfat Thickness
         if (data.lsba === 0) {
           var item_lsba =
             '<li class="collection-item">Litter size born alive: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var item_lsba =
             '<li class="collection-item">Litter size born alive: ' +
             data.lsba +
-            '</li>'
+            "</li>";
         }
 
         // Birthweight
         if (data.birthweight === 0.0) {
           var item_birthweight =
             '<li class="collection-item">Birth weight: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var item_birthweight =
             '<li class="collection-item">Birth weight: ' +
             data.birthweight +
-            'g </li>'
+            "g </li>";
         }
 
         // Number of teats only for Gilt and Sow
@@ -599,33 +591,31 @@ var product = {
           if (data.left_teats === 0 || data.right_teats === 0) {
             var item_number_of_teats =
               '<li class="collection-item">Number of teats <i class="grey-text">Not indicated</i></li>';
-          }
-          else {
+          } else {
             var item_number_of_teats =
               '<li class="collection-item">Number of teats: ' +
-              data.left_teats + "(left) | " + data.right_teats + " (right)" +
-              '</li>'
+              data.left_teats +
+              "(left) | " +
+              data.right_teats +
+              " (right)" +
+              "</li>";
           }
-        }
-        else
-          var item_number_of_teats = "";
-      
+        } else var item_number_of_teats = "";
+
         // House Type
         if (data.house_type === "") {
           var item_house_type =
             '<li class="collection-item">House Type: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var house_type_string;
-          if (data.house_type === "tunnelventilated") 
-            house_type_string = "Tunnel ventilated" 
-          else 
-            house_type_string = "Open sided"
+          if (data.house_type === "tunnelventilated")
+            house_type_string = "Tunnel ventilated";
+          else house_type_string = "Open sided";
 
           var item_house_type =
             '<li class="collection-item">House Type: ' +
             house_type_string +
-            '</li>'
+            "</li>";
         }
 
         var items =
@@ -635,9 +625,7 @@ var product = {
           item_lsba +
           item_birthweight +
           item_number_of_teats +
-          item_house_type
-        ;
-
+          item_house_type;
         var image_list = "";
         var video_list = "";
 
@@ -647,61 +635,58 @@ var product = {
             '<p class="grey-text">(No uploaded images)</p>'
           );
         } else {
+          // Images
+          images.forEach(function(element) {
+            var anchor_tag_html = "Set";
+            var delete_anchor_tag_html = "Delete";
+            var cursor_none_prop = '"';
 
-        // Images
-        images.forEach(function(element) {
-          var anchor_tag_html = "Set";
-          var delete_anchor_tag_html = "Delete";
-          var cursor_none_prop = '"';
+            // Change html value of set-display-photo anchor tag if image is the display photo
+            if (element.id == data.primary_img_id) {
+              product.current_display_photo = element.id;
+              anchor_tag_html = "Displayed";
+              cursor_none_prop = 'cursor: none;"';
+            }
 
-          // Change html value of set-display-photo anchor tag if image is the display photo
-          if (element.id == data.primary_img_id) {
-            product.current_display_photo = element.id;
-            anchor_tag_html = "Displayed";
-            cursor_none_prop = 'cursor: none;"';
-          }
-          
-          image_list +=
-            '<div class="col s12 m6">' +
-            '<div class="card hoverable">' +
-            '<div class="card-image">' +
-            '<img src="' +
-            config.productImages_path +
-            "/" +
-            element.name +
-            '">' +
-            "</div>" +
-            '<div class="card-action grey lighten-5" style="border-top: none !important;">' +
-            "<div class=row>" +
-            '<div class="col s4 m6 l3">' +
-            '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important; ' +
-            cursor_none_prop +
-            'class="set-display-photo btn blue lighten-1" data-product-id="' +
-            data.id +
-            '" data-img-id="' +
-            element.id +
-            '">' +
-            anchor_tag_html +
-            "</a>" +
-            "</div>" +
-            '<div class="col s3"></div>' +
-            '<div class="col s4 m6 l3">' +
-            '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-5" data-media-id="' +
-            element.id +
-            '">' +
-            delete_anchor_tag_html +
-            "</a>" +
-            "</div>" +
-            "</div>" +
-            "</div>" +
-            "</div>" +
-            "</div>";
+            image_list +=
+              '<div class="col s12 m6">' +
+              '<div class="card hoverable">' +
+              '<div class="card-image">' +
+              '<img src="' +
+              config.productImages_path +
+              "/" +
+              element.name +
+              '">' +
+              "</div>" +
+              '<div class="card-action grey lighten-5" style="border-top: none !important;">' +
+              "<div class=row>" +
+              '<div class="col s4 m6 l3">' +
+              '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important; ' +
+              cursor_none_prop +
+              'class="set-display-photo btn blue lighten-1" data-product-id="' +
+              data.id +
+              '" data-img-id="' +
+              element.id +
+              '">' +
+              anchor_tag_html +
+              "</a>" +
+              "</div>" +
+              '<div class="col s3"></div>' +
+              '<div class="col s4 m6 l3">' +
+              '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-5" data-media-id="' +
+              element.id +
+              '">' +
+              delete_anchor_tag_html +
+              "</a>" +
+              "</div>" +
+              "</div>" +
+              "</div>" +
+              "</div>" +
+              "</div>";
           });
 
           $("#images-summary .card-content .image-contents").html(image_list);
         }
-        
-        
 
         // Videos
         var videos_length = videos.length;
@@ -726,9 +711,8 @@ var product = {
           $("#videos-summary .card-content .video-contents").html(video_list);
         }
 
-
         $("#product-summary-collection h3").html(data.name);
-        
+
         var item_type = data.type + " - " + data.breed;
         $("#product-summary-collection h5").html(item_type);
 
@@ -737,21 +721,16 @@ var product = {
         );
 
         if (data.birthdate === "November 30, -0001") {
-          var item_birthdate =
-            'Birthdate: <i class="grey-text">Not indicated</i>';
+          var item_birthdate = '<i class="grey-text">No age information</i>';
         } else {
-          var item_birthdate = "Birthdate: " + data.birthdate
+          var item_birthdate = "Birthdate: " + data.birthdate;
         }
-        $("#product-summary-birthdate").html(
-          item_birthdate
-        );
+        $("#product-summary-birthdate").html(item_birthdate);
 
         $("#swine-information").html(items);
-        var other_details_data = '<p>' + data.other_details + '</p>';
-        $("#other-information")
-          .html(other_details_data);
-        
-        
+        var other_details_data = "<p>" + data.other_details + "</p>";
+        $("#other-information").html(other_details_data);
+
         $("#display-product-form").prepend(
           '<input name="productId" type="hidden" value="' + data.id + '">'
         );

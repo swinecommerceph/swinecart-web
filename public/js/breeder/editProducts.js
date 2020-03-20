@@ -70,7 +70,7 @@ var product = {
       quantity: $(".product-quantity").val(),
       _token: parent_form.find("input[name=_token]").val()
     };
-  
+
     /* Check if the checkbox for product uniqueness is checked or not */
     if ($(".product-unique-checker").is(":checked"))
       data_values["is_unique"] = 1;
@@ -102,7 +102,7 @@ var product = {
         .val()
         .toLowerCase()
         .trim();
-        
+
     // Do AJAX
     $.ajax({
       url: parent_form.attr("action"),
@@ -277,7 +277,7 @@ var product = {
         var videos = data.videoCollection;
         var image_list = "";
         var video_list = "";
-    
+
         var hidden_inputs =
           '<input name="productId" type="hidden" value="' +
           data.id +
@@ -363,7 +363,6 @@ var product = {
               '<p class="grey-text">(No uploaded images)</p>'
             );
           } else {
-
             images.forEach(function(element) {
               var anchor_tag_html = "Set";
               var delete_anchor_tag_html = "Delete";
@@ -412,17 +411,16 @@ var product = {
                 "</div>" +
                 "</div>";
             });
-            
-            $(
-              "#edit-images-summary .card-content .edit-image-contents"
-            ).html(image_list);
-          }
 
+            $("#edit-images-summary .card-content .edit-image-contents").html(
+              image_list
+            );
+          }
 
           // Set-up Videos in Edit Media Modal
           var videos_length = videos.length;
           if (videos_length === 0) {
-            console.log('here video');
+            console.log("here video");
             $(".edit-video-contents").html(
               '<p class="grey-text">(No uploaded videos)</p>'
             );
@@ -450,11 +448,10 @@ var product = {
                 "</div>";
             });
 
-            $(
-              "#edit-videos-summary .card-content .edit-video-contents"
-            ).html(video_list);
+            $("#edit-videos-summary .card-content .edit-video-contents").html(
+              video_list
+            );
           }
-          
         }
       },
       error: function(message) {
@@ -532,65 +529,60 @@ var product = {
 
         // General Info
         /* Catching the unfilled input fields */
-        
+
         // ADG
-        if (data.adg === 0 ) {
+        if (data.adg === 0) {
           var item_adg =
             '<li class="collection-item">Average Daily Gain: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var item_adg =
             '<li class="collection-item">Average Daily Gain: ' +
             data.adg +
-            ' g</li>'
+            " g</li>";
         }
 
         // FCR
         if (data.fcr === 0.0) {
           var item_fcr =
             '<li class="collection-item">Feed Conversion Ratio: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var item_fcr =
             '<li class="collection-item">Feed Conversion Ratio: ' +
             data.fcr +
-            '</li>'
+            "</li>";
         }
 
         // Backfat Thickness
         if (data.backfat_thickness === 0.0) {
           var item_backfat_thickness =
             '<li class="collection-item">Backfat Thickness: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var item_backfat_thickness =
             '<li class="collection-item">Backfat Thickness: ' +
             data.backfat_thickness +
-            'mm </li>'
+            "mm </li>";
         }
-        
+
         // Backfat Thickness
         if (data.lsba === 0) {
           var item_lsba =
             '<li class="collection-item">Litter size born alive: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var item_lsba =
             '<li class="collection-item">Litter size born alive: ' +
             data.lsba +
-            '</li>'
+            "</li>";
         }
 
         // Birthweight
         if (data.birthweight === 0.0) {
           var item_birthweight =
             '<li class="collection-item">Birth weight: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var item_birthweight =
             '<li class="collection-item">Birth weight: ' +
             data.birthweight +
-            'g </li>'
+            "g </li>";
         }
 
         // Number of teats only for Gilt and Sow
@@ -599,33 +591,31 @@ var product = {
           if (data.left_teats === 0 || data.right_teats === 0) {
             var item_number_of_teats =
               '<li class="collection-item">Number of teats <i class="grey-text">Not indicated</i></li>';
-          }
-          else {
+          } else {
             var item_number_of_teats =
               '<li class="collection-item">Number of teats: ' +
-              data.left_teats + "(left) | " + data.right_teats + " (right)" +
-              '</li>'
+              data.left_teats +
+              "(left) | " +
+              data.right_teats +
+              " (right)" +
+              "</li>";
           }
-        }
-        else
-          var item_number_of_teats = "";
-      
+        } else var item_number_of_teats = "";
+
         // House Type
         if (data.house_type === "") {
           var item_house_type =
             '<li class="collection-item">House Type: <i class="grey-text">Not indicated</i></li>';
-        }
-        else {
+        } else {
           var house_type_string;
-          if (data.house_type === "tunnelventilated") 
-            house_type_string = "Tunnel ventilated" 
-          else 
-            house_type_string = "Open sided"
+          if (data.house_type === "tunnelventilated")
+            house_type_string = "Tunnel ventilated";
+          else house_type_string = "Open sided";
 
           var item_house_type =
             '<li class="collection-item">House Type: ' +
             house_type_string +
-            '</li>'
+            "</li>";
         }
 
         var items =
@@ -635,9 +625,7 @@ var product = {
           item_lsba +
           item_birthweight +
           item_number_of_teats +
-          item_house_type
-        ;
-
+          item_house_type;
         var image_list = "";
         var video_list = "";
 
@@ -647,61 +635,58 @@ var product = {
             '<p class="grey-text">(No uploaded images)</p>'
           );
         } else {
+          // Images
+          images.forEach(function(element) {
+            var anchor_tag_html = "Set";
+            var delete_anchor_tag_html = "Delete";
+            var cursor_none_prop = '"';
 
-        // Images
-        images.forEach(function(element) {
-          var anchor_tag_html = "Set";
-          var delete_anchor_tag_html = "Delete";
-          var cursor_none_prop = '"';
+            // Change html value of set-display-photo anchor tag if image is the display photo
+            if (element.id == data.primary_img_id) {
+              product.current_display_photo = element.id;
+              anchor_tag_html = "Displayed";
+              cursor_none_prop = 'cursor: none;"';
+            }
 
-          // Change html value of set-display-photo anchor tag if image is the display photo
-          if (element.id == data.primary_img_id) {
-            product.current_display_photo = element.id;
-            anchor_tag_html = "Displayed";
-            cursor_none_prop = 'cursor: none;"';
-          }
-          
-          image_list +=
-            '<div class="col s12 m6">' +
-            '<div class="card hoverable">' +
-            '<div class="card-image">' +
-            '<img src="' +
-            config.productImages_path +
-            "/" +
-            element.name +
-            '">' +
-            "</div>" +
-            '<div class="card-action grey lighten-5" style="border-top: none !important;">' +
-            "<div class=row>" +
-            '<div class="col s4 m6 l3">' +
-            '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important; ' +
-            cursor_none_prop +
-            'class="set-display-photo btn blue lighten-1" data-product-id="' +
-            data.id +
-            '" data-img-id="' +
-            element.id +
-            '">' +
-            anchor_tag_html +
-            "</a>" +
-            "</div>" +
-            '<div class="col s3"></div>' +
-            '<div class="col s4 m6 l3">' +
-            '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-5" data-media-id="' +
-            element.id +
-            '">' +
-            delete_anchor_tag_html +
-            "</a>" +
-            "</div>" +
-            "</div>" +
-            "</div>" +
-            "</div>" +
-            "</div>";
+            image_list +=
+              '<div class="col s12 m6">' +
+              '<div class="card hoverable">' +
+              '<div class="card-image">' +
+              '<img src="' +
+              config.productImages_path +
+              "/" +
+              element.name +
+              '">' +
+              "</div>" +
+              '<div class="card-action grey lighten-5" style="border-top: none !important;">' +
+              "<div class=row>" +
+              '<div class="col s4 m6 l3">' +
+              '<a href="#!" id="display-photo" style="font-weight: 700; width: 11vw !important; ' +
+              cursor_none_prop +
+              'class="set-display-photo btn blue lighten-1" data-product-id="' +
+              data.id +
+              '" data-img-id="' +
+              element.id +
+              '">' +
+              anchor_tag_html +
+              "</a>" +
+              "</div>" +
+              '<div class="col s3"></div>' +
+              '<div class="col s4 m6 l3">' +
+              '<a href="#!" style="font-weight: 700; width: 10vw !important;" class="delete-image btn-flat grey-text text-darken-2 grey lighten-5" data-media-id="' +
+              element.id +
+              '">' +
+              delete_anchor_tag_html +
+              "</a>" +
+              "</div>" +
+              "</div>" +
+              "</div>" +
+              "</div>" +
+              "</div>";
           });
 
           $("#images-summary .card-content .image-contents").html(image_list);
         }
-        
-        
 
         // Videos
         var videos_length = videos.length;
@@ -726,9 +711,8 @@ var product = {
           $("#videos-summary .card-content .video-contents").html(video_list);
         }
 
-
         $("#product-summary-collection h3").html(data.name);
-        
+
         var item_type = data.type + " - " + data.breed;
         $("#product-summary-collection h5").html(item_type);
 
@@ -737,21 +721,16 @@ var product = {
         );
 
         if (data.birthdate === "November 30, -0001") {
-          var item_birthdate =
-            'Birthdate: <i class="grey-text">Not indicated</i>';
+          var item_birthdate = '<i class="grey-text">No age information</i>';
         } else {
-          var item_birthdate = "Birthdate: " + data.birthdate
+          var item_birthdate = "Birthdate: " + data.birthdate;
         }
-        $("#product-summary-birthdate").html(
-          item_birthdate
-        );
+        $("#product-summary-birthdate").html(item_birthdate);
 
         $("#swine-information").html(items);
-        var other_details_data = '<p>' + data.other_details + '</p>';
-        $("#other-information")
-          .html(other_details_data);
-        
-        
+        var other_details_data = "<p>" + data.other_details + "</p>";
+        $("#other-information").html(other_details_data);
+
         $("#display-product-form").prepend(
           '<input name="productId" type="hidden" value="' + data.id + '">'
         );
@@ -914,39 +893,48 @@ $(".product-quantity , .edit-product-quantity").keyup(function() {
     return value.match(pattern);
   });
 });
+
 function submitEditedProduct(parent_form, update_button) {
+  const dateFromForm = parent_form.find("input[name='edit_birthdate']").val();
+  let submittedBirthdate = null;
+
+  if (dateFromForm) {
+    submittedBirthdate = parent_form.find("input[name='edit_birthdate']").val();
+  }
+
   var data_values = {
-    "id": product_data.id,
-    "name": parent_form.find("input[name='edit-name']").val(),
-    "type": parent_form.find('#edit-select-type').val(),
+    id: product_data.id,
+    name: parent_form.find("input[name='edit-name']").val(),
+    type: parent_form.find("#edit-select-type").val(),
 
-    "min_price": parent_form.find('input[name=edit-min_price]').val(),
-    "max_price": parent_form.find('input[name=edit-max_price]').val(),
+    min_price: parent_form.find("input[name=edit-min_price]").val(),
+    max_price: parent_form.find("input[name=edit-max_price]").val(),
 
-    "farm_from_id": parent_form.find('#edit-select-farm').val(),
-    "birthdate": parent_form.find("input[name='edit_birthdate']").val(),
-    "birthweight": parent_form.find('input[name=edit-birthweight]').val(),
+    farm_from_id: parent_form.find("#edit-select-farm").val(),
+    birthdate: submittedBirthdate,
+    birthweight: parent_form.find("input[name=edit-birthweight]").val(),
 
-    "house_type": parent_form.find('#edit-select-housetype').val(),
+    house_type: parent_form.find("#edit-select-housetype").val(),
 
     // "price": parent_form.find("input[name='edit-price']").val(),
-    "adg": parent_form.find("input[name='edit-adg']").val(),
-    "fcr": parent_form.find("input[name='edit-fcr']").val(),
-    "backfat_thickness": parent_form.find("input[name='edit-backfat_thickness']").val(),
-    "lsba": parent_form.find('input[name=edit-lsba]').val(),
-    "left_teats": parent_form.find('input[name=edit-left_teats]').val(),
-    "right_teats": parent_form.find('input[name=edit-right_teats]').val(),
-    "other_details": $('textarea#edit-other_details').val(),
-    "quantity": $('.edit-product-quantity').val(),
-    "_token": parent_form.find('input[name=_token]').val(),
+    adg: parent_form.find("input[name='edit-adg']").val(),
+    fcr: parent_form.find("input[name='edit-fcr']").val(),
+    backfat_thickness: parent_form
+      .find("input[name='edit-backfat_thickness']")
+      .val(),
+    lsba: parent_form.find("input[name=edit-lsba]").val(),
+    left_teats: parent_form.find("input[name=edit-left_teats]").val(),
+    right_teats: parent_form.find("input[name=edit-right_teats]").val(),
+    other_details: $("textarea#edit-other_details").val(),
+    quantity: $(".edit-product-quantity").val(),
+    _token: parent_form.find("input[name=_token]").val()
   };
 
   /* Check if the checkbox for product uniqueness is checked or not */
-  if ($('.edit-product-unique-checker').is(":checked")) {
+  if ($(".edit-product-unique-checker").is(":checked")) {
     data_values["is_unique"] = 1;
     data_values.quantity = 1;
-  }
-  else data_values["is_unique"] = 0;
+  } else data_values["is_unique"] = 0;
 
   /* Set proper values for semen type */
   var edit_select_type_value = $("#edit-select-type option:selected").text();
@@ -960,13 +948,18 @@ function submitEditedProduct(parent_form, update_button) {
   data_values.max_price = data_values.max_price.replace(",", ""); // remove comma in price before storing
 
   // Transform breed syntax if crossbreed
-  if ($("#edit-product input:checked").val() === 'crossbreed') {
+  if ($("#edit-product input:checked").val() === "crossbreed") {
     var fbreed = parent_form.find("input[name='edit-fbreed']").val();
     var mbreed = parent_form.find("input[name='edit-mbreed']").val();
 
-    data_values["breed"] = fbreed.toLowerCase().trim() + '+' + mbreed.toLowerCase().trim();
-  }
-  else data_values["breed"] = parent_form.find("input[name='edit-breed']").val().toLowerCase().trim();
+    data_values["breed"] =
+      fbreed.toLowerCase().trim() + "+" + mbreed.toLowerCase().trim();
+  } else
+    data_values["breed"] = parent_form
+      .find("input[name='edit-breed']")
+      .val()
+      .toLowerCase()
+      .trim();
 
   /* data_values["other_details"] = ''; */
 
@@ -974,23 +967,23 @@ function submitEditedProduct(parent_form, update_button) {
     // Wait for the update on the database
     // Do AJAX
     $.ajax({
-      url: parent_form.attr('action'),
+      url: parent_form.attr("action"),
       type: "PUT",
       cache: false,
       data: data_values,
-      success: function (data) {
-        Materialize.toast('Product updated!', 1500, 'green lighten-1');
+      success: function(data) {
+        Materialize.toast("Product updated!", 1500, "green lighten-1");
         // $('#edit-product-modal').modal('close');
       },
-      error: function (message) {
+      error: function(message) {
         // console.log(message['responseText']);
-        console.log('Error in editing product');
+        console.log("Error in editing product");
       }
     })
-  ).done(function () {
+  ).done(function() {
     // Enable update-button
-    update_button.removeClass('disabled');
-    update_button.html('Edit Product');
+    update_button.removeClass("disabled");
+    update_button.html("Edit Product");
 
     // Then get the product summary
     //product.modal_history.push('#edit-product-modal');
@@ -1034,14 +1027,16 @@ $(document).ready(function() {
   });
 
   // prevent the date picker from instatly closing upon clicking
-  // Materialize bug? 
-  $('.datepicker').on('mousedown', function (event) {
+  // Materialize bug?
+  $(".datepicker").on("mousedown", function(event) {
     event.preventDefault();
   });
 
   // prevent the dropdown from instantly closing upon clicking
   // Materialize bug?
-  $('#edit-select-type-wrapper, #edit-select-farm-wrapper, #edit-select-housetype-wrapper').on('click', function (event) {
+  $(
+    "#edit-select-type-wrapper, #edit-select-farm-wrapper, #edit-select-housetype-wrapper"
+  ).on("click", function(event) {
     event.stopPropagation();
   });
 
@@ -1056,14 +1051,13 @@ $(document).ready(function() {
 
   // PRODUCT UNIQUENESS
   if (product_data.is_unique) {
-    $('.edit-product-unique-checker').prop('checked', true);
-    $('.edit-product-quantity').val(1);
-    $('.edit-product-quantity').prop('disabled', true);
-  }
-  else {
+    $(".edit-product-unique-checker").prop("checked", true);
+    $(".edit-product-quantity").val(1);
+    $(".edit-product-quantity").prop("disabled", true);
+  } else {
     // Semen will have no quantity
-    var actual_quantity; 
-    if (product_data.quantity === -1) actual_quantity = '';
+    var actual_quantity;
+    if (product_data.quantity === -1) actual_quantity = "";
     else actual_quantity = product_data.quantity;
     $(".edit-product-quantity").val(actual_quantity);
   }
@@ -1099,62 +1093,44 @@ $(document).ready(function() {
   // setting the birthdate differently since simple val() does not work
   var birthdatePicker = $("#edit_birthdate").pickadate();
   var picker = birthdatePicker.pickadate("picker");
-  
-  if (product_data.birthdate !== "November 30, -0001") 
-    picker.set("select", new Date(product_data.birthdate));
 
-  /** Clearing the values if initial attribute has 
+  if (product_data.birthdate !== "0000-00-00") {
+    picker.set("select", new Date(product_data.birthdate));
+  }
+
+  /** Clearing the values if initial attribute has
    * no initial value since 0 is different from null
    */
-  if (product_data.min_price === 0.0)
-    $("#edit-min_price").val();
-  else
-    $("#edit-min_price").val(product_data.min_price);
-  
-  if (product_data.max_price === 0.0)
-    $("#edit-max_price").val();
-  else
-    $("#edit-max_price").val(product_data.max_price);
-  
-  if (product_data.birthweight === 0.0)
-    $("#edit-birthweight").val();
-  else 
-    $("#edit-birthweight").val(product_data.birthweight);
+  if (product_data.min_price === 0.0) $("#edit-min_price").val();
+  else $("#edit-min_price").val(product_data.min_price);
 
-  if (product_data.adg === 0)
-    $("#edit-adg").val();
-  else 
-    $("#edit-adg").val(product_data.adg);
+  if (product_data.max_price === 0.0) $("#edit-max_price").val();
+  else $("#edit-max_price").val(product_data.max_price);
 
-  if (product_data.fcr === 0.0)
-    $("#edit-fcr").val();
-  else
-    $("#edit-fcr").val(product_data.fcr);
+  if (product_data.birthweight === 0.0) $("#edit-birthweight").val();
+  else $("#edit-birthweight").val(product_data.birthweight);
+
+  if (product_data.adg === 0) $("#edit-adg").val();
+  else $("#edit-adg").val(product_data.adg);
+
+  if (product_data.fcr === 0.0) $("#edit-fcr").val();
+  else $("#edit-fcr").val(product_data.fcr);
 
   if (product_data.backfat_thickness === 0.0)
     $("#edit-backfat_thickness").val();
-  else
-    $("#edit-backfat_thickness").val(product_data.backfat_thickness);
+  else $("#edit-backfat_thickness").val(product_data.backfat_thickness);
 
-  if (product_data.lsba === 0)
-    $("#edit-lsba").val();
-  else
-    $("#edit-lsba").val(product_data.lsba);
-  
-  if (product_data.left_teats === 0)
-    $("#edit-left_teats").val();
-  else
-    $("#edit-left_teats").val(product_data.left_teats);
-  
-  if (product_data.right_teats === 0)
-    $("#edit-right_teats").val();
-  else
-    $("#edit-right_teats").val(product_data.right_teats)
-  
-  if (product_data.other_details === "")
-    $("#edit-other_details").val();
-  else 
-    $("#edit-other_details").val(product_data.other_details);
+  if (product_data.lsba === 0) $("#edit-lsba").val();
+  else $("#edit-lsba").val(product_data.lsba);
+
+  if (product_data.left_teats === 0) $("#edit-left_teats").val();
+  else $("#edit-left_teats").val(product_data.left_teats);
+
+  if (product_data.right_teats === 0) $("#edit-right_teats").val();
+  else $("#edit-right_teats").val(product_data.right_teats);
+
+  if (product_data.other_details === "") $("#edit-other_details").val();
+  else $("#edit-other_details").val(product_data.other_details);
 
   var parent_form = $("#edit-product");
   var hidden_inputs =
@@ -1339,34 +1315,33 @@ $(document).ready(function() {
    * This is for handling unique products.
    * Unique products should only have a product quantity of one
    */
-  $(".edit-product-unique-checker").change(function (e) {
+  $(".edit-product-unique-checker").change(function(e) {
     e.preventDefault();
 
     if ($(this).is(":checked")) {
       $(".edit-product-quantity").attr("disabled", "true");
-      $('.edit-product-quantity').val(1);
-    }
-    else $(".edit-product-quantity").removeAttr("disabled");
+      $(".edit-product-quantity").val(1);
+    } else $(".edit-product-quantity").removeAttr("disabled");
   });
 
   /* Set prompt if initial type is Semen */
   var select_type_value_semen = $("#edit-select-type option:selected").text();
   if (select_type_value_semen === "Semen") {
     $("#semen-blockquote").show(300);
-    $(".edit-product-unique-checker").prop('checked', false);
+    $(".edit-product-unique-checker").prop("checked", false);
     $(".edit-product-unique-checker").attr("disabled", "true");
-    $(".edit-product-quantity").val('');
+    $(".edit-product-quantity").val("");
     $(".edit-product-quantity").attr("disabled", "true");
   }
 
   /* Shows a prompt only for semen-type product */
-  $("#edit-select-type").change(function (e) {
+  $("#edit-select-type").change(function(e) {
     var select_type_value = $("#edit-select-type option:selected").text();
     if (select_type_value === "Semen") {
       $("#semen-blockquote").show(300);
-      $(".edit-product-unique-checker").prop('checked', false);
+      $(".edit-product-unique-checker").prop("checked", false);
       $(".edit-product-unique-checker").attr("disabled", "true");
-      $(".edit-product-quantity").val('');
+      $(".edit-product-quantity").val("");
       $(".edit-product-quantity").attr("disabled", "true");
     } else {
       $("#semen-blockquote").hide(300);
@@ -1377,28 +1352,31 @@ $(document).ready(function() {
   });
 
   /* Shows number of teats field only for sow or gilt */
-  
+
   /* For getting initial product type */
   var edit_select_type_value = $("#edit-select-type option:selected").text();
   if (edit_select_type_value === "Sow" || edit_select_type_value === "Gilt")
     $("#edit-number-of-teats-container").show();
-  else
-    $("#edit-number-of-teats-container").hide();
+  else $("#edit-number-of-teats-container").hide();
 
   /* For changing the product type */
-  $("#edit-select-type").change(function () {
-    var edit_change_select_type_value = $("#edit-select-type option:selected").text();
-    if (edit_change_select_type_value === "Sow" || edit_change_select_type_value === "Gilt")
+  $("#edit-select-type").change(function() {
+    var edit_change_select_type_value = $(
+      "#edit-select-type option:selected"
+    ).text();
+    if (
+      edit_change_select_type_value === "Sow" ||
+      edit_change_select_type_value === "Gilt"
+    )
       $("#edit-number-of-teats-container").show();
-    else
-      $("#edit-number-of-teats-container").hide();
+    else $("#edit-number-of-teats-container").hide();
   });
 
   /**
    * This is for handling unique products.
    * Unique products should only have a product quantity of one
    */
-  $(".edit-product-quantity").change(function (e) {
+  $(".edit-product-quantity").change(function(e) {
     e.preventDefault();
 
     if ($(this).val() > 1)
@@ -1775,7 +1753,6 @@ $(document).ready(function() {
   $("#edit-select-type").on('change', function () {
     product.manage_necessary_fields($(this).parents('form'), $(this).val());
   }); */
-
 });
 
 "use strict";
@@ -2020,12 +1997,7 @@ var validateFunction = function() {
         validBreed = validBreed && validFbreed && validMbreed;
       } else validBreed = validateInput(document.getElementById("breed"));
 
-      if (
-        validName &&
-        validType &&
-        validFarmFrom &&
-        validBreed
-      ) {
+      if (validName && validType && validFarmFrom && validBreed) {
         // Disable submit/add product button
         $("#submit-button").addClass("disabled");
         $("#submit-button").html("Adding Product ...");
@@ -2054,16 +2026,10 @@ var validateFunction = function() {
         validBreed = validBreed && validFbreed && validMbreed;
       } else validBreed = validateInput(document.getElementById("edit-breed"));
 
-      if (
-        validName &&
-        validType &&
-        validFarmFrom &&
-        validBreed
-      ) {
+      if (validName && validType && validFarmFrom && validBreed) {
         // Disable update-button
         $(this).addClass("disabled");
         $(this).html("Updating...");
-
         submitEditedProduct($("#edit-product"), $(this));
       } else Materialize.toast("Please properly fill all required fields.", 2500, "orange accent-2");
     });
