@@ -282,12 +282,14 @@ class ProductController extends Controller
       $product->breeder = Breeder::find($product->breeder_id)->users->first();
       $product->breeder = $product->breeder['name'];
       $product->type = ucfirst($product->type);
-      $product->birthdate = $this->transformDateSyntax($product->birthdate);
+      if ($product->birthdate != "0000-00-00") $product->birthdate = $this->transformDateSyntax($product->birthdate);
       $product->age = $this->computeAge($product->birthdate);
       $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
       $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
       $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
       $product->videoCollection = $product->videos;
+
+      //dd($product);
 
       return view('user.breeder.editProduct', compact('product', 'farms'));
     }
@@ -306,8 +308,8 @@ class ProductController extends Controller
           $product->farm_from_id = $request->farm_from_id;
           $product->name = $request->name;
           $product->type = $request->type;
-          if ($request->birthdate === NULL) {
-            $product->birthdate = '';
+          if ($request->birthdate === '') {
+            $product->birthdate = "0000-00-00";
           }
           else {
             $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
