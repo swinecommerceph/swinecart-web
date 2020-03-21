@@ -168,7 +168,7 @@ id="page-breeder-view-product-details"
     {{-- Other Information --}}
     <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Other Information
     </p>
-    @if ( $product->other_details === "")
+    @if ( $product->other_details === null)
     <i class="grey-text">Not Indicated</i>
     @else
     <p>{!! $product->other_details !!}</p>
