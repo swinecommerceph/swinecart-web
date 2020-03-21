@@ -318,7 +318,7 @@ class ProductController extends Controller
 
           $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
 
-          $product->house_type = $request->house_type === '' ? null : $request->house_type;
+          $product->house_type = $request->house_type === 'none' ? null : $request->house_type;
 
           // $product->price = $request->price;
           $product->min_price = $request->min_price === '' ? null : $request->min_price;

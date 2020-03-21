@@ -228,6 +228,7 @@
             <option value="" disabled selected>Choose house type</option>
             <option value="tunnelventilated">Tunnel ventilated</option>
             <option value="opensided">Open sided</option>
+            <option value="none">None of the above</option>
           </select>
           <label style="font-size: 1rem;" class="teal-text text-darken-4">
             House type
