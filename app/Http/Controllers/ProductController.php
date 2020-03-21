@@ -178,7 +178,7 @@ class ProductController extends Controller
         $product->age = $this->computeAge($product->birthdate);
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
         $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-        $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+        $product->other_details = $product->other_details === null ? null : $this->transformOtherDetailsSyntax($product->other_details);
         $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
         $product->videoCollection = $product->videos;
 
@@ -230,26 +230,25 @@ class ProductController extends Controller
             $product->primary_img_id = $image->id;
             $product->name = $request->name;
             $product->type = $request->type;
-            $product->house_type = $request->house_type;
+            $product->house_type = $request->house_type === '' ? null : $request->house_type;
             if ($request->birthdate === "") {
               $product->birthdate = '';
             }
             else {
               $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
             }
-            $product->birthweight = $request->birthweight;
+            $product->birthweight = $request->birthweight === '' ? null : $request->birthweight;
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-            // $product->price = $request->price;
-            $product->min_price = $request->min_price;
-            $product->max_price = $request->max_price;
+            $product->min_price = $request->min_price === '' ? null : $request->min_price;
+            $product->max_price = $request->max_price === '' ? null : $request->max_price;
             $product->quantity = ($request->type == 'semen') ? -1 : 1;
-            $product->lsba = $request->lsba;
-            $product->adg = $request->adg;
-            $product->fcr = $request->fcr;
-            $product->backfat_thickness = $request->backfat_thickness;
-            $product->left_teats = $request->left_teats;
-            $product->right_teats = $request->right_teats;
-            $product->other_details = $request->other_details;
+            $product->lsba = $request->lsba === '' ? null : $request->lsba;
+            $product->adg = $request->adg === '' ? null : $request->adg;
+            $product->fcr = $request->fcr === '' ? null : $request->fcr;
+            $product->backfat_thickness = $request->backfat_thickness === '' ? null : $request->backfat_thickness;
+            $product->left_teats = $request->left_teats === '' ? null : $request->left_teats;
+            $product->right_teats = $request->right_teats === '' ? null : $request->right_teats;
+            $product->other_details = $request->right_teats === '' ? null : $request->right_teats;
             $product->is_unique = $request->is_unique;
             $product->quantity = $request->quantity;
 
@@ -282,12 +281,14 @@ class ProductController extends Controller
       $product->breeder = Breeder::find($product->breeder_id)->users->first();
       $product->breeder = $product->breeder['name'];
       $product->type = ucfirst($product->type);
-      $product->birthdate = $this->transformDateSyntax($product->birthdate);
+      if ($product->birthdate != "0000-00-00") $product->birthdate = $this->transformDateSyntax($product->birthdate);
       $product->age = $this->computeAge($product->birthdate);
       $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
       $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
       $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
       $product->videoCollection = $product->videos;
+
+      //dd($product);
 
       return view('user.breeder.editProduct', compact('product', 'farms'));
     }
@@ -306,36 +307,36 @@ class ProductController extends Controller
           $product->farm_from_id = $request->farm_from_id;
           $product->name = $request->name;
           $product->type = $request->type;
-          if ($request->birthdate === NULL) {
-            $product->birthdate = '';
+          if ($request->birthdate === '') {
+            $product->birthdate = "0000-00-00";
           }
           else {
             $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
           }
 
-          $product->birthweight = $request->birthweight;
+          $product->birthweight = $request->birthweight === '' ? null : $request->birthweight;
 
           $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
 
-          $product->house_type = $request->house_type;
+          $product->house_type = $request->house_type === 'none' ? null : $request->house_type;
 
           // $product->price = $request->price;
-          $product->min_price = $request->min_price;
-          $product->max_price = $request->max_price;
+          $product->min_price = $request->min_price === '' ? null : $request->min_price;
+          $product->max_price = $request->max_price === '' ? null : $request->max_price;
 
 
-          $product->adg = $request->adg;
-          $product->fcr = $request->fcr;
-          $product->backfat_thickness = $request->backfat_thickness;
-          $product->lsba = $request->lsba;
+          $product->adg = $request->adg === '' ? null : $request->adg;
+          $product->fcr = $request->fcr === '' ? null : $request->fcr;
+          $product->backfat_thickness = $request->backfat_thickness === '' ? null : $request->backfat_thickness;
+          $product->lsba = $request->lsba === '' ? null : $request->lsba;
 
-          $product->left_teats = $request->left_teats;
-          $product->right_teats = $request->right_teats;
+          $product->left_teats = $request->left_teats === '' ? null : $request->left_teats;
+          $product->right_teats = $request->right_teats === '' ? null : $request->right_teats;
 
           $product->quantity = $request->quantity;
           $product->is_unique = $request->is_unique;
 
-          $product->other_details = $request->other_details;
+          $product->other_details = $request->other_details === '' ? null : $request->other_details;
           $product->save();
 
           return "OK";
@@ -768,7 +769,7 @@ class ProductController extends Controller
         $product->type = ucfirst($product->type);
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
         $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-        $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+        $product->other_details = $product->other_details === null ? null : $this->transformOtherDetailsSyntax($product->other_details);
         $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
         $product->videoCollection = $product->videos;
         $product->userid = Breeder::find($product->breeder_id)->users->first()->id;

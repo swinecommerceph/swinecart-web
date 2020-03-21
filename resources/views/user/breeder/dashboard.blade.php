@@ -60,10 +60,10 @@ id="page-breeder-dashboard"
             <h3 class="black-text">@{{ overallRequested }}</h3>
           </div>
           <div class="card-action teal darken-3 ">
-            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.requested.boar }} </a>
-            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.requested.sow }} </a>
-            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.requested.gilt }} </a>
-            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.requested.semen }} </a>
+            <a class="grey-text text-lighten-4">Boar: @{{ requestedProductsBoar }} </a>
+            <a class="grey-text text-lighten-4">Sow: @{{ requestedProductsSow }} </a>
+            <a class="grey-text text-lighten-4">Gilt: @{{ requestedProductsGilt }} </a>
+            <a class="grey-text text-lighten-4">Semen: @{{ requestedProductsSemen }} </a>
           </div>
         </div>
       </a>
@@ -80,10 +80,10 @@ id="page-breeder-dashboard"
             <h3 class="black-text">@{{ overallReserved }}</h3>
           </div>
           <div class="card-action teal darken-3 ">
-            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.reserved.boar }} </a>
-            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.reserved.sow }} </a>
-            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.reserved.gilt }} </a>
-            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.reserved.semen }} </a>
+            <a class="grey-text text-lighten-4">Boar: @{{ reservedProductsBoar }} </a>
+            <a class="grey-text text-lighten-4">Sow: @{{ reservedProductsSow }} </a>
+            <a class="grey-text text-lighten-4">Gilt: @{{ reservedProductsGilt }} </a>
+            <a class="grey-text text-lighten-4">Semen: @{{ reservedProductsSemen }} </a>
           </div>
         </div>
       </a>
@@ -100,10 +100,10 @@ id="page-breeder-dashboard"
             <h3 class="black-text">@{{ overallOnDelivery }}</h3>
           </div>
           <div class="card-action teal darken-3 ">
-            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.on_delivery.boar }} </a>
-            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.on_delivery.sow }} </a>
-            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.on_delivery.gilt }} </a>
-            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.on_delivery.semen }} </a>
+            <a class="grey-text text-lighten-4">Boar: @{{ onDeliveryProductsBoar }} </a>
+            <a class="grey-text text-lighten-4">Sow: @{{ onDeliveryProductsSow }} </a>
+            <a class="grey-text text-lighten-4">Gilt: @{{ onDeliveryProductsGilt }} </a>
+            <a class="grey-text text-lighten-4">Semen: @{{ onDeliveryProductsSemen }} </a>
           </div>
         </div>
 
@@ -134,10 +134,10 @@ id="page-breeder-dashboard"
             <h3 class="black-text">@{{ overallHidden }}</h3>
           </div>
           <div class="card-action teal darken-3 ">
-            <a class="grey-text text-lighten-4">Boar: @{{ dashboardStats.hidden.boar }} </a>
-            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.hidden.sow }} </a>
-            <a class="grey-text text-lighten-4">Gilt: @{{ dashboardStats.hidden.gilt }} </a>
-            <a class="grey-text text-lighten-4">Semen: @{{ dashboardStats.hidden.semen }} </a>
+            <a class="grey-text text-lighten-4">Boar: @{{ hiddenProductsBoar }} </a>
+            <a class="grey-text text-lighten-4">Sow: @{{ hiddenProductsSow }} </a>
+            <a class="grey-text text-lighten-4">Gilt: @{{ hiddenProductsGilt }} </a>
+            <a class="grey-text text-lighten-4">Semen: @{{ hiddenProductsSemen }} </a>
           </div>
         </div>
 
@@ -155,14 +155,11 @@ id="page-breeder-dashboard"
             <h3 class="black-text">@{{ overallDisplayed }}</h3>
           </div>
           <div class="card-action teal darken-3 ">
-            <a class="grey-text text-lighten-4">Boar:
-              @{{ dashboardStats.displayed.boar + dashboardStats.requested.boar }} </a>
-            <a class="grey-text text-lighten-4">Sow: @{{ dashboardStats.displayed.sow + dashboardStats.requested.sow }}
+            <a class="grey-text text-lighten-4">Boar: @{{ displayedProductsBoar }} </a>
+            <a class="grey-text text-lighten-4">Sow: @{{ displayedProductsSow }}
             </a>
-            <a class="grey-text text-lighten-4">Gilt:
-              @{{ dashboardStats.displayed.gilt + dashboardStats.requested.gilt }} </a>
-            <a class="grey-text text-lighten-4">Semen:
-              @{{ dashboardStats.displayed.semen + dashboardStats.requested.semen }} </a>
+            <a class="grey-text text-lighten-4">Gilt: @{{ displayedProductsGilt }} </a>
+            <a class="grey-text text-lighten-4">Semen: @{{ displayedProductsSemen }} </a>
           </div>
         </div>
       </a>
@@ -180,13 +177,13 @@ id="page-breeder-dashboard"
           </div>
           <div class="card-action teal darken-3 ">
             <a class="grey-text text-lighten-4">Boar:
-              @{{ dashboardStats.requested.boar + dashboardStats.displayed.boar + dashboardStats.hidden.boar }} </a>
+              @{{ availableProductsBoar }} </a>
             <a class="grey-text text-lighten-4">Sow:
-              @{{ dashboardStats.requested.sow + dashboardStats.displayed.sow + dashboardStats.hidden.sow }} </a>
+              @{{ availableProductsSow }} </a>
             <a class="grey-text text-lighten-4">Gilt:
-              @{{ dashboardStats.requested.gilt + dashboardStats.displayed.gilt + dashboardStats.hidden.gilt }} </a>
+              @{{ availableProductsGilt }} </a>
             <a class="grey-text text-lighten-4">Semen:
-              @{{ dashboardStats.requested.semen + dashboardStats.displayed.semen + dashboardStats.hidden.semen }} </a>
+              @{{ availableProductsSemen }} </a>
           </div>
         </div>
       </a>
