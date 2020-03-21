@@ -230,26 +230,25 @@ class ProductController extends Controller
             $product->primary_img_id = $image->id;
             $product->name = $request->name;
             $product->type = $request->type;
-            $product->house_type = $request->house_type;
+            $product->house_type = $request->house_type === '' ? null : $request->house_type;
             if ($request->birthdate === "") {
               $product->birthdate = '';
             }
             else {
               $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
             }
-            $product->birthweight = $request->birthweight;
+            $product->birthweight = $request->birthweight === '' ? null : $request->birthweight;
             $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-            // $product->price = $request->price;
-            $product->min_price = $request->min_price;
-            $product->max_price = $request->max_price;
+            $product->min_price = $request->min_price === '' ? null : $request->min_price;
+            $product->max_price = $request->max_price === '' ? null : $request->max_price;
             $product->quantity = ($request->type == 'semen') ? -1 : 1;
-            $product->lsba = $request->lsba;
-            $product->adg = $request->adg;
-            $product->fcr = $request->fcr;
-            $product->backfat_thickness = $request->backfat_thickness;
-            $product->left_teats = $request->left_teats;
-            $product->right_teats = $request->right_teats;
-            $product->other_details = $request->other_details;
+            $product->lsba = $request->lsba === '' ? null : $request->lsba;
+            $product->adg = $request->adg === '' ? null : $request->adg;
+            $product->fcr = $request->fcr === '' ? null : $request->fcr;
+            $product->backfat_thickness = $request->backfat_thickness === '' ? null : $request->backfat_thickness;
+            $product->left_teats = $request->left_teats === '' ? null : $request->left_teats;
+            $product->right_teats = $request->right_teats === '' ? null : $request->right_teats;
+            $product->other_details = $request->right_teats === '' ? null : $request->right_teats;
             $product->is_unique = $request->is_unique;
             $product->quantity = $request->quantity;
 
