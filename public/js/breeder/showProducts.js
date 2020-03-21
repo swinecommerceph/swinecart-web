@@ -531,7 +531,7 @@ var product = {
         /* Catching the unfilled input fields */
 
         // ADG
-        if (data.adg === 0) {
+        if (data.adg === null) {
           var item_adg =
             '<li class="collection-item">Average Daily Gain: <i class="grey-text">Not indicated</i></li>';
         } else {
@@ -542,7 +542,7 @@ var product = {
         }
 
         // FCR
-        if (data.fcr === 0.0) {
+        if (data.fcr === null) {
           var item_fcr =
             '<li class="collection-item">Feed Conversion Ratio: <i class="grey-text">Not indicated</i></li>';
         } else {
@@ -553,7 +553,7 @@ var product = {
         }
 
         // Backfat Thickness
-        if (data.backfat_thickness === 0.0) {
+        if (data.backfat_thickness === null) {
           var item_backfat_thickness =
             '<li class="collection-item">Backfat Thickness: <i class="grey-text">Not indicated</i></li>';
         } else {
@@ -564,7 +564,7 @@ var product = {
         }
 
         // Backfat Thickness
-        if (data.lsba === 0) {
+        if (data.lsba === null) {
           var item_lsba =
             '<li class="collection-item">Litter size born alive: <i class="grey-text">Not indicated</i></li>';
         } else {
@@ -575,7 +575,7 @@ var product = {
         }
 
         // Birthweight
-        if (data.birthweight === 0.0) {
+        if (data.birthweight === null) {
           var item_birthweight =
             '<li class="collection-item">Birth weight: <i class="grey-text">Not indicated</i></li>';
         } else {
@@ -588,7 +588,7 @@ var product = {
         // Number of teats only for Gilt and Sow
         if (data.type === "Gilt" || data.type === "Sow") {
           // number of teats
-          if (data.left_teats === 0 || data.right_teats === 0) {
+          if (data.left_teats === null || data.right_teats === null) {
             var item_number_of_teats =
               '<li class="collection-item">Number of teats <i class="grey-text">Not indicated</i></li>';
           } else {
@@ -603,7 +603,7 @@ var product = {
         } else var item_number_of_teats = "";
 
         // House Type
-        if (data.house_type === "") {
+        if (data.house_type === null) {
           var item_house_type =
             '<li class="collection-item">House Type: <i class="grey-text">Not indicated</i></li>';
         } else {
@@ -728,7 +728,11 @@ var product = {
         $("#product-summary-birthdate").html(item_birthdate);
 
         $("#swine-information").html(items);
-        var other_details_data = "<p>" + data.other_details + "</p>";
+        if (data.other_details === null) {
+          var other_details_data = '<i class="grey-text">Not indicated</i>';
+        } else {
+          var other_details_data = "<p>" + data.other_details + "</p>";
+        }
         $("#other-information").html(other_details_data);
 
         $("#display-product-form").prepend(
