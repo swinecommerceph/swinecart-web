@@ -89,7 +89,7 @@ id="page-breeder-view-product-details"
 
     <li style="color: hsl(0, 0%, 29%);">Average Daily Gain:
       <span style="color: hsl(0, 0%, 13%);">
-        @if ( $product->adg === 0)
+        @if ( $product->adg === null)
         <i class="grey-text">Not Indicated</i>
         @else
         {{$product->adg}} g
@@ -99,7 +99,7 @@ id="page-breeder-view-product-details"
 
     <li style="color: hsl(0, 0%, 29%);">Feed Conversion Ratio:
       <span style="color: hsl(0, 0%, 13%);">
-        @if ( $product->fcr === 0.0)
+        @if ( $product->fcr === null)
         <i class="grey-text">Not Indicated</i>
         @else
         {{$product->fcr}} g
@@ -109,7 +109,7 @@ id="page-breeder-view-product-details"
 
     <li style="color: hsl(0, 0%, 29%);">Backfat Thickness:
       <span style="color: hsl(0, 0%, 13%);">
-        @if ( $product->backfat_thickness === 0.0)
+        @if ( $product->backfat_thickness === null)
         <i class="grey-text">Not Indicated</i>
         @else
         {{$product->backfat_thickness}} mm
@@ -119,7 +119,7 @@ id="page-breeder-view-product-details"
 
     <li style="color: hsl(0, 0%, 29%);">Litter size born alive:
       <span style="color: hsl(0, 0%, 13%);">
-        @if ( $product->lsba === 0)
+        @if ( $product->lsba === null)
         <i class="grey-text">Not Indicated</i>
         @else
         {{$product->lsba}}
@@ -129,7 +129,7 @@ id="page-breeder-view-product-details"
 
     <li style="color: hsl(0, 0%, 29%);">Birth weight:
       <span style="color: hsl(0, 0%, 13%);">
-        @if ( $product->birthweight === 0.0)
+        @if ( $product->birthweight === null)
         <i class="grey-text">Not Indicated</i>
         @else
         {{$product->birthweight}} g
@@ -140,7 +140,7 @@ id="page-breeder-view-product-details"
     @if ( $product->type === "Gilt" || $product->type === "Sow")
     <li style="color: hsl(0, 0%, 29%);">Number of teats:
       <span style="color: hsl(0, 0%, 13%);">
-        @if ( $product->left_teats === 0 || $product->right_teats === 0)
+        @if ( $product->left_teats === null || $product->right_teats === null)
         <i class="grey-text">Not Indicated</i>
         @else
         {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
@@ -151,7 +151,7 @@ id="page-breeder-view-product-details"
 
     <li style="color: hsl(0, 0%, 29%);">House type:
       <span style="color: hsl(0, 0%, 13%);">
-        @if ( $product->house_type === "")
+        @if ( $product->house_type === null)
         <i class="grey-text">Not Indicated</i>
         @else
         <span style="color: hsl(0, 0%, 13%);">
