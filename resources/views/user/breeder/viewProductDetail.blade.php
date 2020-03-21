@@ -79,7 +79,7 @@ id="page-breeder-view-product-details"
     @if($product->birthdate === "November 30, -0001")
     <p style="color: hsl(0, 0%, 45%);"><i>No age information</i></p>
     @else
-    <p style="color: hsl(0, 0%, 45%);">Birthdate {{$product->birthdate}} ({{$product->age}} days old)</p>
+    <p style="color: hsl(0, 0%, 45%);">Birthdate: {{$product->birthdate}} ({{$product->age}} days old)</p>
     @endif
 
 
