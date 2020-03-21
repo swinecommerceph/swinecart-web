@@ -314,29 +314,29 @@ class ProductController extends Controller
             $product->birthdate = date_format(date_create($request->birthdate), 'Y-n-j');
           }
 
-          $product->birthweight = $request->birthweight;
+          $product->birthweight = $request->birthweight === '' ? null : $request->birthweight;
 
           $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
 
-          $product->house_type = $request->house_type;
+          $product->house_type = $request->house_type === '' ? null : $request->house_type;
 
           // $product->price = $request->price;
-          $product->min_price = $request->min_price;
-          $product->max_price = $request->max_price;
+          $product->min_price = $request->min_price === '' ? null : $request->min_price;
+          $product->max_price = $request->max_price === '' ? null : $request->max_price;
 
 
-          $product->adg = $request->adg;
-          $product->fcr = $request->fcr;
-          $product->backfat_thickness = $request->backfat_thickness;
-          $product->lsba = $request->lsba;
+          $product->adg = $request->adg === '' ? null : $request->adg;
+          $product->fcr = $request->fcr === '' ? null : $request->fcr;
+          $product->backfat_thickness = $request->backfat_thickness === '' ? null : $request->backfat_thickness;
+          $product->lsba = $request->lsba === '' ? null : $request->lsba;
 
-          $product->left_teats = $request->left_teats;
-          $product->right_teats = $request->right_teats;
+          $product->left_teats = $request->left_teats === '' ? null : $request->left_teats;
+          $product->right_teats = $request->right_teats === '' ? null : $request->right_teats;
 
           $product->quantity = $request->quantity;
           $product->is_unique = $request->is_unique;
 
-          $product->other_details = $request->other_details;
+          $product->other_details = $request->other_details === '' ? null : $request->other_details;
           $product->save();
 
           return "OK";
