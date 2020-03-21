@@ -769,7 +769,7 @@ class ProductController extends Controller
         $product->type = ucfirst($product->type);
         $product->breed = $this->transformBreedSyntax(Breed::find($product->breed_id)->name);
         $product->farm_province = FarmAddress::find($product->farm_from_id)->province;
-        $product->other_details = $this->transformOtherDetailsSyntax($product->other_details);
+        $product->other_details = $product->other_details === null ? null : $this->transformOtherDetailsSyntax($product->other_details);
         $product->imageCollection = $product->images()->where('id', '!=', $product->primary_img_id)->get();
         $product->videoCollection = $product->videos;
         $product->userid = Breeder::find($product->breeder_id)->users->first()->id;
