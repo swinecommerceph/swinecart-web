@@ -101,6 +101,11 @@ Product: {{$product->name}}
               {{ $product->breeder }}
             </a><br>
             <span>Farm Province: {{ $product->farm_province }}</span>
+            @if($product->birthdate === "November 30, -0001")
+            <p style="color: hsl(0, 0%, 45%);"><i>No age information</i></p>
+            @else
+            <p style="color: hsl(0, 0%, 45%);">Birthdate: {{$product->birthdate}} ({{$product->age}} days old)</p>
+            @endif
           </div>
         </div>
       </li>
