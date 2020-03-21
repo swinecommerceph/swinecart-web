@@ -72,146 +72,131 @@ id="page-breeder-view-product-details"
     </div>
 
   </div>
-  {{-- Product Details --}}
-  {{-- <div class="col s12 m5">
-            <ul class="collection with-header">
-                <li class="collection-header">
-                    <h4 class="row">
-                        <div class="col" style="color: hsl(0, 0%, 13%); font-weight: 700">
-                            {{ $product->name }}
-</div>
-</h4>
-</li>
-<li class="collection-item" style="font-weight: 700;">{{$product->type}} - {{$product->breed}}</li>
-<li class="collection-item">Born on {{$product->birthdate}} ({{$product->age}} days old)</li>
-<li class="collection-item">Average Daily Gain: {{$product->adg}} g</li>
-<li class="collection-item">Feed Conversion Ratio: {{$product->fcr}}</li>
-<li class="collection-item">Backfat Thickness: {{$product->backfat_thickness}} mm</li>
-</ul>
-</div> --}}
 
-<div id="product-details-table" class="col s12 m5">
-  <h3 style="color: hsl(0, 0%, 13%); font-weight: 700">{{ $product->name }}</h3>
-  <h5 style="color: hsl(0, 0%, 29%);">{{$product->type}} - {{$product->breed}}</h5>
-  @if($product->birthdate === "November 30, -0001")
-  <p style="color: hsl(0, 0%, 45%);"><i>No age information</i></p>
-  @else
-  <p style="color: hsl(0, 0%, 45%);">Birthdate {{$product->birthdate}} ({{$product->age}} days old)</p>
-  @endif
+  <div id="product-details-table" class="col s12 m5">
+    <h3 style="color: hsl(0, 0%, 13%); font-weight: 700">{{ $product->name }}</h3>
+    <h5 style="color: hsl(0, 0%, 29%);">{{$product->type}} - {{$product->breed}}</h5>
+    @if($product->birthdate === "November 30, -0001")
+    <p style="color: hsl(0, 0%, 45%);"><i>No age information</i></p>
+    @else
+    <p style="color: hsl(0, 0%, 45%);">Birthdate {{$product->birthdate}} ({{$product->age}} days old)</p>
+    @endif
 
 
-  {{-- SwineCart Information --}}
-  <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Swine Information</p>
+    {{-- SwineCart Information --}}
+    <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Swine Information
+    </p>
 
-  <li style="color: hsl(0, 0%, 29%);">Average Daily Gain:
-    <span style="color: hsl(0, 0%, 13%);">
-      @if ( $product->adg === 0)
-      <i class="grey-text">Not Indicated</i>
-      @else
-      {{$product->adg}} g
-      @endif
-    </span>
-  </li>
-
-  <li style="color: hsl(0, 0%, 29%);">Feed Conversion Ratio:
-    <span style="color: hsl(0, 0%, 13%);">
-      @if ( $product->fcr === 0.0)
-      <i class="grey-text">Not Indicated</i>
-      @else
-      {{$product->fcr}} g
-      @endif
-    </span>
-  </li>
-
-  <li style="color: hsl(0, 0%, 29%);">Backfat Thickness:
-    <span style="color: hsl(0, 0%, 13%);">
-      @if ( $product->backfat_thickness === 0.0)
-      <i class="grey-text">Not Indicated</i>
-      @else
-      {{$product->backfat_thickness}} mm
-      @endif
-    </span>
-  </li>
-
-  <li style="color: hsl(0, 0%, 29%);">Litter size born alive:
-    <span style="color: hsl(0, 0%, 13%);">
-      @if ( $product->lsba === 0)
-      <i class="grey-text">Not Indicated</i>
-      @else
-      {{$product->lsba}}
-      @endif
-    </span>
-  </li>
-
-  <li style="color: hsl(0, 0%, 29%);">Birth weight:
-    <span style="color: hsl(0, 0%, 13%);">
-      @if ( $product->birthweight === 0.0)
-      <i class="grey-text">Not Indicated</i>
-      @else
-      {{$product->birthweight}} g
-      @endif
-    </span>
-  </li>
-
-  @if ( $product->type === "Gilt" || $product->type === "Sow")
-  <li style="color: hsl(0, 0%, 29%);">Number of teats:
-    <span style="color: hsl(0, 0%, 13%);">
-      @if ( $product->left_teats === 0 || $product->right_teats === 0)
-      <i class="grey-text">Not Indicated</i>
-      @else
-      {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
-      @endif
-    </span>
-  </li>
-  @endif
-
-  <li style="color: hsl(0, 0%, 29%);">House type:
-    <span style="color: hsl(0, 0%, 13%);">
-      @if ( $product->house_type === "")
-      <i class="grey-text">Not Indicated</i>
-      @else
+    <li style="color: hsl(0, 0%, 29%);">Average Daily Gain:
       <span style="color: hsl(0, 0%, 13%);">
-        @if($product->house_type === "tunnelventilated")
-        Tunnel ventilated
+        @if ( $product->adg === 0)
+        <i class="grey-text">Not Indicated</i>
         @else
-        Open sided
+        {{$product->adg}} g
         @endif
       </span>
-      @endif
-    </span>
-  </li>
+    </li>
 
-  {{-- Other Information --}}
-  <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Other Information</p>
-  @if ( $product->other_details === "")
-  <i class="grey-text">Not Indicated</i>
-  @else
-  <p>{!! $product->other_details !!}</p>
-  @endif
+    <li style="color: hsl(0, 0%, 29%);">Feed Conversion Ratio:
+      <span style="color: hsl(0, 0%, 13%);">
+        @if ( $product->fcr === 0.0)
+        <i class="grey-text">Not Indicated</i>
+        @else
+        {{$product->fcr}} g
+        @endif
+      </span>
+    </li>
+
+    <li style="color: hsl(0, 0%, 29%);">Backfat Thickness:
+      <span style="color: hsl(0, 0%, 13%);">
+        @if ( $product->backfat_thickness === 0.0)
+        <i class="grey-text">Not Indicated</i>
+        @else
+        {{$product->backfat_thickness}} mm
+        @endif
+      </span>
+    </li>
+
+    <li style="color: hsl(0, 0%, 29%);">Litter size born alive:
+      <span style="color: hsl(0, 0%, 13%);">
+        @if ( $product->lsba === 0)
+        <i class="grey-text">Not Indicated</i>
+        @else
+        {{$product->lsba}}
+        @endif
+      </span>
+    </li>
+
+    <li style="color: hsl(0, 0%, 29%);">Birth weight:
+      <span style="color: hsl(0, 0%, 13%);">
+        @if ( $product->birthweight === 0.0)
+        <i class="grey-text">Not Indicated</i>
+        @else
+        {{$product->birthweight}} g
+        @endif
+      </span>
+    </li>
+
+    @if ( $product->type === "Gilt" || $product->type === "Sow")
+    <li style="color: hsl(0, 0%, 29%);">Number of teats:
+      <span style="color: hsl(0, 0%, 13%);">
+        @if ( $product->left_teats === 0 || $product->right_teats === 0)
+        <i class="grey-text">Not Indicated</i>
+        @else
+        {{$product->left_teats}} (left) | {{$product->right_teats}} (right)
+        @endif
+      </span>
+    </li>
+    @endif
+
+    <li style="color: hsl(0, 0%, 29%);">House type:
+      <span style="color: hsl(0, 0%, 13%);">
+        @if ( $product->house_type === "")
+        <i class="grey-text">Not Indicated</i>
+        @else
+        <span style="color: hsl(0, 0%, 13%);">
+          @if($product->house_type === "tunnelventilated")
+          Tunnel ventilated
+          @else
+          Open sided
+          @endif
+        </span>
+        @endif
+      </span>
+    </li>
+
+    {{-- Other Information --}}
+    <p style="font-weight:600; margin-top: 4vh; font-size: 1.4rem;" class="teal-text text-darken-4">Other Information
+    </p>
+    @if ( $product->other_details === "")
+    <i class="grey-text">Not Indicated</i>
+    @else
+    <p>{!! $product->other_details !!}</p>
+    @endif
 
 
-</div>
+  </div>
 
 </div>
 
 <script type="text/x-template" id="average-star-rating">
   <div class="ratings-container" style="padding:0; position:relative; display:inline-block">
-            <div class="star-ratings-top" style="position:absolute; z-index:1; overflow:hidden; display:block; white-space:nowrap;" :style="{ width: ratingToPercentage + '%' }">
-                <i class="material-icons yellow-text"> star </i>
-                <i class="material-icons yellow-text"> star </i>
-                <i class="material-icons yellow-text"> star </i>
-                <i class="material-icons yellow-text"> star </i>
-                <i class="material-icons yellow-text"> star </i>
-            </div>
-            <div class="star-ratings-bottom" style="padding:0; z-index:0; display:block;">
-                <i class="material-icons yellow-text"> star_border </i>
-                <i class="material-icons yellow-text"> star_border </i>
-                <i class="material-icons yellow-text"> star_border </i>
-                <i class="material-icons yellow-text"> star_border </i>
-                <i class="material-icons yellow-text"> star_border </i>
-            </div>
-        </div>
-    </script>
+    <div class="star-ratings-top" style="position:absolute; z-index:1; overflow:hidden; display:block; white-space:nowrap;" :style="{ width: ratingToPercentage + '%' }">
+      <i class="material-icons yellow-text"> star </i>
+      <i class="material-icons yellow-text"> star </i>
+      <i class="material-icons yellow-text"> star </i>
+      <i class="material-icons yellow-text"> star </i>
+      <i class="material-icons yellow-text"> star </i>
+    </div>
+    <div class="star-ratings-bottom" style="padding:0; z-index:0; display:block;">
+      <i class="material-icons yellow-text"> star_border </i>
+      <i class="material-icons yellow-text"> star_border </i>
+      <i class="material-icons yellow-text"> star_border </i>
+      <i class="material-icons yellow-text"> star_border </i>
+      <i class="material-icons yellow-text"> star_border </i>
+    </div>
+  </div>
+  </script>
 @endsection
 
 @section('customScript')
