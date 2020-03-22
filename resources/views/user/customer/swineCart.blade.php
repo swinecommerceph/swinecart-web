@@ -413,7 +413,7 @@ Swine Cart
                   v-if="product.product_type === 'semen' && !product.request_status">
                   {{-- Request Quantity for semen --}}
                   <span class="col s6">
-                    Quantity (in bottles):
+                    Quantity:
                   </span>
 
                   <span class="col s6">
