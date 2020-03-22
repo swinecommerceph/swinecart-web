@@ -398,6 +398,13 @@ span.caret {
   margin-bottom: 5px;
 }
 
+mark {
+  background-color: #4caf50;
+  color: white;
+  padding: 3px 7px;
+  border-radius: 7px;
+}
+
 /* Terms and Policy Label */
 .terms-and-policy {
   text-align: right !important;
@@ -1442,10 +1449,10 @@ label {
   100% { background-color: #FFFFFF; }
 }
 
-.input-show-hide{    
-    background-image:none !important; 
-        -o-animation: fadeIt 0.05s ease-in-out; 
-            animation: fadeIt 1s ease-in-out; 
+.input-show-hide{
+    background-image:none !important;
+        -o-animation: fadeIt 0.05s ease-in-out;
+            animation: fadeIt 1s ease-in-out;
 }
 
 .input-field label[for='email'] {
@@ -1496,7 +1503,7 @@ label {
   height: 2.6rem !important;
   margin: 0 0 0 0 !important;
   padding-top: 0.4rem !important;
-  margin-top: 10px !important; 
+  margin-top: 10px !important;
 }
 
 .input-field label[for='password']::after {
@@ -1605,7 +1612,7 @@ label {
 }
 
 .picker__close {
-  color: #00705E; 
+  color: #00705E;
 }
 
 .picker__day.picker__day--today {
@@ -1680,11 +1687,11 @@ input[type=text]:not(.browser-default).valid {
 }
 
 a.facebook {
- background-color: #4175CE !important; 
+ background-color: #4175CE !important;
 }
 
 a.google {
- background-color: #DD0000 !important;  
+ background-color: #DD0000 !important;
 }
 
 .add-media-button {
@@ -1733,7 +1740,7 @@ a.google {
 .register-button {
   width: 20rem;
 }
- 
+
 .slider .slides li iframe {
   height: 100%;
   width: 100%;
