@@ -269,7 +269,8 @@ Home
         <img class="right" src="/images/logodark.png" alt="" width="180" height="180" />
       </div>
       <div class="col s12">
-        <h2 class="right teal-text text-darken-4" style="margin:0; font-family:Electrolize;">SwineCart</h2>
+        <h2 class="right teal-text text-darken-4" style="margin:0; font-family:Source Sans Pro; font-weight: 600;">
+          SwineCart</h2>
       </div>
       <div class="col s12">
         <h5 class="right-align" style="margin:0; color: hsl(0, 0%, 29%);">

@@ -159,12 +159,13 @@ Browse Products
               <p class="range-field">
 
                 @foreach($breeders as $breeder)
-                <input type="checkbox" class="filled-in filter-breeder" id="check-{{ $breeder['user']->name }}"
+                <input type="checkbox" class="filled-in filter-breeder"
+                  id="check-{{ str_replace(" ", "-", $breeder['user']->name) }}"
                   data-breeder="{{ $breeder['user']->name }}" @if (!empty($filters[$breeder['user']->name]))
                 {{ $filters[$breeder['user']->name] }}
                 @endif/>
 
-                <label for="check-{{$breeder['user']->name}}" @if (!empty($filters[$breeder['user']->name]))
+                <label for="check-{{ str_replace(" ", "-", $breeder['user']->name) }}" @if (!empty($filters[$breeder['user']->name]))
                   @endif>
                   {{ $breeder['user']->name }}
                 </label>
@@ -214,23 +215,23 @@ Browse Products
 
               <div class="row">
                 <div class="col s9">
-                  <span style="color: hsl(0, 0%, 13%); font-weight: 550;">{{$product->type}} -
+                  <span style="color: hsl(0, 0%, 13%); font-weight: 550; padding-left: 3px;">{{$product->type}} -
                     {{$product->breed}}</span> <br>
-                  @if($product->age < 0) <span style="color: hsl(0, 0%, 45%);">
+                  @if($product->age < 0) <span style="color: hsl(0, 0%, 45%); padding-left: 3px;">
                     Age: <i>Birthdate not included</i>
                     </span>
                     @else
-                    <span style="color: hsl(0, 0%, 45%);">Age: {{$product->age}} days old</span>
+                    <span style="color: hsl(0, 0%, 45%); padding-left: 3px;">Age: {{$product->age}} days old</span>
                     @endif
                     <br>
                     @if($product->type == 'Semen')
-                    <span style="color: hsl(0, 0%, 45%);">Quantity: <i>not applicable</i></span>
+                    <span>
+                      <mark>Stock:</mark><i>&nbsp;not applicable</i></span>
                     @elseif($product->type != 'Semen' && $product->is_unique == 0)
-                    <span style="color: hsl(0, 0%, 45%);">Quantity: {{ $product->quantity }}</span>
+                    <span>
+                      <mark>Stock:</mark>&nbsp;{{ $product->quantity }}</span>
                     @else
-                    <span style="color: hsl(0, 0%, 45%);">
-                      Quantity: {{ $product->quantity }} | <i>Can only be bought once</i>
-                    </span>
+                    <br>
                     @endif
                 </div>
                 <div class="col right">
