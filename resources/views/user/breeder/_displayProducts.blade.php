@@ -126,7 +126,9 @@
             <span class="badge accent white-text right-align"><b>UNIQUE</b></span>
             @else
             @if($product->quantity !== -1)
-            <span class="badge pink accent-1 white-text right-align"><b>Quantity: {{ $product->quantity }}</b></span>
+            <span class="badge green white-text right-align">
+              <b>Stock: {{ $product->quantity }}</b>
+            </span>
             @endif
 
             @if($product->quantity === 0)

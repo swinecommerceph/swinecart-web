@@ -11,9 +11,9 @@
   "js/customer/custom.js": "js/customer/custom-12ec5fceaf.js",
   "js/customer/editProfile.js": "js/customer/editProfile-6c0cb606be.js",
   "js/customer/notifications.js": "js/customer/notifications-bf93e0f765.js",
-  "js/customer/swinecartPage.js": "js/customer/swinecartPage-771663f96c.js",
+  "js/customer/swinecartPage.js": "js/customer/swinecartPage-047e485281.js",
   "js/customer/viewProductDetail.js": "js/customer/viewProductDetail-ef9a3f8a5e.js",
-  "js/customer/viewProducts.js": "js/customer/viewProducts-3bf14049a8.js",
+  "js/customer/viewProducts.js": "js/customer/viewProducts-05bfeb55ea.js",
   "js/siteCustom.js": "js/siteCustom-c1b970bc34.js",
   "js/vendor.js": "js/vendor-f604486d5b.js"
 }
