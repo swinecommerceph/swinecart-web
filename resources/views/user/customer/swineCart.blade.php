@@ -443,9 +443,8 @@ Swine Cart
 
                 {{-- product was requested --}}
                 <span class="col s12 input-quantity-container" v-else>
-                  <span class="col s6" v-if="product.request_quantity > 1 && !product.request_status">
-                    Quantity to buy: <multiplier-quantity-input v-model="product.request_quantity">
-                    </multiplier-quantity-input>
+                  <span v-if="product.request_quantity > 1 && !product.request_status">
+                    <multiplier-quantity-input v-model="product.request_quantity"></multiplier-quantity-input>
                   </span>
                 </span>
 
