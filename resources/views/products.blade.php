@@ -159,12 +159,13 @@ Browse Products
               <p class="range-field">
 
                 @foreach($breeders as $breeder)
-                <input type="checkbox" class="filled-in filter-breeder" id="check-{{ $breeder['user']->name }}"
+                <input type="checkbox" class="filled-in filter-breeder"
+                  id="check-{{ str_replace(" ", "-", $breeder['user']->name) }}"
                   data-breeder="{{ $breeder['user']->name }}" @if (!empty($filters[$breeder['user']->name]))
                 {{ $filters[$breeder['user']->name] }}
                 @endif/>
 
-                <label for="check-{{$breeder['user']->name}}" @if (!empty($filters[$breeder['user']->name]))
+                <label for="check-{{ str_replace(" ", "-", $breeder['user']->name) }}" @if (!empty($filters[$breeder['user']->name]))
                   @endif>
                   {{ $breeder['user']->name }}
                 </label>
