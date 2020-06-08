@@ -153,18 +153,19 @@ Vue.component("quantity-input", {
 });
 Vue.component("multiplier-quantity-input", {
   template: `
-        <span class="col s12" style="padding:0;">
-          <input type="text"
-              ref="input"
-              class="center-align remove-borders"
-              :value="value"
-              style="margin:0;"
-              @focus="selectAll"
-              @input="updateValue($event.target.value)"
-              placeholder="Enter request quantity"
-          >
-        </span>
-      `,
+    <div class="row">
+      <span class="col s4">Quantity:</span>
+      <input type="text"
+        ref="input"
+        class="col s3 center-align remove-borders"
+        :value="value"
+        style="margin:0;"
+        @focus="selectAll"
+        @input="updateValue($event.target.value)"
+        placeholder="Enter request quantity"
+      >
+    </div>
+  `,
   props: {
     value: {
       type: Number

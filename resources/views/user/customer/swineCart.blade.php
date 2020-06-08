@@ -412,8 +412,8 @@ Swine Cart
                 <span class="col s12 input-quantity-container"
                   v-if="product.product_type === 'semen' && !product.request_status">
                   {{-- Request Quantity for semen --}}
-                  <span class="col s6">
-                    Quantity (in bottles):
+                  <span class="col s3">
+                    Quantity:
                   </span>
 
                   <span class="col s6">
@@ -443,9 +443,8 @@ Swine Cart
 
                 {{-- product was requested --}}
                 <span class="col s12 input-quantity-container" v-else>
-                  <span class="col s6" v-if="product.request_quantity > 1 && !product.request_status">
-                    Quantity to buy: <multiplier-quantity-input v-model="product.request_quantity">
-                    </multiplier-quantity-input>
+                  <span v-if="product.request_quantity > 1 && !product.request_status">
+                    <multiplier-quantity-input v-model="product.request_quantity"></multiplier-quantity-input>
                   </span>
                 </span>
 

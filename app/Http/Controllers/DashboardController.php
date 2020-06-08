@@ -65,6 +65,7 @@ class DashboardController extends Controller
       $dashboardStats['on_delivery'] = $this->getProductsCountBasedOnStatus($breeder, $request->farm_address, 'on_delivery');
       $dashboardStats['ratings'] = $this->dashboard->getSummaryReviewsAndRatings($breeder);
 
+      //dd($dashboardStats);
      /*  $dashboardStats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
       $dashboardStats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
       $dashboardStats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');

@@ -98,12 +98,7 @@ var validateFunction = function() {
         validBreed = validBreed && validFbreed && validMbreed;
       } else validBreed = validateInput(document.getElementById("breed"));
 
-      if (
-        validName &&
-        validType &&
-        validFarmFrom &&
-        validBreed
-      ) {
+      if (validName && validType && validFarmFrom && validBreed) {
         // Disable submit/add product button
         $("#submit-button").addClass("disabled");
         $("#submit-button").html("Adding Product ...");
@@ -132,16 +127,10 @@ var validateFunction = function() {
         validBreed = validBreed && validFbreed && validMbreed;
       } else validBreed = validateInput(document.getElementById("edit-breed"));
 
-      if (
-        validName &&
-        validType &&
-        validFarmFrom &&
-        validBreed
-      ) {
+      if (validName && validType && validFarmFrom && validBreed) {
         // Disable update-button
         $(this).addClass("disabled");
         $(this).html("Updating...");
-
         submitEditedProduct($("#edit-product"), $(this));
       } else Materialize.toast("Please properly fill all required fields.", 2500, "orange accent-2");
     });
