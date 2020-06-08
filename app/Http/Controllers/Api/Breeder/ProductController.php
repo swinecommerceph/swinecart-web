@@ -152,7 +152,7 @@ class ProductController extends Controller {
     private function getBreederProducts($breeder) 
     {
         return $breeder->products()
-            ->with('breed', 'primaryImage')
+            ->with('breed', 'primaryImage', 'images', 'videos')
             ->whereIn('status', ['hidden', 'displayed', 'requested'])
             ->where('quantity','<>', 0)
             ->orWhere([
@@ -261,6 +261,8 @@ class ProductController extends Controller {
                 $product['age'] = $item->birthdate === '0000-00-00' ? null : $this->computeAge($item->birthdate);
                 $product['quantity'] = $item->quantity;
                 $product['isUnique'] = $item->is_unique === 1;
+                $product['imageCount'] = $item->images->count();
+                $product['videoCount'] = $item->videos->count();
                 $product['imageUrl'] = route('serveImage', [
                     'size' => 'medium',
                     'filename' => $item->primaryImage->name
@@ -394,10 +396,12 @@ class ProductController extends Controller {
 
     public function getProductDetails(Request $request, $product_id) 
     {
-        $product = Product::with('breed', 'primaryImage', 'farmFrom', 'breeder.users')
+        $product = Product::with(
+                'breed', 'primaryImage', 'farmFrom', 'breeder.users', 'videos'
+            )
             ->find($product_id);
 
-        if($product) {   
+        if($product) {
             return response()->json([
                 'data' => [
                     'product' => $this->transformProduct($product)

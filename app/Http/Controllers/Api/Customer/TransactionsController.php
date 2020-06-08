@@ -136,6 +136,12 @@ class TransactionsController extends Controller
                     'type' => $product->type,
                     'farmLocation' => $province,
                     'breederName' => $breeder,
+                    'imageUrl' => route('serveImage',
+                        [
+                            'size' => 'medium', 
+                            'filename' => $product->primaryImage->name
+                        ]
+                    ),
                 ];
 
                 $transaction['logs'] = $element->transactionLogs->map(function ($item) {
