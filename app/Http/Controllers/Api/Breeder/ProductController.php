@@ -409,7 +409,7 @@ class ProductController extends Controller {
             ], 200);
         }
         else return response()->json([
-            'error' => 'Product does not exist!'
+            'error' => 'Product does not exist'
         ], 404);
     }
 
