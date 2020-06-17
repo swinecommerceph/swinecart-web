@@ -51,24 +51,26 @@ class InventoryController extends Controller
         $user = $reservation->customer->users()->first();
         $product = $reservation->product;
 
-        $order['status'] = $reservation->order_status;
-
-        $order['product']['id'] = $product->id;
-        $order['product']['name'] = $product->name;
-        $order['product']['type'] = $product->type;
-        $order['product']['breed'] = $this->transformBreedSyntax($product->breed->name);
-        $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $product->primaryImage->name]);
+        // $order['status'] = $reservation->order_status;
+        
+        // $order['product']['id'] = $product->id;
+        // $order['product']['name'] = $product->name;
+        // $order['product']['type'] = $product->type;
+        // $order['product']['breed'] = $this->transformBreedSyntax($product->breed->name);
+        // $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $product->primaryImage->name]);
     
-        $order['reservation'] = null;
-        $order['reservation']['id'] = $reservation->id;
-        $order['reservation']['quantity'] = $reservation->quantity;
-        $order['reservation']['status_time'] = $status_time;
-        $order['reservation']['date_needed'] = $product->type == 'semen' ? $reservation->date_needed == '0000-00-00' ? null : $reservation->date_needed : null;
-        $order['reservation']['delivery_date'] = $reservation->delivery_date;
-        $order['reservation']['special_request'] = $reservation->special_request;
-        $order['reservation']['customer_id'] = $reservation->customer_id;
-        $order['reservation']['customer_name'] = $user->name;
-        $order['reservation']['user_id'] = $user->id;
+        // $order['reservation'] = null;
+        // $order['reservation']['id'] = $reservation->id;
+        // $order['reservation']['quantity'] = $reservation->quantity;
+        // $order['reservation']['status_time'] = $status_time;
+        // $order['reservation']['date_needed'] = $product->type == 'semen' ? $reservation->date_needed == '0000-00-00' ? null : $reservation->date_needed : null;
+        // $order['reservation']['delivery_date'] = $reservation->delivery_date;
+        // $order['reservation']['special_request'] = $reservation->special_request;
+        // $order['reservation']['customer_id'] = $reservation->customer_id;
+        // $order['reservation']['customer_name'] = $user->name;
+        // $order['reservation']['user_id'] = $user->id;
+
+        $order['statusTime'] = $status_time;
 
         return $order;
     }
