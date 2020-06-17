@@ -52,11 +52,11 @@ class InventoryController extends Controller
 
         $order['status'] = $reservation->order_status;
 
-        $order['product']['id'] = $reservation->product->id;
-        $order['product']['name'] = $reservation->product->name;
-        $order['product']['type'] = $reservation->product->type;
-        $order['product']['breed'] = $this->transformBreedSyntax($reservation->product->breed->name);
-        $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($reservation->product->primary_img_id)->name]);
+        // $order['product']['id'] = $reservation->product->id;
+        // $order['product']['name'] = $reservation->product->name;
+        // $order['product']['type'] = $reservation->product->type;
+        // $order['product']['breed'] = $this->transformBreedSyntax($reservation->product->breed->name);
+        // $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($reservation->product->primary_img_id)->name]);
     
         $order['reservation'] = null;
         $order['reservation']['id'] = $reservation->id;
