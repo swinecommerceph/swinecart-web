@@ -49,20 +49,21 @@ class InventoryController extends Controller
 
         $status_time = $reservation->transactionLogs->first()->created_at;
         $user = $reservation->customer->users()->first();
+        $product = $reservation->product;
 
         $order['status'] = $reservation->order_status;
 
-        // $order['product']['id'] = $reservation->product->id;
-        // $order['product']['name'] = $reservation->product->name;
-        // $order['product']['type'] = $reservation->product->type;
-        // $order['product']['breed'] = $this->transformBreedSyntax($reservation->product->breed->name);
-        // $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($reservation->product->primary_img_id)->name]);
+        $order['product']['id'] = $product->id;
+        $order['product']['name'] = $product->name;
+        $order['product']['type'] = $product->type;
+        $order['product']['breed'] = $this->transformBreedSyntax($product->breed->name);
+        $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $product->primaryImage->name]);
     
         $order['reservation'] = null;
         $order['reservation']['id'] = $reservation->id;
         $order['reservation']['quantity'] = $reservation->quantity;
         $order['reservation']['status_time'] = $status_time;
-        $order['reservation']['date_needed'] = $reservation->product->type == 'semen' ? $reservation->date_needed == '0000-00-00' ? null : $reservation->date_needed : null;
+        $order['reservation']['date_needed'] = $product->type == 'semen' ? $reservation->date_needed == '0000-00-00' ? null : $reservation->date_needed : null;
         $order['reservation']['delivery_date'] = $reservation->delivery_date;
         $order['reservation']['special_request'] = $reservation->special_request;
         $order['reservation']['customer_id'] = $reservation->customer_id;
@@ -122,7 +123,7 @@ class InventoryController extends Controller
                     $order['product']['name'] = $item->name;
                     $order['product']['type'] = $item->type;
                     $order['product']['breed'] = $this->transformBreedSyntax($item->breed->name);
-                    $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => Image::find($item->primary_img_id)->name]);
+                    $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $item->primaryImage->name]);
 
                     return $order;
                 });
