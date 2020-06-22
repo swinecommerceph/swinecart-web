@@ -257,7 +257,7 @@ class TransactionsController extends Controller
                     ->where('if_rated', 0)
                     ->where('if_requested', 1)
                     ->doesntHave('productReservation')
-                    ->paginate($request->limit)
+                    ->get()
                     ->map(function ($data) {
                         $item = [];
 
@@ -305,6 +305,7 @@ class TransactionsController extends Controller
                         return $item;
                     })
                     ->sortByDesc('statusTime')
+                    ->forPage($request->page, $request->limit)
                     ->values()
                     ->all();
 
@@ -328,7 +329,6 @@ class TransactionsController extends Controller
                         'productReservation.product.breed',
                         'productReservation.product.breeder'
                     )
-                    ->paginate($request->limit)
                     ->map(function ($data) use ($status) {
                         $item = [];
 
@@ -382,6 +382,7 @@ class TransactionsController extends Controller
                         return $item;
                     })
                     ->sortByDesc('statusTime')
+                    ->forPage($request->page, $request->limit)
                     ->values()
                     ->all();
 

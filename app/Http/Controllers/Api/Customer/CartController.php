@@ -109,7 +109,7 @@ class CartController extends Controller
                 'farmLocation' => $product->farmFrom->province,
                 'imageUrl' => route('serveImage',
                     [
-                        'size' => 'medium', 
+                        'size' => 'medium',
                         'filename' => $is_deleted 
                         ? $this->defaultImages[$product->type]
                         : $product->primaryImage->name
