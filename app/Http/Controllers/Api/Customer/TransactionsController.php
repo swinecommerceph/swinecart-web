@@ -329,6 +329,7 @@ class TransactionsController extends Controller
                         'productReservation.product.breed',
                         'productReservation.product.breeder'
                     )
+                    ->get()
                     ->map(function ($data) use ($status) {
                         $item = [];
 
