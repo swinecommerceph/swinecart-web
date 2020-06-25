@@ -72,6 +72,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::group(['prefix' => 'inventory'], function() {
             Route::get('/products/{status}', 'InventoryController@getProducts');
             Route::get('/products/{id}/requests', 'InventoryController@getProductRequests');
+            Route::delete('/products/{id}/requests', 'InventoryController@removeProductRequest');
             Route::post('/products/{id}/order-status', 'InventoryController@updateOrderStatus');
             Route::delete('/products/{id}/order-status', 'InventoryController@cancelTransaction');
 

@@ -76,6 +76,7 @@ class InventoryController extends Controller
     private function getBreederProduct($breeder, $product_id)
     {
         $breeder_id = $breeder->id;
+
         return Product::where([
             ['breeder_id', '=', $breeder_id],
             ['id', '=', $product_id]
@@ -111,13 +112,13 @@ class InventoryController extends Controller
                     return $query->where('if_requested', 1)->where('reservation_id', 0);
                 }])
                 ->where('status','requested')
-                ->where('quantity','<>', 0)
+                // ->where('quantity','<>', 0)
                 ->paginate($limit)
                 ->map(function ($item) {
                     $order = [];
                     
                     $order['status'] = $item->status;
-                    $order['request_count'] = $item->swine_cart_item_count;
+                    $order['requestCount'] = $item->swine_cart_item_count;
 
                     $order['product']['id'] = $item->id;
                     $order['product']['name'] = $item->name;
@@ -255,6 +256,30 @@ class InventoryController extends Controller
         else return response()->json([
             'error' => 'Product does not exist!'
         ], 404);
+    }
+
+    public function removeProductRequest(Request $request, $cart_id)
+    {
+        $cart_item = SwineCartItem::with('product')->find($cart_id);
+
+        $product = $cart_item->product;
+
+        $cart_item->reservation_id = 0;
+        $cart_item->quantity = ($product->type == 'semen') ? 2 : 1;
+        $cart_item->if_requested = 0;
+        $cart_item->date_needed = '0000-00-00';
+        $cart_item->special_request = "";
+        $cart_item->save();
+
+        $product->status = "displayed";
+        // $product->quantity = ($product->type == 'semen') ? -1 : 1;
+        $product->save();
+
+        return response()->json([
+            'data' => [
+                'cartItem' => $cart_item,
+            ]
+        ], 200);
     }
 
     public function cancelTransaction(Request $request, $product_id)
