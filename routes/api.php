@@ -106,6 +106,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'shop'], function() {
             Route::get('/products', 'ShopController@getProducts');
+            Route::get('/filters', 'ShopController@getFilterOptions');
             Route::get('/breeders', 'ShopController@getBreeders');
             Route::get('/breeds', 'ShopController@getBreeds');
         });

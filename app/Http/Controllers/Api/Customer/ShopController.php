@@ -90,11 +90,12 @@ class ShopController extends Controller
 
         // Filter
         if($request->input('type')) {
-            $product = $products->whereIn('type', explode(' ', $request->input('type')));
+            $types = explode(',', $request->input('type'));
+            $product = $products->whereIn('type', $types);
         }
 
         if($request->input('breed')) {
-            $breedIds = $this->getBreedIds($request->input('breed'));
+            $breedIds = explode(',', $request->input('breed'));
             $products = $products->whereIn('breed_id', $breedIds);
         }
 
@@ -149,6 +150,38 @@ class ShopController extends Controller
             ]
         ], 200);
     }
+
+    public function getFilterOptions(Request $request)
+    {
+
+        $breeds = Breed::where('name','not like', '%+%')
+            ->where('name','not like', '')
+            ->orderBy('name','asc')
+            ->get(['id', 'name'])
+            ->map(function ($item) {
+                $breed = [];
+                $breed['id'] = $item->id;
+                $breed['name'] = ucwords($item->name);
+                return $breed;
+            });
+        
+        $breeders = Breeder::with('users')
+            ->get(['id'])
+            ->map(function ($item) {
+                $breeder = [];
+                $breeder['id'] = $item->id;
+                $breeder['name'] = ucwords($item->users()->first()->name);
+                return $breeder;
+            });
+
+        return response()->json([
+            'data' => [
+                'breeds' => $breeds,
+                'breeders' => $breeders
+            ]
+        ], 200);
+    }
+
 
     public function getBreeds(Request $request)
     {
