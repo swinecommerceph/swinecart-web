@@ -55,7 +55,6 @@ class NotificationsController extends Controller
                 'notifications' => $notifications
             ]
         ], 200);
-
     }
 
     public function seeNotification(Request $request, $notification_id)
