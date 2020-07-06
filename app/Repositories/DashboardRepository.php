@@ -726,6 +726,8 @@ class DashboardRepository
                 $reservation = ProductReservation::with('swineCartItem')
                     ->find($request->reservation_id);
 
+                $swineCartItem = $reservation->swineCartItem;
+                $customer = $swineCartItem->customer;
                 $breederUser = $product->breeder->users()->first();
 
                 // Store previous reservation status
@@ -798,6 +800,13 @@ class DashboardRepository
                 // Remove item from cart
 
                 $swineCartItem->delete();
+
+                // Add same product to Cart
+                $new_item = new SwineCartItem;
+                $new_item->product_id = $product->id;
+                $new_item->quantity = $product->type == 'semen' ? 2 : 1;
+
+                $customer->swineCartItems()->save($new_item);
 
                 return [
                     "OK",
