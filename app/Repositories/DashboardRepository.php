@@ -495,10 +495,10 @@ class DashboardRepository
                         'url' => route('cart.items')
                     ];
 
-                    $smsDetails = [
-                        'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' was reserved to you.',
-                        'recipient' => $swineCartItem->customer->mobile
-                    ];
+                    // $smsDetails = [
+                    //     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' was reserved to you.',
+                    //     'recipient' => $swineCartItem->customer->mobile
+                    // ];
 
                     $pubsubData = [
                         'item_id' => $transactionDetails['swineCart_id'],
@@ -621,10 +621,10 @@ class DashboardRepository
                     'url' => route('cart.items')
                 ];
 
-                $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' is on delivery. It is expected to arrive on ' . $request->delivery_date . '.',
-                    'recipient' => $customer->mobile
-                ];
+                // $smsDetails = [
+                //     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' is on delivery. It is expected to arrive on ' . $request->delivery_date . '.',
+                //     'recipient' => $customer->mobile
+                // ];
 
                 $pubsubData = [
                     'item_id' => $transactionDetails['swineCart_id'],
@@ -674,10 +674,10 @@ class DashboardRepository
                     'url' => route('cart.items')
                 ];
 
-                $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' is sold.',
-                    'recipient' => $customer->mobile
-                ];
+                // $smsDetails = [
+                //     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' is sold.',
+                //     'recipient' => $customer->mobile
+                // ];
 
                 $pubsubData = [
                     'item_id' => $transactionDetails['swineCart_id'],
@@ -703,19 +703,13 @@ class DashboardRepository
 
             case 'cancel_transaction':
 
-                $reservation = ProductReservation::find($request->reservation_id);
+                $reservation = ProductReservation::with('swineCartItem')
+                    ->find($request->reservation_id);
+
                 $breederUser = $product->breeder->users()->first();
+
                 // Store previous reservation status
                 $oldStatus = $reservation->order_status;
-
-                // Update Swine Cart item
-                $swineCartItem = SwineCartItem::where('reservation_id', $request->reservation_id)->first();
-                $swineCartItem->reservation_id = 0;
-                $swineCartItem->quantity = ($product->type == 'semen') ? 2 : 1;
-                $swineCartItem->if_requested = 0;
-                $swineCartItem->date_needed = null;
-                $swineCartItem->special_request = "";
-                $swineCartItem->save();
 
                 // Update product
                 $product->status = "displayed";
@@ -737,10 +731,10 @@ class DashboardRepository
                     'url' => route('cart.items')
                 ];
 
-                $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: ' . $breederUser->name . ' cancelled your transaction for ' . $product->name . '.',
-                    'recipient' => $swineCartItem->customer->mobile
-                ];
+                // $smsDetails = [
+                //     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: ' . $breederUser->name . ' cancelled your transaction for ' . $product->name . '.',
+                //     'recipient' => $swineCartItem->customer->mobile
+                // ];
 
                 $customerUser = $swineCartItem->customer->users()->first();
 
@@ -749,13 +743,41 @@ class DashboardRepository
 
                 // Queue notifications (SMS, database, notification, pubsub server)
                 // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
-                dispatch(new NotifyUser('product-cancel-transaction', $customerUser->id, $notificationDetails));
-                dispatch(new SendToPubSubServer('notification', $customerUser->email));
-                dispatch(new SendToPubSubServer('sc-cancelTransaction', $customerUser->email, ['item_id' => $transactionDetails['swineCart_id']]));
-                dispatch(new SendToPubSubServer('db-cancelTransaction', Auth::user()->email, ['product_type' => $product->type, 'previous_status' => $oldStatus]));
+                dispatch(new NotifyUser(
+                    'product-cancel-transaction',
+                    $customerUser->id,
+                    $notificationDetails
+                ));
+                
+                dispatch(new SendToPubSubServer(
+                    'notification', 
+                    $customerUser->email
+                ));
+                
+                dispatch(new SendToPubSubServer(
+                    'sc-cancelTransaction',
+                    $customerUser->email,
+                    [
+                        'item_id' => $transactionDetails['swineCart_id'],
+                        'previous_status' => $oldStatus
+                    ]
+                ));
+                
+                dispatch(new SendToPubSubServer(
+                    'db-cancelTransaction',
+                    Auth::user()->email,
+                    [
+                        'product_type' => $product->type,
+                        'previous_status' => $oldStatus
+                    ]
+                ));
 
                 // Delete reservation
                 $reservation->delete();
+
+                // Remove item from cart
+
+                $swineCartItem->delete();
 
                 return [
                     "OK",
