@@ -511,7 +511,7 @@ class DashboardRepository
                     $this->addToTransactionLog($transactionDetails);
 
                     // Queue notifications (SMS, database, notification, pubsub server)
-                    dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+                    // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
                     dispatch(new NotifyUser('product-reserved', $reservedCustomerUser->id, $notificationDetailsReserved));
                     dispatch(new SendToPubSubServer('notification', $reservedCustomerUser->email));
                     dispatch(new SendToPubSubServer('sc-reserved', $reservedCustomerUser->email, $pubsubData));
@@ -550,7 +550,7 @@ class DashboardRepository
                             $this->addToTransactionLog($transactionDetailsOther);
 
                             // Queue notifications (SMS, database, notification, pubsub server)
-                            dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+                            // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
                             dispatch(new NotifyUser('product-reserved-to-other-customer', $customerUser->id, $notificationDetailsOther));
                             dispatch(new SendToPubSubServer('notification', $customerUser->email));
                             dispatch(new SendToPubSubServer('sc-reservedToOthers', $customerUser->email, ['item_id' => $transactionDetailsOther['swineCart_id']]));
@@ -638,7 +638,7 @@ class DashboardRepository
                 $this->addToTransactionLog($transactionDetails);
 
                 // Queue notifications (SMS, database, notification, pubsub server)
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+                // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
                 dispatch(new NotifyUser('product-reservation-update', $reservedCustomerUser->id, $notificationDetails));
                 dispatch(new SendToPubSubServer('notification', $reservedCustomerUser->email));
                 dispatch(new SendToPubSubServer('sc-onDelivery', $reservedCustomerUser->email, $pubsubData));
@@ -690,7 +690,7 @@ class DashboardRepository
                 $this->addToTransactionLog($transactionDetails);
 
                 // Queue notifications (SMS, database, notification, pubsub server)
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+                // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
                 dispatch(new NotifyUser('product-reservation-update', $reservedCustomerUser->id, $notificationDetails));
                 dispatch(new SendToPubSubServer('notification', $reservedCustomerUser->email));
                 dispatch(new SendToPubSubServer('sc-sold', $reservedCustomerUser->email, $pubsubData));
@@ -748,7 +748,7 @@ class DashboardRepository
                 $this->addToTransactionLog($transactionDetails);
 
                 // Queue notifications (SMS, database, notification, pubsub server)
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
+                // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
                 dispatch(new NotifyUser('product-cancel-transaction', $customerUser->id, $notificationDetails));
                 dispatch(new SendToPubSubServer('notification', $customerUser->email));
                 dispatch(new SendToPubSubServer('sc-cancelTransaction', $customerUser->email, ['item_id' => $transactionDetails['swineCart_id']]));
