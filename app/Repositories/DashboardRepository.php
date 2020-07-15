@@ -448,21 +448,29 @@ class DashboardRepository
         switch ($request->status) {
             case 'reserved':
                 // Check if product is available for reservations
-                if($product->quantity){
+                if ($product->quantity) {
                     $customerName = Customer::find($request->customer_id)->users()->first()->name;
                     $breederUser = $product->breeder->users()->first();
 
                     // Update quantity of product
-                    if($product->type != 'semen'){
+                    if ($product->type != 'semen') {
                         if ($product->is_unique == 1) {
-                          $product->quantity = 0;
-                          $product->status = 'hidden';
+                            $product->quantity = 0;
+                            $product->status = 'hidden';
                         }
                         else {
-                          // TODO: ask if multiplier is reserved to someone, is it still displayed? or reserved?
-                          //$product->status = 'displayed';
-                          $product->quantity = $product->quantity - $request->request_quantity;
+                          
+                            $product->quantity = min(
+                                0, 
+                                $product->quantity - $request->request_quantity
+                            );
+
+                            if ($product->quantity === 0) {
+                                $product->status = 'hidden';
+                            }
+
                         }
+    
                         $product->save();
                     }
 
@@ -531,9 +539,9 @@ class DashboardRepository
                     // If product type is not semen remove other requests to this product
                     $productRequests = SwineCartItem::where('product_id', $product->id)
                         ->where('customer_id', '<>', $request->customer_id)
-                        ->where('reservation_id',0);
+                        ->where('reservation_id', 0);
 
-                    if($product->type != 'semen' && $product->is_unique == 1){
+                    if ($product->type != 'semen' && $product->is_unique == 1) {
 
                         // Notify Customer users that the product has been reserved to another customer
                         foreach ($productRequests->get() as $productRequest) {
@@ -572,7 +580,7 @@ class DashboardRepository
                                 'sc-reservedToOthers',
                                 $customerUser->email,
                                 [
-                                    'item_id' => 
+                                    'item_id' =>
                                     $transactionDetailsOther['swineCart_id']
                                 ]
                             ));
@@ -581,8 +589,8 @@ class DashboardRepository
                         // Delete requests to this product after notifying Customer users
                         $productRequests->delete();
                     }
-                    else{
-                        if($productRequests->count() == 0){
+                    else {
+                        if ($productRequests->count() == 0) {
                             $product->status = 'displayed';
                             $product->save();
 
