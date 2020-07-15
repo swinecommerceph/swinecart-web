@@ -495,11 +495,6 @@ class DashboardRepository
                         'url' => route('cart.items')
                     ];
 
-                    // $smsDetails = [
-                    //     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' was reserved to you.',
-                    //     'recipient' => $swineCartItem->customer->mobile
-                    // ];
-
                     $pubsubData = [
                         'item_id' => $transactionDetails['swineCart_id'],
                         'reserved' => $transactionDetails['created_at']->toDateTimeString()
@@ -510,15 +505,33 @@ class DashboardRepository
                     // Add new Transaction Log
                     $this->addToTransactionLog($transactionDetails);
 
-                    // Queue notifications (SMS, database, notification, pubsub server)
-                    // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
-                    dispatch(new NotifyUser('product-reserved', $reservedCustomerUser->id, $notificationDetailsReserved));
-                    dispatch(new SendToPubSubServer('notification', $reservedCustomerUser->email));
-                    dispatch(new SendToPubSubServer('sc-reserved', $reservedCustomerUser->email, $pubsubData));
-                    dispatch(new SendToPubSubServer('db-reserved', Auth::user()->email, ['product_type' => $product->type]));
+                    dispatch(new NotifyUser(
+                        'product-reserved',
+                        $reservedCustomerUser->id,
+                        $notificationDetailsReserved
+                    ));
+
+                    dispatch(new SendToPubSubServer(
+                        'notification',
+                        $reservedCustomerUser->email
+                    ));
+
+                    dispatch(new SendToPubSubServer(
+                        'sc-reserved',
+                        $reservedCustomerUser->email,
+                        $pubsubData
+                    ));
+                    
+                    dispatch(new SendToPubSubServer(
+                        'db-reserved',
+                        Auth::user()->email,
+                        ['product_type' => $product->type]
+                    ));
 
                     // If product type is not semen remove other requests to this product
-                    $productRequests = SwineCartItem::where('product_id', $product->id)->where('customer_id', '<>', $request->customer_id)->where('reservation_id',0);
+                    $productRequests = SwineCartItem::where('product_id', $product->id)
+                        ->where('customer_id', '<>', $request->customer_id)
+                        ->where('reservation_id',0);
 
                     if($product->type != 'semen' && $product->is_unique == 1){
 
@@ -541,19 +554,28 @@ class DashboardRepository
                                 'url' => route('cart.items')
                             ];
 
-                            $smsDetails = [
-                                'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetailsOther['created_at'], 1) .']: Sorry, product ' . $product->name . ' is already reserved.',
-                                'recipient' => $productRequest->customer->mobile
-                            ];
-
                             // Add new Transaction Log.
                             $this->addToTransactionLog($transactionDetailsOther);
 
-                            // Queue notifications (SMS, database, notification, pubsub server)
-                            // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
-                            dispatch(new NotifyUser('product-reserved-to-other-customer', $customerUser->id, $notificationDetailsOther));
-                            dispatch(new SendToPubSubServer('notification', $customerUser->email));
-                            dispatch(new SendToPubSubServer('sc-reservedToOthers', $customerUser->email, ['item_id' => $transactionDetailsOther['swineCart_id']]));
+                            dispatch(new NotifyUser(
+                                'product-reserved-to-other-customer',
+                                $customerUser->id,
+                                $notificationDetailsOther
+                            ));
+                            
+                            dispatch(new SendToPubSubServer(
+                                'notification',
+                                $customerUser->email
+                            ));
+                            
+                            dispatch(new SendToPubSubServer(
+                                'sc-reservedToOthers',
+                                $customerUser->email,
+                                [
+                                    'item_id' => 
+                                    $transactionDetailsOther['swineCart_id']
+                                ]
+                            ));
                         }
 
                         // Delete requests to this product after notifying Customer users
@@ -621,11 +643,6 @@ class DashboardRepository
                     'url' => route('cart.items')
                 ];
 
-                // $smsDetails = [
-                //     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' is on delivery. It is expected to arrive on ' . $request->delivery_date . '.',
-                //     'recipient' => $customer->mobile
-                // ];
-
                 $pubsubData = [
                     'item_id' => $transactionDetails['swineCart_id'],
                     'on_delivery' => $transactionDetails['created_at']->toDateTimeString(),
@@ -637,12 +654,26 @@ class DashboardRepository
                 // Add new Transaction Log.
                 $this->addToTransactionLog($transactionDetails);
 
-                // Queue notifications (SMS, database, notification, pubsub server)
-                // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
-                dispatch(new NotifyUser('product-reservation-update', $reservedCustomerUser->id, $notificationDetails));
-                dispatch(new SendToPubSubServer('notification', $reservedCustomerUser->email));
-                dispatch(new SendToPubSubServer('sc-onDelivery', $reservedCustomerUser->email, $pubsubData));
-                dispatch(new SendToPubSubServer('db-onDelivery', Auth::user()->email, ['product_type' => $product->type]));
+                dispatch(new NotifyUser(
+                    'product-reservation-update',
+                    $reservedCustomerUser->id,
+                    $notificationDetails
+                ));
+
+                dispatch(new SendToPubSubServer('notification',
+                    $reservedCustomerUser->email
+                ));
+
+                dispatch(new SendToPubSubServer(
+                    'sc-onDelivery',
+                    $reservedCustomerUser->email,
+                    $pubsubData
+                ));
+
+                dispatch(new SendToPubSubServer(
+                    'db-onDelivery', Auth::user()->email, 
+                    ['product_type' => $product->type]
+                ));
 
                 return [
                     "OK",
@@ -674,11 +705,6 @@ class DashboardRepository
                     'url' => route('cart.items')
                 ];
 
-                // $smsDetails = [
-                //     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Product ' . $product->name . ' by ' . $breederUser->name . ' is sold.',
-                //     'recipient' => $customer->mobile
-                // ];
-
                 $pubsubData = [
                     'item_id' => $transactionDetails['swineCart_id'],
                     'sold' => $transactionDetails['created_at']->toDateTimeString()
@@ -689,8 +715,6 @@ class DashboardRepository
                 // Add new Transaction Log.
                 $this->addToTransactionLog($transactionDetails);
 
-                // Queue notifications (SMS, database, notification, pubsub server)
-                // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
                 dispatch(new NotifyUser(
                     'product-reservation-update',
                     $reservedCustomerUser->id,
@@ -735,7 +759,10 @@ class DashboardRepository
 
                 // Update product
                 $product->status = "displayed";
-                $product->quantity = ($product->type == 'semen') ? -1 : 1;
+                $product->quantity = ($product->type == 'semen') 
+                    ? -1
+                    : $product->quantity + $reservation->quantity;
+        
                 $product->save();
 
                 $transactionDetails = [
@@ -753,18 +780,11 @@ class DashboardRepository
                     'url' => route('cart.items')
                 ];
 
-                // $smsDetails = [
-                //     'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: ' . $breederUser->name . ' cancelled your transaction for ' . $product->name . '.',
-                //     'recipient' => $swineCartItem->customer->mobile
-                // ];
-
                 $customerUser = $swineCartItem->customer->users()->first();
 
                 // Add new Transaction Log
                 $this->addToTransactionLog($transactionDetails);
 
-                // Queue notifications (SMS, database, notification, pubsub server)
-                // dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
                 dispatch(new NotifyUser(
                     'product-cancel-transaction',
                     $customerUser->id,
@@ -798,7 +818,6 @@ class DashboardRepository
                 $reservation->delete();
 
                 // Remove item from cart
-
                 $swineCartItem->delete();
 
                 // Add same product to Cart
