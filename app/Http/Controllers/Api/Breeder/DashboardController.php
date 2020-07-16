@@ -62,7 +62,6 @@ class DashboardController extends Controller
             'data' => [
                 'stats' => $stats
             ]
-
         ], 200);
     }
 
@@ -118,23 +117,8 @@ class DashboardController extends Controller
 
         return response()->json([
             'data' => [
-                'totalCount' => $review_count,
+                'reviewCount' => $review_count,
                 'reviews' => $reviews
-            ]
-        ], 200);
-    }
-
-    public function getReviewCount(Request $request)
-    {
-        $breeder = $this->user->userable;
-
-        $review_count = $breeder
-            ->reviews()
-            ->count();
-
-        return response()->json([
-            'data' => [
-                'review_count' => $review_count
             ]
         ], 200);
     }

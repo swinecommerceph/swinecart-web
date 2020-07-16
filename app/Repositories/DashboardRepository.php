@@ -460,7 +460,7 @@ class DashboardRepository
                         }
                         else {
                           
-                            $product->quantity = min(
+                            $product->quantity = max(
                                 0, 
                                 $product->quantity - $request->request_quantity
                             );

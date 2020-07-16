@@ -23,7 +23,7 @@ use JWTAuth;
 use Mail;
 use Storage;
 
-class EditProfileController extends Controller
+class ProfileController extends Controller
 {
 
     public function __construct() 

@@ -148,75 +148,39 @@ class ProductController extends Controller {
             return $newBreed->id;
         }
     }
-
-    private function getBreederProducts($breeder) 
-    {
-        return $breeder->products()
-            ->with('breed', 'primaryImage', 'images', 'videos')
-            ->whereIn('status', ['hidden', 'displayed', 'requested'])
-            ->where('quantity','<>', 0)
-            ->orWhere([
-                ['is_unique', '=', '0'],
-                ['quantity', '=', '0']
-            ]);
-    }
     
-    private function transformProduct($product) 
+    private function formatProduct($product)
     {
-        $transFormedProduct = [];
-
-        $breeder = $product->breeder;
-        $farmFrom = $product->farmFrom;
-        $user = $breeder->users->first();
-
-        $transFormedProduct['product_info'] = [
+        return [
             'id' => $product->id,
             'name' => $product->name,
             'type' => $product->type,
             'breed' => $this->transformBreedSyntax($product->breed->name),
-            'age' => $product->birthdate === '0000-00-00' ? null : $this->computeAge($product->birthdate),
-            'birthdate' => $product->birthdate,
-            'is_unique' => $product->is_unique,
+            'status' => $product->status,
+            'age' => $product->birthdate === '0000-00-00' 
+                ? null
+                : $this->computeAge($product->birthdate),
             'quantity' => $product->quantity,
-            'primary_image' => route('serveImage', ['size' => 'default', 'filename' => Image::find($product->primary_img_id)->name]),
+            'isUnique' => $product->is_unique === 1,
+            'imageCount' => $product->images->count(),
+            'videoCount' => $product->videos->count(),
+            'imageUrl' => route('serveImage', [
+                'size' => 'medium',
+                'filename' => $product->primaryImage->name
+            ]),
         ];
-
-        $transFormedProduct['swine_info'] = [
-            'adg' => $product->adg,
-            'fcr' => $product->fcr,
-            'bft' => $product->backfat_thickness,
-            'lsba' => $product->lsba,
-            'house_type' => $product->house_type,
-            'min_price' => $product->min_price,
-            'max_price' => $product->max_price,
-            'left_teats' => $product->left_teats,
-            'right_teats' => $product->right_teats,
-            'birth_weight' => $product->birthweight,
-        ];
-
-        $transFormedProduct['breeder'] = [
-            'id' => $product->breeder_id,
-            'name' => $user->name,
-        ];
-
-        $transFormedProduct['farm'] = [
-            'id' => $farmFrom->id,
-            'name' => $farmFrom->name,
-            'province' => $farmFrom->province,
-        ];
-
-        $transFormedProduct['other_details'] = strip_tags($product->other_details);
-
-        return $transFormedProduct;
     }
 
     private function getBreederProduct($breeder, $product_id)
     {
         $breeder_id = $breeder->id;
-        return Product::where([
+
+        $product = Product::where([
             ['breeder_id', '=', $breeder_id],
             ['id', '=', $product_id]
         ])->first();
+
+        return $product;
     }
     
     /**
@@ -228,7 +192,15 @@ class ProductController extends Controller {
     public function getProducts(Request $request) 
     {
         $breeder = $this->user->userable;
-        $products = $this->getBreederProducts($breeder);
+
+        $products = $breeder->products()
+            ->with('breed', 'primaryImage', 'images', 'videos')
+            ->whereIn('status', ['hidden', 'displayed', 'requested'])
+            ->where('quantity','<>', 0)
+            ->orWhere([
+                ['is_unique', '=', '0'],
+                ['quantity', '=', '0']
+            ]);
         
         // Check for Filtering and Sorting
         if($request->input('type')) {
@@ -251,34 +223,18 @@ class ProductController extends Controller {
         $products = $products
             ->paginate($request->limit)
             ->map(function ($item) {
-                $product = [];
-
-                $product['id'] = $item->id;
-                $product['name'] = $item->name;
-                $product['type'] = $item->type;
-                $product['breed'] = $this->transformBreedSyntax($item->breed->name);
-                $product['status'] = $item->status;
-                $product['age'] = $item->birthdate === '0000-00-00' ? null : $this->computeAge($item->birthdate);
-                $product['quantity'] = $item->quantity;
-                $product['isUnique'] = $item->is_unique === 1;
-                $product['imageCount'] = $item->images->count();
-                $product['videoCount'] = $item->videos->count();
-                $product['imageUrl'] = route('serveImage', [
-                    'size' => 'medium',
-                    'filename' => $item->primaryImage->name
-                ]);
-
-                return $product;
+                return $this->formatProduct($item);
             });
 
         return response()->json([
             'data' => [
+                'count' => $products->count(),
                 'products' => $products
             ]
         ], 200);
     }
 
-    public function toggleProductStatus(Request $request, $product_id)
+    public function toggleProductVisibility(Request $request, $product_id)
     {   
         $breeder = $this->user->userable;
         $product = $this->getBreederProduct($breeder, $product_id);
@@ -310,20 +266,16 @@ class ProductController extends Controller {
         $breeder = $this->user->userable;
         $product = $this->getBreederProduct($breeder, $product_id);
 
-        return [
-            'id' => $product->id,
-            'name' => $product->name,
-            'type' => $product->type,
-            'breed' => $this->transformBreedSyntax($product->breed->name),
-            'status' => $product->status,
-            'age' => $product->birthdate === '0000-00-00' ? null : $this->computeAge($product->birthdate),
-            'quantity' => $product->quantity,
-            'is_unique' => $product->is_unique,
-            'image' => route('serveImage', [
-                'size' => 'medium', 
-                'filename' => Image::find($product->primary_img_id)->name
-            ]),
-        ];
+        if ($product) {
+            return response()->json([
+                'data' => [
+                    'product' => $this->formatProduct($product)
+                ]
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Product does not exist!'
+        ], 404);
 
     }
 
@@ -342,52 +294,83 @@ class ProductController extends Controller {
             'is_unique',
             'breed',
             'birthdate',
-            'price',
             'adg',
             'fcr',
             'bft',
+            'lsba',
+            'house_type',
+            'birth_weight',
+            'min_price',
+            'max_price',
+            'left_teats',
+            'right_teats',
             'other_details'
         ]);
 
-        $validator = Validator::make($data, [
+         $validator = Validator::make($data, [
             'name' => 'required',
             'type' => 'required',
+            'is_unique' => 'required',
             'farm_from_id' => 'required',
             'breed' => 'required'
         ]);
         
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json([
                 'error' => $validator->errors(),
             ], 422);
         }
         else {
-            if($product) {
-                $farm = $farms->find($request->farm_from_id);
-                if($farm) {
-                    $product->farm_from_id = $farm->id;
+            if ($product) {
+
+                $farm = $farms->find($data['farm_from_id']);
+
+                if ($farm) {
+
+                    // Product Info
                     $product->name = $data['name'];
                     $product->type = strtolower($data['type']);
                     $product->breed_id = $this->findOrCreateBreed(strtolower($data['breed']));
-                    $product->birthdate = date_format(date_create($data['birthdate']), 'Y-n-j');
-                    $product->price = $data['price'];
-                    $product->adg = $data['adg'];
-                    $product->quantity = $data['quantity'];
+                    $product->birthdate = $data['birthdate'] == ''
+                        ? ''
+                        : date_format(date_create($data['birthdate']), 'Y-n-j');
                     $product->is_unique = $data['is_unique'];
+                    $product->quantity = $data['is_unique'] == 1 
+                        ? 1
+                        : $data['type'] === 'semen'
+                            ? -1
+                            : $data['quantity'];
+
+                    // Swine Info
+                    $product->farm_from_id = $data['farm_from_id'];
+
+                    $product->min_price = $data['min_price'];
+                    $product->max_price = $data['max_price'];
+                    $product->left_teats = $data['left_teats'];
+                    $product->right_teats = $data['right_teats'];
+                    $product->birthweight = $data['birth_weight'];
+                    $product->house_type = $data['house_type'];
+
+                    $product->adg = $data['adg'];
                     $product->fcr = $data['fcr'];
+                    $product->lsba = $data['lsba'];
                     $product->backfat_thickness = $data['bft'];
                     $product->other_details = $data['other_details'];
                     $product->save();
 
                     return response()->json([
-                        'message' => 'Update Product successful!'
+                        'data' => [
+                            'product' => $product
+                        ]
                     ], 200);
                 }
                 else return response()->json([
+                    'success' => false,
                     'error' => 'Farm does not exist!'
                 ], 404);
             }
             else return response()->json([
+                'success' => false,
                 'error' => 'Product does not exist!'
             ], 404);
         }
@@ -397,62 +380,98 @@ class ProductController extends Controller {
     public function getProductDetails(Request $request, $product_id) 
     {
         $product = Product::with(
-                'breed', 'primaryImage', 'farmFrom', 'breeder.users', 'videos'
+                'breed', 'primaryImage', 'farmFrom', 'breeder.users',
+                'videos'
             )
             ->find($product_id);
 
-        if($product) {
+        if ($product) {
+
+            $breeder = $product->breeder;
+            $farmFrom = $product->farmFrom;
+            $user = $breeder->users->first();
+
+            $productInfo = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'type' => $product->type,
+                'breed' => $this->transformBreedSyntax($product->breed->name),
+                'age' => $product->birthdate === '0000-00-00'
+                    ? null
+                    : $this->computeAge($product->birthdate),
+                'birthDate' => $product->birthdate,
+                'isUnique' => $product->is_unique === 1,
+                'quantity' => $product->quantity,
+                'primaryImageUrl' => route('serveImage', [
+                    'size' => 'large', 
+                    'filename' => $product->primaryImage->name
+                ]),
+            ];
+
+            $swineInfo = [
+                'adg' => $product->adg,
+                'fcr' => $product->fcr,
+                'bft' => $product->backfat_thickness,
+                'lsba' => $product->lsba,
+                'houseType' => $product->house_type,
+                'minPrice' => $product->min_price,
+                'maxPrice' => $product->max_price,
+                'leftTeats' => $product->left_teats,
+                'rightTeats' => $product->right_teats,
+                'birthWeight' => $product->birthweight,
+            ];
+
+            $breeder = [
+                'id' => $product->breeder_id,
+                'name' => $user->name,
+            ];
+
+            $farm = [
+                'id' => $farmFrom->id,
+                'name' => $farmFrom->name,
+                'province' => $farmFrom->province,
+            ];
+
+            $images = $product->images()
+                ->where('id', '<>', $product->primaryImage->id)
+                ->get()
+                ->map(function ($image) {
+                    return [
+                        'id' => $image->id,
+                        'link' => route('serveImage', [
+                            'size' => 'large', 
+                            'filename' => $image->name
+                        ])
+                    ]; 
+                });
+            
+            $videos = $product->videos->map(function ($video) {
+                return [
+                    'id'=> $video->id,
+                    'link'=> route('serveImage', [
+                        'size' => 'large', 
+                        'filename' => $video->name
+                    ])
+                ];
+            });
+
+            $otherDetails = strip_tags($product->other_details);
+
             return response()->json([
                 'data' => [
-                    'product' => $this->transformProduct($product)
+                    'product' => [
+                        'productInfo' => $productInfo,
+                        'swineInfo' => $swineInfo,
+                        'breeder' => $breeder,
+                        'farm' => $farm,
+                        'images' => $images,
+                        'videos' => $videos,
+                    ]
                 ]
             ], 200);
         }
         else return response()->json([
             'error' => 'Product does not exist'
-        ], 404);
-    }
-
-    public function getProductMedia(Request $request, $product_id)
-    {
-        $product = Product::find($product_id);
-
-        if($product) {
-
-            $images = $product->images->map(function ($item) {
-                $image = [];
-
-                $image['id'] = $item->id;
-                $image['link'] = route('serveImage', [
-                    'size' => 'large', 
-                    'filename' => $item->name
-                ]);
-
-                return $image;
-            });
-
-            $videos = $product->videos->map(function ($item) {
-                $video = [];
-
-                $video['id'] = $item->id;
-                $video['link'] = route('serveImage', [
-                    'size' => 'large', 
-                    'filename' => $item->name
-                ]);
-
-                return $video;
-            });
-
-            return response()->json([
-                'message' => 'Get Product Media successful!',
-                'data' => [
-                    'images' => $images,
-                    // 'videos' => $videos,
-                ]
-            ], 200);
-        }
-        else return response()->json([
-            'error' => 'Product does not exist!'
         ], 404);
     }
 
@@ -499,6 +518,7 @@ class ProductController extends Controller {
         }
         else {
             if ($farm) {
+
                 $product = new Product;
 
                 if($request->type == 'boar') $image = Image::firstOrCreate(['name' => 'boar_default.jpg']);
@@ -506,34 +526,44 @@ class ProductController extends Controller {
                 else if($request->type == 'gilt') $image = Image::firstOrCreate(['name' => 'gilt_default.jpg']);
                 else $image = Image::firstOrCreate(['name' => 'semen_default.jpg']);
 
-                $product->farm_from_id = $request->farm_from_id;
                 $product->primary_img_id = $image->id;
-                $product->name = $request->name;
-                $product->type = $request->type;
-                $product->birthdate = $request->birthdate == '' ? '' : date_format(date_create($request->birthdate), 'Y-n-j');
-                $product->breed_id = $this->findOrCreateBreed(strtolower($request->breed));
-                $product->min_price = $request->min_price;
-                $product->max_price = $request->max_price;
-                $product->left_teats = $request->left_teats;
-                $product->right_teats = $request->right_teats;
-                $product->birthweight = $request->birth_weight;
-                $product->house_type = $request->house_type;
-                $product->is_unique = $request->is_unique;
-                $product->quantity = $request->is_unique == 1 ? 1 : $request->quantity;
-                $product->adg = $request->adg;
-                $product->fcr = $request->fcr;
-                $product->lsba = $request->lsba;
-                $product->backfat_thickness = $request->bft;
-                $product->other_details = $request->other_details;
+                $product->farm_from_id = $data['farm_from_id'];
+                $product->name = $data['name'];
+                $product->type = strtolower($data['type']);
+                $product->birthdate = $data['birthdate'] == ''
+                    ? ''
+                    : date_format(date_create($data['birthdate']), 'Y-n-j');
+
+                $product->breed_id = $this->findOrCreateBreed(strtolower($data['breed']));
+                $product->min_price = $data['min_price'];
+                $product->max_price = $data['max_price'];
+                $product->left_teats = $data['left_teats'];
+                $product->right_teats = $data['right_teats'];
+                $product->birthweight = $data['birth_weight'];
+                $product->house_type = $data['house_type'];
+                $product->is_unique = $data['is_unique'];
+                $product->quantity = $data['is_unique'] == 1 
+                    ? 1 
+                    : $data['type'] === 'semen'
+                        ? -1
+                        : $data['quantity'];
+                $product->adg = $data['adg'];
+                $product->fcr = $data['fcr'];
+                $product->lsba = $data['lsba'];
+                $product->backfat_thickness = $data['bft'];
+                $product->other_details = $data['other_details'];
                 $breeder->products()->save($product);
+
+                $product = $this->getBreederProduct($breeder, $product->id);
 
                 return response()->json([
                     'data' => [
-                        'product' => $this->getProduct($product->id),
+                        'product' => $this->formatProduct($product),
                     ]
                 ], 200);
             }
             else return response()->json([
+                'success' => false,
                 'error' => 'Farm does not exist!'
             ], 404);
         }

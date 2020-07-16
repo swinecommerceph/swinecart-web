@@ -353,7 +353,7 @@ class TransactionsController extends Controller
                             'breed' => $this->transformBreedSyntax($breed->name),
                             'imageUrl' => route('serveImage',
                                 [
-                                    'size' => 'small',
+                          Pati           'size' => 'small',
                                     'filename' => $product->primaryImage->name
                                 ]
                             ),

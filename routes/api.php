@@ -27,20 +27,25 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::post('/logout', 'LogoutController@logout');
     });    
 
+    Route::group(['prefix' => 'notifications'], function() {
+        Route::get('/', 'NotificationsController@getNotifications');
+        Route::patch('/{id}', 'NotificationsController@SeeNotification');
+    });
+
     Route::group(['namespace' => 'Breeder', 'prefix' => 'breeder'], function() {
         Route::group(['prefix' => 'profile'], function() {
-            Route::get('/', 'EditProfileController@getProfile');
-            Route::put('/', 'EditProfileController@updatePersonal');
-            Route::patch('/password', 'EditProfileController@changePassword');
+            Route::get('/', 'ProfileController@getProfile');
+            Route::put('/', 'ProfileController@updatePersonal');
+            Route::patch('/password', 'ProfileController@changePassword');
 
-            Route::get('/farms', 'EditProfileController@getFarms');
-            Route::get('/farms/{id}', 'EditProfileController@getFarm');
-            Route::put('/farms/{id}', 'EditProfileController@updateFarm');
-            Route::delete('/farms/{id}', 'EditProfileController@deleteFarm');
+            Route::get('/farms', 'ProfileController@getFarms');
+            Route::get('/farms/{id}', 'ProfileController@getFarm');
+            Route::put('/farms/{id}', 'ProfileController@updateFarm');
+            Route::delete('/farms/{id}', 'ProfileController@deleteFarm');
          
-            // Route::post('/upload-logo', 'EditProfileController@uploadLogo');
-            // Route::delete('/delete-logo', 'EditProfileController@deleteLogo');
-            // Route::post('/set-logo', 'EditProfileController@setLogo');
+            // Route::post('/upload-logo', 'ProfileController@uploadLogo');
+            // Route::delete('/delete-logo', 'ProfileController@deleteLogo');
+            // Route::post('/set-logo', 'ProfileController@setLogo');
         });
 
         Route::group(['prefix' => 'products'], function() {
@@ -53,9 +58,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             
             Route::post('/', 'ProductController@addProduct');
             Route::put('/{id}', 'ProductController@updateProduct');
-            Route::patch('/{id}/status', 'ProductController@toggleProductStatus');
-            
-            Route::get('/{id}/media', 'ProductController@getProductMedia');
+            Route::patch('/{id}/status', 'ProductController@toggleProductVisibility');
+
             Route::post('/{id}/media', 'ProductController@addMedia');
             Route::patch('/{id}/media', 'ProductController@setPrimaryPicture');
             Route::delete('/{id}/media', 'ProductController@deleteMedia');
@@ -66,17 +70,14 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/stats', 'DashboardController@getDashBoardStats');
             Route::get('/ratings', 'DashboardController@getRatings');
             Route::get('/reviews', 'DashboardController@getReviews');
-            Route::get('/reviews/count', 'DashboardController@getReviewCount');
         });
 
-        Route::group(['prefix' => 'inventory'], function() {
-            Route::get('/products/{status}', 'InventoryController@getProducts');
-            Route::get('/products/{id}/requests', 'InventoryController@getProductRequests');
-            Route::delete('/products/{id}/requests', 'InventoryController@removeProductRequest');
-            Route::post('/products/{id}/order-status', 'InventoryController@updateOrderStatus');
-            Route::delete('/products/{id}/order-status', 'InventoryController@cancelTransaction');
-
-            Route::get('/customers/{id}', 'InventoryController@getCustomer');
+        Route::group(['prefix' => 'orders'], function() {
+            Route::get('/{status}', 'OrderController@getProducts');
+            Route::get('/{id}/requests', 'OrderController@getProductRequests');
+            Route::delete('/{id}/requests', 'OrderController@removeProductRequest');
+            Route::post('/{id}/order-status', 'OrderController@updateOrderStatus');
+            Route::delete('/{id}/order-status', 'OrderController@cancelTransaction');
         });
 
         Route::group(['prefix' => 'notifications'], function() {
@@ -107,8 +108,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::group(['prefix' => 'shop'], function() {
             Route::get('/products', 'ShopController@getProducts');
             Route::get('/filters', 'ShopController@getFilterOptions');
-            Route::get('/breeders', 'ShopController@getBreeders');
-            Route::get('/breeds', 'ShopController@getBreeds');
         });
 
         Route::group(['prefix' => 'cart'], function() {

@@ -21,7 +21,7 @@ use Mail;
 use Storage;
 use Config;
 
-class InventoryController extends Controller
+class OrderController extends Controller
 {   
 
     use CustomHelpers {
