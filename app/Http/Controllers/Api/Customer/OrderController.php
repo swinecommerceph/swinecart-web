@@ -36,7 +36,7 @@ use Storage;
 use Config;
 use DB;
 
-class TransactionsController extends Controller
+class OrderController extends Controller
 {
 
     use CustomHelpers {
@@ -97,7 +97,7 @@ class TransactionsController extends Controller
         });
     }
 
-    public function getTransactionHistory(Request $request)
+    public function getHistory(Request $request)
     {
         $customer = $this->user->userable;
 
@@ -240,10 +240,9 @@ class TransactionsController extends Controller
         ], 404);
     }
 
-    public function getItems(Request $request)
+    public function getItems(Request $request, $status)
     {
         $customer = $this->user->userable;
-        $status = $request->status;
         
         if ($status) {
             if ($status == 'requested') {
@@ -353,7 +352,7 @@ class TransactionsController extends Controller
                             'breed' => $this->transformBreedSyntax($breed->name),
                             'imageUrl' => route('serveImage',
                                 [
-                          Pati           'size' => 'small',
+                                    'size' => 'small',
                                     'filename' => $product->primaryImage->name
                                 ]
                             ),

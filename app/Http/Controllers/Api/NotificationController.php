@@ -48,7 +48,10 @@ class NotificationsController extends Controller
     public function seeNotification(Request $request, $notification_id)
     {   
 
-        $notification = $this->user->notifications()->where('id', $notification_id)->get()->first();
+        $notification = $this->user->notifications()
+            ->where('id', $notification_id)
+            ->get()
+            ->first();
 
         if($notification) {
             if($notification->read_at) {

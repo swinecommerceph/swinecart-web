@@ -118,13 +118,13 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::delete('/items/{id}', 'CartController@deleteItem');
         });
 
-        Route::group(['prefix' => 'transactions'], function() {
+        Route::group(['prefix' => 'orders'], function() {
 
-            Route::get('/', 'TransactionsController@getItems');
-            Route::post('/{id}', 'TransactionsController@requestItem');
+            Route::get('/{status}', 'OrderController@getItems');
+            Route::post('/{id}', 'OrderController@requestItem');
 
-            Route::get('/history', 'TransactionsController@getTransactionHistory');
-            Route::post('/reviews/{id}', 'TransactionsController@reviewBreeder');
+            Route::get('/history', 'OrderController@getHistory');
+            Route::post('/reviews/{id}', 'OrderController@reviewBreeder');
         });
 
         Route::group(['prefix' => 'notifications'], function() {
