@@ -98,7 +98,7 @@ class OrderController extends Controller
         return $this->transformOrder($reservation);
     }
 
-    public function getProducts(Request $request)
+    public function getOrders(Request $request)
     {
         $breeder = $this->user->userable;
         $limit = $request->limit;
@@ -163,7 +163,7 @@ class OrderController extends Controller
         }
     }
 
-    public function getProductRequests(Request $request, $product_id)
+    public function getRequests(Request $request, $product_id)
     {
         $limit = $request->limit;
 
@@ -258,7 +258,7 @@ class OrderController extends Controller
         ], 404);
     }
 
-    public function removeProductRequest(Request $request, $cart_id)
+    public function deleteRequest(Request $request, $cart_id)
     {
         $cart_item = SwineCartItem::with('product')->find($cart_id);
 

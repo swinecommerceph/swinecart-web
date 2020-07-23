@@ -10,7 +10,6 @@ use Ramsey\Uuid\Uuid;
 
 use App\Jobs\AddToTransactionLog;
 use App\Jobs\NotifyUser;
-use App\Jobs\SendSMS;
 use App\Jobs\SendToPubSubServer;
 use App\Http\Requests;
 use App\Models\Customer;
@@ -45,6 +44,27 @@ class OrderController extends Controller
         computeAge as private;
     }
 
+    private function formatOrderDetails($reservation)
+    {
+        $trimmed_special_request = trim($reservation->special_request);
+
+        return [
+            'quantity' => $reservation->quantity,
+            'specialRequest' =>
+                $trimmed_special_request === ''
+                    ? null
+                    : $trimmed_special_request,
+            'deliveryDate' =>
+                ($reservation->delivery_date == '0000-00-00')
+                    ? null
+                    : $reservation->delivery_date,
+            'dateNeeded' =>
+                ($reservation->date_needed == '0000-00-00')
+                    ? null
+                    : $reservation->date_needed
+        ];
+    }
+
     private function dispatchRatedNotif($item, $product, $review, $customer, $breeder)
     {
         $transactionDetails = [
@@ -62,11 +82,6 @@ class OrderController extends Controller
             'url' => route('dashboard')
         ];
 
-        $smsDetails = [
-            'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: Customer ' . $this->user->name . ' rated you with ' . round(($review->rating_delivery + $review->rating_transaction + $review->rating_productQuality)/3, 2) . ' (overall average).',
-            'recipient' => $breeder->office_mobile
-        ];
-
         $pubsubData = [
             'rating_delivery' => $review->rating_delivery,
             'rating_transaction' => $review->rating_transaction,
@@ -81,7 +96,6 @@ class OrderController extends Controller
         $this->addToTransactionLog($transactionDetails);
 
         // Queue notifications (SMS, database, notification, pubsub server)
-        dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
         dispatch(new NotifyUser('breeder-rated', $breederUser->id, $notificationDetails));
         dispatch(new SendToPubSubServer('notification', $breederUser->email));
         dispatch(new SendToPubSubServer('db-rated', $breederUser->email, $pubsubData));
@@ -155,7 +169,7 @@ class OrderController extends Controller
 
                 $trimmed_special_request = trim($productReservation->special_request);
 
-                $transaction['reservationDetails'] = [
+                $transaction['details'] = [
                     'quantity' => $productReservation->quantity,
                     'specialRequest' => 
                         $trimmed_special_request === ''
@@ -201,10 +215,8 @@ class OrderController extends Controller
             ->first();
 
         if ($item) {
-            $product = $breeder
-                ->products()
-                ->where('id', $item->product->id)
-                ->first();
+            
+            $product = $item->product;
 
             if ($product) {
                 if ($item->if_rated == 0) {
@@ -240,9 +252,10 @@ class OrderController extends Controller
         ], 404);
     }
 
-    public function getItems(Request $request, $status)
+    public function getOrders(Request $request)
     {
         $customer = $this->user->userable;
+        $status = $request->status;
         
         if ($status) {
             if ($status == 'requested') {
@@ -258,50 +271,36 @@ class OrderController extends Controller
                     ->doesntHave('productReservation')
                     ->get()
                     ->map(function ($data) {
-                        $item = [];
+                        $order = [];
 
                         $product = $data->product;
                         $breeder = $product->breeder->user;
                         $breed_name = $product->breed->name;
 
-                        $item['id'] = $data->id;
-                        $item['status'] = 'requested';
-                        $item['statusTime'] = $data
+                        $order['id'] = $data->id;
+                        $order['status'] = 'requested';
+                        $order['statusTime'] = $data
                                 ->transactionLogs()
                                 ->where('status', 'requested')
                                 ->latest()->first()
                                 ->created_at;
 
-                        $item['product'] = [
-                            'id' =>  $data->product_id,
+                        $order['product'] = [
+                            'id' => $data->product_id,
                             'name' => $product->name,
                             'type' =>  $product->type,
                             'breed' =>  $this->transformBreedSyntax($breed_name),
+                            'breederName' => $breeder->name,
+                            'farmLocation' => $product->farmFrom->province,
                             'imageUrl' => route('serveImage',
                                 [
                                     'size' => 'small',
                                     'filename' => $product->primaryImage->name
                                 ]
                             ),
-                            'breederName' => $breeder->name,
-                            'farmLocation' => $product->farmFrom->province
                         ];
 
-                        $trimmed_special_request = trim($data->special_request);
-
-                        $item['reservationDetails'] = [
-                            'quantity' => $data->quantity,
-                            'specialRequest' => 
-                                $trimmed_special_request === ''
-                                    ? null
-                                    : $trimmed_special_request,
-                            'dateNeeded' => 
-                                ($data->date_needed == '0000-00-00') 
-                                    ? null
-                                    : $data->date_needed
-                        ];
-
-                        return $item;
+                        return $order;
                     })
                     ->sortByDesc('statusTime')
                     ->forPage($request->page, $request->limit)
@@ -317,69 +316,50 @@ class OrderController extends Controller
             else if ($status == 'reserved' || $status == 'on_delivery' || $status == 'sold') {
                 $items = $customer
                     ->swineCartItems()
+                    ->with(
+                        'product.primaryImage',
+                        'product.breed',
+                        'product.breeder'
+                    )
                     ->where('if_rated', 0)
                     ->where('if_requested', 1)
                     ->whereHas('productReservation', function ($query) use ($status) {
                         $query->where('order_status', $status);
                     })
-                    ->with(
-                        'productReservation.product',
-                        'productReservation.product.primaryImage',
-                        'productReservation.product.breed',
-                        'productReservation.product.breeder'
-                    )
                     ->get()
                     ->map(function ($data) use ($status) {
-                        $item = [];
+                        $order = [];
 
                         $reservation = $data->productReservation;
-                        $product = $data->productReservation->product;
+                        $product = $data->product;
                         $breed = $product->breed;
                         $breeder = $product->breeder->user;
 
-                        $item['id'] = $data->id;
-                        $item['status'] = $reservation->order_status;
-                        $item['statusTime'] = $data
+                        $order['id'] = $data->id;
+                        $order['status'] = $reservation->order_status;
+                        $order['statusTime'] = $data
                                 ->transactionLogs()
                                 ->where('status', $status)
                                 ->latest()->first()
                                 ->created_at;
 
-                        $item['product'] = [
+                        $order['product'] = [
                             'id' => $product->id,
                             'name' => $product->name,
                             'type' => $product->type,
                             'breed' => $this->transformBreedSyntax($breed->name),
+                            'breederId' => $product->breeder_id,
+                            'breederName' => $breeder->name,
+                            'farmLocation' => $product->farmFrom->province,
                             'imageUrl' => route('serveImage',
                                 [
                                     'size' => 'small',
                                     'filename' => $product->primaryImage->name
                                 ]
                             ),
-                            'breederName' => $breeder->name,
-                            'farmLocation' => $product->farmFrom->province,
-                            'breederId' => $product->breeder_id
                         ];
 
-                        $trimmed_special_request = trim($data->special_request);
-
-                        $item['reservationDetails'] = [
-                            'quantity' => $data->quantity,
-                            'specialRequest' =>
-                                $trimmed_special_request === ''
-                                    ? null
-                                    : $trimmed_special_request,
-                            'deliveryDate' =>
-                                ($reservation->delivery_date == '0000-00-00')
-                                    ? null
-                                    : $reservation->delivery_date,
-                            'dateNeeded' =>
-                                ($data->date_needed == '0000-00-00') 
-                                    ? null
-                                    : $data->date_needed
-                        ];
-    
-                        return $item;
+                        return $order;
                     })
                     ->sortByDesc('statusTime')
                     ->forPage($request->page, $request->limit)
@@ -401,8 +381,73 @@ class OrderController extends Controller
         ], 400);
     }
 
+    public function getOrder(Request $request, $id)
+    {
+        $customer = $this->user->userable;
+
+        $item = $customer
+            ->swineCartItems()
+            ->with(
+                'productReservation',
+                'product.primaryImage',
+                'product.breed',
+                'product.breeder'
+            )
+            ->where('if_rated', 0)
+            ->where('if_requested', 1)
+            ->find($id);
+
+        if ($item) {
+
+            $order = [];
+
+            $reservation = $item->productReservation;
+            $product = $item->product;
+            $breed = $product->breed;
+            $breeder = $product->breeder->user;
+
+            $order['id'] = $item->id;
+
+            $order['product'] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'type' => $product->type,
+                'breed' => $this->transformBreedSyntax($breed->name),
+                'farmLocation' => $product->farmFrom->province,
+                'imageUrl' => route('serveImage',
+                    [
+                        'size' => 'small',
+                        'filename' => $product->primaryImage->name
+                    ]
+                ),
+            ];
+
+            $order['breederInfo'] = [
+                'id' => $product->breeder_id,
+                'name' => $breeder->name,
+                'province' => $product->breeder->officeAddress_province
+            ];
+
+            $order['details'] = $this->formatOrderDetails(
+                $reservation
+                    ? $reservation 
+                    : $item
+            );
+
+            return response()->json([
+                'data' => [
+                    // 'item' => $item,
+                    'order' => $order,
+                ]
+            ]);
+        }
+        else return response()->json([
+            'error' => 'Item not Found!'
+        ], 404);
+    }
+
     public function requestItem(Request $request, $item_id)
-    {   
+    {
 
         $customer = $this->user->userable;
 
@@ -447,11 +492,6 @@ class OrderController extends Controller
                     'url' => route('dashboard.productStatus')
                 ];
 
-                $smsDetails = [
-                    'message' => 'SwineCart ['. $this->transformDateSyntax($transactionDetails['created_at'], 1) .']: ' . $this->user->name . ' requested for Product ' . $product->name . '.',
-                    'recipient' => $breeder->office_mobile
-                ];
-
                 $pubsubData = [
                     'body' => [
                         'uuid' => (string) Uuid::uuid4(),
@@ -482,7 +522,6 @@ class OrderController extends Controller
 
                 $this->addToTransactionLog($transactionDetails);
 
-                dispatch(new SendSMS($smsDetails['message'], $smsDetails['recipient']));
                 dispatch(new NotifyUser('product-requested', $breederUser->id, $notificationDetails));
                 dispatch(new SendToPubSubServer('notification', $breederUser->email));
                 dispatch(new SendToPubSubServer('db-productRequest', $breederUser->email, $pubsubData));
@@ -527,20 +566,6 @@ class OrderController extends Controller
                     ),
                     'breederName' => $breeder->name,
                     'farmLocation' => $product->farmFrom->province
-                ];
-
-                $trimmed_special_request = trim($item->special_request);
-
-                $formattedItem['reservationDetails'] = [
-                    'quantity' => $item->quantity,
-                    'specialRequest' => 
-                        $trimmed_special_request === ''
-                            ? null
-                            : $trimmed_special_request,
-                    'dateNeeded' =>
-                        ($item->date_needed == '0000-00-00') 
-                            ? null
-                            : $item->date_needed
                 ];
 
                 return response()->json([
