@@ -425,7 +425,9 @@ class OrderController extends Controller
             $order['breederInfo'] = [
                 'id' => $product->breeder_id,
                 'name' => $breeder->name,
-                'province' => $product->breeder->officeAddress_province
+                'province' => $product->breeder->officeAddress_province,
+                'landlineNumber' => $product->breeder->office_landline,
+                'mobileNumber' => $product->breeder->office_mobile,
             ];
 
             $order['details'] = $this->formatOrderDetails(
