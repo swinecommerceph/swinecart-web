@@ -101,7 +101,7 @@ class CartController extends Controller
                 'id' =>  $product->id,
                 'name' => $product->name,
                 'type' => $product->type,
-                'age' => $product->birthdate === '0000-00-00' 
+                'age' => $product->birthdate === '0000-00-00'
                     ? null
                     : $this->computeAge($product->birthdate),
                 'breed' => $this->transformBreedSyntax($breed->name),
@@ -139,28 +139,21 @@ class CartController extends Controller
 
     }
 
-    public function getItemCount(Request $request)
-    {
-        $count = $this->getCartItems()->count();
-
-        return response()->json([
-            'data' => [
-                'itemCount' => $count
-            ]
-        ], 200);
-    }
-
     public function getItems(Request $request)
     {
         $items = $this->getCartItems()
-            ->paginate($request->limit)
-            ->map(function ($element) {
-                return $this->formatCartItem($element);
+            ->paginate($request->limit);
+
+        $formattedItems = $items
+            ->map(function ($item) {
+                return $this->formatCartItem($item);
             });
 
         return response()->json([
             'data' => [
-                'items' => $items,
+                'totalCount' => $items->total(),
+                'hasNext' => $items->hasMorePages(),
+                'items' => $formattedItems,
             ]
         ]);
     }

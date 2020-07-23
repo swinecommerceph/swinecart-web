@@ -112,19 +112,18 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'cart'], function() {
             Route::get('/items', 'CartController@getItems');
-            Route::get('/items/count', 'CartController@getItemCount');
             Route::get('/items/{id}', 'CartController@getItem');
             Route::post('/items/{id}', 'CartController@addItem');
             Route::delete('/items/{id}', 'CartController@deleteItem');
         });
 
         Route::group(['prefix' => 'orders'], function() {
-
+            
+            Route::get('/history', 'OrderController@getHistory');
+            Route::post('/reviews/{id}', 'OrderController@reviewBreeder');
             Route::get('/{status}', 'OrderController@getItems');
             Route::post('/{id}', 'OrderController@requestItem');
 
-            Route::get('/history', 'OrderController@getHistory');
-            Route::post('/reviews/{id}', 'OrderController@reviewBreeder');
         });
 
         Route::group(['prefix' => 'notifications'], function() {
