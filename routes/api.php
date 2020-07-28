@@ -28,8 +28,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     });    
 
     Route::group(['prefix' => 'notifications'], function() {
-        Route::get('/', 'NotificationsController@getNotifications');
-        Route::patch('/{id}', 'NotificationsController@SeeNotification');
+        Route::get('/', 'NotificationController@getNotifications');
+        Route::patch('/{id}', 'NotificationController@SeeNotification');
     });
 
     Route::group(['namespace' => 'Breeder', 'prefix' => 'breeder'], function() {

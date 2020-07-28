@@ -84,8 +84,17 @@ class ShopController extends Controller
 
         // Search
         if($request->input('q')) {
-            // $products = $repository->search($request->q);
-            // $scores = $products->scores;
+            $keyword = $request->input('q');
+
+            $ids = Breed::where('name', 'LIKE', '%' . $keyword . '%')
+                ->get()
+                ->map(function ($breed) {
+                    return $breed->id;
+                });
+
+            $products = $products->where('name', 'LIKE', '%' . $keyword . '%');
+            $products = $products->orWhere('type', 'LIKE', '%' . $keyword . '%');
+            $products = $products->orWhereIn('breed_id', $ids);
         }
 
         // Filter

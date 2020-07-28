@@ -8,7 +8,7 @@ use App\Http\Controllers\Controller;
 
 use JWTAuth;
 
-class NotificationsController extends Controller
+class NotificationController extends Controller
 {
     public function __construct()
     {
