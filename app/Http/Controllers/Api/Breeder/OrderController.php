@@ -280,7 +280,6 @@ class OrderController extends Controller
 
         return response()->json([
             'data' => [
-                'items' => $items,
                 'cartItem' => $cart_item,
             ]
         ], 200);
