@@ -271,7 +271,12 @@ class OrderController extends Controller
         $cart_item->special_request = "";
         $cart_item->save();
 
-        $items = SwineCartItem::where('product_id', $product->id)->get()->count();
+        $count = SwineCartItem::where('product_id', $product->id)->get()->count();
+
+        if ($count - 1 == 0) {
+            $product->status = 'displayed';
+            $product->save();
+        }
 
         return response()->json([
             'data' => [
