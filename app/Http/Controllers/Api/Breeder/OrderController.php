@@ -262,18 +262,12 @@ class OrderController extends Controller
     {
         $cart_item = SwineCartItem::with('product')->find($cart_id);
 
-        $product = $cart_item->product;
-
         $cart_item->reservation_id = 0;
         $cart_item->quantity = ($product->type == 'semen') ? 2 : 1;
         $cart_item->if_requested = 0;
         $cart_item->date_needed = '0000-00-00';
         $cart_item->special_request = "";
         $cart_item->save();
-
-        $product->status = "displayed";
-        // $product->quantity = ($product->type == 'semen') ? -1 : 1;
-        $product->save();
 
         return response()->json([
             'data' => [
