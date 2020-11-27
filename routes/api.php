@@ -42,7 +42,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::get('/farms/{id}', 'ProfileController@getFarm');
             Route::put('/farms/{id}', 'ProfileController@updateFarm');
             Route::delete('/farms/{id}', 'ProfileController@deleteFarm');
-         
+
             // Route::post('/upload-logo', 'ProfileController@uploadLogo');
             // Route::delete('/delete-logo', 'ProfileController@deleteLogo');
             // Route::post('/set-logo', 'ProfileController@setLogo');
@@ -55,7 +55,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
             Route::get('/{id}', 'ProductController@getProduct');
             Route::get('/{id}/details', 'ProductController@getProductDetails');
-            
+
             Route::post('/', 'ProductController@addProduct');
             Route::put('/{id}', 'ProductController@updateProduct');
             Route::patch('/{id}/status', 'ProductController@toggleProductVisibility');
@@ -80,18 +80,13 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::delete('/{id}/order-status', 'OrderController@cancelTransaction');
         });
 
-        Route::group(['prefix' => 'notifications'], function() {
-            Route::get('/', 'NotificationsController@getNotifications');
-            Route::patch('/{id}', 'NotificationsController@SeeNotification');
-        });
-
         Route::group(['prefix' => 'chats'], function() {
             Route::get('/', 'MessageController@getThreads');
             Route::get('/{id}', 'MessageController@getMessages');
             Route::patch('/{id}/{messageId}', 'MessageController@seeMessage');
         });
     });
- 
+
     Route::group(['namespace' => 'Customer', 'prefix' => 'customer'], function() {
         Route::group(['prefix' => 'profile'], function() {
             Route::get('/', 'ProfileController@getProfile');
@@ -118,7 +113,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         });
 
         Route::group(['prefix' => 'orders'], function() {
-            
+
             Route::get('/', 'OrderController@getOrders');
             Route::get('/history', 'OrderController@getHistory');
             Route::get('/{id}', 'OrderController@getOrder');
@@ -126,11 +121,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::post('/reviews/{id}', 'OrderController@reviewBreeder');
             Route::post('/{id}', 'OrderController@requestItem');
 
-        });
-
-        Route::group(['prefix' => 'notifications'], function() {
-            Route::get('/', 'NotificationsController@getNotifications');
-            Route::patch('/{id}', 'NotificationsController@SeeNotification');
         });
 
         Route::group(['prefix' => 'chats'], function() {
