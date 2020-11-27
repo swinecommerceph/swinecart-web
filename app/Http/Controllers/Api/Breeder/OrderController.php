@@ -116,7 +116,7 @@ class OrderController extends Controller
                 ->paginate($limit)
                 ->map(function ($item) {
                     $order = [];
-                    
+
                     $order['status'] = $item->status;
                     $order['requestCount'] = $item->swine_cart_item_count;
 
@@ -271,8 +271,11 @@ class OrderController extends Controller
         $cart_item->special_request = "";
         $cart_item->save();
 
+        $items = SwineCartItem::where('product_id', $product->id)->get()->count();
+
         return response()->json([
             'data' => [
+                'items' => $items,
                 'cartItem' => $cart_item,
             ]
         ], 200);
