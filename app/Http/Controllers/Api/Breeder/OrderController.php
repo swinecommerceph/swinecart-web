@@ -273,7 +273,7 @@ class OrderController extends Controller
 
         $count = SwineCartItem::where('product_id', $product->id)->get()->count();
 
-        if ($count - 1 == 0) {
+        if ($count == 1) {
             $product->status = 'displayed';
             $product->save();
         }
@@ -327,7 +327,7 @@ class OrderController extends Controller
     {
         $customer = Customer::find($customer_id)->with('user')->first();
         $user = $customer->user->first();
-    
+
         return response()->json([
             'data' => [
                 'customer' => [
