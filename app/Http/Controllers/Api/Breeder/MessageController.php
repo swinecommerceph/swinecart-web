@@ -105,7 +105,7 @@ class MessageController extends Controller
                 'threads' => $threads,
             ]
         ], 200);
-        
+
     }
 
     public function seeMessage(Request $request, $customer_id, $message_id)

@@ -63,7 +63,7 @@ class ProductController extends Controller {
 
     protected $guard = 'api';
 
-    public function __construct() 
+    public function __construct()
     {
         $this->middleware('jwt:auth', ['except' => [
             'getProductDetails', 'getProductMedia'
@@ -87,15 +87,18 @@ class ProductController extends Controller {
     private function createMediaInfo($filename, $extension, $productId, $type, $breed)
     {
         $mediaInfo = [];
-        if(str_contains($breed,'+')){
+
+        $slug = md5(mt_rand());
+
+        if (str_contains($breed,'+')) {
             $part = explode("+", $breed);
-            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . $slug . '.' . $extension;
         }
         else {
-            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . $slug . '.' . $extension;
         }
-        
-        if($this->isImage($extension)){
+
+        if ($this->isImage($extension)) {
             $mediaInfo['directoryPath'] = self::PRODUCT_IMG_PATH;
             $mediaInfo['type'] = new Image;
         }
@@ -645,7 +648,7 @@ class ProductController extends Controller {
         ], 200);
     }
 
-    public function setPrimaryPicture(Request $request, $product_id) 
+    public function setPrimaryPicture(Request $request, $product_id)
     {
         $breeder = $this->user->userable;
         $product = $this->getBreederProduct($breeder, $product_id);
@@ -661,22 +664,23 @@ class ProductController extends Controller {
         else return response()->json([
             'error' => 'Product does not exist!'
         ], 404);
-        
+
     }
 
     public function addMedia(Request $request, $product_id)
     {
-
         $file = $request->file('file');
 
+        $product = Product::find($product_id);
+
         if ($file->isValid()) {
+
             $fileExtension = $file->getClientOriginalExtension();
             $fileName = $file->getClientOriginalName();
 
             if ($this->isImage($fileExtension) || $this->isVideo($fileExtension)) {
                 $mediaInfo = $this->createMediaInfo(
-                    $fileName, $fileExtension, $product_id, 
-                    $request->type, $request->breed
+                    $fileName, $fileExtension, $product_id, $product->type, $product->breed->name
                 );
             }
             else return response()->json([
@@ -689,15 +693,15 @@ class ProductController extends Controller {
             );
 
             if ($file) {
-                $product = Product::find($product_id);
 
                 $media = $mediaInfo['type'];
                 $media->name = $mediaInfo['filename'];
 
-                if($this->isImage($fileExtension)){
+                if ($this->isImage($fileExtension)) {
+
                     $product->images()->save($media);
                     dispatch(new ResizeUploadedImage($media->name));
-                    
+
                     return response()->json([
                         'data' => [
                             'id' => $media->id,
@@ -709,7 +713,9 @@ class ProductController extends Controller {
                     ], 200);
                 }
                 else if ($this->isVideo($fileExtension)) {
+
                     $product->videos()->save($media);
+
                     return response()->json([
                         'data' => [
                             'id' => $media->id,
@@ -719,11 +725,11 @@ class ProductController extends Controller {
                 }
             }
             else return response()->json([
-                'error' => 'Upload Failed' 
+                'error' => 'Upload Failed'
             ], 500);
         }
         else return response()->json([
-            'error' => 'Upload Failed' 
+            'error' => 'Upload Failed'
         ], 500);
     }
 
@@ -746,7 +752,5 @@ class ProductController extends Controller {
         return response()->json([
             'message' => 'Delete Medium successful!',
         ], 200);
-
-        
     }
 }

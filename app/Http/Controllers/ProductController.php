@@ -822,12 +822,15 @@ class ProductController extends Controller
     private function createMediaInfo($filename, $extension, $productId, $type, $breed)
     {
         $mediaInfo = [];
+
+        $slug = md5(mt_rand());
+
         if(str_contains($breed,'+')){
             $part = explode("+", $breed);
-            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $part[0] . ucfirst($part[1]) . '_' . $slug . '.' . $extension;
         }
         else {
-            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . crypt($filename, Carbon::now()) . '.' . $extension;
+            $mediaInfo['filename'] = $productId . '_' . $type . '_' . $breed . '_' . $slug . '.' . $extension;
         }
         /* $filename = $file->getClientOriginalName();
         $pathname = $file->getPathName();
