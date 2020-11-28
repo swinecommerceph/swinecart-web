@@ -263,7 +263,7 @@ class OrderController extends Controller
     {
         $cart_item = SwineCartItem::with('product')->find($cart_id);
 
-        // $product = $cart_item->product;
+        $product = $cart_item->product;
 
         // $cart_item->reservation_id = 0;
         // $cart_item->quantity = ($product->type == 'semen') ? 2 : 1;
