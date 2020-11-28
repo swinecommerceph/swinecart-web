@@ -281,6 +281,7 @@ class OrderController extends Controller
         return response()->json([
             'data' => [
                 'cartItem' => $cart_item,
+                'count' => $count,
             ]
         ], 200);
     }
