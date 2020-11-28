@@ -265,12 +265,12 @@ class OrderController extends Controller
 
         $product = $cart_item->product;
 
-        // $cart_item->reservation_id = 0;
-        // $cart_item->quantity = ($product->type == 'semen') ? 2 : 1;
-        // $cart_item->if_requested = 0;
-        // $cart_item->date_needed = '0000-00-00';
-        // $cart_item->special_request = "";
-        // $cart_item->save();
+        $cart_item->reservation_id = 0;
+        $cart_item->quantity = ($product->type == 'semen') ? 2 : 1;
+        $cart_item->if_requested = 0;
+        $cart_item->date_needed = '0000-00-00';
+        $cart_item->special_request = "";
+        $cart_item->save();
 
         $count = SwineCartItem::with(['product' => function($q) {
             $q->where('status', 'requested');
@@ -278,10 +278,10 @@ class OrderController extends Controller
         ->where('product_id', $product->id)
         ->get();
 
-        // if ($count == 1) {
-        //     $product->status = 'displayed';
-        //     $product->save();
-        // }
+        if ($count == 1) {
+            $product->status = 'displayed';
+            $product->save();
+        }
 
         return response()->json([
             'data' => [
