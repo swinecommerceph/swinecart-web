@@ -28,7 +28,7 @@ class MessageController extends Controller
 
 
     public function getMessages(Request $request, $customer_id)
-    {   
+    {
         $user_id = $this->user->id;
 
         $messages = Message::where('breeder_id', '=', $user_id)
