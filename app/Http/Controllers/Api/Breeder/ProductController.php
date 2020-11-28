@@ -55,12 +55,6 @@ class ProductController extends Controller {
     const PRODUCT_MIMG_PATH = '/images/product/resize/medium/';
     const PRODUCT_LIMG_PATH = '/images/product/resize/large/';
 
-    /** 
-     * Paginate Variables 
-    */
-
-    const RESULTS_PER_PAGE = 15;
-
     protected $guard = 'api';
 
     public function __construct()
@@ -144,14 +138,14 @@ class ProductController extends Controller {
      */
     private function findOrCreateBreed($breed)
     {
-        $breedInstance = Breed::where('name','like',$breed)->get()->first();
+        $breedInstance = Breed::where('name','like', $breed)->get()->first();
         if($breedInstance) return $breedInstance->id;
         else{
             $newBreed = Breed::create(['name' => $breed]);
             return $newBreed->id;
         }
     }
-    
+
     private function formatProduct($product)
     {
         return [
@@ -160,7 +154,7 @@ class ProductController extends Controller {
             'type' => $product->type,
             'breed' => $this->transformBreedSyntax($product->breed->name),
             'status' => $product->status,
-            'age' => $product->birthdate === '0000-00-00' 
+            'age' => $product->birthdate === '0000-00-00'
                 ? null
                 : $this->computeAge($product->birthdate),
             'quantity' => $product->quantity,
@@ -185,14 +179,14 @@ class ProductController extends Controller {
 
         return $product;
     }
-    
+
     /**
      * ---------------------------------------
      *  PUBLIC METHODS
      * ---------------------------------------
      */
-    
-    public function getProducts(Request $request) 
+
+    public function getProducts(Request $request)
     {
         $breeder = $this->user->userable;
 
@@ -204,7 +198,7 @@ class ProductController extends Controller {
                 ['is_unique', '=', '0'],
                 ['quantity', '=', '0']
             ]);
-        
+
         // Check for Filtering and Sorting
         if($request->input('type')) {
             $products = $products->where('type', $request->input('type'));
@@ -238,7 +232,7 @@ class ProductController extends Controller {
     }
 
     public function toggleProductVisibility(Request $request, $product_id)
-    {   
+    {
         $breeder = $this->user->userable;
         $product = $this->getBreederProduct($breeder, $product_id);
 
@@ -279,7 +273,6 @@ class ProductController extends Controller {
         else return response()->json([
             'error' => 'Product does not exist!'
         ], 404);
-
     }
 
     public function updateProduct(Request $request, $product_id)
@@ -317,7 +310,7 @@ class ProductController extends Controller {
             'farm_from_id' => 'required',
             'breed' => 'required'
         ]);
-        
+
         if ($validator->fails()) {
             return response()->json([
                 'error' => $validator->errors(),
@@ -380,7 +373,7 @@ class ProductController extends Controller {
         
     }
 
-    public function getProductDetails(Request $request, $product_id) 
+    public function getProductDetails(Request $request, $product_id)
     {
         $product = Product::with(
                 'breed', 'primaryImage', 'farmFrom', 'breeder.users',
@@ -406,7 +399,7 @@ class ProductController extends Controller {
                 'isUnique' => $product->is_unique === 1,
                 'quantity' => $product->quantity,
                 'primaryImageUrl' => route('serveImage', [
-                    'size' => 'large', 
+                    'size' => 'large',
                     'filename' => $product->primaryImage->name
                 ]),
             ];
@@ -442,17 +435,17 @@ class ProductController extends Controller {
                     return [
                         'id' => $image->id,
                         'link' => route('serveImage', [
-                            'size' => 'large', 
+                            'size' => 'large',
                             'filename' => $image->name
                         ])
-                    ]; 
+                    ];
                 });
-            
+
             $videos = $product->videos->map(function ($video) {
                 return [
                     'id'=> $video->id,
                     'link'=> route('serveImage', [
-                        'size' => 'large', 
+                        'size' => 'large',
                         'filename' => $video->name
                     ])
                 ];
@@ -545,8 +538,8 @@ class ProductController extends Controller {
                 $product->birthweight = $data['birth_weight'];
                 $product->house_type = $data['house_type'];
                 $product->is_unique = $data['is_unique'];
-                $product->quantity = $data['is_unique'] == 1 
-                    ? 1 
+                $product->quantity = $data['is_unique'] == 1
+                    ? 1
                     : $data['type'] === 'semen'
                         ? -1
                         : $data['quantity'];
@@ -580,7 +573,7 @@ class ProductController extends Controller {
 
         foreach (explode(',', $ids) as $id) {
             $product = $this->getBreederProduct($breeder, $id);
-            
+
             if($product) {
                 if($product->status === 'hidden') {
                     $product->status = 'displayed';
@@ -600,7 +593,7 @@ class ProductController extends Controller {
             'message' => 'Toggle Product Statuses successful!',
         ], 200);
     }
-    
+
     public function deleteProducts(Request $request)
     {
         $breeder = $this->user->userable;
