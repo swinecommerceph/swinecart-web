@@ -261,7 +261,7 @@ class OrderController extends Controller
 
     public function deleteRequest(Request $request, $cart_id)
     {
-        // $customer = Customer::find($reservation->customer_id);
+
         $cart_item = SwineCartItem::with('product')->find($cart_id);
 
         $product = $cart_item->product;
@@ -285,8 +285,7 @@ class OrderController extends Controller
 
         return response()->json([
             'data' => [
-                // 'cartItem' => $cart_item,
-                'count' => $count,
+                'cartItem' => $cart_item,
             ]
         ], 200);
     }
