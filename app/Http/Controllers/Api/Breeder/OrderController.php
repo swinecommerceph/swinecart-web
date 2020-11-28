@@ -276,7 +276,8 @@ class OrderController extends Controller
             $q->where('status', 'requested');
         }])
         ->where('product_id', $product->id)
-        ->get();
+        ->get()
+        ->count();
 
         if ($count == 1) {
             $product->status = 'displayed';
