@@ -261,6 +261,7 @@ class OrderController extends Controller
 
     public function deleteRequest(Request $request, $cart_id)
     {
+        // $customer = Customer::find($reservation->customer_id);
         $cart_item = SwineCartItem::with('product')->find($cart_id);
 
         $product = $cart_item->product;
@@ -272,21 +273,19 @@ class OrderController extends Controller
         $cart_item->special_request = "";
         $cart_item->save();
 
-        $count = SwineCartItem::with(['product' => function($q) {
-            $q->where('status', 'requested');
-        }])
-        ->where('product_id', $product->id)
-        ->get()
-        ->count();
+        $count = SwineCartItem::where('product_id', $product->id)
+            ->where('if_requested', 1)
+            ->get()
+            ->count();
 
-        if ($count == 1) {
+        if ($count == 0) {
             $product->status = 'displayed';
             $product->save();
         }
 
         return response()->json([
             'data' => [
-                'cartItem' => $cart_item,
+                // 'cartItem' => $cart_item,
                 'count' => $count,
             ]
         ], 200);
