@@ -153,7 +153,7 @@ $factory->define(App\Models\Customer::class, function (Faker\Generator $faker) {
         'address_addressLine2' => $faker->address,
         'address_province' => $provinces[$rand],
         'address_zipCode' => $faker->regexify('[0-9]{4}'),
-        'landline' => $faker->regexify('(0[1-8][1-8])[1-9]{3}\-[0-9]{4}'),
+        'landline' => $faker->regexify('[1-9]{8}'),
         // 'mobile' => $faker->regexify('09[0-9]{9}'),
         'mobile' => '09776749666'
     ];
@@ -287,7 +287,7 @@ $factory->define(App\Models\Breeder::class, function (Faker\Generator $faker) {
         'officeAddress_addressLine2' => $faker->streetAddress,
         'officeAddress_province' => $provinces[$rand],
         'officeAddress_zipCode' => $faker->regexify('[0-9]{4}'),
-        'office_landline' => $faker->regexify('(0[1-8][1-8])[1-9]{3}\-[0-9]{4}'),
+        'office_landline' => $faker->regexify('[1-9]{8}'),
         // 'office_mobile' => $faker->regexify('09[0-9]{9}'),
         'office_mobile' => '09776749666',
         'website' => $faker->word.'.com',
@@ -411,7 +411,7 @@ $factory->define(App\Models\FarmAddress::class, function (Faker\Generator $faker
         'province' => $provinces[$rand],
         'zipCode' => $faker->regexify('[0-9]{4}'),
         'farmType' => $faker->word,
-        'landline' => $faker->regexify('(0[1-8][1-8])[1-9]{3}\-[0-9]{4}'),
+        'landline' => $faker->regexify('[0-9]{8}'),
         'mobile' => $faker->regexify('09[0-9]{9}'),
         'accreditation_no' => null,
         'accreditation_status' => 'not_applicable',

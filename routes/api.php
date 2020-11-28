@@ -25,11 +25,20 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::post('/login', 'LoginController@normalLogin');
         Route::get('/me', 'LoginController@me');
         Route::post('/logout', 'LogoutController@logout');
-    });    
+    });
 
     Route::group(['prefix' => 'notifications'], function() {
         Route::get('/', 'NotificationController@getNotifications');
         Route::patch('/{id}', 'NotificationController@SeeNotification');
+    });
+
+    Route::group(['prefix' => 'farms'], function() {
+        Route::get('/', 'FarmController@getFarms');
+        Route::get('/{id}', 'FarmController@getFarm');
+    });
+
+    Route::group(['prefix' => 'provinces'], function() {
+        Route::get('/', 'ProvinceController@getProvinces');
     });
 
     Route::group(['namespace' => 'Breeder', 'prefix' => 'breeder'], function() {
