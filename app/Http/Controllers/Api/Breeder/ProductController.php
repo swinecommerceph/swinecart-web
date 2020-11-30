@@ -458,10 +458,11 @@ class ProductController extends Controller {
                     'product' => [
                         'productInfo' => $productInfo,
                         'swineInfo' => $swineInfo,
+                        'otherDetails' => $otherDetails,
                         'breeder' => $breeder,
                         'farm' => $farm,
                         'images' => $images,
-                        'videos' => $videos,
+                        'videos' => $videos
                     ]
                 ]
             ], 200);
@@ -479,21 +480,21 @@ class ProductController extends Controller {
         $farm = $farms->find($request->farm_from_id);
 
         $data = $request->only([
-            'farm_from_id',
             'name',
             'type',
-            'quantity',
+            'min_price',
+            'max_price',
             'is_unique',
+            'quantity',
             'breed',
             'birthdate',
+            'farm_from_id',
+            'house_type',
+            'birth_weight',
             'adg',
             'fcr',
             'bft',
             'lsba',
-            'house_type',
-            'birth_weight',
-            'min_price',
-            'max_price',
             'left_teats',
             'right_teats',
             'other_details'

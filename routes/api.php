@@ -46,15 +46,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     });
 
     Route::group(['namespace' => 'Breeder', 'prefix' => 'breeder'], function() {
-        Route::group(['prefix' => 'profile'], function() {
-            Route::get('/', 'ProfileController@getProfile');
-            Route::put('/', 'ProfileController@updatePersonal');
-            Route::patch('/password', 'ProfileController@changePassword');
-
-            // Route::post('/upload-logo', 'ProfileController@uploadLogo');
-            // Route::delete('/delete-logo', 'ProfileController@deleteLogo');
-            // Route::post('/set-logo', 'ProfileController@setLogo');
-        });
 
         Route::group(['prefix' => 'products'], function() {
             Route::get('/', 'ProductController@getProducts');
@@ -96,11 +87,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     });
 
     Route::group(['namespace' => 'Customer', 'prefix' => 'customer'], function() {
-        Route::group(['prefix' => 'profile'], function() {
-            Route::get('/', 'ProfileController@getProfile');
-            Route::put('/', 'ProfileController@updatePersonal');
-            Route::patch('/password', 'ProfileController@changePassword');
-        });
 
         Route::group(['prefix' => 'shop'], function() {
             Route::get('/products', 'ShopController@getProducts');
