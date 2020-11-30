@@ -283,27 +283,27 @@ class ProductController extends Controller {
         $farms = $breeder->farmAddresses;
 
         $data = $request->only([
-            'farm_from_id',
             'name',
             'type',
-            'quantity',
+            'min_price',
+            'max_price',
             'is_unique',
+            'quantity',
             'breed',
             'birthdate',
+            'farm_from_id',
+            'house_type',
+            'birth_weight',
             'adg',
             'fcr',
             'bft',
             'lsba',
-            'house_type',
-            'birth_weight',
-            'min_price',
-            'max_price',
             'left_teats',
             'right_teats',
             'other_details'
         ]);
 
-         $validator = Validator::make($data, [
+        $validator = Validator::make($data, [
             'name' => 'required',
             'type' => 'required',
             'is_unique' => 'required',
@@ -326,32 +326,30 @@ class ProductController extends Controller {
                     // Product Info
                     $product->name = $data['name'];
                     $product->type = strtolower($data['type']);
-                    $product->breed_id = $this->findOrCreateBreed(strtolower($data['breed']));
-                    $product->birthdate = $data['birthdate'] == ''
-                        ? ''
-                        : date_format(date_create($data['birthdate']), 'Y-n-j');
+                    $product->min_price = $data['min_price'];
+                    $product->max_price = $data['max_price'];
                     $product->is_unique = $data['is_unique'];
-                    $product->quantity = $data['is_unique'] == 1 
+                    $product->quantity = $data['is_unique'] == 1
                         ? 1
                         : $data['type'] === 'semen'
                             ? -1
                             : $data['quantity'];
+                    $product->breed_id = $this->findOrCreateBreed(strtolower($data['breed']));
+                    $product->birthdate = $data['birthdate'] == ''
+                        ? ''
+                        : date_format(date_create($data['birthdate']), 'Y-n-j');
 
-                    // Swine Info
                     $product->farm_from_id = $data['farm_from_id'];
-
-                    $product->min_price = $data['min_price'];
-                    $product->max_price = $data['max_price'];
-                    $product->left_teats = $data['left_teats'];
-                    $product->right_teats = $data['right_teats'];
-                    $product->birthweight = $data['birth_weight'];
                     $product->house_type = $data['house_type'];
-
+                    $product->birthweight = $data['birth_weight'];
                     $product->adg = $data['adg'];
                     $product->fcr = $data['fcr'];
-                    $product->lsba = $data['lsba'];
                     $product->backfat_thickness = $data['bft'];
+                    $product->lsba = $data['lsba'];
+                    $product->left_teats = $data['left_teats'];
+                    $product->right_teats = $data['right_teats'];
                     $product->other_details = $data['other_details'];
+
                     $product->save();
 
                     return response()->json([
@@ -524,31 +522,34 @@ class ProductController extends Controller {
                 else $image = Image::firstOrCreate(['name' => 'semen_default.jpg']);
 
                 $product->primary_img_id = $image->id;
-                $product->farm_from_id = $data['farm_from_id'];
+
                 $product->name = $data['name'];
                 $product->type = strtolower($data['type']);
-                $product->birthdate = $data['birthdate'] == ''
-                    ? ''
-                    : date_format(date_create($data['birthdate']), 'Y-n-j');
-
-                $product->breed_id = $this->findOrCreateBreed(strtolower($data['breed']));
                 $product->min_price = $data['min_price'];
                 $product->max_price = $data['max_price'];
-                $product->left_teats = $data['left_teats'];
-                $product->right_teats = $data['right_teats'];
-                $product->birthweight = $data['birth_weight'];
-                $product->house_type = $data['house_type'];
                 $product->is_unique = $data['is_unique'];
                 $product->quantity = $data['is_unique'] == 1
                     ? 1
                     : $data['type'] === 'semen'
                         ? -1
                         : $data['quantity'];
+
+                $product->breed_id = $this->findOrCreateBreed(strtolower($data['breed']));
+                $product->birthdate = $data['birthdate'] == ''
+                    ? ''
+                    : date_format(date_create($data['birthdate']), 'Y-n-j');
+
+                $product->farm_from_id = $data['farm_from_id'];
+                $product->house_type = $data['house_type'];
+                $product->birthweight = $data['birth_weight'];
                 $product->adg = $data['adg'];
                 $product->fcr = $data['fcr'];
-                $product->lsba = $data['lsba'];
                 $product->backfat_thickness = $data['bft'];
+                $product->lsba = $data['lsba'];
+                $product->left_teats = $data['left_teats'];
+                $product->right_teats = $data['right_teats'];
                 $product->other_details = $data['other_details'];
+
                 $breeder->products()->save($product);
 
                 $product = $this->getBreederProduct($breeder, $product->id);
