@@ -397,7 +397,7 @@ class ProductController extends Controller {
                 'isUnique' => $product->is_unique === 1,
                 'quantity' => $product->quantity,
                 'primaryImage' => [
-                    'id' => $product->primaryImage->id
+                    'id' => $product->primaryImage->id,
                     'link' => route('serveImage', [
                         'size' => 'large',
                         'filename' => $product->primaryImage->name
