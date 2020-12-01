@@ -712,7 +712,7 @@ class ProductController extends Controller {
         $file = $request->file('file');
 
         return response()->json([
-            'request' => $request->file('file')
+            'request' => $request->all()
         ], 200);
 
         $product = Product::find($product_id);
