@@ -79,7 +79,7 @@ class FarmController extends Controller
 
             if ($this->accountType === 'Breeder') {
                 $formatted['accreditation']['number'] = $farm->accreditation_no;
-                $formatted['accreditation']['statue'] = $farm->accreditation_status;
+                $formatted['accreditation']['status'] = $farm->accreditation_status;
                 $formatted['accreditation']['date'] = $farm->accreditation_date;
                 $formatted['accreditation']['expiry'] = $farm->accreditation_expiry;
             }
