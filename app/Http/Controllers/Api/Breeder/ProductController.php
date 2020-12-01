@@ -713,6 +713,12 @@ class ProductController extends Controller {
 
         $product = Product::find($product_id);
 
+        if (!$request->hasFile('file')) {
+            return response()->json([
+                'error' => 'Upload Failed'
+            ], 500);
+        }
+
         if ($file->isValid()) {
 
             $fileExtension = $file->getClientOriginalExtension();
