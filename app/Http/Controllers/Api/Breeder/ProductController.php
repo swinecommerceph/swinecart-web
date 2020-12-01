@@ -396,10 +396,13 @@ class ProductController extends Controller {
                 'birthDate' => $product->birthdate,
                 'isUnique' => $product->is_unique === 1,
                 'quantity' => $product->quantity,
-                'primaryImageUrl' => route('serveImage', [
-                    'size' => 'large',
-                    'filename' => $product->primaryImage->name
-                ]),
+                'primaryImage' => [
+                    'id' => $product->primaryImage->id
+                    'link' => route('serveImage', [
+                        'size' => 'large',
+                        'filename' => $product->primaryImage->name
+                    ]),
+                ]
             ];
 
             $swineInfo = [
@@ -438,6 +441,8 @@ class ProductController extends Controller {
                         ])
                     ];
                 });
+
+            $images = $images->prepend($productInfo->primaryImage);
 
             $videos = $product->videos->map(function ($video) {
                 return [
