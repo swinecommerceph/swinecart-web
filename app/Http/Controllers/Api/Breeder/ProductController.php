@@ -712,7 +712,7 @@ class ProductController extends Controller {
                     'videos' => $videos
                 ]
             ], 200);
-
+        }
         else return response()->json([
             'error' => 'Product does not exist'
         ], 404);
