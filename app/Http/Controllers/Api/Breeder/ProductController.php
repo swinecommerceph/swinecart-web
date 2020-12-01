@@ -711,6 +711,10 @@ class ProductController extends Controller {
     {
         $file = $request->file('file');
 
+        return response()->json([
+            'request' => $request
+        ], 200);
+
         $product = Product::find($product_id);
 
         if (!$request->hasFile('file')) {
