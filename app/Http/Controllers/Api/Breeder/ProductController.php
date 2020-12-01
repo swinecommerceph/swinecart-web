@@ -674,10 +674,7 @@ class ProductController extends Controller {
 
         if ($product) {
 
-            $images = $product->images()
-                ->where('id', '<>', $product->primaryImage->id)
-                ->get()
-                ->map(function ($image) {
+            $images = $product->images->map(function ($image) {
                     return [
                         'id' => $image->id,
                         'link' => route('serveImage', [
@@ -686,14 +683,6 @@ class ProductController extends Controller {
                         ])
                     ];
                 });
-
-            $images = $images->prepend([
-                'id' => $product->primaryImage->id,
-                'link' => route('serveImage', [
-                    'size' => 'large',
-                    'filename' => $product->primaryImage->name
-                ])
-            ]);
 
             $videos = $product->videos->map(function ($video) {
                 return [
