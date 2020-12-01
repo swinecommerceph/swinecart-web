@@ -375,7 +375,7 @@ class ProductController extends Controller {
     {
         $product = Product::with(
                 'breed', 'primaryImage', 'farmFrom', 'breeder.users',
-                'videos'
+                'images','videos'
             )
             ->find($product_id);
 
@@ -665,6 +665,57 @@ class ProductController extends Controller {
             'error' => 'Product does not exist!'
         ], 404);
 
+    }
+
+    public function getMedia(Request $request, $product_id)
+    {
+        $product = Product::with('primaryImage', 'images', 'videos')
+            ->find($product_id);
+
+        if ($product) {
+
+            $images = $product->images()
+                ->where('id', '<>', $product->primaryImage->id)
+                ->get()
+                ->map(function ($image) {
+                    return [
+                        'id' => $image->id,
+                        'link' => route('serveImage', [
+                            'size' => 'large',
+                            'filename' => $image->name
+                        ])
+                    ];
+                });
+
+            $images = $images->prepend([
+                'id' => $product->primaryImage->id,
+                'link' => route('serveImage', [
+                    'size' => 'large',
+                    'filename' => $product->primaryImage->name
+                ])
+            ]);
+
+            $videos = $product->videos->map(function ($video) {
+                    return [
+                        'id'=> $video->id,
+                        'link'=> route('serveImage', [
+                            'size' => 'large',
+                            'filename' => $video->name
+                        ])
+                    ];
+                });
+            }
+
+            return response()->json([
+                'data' => [
+                    'images' => $images,
+                    'videos' => $videos
+                ]
+            ], 200);
+
+        else return response()->json([
+            'error' => 'Product does not exist'
+        ], 404);
     }
 
     public function addMedia(Request $request, $product_id)

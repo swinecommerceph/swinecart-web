@@ -59,6 +59,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::put('/{id}', 'ProductController@updateProduct');
             Route::patch('/{id}/status', 'ProductController@toggleProductVisibility');
 
+            Route::get('/{id}/media', 'ProductController@getMedia');
             Route::post('/{id}/media', 'ProductController@addMedia');
             Route::patch('/{id}/media', 'ProductController@setPrimaryPicture');
             Route::delete('/{id}/media', 'ProductController@deleteMedia');
