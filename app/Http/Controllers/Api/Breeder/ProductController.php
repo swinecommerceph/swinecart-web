@@ -442,7 +442,7 @@ class ProductController extends Controller {
                     ];
                 });
 
-            $images = $images->prepend($productInfo->primaryImage);
+            $images = $images->prepend($productInfo['primaryImage']);
 
             $videos = $product->videos->map(function ($video) {
                 return [
