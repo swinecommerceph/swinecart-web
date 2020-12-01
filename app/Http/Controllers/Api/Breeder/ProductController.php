@@ -696,6 +696,7 @@ class ProductController extends Controller {
 
             return response()->json([
                 'data' => [
+                    'primaryImageId' => $product->primaryImage->id,
                     'images' => $images,
                     'videos' => $videos
                 ]
