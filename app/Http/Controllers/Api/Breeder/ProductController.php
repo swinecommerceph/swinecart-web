@@ -751,7 +751,7 @@ class ProductController extends Controller {
                     return response()->json([
                         'data' => [
                             'id' => $media->id,
-                            'mediaUrl' => route('serveImage', [
+                            'link' => route('serveImage', [
                                 'size' => 'medium',
                                 'filename' => $media->name
                             ]),
