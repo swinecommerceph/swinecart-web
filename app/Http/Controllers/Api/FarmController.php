@@ -71,8 +71,9 @@ class FarmController extends Controller
             $formatted['name'] = $farm->name;
             $formatted['addressLine1'] = $farm->addressLine1;
             $formatted['addressLine2'] = $farm->addressLine2;
-            $formatted['zipCode'] = $farm->zipCode;
             $formatted['farmType'] = $farm->farmType;
+            $formatted['province'] = $farm->province;
+            $formatted['zipCode'] = $farm->zipCode;
             $formatted['landline'] = $farm->landline;
             $formatted['mobile'] = $farm->mobile;
 
