@@ -696,15 +696,14 @@ class ProductController extends Controller {
             ]);
 
             $videos = $product->videos->map(function ($video) {
-                    return [
-                        'id'=> $video->id,
-                        'link'=> route('serveImage', [
-                            'size' => 'large',
-                            'filename' => $video->name
-                        ])
-                    ];
-                });
-            }
+                return [
+                    'id'=> $video->id,
+                    'link'=> route('serveImage', [
+                        'size' => 'large',
+                        'filename' => $video->name
+                    ])
+                ];
+            });
 
             return response()->json([
                 'data' => [
