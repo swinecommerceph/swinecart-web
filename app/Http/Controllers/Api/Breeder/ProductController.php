@@ -674,7 +674,10 @@ class ProductController extends Controller {
 
         if ($product) {
 
-            $images = $product->images->map(function ($image) {
+            $images = $product->images()
+                ->orderBy('id', 'DESC')
+                ->get()
+                ->map(function ($image) {
                     return [
                         'id' => $image->id,
                         'link' => route('serveImage', [
@@ -749,6 +752,7 @@ class ProductController extends Controller {
                     dispatch(new ResizeUploadedImage($media->name));
 
                     return response()->json([
+                        'success': true,
                         'data' => [
                             'id' => $media->id,
                             'link' => route('serveImage', [
@@ -763,6 +767,7 @@ class ProductController extends Controller {
                     $product->videos()->save($media);
 
                     return response()->json([
+                        'success': true,
                         'data' => [
                             'id' => $media->id,
                             'mediaFileName' => $media->name
@@ -782,21 +787,27 @@ class ProductController extends Controller {
     public function deleteMedia(Request $request, $product_id)
     {
         $image = Image::find($request->mediaId);
-        $fullFilePath = self::PRODUCT_IMG_PATH.$image->name;
-        $sFullFilePath = self::PRODUCT_SIMG_PATH.$image->name;
-        $mFullFilePath = self::PRODUCT_MIMG_PATH.$image->name;
-        $lFullFilePath = self::PRODUCT_LIMG_PATH.$image->name;
 
-        // Check if file exists in the storage
-        if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
-        if(Storage::disk('public')->exists($sFullFilePath)) Storage::disk('public')->delete($sFullFilePath);
-        if(Storage::disk('public')->exists($mFullFilePath)) Storage::disk('public')->delete($mFullFilePath);
-        if(Storage::disk('public')->exists($lFullFilePath)) Storage::disk('public')->delete($lFullFilePath);
+        if ($image) {
+            $fullFilePath = self::PRODUCT_IMG_PATH.$image->name;
+            $sFullFilePath = self::PRODUCT_SIMG_PATH.$image->name;
+            $mFullFilePath = self::PRODUCT_MIMG_PATH.$image->name;
+            $lFullFilePath = self::PRODUCT_LIMG_PATH.$image->name;
 
-        $image->delete();
+            // Check if file exists in the storage
+            if(Storage::disk('public')->exists($fullFilePath)) Storage::disk('public')->delete($fullFilePath);
+            if(Storage::disk('public')->exists($sFullFilePath)) Storage::disk('public')->delete($sFullFilePath);
+            if(Storage::disk('public')->exists($mFullFilePath)) Storage::disk('public')->delete($mFullFilePath);
+            if(Storage::disk('public')->exists($lFullFilePath)) Storage::disk('public')->delete($lFullFilePath);
 
-        return response()->json([
-            'message' => 'Delete Medium successful!',
-        ], 200);
+            $image->delete();
+
+            return response()->json([
+                'success': true,
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Image does not exist'
+        ], 404);
     }
 }
