@@ -803,7 +803,7 @@ class ProductController extends Controller {
             $image->delete();
 
             return response()->json([
-                'success': true,
+                'success' => true,
             ], 200);
         }
         else return response()->json([
