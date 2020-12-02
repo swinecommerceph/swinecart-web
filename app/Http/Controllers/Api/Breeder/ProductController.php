@@ -431,6 +431,7 @@ class ProductController extends Controller {
 
             $images = $product->images()
                 ->where('id', '<>', $product->primaryImage->id)
+                ->orderBy('id', 'DESC')
                 ->get()
                 ->map(function ($image) {
                     return [
