@@ -767,7 +767,7 @@ class ProductController extends Controller {
                     $product->videos()->save($media);
 
                     return response()->json([
-                        'success': true,
+                        'success' => true,
                         'data' => [
                             'id' => $media->id,
                             'mediaFileName' => $media->name
