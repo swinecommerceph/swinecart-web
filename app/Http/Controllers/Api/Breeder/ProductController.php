@@ -752,7 +752,7 @@ class ProductController extends Controller {
                     dispatch(new ResizeUploadedImage($media->name));
 
                     return response()->json([
-                        'success': true,
+                        'success'=> true,
                         'data' => [
                             'id' => $media->id,
                             'link' => route('serveImage', [
