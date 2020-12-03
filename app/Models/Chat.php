@@ -1,90 +1,102 @@
-<?php 
+<?php
 namespace App\Models;
 
 use Ratchet\MessageComponentInterface;
-use Ratchet\ConnectionInterface;    
-use Illuminate\Support\Facades\Log;                
-
+use Ratchet\ConnectionInterface;
+use Illuminate\Support\Facades\Log;
 
 
 class Chat implements MessageComponentInterface {
 
-    protected $clients, $maps;
+    protected $map;
 
     public function __construct() {
-        $this->clients = new \SplObjectStorage;
-        $this->maps = [];
+        $this->map = [];
     }
 
     public function onOpen(ConnectionInterface $conn) {
-        // Store the new connection to send messages to later
-        $this->clients->attach($conn);
-
-        echo "New connection! ({$conn->resourceId})\n";
+        echo "\n\nConnection {$conn->resourceId} has connected\n\n";
     }
 
-    public function onMessage(ConnectionInterface $from, $msg) {
-        
-        $numRecv = count($this->clients) - 1;
-        echo sprintf('Connection %d sending message "%s" to %d other connection%s' . "\n"
-            , $from->resourceId, $msg, $numRecv, $numRecv == 1 ? '' : 's');
-        
-
-        $msg = json_decode($msg);
-
-        if($msg->to == null && $msg->direction == null && $msg->message == 'Connection established.' ){
-            $this->maps[$msg->from] = $from;
-            return;
+    private function removeConnection($user_id, $conn) {
+        if ($this->isClientRegistered($user_id)) {
+            $this->map[$user_id] = array_filter($this->map[$user_id],
+                function ($element) use ($conn) {
+                    return $element->resourceId !== $conn->resourceId;
+                });
         }
-        else{
+    }
+
+    private function addConnection($user_id, $conn) {
+        if (!$this->isClientRegistered($user_id)) {
+            $this->map[$user_id] = array();
+        }
+        $this->map[$user_id][] = $conn;
+    }
+
+    private function isClientRegistered($user_id) {
+        return array_key_exists($user_id, $this->map);
+    }
+
+    public function onMessage(ConnectionInterface $conn, $msg) {
+
+        $message = json_decode($msg);
+
+        echo "Incoming Message Object: {$msg}\n";
+
+        if (isset($message->connect)) {
+            $this->addConnection($message->userId, $conn);
+            foreach ($this->map as $user_id => $connections) {
+                $count = count($connections);
+                echo "User ID: {$user_id} Connections: {$count}\n";
+            }
+        }
+        else {
+
+            echo "From ID: {$message->from_id} Resource ID: {$conn->resourceId}\n";
+
             $new_message = Message::create([
-                'customer_id' => $msg->direction == 0 ? $msg->from : $msg->to,
-                'breeder_id' => $msg->direction == 0 ? $msg->to : $msg->from,
-                'message' => $msg->message,
-                'direction' => $msg->direction,
+                'customer_id' => $message->direction == 0
+                    ? $message->from_id
+                    : $message->to_id,
+                'breeder_id' => $message->direction == 0
+                    ? $message->to_id
+                    : $message->from_id,
+                'message' => $message->message,
+                'direction' => $message->direction,
             ]);
 
-            if(array_key_exists($msg->to, $this->maps)) {
+            $new_message->save();
 
-                $msg->id = $new_message->id;
-                $msg->from_id = $msg->from;
-                $msg->to_id = $msg->to;
-                $msg->read_at = $new_message->read_at;
-                $msg->created_at = $new_message->created_at->toDateTimeString();
-                $msg->from = User::where('id', $msg->from)->first()->name;
+            if ($this->isClientRegistered($message->to_id)) {
 
-                // echo sprintf('Sending %s to %d' . "\n"  , json_encode($msg), $msg->to);
+                $message->id = $new_message->id;
 
-                $this->maps[$msg->to]->send(json_encode($msg));
+                $message_string = json_encode($message);
+                echo "Outgoing Message Object: {$message_string}\n\n";
+
+                foreach ($this->map[$message->to_id] as $connection) {
+                    $connection->send($message_string);
+                }
+
+                foreach ($this->map[$message->from_id] as $connection) {
+                    if ($conn->resourceId !== $connection->resourceId) {
+                        $connection->send($message_string);
+                    }
+                }
+
             }
-            
-
-            // foreach ($this->clients as $client) {
-            //     if($client != $from){
-            //         $client->send(json_encode($msg));
-            //     }
-
-            // }
-
         }
     }
 
     public function onClose(ConnectionInterface $conn) {
-        // The connection is closed, remove it, as we can no longer send it messages
-        $this->clients->detach($conn);
-        foreach ($maps as $key => $map) {
-            if($map == $conn){
-                unset($maps[$key]);
-                break;
-            }
+        foreach ($this->map as $user_id => $connections) {
+            $this->removeConnection($user_id, $conn);
         }
-
-        echo "Connection {$conn->resourceId} has disconnected\n";
     }
 
     public function onError(ConnectionInterface $conn, \Exception $e) {
-        echo "An error has occurred: {$e->getMessage()}\n";
-
+        echo "An error has occurred: {$e->getMessage()}\n\n";
         $conn->close();
     }
 
