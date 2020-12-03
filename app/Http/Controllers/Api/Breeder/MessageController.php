@@ -37,18 +37,13 @@ class MessageController extends Controller
                 ->paginate($request->limit)
                 ->map(function ($item) {
 
-                    // if($item->read_at == NULL){
-                    //     $item->read_at = date('Y-m-d H:i:s');
-                    //     $item->save();
-                    // }
-
                     $message = [];
 
                     $message['id'] = $item->id;
                     $message['direction'] = $item->direction;
                     $message['content'] = $item->message;
-                    $message['read_at'] = $item->read_at; 
-                    $message['created_at'] = $item->created_at->toDateTimeString();
+                    $message['readAt'] = $item->read_at; 
+                    $message['createdAt'] = $item->created_at->toDateTimeString();
                     $message['from_id'] = $item->direction === 1 ? $item->breeder_id : $item->customer_id;
                     $message['to_id'] = $item->direction === 1 ? $item->customer_id : $item->breeder_id;
 
@@ -89,8 +84,8 @@ class MessageController extends Controller
                         'id' => $item->id,
                         'direction' => $item->direction,
                         'content' => $item->message,
-                        'read_at' => $item->read_at,
-                        'created_at' => $item->created_at->toDateTimeString(),
+                        'readAt' => $item->read_at,
+                        'createdAt' => $item->created_at->toDateTimeString(),
                         'from_id' => $item->direction === 1 ? $item->breeder_id : $item->customer_id,
                         'to_id' => $item->direction === 1 ? $item->customer_id : $item->breeder_id
                     ];

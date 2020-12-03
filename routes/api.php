@@ -32,6 +32,11 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::patch('/{id}', 'NotificationController@SeeNotification');
     });
 
+    Route::group(['prefix' => 'chats'], function() {
+        Route::get('/', 'ChatController@getChats');
+        Route::get('/{id}', 'ChatController@getConversation');
+    });
+
     Route::group(['prefix' => 'farms'], function() {
         Route::get('/', 'FarmController@getFarms');
         Route::get('/{id}', 'FarmController@getFarm');
@@ -78,12 +83,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::delete('/{id}/requests', 'OrderController@deleteRequest');
             Route::post('/{id}/order-status', 'OrderController@updateOrderStatus');
             Route::delete('/{id}/order-status', 'OrderController@cancelTransaction');
-        });
-
-        Route::group(['prefix' => 'chats'], function() {
-            Route::get('/', 'MessageController@getThreads');
-            Route::get('/{id}', 'MessageController@getMessages');
-            Route::patch('/{id}/{messageId}', 'MessageController@seeMessage');
         });
     });
 
