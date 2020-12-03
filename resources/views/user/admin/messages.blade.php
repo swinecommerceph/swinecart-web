@@ -146,6 +146,7 @@ $(document).ready(function(){
 	var url = "{{ explode(':', str_replace('http://', '', str_replace('https://', '', App::make('url')->to('/'))))[0] }}";
 	var threadid = "{{ $threadId }}";
 	var otherparty;
+	var allMessages = {!! $messages !!};
 
 </script>
 <script type="text/javascript" src="/js/chat.js"></script>
