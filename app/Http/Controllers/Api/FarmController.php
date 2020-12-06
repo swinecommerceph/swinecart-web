@@ -11,6 +11,7 @@ use App\Models\Customer;
 use App\Models\FarmAddress;
 
 use JWTAuth;
+use Validator;
 
 class FarmController extends Controller
 {
@@ -99,7 +100,7 @@ class FarmController extends Controller
     {
         $user = $this->user->userable;
 
-        $farm = $request->only([
+        $data = $request->only([
             'name',
             'addressLine1',
             'addressLine2',
@@ -110,7 +111,7 @@ class FarmController extends Controller
             'mobile'
         ]);
 
-        $validator = Validator::make($farm, [
+        $validator = Validator::make($data, [
             'name' => 'required',
             'addressLine1' => 'required',
             'addressLine2' => 'required',
@@ -129,19 +130,22 @@ class FarmController extends Controller
         else {
 
             $farm = new FarmAddress;
-            $farm->name = $farm['name'];
-            $farm->addressLine1 = $farm['addressLine1'];
-            $farm->addressLine2 = $farm['addressLine2'];
-            $farm->province = $farm['province'];
-            $farm->zipCode = $farm['zipCode'];
-            $farm->farmType = $farm['farmType'];
-            $farm->landline = $farm['landline'];
-            $farm->mobile = $farm['mobile'];
+            $farm->name = $data['name'];
+            $farm->addressLine1 = $data['addressLine1'];
+            $farm->addressLine2 = $data['addressLine2'];
+            $farm->province = $data['province'];
+            $farm->zipCode = $data['zipCode'];
+            $farm->farmType = $data['farmType'];
+            $farm->landline = $data['landline'];
+            $farm->mobile = $data['mobile'];
 
             $user->farmAddresses()->save($farm);
 
             return response()->json([
-                'message' => 'Add Farm successful!'
+                'success' => true,
+                'data' => [
+                    'farm' => $farm,
+                ]
             ], 200);
         }
     }
@@ -190,6 +194,7 @@ class FarmController extends Controller
             $farm->save();
 
             return response()->json([
+                'success' => true,
                 'farm' => $farm
             ], 200);
         }
@@ -200,13 +205,14 @@ class FarmController extends Controller
 
     public function deleteFarm(Request $request, $farm_id)
     {
-        $roleUser = $this->user->userable;
         $farm = $this->getUserFarms()->find($farm_id);
 
-        if($farm) {
+        if ($farm) {
+
             $farm->delete();
+
             return response()->json([
-                'message' => 'Delete Farm successful!'
+                'success' => true
             ], 200);
         }
         else return response()->json([

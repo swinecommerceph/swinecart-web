@@ -39,9 +39,10 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
     Route::group(['prefix' => 'farms'], function() {
         Route::get('/', 'FarmController@getFarms');
-        Route::get('/{id}', 'FarmController@getFarm');
         Route::post('/', 'FarmController@addFarm');
+        Route::get('/{id}', 'FarmController@getFarm');
         Route::put('/{id}', 'FarmController@updateFarm');
+        Route::delete('/{id}', 'FarmController@deleteFarm');
     });
 
     Route::group(['prefix' => 'provinces'], function() {
