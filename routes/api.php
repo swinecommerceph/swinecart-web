@@ -40,6 +40,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     Route::group(['prefix' => 'farms'], function() {
         Route::get('/', 'FarmController@getFarms');
         Route::get('/{id}', 'FarmController@getFarm');
+        Route::post('/', 'FarmController@addFarm');
+        Route::put('/{id}', 'FarmController@updateFarm');
     });
 
     Route::group(['prefix' => 'provinces'], function() {
@@ -101,20 +103,12 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         });
 
         Route::group(['prefix' => 'orders'], function() {
-
             Route::get('/', 'OrderController@getOrders');
             Route::get('/history', 'OrderController@getHistory');
             Route::get('/{id}', 'OrderController@getOrder');
 
             Route::post('/reviews/{id}', 'OrderController@reviewBreeder');
             Route::post('/{id}', 'OrderController@requestItem');
-
-        });
-
-        Route::group(['prefix' => 'chats'], function() {
-            Route::get('/', 'MessageController@getThreads');
-            Route::get('/{id}', 'MessageController@getMessages');
-            Route::patch('/{id}/{messageId}', 'MessageController@seeMessage');
         });
     });
 

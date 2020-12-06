@@ -45,7 +45,7 @@ class CartController extends Controller
         computeAge as private;
     }
 
-    public function __construct() 
+    public function __construct()
     {
         $this->middleware('jwt:auth');
         $this->middleware('jwt.role:customer');
@@ -54,7 +54,7 @@ class CartController extends Controller
             return $next($request);
         });
     }
-    
+
     private $defaultImages = [
         'boar' => 'boar_default.jpg',
         'sow' => 'sow_default.jpg',
@@ -63,7 +63,7 @@ class CartController extends Controller
     ];
 
     private function getCartItems()
-    {   
+    {
         $customer = $this->user->userable;
 
         return $customer
