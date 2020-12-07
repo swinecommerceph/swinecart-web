@@ -21,9 +21,7 @@ Route::get('/customer-privacy-policy', ['as' => 'customerPrivacyPolicy', 'uses' 
 Route::get('/breeder-privacy-policy', ['as' => 'breederPrivacyPolicy', 'uses' => 'Auth\RegisterController@getBreederPrivacyPolicy']);
 Route::get('/terms-of-agreement', ['as' => 'termsOfAgreement', 'uses' => 'Auth\RegisterController@getTermsOfAgreement']);
 
-Route::get('/',['as' => 'index_path', function () {
-    return view('home');
-}])->middleware('guest');
+Route::get('/', ['as' => 'index_path', 'uses' => 'HomeController@index']);
 
 // Sample Email template
 // Route::get('/sample', function(){

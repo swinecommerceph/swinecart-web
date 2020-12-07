@@ -8,6 +8,7 @@ use App\Repositories\ProductRepository;
 use App\Repositories\EloquentProductRepository;
 use App\Repositories\ElasticsearchProductRepository;
 use Illuminate\Support\ServiceProvider;
+use Illuminate\Support\Facades\URL;
 
 use Validator;
 
@@ -22,6 +23,10 @@ class AppServiceProvider extends ServiceProvider
     {
         // For custom validator
         Validator::extend('is_current_password', 'App\Validators\CustomValidator@currentPasswordValidator');
+
+        if (env('FORCE_HTTPS', false)) {
+            URL::forceSchema('https');
+        }
     }
 
     /**
