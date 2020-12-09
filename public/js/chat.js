@@ -197,6 +197,7 @@ $(document).ready(function(){
           var message = {};
           message.from_id = userid;
           message.to_id = threadid;
+          message.from = username;
 
           // assign what time of message to send
           if (this.newMessage) {

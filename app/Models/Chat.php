@@ -59,9 +59,9 @@ class Chat implements MessageComponentInterface {
                 'customer_id' => $message->direction == 0
                     ? $message->from_id
                     : $message->to_id,
-                'breeder_id' => $message->direction == 0
-                    ? $message->to_id
-                    : $message->from_id,
+                'breeder_id' => $message->direction == 1
+                    ? $message->from_id
+                    : $message->to_id,
                 'message' => $message->message,
                 'direction' => $message->direction,
             ]);
@@ -71,6 +71,8 @@ class Chat implements MessageComponentInterface {
             if ($this->isClientRegistered($message->to_id)) {
 
                 $message->id = $new_message->id;
+                $message->createdAt = $new_message->created_at
+                    ->toDateTimeString();
 
                 $message_string = json_encode($message);
                 echo "Outgoing Message Object: {$message_string}\n\n";
