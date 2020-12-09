@@ -51,6 +51,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
     Route::group(['prefix' => 'profile'], function() {
         Route::get('/', 'ProfileController@getProfile');
+        Route::put('/', 'ProfileController@editProfile');
     });
 
     Route::group(['namespace' => 'Breeder', 'prefix' => 'breeder'], function() {

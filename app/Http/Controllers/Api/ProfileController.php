@@ -3,8 +3,11 @@
 namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\URL;
 
 use App\Http\Controllers\Controller;
+
+use App\Models\Image;
 use JWTAuth;
 
 class ProfileController extends Controller
@@ -34,6 +37,14 @@ class ProfileController extends Controller
         $profile = [];
 
         if ($this->accountType === 'Breeder') {
+
+            $logo = Image::find($user->logo_img_id);
+
+            $logoUrl = $logo
+                ? '/images/breeder/'.$logo->name
+                : '/images/default_logo.png';
+            $logoUrl = URL::to('/').$logoUrl;
+
             $profile['addressLine1'] = $user->officeAddress_addressLine1;
             $profile['addressLine2'] = $user->officeAddress_addressLine2;
             $profile['province'] = $user->officeAddress_province;
@@ -49,6 +60,8 @@ class ProfileController extends Controller
                 'mobile' => $user->contactPerson_mobile,
             ];
 
+            $profile['logoUrl'] = $logoUrl;
+
         }
         else {
             $profile['addressLine1'] = $user->address_addressLine1;
@@ -61,7 +74,7 @@ class ProfileController extends Controller
 
         return response()->json([
             'data' => [
-                'profile' => $profile
+                'profile' => $profile,
             ]
         ], 200);
     }
@@ -94,47 +107,47 @@ class ProfileController extends Controller
         }
     }
 
-    // public function updatePersonal(Request $request) 
-    // {
-    //     $breeder = $this->user->userable;
+    public function editProfile(Request $request)
+    {
+        $breeder = $this->user->userable;
 
-    //     $data = $request->only([
-    //         'officeAddress_addressLine1',
-    //         'officeAddress_addressLine2',
-    //         'officeAddress_province',
-    //         'officeAddress_zipCode',
-    //         'office_landline',
-    //         'office_mobile',
-    //         'website',
-    //         'produce',
-    //         'contactPerson_name',
-    //         'contactPerson_mobile'
-    //     ]);
+        $data = $request->only([
+            'officeAddress_addressLine1',
+            'officeAddress_addressLine2',
+            'officeAddress_province',
+            'officeAddress_zipCode',
+            'office_landline',
+            'office_mobile',
+            'website',
+            'produce',
+            'contactPerson_name',
+            'contactPerson_mobile'
+        ]);
 
-    //     $validator = Validator::make($data, [
-    //         'officeAddress_addressLine1' => 'required',
-    //         'officeAddress_addressLine2' => 'required',
-    //         'officeAddress_province' => 'required',
-    //         'officeAddress_zipCode' => 'required|digits:4',
-    //         'office_mobile' => 'required|digits:11|regex:/^09/',
-    //         'contactPerson_name' => 'required',
-    //         'contactPerson_mobile' => 'required|digits:11|regex:/^09/',
-    //     ]);
+        $validator = Validator::make($data, [
+            'officeAddress_addressLine1' => 'required',
+            'officeAddress_addressLine2' => 'required',
+            'officeAddress_province' => 'required',
+            'officeAddress_zipCode' => 'required|digits:4',
+            'office_mobile' => 'required|digits:11|regex:/^09/',
+            'contactPerson_name' => 'required',
+            'contactPerson_mobile' => 'required|digits:11|regex:/^09/',
+        ]);
 
-    //     if($validator->fails()) {
-    //         return response()->json([
-    //             'error' => $validator->errors(),
-    //         ], 422);
-    //     }
-    //     else {
-    //         $breeder->fill($data)->save();
+        if($validator->fails()) {
+            return response()->json([
+                'error' => $validator->errors(),
+            ], 422);
+        }
+        else {
+            $breeder->fill($data)->save();
 
-    //         return response()->json([
-    //             'message' => 'Update Personal successful!'
-    //         ], 200);
-    //     }
-        
-    // }
+            return response()->json([
+                'message' => 'Update Personal successful!'
+            ], 200);
+        }
+    }
+
     // public function updatePersonal(CustomerPersonalProfileRequest $request)
     // {
     //     $customer = $this->user->userable;
@@ -214,31 +227,5 @@ class ProfileController extends Controller
     //     else return response()->json([
     //         'message' => 'No files detected'
     //     ], 500);
-    // }
-
-    // public function setLogo(Request $request) 
-    // {
-    //     $breeder = $this->user->userable;
-    //     $breeder->logo_img_id = $request->imageId;
-    //     $breeder->save();
-
-    //     $redundantImages = $breeder->images->where(
-    //         'id', '<>', $breeder->logo_img_id
-    //     );
-
-    //     if(!$redundantImages->isEmpty()){
-    //         $redundantImages->each(function($item, $key){
-    //             $fullFilePath = '/images/breeder/' . $item->name;
-
-    //             // Check if file exists in the storage
-    //             if(Storage::disk('public')->exists($fullFilePath)) {
-    //                 Storage::disk('public')->delete($fullFilePath);
-    //             }
-
-    //             $item->delete();
-    //         });
-    //     }
-
-    //     return '/images/breeder/'.Image::find($request->imageId)->name;
     // }
 }
