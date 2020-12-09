@@ -98,7 +98,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'cart'], function() {
             Route::get('/items', 'CartController@getItems');
-            Route::get('/items/{id}', 'CartController@getItem');
             Route::post('/items/{id}', 'CartController@addItem');
             Route::delete('/items/{id}', 'CartController@deleteItem');
         });

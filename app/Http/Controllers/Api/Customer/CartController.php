@@ -69,7 +69,7 @@ class CartController extends Controller
         return $customer
             ->swineCartItems()
             ->with(
-                'product', 
+                'product',
                 'product.breed',
                 'product.breeder.user',
                 'product.primaryImage'
@@ -80,7 +80,7 @@ class CartController extends Controller
     }
 
     private function findItem($item_id)
-    {   
+    {
         return $this->getCartItems()
             ->where('id', $item_id)
             ->first();
@@ -88,7 +88,6 @@ class CartController extends Controller
 
     private function formatCartItem($cart_item)
     {
-
         $product = $cart_item->product;
         $breed = $product->breed;
         $breeder = $product->breeder->user;
@@ -110,33 +109,15 @@ class CartController extends Controller
                 'imageUrl' => route('serveImage',
                     [
                         'size' => 'medium',
-                        'filename' => $is_deleted 
+                        'filename' => $is_deleted
                         ? $this->defaultImages[$product->type]
                         : $product->primaryImage->name
                     ]
                 ),
-                'isDeleted' => $is_deleted
+                'isDeleted' => $is_deleted,
+                'isUnique' => $product->is_unique === 1
             ]
         ];
-    }
-
-    public function getItem(Request $request, $item_id)
-    {
-        $cart_item = $this->findItem($item_id);
-
-        if ($cart_item) {
-            return response()->json([
-                'data' => [
-                    'item' => $this->formatCartItem($cart_item),
-                ]
-            ], 200);
-        }
-        else {
-            return response()->json([
-                'data' => 'Cart Item not found!'
-            ], 404);
-        }
-
     }
 
     public function getItems(Request $request)
@@ -151,7 +132,6 @@ class CartController extends Controller
 
         return response()->json([
             'data' => [
-                'totalCount' => $items->total(),
                 'hasNext' => $items->hasMorePages(),
                 'items' => $formattedItems,
             ]
