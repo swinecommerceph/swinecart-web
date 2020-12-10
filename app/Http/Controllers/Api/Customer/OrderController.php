@@ -120,78 +120,42 @@ class OrderController extends Controller
             ->whereHas('transactionLogs', function ($query) {
                 $query->where('status', 'rated');
             })
-            ->with(['transactionLogs' => function ($query) {
-                $query->orderBy('created_at', 'DESC');
-            }])
             ->with(
                 'product.breed',
                 'product.farmFrom',
                 'product.breeder.user',
-                'product.primaryImage',
-                'productReservation'
+                'product.primaryImage'
             )
+            ->orderBy('id', 'DESC')
             ->paginate($request->limit)
             ->map(function ($element) {
 
-                $transaction = [];
+                $order = [];
 
                 $product = $element->product;
-                $productReservation = $element->productReservation;
                 $province = $product->farmFrom->province;
                 $breed = $product->breed;
-                $breeder = $product->breeder->users()->first()->name;
+                $breederName = $product->breeder->users()->first()->name;
 
-                $transaction['id'] = $element->id;
+                $order['id'] = $element->id;
 
-                $transaction['product'] = [
+                $order['product'] = [
                     'id' => $product->id,
                     'name' => $product->name,
                     'breed' => $this->transformBreedSyntax($breed->name),
                     'type' => $product->type,
                     'farmLocation' => $province,
-                    'breederName' => $breeder,
+                    'breederName' => $breederName,
                     'imageUrl' => route('serveImage',
                         [
-                            'size' => 'medium', 
+                            'size' => 'medium',
                             'filename' => $product->primaryImage->name
                         ]
                     ),
                 ];
 
-                $transaction['logs'] = $element->transactionLogs->map(function ($item) {
-                    $log = [];
-                    $log['status'] = $item->status === 'on_delivery'
-                        ? 'On Delivery'
-                        : ucwords($item->status);
-                    $log['createdAt'] = $item->created_at;
-                    return $log;
-                });
-
-                $trimmed_special_request = trim($productReservation->special_request);
-
-                $transaction['details'] = [
-                    'quantity' => $productReservation->quantity,
-                    'specialRequest' => 
-                        $trimmed_special_request === ''
-                            ? null
-                            : $trimmed_special_request,
-                    'dateNeeded' => 
-                        ($productReservation->date_needed == '0000-00-00')
-                            ? null
-                            : $productReservation->date_needed,
-                    'deliveryDate' =>
-                        ($productReservation->delivery_date == '0000-00-00')
-                            ? null
-                            : $productReservation->delivery_date,
-                ];
-
-                $transaction['statusTime'] = $transaction['logs'][0]['createdAt'];
-
-                return $transaction;
-            })
-            ->sortByDesc('statusTime')
-            ->values()
-            ->all();
+                return $order;
+            });
 
         return response()->json([
             'data' => [
@@ -256,7 +220,7 @@ class OrderController extends Controller
     {
         $customer = $this->user->userable;
         $status = $request->status;
-        
+
         if ($status) {
             if ($status == 'requested') {
                 $items = $customer
@@ -387,13 +351,17 @@ class OrderController extends Controller
 
         $item = $customer
             ->swineCartItems()
+            ->with(['transactionLogs' => function ($query) {
+                $query->orderBy('created_at', 'DESC');
+            }])
             ->with(
                 'productReservation',
                 'product.primaryImage',
                 'product.breed',
-                'product.breeder'
+                'product.breeder.user',
+                'product.primaryImage',
+                'product.farmFrom'
             )
-            ->where('if_rated', 0)
             ->where('if_requested', 1)
             ->find($id);
 
@@ -421,6 +389,15 @@ class OrderController extends Controller
                     ]
                 ),
             ];
+
+            $order['logs'] = $element->transactionLogs->map(function ($item) {
+                $log = [];
+                $log['status'] = $item->status === 'on_delivery'
+                    ? 'On Delivery'
+                    : ucwords($item->status);
+                $log['createdAt'] = $item->created_at;
+                return $log;
+            });
 
             $order['breederInfo'] = [
                 'id' => $product->breeder_id,
