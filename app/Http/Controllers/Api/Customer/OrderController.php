@@ -123,31 +123,39 @@ class OrderController extends Controller
                 'product.breeder.user',
                 'product.primaryImage'
             )
+            ->join('transaction_logs', function ($join) {
+                $join
+                    ->on(
+                        'swine_cart_items.id',
+                        '=',
+                        'transaction_logs.swineCart_id'
+                    )
+                    ->where('status', 'rated');
+            })
             ->where('if_rated', 1)
-            ->orderBy('id', 'DESC')
+            ->orderBy('created_at', 'DESC')
             ->paginate($request->limit);
 
-        $formatted = $history->map(function ($element) {
+        $formatted = $history->map(function ($item) {
 
             $order = [];
 
-            $product = $element->product;
-            $province = $product->farmFrom->province;
-            $breed = $product->breed;
-            $breederName = $product->breeder->users()->first()->name;
+            $product = $item->product;
+            $breed_name = $product->breed->name;
+            $breeder = $product->breeder->user;
 
-            $order['id'] = $element->id;
+            $order['id'] = $item->swineCart_id;
 
             $order['product'] = [
                 'id' => $product->id,
                 'name' => $product->name,
-                'breed' => $this->transformBreedSyntax($breed->name),
                 'type' => $product->type,
-                'farmLocation' => $province,
-                'breederName' => $breederName,
+                'breed' => $this->transformBreedSyntax($breed_name),
+                'breederName' => $breeder->name,
+                'farmLocation' => $product->farmFrom->province,
                 'imageUrl' => route('serveImage',
                     [
-                        'size' => 'medium',
+                        'size' => 'small',
                         'filename' => $product->primaryImage->name
                     ]
                 ),
@@ -165,181 +173,86 @@ class OrderController extends Controller
 
     }
 
-    public function reviewBreeder(Request $request, $breeder_id)
-    {
-        $customer = $this->user->userable;
-
-        $breeder = Breeder::find($breeder_id);
-        $reviews = $breeder->reviews();
-
-        $item = $customer
-            ->swineCartItems()
-            ->with('product')
-            ->where('id', $request->item_id)
-            ->first();
-
-        if ($item) {
-
-            $product = $item->product;
-
-            if ($product) {
-                if ($item->if_rated == 0) {
-                    // Create Review
-                    $review = new Review;
-                    $review->customer_id = $customer->id;
-                    $review->comment = $request->comment;
-                    $review->rating_delivery = $request->delivery;
-                    $review->rating_transaction = $request->transaction;
-                    $review->rating_productQuality = $request->productQuality;
-
-                    $item->if_rated = 1;
-                    $reviews->save($review);
-                    $item->save();
-
-                    $this->dispatchRatedNotif($item, $product, $review, $customer, $breeder);
-
-                    return response()->json([
-                        'message' => 'Review Breeder successful',
-                    ], 200);
-                }
-                else return response()->json([
-                    'error' => 'Item already rated!'
-                ], 409);
-
-            }
-            else return response()->json([
-                'error' => 'Product not Found!'
-            ], 404);
-        }
-        else return response()->json([
-            'error' => 'Item not Found!'
-        ], 404);
-    }
-
     public function getOrders(Request $request)
     {
         $customer = $this->user->userable;
         $status = $request->status;
 
-        if ($status) {
-            if ($status == 'requested') {
-                $items = $customer
+        $statuses = [
+            'requested' => true,
+            'reserved' => true,
+            'on_delivery' => true,
+            'sold' => true,
+        ];
+
+        if ($status && array_key_exists($status, $statuses)) {
+
+            $orders = $customer
                     ->swineCartItems()
                     ->with(
                         'product.breeder.user',
                         'product.breed',
                         'product.primaryImage'
                     )
-                    ->where('if_rated', 0)
-                    ->where('if_requested', 1)
-                    ->doesntHave('productReservation')
-                    ->get()
-                    ->map(function ($data) {
-                        $order = [];
-
-                        $product = $data->product;
-                        $breeder = $product->breeder->user;
-                        $breed_name = $product->breed->name;
-
-                        $order['id'] = $data->id;
-                        $order['status'] = 'requested';
-                        $order['statusTime'] = $data
-                                ->transactionLogs()
-                                ->where('status', 'requested')
-                                ->latest()
-                                ->first()
-                                ->created_at;
-
-                        $order['product'] = [
-                            'id' => $data->product_id,
-                            'name' => $product->name,
-                            'type' =>  $product->type,
-                            'breed' =>  $this->transformBreedSyntax($breed_name),
-                            'breederName' => $breeder->name,
-                            'farmLocation' => $product->farmFrom->province,
-                            'imageUrl' => route('serveImage',
-                                [
-                                    'size' => 'small',
-                                    'filename' => $product->primaryImage->name
-                                ]
-                            ),
-                        ];
-
-                        return $order;
+                    ->join('transaction_logs', function ($join) use ($status) {
+                        $join
+                            ->on(
+                                'swine_cart_items.id',
+                                '=',
+                                'transaction_logs.swineCart_id'
+                            )
+                            ->where('status', $status);
                     })
-                    ->sortByDesc('statusTime')
-                    ->forPage($request->page, $request->limit)
-                    ->values()
-                    ->all();
-
-                return response()->json([
-                    'data' => [
-                        'items' => $items,
-                    ]
-                ]);
-            }
-            else if ($status == 'reserved' || $status == 'on_delivery' || $status == 'sold') {
-                $items = $customer
-                    ->swineCartItems()
-                    ->with(
-                        'product.primaryImage',
-                        'product.breed',
-                        'product.breeder'
-                    )
                     ->where('if_rated', 0)
-                    ->where('if_requested', 1)
-                    ->whereHas('productReservation', function ($query) use ($status) {
+                    ->where('if_requested', 1);
+
+            $orders = $status == 'requested'
+                ? $orders->doesntHave('productReservation')
+                : $orders->whereHas('productReservation',
+                    function ($query) use ($status) {
                         $query->where('order_status', $status);
-                    })
-                    ->get()
-                    ->map(function ($data) use ($status) {
-                        $order = [];
+                    });
 
-                        $reservation = $data->productReservation;
-                        $product = $data->product;
-                        $breed = $product->breed;
-                        $breeder = $product->breeder->user;
+            $orders = $orders->orderBy('created_at', 'DESC')
+                    ->paginate($request->limit);
 
-                        $order['id'] = $data->id;
-                        $order['status'] = $reservation->order_status;
-                        $order['statusTime'] = $data
-                                ->transactionLogs()
-                                ->where('status', $status)
-                                ->latest()->first()
-                                ->created_at;
+            $formatted = $orders->map(function ($item) use ($status) {
 
-                        $order['product'] = [
-                            'id' => $product->id,
-                            'name' => $product->name,
-                            'type' => $product->type,
-                            'breed' => $this->transformBreedSyntax($breed->name),
-                            'breederId' => $product->breeder_id,
-                            'breederName' => $breeder->name,
-                            'farmLocation' => $product->farmFrom->province,
-                            'imageUrl' => route('serveImage',
-                                [
-                                    'size' => 'small',
-                                    'filename' => $product->primaryImage->name
-                                ]
-                            ),
-                        ];
+                $order = [];
 
-                        return $order;
-                    })
-                    ->sortByDesc('statusTime')
-                    ->forPage($request->page, $request->limit)
-                    ->values()
-                    ->all();
+                $product = $item->product;
+                $breed_name = $product->breed->name;
+                $breeder = $product->breeder->user;
 
-                return response()->json([
-                    'data' => [
-                        'items' => $items,
-                    ]
-                ]);
-            }
-            else return response()->json([
-                'error' => 'Invalid Status!'
-            ], 400);
+                $order['id'] = $item->swineCart_id;
+                $order['status'] = $status;
+                $order['statusTime'] = $item->created_at;
+
+                $order['product'] = [
+                    'id' => $product->id,
+                    'name' => $product->name,
+                    'type' => $product->type,
+                    'breed' => $this->transformBreedSyntax($breed_name),
+                    'breederName' => $breeder->name,
+                    'farmLocation' => $product->farmFrom->province,
+                    'imageUrl' => route('serveImage',
+                        [
+                            'size' => 'small',
+                            'filename' => $product->primaryImage->name
+                        ]
+                    ),
+                ];
+
+                return $order;
+            });
+
+            return response()->json([
+                'data' => [
+                    'hasNextPage' => $orders->hasMorePages(),
+                    'orders' => $formatted,
+                ]
+            ]);
+
         }
         else return response()->json([
             'error' => 'Invalid Status!'
@@ -400,9 +313,7 @@ class OrderController extends Controller
 
             $order['logs'] = $logs->map(function ($item) {
                 $log = [];
-                $log['status'] = $item->status === 'on_delivery'
-                    ? 'On Delivery'
-                    : ucwords($item->status);
+                $log['status'] = $item->status;
                 $log['createdAt'] = $item->created_at;
                 return $log;
             });
@@ -415,11 +326,67 @@ class OrderController extends Controller
                 'mobileNumber' => $product->breeder->office_mobile,
             ];
 
+            $latestLog = $order['logs'][0];
+
+            $order['status'] = $latestLog['status'];
+            $order['statusTime'] = $latestLog['createdAt'];
+
             return response()->json([
                 'data' => [
                     'order' => $order,
                 ]
             ]);
+        }
+        else return response()->json([
+            'error' => 'Item not Found!'
+        ], 404);
+    }
+
+    public function reviewBreeder(Request $request, $breeder_id)
+    {
+        $customer = $this->user->userable;
+
+        $breeder = Breeder::find($breeder_id);
+        $reviews = $breeder->reviews();
+
+        $item = $customer
+            ->swineCartItems()
+            ->with('product')
+            ->where('id', $request->item_id)
+            ->first();
+
+        if ($item) {
+
+            $product = $item->product;
+
+            if ($product) {
+                if ($item->if_rated == 0) {
+                    // Create Review
+                    $review = new Review;
+                    $review->customer_id = $customer->id;
+                    $review->comment = $request->comment;
+                    $review->rating_delivery = $request->delivery;
+                    $review->rating_transaction = $request->transaction;
+                    $review->rating_productQuality = $request->productQuality;
+
+                    $item->if_rated = 1;
+                    $reviews->save($review);
+                    $item->save();
+
+                    $this->dispatchRatedNotif($item, $product, $review, $customer, $breeder);
+
+                    return response()->json([
+                        'message' => 'Review Breeder successful',
+                    ], 200);
+                }
+                else return response()->json([
+                    'error' => 'Item already rated!'
+                ], 409);
+
+            }
+            else return response()->json([
+                'error' => 'Product not Found!'
+            ], 404);
         }
         else return response()->json([
             'error' => 'Item not Found!'
