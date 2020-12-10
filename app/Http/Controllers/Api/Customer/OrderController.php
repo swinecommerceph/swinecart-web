@@ -117,15 +117,13 @@ class OrderController extends Controller
 
         $history = $customer
             ->swineCartItems()
-            ->whereHas('transactionLogs', function ($query) {
-                $query->where('status', 'rated');
-            })
             ->with(
                 'product.breed',
                 'product.farmFrom',
                 'product.breeder.user',
                 'product.primaryImage'
             )
+            ->where('if_rated', 1)
             ->orderBy('id', 'DESC')
             ->paginate($request->limit);
 
@@ -248,7 +246,8 @@ class OrderController extends Controller
                         $order['statusTime'] = $data
                                 ->transactionLogs()
                                 ->where('status', 'requested')
-                                ->latest()->first()
+                                ->latest()
+                                ->first()
                                 ->created_at;
 
                         $order['product'] = [
@@ -371,10 +370,11 @@ class OrderController extends Controller
 
             $order = [];
 
-            $reservation = $item->productReservation;
             $product = $item->product;
             $breed = $product->breed;
             $breeder = $product->breeder->user;
+            $reservation = $item->productReservation;
+            $logs = $item->transactionLogs;
 
             $order['id'] = $item->id;
 
@@ -392,7 +392,13 @@ class OrderController extends Controller
                 ),
             ];
 
-            $order['logs'] = $element->transactionLogs->map(function ($item) {
+            $order['details'] = $this->formatOrderDetails(
+                $reservation
+                    ? $reservation
+                    : $item
+            );
+
+            $order['logs'] = $logs->map(function ($item) {
                 $log = [];
                 $log['status'] = $item->status === 'on_delivery'
                     ? 'On Delivery'
@@ -401,7 +407,7 @@ class OrderController extends Controller
                 return $log;
             });
 
-            $order['breederInfo'] = [
+            $order['breeder'] = [
                 'id' => $product->breeder_id,
                 'name' => $breeder->name,
                 'province' => $product->breeder->officeAddress_province,
@@ -409,15 +415,8 @@ class OrderController extends Controller
                 'mobileNumber' => $product->breeder->office_mobile,
             ];
 
-            $order['details'] = $this->formatOrderDetails(
-                $reservation
-                    ? $reservation 
-                    : $item
-            );
-
             return response()->json([
                 'data' => [
-                    // 'item' => $item,
                     'order' => $order,
                 ]
             ]);
@@ -519,7 +518,7 @@ class OrderController extends Controller
                     ->where('if_requested', 1)
                     ->doesntHave('productReservation')
                     ->find($item_id);
-                
+
                 $product = $item->product;
                 $breeder = $product->breeder->user;
                 $breed_name = $product->breed->name;

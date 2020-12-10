@@ -56,6 +56,7 @@ class FarmController extends Controller
 
         return response()->json([
             'data' => [
+                'hasNextPage' => false,
                 'farms' => $farms,
             ]
         ], 200);
@@ -196,7 +197,6 @@ class FarmController extends Controller
 
             return response()->json([
                 'success' => true,
-                'farm' => $farm
             ], 200);
         }
         else return response()->json([

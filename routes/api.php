@@ -104,8 +104,8 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         });
 
         Route::group(['prefix' => 'orders'], function() {
-            Route::get('/', 'OrderController@getOrders');
             Route::get('/history', 'OrderController@getHistory');
+            Route::get('/', 'OrderController@getOrders');
             Route::get('/{id}', 'OrderController@getOrder');
 
             Route::post('/reviews/{id}', 'OrderController@reviewBreeder');
