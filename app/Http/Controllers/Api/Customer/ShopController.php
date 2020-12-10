@@ -117,8 +117,6 @@ class ShopController extends Controller
             $product['id'] = $item->id;
             $product['name'] = $item->name;
             $product['type'] = $item->type;
-            $product['quantity'] = $item->quantity;
-            $product['isUnique'] = $item->is_unique === 1;
             $product['age'] = $item->birthdate === '0000-00-00'
                 ? null
                 : $this->computeAge($item->birthdate);
@@ -130,6 +128,9 @@ class ShopController extends Controller
                     'filename' => $item->primaryImage->name
                 ]
             );
+            $product['quantity'] = $item->quantity;
+            $product['isUnique'] = $item->is_unique === 1;
+            $product['isDeleted'] = $item->trashed();
 
             return $product;
         });

@@ -4,37 +4,10 @@ namespace App\Http\Controllers\Api\Customer;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Tymon\JWTAuth\Exceptions\JWTException;
-use Carbon\Carbon;
-use Ramsey\Uuid\Uuid;
-use App\Jobs\AddToTransactionLog;
-use App\Jobs\NotifyUser;
-use App\Jobs\SendSMS;
-use App\Jobs\SendToPubSubServer;
-use App\Http\Requests;
-use App\Models\Customer;
-use App\Models\Breeder;
-use App\Models\FarmAddress;
-use App\Models\Breed;
-use App\Models\Image;   
-use App\Models\SwineCartItem;
-use App\Models\Product;
-use App\Models\Review;
-use App\Models\TransactionLog;
-use App\Models\ProductReservation;
 
-use App\Repositories\ProductRepository;
 use App\Repositories\CustomHelpers;
 
-use Auth;
-use Response;
-use Validator;
 use JWTAuth;
-use Mail;
-use Storage;
-use Config;
-
-use DB;
 
 class CartController extends Controller
 {
@@ -81,9 +54,7 @@ class CartController extends Controller
 
     private function findItem($item_id)
     {
-        return $this->getCartItems()
-            ->where('id', $item_id)
-            ->first();
+        return $this->getCartItems()->where('id', $item_id)->first();
     }
 
     private function formatCartItem($cart_item)
@@ -108,7 +79,7 @@ class CartController extends Controller
                 'farmLocation' => $product->farmFrom->province,
                 'imageUrl' => route('serveImage',
                     [
-                        'size' => 'medium',
+                        'size' => 'small',
                         'filename' => $is_deleted
                         ? $this->defaultImages[$product->type]
                         : $product->primaryImage->name
@@ -122,18 +93,17 @@ class CartController extends Controller
 
     public function getItems(Request $request)
     {
-        $items = $this->getCartItems()
-            ->paginate($request->limit);
+        $items = $this->getCartItems()->paginate($request->limit);
 
-        $formattedItems = $items
+        $formatted = $items
             ->map(function ($item) {
                 return $this->formatCartItem($item);
             });
 
         return response()->json([
             'data' => [
-                'hasNext' => $items->hasMorePages(),
-                'items' => $formattedItems,
+                'hasNextPage' => $items->hasMorePages(),
+                'items' => $formatted,
             ]
         ]);
     }
@@ -148,16 +118,16 @@ class CartController extends Controller
             ->where('reservation_id', 0)
             ->first();
 
-        if($item) {
-            if($item->if_requested) {
+        if ($item) {
+            if ($item->if_requested) {
                 return response()->json([
                     'error' => 'Product already requested!',
                 ], 409);
-            } 
+            }
             else {
                 return response()->json([
-                    'error' => 'Cart Item already added!',
-                ], 409); 
+                    'error' => 'Item already added!',
+                ], 409);
             }
         }
         else {
@@ -171,9 +141,9 @@ class CartController extends Controller
             $is_inserted = $customer->swineCartItems()->save($new_item);
 
             if ($is_inserted) {
-                
+
                 $cart_item = $this->findItem($new_item->id);
-                
+
                 return response()->json([
                     'data' => [
                         'item' => $this->formatCartItem($cart_item)
@@ -200,7 +170,7 @@ class CartController extends Controller
             ], 200);
         }
         else return response()->json([
-            'error' => 'Cart Item not found!' 
+            'error' => 'Cart Item not found!'
         ], 404);
     }
 }

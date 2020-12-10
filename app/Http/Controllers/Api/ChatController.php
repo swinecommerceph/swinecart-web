@@ -72,10 +72,6 @@ class ChatController extends Controller
                 'threads' => $threads,
             ]
         ], 200);
-
-        return response()->json([
-            'data' => 'hello'
-        ], 200);
     }
 
     public function getConversation(Request $request, $other_user_id)
