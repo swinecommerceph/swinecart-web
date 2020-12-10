@@ -61,7 +61,7 @@ class OrderController extends Controller
         'gilt' => 'gilt_default.jpg',
     ];
 
-    private function formatOrderDetails($reservation)
+    private function formatDetails($reservation)
     {
         $trimmed_special_request = trim($reservation->special_request);
 
@@ -168,7 +168,9 @@ class OrderController extends Controller
                             ? $this->defaultImages[$product->type]
                             : $product->primaryImage->name
                     ]
-                )
+                ),
+                'isDeleted' => $is_product_deleted,
+                'isUnique' => $product->is_unique === 1
             ];
 
             return $order;
@@ -231,7 +233,7 @@ class OrderController extends Controller
                 $order = [];
 
                 $product = $item->product;
-                $breed_name = $product->breed->name;
+                $breed = $product->breed;
                 $breeder = $product->breeder->user;
                 $is_product_deleted = $product->trashed();
 
@@ -243,7 +245,7 @@ class OrderController extends Controller
                     'id' => $product->id,
                     'name' => $product->name,
                     'type' => $product->type,
-                    'breed' => $this->transformBreedSyntax($breed_name),
+                    'breed' => $this->transformBreedSyntax($breed->name),
                     'breederName' => $breeder->name,
                     'farmLocation' => $product->farmFrom->province,
                     'imageUrl' => route('serveImage',
@@ -325,7 +327,7 @@ class OrderController extends Controller
                 'isUnique' => $product->is_unique === 1
             ];
 
-            $order['details'] = $this->formatOrderDetails(
+            $order['details'] = $this->formatDetails(
                 $reservation
                     ? $reservation
                     : $item
@@ -432,13 +434,27 @@ class OrderController extends Controller
 
             if(!$cart_item->if_requested) {
 
+                $product = $cart_item->product;
+                $is_product_unique = $product->is_unique === 1;
+
                 $cart_item->if_requested = 1;
-                $cart_item->quantity = $request->requestQuantity;
+
+                if ($product->type === 'semen') {
+                    $cart_item->quantity = $request->quantity;
+                }
+                else {
+                    if ($is_product_unique) {
+                        $cart_item->quantity = 1;
+                    }
+                    else {
+                        $cart_item->quantity = $request->quantity;
+                    }
+                }
+
                 $cart_item->date_needed = ($request->dateNeeded) ? date_format(date_create($request->dateNeeded), 'Y-n-j') : '';
                 $cart_item->special_request = $request->specialRequest;
                 $cart_item->save();
 
-                $product = $cart_item->product;
                 $product->status = 'requested';
                 $product->save();
 
@@ -494,55 +510,49 @@ class OrderController extends Controller
                 dispatch(new SendToPubSubServer('db-productRequest', $breederUser->email, $pubsubData));
                 dispatch(new SendToPubSubServer('db-requested', $breederUser->email, ['product_type' => $product->type]));
 
-                $item = $customer
-                    ->swineCartItems()
-                    ->with(
-                        'product.breeder',
-                        'product.breed',
-                        'product.primaryImage'
-                    )
-                    ->where('if_rated', 0)
-                    ->where('if_requested', 1)
-                    ->doesntHave('productReservation')
-                    ->find($item_id);
-
-                $product = $item->product;
+                $product = $cart_item->product;
                 $breeder = $product->breeder->user;
-                $breed_name = $product->breed->name;
+                $breed = $product->breed;
+                $is_product_deleted = $product->trashed();
 
-                $formattedItem = [];
+                $formatted = [];
 
-                $formattedItem['id'] = $item->id;
-                $formattedItem['status'] = 'requested';
-                $formattedItem['statusTime'] = $item
+                $formatted['id'] = $cart_item->id;
+                $formatted['status'] = 'requested';
+                $formatted['statusTime'] = $cart_item
                         ->transactionLogs()
                         ->where('status', 'requested')
                         ->latest()->first()
                         ->created_at;
 
-                $formattedItem['product'] = [
-                    'id' => $item->product_id,
+                $formatted['product'] = [
+                    'id' => $product->id,
                     'name' => $product->name,
                     'type' => $product->type,
-                    'breed' => $this->transformBreedSyntax($breed_name),
+                    'breed' => $this->transformBreedSyntax($breed->name),
+                    'breederName' => $breeder->name,
+                    'farmLocation' => $product->farmFrom->province,
                     'imageUrl' => route('serveImage',
                         [
                             'size' => 'small',
-                            'filename' => $product->primaryImage->name
+                            'filename' => $is_product_deleted
+                                ? $this->defaultImages[$product->type]
+                                : $product->primaryImage->name
                         ]
                     ),
-                    'breederName' => $breeder->name,
-                    'farmLocation' => $product->farmFrom->province
+                    'isDeleted' => $is_product_deleted,
+                    'isUnique' => $product->is_unique === 1
                 ];
 
                 return response()->json([
+                    'success' => true,
                     'data' => [
-                        'item' => $formattedItem
+                        'item' => $formatted
                     ]
                 ], 200);
             }
             else return response()->json([
-                'error' => 'Item already requested!' 
+                'error' => 'Item already requested!'
             ], 409);
         }
         else return response()->json([
