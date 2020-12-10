@@ -96,28 +96,30 @@ class DashboardController extends Controller
         $reviews = $reviews
             ->with('customer.user')
             ->orderBy('created_at', 'desc')
-            ->paginate($request->limit)
-            ->map(function ($item) {
-                $review = [];
+            ->paginate($request->limit);
 
-                $customer = $item->customer;
+        $formatted = $reviews->map(function ($item) {
+            $review = [];
 
-                $review['id'] = $item->id;
-                $review['comment'] = $item->comment;
-                $review['customerName'] = $customer->users()->first()->name;
-                $review['customerProvince'] = $customer->address_province;
-                $review['createdAt'] = $item->created_at->toDateTimeString();
-                $review['rating']['delivery'] = $item->rating_delivery;
-                $review['rating']['transaction'] = $item->rating_transaction;
-                $review['rating']['productQuality'] = $item->rating_productQuality;
+            $customer = $item->customer;
 
-                return $review;
-            });
+            $review['id'] = $item->id;
+            $review['comment'] = $item->comment;
+            $review['customerName'] = $customer->users()->first()->name;
+            $review['customerProvince'] = $customer->address_province;
+            $review['createdAt'] = $item->created_at->toDateTimeString();
+            $review['rating']['delivery'] = $item->rating_delivery;
+            $review['rating']['transaction'] = $item->rating_transaction;
+            $review['rating']['productQuality'] = $item->rating_productQuality;
+
+            return $review;
+        });
 
         return response()->json([
             'data' => [
                 'reviewCount' => $review_count,
-                'reviews' => $reviews
+                'hasNextPage' => $reviews->hasMorePages(),
+                'reviews' => $formatted
             ]
         ], 200);
     }

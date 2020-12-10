@@ -659,7 +659,7 @@ class ProductController extends Controller {
             $product->save();
 
             return response()->json([
-                'message' => 'Set Primary Picture succesful!',
+                'success' => true,
             ]);
         }
         else return response()->json([
