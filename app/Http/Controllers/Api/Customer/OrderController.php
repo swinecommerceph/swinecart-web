@@ -101,7 +101,7 @@ class OrderController extends Controller
         dispatch(new SendToPubSubServer('db-rated', $breederUser->email, $pubsubData));
     }
 
-    public function __construct() 
+    public function __construct()
     {
         $this->middleware('jwt:auth');
         $this->middleware('jwt.role:customer');
@@ -127,39 +127,41 @@ class OrderController extends Controller
                 'product.primaryImage'
             )
             ->orderBy('id', 'DESC')
-            ->paginate($request->limit)
-            ->map(function ($element) {
+            ->paginate($request->limit);
 
-                $order = [];
+        $formatted = $history->map(function ($element) {
 
-                $product = $element->product;
-                $province = $product->farmFrom->province;
-                $breed = $product->breed;
-                $breederName = $product->breeder->users()->first()->name;
+            $order = [];
 
-                $order['id'] = $element->id;
+            $product = $element->product;
+            $province = $product->farmFrom->province;
+            $breed = $product->breed;
+            $breederName = $product->breeder->users()->first()->name;
 
-                $order['product'] = [
-                    'id' => $product->id,
-                    'name' => $product->name,
-                    'breed' => $this->transformBreedSyntax($breed->name),
-                    'type' => $product->type,
-                    'farmLocation' => $province,
-                    'breederName' => $breederName,
-                    'imageUrl' => route('serveImage',
-                        [
-                            'size' => 'medium',
-                            'filename' => $product->primaryImage->name
-                        ]
-                    ),
-                ];
+            $order['id'] = $element->id;
 
-                return $order;
-            });
+            $order['product'] = [
+                'id' => $product->id,
+                'name' => $product->name,
+                'breed' => $this->transformBreedSyntax($breed->name),
+                'type' => $product->type,
+                'farmLocation' => $province,
+                'breederName' => $breederName,
+                'imageUrl' => route('serveImage',
+                    [
+                        'size' => 'medium',
+                        'filename' => $product->primaryImage->name
+                    ]
+                ),
+            ];
+
+            return $order;
+        });
 
         return response()->json([
             'data' => [
-                'history' => $history,
+                'hasNextPage' => $history->hasMorePages(),
+                'history' => $formatted,
             ]
         ]);
 
