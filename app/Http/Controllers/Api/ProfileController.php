@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Api;
 
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\URL;
+use Illuminate\Support\Facades\Validator;
 
 use App\Http\Controllers\Controller;
 
@@ -21,14 +22,6 @@ class ProfileController extends Controller
             return $next($request);
         });
     }
-
-    // "address_addressLine1": "sunt",
-    // "address_addressLine2": "5894 Elisa Via Suite 970\nWest Nadia, MI 66084",
-    // "address_province": "Tarlac",
-    // "address_zipCode": "4446",
-    // "landline": "24984577",
-    // "mobile": "09776749666",
-    // "status_instance": "active"
 
     public function getProfile(Request $request)
     {
@@ -92,7 +85,7 @@ class ProfileController extends Controller
             'new_password' => 'required|confirmed|min:8'
         ]);
 
-        if($validator->fails()) {
+        if ($validator->fails()) {
             return response()->json([
                 'error' => $validator->errors(),
             ], 422);
@@ -102,85 +95,98 @@ class ProfileController extends Controller
             $this->user->save();
 
             return response()->json([
-                'message' => 'Change Password successful!',
+                'success' => true,
             ], 200);
         }
     }
 
     public function editProfile(Request $request)
     {
-        $breeder = $this->user->userable;
+        $user = $this->user->userable;
 
-        $data = $request->only([
-            'officeAddress_addressLine1',
-            'officeAddress_addressLine2',
-            'officeAddress_province',
-            'officeAddress_zipCode',
-            'office_landline',
-            'office_mobile',
-            'website',
-            'produce',
-            'contactPerson_name',
-            'contactPerson_mobile'
-        ]);
+        $validator;
+        $data;
 
-        $validator = Validator::make($data, [
-            'officeAddress_addressLine1' => 'required',
-            'officeAddress_addressLine2' => 'required',
-            'officeAddress_province' => 'required',
-            'officeAddress_zipCode' => 'required|digits:4',
-            'office_mobile' => 'required|digits:11|regex:/^09/',
-            'contactPerson_name' => 'required',
-            'contactPerson_mobile' => 'required|digits:11|regex:/^09/',
-        ]);
+        if ($this->accountType === 'Breeder') {
 
-        if($validator->fails()) {
+            $data = $request->only([
+                'addressLine1',
+                'addressLine2',
+                'province',
+                'zipCode',
+                'landline',
+                'mobile',
+                'website',
+                'produce',
+                'contactPersonName',
+                'contactPersonMobile'
+            ]);
+
+            $validator = Validator::make($data, [
+                'addressLine1' => 'required',
+                'addressLine2' => 'required',
+                'province' => 'required',
+                'zipCode' => 'required|digits:4',
+                'mobile' => 'required|digits:11|regex:/^09/',
+                'contactPersonName' => 'required',
+                'contactPersonMobile' => 'required|digits:11|regex:/^09/',
+            ]);
+        }
+        else {
+
+            $data = $request->only([
+                'addressLine1',
+                'addressLine2',
+                'province',
+                'zipCode',
+                'landline',
+                'mobile'
+            ]);
+
+            $validator = Validator::make($data, [
+                'addressLine1' => 'required',
+                'addressLine2' => 'required',
+                'province' => 'required',
+                'zipCode' => 'required|digits:4',
+                'mobile' => 'required|digits:11|regex:/^09/',
+            ]);
+        }
+
+        if ($validator->fails()) {
             return response()->json([
                 'error' => $validator->errors(),
             ], 422);
         }
         else {
-            $breeder->fill($data)->save();
+            if ($this->accountType === 'Breeder') {
+                $user->officeAddress_addressLine1 = $data['addressLine1'];
+                $user->officeAddress_addressLine2 = $data['addressLine2'];
+                $user->officeAddress_province = $data['province'];
+                $user->officeAddress_zipCode = $data['zipCode'];
+                $user->office_landline = $data['landline'];
+                $user->office_mobile = $data['mobile'];
+                $user->website = $data['website'];
+                $user->produce = $data['produce'];
+                $user->contactPerson_name = $data['contactPersonName'];
+                $user->contactPerson_mobile = $data['contactPersonMobile'];
+            }
+            else {
+                $user->address_addressLine1 = $data['addressLine1'];
+                $user->address_addressLine2 = $data['addressLine2'];
+                $user->address_province = $data['province'];
+                $user->address_zipCode = $data['zipCode'];
+                $user->landline = $data['landline'];
+                $user->mobile = $data['mobile'];
+            }
+
+            $user->save();
 
             return response()->json([
-                'message' => 'Update Personal successful!'
+                'success' =>  true,
+                'user' => $user,
             ], 200);
         }
     }
-
-    // public function updatePersonal(CustomerPersonalProfileRequest $request)
-    // {
-    //     $customer = $this->user->userable;
-    //     $data = $request->only([
-    //         'address_addressLine1',
-    //         'address_addressLine2',
-    //         'address_province',
-    //         'address_zipCode',
-    //         'landline',
-    //         'mobile'
-    //     ]);
-
-    //     $validator = Validator::make($data, [
-    //         'address_addressLine1' => 'required',
-    //         'address_addressLine2' => 'required',
-    //         'address_province' => 'required',
-    //         'address_zipCode' => 'required|digits:4',
-    //         'mobile' => 'required|digits:11|regex:/^09/',
-    //     ]);
-
-    //     if($validator->fails()) {
-    //         return response()->json([
-    //             'error' => $validator->errors(),
-    //         ], 422);
-    //     }
-    //     else {
-    //         $customer->fill($data)->save();
-
-    //         return response()->json([
-    //             'message' => 'Update Personal successful!'
-    //         ], 200);
-    //     }
-    // }
 
     // public function uploadLogo(Request $request) 
     // {

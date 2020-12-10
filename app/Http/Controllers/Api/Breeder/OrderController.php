@@ -113,7 +113,6 @@ class OrderController extends Controller
                     return $query->where('if_requested', 1)->where('reservation_id', 0);
                 }])
                 ->where('status','requested')
-                // ->where('quantity','<>', 0)
                 ->paginate($limit)
                 ->map(function ($item) {
                     $order = [];

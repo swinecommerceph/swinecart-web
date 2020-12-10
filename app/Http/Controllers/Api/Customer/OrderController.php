@@ -215,7 +215,7 @@ class OrderController extends Controller
             ->first();
 
         if ($item) {
-            
+
             $product = $item->product;
 
             if ($product) {
