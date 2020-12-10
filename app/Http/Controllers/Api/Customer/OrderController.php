@@ -54,6 +54,13 @@ class OrderController extends Controller
         });
     }
 
+    private $defaultImages = [
+        'boar' => 'boar_default.jpg',
+        'sow' => 'sow_default.jpg',
+        'semen' => 'semen_default.jpg',
+        'gilt' => 'gilt_default.jpg',
+    ];
+
     private function formatOrderDetails($reservation)
     {
         $trimmed_special_request = trim($reservation->special_request);
@@ -143,6 +150,7 @@ class OrderController extends Controller
             $product = $item->product;
             $breed_name = $product->breed->name;
             $breeder = $product->breeder->user;
+            $is_product_deleted = $product->trashed();
 
             $order['id'] = $item->swineCart_id;
 
@@ -156,9 +164,11 @@ class OrderController extends Controller
                 'imageUrl' => route('serveImage',
                     [
                         'size' => 'small',
-                        'filename' => $product->primaryImage->name
+                        'filename' => $is_product_deleted
+                            ? $this->defaultImages[$product->type]
+                            : $product->primaryImage->name
                     ]
-                ),
+                )
             ];
 
             return $order;
@@ -223,6 +233,7 @@ class OrderController extends Controller
                 $product = $item->product;
                 $breed_name = $product->breed->name;
                 $breeder = $product->breeder->user;
+                $is_product_deleted = $product->trashed();
 
                 $order['id'] = $item->swineCart_id;
                 $order['status'] = $status;
@@ -238,9 +249,13 @@ class OrderController extends Controller
                     'imageUrl' => route('serveImage',
                         [
                             'size' => 'small',
-                            'filename' => $product->primaryImage->name
+                            'filename' => $is_product_deleted
+                                ? $this->defaultImages[$product->type]
+                                : $product->primaryImage->name
                         ]
                     ),
+                    'isDeleted' => $is_product_deleted,
+                    'isUnique' => $product->is_unique === 1
                 ];
 
                 return $order;
@@ -288,6 +303,7 @@ class OrderController extends Controller
             $breeder = $product->breeder->user;
             $reservation = $item->productReservation;
             $logs = $item->transactionLogs;
+            $is_product_deleted = $product->trashed();
 
             $order['id'] = $item->id;
 
@@ -300,9 +316,13 @@ class OrderController extends Controller
                 'imageUrl' => route('serveImage',
                     [
                         'size' => 'small',
-                        'filename' => $product->primaryImage->name
+                        'filename' => $is_product_deleted
+                            ? $this->defaultImages[$product->type]
+                            : $product->primaryImage->name
                     ]
                 ),
+                'isDeleted' => $is_product_deleted,
+                'isUnique' => $product->is_unique === 1
             ];
 
             $order['details'] = $this->formatOrderDetails(
@@ -419,7 +439,7 @@ class OrderController extends Controller
                 $cart_item->save();
 
                 $product = $cart_item->product;
-                $product->status = "requested";
+                $product->status = 'requested';
                 $product->save();
 
                 $breeder = $product->breeder;

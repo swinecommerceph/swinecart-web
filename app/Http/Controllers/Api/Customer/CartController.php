@@ -6,6 +6,8 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
 use App\Repositories\CustomHelpers;
+use App\Models\Product;
+use App\Models\SwineCartItem;
 
 use JWTAuth;
 
@@ -49,7 +51,7 @@ class CartController extends Controller
             )
             ->where('if_rated', 0)
             ->where('if_requested', 0)
-            ->orderBy('id', 'desc');
+            ->orderBy('id', 'DESC');
     }
 
     private function findItem($item_id)
@@ -142,11 +144,12 @@ class CartController extends Controller
 
             if ($is_inserted) {
 
-                $cart_item = $this->findItem($new_item->id);
+                $formatted = $this->formatCartItem($new_item);
 
                 return response()->json([
+                    'success' => true,
                     'data' => [
-                        'item' => $this->formatCartItem($cart_item)
+                        'item' => $formatted
                     ]
                 ], 200);
             }
@@ -160,17 +163,16 @@ class CartController extends Controller
     {
         $cart_item = $this->findItem($item_id);
 
-        if($cart_item) {
+        if ($cart_item) {
+
             $cart_item->delete();
 
             return response()->json([
-                'data' => [
-                    'itemId' => $cart_item->id,
-                ]
+                'success' => true
             ], 200);
         }
         else return response()->json([
-            'error' => 'Cart Item not found!'
+            'error' => 'Item not found!'
         ], 404);
     }
 }
