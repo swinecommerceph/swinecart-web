@@ -23,30 +23,39 @@ class NotificationController extends Controller
     {
         $notifications = $this->user->notifications();
 
-        $notifications = $notifications
-            ->paginate($request->limit)
-            ->map(function ($item) {
-                $notification = [];
-                $type = explode('\\', $item->type);
+        $notifications = $notifications->paginate($request->limit);
 
-                $notification['id'] = $item->id;
-                $notification['type'] = end($type);
-                $notification['message'] = strip_tags($item->data['description']);
-                $notification['createdAt'] = $item->created_at->toDateTimeString();
-                $notification['readAt'] = $item->read_at ? $item->read_at->toDateTimeString() : null;
+        $formatted = $notifications->map(function ($item) {
 
-                return $notification;
-            });
+            $notification = [];
+            $type = explode('\\', $item->type);
+
+            $notification['id'] = $item->id;
+            $notification['type'] = end($type);
+            $notification['message'] = strip_tags($item->data['description']);
+            $notification['createdAt'] =
+                $item->created_at
+                    ?
+                        $item->created_at->toDateTimeString()
+                    : null;
+            $notification['readAt'] =
+                $item->read_at
+                    ? $item->read_at->toDateTimeString()
+                : null;
+
+            return $notification;
+        });
 
         return response()->json([
             'data' => [
-                'notifications' => $notifications
+                'hasNextPage' => $notifications->hasMorePages(),
+                'notifications' => $formatted
             ]
         ], 200);
     }
 
     public function seeNotification(Request $request, $notification_id)
-    {   
+    {
 
         $notification = $this->user->notifications()
             ->where('id', $notification_id)

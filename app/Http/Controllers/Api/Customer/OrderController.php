@@ -44,6 +44,16 @@ class OrderController extends Controller
         computeAge as private;
     }
 
+    public function __construct()
+    {
+        $this->middleware('jwt:auth');
+        $this->middleware('jwt.role:customer');
+        $this->middleware(function($request, $next) {
+            $this->user = JWTAuth::user();
+            return $next($request);
+        });
+    }
+
     private function formatOrderDetails($reservation)
     {
         $trimmed_special_request = trim($reservation->special_request);
@@ -99,16 +109,6 @@ class OrderController extends Controller
         dispatch(new NotifyUser('breeder-rated', $breederUser->id, $notificationDetails));
         dispatch(new SendToPubSubServer('notification', $breederUser->email));
         dispatch(new SendToPubSubServer('db-rated', $breederUser->email, $pubsubData));
-    }
-
-    public function __construct()
-    {
-        $this->middleware('jwt:auth');
-        $this->middleware('jwt.role:customer');
-        $this->middleware(function($request, $next) {
-            $this->user = JWTAuth::user();
-            return $next($request);
-        });
     }
 
     public function getHistory(Request $request)
