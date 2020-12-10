@@ -66,7 +66,6 @@ class DashboardController extends Controller
     }
 
     public function getRatings(Request $request)
-
     {
         $breeder = $this->user->userable;
         $reviews = $breeder->reviews()->get();

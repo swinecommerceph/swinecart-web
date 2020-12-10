@@ -42,6 +42,7 @@ class FarmController extends Controller
         $roleUser = $this->user->userable;
 
         $farms = $this->getUserFarms()
+            ->orderBy('id', 'DESC')
             ->get()
             ->map(function ($item) {
                 $farm = [];
