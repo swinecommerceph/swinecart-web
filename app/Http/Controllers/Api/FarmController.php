@@ -26,6 +26,30 @@ class FarmController extends Controller
         });
     }
 
+    private function formatFarm($item)
+    {
+        $farm = [];
+
+        $farm['id'] = $item->id;
+        $farm['name'] = $item->name;
+        $farm['addressLine1'] = $item->addressLine1;
+        $farm['addressLine2'] = $item->addressLine2;
+        $farm['farmType'] = $item->farmType;
+        $farm['province'] = $item->province;
+        $farm['zipCode'] = $item->zipCode;
+        $farm['landline'] = $item->landline;
+        $farm['mobile'] = $item->mobile;
+
+        if ($this->accountType === 'Breeder') {
+            $farm['accreditation']['number'] = $item->accreditation_no;
+            $farm['accreditation']['status'] = $item->accreditation_status;
+            $farm['accreditation']['date'] = $item->accreditation_date;
+            $farm['accreditation']['expiry'] = $item->accreditation_expiry;
+        }
+
+        return $farm;
+    }
+
     private function getUserFarms()
     {
         $farms = $this->user->userable->farmAddresses();
@@ -67,26 +91,7 @@ class FarmController extends Controller
         $farm = $this->getUserFarms()->find($farm_id);
 
         if ($farm) {
-
-            $formatted = [];
-
-            $formatted['id'] = $farm->id;
-            $formatted['name'] = $farm->name;
-            $formatted['addressLine1'] = $farm->addressLine1;
-            $formatted['addressLine2'] = $farm->addressLine2;
-            $formatted['farmType'] = $farm->farmType;
-            $formatted['province'] = $farm->province;
-            $formatted['zipCode'] = $farm->zipCode;
-            $formatted['landline'] = $farm->landline;
-            $formatted['mobile'] = $farm->mobile;
-
-            if ($this->accountType === 'Breeder') {
-                $formatted['accreditation']['number'] = $farm->accreditation_no;
-                $formatted['accreditation']['status'] = $farm->accreditation_status;
-                $formatted['accreditation']['date'] = $farm->accreditation_date;
-                $formatted['accreditation']['expiry'] = $farm->accreditation_expiry;
-            }
-
+            $formatted = $this->formatFarm($farm);
             return response()->json([
                 'data' => [
                     'farm' => $formatted,
@@ -143,10 +148,12 @@ class FarmController extends Controller
 
             $user->farmAddresses()->save($farm);
 
+            $formatted = $this->formatFarm($farm);
+
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'farm' => $farm,
+                    'farm' => $formatted
                 ]
             ], 200);
         }
@@ -195,8 +202,13 @@ class FarmController extends Controller
             $farm->mobile = $data['mobile'];
             $farm->save();
 
+            $formatted = $this->formatFarm($farm);
+
             return response()->json([
                 'success' => true,
+                'data' => [
+                    'farm' => $formatted
+                ]
             ], 200);
         }
         else return response()->json([

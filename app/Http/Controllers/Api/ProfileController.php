@@ -23,10 +23,8 @@ class ProfileController extends Controller
         });
     }
 
-    public function getProfile(Request $request)
+    private function formatProfile($user)
     {
-        $user = $this->user->userable;
-
         $profile = [];
 
         if ($this->accountType === 'Breeder') {
@@ -36,7 +34,10 @@ class ProfileController extends Controller
             $logoUrl = $logo
                 ? '/images/breeder/'.$logo->name
                 : '/images/default_logo.png';
+
             $logoUrl = URL::to('/').$logoUrl;
+
+            $profile['logoUrl'] = $logoUrl;
 
             $profile['addressLine1'] = $user->officeAddress_addressLine1;
             $profile['addressLine2'] = $user->officeAddress_addressLine2;
@@ -47,13 +48,8 @@ class ProfileController extends Controller
 
             $profile['website'] = $user->website;
             $profile['produce'] = $user->produce;
-
-            $profile['contactPerson'] = [
-                'name' => $user->contactPerson_name,
-                'mobile' => $user->contactPerson_mobile,
-            ];
-
-            $profile['logoUrl'] = $logoUrl;
+            $profile['contactPersonName'] = $user->contactPerson_name;
+            $profile['contactPersonMobile'] = $user->contactPerson_mobile;
 
         }
         else {
@@ -65,9 +61,19 @@ class ProfileController extends Controller
             $profile['mobile'] = $user->mobile;
         }
 
+        return $profile;
+    }
+
+    public function getProfile(Request $request)
+    {
+        $user = $this->user->userable;
+
+        $formatted = $this->formatProfile($user);
+
         return response()->json([
+            'success' => true,
             'data' => [
-                'profile' => $profile,
+                'profile' => $formatted,
             ]
         ], 200);
     }
@@ -181,9 +187,13 @@ class ProfileController extends Controller
 
             $user->save();
 
+            $formatted = $this->formatProfile($user);
+
             return response()->json([
-                'success' =>  true,
-                'user' => $user,
+                'success' => true,
+                'data' => [
+                    'profile' => $formatted,
+                ]
             ], 200);
         }
     }
