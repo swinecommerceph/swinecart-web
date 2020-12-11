@@ -55,24 +55,18 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     });
 
     Route::group(['namespace' => 'Breeder', 'prefix' => 'breeder'], function() {
-
         Route::group(['prefix' => 'products'], function() {
             Route::get('/', 'ProductController@getProducts');
-            Route::delete('/', 'ProductController@deleteProducts');
-            Route::patch('/', 'ProductController@updateSelected');
-
             Route::get('/{id}', 'ProductController@getProduct');
-            Route::get('/{id}/details', 'ProductController@getProductDetails');
-
             Route::post('/', 'ProductController@addProduct');
             Route::put('/{id}', 'ProductController@updateProduct');
+            Route::delete('/{id}', 'ProductController@deleteProduct');
             Route::patch('/{id}/status', 'ProductController@toggleProductVisibility');
 
             Route::get('/{id}/media', 'ProductController@getMedia');
             Route::post('/{id}/media', 'ProductController@addMedia');
-            Route::patch('/{id}/media', 'ProductController@setPrimaryPicture');
             Route::delete('/{id}/media', 'ProductController@deleteMedia');
-
+            Route::patch('/{id}/media', 'ProductController@setPrimaryPicture');
         });
 
         Route::group(['prefix' => 'dashboard'], function() {
@@ -91,7 +85,6 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
     });
 
     Route::group(['namespace' => 'Customer', 'prefix' => 'customer'], function() {
-
         Route::group(['prefix' => 'shop'], function() {
             Route::get('/products', 'ShopController@getProducts');
             Route::get('/filters', 'ShopController@getFilterOptions');

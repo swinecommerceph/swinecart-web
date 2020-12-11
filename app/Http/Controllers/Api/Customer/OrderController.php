@@ -485,7 +485,9 @@ class OrderController extends Controller
                         'farm_province' => $product->farmFrom->province,
                         'name' => $product->name,
                         'type' => $product->type,
-                        'age' => $this->computeAge($product->birthdate),
+                        'age' => !$product->birthdate || $product->birthdate === '0000-00-00'
+                            ? null
+                            : $this->computeAge($product->birthdate),
                         'breed' => $this->transformBreedSyntax($product->breeder->name),
                         'quantity' => $product->quantity,
                         'adg' => $product->adg,

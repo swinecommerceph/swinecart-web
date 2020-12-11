@@ -58,7 +58,7 @@ class OrderController extends Controller
         $order['product']['name'] = $product->name;
         $order['product']['type'] = $product->type;
         $order['product']['breed'] = $this->transformBreedSyntax($product->breed->name);
-        $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $product->primaryImage->name]);
+        $order['product']['imageUrl'] = route('serveImage', ['size' => 'small', 'filename' => $product->primaryImage->name]);
     
         $order['reservation'] = null;
         $order['reservation']['id'] = $reservation->id;
@@ -112,7 +112,7 @@ class OrderController extends Controller
                 ->withCount(['swineCartItem' => function ($query) {
                     return $query->where('if_requested', 1)->where('reservation_id', 0);
                 }])
-                ->where('status','requested')
+                ->where('status', 'requested')
                 ->paginate($limit)
                 ->map(function ($item) {
                     $order = [];
@@ -124,7 +124,7 @@ class OrderController extends Controller
                     $order['product']['name'] = $item->name;
                     $order['product']['type'] = $item->type;
                     $order['product']['breed'] = $this->transformBreedSyntax($item->breed->name);
-                    $order['product']['image'] = route('serveImage', ['size' => 'small', 'filename' => $item->primaryImage->name]);
+                    $order['product']['imageUrl'] = route('serveImage', ['size' => 'small', 'filename' => $item->primaryImage->name]);
 
                     return $order;
                 });
@@ -165,37 +165,44 @@ class OrderController extends Controller
 
     public function getRequests(Request $request, $product_id)
     {
-        $limit = $request->limit;
-
         $requests = SwineCartItem::where('product_id', $product_id)
-            ->with('product', 'customer.users')
+            ->with('product', 'customer.user')
             ->where('if_requested', 1)
             ->where('reservation_id', 0)
-            ->paginate($limit)
-            ->map(function ($item) {
-                $request = [];
+            ->paginate($request->limit);
 
-                $customer = $item->customer;
-                $product_type = $item->product->type;
-                $user = $customer->users[0];
+        $formatted = $requests->map(function ($item) {
+            $request = [];
 
-                $request['product_id'] = $item->product_id;
-                $request['customer_id'] = $item->customer->id;
-                $request['swinecart_id'] = $item->id;
-                $request['request_quantity'] = $item->quantity;
-                $request['date_needed'] = $product_type == 'semen' ? $item->date_needed == '0000-00-00' ? null : $item->date_needed : null;
-                $request['special_request'] = $item->special_request;
+            $customer = $item->customer;
+            $product_type = $item->product->type;
+            $user = $customer->user;
 
-                $request['customer_name'] = $user->name;
-                $request['customer_province'] = $customer->address_province;
-                $request['user_id'] = $user->id;
+            $request['id'] = $item->id;
+            $request['product_id'] = $item->product_id;
+            $request['customer_id'] = $item->customer->id;
+            $request['swinecart_id'] = $item->id;
+            $request['request_quantity'] = $item->quantity;
+            $request['date_needed'] = $product_type == 'semen'
+                ? $item->date_needed == '0000-00-00'
+                    ?
+                        null
+                    :
+                        $item->date_needed
+                : null;
+            $request['special_request'] = $item->special_request;
 
-                return $request;
-            });
+            $request['customer_name'] = $user->name;
+            $request['customer_province'] = $customer->address_province;
+            $request['user_id'] = $user->id;
+
+            return $request;
+        });
 
         return response()->json([
             'data' => [
-                'requests' => $requests,
+                'hasNextPage' => $requests->hasMorePages(),
+                'requests' => $formatted
             ]
         ], 200);
     }
@@ -225,6 +232,7 @@ class OrderController extends Controller
                     }
                     else {
                         return response()->json([
+                            'success' => true,
                             'data' => [
                                 'product' => $this->getReservation($result[2], $status)
                             ]
@@ -234,8 +242,12 @@ class OrderController extends Controller
                 else if($status == 'on_delivery') {
                     if($result[0] == 'OK') {
                         return response()->json([
+                            'success' => true,
                             'data' => [
-                                'product' => $this->getReservation($request->reservation_id, $status)
+                                'product' => $this->getReservation(
+                                    $request->reservation_id,
+                                    $status
+                                )
                             ]
                         ], 200);
                     }
@@ -243,6 +255,7 @@ class OrderController extends Controller
                 else if($status == 'sold') {
                     if($result[0] == 'OK') {
                         return response()->json([
+                            'success' => true,
                             'data' => [
                                 'product' => $this->getReservation($request->reservation_id, $status)
                             ]
@@ -325,23 +338,5 @@ class OrderController extends Controller
             'error' => 'Product does not exist!'
         ], 404);
 
-    }
-
-    public function getCustomer(Request $request, $customer_id)
-    {
-        $customer = Customer::find($customer_id)->with('user')->first();
-        $user = $customer->user->first();
-
-        return response()->json([
-            'data' => [
-                'customer' => [
-                    'name' => $user->name,
-                    'addressLine1' => $customer->address_addressLine1,
-                    'addressLine2' => $customer->address_addressLine2,
-                    'province' => $customer->address_province,
-                    'mobile' => $customer->mobile,
-                ]
-            ]
-        ], 200);
     }
 }

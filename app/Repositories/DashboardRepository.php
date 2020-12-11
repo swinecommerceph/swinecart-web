@@ -449,7 +449,10 @@ class DashboardRepository
             case 'reserved':
                 // Check if product is available for reservations
                 if ($product->quantity) {
-                    $customerName = Customer::find($request->customer_id)->users()->first()->name;
+                    $swineCartItem = SwineCartItem::with('product', 'customer.user')
+                        ->find($request->swinecart_id);
+
+                    $customerName = $swineCartItem->customer->user->name;
                     $breederUser = $product->breeder->users()->first();
 
                     // Update quantity of product
@@ -459,10 +462,9 @@ class DashboardRepository
                             $product->status = 'hidden';
                         }
                         else {
-                          
                             $product->quantity = max(
-                                0, 
-                                $product->quantity - $request->request_quantity
+                                0,
+                                $product->quantity - $swineCartItem->quantity
                             );
 
                             if ($product->quantity === 0) {
@@ -470,27 +472,26 @@ class DashboardRepository
                             }
 
                         }
-    
+
                         $product->save();
                     }
 
                     // Make a product reservation
                     $reservation = new ProductReservation;
-                    $reservation->customer_id = $request->customer_id;
-                    $reservation->quantity = $request->request_quantity;
-                    $reservation->date_needed = date_format(date_create($request->date_needed), 'Y-n-j');
-                    $reservation->special_request = $request->special_request;
+                    $reservation->customer_id = $swineCartItem->customer_id;
+                    $reservation->quantity = $swineCartItem->quantity;
+                    $reservation->date_needed = date_format(date_create($swineCartItem->date_needed), 'Y-n-j');
+                    $reservation->special_request = $swineCartItem->special_request;
                     $reservation->order_status = 'reserved';
                     $product->reservations()->save($reservation);
 
                     // Update the Swine Cart item
-                    $swineCartItem = SwineCartItem::find($request->swinecart_id);
                     $swineCartItem->reservation_id = $reservation->id;
                     $swineCartItem->save();
 
                     $transactionDetails = [
                         'swineCart_id' => $swineCartItem->id,
-                        'customer_id' => $request->customer_id,
+                        'customer_id' => $swineCartItem->customer_id,
                         'breeder_id' => $product->breeder_id,
                         'product_id' => $product->id,
                         'status' => 'reserved',
@@ -529,7 +530,7 @@ class DashboardRepository
                         $reservedCustomerUser->email,
                         $pubsubData
                     ));
-                    
+
                     dispatch(new SendToPubSubServer(
                         'db-reserved',
                         Auth::user()->email,
@@ -538,7 +539,7 @@ class DashboardRepository
 
                     // If product type is not semen remove other requests to this product
                     $productRequests = SwineCartItem::where('product_id', $product->id)
-                        ->where('customer_id', '<>', $request->customer_id)
+                        ->where('customer_id', '<>', $swineCartItem->customer_id)
                         ->where('reservation_id', 0);
 
                     if ($product->type != 'semen' && $product->is_unique == 1) {
@@ -570,12 +571,12 @@ class DashboardRepository
                                 $customerUser->id,
                                 $notificationDetailsOther
                             ));
-                            
+
                             dispatch(new SendToPubSubServer(
                                 'notification',
                                 $customerUser->email
                             ));
-                            
+
                             dispatch(new SendToPubSubServer(
                                 'sc-reservedToOthers',
                                 $customerUser->email,
