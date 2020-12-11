@@ -12,27 +12,19 @@ use App\Models\Product;
 use App\Repositories\DashboardRepository;
 use App\Repositories\CustomHelpers;
 
-use Auth;
-use Response;
-use Validator;
 use JWTAuth;
-use Mail;
-use Storage;
-use Config;
 
 class DashboardController extends Controller
-{   
-
+{
 
     use CustomHelpers {
         transformDateSyntax as private;
         computeAge as private;
     }
 
-
     protected $dashboard;
 
-    public function __construct(DashboardRepository $dashboard) 
+    public function __construct(DashboardRepository $dashboard)
     {
         $this->middleware('jwt:auth');
         $this->middleware('jwt.role:breeder');
@@ -45,12 +37,12 @@ class DashboardController extends Controller
 
 
 
-    public function getDashboardStats(Request $request) 
+    public function getDashboardStats(Request $request)
     {
         $breeder = $this->user->userable;
 
         $stats = [];
-        
+
         $stats['hidden'] = $this->dashboard->getProductNumberStatus($breeder,'hidden');
         $stats['displayed'] = $this->dashboard->getProductNumberStatus($breeder,'displayed');
         $stats['requested'] = $this->dashboard->getProductNumberStatus($breeder,'requested');
