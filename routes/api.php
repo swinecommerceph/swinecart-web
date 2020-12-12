@@ -20,11 +20,9 @@ header("Access-Control-Allow-Methods: GET, POST, OPTIONS, PUT, PATCH, DELETE");
 
 
 Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
-    Route::group(['namespace' => 'Auth', 'prefix' => 'auth'], function() {
-        Route::post('/register', 'RegisterController@register');
-        Route::post('/login', 'LoginController@normalLogin');
-        Route::get('/me', 'LoginController@me');
-        Route::post('/logout', 'LogoutController@logout');
+    Route::group(['prefix' => 'auth'], function() {
+        Route::post('/login', 'AuthController@login');
+        Route::post('/logout', 'AuthController@logout');
     });
 
     Route::group(['prefix' => 'notifications'], function() {

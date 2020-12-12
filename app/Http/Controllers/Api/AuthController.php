@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Http\Controllers\Api\Auth;
+namespace App\Http\Controllers\Api;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
@@ -15,18 +15,20 @@ use Carbon\Carbon;
 use Tymon\JWTAuth\Exceptions\JWTException;
 
 
-class LoginController extends Controller
-{   
+class AuthController extends Controller
+{
 
-    public function __construct() 
+    public function __construct()
     {
-        $this->middleware('jwt:auth', ['except' => 'normalLogin']);
+        $this->middleware('jwt:auth', ['except' => [
+            'login'
+        ]]);
     }
 
-    public function normalLogin(Request $request) 
+    public function login(Request $request)
     {
         $credentials = $request->only(['email', 'password']);
-        
+
         if(! $token = JWTAuth::attempt($credentials)) {
             return response()->json([
                 'error' => 'Invalid Email or Password!'
@@ -34,6 +36,7 @@ class LoginController extends Controller
         }
 
         $user = JWTAuth::user();
+
         $userLog = new UserLog;
         $userLog->user_id = $user->id;
         $userLog->user_type = $user->roles()->first()->title;
@@ -42,24 +45,40 @@ class LoginController extends Controller
         $userLog->created_at = Carbon::now();
         $userLog->save();
 
+        $formatted = [
+            'id' => $user->id,
+            'name' => $user->name,
+            'email' => $user->email,
+            'accountType' => explode('\\', $user->userable_type)[2],
+        ];
+
         return response()->json([
+            'success' => true,
             'data' => [
+                'user' => $formatted,
                 'token' => $token,
-             ]
+            ]
         ], 200);
     }
 
-    public function me(Request $request) 
+    public function logout(Request $request)
     {
-        $user = Auth::user();
+        $user = JWTAuth::user();
 
-        $topic = crypt($user->email, md5($user->email));
+        $userLog = new UserLog;
+        $userLog->user_id = $user->id;
+        $userLog->user_type = $user->roles()->first()->title;
+        $userLog->ip_address = $request->ip();
+        $userLog->activity = 'logout';
+        $userLog->created_at = Carbon::now();
+        $userLog->save();
+
+        $token = JWTAuth::fromUser($user);
+
+        JWTAuth::invalidate($token);
 
         return response()->json([
-            'data' => [
-                'user' => $user,
-                'topic' => $topic,
-             ]
+            'success' => true
         ], 200);
     }
 }

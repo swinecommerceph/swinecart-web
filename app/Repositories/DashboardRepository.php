@@ -509,7 +509,7 @@ class DashboardRepository
                         'reserved' => $transactionDetails['created_at']->toDateTimeString()
                     ];
 
-                    $reservedCustomerUser = Customer::find($reservation->customer_id)->users()->first();
+                    $reservedCustomerUser = $swineCartItem->customer->user;
 
                     // Add new Transaction Log
                     $this->addToTransactionLog($transactionDetails);
