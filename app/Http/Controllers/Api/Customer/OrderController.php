@@ -61,24 +61,19 @@ class OrderController extends Controller
         'gilt' => 'gilt_default.jpg',
     ];
 
-    private function formatDetails($reservation)
+    private function formatDetails($item)
     {
-        $trimmed_special_request = trim($reservation->special_request);
+        $special_request = trim($item->special_request);
 
         return [
-            'quantity' => $reservation->quantity,
-            'specialRequest' =>
-                $trimmed_special_request === ''
-                    ? null
-                    : $trimmed_special_request,
-            'deliveryDate' =>
-                ($reservation->delivery_date == '0000-00-00')
-                    ? null
-                    : $reservation->delivery_date,
-            'dateNeeded' =>
-                ($reservation->date_needed == '0000-00-00')
-                    ? null
-                    : $reservation->date_needed
+            'quantity' => $item->quantity,
+            'deliveryDate' => $item->delivery_date,
+            'dateNeeded' => $item->date_needed === '0000-00-00'
+                ? null
+                : $item->date_needed,
+            'specialRequest' => $special_request === ''
+                ? null
+                : $special_request,
         ];
     }
 
@@ -268,7 +263,7 @@ class OrderController extends Controller
                     'hasNextPage' => $orders->hasMorePages(),
                     'orders' => $formatted,
                 ]
-            ]);
+            ], 200);
 
         }
         else return response()->json([
@@ -334,10 +329,10 @@ class OrderController extends Controller
             );
 
             $order['logs'] = $logs->map(function ($item) {
-                $log = [];
-                $log['status'] = $item->status;
-                $log['createdAt'] = $item->created_at;
-                return $log;
+                return [
+                    'status' => $item->status,
+                    'createdAt' => $item->created_at,
+                ];
             });
 
             $order['breeder'] = [
@@ -452,7 +447,7 @@ class OrderController extends Controller
                 }
 
                 $cart_item->date_needed = ($request->dateNeeded) ? date_format(date_create($request->dateNeeded), 'Y-n-j') : '';
-                $cart_item->special_request = $request->specialRequest;
+                $cart_item->special_request = trim($request->specialRequest);
                 $cart_item->save();
 
                 $product->status = 'requested';

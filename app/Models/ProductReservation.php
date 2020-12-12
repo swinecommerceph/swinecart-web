@@ -58,9 +58,4 @@ class ProductReservation extends Model
         return $this->hasOne(SwineCartItem::class, 'reservation_id');
     }
 
-    public function statusTime()
-    {
-        return $this->hasManyThrough(TransactionLog::class, SwineCartItem::class, 'reservation_id', 'swineCart_id', 'id')->latest();
-    }
-
 }

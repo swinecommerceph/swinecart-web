@@ -62,7 +62,7 @@ class NotificationController extends Controller
             ->get()
             ->first();
 
-        if($notification) {
+        if ($notification) {
             if($notification->read_at) {
                 return response()->json([
                     'error' => 'Notification already seen!',
