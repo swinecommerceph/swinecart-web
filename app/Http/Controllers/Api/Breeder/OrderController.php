@@ -481,6 +481,7 @@ class OrderController extends Controller
         }
 
         return response()->json([
+            'success' => true,
             'data' => [
                 'cartItem' => $cart_item,
             ]
@@ -508,7 +509,7 @@ class OrderController extends Controller
                 else {
                     if($result[0] == 'OK') {
                         return response()->json([
-                            'message' => 'Update Order Status successful!'
+                            'success' => true
                         ], 200);
                     }
                 }
