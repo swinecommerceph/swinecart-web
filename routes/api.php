@@ -74,14 +74,16 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         });
 
         Route::group(['prefix' => 'orders'], function() {
-            Route::get('/requests/{id}', 'OrderController@getRequests');
-            Route::delete('/requests/{id}', 'OrderController@deleteRequest');
+            Route::get('/requests/{product_id}', 'OrderController@getRequests');
+            Route::delete('/requests/{swinecart_id}', 'OrderController@deleteRequest');
 
             Route::get('/', 'OrderController@getOrders');
-            Route::get('/{id}', 'OrderController@getOrder');
-            Route::post('/{id}/status', 'OrderController@updateOrderStatus');
-            Route::put('/{id}/status', 'OrderController@updateOrderStatus');
-            Route::delete('/{id}/status', 'OrderController@cancelTransaction');
+            Route::get('/{order_id}', 'OrderController@getOrder');
+
+            Route::post('/{swinecart_id}/reserve', 'OrderController@reserveProduct');
+            Route::put('/{swinecart_id}/send', 'OrderController@sendProduct');
+            Route::put('/{swinecart_id}/confirm', 'OrderController@confirmSold');
+            Route::delete('/{swinecart_id}/cancel', 'OrderController@cancelTransaction');
         });
     });
 
@@ -99,11 +101,11 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
 
         Route::group(['prefix' => 'orders'], function() {
             Route::get('/history', 'OrderController@getHistory');
+            Route::post('/reviews/{id}', 'OrderController@reviewBreeder');
 
             Route::get('/', 'OrderController@getOrders');
             Route::get('/{id}', 'OrderController@getOrder');
 
-            Route::post('/reviews/{id}', 'OrderController@reviewBreeder');
             Route::post('/{id}', 'OrderController@requestItem');
         });
     });

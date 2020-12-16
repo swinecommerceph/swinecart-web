@@ -51,6 +51,8 @@ class OrderController extends Controller
         'gilt' => 'gilt_default.jpg',
     ];
 
+    // Helper Functions
+
     private function formatOrder($item)
     {
         $order = [];
@@ -60,6 +62,7 @@ class OrderController extends Controller
         $is_product_deleted = $product->trashed();
 
         $order['id'] = $item->id;
+        $order['swineCartId'] = $item->swinecart_id;
         $order['status'] = $item->order_status;
         $order['statusTime'] = $item->created_at;
 
@@ -128,6 +131,7 @@ class OrderController extends Controller
             })
             ->select(
                 'product_reservations.*',
+                'swine_cart_items.id as swinecart_id',
                 'transaction_logs.created_at as created_at'
             )
             ->where('order_status', $status)
@@ -136,6 +140,8 @@ class OrderController extends Controller
 
         return $this->formatOrder($order);
     }
+
+    // Controller Functions
 
     public function getOrders(Request $request)
     {
@@ -229,6 +235,7 @@ class OrderController extends Controller
                     })
                     ->select(
                         'product_reservations.*',
+                        'swine_cart_items.id as swinecart_id',
                         'transaction_logs.created_at as created_at'
                     )
                     ->where('order_status', $status)
@@ -340,6 +347,143 @@ class OrderController extends Controller
         ], 404);
     }
 
+    public function reserveProduct(Request $request, $swinecart_id)
+    {
+        $breeder = $this->user->userable;
+
+        $cart_item = SwineCartItem::with('product')->find($swinecart_id);
+
+        if ($cart_item) {
+
+            $product = $cart_item->product;
+
+            $request->status = 'reserved';
+            $request->swinecart_id = $swinecart_id;
+
+            $result = $this->dashboard->updateStatus($request, $product);
+
+            if ($result[0] === 'fail') {
+                return response()->json([
+                    'success' => false,
+                    'error' => $result[1],
+                ], 409);
+            }
+            else {
+                return response()->json([
+                    'success' => true,
+                    'data' => [
+                        'order' => $this->getReservation(
+                            $result[2],
+                            'reserved'
+                        )
+                    ],
+                ], 200);
+            }
+        }
+        else return response()->json([
+            'error' => 'Item does not exist!'
+        ], 404);
+    }
+
+    public function sendProduct(Request $request, $swinecart_id)
+    {
+        $breeder = $this->user->userable;
+
+        $cart_item = SwineCartItem::with(
+                'product',
+                'productReservation'
+            )
+            ->find($swinecart_id);
+
+        if ($cart_item) {
+
+            $product = $cart_item->product;
+            $reservation = $cart_item->productReservation;
+
+            $request->status = 'on_delivery';
+            $request->reservation_id = $reservation->id;
+
+            $result = $this->dashboard->updateStatus($request, $product);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'order' => $this->getReservation(
+                        $request->reservation_id,
+                        'on_delivery'
+                    )
+                ],
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Item does not exist!'
+        ], 404);
+    }
+
+    public function confirmSold(Request $request, $swinecart_id)
+    {
+        $breeder = $this->user->userable;
+
+        $cart_item = SwineCartItem::with(
+                'product',
+                'productReservation'
+            )
+            ->find($swinecart_id);
+
+        if ($cart_item) {
+
+            $product = $cart_item->product;
+            $reservation = $cart_item->productReservation;
+
+            $request->status = 'sold';
+            $request->reservation_id = $reservation->id;
+
+            $result = $this->dashboard->updateStatus($request, $product);
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'order' => $this->getReservation(
+                        $request->reservation_id,
+                        'sold'
+                    )
+                ],
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Item does not exist!'
+        ], 404);
+    }
+
+    public function cancelTransaction(Request $request, $swinecart_id)
+    {
+        $breeder = $this->user->userable;
+
+        $cart_item = SwineCartItem::with(
+                'product',
+                'productReservation'
+            )
+            ->find($swinecart_id);
+
+        if ($cart_item) {
+
+            $product = $cart_item->product;
+            $reservation = $cart_item->productReservation;
+
+            $request->status = 'cancel_transaction';
+            $request->reservation_id = $reservation->id;
+
+            $result = $this->dashboard->updateStatus($request, $product);
+
+            return response()->json([
+                'success' => true
+            ], 200);
+        }
+        else return response()->json([
+            'error' => 'Item does not exist!'
+        ], 404);
+    }
+
     public function getRequests(Request $request, $product_id)
     {
         $requests = SwineCartItem::where('product_id', $product_id)
@@ -386,76 +530,6 @@ class OrderController extends Controller
         ], 200);
     }
 
-    public function updateOrderStatus(Request $request, $product_id)
-    {
-        $breeder = $this->user->userable;
-        $product = $this->getBreederProduct($breeder, $product_id);
-
-        $isAddedToCart = SwineCartItem::where('product_id', $product_id)->first();
-
-        if($product && $isAddedToCart) {
-            $result = $this->dashboard->updateStatus($request, $product);
-            $status = $request->status;
-
-            if(is_string($result) && $result == 'Invalid operation') {
-                return response()->json([
-                    'error' => 'Invalid Operation',
-                ], 400);
-            }
-            else {
-                if($status == 'reserved') {
-                    if($result[0] == 'fail') {
-                        return response()->json([
-                            'error' => $result[1],
-                        ], 409);
-                    }
-                    else {
-                        return response()->json([
-                            'success' => true,
-                            'data' => [
-                                'order' => $this->getReservation(
-                                    $result[2],
-                                    $status
-                                )
-                            ],
-                        ], 200);
-                    }
-                }
-                else if($status == 'on_delivery') {
-                    if($result[0] == 'OK') {
-                        return response()->json([
-                            'success' => true,
-                            'data' => [
-                                'order' => $this->getReservation(
-                                    $request->reservation_id,
-                                    $status
-                                )
-                            ],
-                        ], 200);
-                    }
-                }
-                else if($status == 'sold') {
-                    if($result[0] == 'OK') {
-                        return response()->json([
-                            'success' => true,
-                            'data' => [
-                                'order' => $this->getReservation(
-                                    $request->reservation_id,
-                                    $status
-                                )
-                            ],
-                        ], 200);
-                    }
-                }
-            }
-
-        }
-
-        else return response()->json([
-            'error' => 'Product does not exist!'
-        ], 404);
-    }
-
     public function deleteRequest(Request $request, $cart_id)
     {
 
@@ -486,43 +560,5 @@ class OrderController extends Controller
                 'cartItem' => $cart_item,
             ]
         ], 200);
-    }
-
-    public function cancelTransaction(Request $request, $product_id)
-    {
-        $breeder = $this->user->userable;
-        $product = $this->getBreederProduct($breeder, $product_id);
-        $isAddedToCart = SwineCartItem::where('product_id', $product_id)->first();
-
-        if($product && $isAddedToCart) {
-            $reservation = $breeder->reservations()->with('product')->find($request->reservation_id);
-
-            if($reservation) {
-                $result = $this->dashboard->updateStatus($request, $product);
-                $status = $request->status;
-
-                if(is_string($result) && $result == 'Invalid operation') {
-                    return response()->json([
-                        'error' => 'Invalid Operation',
-                    ], 400);
-                }
-                else {
-                    if($result[0] == 'OK') {
-                        return response()->json([
-                            'success' => true
-                        ], 200);
-                    }
-                }
-            }
-            else return response()->json([
-                'error' => 'Product does not exist!'
-            ], 404);
-
-        }
-
-        else return response()->json([
-            'error' => 'Product does not exist!'
-        ], 404);
-
     }
 }

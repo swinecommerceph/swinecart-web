@@ -480,7 +480,9 @@ class DashboardRepository
                     $reservation = new ProductReservation;
                     $reservation->customer_id = $swineCartItem->customer_id;
                     $reservation->quantity = $swineCartItem->quantity;
-                    $reservation->date_needed = date_format(date_create($swineCartItem->date_needed), 'Y-n-j');
+                    $reservation->date_needed = date_format(
+                        date_create($swineCartItem->date_needed), 'Y-n-j'
+                    );
                     $reservation->special_request = $swineCartItem->special_request;
                     $reservation->order_status = 'reserved';
                     $product->reservations()->save($reservation);
@@ -799,12 +801,12 @@ class DashboardRepository
                     $customerUser->id,
                     $notificationDetails
                 ));
-                
+
                 dispatch(new SendToPubSubServer(
                     'notification', 
                     $customerUser->email
                 ));
-                
+
                 dispatch(new SendToPubSubServer(
                     'sc-cancelTransaction',
                     $customerUser->email,
@@ -813,7 +815,7 @@ class DashboardRepository
                         'previous_status' => $oldStatus
                     ]
                 ));
-                
+
                 dispatch(new SendToPubSubServer(
                     'db-cancelTransaction',
                     Auth::user()->email,
