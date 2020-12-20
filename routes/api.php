@@ -78,7 +78,7 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
             Route::delete('/requests/{swinecart_id}', 'OrderController@deleteRequest');
 
             Route::get('/', 'OrderController@getOrders');
-            Route::get('/{order_id}', 'OrderController@getOrder');
+            Route::get('/{order_id}', 'OrderController@getOrderDetails');
 
             Route::post('/{swinecart_id}/reserve', 'OrderController@reserveProduct');
             Route::put('/{swinecart_id}/send', 'OrderController@sendProduct');

@@ -101,7 +101,7 @@ class OrderController extends Controller
         ])->first();
     }
 
-    private function getReservation($id, $status)
+    private function getOrder($id, $status)
     {
         $breeder = $this->user->userable;
 
@@ -260,7 +260,7 @@ class OrderController extends Controller
 
     }
 
-    public function getOrder(Request $request, $id)
+    public function getOrderDetails(Request $request, $id)
     {
         $breeder = $this->user->userable;
 
@@ -372,7 +372,7 @@ class OrderController extends Controller
                 return response()->json([
                     'success' => true,
                     'data' => [
-                        'order' => $this->getReservation(
+                        'order' => $this->getOrder(
                             $result[2],
                             'reserved'
                         )
@@ -408,7 +408,7 @@ class OrderController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'order' => $this->getReservation(
+                    'order' => $this->getOrder(
                         $request->reservation_id,
                         'on_delivery'
                     )
@@ -443,7 +443,7 @@ class OrderController extends Controller
             return response()->json([
                 'success' => true,
                 'data' => [
-                    'order' => $this->getReservation(
+                    'order' => $this->getOrder(
                         $request->reservation_id,
                         'sold'
                     )
