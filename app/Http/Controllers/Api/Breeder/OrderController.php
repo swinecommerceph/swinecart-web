@@ -535,30 +535,37 @@ class OrderController extends Controller
 
         $cart_item = SwineCartItem::with('product')->find($cart_id);
 
-        $product = $cart_item->product;
+        if ($cart_item) {
 
-        $cart_item->reservation_id = 0;
-        $cart_item->quantity = ($product->type == 'semen') ? 2 : 1;
-        $cart_item->if_requested = 0;
-        $cart_item->date_needed = '0000-00-00';
-        $cart_item->special_request = "";
-        $cart_item->save();
+            $product = $cart_item->product;
 
-        $count = SwineCartItem::where('product_id', $product->id)
-            ->where('if_requested', 1)
-            ->get()
-            ->count();
+            $cart_item->reservation_id = 0;
+            $cart_item->quantity = ($product->type == 'semen') ? 2 : 1;
+            $cart_item->if_requested = 0;
+            $cart_item->date_needed = '0000-00-00';
+            $cart_item->special_request = '';
+            $cart_item->save();
 
-        if ($count == 0) {
-            $product->status = 'displayed';
-            $product->save();
+            $count = SwineCartItem::where('product_id', $product->id)
+                ->where('if_requested', 1)
+                ->get()
+                ->count();
+
+            if ($count == 0) {
+                $product->status = 'displayed';
+                $product->save();
+            }
+
+            return response()->json([
+                'success' => true,
+                'data' => [
+                    'cartItem' => $cart_item,
+                ]
+            ], 200);
+
         }
-
-        return response()->json([
-            'success' => true,
-            'data' => [
-                'cartItem' => $cart_item,
-            ]
-        ], 200);
+        else return response()->json([
+            'error' => 'Item does not exist!'
+        ], 404);
     }
 }
