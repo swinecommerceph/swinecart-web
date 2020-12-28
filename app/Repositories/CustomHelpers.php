@@ -99,4 +99,26 @@ trait CustomHelpers
 
         $swineCartItem->transactionLogs()->save($transactionLog);
     }
+
+    public function getProductImage($product, $size)
+    {
+        $default_images = [
+            'boar' => 'boar_default.jpg',
+            'sow' => 'sow_default.jpg',
+            'semen' => 'semen_default.jpg',
+            'gilt' => 'gilt_default.jpg',
+        ];
+
+        $is_product_deleted = $product->trashed();
+
+        $image_url = route('serveImage', [
+            'size' => $size,
+            'filename' => $is_product_deleted
+                ? $default_images[$product->type]
+                : $product->primaryImage->name
+        ]);
+
+        return $image_url;
+    }
+
 }

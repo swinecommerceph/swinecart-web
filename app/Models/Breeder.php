@@ -4,6 +4,7 @@ namespace App\Models;
 
 use App\Models\User;
 use App\Models\Product;
+use App\Models\SwineCartItem;
 use App\Models\TransactionLog;
 use App\Models\ProductReservation;
 use App\Models\Image;
@@ -110,5 +111,10 @@ class Breeder extends Model
     public function transactionLogs()
     {
         return $this->hasMany(TransactionLog::class);
+    }
+
+    public function swineCartItems()
+    {
+        return $this->hasManyThrough(SwineCartItem::class, Product::class);
     }
 }

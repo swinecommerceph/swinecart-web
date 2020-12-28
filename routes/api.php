@@ -43,6 +43,20 @@ Route::group(['middleware' => 'api', 'namespace' => 'Api'], function() {
         Route::delete('/{id}', 'FarmController@deleteFarm');
     });
 
+    Route::group(['prefix' => 'orders'], function() {
+        // Route::get('/requests/{product_id}', 'OrderController@getRequests');
+        // Route::post('/{id}', 'OrderController@requestItem');
+        // Route::delete('/requests/{swinecart_id}', 'OrderController@deleteRequest');
+
+        Route::get('/', 'OrderController@getOrders');
+        Route::get('/{order_id}', 'OrderController@getOrderDetails');
+
+        // Route::post('/{swinecart_id}/reserve', 'OrderController@reserveProduct');
+        // Route::put('/{swinecart_id}/send', 'OrderController@sendProduct');
+        // Route::put('/{swinecart_id}/confirm', 'OrderController@confirmSold');
+        // Route::delete('/{swinecart_id}/cancel', 'OrderController@cancelTransaction');
+    });
+
     Route::group(['prefix' => 'provinces'], function() {
         Route::get('/', 'ProvinceController@getProvinces');
     });

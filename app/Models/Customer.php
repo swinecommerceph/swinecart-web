@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\FarmAddress;
 use App\Models\Review;
 use App\Models\SwineCart;
+use App\Models\ProductReservation;
 use App\Models\TransactionLog;
 use Illuminate\Database\Eloquent\Model;
 
@@ -73,5 +74,9 @@ class Customer extends Model
     public function reviews()
     {
         return $this->hasMany(Review::class);
+    }
+
+    public function reservations(){
+        return $this->hasMany(ProductReservation::class);
     }
 }

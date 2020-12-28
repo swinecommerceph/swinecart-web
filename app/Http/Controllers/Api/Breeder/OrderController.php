@@ -6,7 +6,6 @@ use Illuminate\Http\Request;
 use Carbon\Carbon;
 
 use App\Http\Controllers\Controller;
-use App\Http\Requests;
 use App\Models\Customer;
 use App\Models\Product;
 use App\Models\Breed;
@@ -15,12 +14,7 @@ use App\Models\SwineCartItem;
 use App\Repositories\DashboardRepository;
 use App\Repositories\CustomHelpers;
 
-use Auth;
 use JWTAuth;
-use Mail;
-use Storage;
-use Config;
-use DB;
 
 class OrderController extends Controller
 {
@@ -29,6 +23,7 @@ class OrderController extends Controller
         transformBreedSyntax as private;
         transformDateSyntax as private;
         computeAge as private;
+        getProductImage as private;
     }
 
     protected $dashboard;
@@ -44,13 +39,6 @@ class OrderController extends Controller
         $this->dashboard = $dashboard;
     }
 
-    private $defaultImages = [
-        'boar' => 'boar_default.jpg',
-        'sow' => 'sow_default.jpg',
-        'semen' => 'semen_default.jpg',
-        'gilt' => 'gilt_default.jpg',
-    ];
-
     // Helper Functions
 
     private function formatOrder($item)
@@ -59,7 +47,6 @@ class OrderController extends Controller
 
         $product = $item->product;
         $customer = $item->customer;
-        $is_product_deleted = $product->trashed();
 
         $order['id'] = $item->id;
         $order['swineCartId'] = $item->swinecart_id;
@@ -71,15 +58,8 @@ class OrderController extends Controller
             'name' => $product->name,
             'type' => $product->type,
             'breed' => $this->transformBreedSyntax($product->breed->name),
-            'imageUrl' => route('serveImage',
-                [
-                    'size' => 'small',
-                    'filename' => $is_product_deleted
-                        ? $this->defaultImages[$product->type]
-                        : $product->primaryImage->name
-                ]
-                ),
-            'isDeleted' => $is_product_deleted,
+            'imageUrl' => $this->getProductImage($product, 'small'),
+            'isDeleted' => $product->trashed(),
             'isUnique' => $product->is_unique === 1
         ];
 
@@ -173,8 +153,6 @@ class OrderController extends Controller
 
                     $order = [];
 
-                    $is_product_deleted = $item->trashed();
-
                     $order['status'] = $item->status;
                     $order['requestCount'] = $item->swine_cart_item_count;
 
@@ -185,18 +163,11 @@ class OrderController extends Controller
                         'breed' => $this->transformBreedSyntax(
                             $item->breed->name
                         ),
-                        'imageUrl' => route('serveImage',
-                            [
-                                'size' => 'small',
-                                'filename' => $is_product_deleted
-                                    ? $this->defaultImages[$item->type]
-                                    : $item->primaryImage->name
-                            ]
-                        ),
-                        'isDeleted' => $is_product_deleted,
+                        'imageUrl' => $this->getProductImage($item, 'small'),
+                        'isDeleted' => $item->trashed(),
                         'isUnique' => $item->is_unique === 1
                     ];
-    
+
                     return $order;
                 });
 
@@ -283,7 +254,6 @@ class OrderController extends Controller
             $breed = $product->breed;
             $customer = $item->customer;
             $logs = $item->transactionLogs;
-            $is_product_deleted = $product->trashed();
 
             $order['id'] = $item->id;
 
@@ -293,15 +263,8 @@ class OrderController extends Controller
                 'type' => $product->type,
                 'breed' => $this->transformBreedSyntax($breed->name),
                 'farmLocation' => $product->farmFrom->province,
-                'imageUrl' => route('serveImage',
-                    [
-                        'size' => 'small',
-                        'filename' => $is_product_deleted
-                            ? $this->defaultImages[$product->type]
-                            : $product->primaryImage->name
-                    ]
-                ),
-                'isDeleted' => $is_product_deleted,
+                'imageUrl' => $this->getProductImage($product, 'small'),
+                'isDeleted' => $product->trashed(),
                 'isUnique' => $product->is_unique === 1
             ];
 

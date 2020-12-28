@@ -459,20 +459,13 @@ class DashboardRepository
                     if ($product->type != 'semen') {
                         if ($product->is_unique == 1) {
                             $product->quantity = 0;
-                            $product->status = 'hidden';
                         }
                         else {
                             $product->quantity = max(
                                 0,
                                 $product->quantity - $swineCartItem->quantity
                             );
-
-                            if ($product->quantity === 0) {
-                                $product->status = 'hidden';
-                            }
-
                         }
-
                         $product->save();
                     }
 
@@ -544,6 +537,13 @@ class DashboardRepository
                         ->where('customer_id', '<>', $swineCartItem->customer_id)
                         ->where('reservation_id', 0);
 
+                        // check for quantity
+
+                    if ($productRequests->count() == 0) {
+                        $product->status = 'displayed';
+                        $product->save();
+                    }
+
                     if ($product->type != 'semen' && $product->is_unique == 1) {
 
                         // Notify Customer users that the product has been reserved to another customer
@@ -592,20 +592,13 @@ class DashboardRepository
                         // Delete requests to this product after notifying Customer users
                         $productRequests->delete();
                     }
-                    else {
-                        if ($productRequests->count() == 0) {
-                            $product->status = 'displayed';
-                            $product->save();
+                    else if ($product->is_unique === 0 && $product->quantity === 0) {
 
-                            return [
-                                'success',
-                                'Product ' . $product->name . ' reserved to ' . $customerName,
-                                $reservation->id,
-                                (string) Uuid::uuid4(),
-                                true,
-                                $transactionDetails['created_at']
-                            ];
+                        foreach ($productRequests->get() as $productRequest) {
                         }
+
+
+                        $productRequests->delete();
                     }
 
                     // [0] - success/fail operation flag
@@ -769,12 +762,12 @@ class DashboardRepository
                 $oldStatus = $reservation->order_status;
 
                 // Update product
-                $product->status = "displayed";
-                $product->quantity = ($product->type == 'semen') 
-                    ? -1
-                    : $product->quantity + $reservation->quantity;
-        
-                $product->save();
+                // $product->status = 'displayed';
+                // $product->quantity = ($product->type == 'semen')
+                //     ? -1
+                //     : $product->quantity + $reservation->quantity;
+
+                // $product->save();
 
                 $transactionDetails = [
                     'swineCart_id' => $swineCartItem->id,

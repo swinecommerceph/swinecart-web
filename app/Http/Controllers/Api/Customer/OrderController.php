@@ -42,6 +42,7 @@ class OrderController extends Controller
         transformBreedSyntax as private;
         transformDateSyntax as private;
         computeAge as private;
+        getProductImage as private;
     }
 
     public function __construct()
@@ -53,13 +54,6 @@ class OrderController extends Controller
             return $next($request);
         });
     }
-
-    private $defaultImages = [
-        'boar' => 'boar_default.jpg',
-        'sow' => 'sow_default.jpg',
-        'semen' => 'semen_default.jpg',
-        'gilt' => 'gilt_default.jpg',
-    ];
 
     private function formatDetails($item)
     {
@@ -145,7 +139,6 @@ class OrderController extends Controller
             $product = $item->product;
             $breed_name = $product->breed->name;
             $breeder = $product->breeder->user;
-            $is_product_deleted = $product->trashed();
 
             $order['id'] = $item->swineCart_id;
 
@@ -156,15 +149,8 @@ class OrderController extends Controller
                 'breed' => $this->transformBreedSyntax($breed_name),
                 'breederName' => $breeder->name,
                 'farmLocation' => $product->farmFrom->province,
-                'imageUrl' => route('serveImage',
-                    [
-                        'size' => 'small',
-                        'filename' => $is_product_deleted
-                            ? $this->defaultImages[$product->type]
-                            : $product->primaryImage->name
-                    ]
-                ),
-                'isDeleted' => $is_product_deleted,
+                'imageUrl' => $this->getProductImage($product, 'small'),
+                'isDeleted' => $product->trashed(),
                 'isUnique' => $product->is_unique === 1
             ];
 
@@ -230,7 +216,6 @@ class OrderController extends Controller
                 $product = $item->product;
                 $breed = $product->breed;
                 $breeder = $product->breeder->user;
-                $is_product_deleted = $product->trashed();
 
                 $order['id'] = $item->swineCart_id;
                 $order['status'] = $status;
@@ -243,15 +228,8 @@ class OrderController extends Controller
                     'breed' => $this->transformBreedSyntax($breed->name),
                     'breederName' => $breeder->name,
                     'farmLocation' => $product->farmFrom->province,
-                    'imageUrl' => route('serveImage',
-                        [
-                            'size' => 'small',
-                            'filename' => $is_product_deleted
-                                ? $this->defaultImages[$product->type]
-                                : $product->primaryImage->name
-                        ]
-                    ),
-                    'isDeleted' => $is_product_deleted,
+                    'imageUrl' => $this->getProductImage($product, 'small'),
+                    'isDeleted' => $product->trashed(),
                     'isUnique' => $product->is_unique === 1
                 ];
 
@@ -300,7 +278,6 @@ class OrderController extends Controller
             $breeder = $product->breeder->user;
             $reservation = $item->productReservation;
             $logs = $item->transactionLogs;
-            $is_product_deleted = $product->trashed();
 
             $order['id'] = $item->id;
 
@@ -310,15 +287,8 @@ class OrderController extends Controller
                 'type' => $product->type,
                 'breed' => $this->transformBreedSyntax($breed->name),
                 'farmLocation' => $product->farmFrom->province,
-                'imageUrl' => route('serveImage',
-                    [
-                        'size' => 'small',
-                        'filename' => $is_product_deleted
-                            ? $this->defaultImages[$product->type]
-                            : $product->primaryImage->name
-                    ]
-                ),
-                'isDeleted' => $is_product_deleted,
+                'imageUrl' => $this->getProductImage($product, 'small'),
+                'isDeleted' => $product->trashed(),
                 'isUnique' => $product->is_unique === 1
             ];
 
